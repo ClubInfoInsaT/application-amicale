@@ -1,0 +1,24 @@
+{
+  "screens": {
+    "home": "Home",
+    "planning": "Planning",
+    "settings": "Settings",
+    "about": "About"
+  },
+  "settingsScreen": {
+    "nightMode": "Night Mode",
+    "restart": "Restart the app to apply changes"
+  },
+  "aboutScreen": {
+    "appstore": "See on the Appstore",
+    "playstore": "See on the Playstore",
+    "bugs": "Report Bugs",
+    "changelog": "Changelog",
+    "license": "License",
+    "author": "Author",
+    "mail": "Send an email",
+    "technologies": "Technologies",
+    "reactNative": "Made with React Native",
+    "libs": "Libraries used"
+  },
+}

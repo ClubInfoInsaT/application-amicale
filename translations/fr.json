@@ -1,0 +1,24 @@
+{
+  "screens": {
+    "home": "Accueil",
+    "planning": "Planning",
+    "settings": "Paramètres",
+    "about": "À Propos"
+  },
+  "settingsScreen": {
+    "nightMode": "Mode Nuit",
+    "restart": "Redémarrez l'application pour appliquer les changements"
+  },
+  "aboutScreen": {
+    "appstore": "Voir sur l'Appstore",
+    "playstore": "Voir sur le Playstore",
+    "bugs": "Rapporter des Bugs",
+    "changelog": "Historique des modifications",
+    "license": "Licence",
+    "author": "Auteur",
+    "mail": "Envoyer un mail",
+    "technologies": "Technologies",
+    "reactNative": "Créé avec React Native",
+    "libs": "Librairies utilisées"
+  }
+}
