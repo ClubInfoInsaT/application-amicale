@@ -28,5 +28,26 @@
     "sortName": "Trier par nom",
     "sortPrice": "Trier par prix",
     "listUpdated": "Liste des articles mise à jour !"
+  },
+  "proxiwashScreen": {
+    "dryer": "Sèche Linge",
+    "dryers": "Sèche Linges",
+    "washer": "Lave Linge",
+    "washers": "Lave Linges",
+    "min": "min",
+    "listUpdated": "Etat des machines mis à jour",
+    "states": {
+      "finished": "TERMINE",
+      "ready": "DISPONIBLE",
+      "running": "En COURS",
+      "broken": "HORS SERVICE",
+      "error": "ERREUR"
+    },
+    "notifications": {
+      "machineFinishedTitle": "Linge prêt",
+      "machineFinishedBody": "La machine n°{{number}} est terminée et votre linge est prêt à être récupéré",
+      "machineRunningTitle": "Machine en cours: {{time}} minutes restantes",
+      "machineRunningBody": "La machine n°{{number}} n'est pas encore terminée"
+    }
   }
 }

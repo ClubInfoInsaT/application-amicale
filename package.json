@@ -12,6 +12,7 @@
     "expo": "^33.0.0",
     "expo-font": "^5.0.1",
     "expo-localization": "^5.0.1",
+    "expo-permissions": "^5.0.1",
     "i18n-js": "^3.3.0",
     "i18next": "latest",
     "native-base": "latest",
@@ -20,13 +21,13 @@
     "react-i18next": "latest",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-paper": "latest",
+    "react-native-platform-touchable": "latest",
     "react-native-settings-page": "latest",
     "react-native-status-bar-height": "latest",
     "react-native-web": "^0.11.4",
     "react-native-week-view": "latest",
     "react-navigation": "latest",
-    "react-navigation-material-bottom-tabs": "latest",
-    "react-native-platform-touchable": "latest"
+    "react-navigation-material-bottom-tabs": "latest"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.1",

@@ -1,4 +1,3 @@
-import {DefaultTheme} from 'react-native-paper';
 import {AsyncStorage} from 'react-native'
 import platform from '../native-base-theme/variables/platform';
 import platformDark from '../native-base-theme/variables/platformDark';

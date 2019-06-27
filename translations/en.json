@@ -28,5 +28,26 @@
     "sortName": "Sort by name",
     "sortPrice": "Sort by price",
     "listUpdated": "Article list updated!"
+  },
+  "proxiwashScreen": {
+    "dryer": "Dryer",
+    "dryers": "Dryers",
+    "washer": "Washer",
+    "washers": "Washers",
+    "min": "min",
+    "listUpdated": "Machines state updated",
+    "states": {
+      "finished": "FINISHED",
+      "ready": "READY",
+      "running": "RUNNING",
+      "broken": "BROKEN",
+      "error": "ERROR"
+    },
+    "notifications": {
+      "machineFinishedTitle": "Laundry Ready",
+      "machineFinishedBody": "The machine n°{{number}} is finished and your laundry is ready to pickup",
+      "machineRunningTitle": "Laundry running: {{time}} minutes left",
+      "machineRunningBody": "The machine n°{{number}} is still running"
+    }
   }
 }

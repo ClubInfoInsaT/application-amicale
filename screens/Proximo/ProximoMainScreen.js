@@ -54,7 +54,6 @@ export default class ProximoMainScreen extends React.Component {
                 this.setState({data: undefined});
         } catch (error) {
             console.error(error);
-            return undefined;
         }
     }
 
@@ -81,46 +80,44 @@ export default class ProximoMainScreen extends React.Component {
         return (
             <Container>
                 <CustomHeader navigation={nav} title={'Proximo'}/>
-                <Content>
-                    <FlatList
-                        data={this.state.data}
-                        extraData={this.state}
-                        keyExtractor={(item, index) => item.type}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={this.state.refreshing}
-                                onRefresh={this._onRefresh}
-                            />
-                        }
-                        style={{minHeight: 300, width: '100%'}}
-                        renderItem={({item}) =>
-                            <ListItem
-                                button
-                                thumbnail
-                                onPress={() => {
-                                    nav.navigate('ProximoListScreen', item);
-                                }}
-                            >
-                                <Left>
-                                    <Icon name={typesIcons[item.type] ? typesIcons[item.type] : typesIcons.Default}
-                                          type={'MaterialCommunityIcons'}
-                                          style={styles.icon}/>
-                                </Left>
-                                <Body>
-                                    <Text>
-                                        {item.type}
-                                    </Text>
-                                    <Badge><Text>
-                                        {item.data.length} {item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article')}
-                                    </Text></Badge>
-                                </Body>
-                                <Right>
-                                    <Icon name="chevron-right"
-                                          type={'MaterialCommunityIcons'}/>
-                                </Right>
-                            </ListItem>}
-                    />
-                </Content>
+                <FlatList
+                    data={this.state.data}
+                    extraData={this.state}
+                    keyExtractor={(item, index) => item.type}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh}
+                        />
+                    }
+                    style={{minHeight: 300, width: '100%'}}
+                    renderItem={({item}) =>
+                        <ListItem
+                            button
+                            thumbnail
+                            onPress={() => {
+                                nav.navigate('ProximoListScreen', item);
+                            }}
+                        >
+                            <Left>
+                                <Icon name={typesIcons[item.type] ? typesIcons[item.type] : typesIcons.Default}
+                                      type={'MaterialCommunityIcons'}
+                                      style={styles.icon}/>
+                            </Left>
+                            <Body>
+                                <Text>
+                                    {item.type}
+                                </Text>
+                                <Badge><Text>
+                                    {item.data.length} {item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article')}
+                                </Text></Badge>
+                            </Body>
+                            <Right>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
+                            </Right>
+                        </ListItem>}
+                />
             </Container>
         );
     }
