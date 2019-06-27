@@ -1,11 +1,13 @@
 import React from 'react';
-import {Platform, Dimensions, StyleSheet, Image, FlatList} from 'react-native';
+import {Platform, Dimensions, StyleSheet, Image, FlatList, Linking} from 'react-native';
 import {Badge, Text, Container, Content, Icon, Left, ListItem, Right} from "native-base";
 import i18n from "i18n-js";
 
 const deviceHeight = Dimensions.get("window").height;
 
 const drawerCover = require("../assets/drawer-cover.png");
+
+const WIKETUD_LINK = "https://www.etud.insa-toulouse.fr/wiketud/index.php/Accueil";
 
 export default class SideBar extends React.Component {
 
@@ -44,6 +46,13 @@ export default class SideBar extends React.Component {
                 // types: "11"
             },
             {
+                name: "Wiketud",
+                route: "",
+                icon: "web",
+                bg: "#477EEA",
+                // types: "11"
+            },
+            {
                 name: i18n.t('screens.settings'),
                 route: "Settings",
                 icon: "settings",
@@ -60,7 +69,7 @@ export default class SideBar extends React.Component {
         ];
     }
 
-    navigateToScreen = (route) => () => {
+    navigateToScreen(route) {
         this.props.navigation.navigate(route);
         this.props.navigation.closeDrawer();
         this.setState({active: route});
@@ -71,9 +80,9 @@ export default class SideBar extends React.Component {
             <Container>
                 <Content
                     bounces={false}
-                    style={{ flex: 1, top: -1 }}
+                    style={{flex: 1, top: -1}}
                 >
-                    <Image source={drawerCover} style={styles.drawerCover} />
+                    <Image source={drawerCover} style={styles.drawerCover}/>
 
                     <FlatList
                         data={this.dataSet}
@@ -82,25 +91,28 @@ export default class SideBar extends React.Component {
                         renderItem={({item}) =>
                             <ListItem
                                 button
-                                noBorder={item.route !== 'Proximo'} // Display a separator before settings
+                                noBorder={item.name !== 'Wiketud'} // Display a separator before settings
                                 selected={this.state.active === item.route}
-                                onPress={
-                                    this.navigateToScreen(item.route)
-                                }
+                                onPress={() => {
+                                    if (item.name !== 'Wiketud')
+                                        this.navigateToScreen(item.route);
+                                    else
+                                        Linking.openURL(WIKETUD_LINK).catch((err) => console.error('Error opening link', err));
+                                }}
                             >
                                 <Left>
                                     <Icon
                                         active
                                         name={item.icon}
                                         type={'MaterialCommunityIcons'}
-                                        style={{ color: "#777", fontSize: 26, width: 30 }}
+                                        style={{color: "#777", fontSize: 26, width: 30}}
                                     />
                                     <Text style={styles.text}>
                                         {item.name}
                                     </Text>
                                 </Left>
                                 {item.types &&
-                                <Right style={{ flex: 1 }}>
+                                <Right style={{flex: 1}}>
                                     <Badge
                                         style={{
                                             borderRadius: 3,
