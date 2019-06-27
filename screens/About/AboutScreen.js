@@ -1,10 +1,11 @@
 import React from 'react';
 import {Platform, StyleSheet, Linking, Alert} from 'react-native';
 import {Container, Content, Text, Card, CardItem, Body, Icon, Left, Right, Thumbnail, H1} from 'native-base';
-import CustomHeader from "../components/CustomHeader";
+import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
+import appJson from '../../app';
+import packageJson from '../../package';
 
-const version = 'a0.0.1';
 const links = {
     appstore: 'https://qwant.com',
     playstore: 'https://qwant.com',
@@ -34,11 +35,11 @@ export default class AboutScreen extends React.Component {
                     <Card>
                         <CardItem>
                             <Left>
-                                <Thumbnail square source={require('../assets/amicale.png')}/>
+                                <Thumbnail square source={require('../../assets/amicale.png')}/>
                                 <Body>
                                     <H1>Amicale INSA Toulouse</H1>
                                     <Text note>
-                                        v.{version}
+                                        v.{appJson.expo.version}
                                     </Text>
                                 </Body>
                             </Left>
@@ -204,7 +205,7 @@ export default class AboutScreen extends React.Component {
                             </Right>
                         </CardItem>
                         <CardItem button
-                                  onPress={() => console.log('libs')}>
+                                  onPress={() => this.props.navigation.navigate('AboutDependenciesScreen', {data: packageJson.dependencies})}>
                             <Left>
                                 <Icon active name="developer-board"
                                       type={'MaterialCommunityIcons'}

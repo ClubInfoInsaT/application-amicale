@@ -6,7 +6,7 @@ import PlanningScreen from '../screens/PlanningScreen';
 import ProxiwashScreen from '../screens/ProxiwashScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import AboutScreen from '../screens/AboutScreen';
+import AboutScreen from '../screens/About/AboutScreen';
 import SideMenu from "../components/SideMenu";
 
 
