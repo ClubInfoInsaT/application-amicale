@@ -1,7 +1,6 @@
 import React from 'react';
-import {Platform, Dimensions, ScrollView, StyleSheet, View, Image, FlatList} from 'react-native';
-import {Drawer} from 'react-native-paper';
-import {Badge, Text, Container, Content, Icon, Left, List, ListItem, Right} from "native-base";
+import {Platform, Dimensions, StyleSheet, Image, FlatList} from 'react-native';
+import {Badge, Text, Container, Content, Icon, Left, ListItem, Right} from "native-base";
 import i18n from "i18n-js";
 
 const deviceHeight = Dimensions.get("window").height;

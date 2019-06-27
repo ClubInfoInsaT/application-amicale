@@ -12,7 +12,7 @@ export default class HomeScreen extends React.Component {
         return (
             <Container>
                 <CustomHeader navigation={nav} title={i18n.t('screens.home')}/>
-                <Content>
+                <Content padder>
                     <Button>
                         <Icon
                             active

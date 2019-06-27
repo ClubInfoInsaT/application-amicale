@@ -1,6 +1,6 @@
 import React from 'react';
 import {Dimensions, StyleSheet, View, Text} from 'react-native';
-import {StyleProvider} from 'native-base';
+import {StyleProvider, Root} from 'native-base';
 import AppNavigator from './navigation/AppNavigator';
 import ThemeManager from './utils/ThemeManager';
 import LocaleManager from './utils/LocaleManager';
@@ -48,7 +48,9 @@ export default class App extends React.Component {
         // console.log(this.state.currentTheme.variables.containerBgColor);
         return (
             <StyleProvider style={this.state.currentTheme}>
-                <AppNavigator/>
+                <Root>
+                    <AppNavigator/>
+                </Root>
             </StyleProvider>);
     }
 }

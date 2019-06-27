@@ -53,7 +53,8 @@ export default class AboutScreen extends React.Component {
                                 <Text>{Platform.OS === "ios" ? i18n.t('aboutScreen.appstore') : i18n.t('aboutScreen.playstore')}</Text>
                             </Left>
                             <Right>
-                                <Icon name="arrow-forward"/>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
                             </Right>
                         </CardItem>
                         <CardItem button
@@ -66,7 +67,8 @@ export default class AboutScreen extends React.Component {
                                 <Text>Gitlab</Text>
                             </Left>
                             <Right>
-                                <Icon name="arrow-forward"/>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
                             </Right>
                         </CardItem>
                         <CardItem button
@@ -79,7 +81,8 @@ export default class AboutScreen extends React.Component {
                                 <Text>{i18n.t('aboutScreen.bugs')}</Text>
                             </Left>
                             <Right>
-                                <Icon name="arrow-forward"/>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
                             </Right>
                         </CardItem>
                         <CardItem button
@@ -94,7 +97,8 @@ export default class AboutScreen extends React.Component {
                                 </Text>
                             </Left>
                             <Right>
-                                <Icon name="arrow-forward"/>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
                             </Right>
                         </CardItem>
                         <CardItem button
@@ -109,7 +113,8 @@ export default class AboutScreen extends React.Component {
                                 </Text>
                             </Left>
                             <Right>
-                                <Icon name="arrow-forward"/>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
                             </Right>
                         </CardItem>
                     </Card>
@@ -140,7 +145,8 @@ export default class AboutScreen extends React.Component {
                                 </Text>
                             </Left>
                             <Right>
-                                <Icon name="arrow-forward"/>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
                             </Right>
                         </CardItem>
                         <CardItem button
@@ -155,7 +161,8 @@ export default class AboutScreen extends React.Component {
                                 </Text>
                             </Left>
                             <Right>
-                                <Icon name="arrow-forward"/>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
                             </Right>
                         </CardItem>
                         <CardItem button
@@ -170,7 +177,8 @@ export default class AboutScreen extends React.Component {
                                 </Text>
                             </Left>
                             <Right>
-                                <Icon name="arrow-forward"/>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
                             </Right>
                         </CardItem>
                     </Card>
@@ -191,7 +199,8 @@ export default class AboutScreen extends React.Component {
                                 </Text>
                             </Left>
                             <Right>
-                                <Icon name="arrow-forward"/>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
                             </Right>
                         </CardItem>
                         <CardItem button
@@ -206,7 +215,8 @@ export default class AboutScreen extends React.Component {
                                 </Text>
                             </Left>
                             <Right>
-                                <Icon name="arrow-forward"/>
+                                <Icon name="chevron-right"
+                                      type={'MaterialCommunityIcons'}/>
                             </Right>
                         </CardItem>
                     </Card>

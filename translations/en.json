@@ -21,4 +21,12 @@
     "reactNative": "Made with React Native",
     "libs": "Libraries used"
   },
+  "proximoScreen": {
+    "emptyList": "Empty List",
+    "article": "Article",
+    "articles": "Articles",
+    "sortName": "Sort by name",
+    "sortPrice": "Sort by price",
+    "listUpdated": "Article list updated!"
+  }
 }

@@ -20,5 +20,13 @@
     "technologies": "Technologies",
     "reactNative": "Créé avec React Native",
     "libs": "Librairies utilisées"
+  },
+  "proximoScreen": {
+    "emptyList": "Liste Vide",
+    "article": "Article",
+    "articles": "Articles",
+    "sortName": "Trier par nom",
+    "sortPrice": "Trier par prix",
+    "listUpdated": "Liste des articles mise à jour !"
   }
 }

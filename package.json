@@ -25,10 +25,12 @@
     "react-native-web": "^0.11.4",
     "react-native-week-view": "latest",
     "react-navigation": "latest",
-    "react-navigation-material-bottom-tabs": "latest"
+    "react-navigation-material-bottom-tabs": "latest",
+    "react-native-platform-touchable": "latest"
   },
   "devDependencies": {
-    "babel-preset-expo": "^5.1.1"
+    "babel-preset-expo": "^5.1.1",
+    "react-native-material-menu": "^0.6.2"
   },
   "private": true
 }
