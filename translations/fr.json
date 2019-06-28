@@ -6,8 +6,21 @@
     "about": "À Propos"
   },
   "settingsScreen": {
+    "appearanceCard": "Apparence",
     "nightMode": "Mode Nuit",
-    "restart": "Redémarrez l'application pour appliquer les changements"
+    "nightModeSub": "Passer l'application dans un thème sombre ou clair",
+    "proxiwashNotifReminder": "Rappel de machine en cours",
+    "proxiwashNotifReminderSub": "Choississez quand envoyer une notification pour vous rappeler qu'une machine avec votre linge est en cours",
+    "proxiwashNotifReminderPicker": {
+      "never": "Jamais",
+      "1": "1 min",
+      "2": "2 min",
+      "3": "3 min",
+      "5": "5 min",
+      "10": "10 min",
+      "20": "20 min",
+      "30": "30 min"
+    }
   },
   "aboutScreen": {
     "appstore": "Voir sur l'Appstore",
@@ -27,7 +40,9 @@
     "articles": "Articles",
     "sortName": "Trier par nom",
     "sortPrice": "Trier par prix",
-    "listUpdated": "Liste des articles mise à jour !"
+    "listUpdated": "Liste des articles mise à jour !",
+    "loading": "Chargement...",
+    "listTitle": "Choisissez une catégorie"
   },
   "proxiwashScreen": {
     "dryer": "Sèche Linge",

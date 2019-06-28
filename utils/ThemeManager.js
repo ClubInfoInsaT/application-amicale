@@ -23,8 +23,6 @@ export default class ThemeManager {
 
     setUpdateThemeCallback(callback) {
         this.updateThemeCallback = callback;
-        console.log(this.updateThemeCallback);
-
     }
 
     async getDataFromPreferences() {

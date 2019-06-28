@@ -35,8 +35,7 @@ export default class App extends React.Component {
     }
 
     updateTheme() {
-        console.log('update theme called');
-        // Change not propagating, need to restart the app
+        // console.log('update theme called');
         this.setState({
             currentTheme: ThemeManager.getInstance().getCurrentTheme()
         });
@@ -47,8 +46,8 @@ export default class App extends React.Component {
         if (this.state.isLoading) {
             return <View/>;
         }
-        console.log('rendering');
-        console.log(this.state.currentTheme.variables.containerBgColor);
+        // console.log('rendering');
+        // console.log(this.state.currentTheme.variables.containerBgColor);
         return (
             <Root>
                 <StyleProvider style={this.state.currentTheme}>

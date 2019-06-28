@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, RefreshControl, FlatList} from 'react-native';
-import {Container, Text, Content, ListItem, Left, Right, Body, Badge, Icon, Toast} from 'native-base';
+import {RefreshControl, SectionList} from 'react-native';
+import {Container, Text, Content, ListItem, Left, Right, Body, Badge, Icon, Toast, H2} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
@@ -82,12 +82,24 @@ export default class ProximoMainScreen extends React.Component {
 
     render() {
         const nav = this.props.navigation;
+        const data = [
+            {
+                title: i18n.t('proximoScreen.listTitle'),
+                data: this.state.data,
+                extraData: this.state,
+            }
+        ];
+        const loadingData = [
+            {
+                title: i18n.t('proximoScreen.loading'),
+                data: []
+            }
+        ];
         return (
             <Container>
                 <CustomHeader navigation={nav} title={'Proximo'}/>
-                <FlatList
-                    data={this.state.data}
-                    extraData={this.state}
+                <SectionList
+                    sections={this.state.firstLoading ? loadingData : data}
                     keyExtractor={(item, index) => item.type}
                     refreshControl={
                         <RefreshControl
@@ -96,6 +108,9 @@ export default class ProximoMainScreen extends React.Component {
                         />
                     }
                     style={{minHeight: 300, width: '100%'}}
+                    renderSectionHeader={({section: {title}}) => (
+                        <H2 style={{textAlign: 'center', paddingVertical: 10}}>{title}</H2>
+                    )}
                     renderItem={({item}) =>
                         <ListItem
                             button

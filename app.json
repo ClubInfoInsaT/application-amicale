@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Application Amicale",
+    "name": "Amicale INSAT",
     "slug": "application-amicale",
     "privacy": "public",
     "sdkVersion": "33.0.0",
@@ -15,7 +15,7 @@
     "primaryColor": "#e42612",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#fff"
     },
     "updates": {

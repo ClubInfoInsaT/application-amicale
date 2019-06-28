@@ -118,7 +118,7 @@ export default {
     containerBgColor: "#333333",
 
     //Date Picker
-    datePickerTextColor: "#000",
+    datePickerTextColor: "#fff",
     datePickerBg: "transparent",
 
     // Font

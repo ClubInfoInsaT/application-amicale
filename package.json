@@ -22,6 +22,7 @@
     "react-dom": "^16.8.6",
     "react-i18next": "latest",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-fs": "^2.13.3",
     "react-native-paper": "latest",
     "react-native-platform-touchable": "latest",
     "react-native-settings-page": "latest",

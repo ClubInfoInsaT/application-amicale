@@ -11,7 +11,7 @@ import CustomMaterialIcon from "../components/CustomMaterialIcon";
 const DATA_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/dataProxiwash.json";
 const WATCHED_MACHINES_PREFKEY = "proxiwash.watchedMachines";
 
-const remainderNotifTime = 5;
+let reminderNotifTime = 5;
 
 const MACHINE_STATES = {
     TERMINE: "0",
@@ -72,8 +72,11 @@ export default class ProxiwashScreen extends React.Component {
         let dataString = await AsyncStorage.getItem(WATCHED_MACHINES_PREFKEY);
         if (dataString === null)
             dataString = '[]';
-        this.setState({machinesWatched: JSON.parse(dataString)});
+        this.setState({
+            machinesWatched: JSON.parse(dataString)
+        });
     }
+
 
     componentDidMount() {
         this._onRefresh();
@@ -112,16 +115,24 @@ export default class ProxiwashScreen extends React.Component {
                 i18n.t('proxiwashScreen.notifications.machineFinishedBody', {number: number}),
                 new Date().getTime() + remainingTime * (60 * 1000) // Convert back to milliseconds
             );
-            let remainderNotifID = undefined;
-            if (remainingTime > remainderNotifTime) {
-                remainderNotifID = await NotificationsManager.scheduleNotification(
-                    i18n.t('proxiwashScreen.notifications.machineRunningTitle', {time: remainderNotifTime}),
+            let reminderNotifID = undefined;
+            let val = await AsyncStorage.getItem('proxiwashNotifKey');
+            if (val === null)
+                val = "5";
+            if (val !== "never")
+                reminderNotifTime = parseInt(val);
+            else
+                reminderNotifTime = -1;
+            console.log(reminderNotifTime);
+            if (remainingTime > reminderNotifTime && reminderNotifTime > 0) {
+                reminderNotifID = await NotificationsManager.scheduleNotification(
+                    i18n.t('proxiwashScreen.notifications.machineRunningTitle', {time: reminderNotifTime}),
                     i18n.t('proxiwashScreen.notifications.machineRunningBody', {number: number}),
-                    new Date().getTime() + (remainingTime - remainderNotifTime) * (60 * 1000) // Convert back to milliseconds
+                    new Date().getTime() + (remainingTime - reminderNotifTime) * (60 * 1000) // Convert back to milliseconds
                 );
             }
             let data = this.state.machinesWatched;
-            data.push({machineNumber: number, endNotifID: endNotifID, remainderNotifID: remainderNotifID});
+            data.push({machineNumber: number, endNotifID: endNotifID, reminderNotifID: reminderNotifID});
             this.setState({machinesWatched: data});
             AsyncStorage.setItem(WATCHED_MACHINES_PREFKEY, JSON.stringify(data));
         } else
@@ -136,8 +147,8 @@ export default class ProxiwashScreen extends React.Component {
             });
             let arrayIndex = data.indexOf(elem);
             NotificationsManager.cancelScheduledNoification(data[arrayIndex].endNotifID);
-            if (data[arrayIndex].remainderNotifID !== undefined)
-                NotificationsManager.cancelScheduledNoification(data[arrayIndex].remainderNotifID);
+            if (data[arrayIndex].reminderNotifID !== undefined)
+                NotificationsManager.cancelScheduledNoification(data[arrayIndex].reminderNotifID);
             data.splice(arrayIndex, 1);
             this.setState({machinesWatched: data});
             AsyncStorage.setItem(WATCHED_MACHINES_PREFKEY, JSON.stringify(data));
