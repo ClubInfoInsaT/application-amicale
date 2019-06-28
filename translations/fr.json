@@ -36,6 +36,7 @@
     "washers": "Lave Linges",
     "min": "min",
     "listUpdated": "Etat des machines mis à jour",
+    "loading": "Chargement...",
     "states": {
       "finished": "TERMINE",
       "ready": "DISPONIBLE",

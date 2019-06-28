@@ -3,6 +3,7 @@ import {StyleSheet, RefreshControl, FlatList} from 'react-native';
 import {Container, Text, Content, ListItem, Left, Right, Body, Badge, Icon, Toast} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
+import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/dataProximo.json";
 
@@ -20,6 +21,7 @@ export default class ProximoMainScreen extends React.Component {
         super(props);
         this.state = {
             refreshing: false,
+            firstLoading: true,
             data: {},
         };
     }
@@ -64,7 +66,10 @@ export default class ProximoMainScreen extends React.Component {
     _onRefresh = () => {
         this.setState({refreshing: true});
         this.readData().then(() => {
-            this.setState({refreshing: false});
+            this.setState({
+                refreshing: false,
+                firstLoading: false
+            });
             Toast.show({
                 text: i18n.t('proximoScreen.listUpdated'),
                 buttonText: 'OK',
@@ -100,9 +105,10 @@ export default class ProximoMainScreen extends React.Component {
                             }}
                         >
                             <Left>
-                                <Icon name={typesIcons[item.type] ? typesIcons[item.type] : typesIcons.Default}
-                                      type={'MaterialCommunityIcons'}
-                                      style={styles.icon}/>
+                                <CustomMaterialIcon
+                                    icon={typesIcons[item.type] ? typesIcons[item.type] : typesIcons.Default}
+                                    fontSize={30}
+                                />
                             </Left>
                             <Body>
                                 <Text>
@@ -113,8 +119,7 @@ export default class ProximoMainScreen extends React.Component {
                                 </Text></Badge>
                             </Body>
                             <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
+                                <CustomMaterialIcon icon="chevron-right"/>
                             </Right>
                         </ListItem>}
                 />
@@ -123,9 +128,3 @@ export default class ProximoMainScreen extends React.Component {
     }
 }
 
-const styles = StyleSheet.create({
-    icon: {
-        fontSize: 30,
-        width: 30
-    }
-});

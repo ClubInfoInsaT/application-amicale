@@ -53,4 +53,8 @@ export default class ThemeManager {
             return getTheme(platform);
     }
 
+    getCurrentThemeVariables() {
+        return this.getCurrentTheme().variables;
+    }
+
 };

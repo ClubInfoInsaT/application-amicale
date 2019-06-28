@@ -1,11 +1,13 @@
 import React from 'react';
-import {Dimensions, StyleSheet, View, Text} from 'react-native';
-import {StyleProvider, Root} from 'native-base';
+import {StyleProvider, Root, View} from 'native-base';
 import AppNavigator from './navigation/AppNavigator';
 import ThemeManager from './utils/ThemeManager';
 import LocaleManager from './utils/LocaleManager';
 import * as Font from 'expo-font';
-
+// edited native-base-shoutem-theme according to
+// https://github.com/GeekyAnts/theme/pull/5/files/91f67c55ca6e65fe3af779586b506950c9f331be#diff-4cfc2dd4d5dae7954012899f2268a422
+// to allow for dynamic theme switching
+import { clearThemeCache } from 'native-base-shoutem-theme';
 
 export default class App extends React.Component {
 
@@ -35,9 +37,10 @@ export default class App extends React.Component {
     updateTheme() {
         console.log('update theme called');
         // Change not propagating, need to restart the app
-        // this.setState({
-        //     currentTheme: ThemeManager.getInstance().getCurrentTheme()
-        // });
+        this.setState({
+            currentTheme: ThemeManager.getInstance().getCurrentTheme()
+        });
+        clearThemeCache();
     }
 
     render() {
@@ -45,12 +48,15 @@ export default class App extends React.Component {
             return <View/>;
         }
         console.log('rendering');
-        // console.log(this.state.currentTheme.variables.containerBgColor);
+        console.log(this.state.currentTheme.variables.containerBgColor);
         return (
-            <StyleProvider style={this.state.currentTheme}>
-                <Root>
+            <Root>
+                <StyleProvider style={this.state.currentTheme}>
+
                     <AppNavigator/>
-                </Root>
-            </StyleProvider>);
+
+                </StyleProvider>
+            </Root>
+        );
     }
 }

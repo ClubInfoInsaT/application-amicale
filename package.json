@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "latest",
+    "@shoutem/theme": "latest",
     "expo": "^33.0.0",
     "expo-font": "^5.0.1",
     "expo-localization": "^5.0.1",
@@ -16,6 +17,7 @@
     "i18n-js": "^3.3.0",
     "i18next": "latest",
     "native-base": "latest",
+    "native-base-shoutem-theme": "latest",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-i18next": "latest",

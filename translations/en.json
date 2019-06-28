@@ -36,6 +36,7 @@
     "washers": "Washers",
     "min": "min",
     "listUpdated": "Machines state updated",
+    "loading": "Loading...",
     "states": {
       "finished": "FINISHED",
       "ready": "READY",

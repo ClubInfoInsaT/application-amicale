@@ -1,10 +1,12 @@
 import React from 'react';
-import {SectionList, RefreshControl, StyleSheet, View, ScrollView} from 'react-native';
-import {Badge, Body, Container, Content, Icon, Left, ListItem, Right, Text, Toast, H2, Button} from 'native-base';
+import {SectionList, RefreshControl, View} from 'react-native';
+import {Body, Container, Icon, Left, ListItem, Right, Text, Toast, H2, Button} from 'native-base';
 import CustomHeader from "../components/CustomHeader";
+import ThemeManager from '../utils/ThemeManager';
 import NotificationsManager from '../utils/NotificationsManager';
 import i18n from "i18n-js";
 import {AsyncStorage} from 'react-native'
+import CustomMaterialIcon from "../components/CustomMaterialIcon";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/dataProxiwash.json";
 const WATCHED_MACHINES_PREFKEY = "proxiwash.watchedMachines";
@@ -28,11 +30,12 @@ export default class ProxiwashScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        stateColors[MACHINE_STATES.TERMINE] = 'rgba(54,165,22,0.4)';
-        stateColors[MACHINE_STATES.DISPONIBLE] = '#ffffff';
-        stateColors[MACHINE_STATES.FONCTIONNE] = 'rgba(241,237,41,0.4)';
-        stateColors[MACHINE_STATES.HS] = '#a2a2a2';
-        stateColors[MACHINE_STATES.ERREUR] = 'rgba(204,7,0,0.4)';
+        let colors = ThemeManager.getInstance().getCurrentThemeVariables();
+        stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
+        stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;
+        stateColors[MACHINE_STATES.FONCTIONNE] = colors.proxiwashRunningColor;
+        stateColors[MACHINE_STATES.HS] = colors.proxiwashBrokenColor;
+        stateColors[MACHINE_STATES.ERREUR] = colors.proxiwashErrorColor;
 
         stateStrings[MACHINE_STATES.TERMINE] = i18n.t('proxiwashScreen.states.finished');
         stateStrings[MACHINE_STATES.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
@@ -41,6 +44,7 @@ export default class ProxiwashScreen extends React.Component {
         stateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.states.error');
         this.state = {
             refreshing: false,
+            firstLoading: true,
             data: {},
             machinesWatched: [],
         };
@@ -78,7 +82,10 @@ export default class ProxiwashScreen extends React.Component {
     _onRefresh = () => {
         this.setState({refreshing: true});
         this.readData().then(() => {
-            this.setState({refreshing: false});
+            this.setState({
+                refreshing: false,
+                firstLoading: false
+            });
             Toast.show({
                 text: i18n.t('proxiwashScreen.listUpdated'),
                 buttonText: 'OK',
@@ -158,13 +165,12 @@ export default class ProxiwashScreen extends React.Component {
                     alignSelf: 'flex-end',
                     right: 0,
                     width: item.donePercent !== '' ? (100 - parseInt(item.donePercent)).toString() + '%' : 0,
-                    backgroundColor: '#fff'
+                    backgroundColor: ThemeManager.getInstance().getCurrentThemeVariables().containerBgColor
                 }}>
                 </View>
                 <Left>
-                    <Icon name={section.title === data[0].title ? 'tumble-dryer' : 'washing-machine'}
-                          type={'MaterialCommunityIcons'}
-                          style={{fontSize: 30, width: 30}}
+                    <CustomMaterialIcon icon={section.title === data[0].title ? 'tumble-dryer' : 'washing-machine'}
+                                        fontSize={30}
                     />
                 </Left>
                 <Body>
@@ -214,12 +220,17 @@ export default class ProxiwashScreen extends React.Component {
                 extraData: this.state
             },
         ];
-        console.log(this.state.machinesWatched);
+        const loadingData = [
+            {
+                title: i18n.t('proxiwashScreen.loading'),
+                data: []
+            }
+        ];
         return (
             <Container>
                 <CustomHeader navigation={nav} title={'Proxiwash'}/>
                 <SectionList
-                    sections={data}
+                    sections={this.state.firstLoading ? loadingData : data}
                     keyExtractor={(item) => item.number}
                     refreshControl={
                         <RefreshControl

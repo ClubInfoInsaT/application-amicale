@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, Text, Content, ListItem, Left, Thumbnail, Right, Button, Icon} from 'native-base';
+import {Container, Text, Content, ListItem, Left, Thumbnail, Right, Body, Icon} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import {AsyncStorage, FlatList, View} from "react-native";
 import Touchable from 'react-native-platform-touchable';
@@ -181,10 +181,12 @@ export default class ProximoMainScreen extends React.Component {
                             >
                                 <Left>
                                     <Thumbnail square source={{uri: IMG_URL + item.name + '.jpg'}}/>
+                                </Left>
+                                <Body>
                                     <Text style={{marginLeft: 20}}>
                                         {item.name}
                                     </Text>
-                                </Left>
+                                </Body>
                                 <Right style={{flex: 1}}>
                                     <Text>
                                         {item.price}€

@@ -35,6 +35,7 @@ export default {
 
   // Button
   btnFontFamily: platform === "ios" ? "System" : "Roboto_medium",
+  btnTextColor: '#fff',
   btnDisabledBg: "#b5b5b5",
   buttonPadding: 6,
   get btnPrimaryBg() {
@@ -100,7 +101,7 @@ export default {
   CheckboxIconSize: platform === "ios" ? 21 : 16,
   CheckboxIconMarginTop: platform === "ios" ? undefined : 1,
   CheckboxFontSize: platform === "ios" ? 23 / 0.9 : 17,
-  checkboxBgColor: "#039BE5",
+  checkboxBgColor: "#E4202D",
   checkboxSize: 20,
   checkboxTickColor: "#fff",
 
@@ -210,7 +211,7 @@ export default {
 
   // Radio Button
   radioBtnSize: platform === "ios" ? 25 : 23,
-  radioSelectedColorAndroid: "#3F51B5",
+  radioSelectedColorAndroid: "#E4202D",
   radioBtnLineHeight: platform === "ios" ? 29 : 24,
   get radioColor() {
     return this.brandPrimary;
@@ -253,6 +254,17 @@ export default {
   subTitleFontSize: platform === "ios" ? 11 : 14,
   subtitleColor: platform === "ios" ? "#8e8e93" : "#FFF",
   titleFontColor: platform === "ios" ? "#000" : "#FFF",
+
+
+  // CUSTOM
+  customMaterialIconColor: "#5d5d5d",
+
+  // PROXIWASH
+  proxiwashFinishedColor: "rgba(54,165,22,0.4)",
+  proxiwashReadyColor: "transparent",
+  proxiwashRunningColor: "rgba(94,104,241,0.4)",
+  proxiwashBrokenColor: "#a2a2a2",
+  proxiwashErrorColor: "rgba(204,7,0,0.4)",
 
   // Other
   borderRadiusBase: platform === "ios" ? 5 : 2,

@@ -35,37 +35,38 @@ export default {
 
     // Button
     btnFontFamily: platform === "ios" ? "System" : "Roboto_medium",
+    btnTextColor: '#fff',
     btnDisabledBg: "#b5b5b5",
     buttonPadding: 6,
     get btnPrimaryBg() {
         return this.brandPrimary;
     },
     get btnPrimaryColor() {
-        return this.inverseTextColor;
+        return this.textColor;
     },
     get btnInfoBg() {
         return this.brandInfo;
     },
     get btnInfoColor() {
-        return this.inverseTextColor;
+        return this.textColor;
     },
     get btnSuccessBg() {
         return this.brandSuccess;
     },
     get btnSuccessColor() {
-        return this.inverseTextColor;
+        return this.textColor;
     },
     get btnDangerBg() {
         return this.brandDanger;
     },
     get btnDangerColor() {
-        return this.inverseTextColor;
+        return this.textColor;
     },
     get btnWarningBg() {
         return this.brandWarning;
     },
     get btnWarningColor() {
-        return this.inverseTextColor;
+        return this.textColor;
     },
     get btnTextSize() {
         return platform === "ios" ? this.fontSizeBase * 1.1 : this.fontSizeBase - 1;
@@ -87,8 +88,8 @@ export default {
     },
 
     // Card
-    cardDefaultBg: "#2b2b2b",
-    cardBorderColor: "#ccc",
+    cardDefaultBg: "#363636",
+    cardBorderColor: "#1a1a1a",
     cardBorderRadius: 2,
     cardItemPadding: platform === "ios" ? 10 : 12,
 
@@ -100,7 +101,7 @@ export default {
     CheckboxIconSize: platform === "ios" ? 21 : 16,
     CheckboxIconMarginTop: platform === "ios" ? undefined : 1,
     CheckboxFontSize: platform === "ios" ? 23 / 0.9 : 17,
-    checkboxBgColor: "#039BE5",
+    checkboxBgColor: "#E4202D",
     checkboxSize: 20,
     checkboxTickColor: "#fff",
 
@@ -114,7 +115,7 @@ export default {
     brandLight: "#f4f4f4",
 
     //Container
-    containerBgColor: "#2b2b2b",
+    containerBgColor: "#333333",
 
     //Date Picker
     datePickerTextColor: "#000",
@@ -197,11 +198,11 @@ export default {
 
     // List
     listBg: "transparent",
-    listBorderColor: "#c9c9c9",
+    listBorderColor: "#727272",
     listDividerBg: "#f4f4f4",
     listBtnUnderlayColor: "#DDD",
     listItemPadding: platform === "ios" ? 10 : 12,
-    listNoteColor: "#808080",
+    listNoteColor: "#acacac",
     listNoteSize: 13,
 
     // Progress Bar
@@ -210,7 +211,7 @@ export default {
 
     // Radio Button
     radioBtnSize: platform === "ios" ? 25 : 23,
-    radioSelectedColorAndroid: "#3F51B5",
+    radioSelectedColorAndroid: "#E4202D",
     radioBtnLineHeight: platform === "ios" ? 29 : 24,
     get radioColor() {
         return this.brandPrimary;
@@ -240,7 +241,7 @@ export default {
     tabFontSize: 15,
 
     // Text
-    textColor: "#fff",
+    textColor: "#d6d6d6",
     inverseTextColor: "#000",
     noteFontSize: 14,
     get defaultTextColor() {
@@ -253,6 +254,18 @@ export default {
     subTitleFontSize: platform === "ios" ? 11 : 14,
     subtitleColor: platform === "ios" ? "#8e8e93" : "#FFF",
     titleFontColor: platform === "ios" ? "#000" : "#FFF",
+
+
+    // CUSTOM
+    customMaterialIconColor: "#b3b3b3",
+
+    // PROXIWASH
+    proxiwashFinishedColor: "rgba(12,157,13,0.72)",
+    proxiwashReadyColor: "transparent",
+    proxiwashRunningColor: "rgba(29,59,175,0.65)",
+    proxiwashBrokenColor: "#000000",
+    proxiwashErrorColor: "rgba(213,8,0,0.57)",
+
 
     // Other
     borderRadiusBase: platform === "ios" ? 5 : 2,

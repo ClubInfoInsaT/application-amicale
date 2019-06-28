@@ -1,10 +1,11 @@
 import React from 'react';
-import {Platform, StyleSheet, Linking, Alert} from 'react-native';
-import {Container, Content, Text, Card, CardItem, Body, Icon, Left, Right, Thumbnail, H1} from 'native-base';
+import {Platform, StyleSheet, Linking, Alert, FlatList} from 'react-native';
+import {Container, Content, Text, Card, CardItem, Body, Icon, Left, Right, Thumbnail, H1, ListItem} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
 import appJson from '../../app';
 import packageJson from '../../package';
+import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 
 const links = {
     appstore: 'https://qwant.com',
@@ -19,11 +20,105 @@ const links = {
     react: 'https://facebook.github.io/react-native/',
 };
 
+function openWebLink(link) {
+    Linking.openURL(link).catch((err) => console.error('Error opening link', err));
+}
 
 export default class AboutScreen extends React.Component {
 
-    openWebLink(link) {
-        Linking.openURL(link).catch((err) => console.error('Error opening link', err));
+    appData = [
+        {
+            onPressCallback: () => openWebLink(Platform.OS === "ios" ? links.appstore : links.playstore),
+            icon: Platform.OS === "ios" ? 'apple' : 'google-play',
+            text: Platform.OS === "ios" ? i18n.t('aboutScreen.appstore') : i18n.t('aboutScreen.playstore'),
+            showChevron: true
+        },
+        {
+            onPressCallback: () => openWebLink(links.gitlab),
+            icon: 'git',
+            text: 'Gitlab',
+            showChevron: true
+        },
+        {
+            onPressCallback: () => openWebLink(links.bugs),
+            icon: 'bug',
+            text: i18n.t('aboutScreen.bugs'),
+            showChevron: true
+        },
+        {
+            onPressCallback: () => openWebLink(links.changelog),
+            icon: 'refresh',
+            text: i18n.t('aboutScreen.changelog'),
+            showChevron: true
+        },
+        {
+            onPressCallback: () => openWebLink(links.license),
+            icon: 'file-document',
+            text: i18n.t('aboutScreen.license'),
+            showChevron: true
+        },
+    ];
+
+    authorData = [
+        {
+            onPressCallback: () => Alert.alert('Coucou', 'Whaou'),
+            icon: 'account-circle',
+            text: 'Arnaud VERGNET',
+            showChevron: false
+        },
+        {
+            onPressCallback: () => openWebLink(links.mail),
+            icon: 'email',
+            text: i18n.t('aboutScreen.mail'),
+            showChevron: true
+        },
+        {
+            onPressCallback: () => openWebLink(links.linkedin),
+            icon: 'linkedin',
+            text: 'Linkedin',
+            showChevron: true
+        },
+        {
+            onPressCallback: () => openWebLink(links.facebook),
+            icon: 'facebook',
+            text: 'Facebook',
+            showChevron: true
+        },
+    ];
+
+    technoData = [
+        {
+            onPressCallback: () => openWebLink(links.react),
+            icon: 'react',
+            text: i18n.t('aboutScreen.reactNative'),
+            showChevron: false
+        },
+        {
+            onPressCallback: () => this.props.navigation.navigate('AboutDependenciesScreen', {data: packageJson.dependencies}),
+            icon: 'developer-board',
+            text: i18n.t('aboutScreen.libs'),
+            showChevron: true
+        },
+    ];
+
+    getCardItem(onPressCallback, icon, text, showChevron) {
+        return (
+            <CardItem button
+                      onPress={onPressCallback}>
+                <Left>
+                    <CustomMaterialIcon icon={icon}/>
+                    <Text>{text}</Text>
+                </Left>
+                {showChevron ?
+                    <Right>
+                        <CustomMaterialIcon icon="chevron-right"
+                                            fontSize={20}/>
+                    </Right>
+                    :
+                    <Right/>
+                }
+            </CardItem>)
+            ;
     }
 
     render() {
@@ -44,182 +139,39 @@ export default class AboutScreen extends React.Component {
                                 </Body>
                             </Left>
                         </CardItem>
-                        <CardItem button
-                                  onPress={() => this.openWebLink(Platform.OS === "ios" ? links.appstore : links.playstore)}>
-                            <Left>
-                                <Icon active name={Platform.OS === "ios" ? 'apple' : 'google-play'}
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>{Platform.OS === "ios" ? i18n.t('aboutScreen.appstore') : i18n.t('aboutScreen.playstore')}</Text>
-                            </Left>
-                            <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
-                            </Right>
-                        </CardItem>
-                        <CardItem button
-                                  onPress={() => this.openWebLink(links.gitlab)}>
-                            <Left>
-                                <Icon active name="git"
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>Gitlab</Text>
-                            </Left>
-                            <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
-                            </Right>
-                        </CardItem>
-                        <CardItem button
-                                  onPress={() => this.openWebLink(links.bugs)}>
-                            <Left>
-                                <Icon active name="bug"
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>{i18n.t('aboutScreen.bugs')}</Text>
-                            </Left>
-                            <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
-                            </Right>
-                        </CardItem>
-                        <CardItem button
-                                  onPress={() => this.openWebLink(links.changelog)}>
-                            <Left>
-                                <Icon active name="refresh"
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>
-                                    {i18n.t('aboutScreen.changelog')}
-                                </Text>
-                            </Left>
-                            <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
-                            </Right>
-                        </CardItem>
-                        <CardItem button
-                                  onPress={() => this.openWebLink(links.license)}>
-                            <Left>
-                                <Icon active name="file-document"
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>
-                                    {i18n.t('aboutScreen.license')}
-                                </Text>
-                            </Left>
-                            <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
-                            </Right>
-                        </CardItem>
+                        <FlatList
+                            data={this.appData}
+                            keyExtractor={(item) => item.icon}
+                            renderItem={({item}) =>
+                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
+                            }
+                        />
                     </Card>
 
                     <Card>
                         <CardItem header>
                             <Text>{i18n.t('aboutScreen.author')}</Text>
                         </CardItem>
-                        <CardItem button
-                        onPress={() => Alert.alert('Coucou', 'Whaou')}>
-                            <Left>
-                                <Icon active name="account-circle"
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>Arnaud VERGNET</Text>
-                            </Left>
-                        </CardItem>
-                        <CardItem button
-                                  onPress={() => this.openWebLink(links.mail)}>
-                            <Left>
-                                <Icon active name="email"
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>
-                                    {i18n.t('aboutScreen.mail')}
-                                </Text>
-                            </Left>
-                            <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
-                            </Right>
-                        </CardItem>
-                        <CardItem button
-                                  onPress={() => this.openWebLink(links.linkedin)}>
-                            <Left>
-                                <Icon active name="linkedin"
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>
-                                    Linkedin
-                                </Text>
-                            </Left>
-                            <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
-                            </Right>
-                        </CardItem>
-                        <CardItem button
-                                  onPress={() => this.openWebLink(links.facebook)}>
-                            <Left>
-                                <Icon active name="facebook"
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>
-                                    Facebook
-                                </Text>
-                            </Left>
-                            <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
-                            </Right>
-                        </CardItem>
+                        <FlatList
+                            data={this.authorData}
+                            keyExtractor={(item) => item.icon}
+                            renderItem={({item}) =>
+                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
+                            }
+                        />
                     </Card>
 
                     <Card>
                         <CardItem header>
                             <Text>{i18n.t('aboutScreen.technologies')}</Text>
                         </CardItem>
-                        <CardItem button
-                                  onPress={() => this.openWebLink(links.react)}>
-                            <Left>
-                                <Icon active name="react"
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>
-                                    {i18n.t('aboutScreen.reactNative')}
-                                </Text>
-                            </Left>
-                            <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
-                            </Right>
-                        </CardItem>
-                        <CardItem button
-                                  onPress={() => this.props.navigation.navigate('AboutDependenciesScreen', {data: packageJson.dependencies})}>
-                            <Left>
-                                <Icon active name="developer-board"
-                                      type={'MaterialCommunityIcons'}
-                                      style={{color: "#777", fontSize: 26, width: 30}}
-                                />
-                                <Text>
-                                    {i18n.t('aboutScreen.libs')}
-                                </Text>
-                            </Left>
-                            <Right>
-                                <Icon name="chevron-right"
-                                      type={'MaterialCommunityIcons'}/>
-                            </Right>
-                        </CardItem>
+                        <FlatList
+                            data={this.technoData}
+                            keyExtractor={(item) => item.icon}
+                            renderItem={({item}) =>
+                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
+                            }
+                        />
                     </Card>
                 </Content>
             </Container>

@@ -1,9 +1,10 @@
 import React from 'react';
-import {Alert} from 'react-native'
-import {Badge, Container, Content, Icon, Left, ListItem, Right, Text, List, CheckBox} from "native-base";
+import {Container, Content, Left, ListItem, Right, Text, List, CheckBox, Button} from "native-base";
 import CustomHeader from "../components/CustomHeader";
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
+import {NavigationActions, StackActions} from "react-navigation";
+import CustomMaterialIcon from "../components/CustomMaterialIcon";
 
 
 const nightModeKey = 'nightMode';
@@ -16,8 +17,18 @@ export default class SettingsScreen extends React.Component {
     toggleNightMode() {
         this.setState({nightMode: !this.state.nightMode});
         ThemeManager.getInstance().setNightmode(!this.state.nightMode);
-        Alert.alert(i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.restart'));
+        // Alert.alert(i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.restart'));
+        this.resetStack();
+    }
 
+    resetStack() {
+        const resetAction = StackActions.reset({
+            index: 0,
+            key: null,
+            actions: [NavigationActions.navigate({ routeName: 'Main' })],
+        });
+        this.props.navigation.dispatch(resetAction);
+        this.props.navigation.navigate('Settings');
     }
 
     render() {
@@ -32,12 +43,7 @@ export default class SettingsScreen extends React.Component {
                             onPress={() => this.toggleNightMode()}
                         >
                             <Left>
-                                <Icon
-                                    active
-                                    name={'theme-light-dark'}
-                                    type={'MaterialCommunityIcons'}
-                                    style={{color: "#777", fontSize: 26, width: 30}}
-                                />
+                                <CustomMaterialIcon icon={'theme-light-dark'} />
                                 <Text>
                                     {i18n.t('settingsScreen.nightMode')}
                                 </Text>

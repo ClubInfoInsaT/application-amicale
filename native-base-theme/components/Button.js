@@ -319,7 +319,7 @@ export default (variables /*: * */ = variable) => {
       fontFamily: variables.btnFontFamily,
       marginLeft: 0,
       marginRight: 0,
-      color: variables.inverseTextColor,
+      color: variables.btnTextColor,
       fontSize: variables.btnTextSize,
       paddingHorizontal: 16,
       backgroundColor: "transparent"
@@ -327,13 +327,13 @@ export default (variables /*: * */ = variable) => {
     },
 
     "NativeBase.Icon": {
-      color: variables.inverseTextColor,
+      color: variables.btnTextColor,
       fontSize: 24,
       marginHorizontal: 16,
       paddingTop: platform === "ios" ? 2 : undefined
     },
     "NativeBase.IconNB": {
-      color: variables.inverseTextColor,
+      color: variables.btnTextColor,
       fontSize: 24,
       marginHorizontal: 16,
       paddingTop: platform === "ios" ? 2 : undefined

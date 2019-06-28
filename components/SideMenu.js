@@ -2,6 +2,7 @@ import React from 'react';
 import {Platform, Dimensions, StyleSheet, Image, FlatList, Linking} from 'react-native';
 import {Badge, Text, Container, Content, Icon, Left, ListItem, Right} from "native-base";
 import i18n from "i18n-js";
+import CustomMaterialIcon from '../components/CustomMaterialIcon';
 
 const deviceHeight = Dimensions.get("window").height;
 
@@ -101,11 +102,9 @@ export default class SideBar extends React.Component {
                                 }}
                             >
                                 <Left>
-                                    <Icon
-                                        active
-                                        name={item.icon}
-                                        type={'MaterialCommunityIcons'}
-                                        style={{color: "#777", fontSize: 26, width: 30}}
+                                    <CustomMaterialIcon
+                                        icon={item.icon}
+                                        active={this.state.active === item.route}
                                     />
                                     <Text style={styles.text}>
                                         {item.name}
