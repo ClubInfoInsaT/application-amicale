@@ -27,6 +27,10 @@ type State = {
     data: Object,
 };
 
+/**
+ * Class defining the main proximo screen. This screen shows the different categories of articles
+ * offered by proximo.
+ */
 export default class ProximoMainScreen extends React.Component<Props, State> {
 
     state = {
@@ -35,7 +39,15 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         data: {},
     };
 
-    static generateDataset(types: Array<string>, data: Object) {
+    /**
+     * Generate the dataset using types and data.
+     * This will group items under the same type.
+     *
+     * @param types An array containing the types available (categories)
+     * @param data The array of articles represented by objects
+     * @returns {Array} The formatted dataset
+     */
+    static generateDataset(types: Array<string>, data: Array<Object>) {
         let finalData = [];
         for (let i = 0; i < types.length; i++) {
             finalData.push({
@@ -51,6 +63,11 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         return finalData;
     }
 
+    /**
+     * Async function reading data from the proximo website and setting the state to rerender the list
+     *
+     * @returns {Promise<void>}
+     */
     async readData() {
         try {
             let response = await fetch(DATA_URL);
@@ -68,10 +85,18 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Refresh the list on first screen load
+     */
     componentDidMount() {
         this._onRefresh();
     }
 
+    /**
+     * Display a loading indicator and fetch data from the internet
+     *
+     * @private
+     */
     _onRefresh = () => {
         this.setState({refreshing: true});
         this.readData().then(() => {
@@ -88,7 +113,12 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         });
     };
 
-
+    /**
+     * Renders the proximo categories list.
+     * If we are loading for the first time, change the data for the SectionList to display a loading message.
+     *
+     * @returns {react.Node}
+     */
     render() {
         const nav = this.props.navigation;
         const data = [

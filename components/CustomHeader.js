@@ -13,14 +13,19 @@ type Props = {
     navigation: Object,
 };
 
-
+/**
+ * Custom component defining a header using native base
+ *
+ * @prop backButton {boolean} Whether to show a back button or a burger menu. Use burger if unspecified
+ * @prop rightMenu {React.Node} Element to place at the right of the header. Use nothing if unspecified
+ * @prop title {string} This header title
+ * @prop navigation {Object} The navigation object from react navigation
+ */
 export default class CustomHeader extends React.Component<Props> {
 
     static defaultProps = {
         backButton: false,
         rightMenu: <Right/>,
-        fontSize: 26,
-        width: 30,
     };
 
     render() {

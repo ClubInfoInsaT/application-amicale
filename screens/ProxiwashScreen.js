@@ -38,6 +38,10 @@ type State = {
     machinesWatched: Array<Object>
 };
 
+/**
+ * Class defining the app's proxiwash screen. This screen shows information about washing machines and
+ * dryers, taken from a scrapper reading proxiwash website
+ */
 export default class ProxiwashScreen extends React.Component<Props, State> {
 
     state = {
@@ -47,6 +51,11 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         machinesWatched: [],
     };
 
+    /**
+     * Creates machine state parameters using current theme and translations
+     *
+     * @param props
+     */
     constructor(props: Props) {
         super(props);
         let colors = ThemeManager.getInstance().getCurrentThemeVariables();
@@ -63,6 +72,11 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         stateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.states.error');
     }
 
+    /**
+     * Read the data from the proxiwash scrapper and set it to current state to reload the screen
+     *
+     * @returns {Promise<void>}
+     */
     async readData() {
         try {
             let response = await fetch(DATA_URL);
@@ -75,6 +89,11 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Get which machines have notifications enabled before loading the screen
+     *
+     * @returns {Promise<void>}
+     */
     async componentWillMount() {
         let dataString = await AsyncStorage.getItem(WATCHED_MACHINES_PREFKEY);
         if (dataString === null)
@@ -84,11 +103,18 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         });
     }
 
-
+    /**
+     * Refresh the data on first screen load
+     */
     componentDidMount() {
         this._onRefresh();
     }
 
+    /**
+     * Show the refresh inddicator and wait for data to be fetched from the scrapper
+     *
+     * @private
+     */
     _onRefresh = () => {
         this.setState({refreshing: true});
         this.readData().then(() => {
@@ -105,6 +131,14 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         });
     };
 
+    /**
+     * Get the time remaining based on start/end time and done percent
+     *
+     * @param startString The string representing the start time. Format: hh:mm
+     * @param endString The string representing the end time. Format: hh:mm
+     * @param percentDone The percentage done
+     * @returns {number} How many minutes are remaining for this machine
+     */
     static getRemainingTime(startString: string, endString: string, percentDone: string): number {
         let startArray = startString.split(':');
         let endArray = endString.split(':');
@@ -117,6 +151,15 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         return parseInt(time);
     }
 
+    /**
+     * Setup notifications for the machine with the given ID.
+     * One notification will be sent at the end of the program.
+     * Another will be send a few minutes before the end, based on the value of reminderNotifTime
+     *
+     * @param machineId The machine's ID
+     * @param remainingTime The time remaining for this machine
+     * @returns {Promise<void>}
+     */
     async setupNotifications(machineId: string, remainingTime: number) {
         if (!this.isMachineWatched(machineId)) {
             let endNotifID = await NotificationsManager.scheduleNotification(
@@ -148,6 +191,12 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
             this.disableNotification(machineId);
     }
 
+    /**
+     * Stop scheduled notifications for the machine of the given ID.
+     * This will also remove the notification if it was already shown.
+     *
+     * @param machineId The machine's ID
+     */
     disableNotification(machineId: string) {
         let data: Object = this.state.machinesWatched;
         if (data.length > 0) {
@@ -164,12 +213,26 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         }
     }
 
-    isMachineWatched(number: string) {
+    /**
+     * Checks whether the machine of the given ID has scheduled notifications
+     *
+     * @param machineID The machine's ID
+     * @returns {boolean}
+     */
+    isMachineWatched(machineID: string) {
         return this.state.machinesWatched.find(function (elem) {
-            return elem.machineNumber === number
+            return elem.machineNumber === machineID
         }) !== undefined;
     }
 
+    /**
+     * Get list item to be rendered
+     *
+     * @param item The object containing the item's data
+     * @param section The object describing the current SectionList section
+     * @param data The full data used by the SectionList
+     * @returns {React.Node}
+     */
     renderItem(item: Object, section: Object, data: Object) {
         return (
             <ListItem
@@ -226,6 +289,12 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
             </ListItem>);
     }
 
+    /**
+     * Renders the machines list.
+     * If we are loading for the first time, change the data for the SectionList to display a loading message.
+     *
+     * @returns {react.Node}
+     */
     render() {
         const nav = this.props.navigation;
         const data = [

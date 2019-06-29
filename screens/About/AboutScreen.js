@@ -26,13 +26,22 @@ type Props = {
     navigation: Object,
 };
 
-
+/**
+ * Opens a link in the device's browser
+ * @param link The link to open
+ */
 function openWebLink(link) {
     Linking.openURL(link).catch((err) => console.error('Error opening link', err));
 }
 
+/**
+ * Class defining an about screen. This screen shows the user information about the app and it's author.
+ */
 export default class AboutScreen extends React.Component<Props> {
 
+    /**
+     * Data to be displayed in the app card
+     */
     appData: Array<Object> = [
         {
             onPressCallback: () => openWebLink(Platform.OS === "ios" ? links.appstore : links.playstore),
@@ -66,6 +75,9 @@ export default class AboutScreen extends React.Component<Props> {
         },
     ];
 
+    /**
+     * Data to be displayed in the author card
+     */
     authorData: Array<Object> = [
         {
             onPressCallback: () => Alert.alert('Coucou', 'Whaou'),
@@ -93,6 +105,9 @@ export default class AboutScreen extends React.Component<Props> {
         },
     ];
 
+    /**
+     * Data to be displayed in the technologies card
+     */
     technoData: Array<Object> = [
         {
             onPressCallback: () => openWebLink(links.react),
@@ -108,7 +123,16 @@ export default class AboutScreen extends React.Component<Props> {
         },
     ];
 
-    getCardItem(onPressCallback: Function, icon: string, text: string, showChevron: boolean) {
+    /**
+     * Get a clickable card item to be rendered inside a card.
+     *
+     * @param onPressCallback The callback to use when the item is clicked
+     * @param icon The icon name to use from MaterialCommunityIcons
+     * @param text The text to show
+     * @param showChevron Whether to show a chevron indicating this button will change screen
+     * @returns {React.Node}
+     */
+    static getCardItem(onPressCallback: Function, icon: string, text: string, showChevron: boolean) {
         return (
             <CardItem button
                       onPress={onPressCallback}>
@@ -150,7 +174,7 @@ export default class AboutScreen extends React.Component<Props> {
                             data={this.appData}
                             keyExtractor={(item) => item.icon}
                             renderItem={({item}) =>
-                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
+                                AboutScreen.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
                             }
                         />
                     </Card>
@@ -163,7 +187,7 @@ export default class AboutScreen extends React.Component<Props> {
                             data={this.authorData}
                             keyExtractor={(item) => item.icon}
                             renderItem={({item}) =>
-                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
+                                AboutScreen.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
                             }
                         />
                     </Card>
@@ -176,7 +200,7 @@ export default class AboutScreen extends React.Component<Props> {
                             data={this.technoData}
                             keyExtractor={(item) => item.icon}
                             renderItem={({item}) =>
-                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
+                                AboutScreen.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
                             }
                         />
                     </Card>

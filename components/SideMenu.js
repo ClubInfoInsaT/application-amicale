@@ -20,15 +20,24 @@ type State = {
     active: string,
 };
 
+/**
+ * Class used to define a navigation drawer
+ */
 export default class SideBar extends React.Component<Props, State> {
 
     dataSet: Array<Object>;
 
+    state = {
+        active: 'Home',
+    };
+
+    /**
+     * Generate the datasets
+     *
+     * @param props
+     */
     constructor(props: Props) {
         super(props);
-        this.state = {
-            active: 'Home',
-        };
         this.dataSet = [
             {
                 name: i18n.t('screens.home'),
@@ -82,6 +91,10 @@ export default class SideBar extends React.Component<Props, State> {
         ];
     }
 
+    /**
+     * Navigate to the selected route, close the drawer, and mark the correct item as selected
+     * @param route {string} The route name to navigate to
+     */
     navigateToScreen(route: string) {
         this.props.navigation.navigate(route);
         this.props.navigation.closeDrawer();

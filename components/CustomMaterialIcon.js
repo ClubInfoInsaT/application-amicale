@@ -12,6 +12,15 @@ type Props = {
     width: number,
 }
 
+/**
+ * Custom component defining a material icon using native base
+ *
+ * @prop active {boolean} Whether to set the icon color to active
+ * @prop icon {string} The icon string to use from MaterialCommunityIcons
+ * @prop color {string} The icon color. Use default theme color if unspecified
+ * @prop fontSize {number} The icon size. Use 26 if unspecified
+ * @prop width {number} The icon width. Use 30 if unspecified
+ */
 export default class CustomMaterialIcon extends React.Component<Props> {
 
     static defaultProps = {

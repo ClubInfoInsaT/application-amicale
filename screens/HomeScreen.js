@@ -10,6 +10,9 @@ type Props = {
     navigation: Object,
 }
 
+/**
+ * Class defining the app's home screen
+ */
 export default class HomeScreen extends React.Component<Props> {
     render() {
         const nav = this.props.navigation;

@@ -11,7 +11,9 @@ import SettingsScreen from '../screens/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import SideMenu from "../components/SideMenu";
 
-
+/**
+ * Creates the drawer navigation stack
+ */
 export default createDrawerNavigator({
         Home: {screen: HomeScreen},
         Planning: {screen: PlanningScreen,},

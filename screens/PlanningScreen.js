@@ -9,6 +9,9 @@ type Props = {
     navigation: Object,
 }
 
+/**
+ * Class defining the app's planning screen
+ */
 export default class PlanningScreen extends React.Component<Props> {
     render() {
         const nav = this.props.navigation;

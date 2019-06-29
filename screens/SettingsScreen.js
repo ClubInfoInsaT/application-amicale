@@ -33,12 +33,20 @@ type State = {
     proxiwashNotifPickerSelected: string,
 };
 
+/**
+ * Class defining the Settings screen. This screen shows controls to modify app preferences.
+ */
 export default class SettingsScreen extends React.Component<Props, State> {
     state = {
         nightMode: ThemeManager.getInstance().getNightMode(),
         proxiwashNotifPickerSelected: "5"
     };
 
+    /**
+     * Gets data from preferences before rendering components
+     *
+     * @returns {Promise<void>}
+     */
     async componentWillMount() {
         let val = await AsyncStorage.getItem(proxiwashNotifKey);
         if (val === null)
@@ -48,7 +56,11 @@ export default class SettingsScreen extends React.Component<Props, State> {
         });
     }
 
-
+    /**
+     * Save the value for the proxiwash reminder notification time
+     *
+     * @param value The value to store
+     */
     onProxiwashNotifPickerValueChange(value: string) {
         AsyncStorage.setItem(proxiwashNotifKey, value);
         this.setState({
@@ -56,6 +68,11 @@ export default class SettingsScreen extends React.Component<Props, State> {
         });
     }
 
+    /**
+     * Returns a picker allowing the user to select the proxiwash reminder notification time
+     *
+     * @returns {React.Node}
+     */
     getProxiwashNotifPicker() {
         return (
             <Picker
@@ -77,6 +94,9 @@ export default class SettingsScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Toggle night mode and save it to preferences
+     */
     toggleNightMode() {
         ThemeManager.getInstance().setNightMode(!this.state.nightMode);
         this.setState({nightMode: !this.state.nightMode});
@@ -84,6 +104,9 @@ export default class SettingsScreen extends React.Component<Props, State> {
         this.resetStack();
     }
 
+    /**
+     * Reset react navigation stack to allow for a theme reset
+     */
     resetStack() {
         const resetAction = StackActions.reset({
             index: 0,
@@ -94,7 +117,16 @@ export default class SettingsScreen extends React.Component<Props, State> {
         this.props.navigation.navigate('Settings');
     }
 
-    getToggleItem(onPressCallback: Function, icon: string, text: string, subtitle: string) {
+    /**
+     * Get a list item using a checkbox control
+     *
+     * @param onPressCallback The callback when the checkbox state changes
+     * @param icon The icon name to display on the list item
+     * @param title The text to display as this list item title
+     * @param subtitle The text to display as this list item subtitle
+     * @returns {React.Node}
+     */
+    getToggleItem(onPressCallback: Function, icon: string, title: string, subtitle: string) {
         return (
             <ListItem
                 button
@@ -106,7 +138,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 </Left>
                 <Body>
                     <Text>
-                        {text}
+                        {title}
                     </Text>
                     <Text note>
                         {subtitle}
@@ -120,7 +152,16 @@ export default class SettingsScreen extends React.Component<Props, State> {
         );
     }
 
-    static getGeneralItem(control: React.Node, icon: string, text: string, subtitle: string) {
+    /**
+     * Get a list item using the specified control
+     *
+     * @param control The custom control to use
+     * @param icon The icon name to display on the list item
+     * @param title The text to display as this list item title
+     * @param subtitle The text to display as this list item subtitle
+     * @returns {React.Node}
+     */
+    static getGeneralItem(control: React.Node, icon: string, title: string, subtitle: string) {
         return (
             <ListItem
                 thumbnail
@@ -130,7 +171,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 </Left>
                 <Body>
                     <Text>
-                        {text}
+                        {title}
                     </Text>
                     <Text note>
                         {subtitle}

@@ -16,7 +16,6 @@ const sortMode = {
     name: '1',
 };
 
-
 function sortPrice(a, b) {
     return a.price - b.price;
 }
@@ -53,7 +52,10 @@ type State = {
     sortNameIcon: React.Node,
 };
 
-export default class ProximoMainScreen extends React.Component<Props, State> {
+/**
+ * Class defining proximo's article list of a certain category.
+ */
+export default class ProximoListScreen extends React.Component<Props, State> {
 
     state = {
         navData: this.props.navigation.getParam('data', []).sort(sortPrice),
@@ -65,11 +67,22 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
 
     _menu: Menu;
 
+    /**
+     * Saves the reference to the sort menu for later use
+     *
+     * @param ref The menu reference
+     */
     setMenuRef = (ref: Menu) => {
         this._menu = ref;
     };
 
-    toggleSortMode(mode: string) {
+    /**
+     * Sets the sort mode based on the one selected.
+     * If the selected mode is the current one, reverse it.
+     *
+     * @param mode The string representing the mode
+     */
+    sortModeSelected(mode: string) {
         let isReverse = this.state.isSortReversed;
         if (mode === this.state.currentSortMode) // reverse mode
             isReverse = !isReverse; // this.state not updating on this function cycle
@@ -78,6 +91,12 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         this.setSortMode(mode, isReverse);
     }
 
+    /**
+     * Set the current sort mode.
+     *
+     * @param mode The string representing the mode
+     * @param isReverse Whether to use a reverse sort
+     */
     setSortMode(mode: string, isReverse: boolean) {
         this.setState({
             currentSortMode: mode,
@@ -107,10 +126,19 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         this._menu.hide();
     }
 
+    /**
+     * Set the sort mode from state when components are ready
+     */
     componentDidMount() {
         this.setSortMode(this.state.currentSortMode, this.state.isSortReversed);
     }
 
+    /**
+     * Set the sort menu icon based on the given mode.
+     *
+     * @param mode The string representing the mode
+     * @param isReverse Whether to use a reversed icon
+     */
     setupSortIcons(mode: string, isReverse: boolean) {
         const downSortIcon =
             <Icon
@@ -166,12 +194,12 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
                             }
                         >
                             <MenuItem
-                                onPress={() => this.toggleSortMode(sortMode.name)}>
+                                onPress={() => this.sortModeSelected(sortMode.name)}>
                                 {this.state.sortNameIcon}
                                 {i18n.t('proximoScreen.sortName')}
                             </MenuItem>
                             <MenuItem
-                                onPress={() => this.toggleSortMode(sortMode.price)}>
+                                onPress={() => this.sortModeSelected(sortMode.price)}>
                                 {this.state.sortPriceIcon}
                                 {i18n.t('proximoScreen.sortPrice')}
                             </MenuItem>

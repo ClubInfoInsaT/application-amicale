@@ -20,6 +20,9 @@ type Props = {
     navigation: Object
 }
 
+/**
+ * Class defining a screen showing the list of libraries used by the app, taken from package.json
+ */
 export default class AboutDependenciesScreen extends React.Component<Props> {
 
     render() {
