@@ -26,9 +26,11 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "icon": "./assets/ios.icon.png",
       "bundleIdentifier": "com.test.applicationamicale"
     },
     "android": {
+      "icon": "./assets/android.icon.png",
       "package": "com.test.applicationamicale"
     }
   }

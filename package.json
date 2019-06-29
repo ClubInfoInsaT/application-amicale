@@ -8,33 +8,28 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@expo/vector-icons": "latest",
-    "@shoutem/theme": "latest",
-    "expo": "^33.0.0",
+    "@expo/vector-icons": "^10.0.2",
+    "@shoutem/theme": "^0.11.3",
+    "expo": "^33.0.7",
     "expo-font": "^5.0.1",
     "expo-localization": "^5.0.1",
     "expo-permissions": "^5.0.1",
     "i18n-js": "^3.3.0",
-    "i18next": "latest",
-    "native-base": "latest",
-    "native-base-shoutem-theme": "latest",
-    "react": "16.8.3",
+    "i18next": "^17.0.4",
+    "native-base": "^2.12.1",
+    "native-base-shoutem-theme": "^0.2.3",
+    "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-i18next": "latest",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
-    "react-native-fs": "^2.13.3",
-    "react-native-paper": "latest",
-    "react-native-platform-touchable": "latest",
-    "react-native-settings-page": "latest",
-    "react-native-status-bar-height": "latest",
+    "react-native": "^0.59.9",
+    "react-native-platform-touchable": "^1.1.1",
+    "react-native-status-bar-height": "^2.3.1",
     "react-native-web": "^0.11.4",
-    "react-native-week-view": "latest",
-    "react-navigation": "latest",
-    "react-navigation-material-bottom-tabs": "latest"
+    "react-navigation": "^3.11.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.1",
-    "react-native-material-menu": "^0.6.2"
+    "react-native-material-menu": "^0.6.3"
   },
   "private": true
 }
