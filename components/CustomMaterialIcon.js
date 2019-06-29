@@ -1,12 +1,25 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import {Icon} from "native-base";
 import ThemeManager from '../utils/ThemeManager';
 
-export default class CustomMaterialIcon extends React.Component {
+type Props = {
+    active: boolean,
+    icon: string,
+    color: ?string,
+    fontSize: number,
+    width: number,
+}
 
-    constructor(props) {
-        super(props);
-    }
+export default class CustomMaterialIcon extends React.Component<Props> {
+
+    static defaultProps = {
+        active: false,
+        color: undefined,
+        fontSize: 26,
+        width: 30,
+    };
 
     render() {
         return (
@@ -21,8 +34,8 @@ export default class CustomMaterialIcon extends React.Component {
                             this.props.active ?
                                 ThemeManager.getInstance().getCurrentThemeVariables().brandPrimary :
                                 ThemeManager.getInstance().getCurrentThemeVariables().customMaterialIconColor,
-                    fontSize: this.props.fontSize !== undefined ? this.props.fontSize : 26,
-                    width: this.props.width !== undefined ? this.props.width : 30
+                    fontSize: this.props.fontSize,
+                    width: this.props.width
                 }}
             />
         );

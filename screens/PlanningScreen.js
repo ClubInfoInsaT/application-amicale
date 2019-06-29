@@ -1,10 +1,15 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+// @flow
+
+import * as React from 'react';
 import {Container, Text} from 'native-base';
 import CustomHeader from "../components/CustomHeader";
 import i18n from "i18n-js";
 
-export default class PlanningScreen extends React.Component {
+type Props = {
+    navigation: Object,
+}
+
+export default class PlanningScreen extends React.Component<Props> {
     render() {
         const nav = this.props.navigation;
         return (
@@ -14,11 +19,4 @@ export default class PlanningScreen extends React.Component {
         );
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
+

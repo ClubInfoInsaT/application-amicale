@@ -1,6 +1,8 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import {Platform, StyleSheet, Linking, Alert, FlatList} from 'react-native';
-import {Container, Content, Text, Card, CardItem, Body, Icon, Left, Right, Thumbnail, H1, ListItem} from 'native-base';
+import {Container, Content, Text, Card, CardItem, Body, Left, Right, Thumbnail, H1} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
 import appJson from '../../app';
@@ -20,13 +22,18 @@ const links = {
     react: 'https://facebook.github.io/react-native/',
 };
 
+type Props = {
+    navigation: Object,
+};
+
+
 function openWebLink(link) {
     Linking.openURL(link).catch((err) => console.error('Error opening link', err));
 }
 
-export default class AboutScreen extends React.Component {
+export default class AboutScreen extends React.Component<Props> {
 
-    appData = [
+    appData: Array<Object> = [
         {
             onPressCallback: () => openWebLink(Platform.OS === "ios" ? links.appstore : links.playstore),
             icon: Platform.OS === "ios" ? 'apple' : 'google-play',
@@ -59,7 +66,7 @@ export default class AboutScreen extends React.Component {
         },
     ];
 
-    authorData = [
+    authorData: Array<Object> = [
         {
             onPressCallback: () => Alert.alert('Coucou', 'Whaou'),
             icon: 'account-circle',
@@ -86,7 +93,7 @@ export default class AboutScreen extends React.Component {
         },
     ];
 
-    technoData = [
+    technoData: Array<Object> = [
         {
             onPressCallback: () => openWebLink(links.react),
             icon: 'react',
@@ -101,7 +108,7 @@ export default class AboutScreen extends React.Component {
         },
     ];
 
-    getCardItem(onPressCallback, icon, text, showChevron) {
+    getCardItem(onPressCallback: Function, icon: string, text: string, showChevron: boolean) {
         return (
             <CardItem button
                       onPress={onPressCallback}>
@@ -178,12 +185,3 @@ export default class AboutScreen extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

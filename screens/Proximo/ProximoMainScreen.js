@@ -1,6 +1,8 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import {RefreshControl, SectionList} from 'react-native';
-import {Container, Text, Content, ListItem, Left, Right, Body, Badge, Icon, Toast, H2} from 'native-base';
+import {Container, Text, ListItem, Left, Right, Body, Badge, Toast, H2} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
@@ -15,18 +17,25 @@ const typesIcons = {
     Default: "information-outline",
 };
 
-export default class ProximoMainScreen extends React.Component {
+type Props = {
+    navigation: Object
+}
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            refreshing: false,
-            firstLoading: true,
-            data: {},
-        };
-    }
+type State = {
+    refreshing: boolean,
+    firstLoading: boolean,
+    data: Object,
+};
 
-    static generateDataset(types, data) {
+export default class ProximoMainScreen extends React.Component<Props, State> {
+
+    state = {
+        refreshing: false,
+        firstLoading: true,
+        data: {},
+    };
+
+    static generateDataset(types: Array<string>, data: Object) {
         let finalData = [];
         for (let i = 0; i < types.length; i++) {
             finalData.push({

@@ -1,9 +1,11 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import {Container, Text, Content, ListItem, Left, Thumbnail, Right, Body, Icon} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
-import {AsyncStorage, FlatList, View} from "react-native";
+import {FlatList} from "react-native";
 import Touchable from 'react-native-platform-touchable';
-import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
+import Menu, {MenuItem} from 'react-native-material-menu';
 import i18n from "i18n-js";
 
 const IMG_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/img/";
@@ -39,24 +41,35 @@ function sortNameReverse(a, b) {
     return 0;
 }
 
+type Props = {
+    navigation: Object
+}
 
-export default class ProximoMainScreen extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            navData: this.props.navigation.getParam('data', []).sort(sortPrice),
-            currentSortMode: sortMode.price,
-            isSortReversed: false,
-            sortPriceIcon: '',
-            sortNameIcon: '',
-        };
-    }
+type State = {
+    navData: Array<Object>,
+    currentSortMode: string,
+    isSortReversed: boolean,
+    sortPriceIcon: React.Node,
+    sortNameIcon: React.Node,
+};
 
-    setMenuRef = ref => {
+export default class ProximoMainScreen extends React.Component<Props, State> {
+
+    state = {
+        navData: this.props.navigation.getParam('data', []).sort(sortPrice),
+        currentSortMode: sortMode.price,
+        isSortReversed: false,
+        sortPriceIcon: '',
+        sortNameIcon: '',
+    };
+
+    _menu: Menu;
+
+    setMenuRef = (ref: Menu) => {
         this._menu = ref;
     };
 
-    toggleSortMode(mode) {
+    toggleSortMode(mode: string) {
         let isReverse = this.state.isSortReversed;
         if (mode === this.state.currentSortMode) // reverse mode
             isReverse = !isReverse; // this.state not updating on this function cycle
@@ -65,7 +78,7 @@ export default class ProximoMainScreen extends React.Component {
         this.setSortMode(mode, isReverse);
     }
 
-    setSortMode(mode, isReverse) {
+    setSortMode(mode: string, isReverse: boolean) {
         this.setState({
             currentSortMode: mode,
             isSortReversed: isReverse
@@ -98,7 +111,7 @@ export default class ProximoMainScreen extends React.Component {
         this.setSortMode(this.state.currentSortMode, this.state.isSortReversed);
     }
 
-    setupSortIcons(mode, isReverse) {
+    setupSortIcons(mode: string, isReverse: boolean) {
         const downSortIcon =
             <Icon
                 active

@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import {StyleProvider, Root, View} from 'native-base';
 import AppNavigator from './navigation/AppNavigator';
@@ -7,26 +9,37 @@ import * as Font from 'expo-font';
 // edited native-base-shoutem-theme according to
 // https://github.com/GeekyAnts/theme/pull/5/files/91f67c55ca6e65fe3af779586b506950c9f331be#diff-4cfc2dd4d5dae7954012899f2268a422
 // to allow for dynamic theme switching
-import { clearThemeCache } from 'native-base-shoutem-theme';
+import {clearThemeCache} from 'native-base-shoutem-theme';
 
-export default class App extends React.Component {
+type Props = {};
 
-    constructor(props) {
+type State = {
+    isLoading: boolean,
+    currentTheme: ?Object,
+};
+
+export default class App extends React.Component<Props, State> {
+
+    state = {
+        isLoading: true,
+        currentTheme: null,
+    };
+
+    constructor(props: Object) {
         super(props);
-        LocaleManager.getInstance().initTranslations();
-        this.updateTheme = this.updateTheme.bind(this);
-        this.state = {
-            isLoading: true,
-            currentTheme: undefined,
-        };
+        LocaleManager.initTranslations();
     }
 
+    /**
+     * Loads data before components are mounted, like fonts and themes
+     * @returns {Promise}
+     */
     async componentWillMount() {
         await Font.loadAsync({
             'Roboto': require('native-base/Fonts/Roboto.ttf'),
             'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
         });
-        ThemeManager.getInstance().setUpdateThemeCallback(this.updateTheme);
+        ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
         await ThemeManager.getInstance().getDataFromPreferences();
         this.setState({
             isLoading: false,
@@ -34,6 +47,9 @@ export default class App extends React.Component {
         });
     }
 
+    /**
+     * Updates the theme and clears the cache to force reloading the app colors
+     */
     updateTheme() {
         // console.log('update theme called');
         this.setState({
@@ -42,6 +58,11 @@ export default class App extends React.Component {
         clearThemeCache();
     }
 
+    /**
+     * Renders the app based on loading state
+     *
+     * @returns {*}
+     */
     render() {
         if (this.state.isLoading) {
             return <View/>;

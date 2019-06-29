@@ -1,12 +1,16 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import {Container, Content, Text, Button, Icon} from 'native-base';
 import CustomHeader from '../components/CustomHeader';
 import i18n from "i18n-js";
 import NotificationsManager from '../utils/NotificationsManager'
-import { Notifications } from 'expo';
 
+type Props = {
+    navigation: Object,
+}
 
-export default class HomeScreen extends React.Component {
+export default class HomeScreen extends React.Component<Props> {
     render() {
         const nav = this.props.navigation;
         return (
@@ -19,7 +23,7 @@ export default class HomeScreen extends React.Component {
                             name={'bell-ring'}
                             type={'MaterialCommunityIcons'}
                         />
-                        <Text>Notif</Text>
+                        <Text>Instant Notification</Text>
                     </Button>
                 </Content>
             </Container>

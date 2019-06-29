@@ -1,4 +1,6 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import {
     Container,
     Content,
@@ -22,7 +24,16 @@ import {AsyncStorage} from 'react-native'
 
 const proxiwashNotifKey = "proxiwashNotifKey";
 
-export default class SettingsScreen extends React.Component {
+type Props = {
+    navigation: Object,
+};
+
+type State = {
+    nightMode: boolean,
+    proxiwashNotifPickerSelected: string,
+};
+
+export default class SettingsScreen extends React.Component<Props, State> {
     state = {
         nightMode: ThemeManager.getInstance().getNightMode(),
         proxiwashNotifPickerSelected: "5"
@@ -38,21 +49,21 @@ export default class SettingsScreen extends React.Component {
     }
 
 
-    onProxiwashNotidPickerValueChange(value) {
+    onProxiwashNotifPickerValueChange(value: string) {
         AsyncStorage.setItem(proxiwashNotifKey, value);
         this.setState({
             proxiwashNotifPickerSelected: value
         });
     }
 
-    getproxiwashNotifPicker() {
+    getProxiwashNotifPicker() {
         return (
             <Picker
                 note
                 mode="dropdown"
                 style={{width: 120}}
                 selectedValue={this.state.proxiwashNotifPickerSelected}
-                onValueChange={(value) => this.onProxiwashNotidPickerValueChange(value)}
+                onValueChange={(value) => this.onProxiwashNotifPickerValueChange(value)}
             >
                 <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.never')} value="never"/>
                 <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.1')} value="1"/>
@@ -67,7 +78,7 @@ export default class SettingsScreen extends React.Component {
     }
 
     toggleNightMode() {
-        ThemeManager.getInstance().setNightmode(!this.state.nightMode);
+        ThemeManager.getInstance().setNightMode(!this.state.nightMode);
         this.setState({nightMode: !this.state.nightMode});
         // Alert.alert(i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.restart'));
         this.resetStack();
@@ -83,7 +94,7 @@ export default class SettingsScreen extends React.Component {
         this.props.navigation.navigate('Settings');
     }
 
-    getToggleItem(onPressCallback, icon, text, subtitle) {
+    getToggleItem(onPressCallback: Function, icon: string, text: string, subtitle: string) {
         return (
             <ListItem
                 button
@@ -109,7 +120,7 @@ export default class SettingsScreen extends React.Component {
         );
     }
 
-    getGeneralItem(control, icon, text, subtitle) {
+    static getGeneralItem(control: React.Node, icon: string, text: string, subtitle: string) {
         return (
             <ListItem
                 thumbnail
@@ -152,7 +163,7 @@ export default class SettingsScreen extends React.Component {
                             <Text>Proxiwash</Text>
                         </CardItem>
                         <List>
-                            {this.getGeneralItem(this.getproxiwashNotifPicker(), 'washing-machine', i18n.t('settingsScreen.proxiwashNotifReminder'), i18n.t('settingsScreen.proxiwashNotifReminderSub'))}
+                            {SettingsScreen.getGeneralItem(this.getProxiwashNotifPicker(), 'washing-machine', i18n.t('settingsScreen.proxiwashNotifReminder'), i18n.t('settingsScreen.proxiwashNotifReminderSub'))}
                         </List>
                     </Card>
                 </Content>

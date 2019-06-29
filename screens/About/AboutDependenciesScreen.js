@@ -1,5 +1,7 @@
-import React from 'react';
-import {Container, Text, Content, ListItem, Body, Left, Thumbnail, Right, Button, Icon} from 'native-base';
+// @flow
+
+import * as React from 'react';
+import {Container, Text, Content, ListItem, Body} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import {FlatList} from "react-native";
 import i18n from "i18n-js";
@@ -14,8 +16,11 @@ function generateListFromObject(object) {
     return list;
 }
 
+type Props = {
+    navigation: Object
+}
 
-export default class AboutDependenciesScreen extends React.Component {
+export default class AboutDependenciesScreen extends React.Component<Props> {
 
     render() {
         const nav = this.props.navigation;
@@ -26,7 +31,7 @@ export default class AboutDependenciesScreen extends React.Component {
                 <Content>
                     <FlatList
                         data={data}
-                        keyExtractor={(item, index) => item.name}
+                        keyExtractor={(item) => item.name}
                         style={{minHeight: 300, width: '100%'}}
                         renderItem={({item}) =>
                             <ListItem>

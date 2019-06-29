@@ -1,6 +1,8 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import {Platform, Dimensions, StyleSheet, Image, FlatList, Linking} from 'react-native';
-import {Badge, Text, Container, Content, Icon, Left, ListItem, Right} from "native-base";
+import {Badge, Text, Container, Content, Left, ListItem, Right} from "native-base";
 import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
 
@@ -10,9 +12,19 @@ const drawerCover = require("../assets/drawer-cover.png");
 
 const WIKETUD_LINK = "https://www.etud.insa-toulouse.fr/wiketud/index.php/Accueil";
 
-export default class SideBar extends React.Component {
+type Props = {
+    navigation: Object,
+};
 
-    constructor(props) {
+type State = {
+    active: string,
+};
+
+export default class SideBar extends React.Component<Props, State> {
+
+    dataSet: Array<Object>;
+
+    constructor(props: Props) {
         super(props);
         this.state = {
             active: 'Home',
@@ -70,7 +82,7 @@ export default class SideBar extends React.Component {
         ];
     }
 
-    navigateToScreen(route) {
+    navigateToScreen(route: string) {
         this.props.navigation.navigate(route);
         this.props.navigation.closeDrawer();
         this.setState({active: route});
@@ -88,7 +100,7 @@ export default class SideBar extends React.Component {
                     <FlatList
                         data={this.dataSet}
                         extraData={this.state}
-                        keyExtractor={(item, index) => item.route}
+                        keyExtractor={(item) => item.route}
                         renderItem={({item}) =>
                             <ListItem
                                 button

@@ -1,15 +1,31 @@
-import React from "react";
-import {Body, Button, Header, Icon, Left, Right, Title} from "native-base";
+// @flow
+
+import * as React from "react";
+import {Body, Header, Icon, Left, Right, Title} from "native-base";
 import {StyleSheet} from "react-native";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import Touchable from 'react-native-platform-touchable';
 
+type Props = {
+    backButton: boolean,
+    rightMenu: React.Node,
+    title: string,
+    navigation: Object,
+};
 
-export default class CustomHeader extends React.Component {
+
+export default class CustomHeader extends React.Component<Props> {
+
+    static defaultProps = {
+        backButton: false,
+        rightMenu: <Right/>,
+        fontSize: 26,
+        width: 30,
+    };
+
     render() {
         let button;
-        let rightMenu;
-        if (this.props.backButton !== undefined && this.props.backButton === true)
+        if (this.props.backButton)
             button =
                 <Touchable
                     style={{padding: 6}}
@@ -30,11 +46,6 @@ export default class CustomHeader extends React.Component {
                         type={'MaterialCommunityIcons'}/>
                 </Touchable>;
 
-        if (this.props.rightMenu)
-            rightMenu = this.props.rightMenu;
-        else
-            rightMenu = <Right/>;
-
         return (
             <Header style={styles.header}>
                 <Left>
@@ -43,7 +54,7 @@ export default class CustomHeader extends React.Component {
                 <Body>
                     <Title>{this.props.title}</Title>
                 </Body>
-                {rightMenu}
+                {this.props.rightMenu}
             </Header>);
     }
 };

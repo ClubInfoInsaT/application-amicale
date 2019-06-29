@@ -1,4 +1,6 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import {SectionList, RefreshControl, View} from 'react-native';
 import {Body, Container, Icon, Left, ListItem, Right, Text, Toast, H2, Button} from 'native-base';
 import CustomHeader from "../components/CustomHeader";
@@ -25,10 +27,27 @@ let stateStrings = {};
 
 let stateColors = {};
 
+type Props = {
+    navigation: Object,
+};
 
-export default class ProxiwashScreen extends React.Component {
+type State = {
+    refreshing: boolean,
+    firstLoading: boolean,
+    data: Object,
+    machinesWatched: Array<Object>
+};
 
-    constructor(props) {
+export default class ProxiwashScreen extends React.Component<Props, State> {
+
+    state = {
+        refreshing: false,
+        firstLoading: true,
+        data: {},
+        machinesWatched: [],
+    };
+
+    constructor(props: Props) {
         super(props);
         let colors = ThemeManager.getInstance().getCurrentThemeVariables();
         stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
@@ -42,24 +61,12 @@ export default class ProxiwashScreen extends React.Component {
         stateStrings[MACHINE_STATES.FONCTIONNE] = i18n.t('proxiwashScreen.states.running');
         stateStrings[MACHINE_STATES.HS] = i18n.t('proxiwashScreen.states.broken');
         stateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.states.error');
-        this.state = {
-            refreshing: false,
-            firstLoading: true,
-            data: {},
-            machinesWatched: [],
-        };
     }
 
     async readData() {
         try {
             let response = await fetch(DATA_URL);
             let responseJson = await response.json();
-            // This prevents end notifications from showing
-            // let watchList = this.state.machinesWatched;
-            // for (let i = 0; i < watchList.length; i++) {
-            //     if (responseJson[MACHINE_STATES[watchList[i].machineNumber.state]] !== MACHINE_STATES.FONCTIONNE)
-            //         this.disableNotification(watchList[i].machineNumber);
-            // }
             this.setState({
                 data: responseJson
             });
@@ -98,21 +105,23 @@ export default class ProxiwashScreen extends React.Component {
         });
     };
 
-    static getRemainingTime(startString, endString, percentDone) {
+    static getRemainingTime(startString: string, endString: string, percentDone: string): number {
         let startArray = startString.split(':');
         let endArray = endString.split(':');
         let startDate = new Date();
         startDate.setHours(parseInt(startArray[0]), parseInt(startArray[1]), 0, 0);
         let endDate = new Date();
         endDate.setHours(parseInt(endArray[0]), parseInt(endArray[1]), 0, 0);
-        return (((100 - percentDone) / 100) * (endDate - startDate) / (60 * 1000)).toFixed(0); // Convert milliseconds into minutes
+        // Convert milliseconds into minutes
+        let time: string = (((100 - parseFloat(percentDone)) / 100) * (endDate - startDate) / (60 * 1000)).toFixed(0);
+        return parseInt(time);
     }
 
-    async setupNotifications(number, remainingTime) {
-        if (!this.isMachineWatched(number)) {
+    async setupNotifications(machineId: string, remainingTime: number) {
+        if (!this.isMachineWatched(machineId)) {
             let endNotifID = await NotificationsManager.scheduleNotification(
                 i18n.t('proxiwashScreen.notifications.machineFinishedTitle'),
-                i18n.t('proxiwashScreen.notifications.machineFinishedBody', {number: number}),
+                i18n.t('proxiwashScreen.notifications.machineFinishedBody', {number: machineId}),
                 new Date().getTime() + remainingTime * (60 * 1000) // Convert back to milliseconds
             );
             let reminderNotifID = undefined;
@@ -127,41 +136,41 @@ export default class ProxiwashScreen extends React.Component {
             if (remainingTime > reminderNotifTime && reminderNotifTime > 0) {
                 reminderNotifID = await NotificationsManager.scheduleNotification(
                     i18n.t('proxiwashScreen.notifications.machineRunningTitle', {time: reminderNotifTime}),
-                    i18n.t('proxiwashScreen.notifications.machineRunningBody', {number: number}),
+                    i18n.t('proxiwashScreen.notifications.machineRunningBody', {number: machineId}),
                     new Date().getTime() + (remainingTime - reminderNotifTime) * (60 * 1000) // Convert back to milliseconds
                 );
             }
             let data = this.state.machinesWatched;
-            data.push({machineNumber: number, endNotifID: endNotifID, reminderNotifID: reminderNotifID});
+            data.push({machineNumber: machineId, endNotifID: endNotifID, reminderNotifID: reminderNotifID});
             this.setState({machinesWatched: data});
             AsyncStorage.setItem(WATCHED_MACHINES_PREFKEY, JSON.stringify(data));
         } else
-            this.disableNotification(number);
+            this.disableNotification(machineId);
     }
 
-    disableNotification(number) {
-        let data = this.state.machinesWatched;
+    disableNotification(machineId: string) {
+        let data: Object = this.state.machinesWatched;
         if (data.length > 0) {
             let elem = this.state.machinesWatched.find(function (elem) {
-                return elem.machineNumber === number
+                return elem.machineNumber === machineId
             });
             let arrayIndex = data.indexOf(elem);
-            NotificationsManager.cancelScheduledNoification(data[arrayIndex].endNotifID);
+            NotificationsManager.cancelScheduledNotification(data[arrayIndex].endNotifID);
             if (data[arrayIndex].reminderNotifID !== undefined)
-                NotificationsManager.cancelScheduledNoification(data[arrayIndex].reminderNotifID);
+                NotificationsManager.cancelScheduledNotification(data[arrayIndex].reminderNotifID);
             data.splice(arrayIndex, 1);
             this.setState({machinesWatched: data});
             AsyncStorage.setItem(WATCHED_MACHINES_PREFKEY, JSON.stringify(data));
         }
     }
 
-    isMachineWatched(number) {
+    isMachineWatched(number: string) {
         return this.state.machinesWatched.find(function (elem) {
             return elem.machineNumber === number
         }) !== undefined;
     }
 
-    renderItem(item, section, data) {
+    renderItem(item: Object, section: Object, data: Object) {
         return (
             <ListItem
                 thumbnail

@@ -1,3 +1,5 @@
+// @flow
+
 import {createAppContainer, createStackNavigator} from 'react-navigation';
 
 import MainDrawerNavigator from './MainDrawerNavigator';
