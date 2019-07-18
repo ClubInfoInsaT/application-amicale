@@ -73,6 +73,15 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     /**
+     * Check if the data object contains valid entries
+     *
+     * @returns {boolean}
+     */
+    isDataObjectValid() {
+        return Object.keys(this.state.data).length > 0;
+    }
+
+    /**
      * Read the data from the proxiwash scrapper and set it to current state to reload the screen
      *
      * @returns {Promise<void>}
@@ -85,7 +94,11 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                 data: responseJson
             });
         } catch (error) {
-            console.error(error);
+            console.log('Could not read data from server');
+            console.log(error);
+            this.setState({
+                data: {}
+            });
         }
     }
 
@@ -111,7 +124,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Show the refresh inddicator and wait for data to be fetched from the scrapper
+     * Show the refresh indicator and wait for data to be fetched from the scrapper
      *
      * @private
      */
@@ -122,12 +135,21 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                 refreshing: false,
                 firstLoading: false
             });
-            Toast.show({
-                text: i18n.t('proxiwashScreen.listUpdated'),
-                buttonText: 'OK',
-                type: "success",
-                duration: 2000
-            })
+            if (this.isDataObjectValid()) {
+                Toast.show({
+                    text: i18n.t('proxiwashScreen.listUpdated'),
+                    buttonText: 'OK',
+                    type: "success",
+                    duration: 2000
+                })
+            } else {
+                Toast.show({
+                    text: i18n.t('proxiwashScreen.listUpdateFail'),
+                    buttonText: 'OK',
+                    type: "danger",
+                    duration: 4000
+                })
+            }
         });
     };
 
@@ -297,18 +319,29 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
      */
     render() {
         const nav = this.props.navigation;
-        const data = [
-            {
-                title: i18n.t('proxiwashScreen.dryers'),
-                data: this.state.data.dryers === undefined ? [] : this.state.data.dryers,
-                extraData: this.state
-            },
-            {
-                title: i18n.t('proxiwashScreen.washers'),
-                data: this.state.data.washers === undefined ? [] : this.state.data.washers,
-                extraData: this.state
-            },
-        ];
+        let data = [];
+        if (!this.isDataObjectValid()) {
+            data = [
+                {
+                    title: i18n.t('proxiwashScreen.error'),
+                    data: []
+                }
+            ];
+        } else {
+            data = [
+                {
+                    title: i18n.t('proxiwashScreen.dryers'),
+                    data: this.state.data.dryers === undefined ? [] : this.state.data.dryers,
+                    extraData: this.state
+                },
+                {
+                    title: i18n.t('proxiwashScreen.washers'),
+                    data: this.state.data.washers === undefined ? [] : this.state.data.washers,
+                    extraData: this.state
+                },
+            ];
+        }
+
         const loadingData = [
             {
                 title: i18n.t('proxiwashScreen.loading'),

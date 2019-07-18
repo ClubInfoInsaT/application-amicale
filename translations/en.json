@@ -41,6 +41,7 @@
     "sortName": "Sort by name",
     "sortPrice": "Sort by price",
     "listUpdated": "Article list updated!",
+    "listUpdateFail": "Error while updating article list",
     "loading": "Loading...",
     "listTitle": "Choose a category"
   },
@@ -51,6 +52,8 @@
     "washers": "Washers",
     "min": "min",
     "listUpdated": "Machines state updated",
+    "listUpdateFail": "Error while updating machines state",
+    "error": "Could not update machines state. Pull down to retry.",
     "loading": "Loading...",
     "states": {
       "finished": "FINISHED",

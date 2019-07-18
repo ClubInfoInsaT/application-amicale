@@ -40,7 +40,8 @@
     "articles": "Articles",
     "sortName": "Trier par nom",
     "sortPrice": "Trier par prix",
-    "listUpdated": "Liste des articles mise à jour !",
+    "listUpdated": "Liste d'articles mise à jour !",
+    "listUpdateFail": "Erreur lors de la mise à jour de la list d'articles",
     "loading": "Chargement...",
     "listTitle": "Choisissez une catégorie"
   },
@@ -51,6 +52,8 @@
     "washers": "Lave Linges",
     "min": "min",
     "listUpdated": "Etat des machines mis à jour",
+    "listUpdateFail": "Erreur lors de la mise à jour del'état des machines",
+    "error": "Impossible de mettre a jour l'état des machines. Tirez vers le bas pour reessayer.",
     "loading": "Chargement...",
     "states": {
       "finished": "TERMINE",
