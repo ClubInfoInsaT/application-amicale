@@ -157,7 +157,7 @@ export default class AboutScreen extends React.Component<Props> {
         return (
             <Container>
                 <CustomHeader navigation={nav} title={i18n.t('screens.about')}/>
-                <Content>
+                <Content padder>
                     <Card>
                         <CardItem>
                             <Left>

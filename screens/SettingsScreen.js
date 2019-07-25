@@ -190,7 +190,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
         return (
             <Container>
                 <CustomHeader navigation={nav} title={i18n.t('screens.settings')}/>
-                <Content>
+                <Content padder>
                     <Card>
                         <CardItem header>
                             <Text>{i18n.t('settingsScreen.appearanceCard')}</Text>
