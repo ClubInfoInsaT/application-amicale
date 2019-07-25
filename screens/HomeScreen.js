@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Image, Linking, RefreshControl, FlatList} from 'react-native';
+import {Image, View, Linking, RefreshControl, FlatList} from 'react-native';
 import {Container, Content, Text, Button, Card, CardItem, Left, Body, Thumbnail, H2, Toast} from 'native-base';
 import CustomHeader from '../components/CustomHeader';
 import i18n from "i18n-js";
@@ -19,7 +19,7 @@ type State = {
     data: Object,
 };
 
-const FB_URL = "https://graph.facebook.com/v3.3/amicale.deseleves/posts?fields=message%2Cfull_picture%2Ccreated_time%2Cpermalink_url&access_token=EAAGliUs4Ei8BAC9J8U6EpL8LKLImMhvcgBq6iWK2BPDAhjZB7v4t8Fy5q3SsdfUq8nPovQfyFmwURSrNGWypwwBC1VZAf7Vmfff76UkpZCm0KTp56TRVK0NkH9YI4kRO8VqEucejFCBPQZBflZASwSbfRGZBLi4FWqBopBTEZCXg7RZAiMM02WXKXcc7b3AOl6wZD";
+const FB_URL = "https://graph.facebook.com/v3.3/amicale.deseleves/posts?fields=message%2Cfull_picture%2Ccreated_time%2Cpermalink_url&access_token=EAAGliUs4Ei8BAHRO8Gch8noIZCdQfgWztBKCvWy8MaKGMdWug1qUV2h4M3WzyUo8kbja1qhRdc8ZA1FzQDGbJZCxVtUakzFVvNpgC1SbJbtueA1rzlMCF5wuPinaKNyZCwH7JaqdUFbD9RnD6lOMCJ6XBeO0sojL2PBdEZAov6j6EZAOvjgykfG0ZB5E7EmxebrXWSQLBFoEAZDZD";
 
 let test_data = [
     {
@@ -125,7 +125,7 @@ export default class HomeScreen extends React.Component<Props, State> {
                 </CardItem>
                 <CardItem>
                     <Left>
-                        <Button transparent info
+                        <Button transparent
                         onPress={() => openWebLink(item.permalink_url)}>
                             <CustomMaterialIcon
                                 icon="facebook"
@@ -167,6 +167,7 @@ export default class HomeScreen extends React.Component<Props, State> {
                         renderItem={({item}) =>
                             this.getRenderItem(item)
                         }
+                        style={{minHeight: 300, width: '100%'}}
                     />
                 </Content>
             </Container>
