@@ -2,6 +2,8 @@
   "screens": {
     "home": "Home",
     "planning": "Planning",
+    "proxiwash": "Proxiwash",
+    "proximo": "Proximo",
     "settings": "Settings",
     "about": "About"
   },
@@ -21,6 +23,10 @@
       "20": "20 min",
       "30": "30 min"
     }
+  },
+  "homeScreen": {
+    "listUpdated": "List updated!",
+    "listUpdateFail": "Error while updating list"
   },
   "aboutScreen": {
     "appstore": "See on the Appstore",

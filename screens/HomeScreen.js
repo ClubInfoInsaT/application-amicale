@@ -1,44 +1,15 @@
 // @flow
 
 import * as React from 'react';
-import {Image, View, Linking, RefreshControl, FlatList} from 'react-native';
-import {Container, Content, Text, Button, Card, CardItem, Left, Body, Thumbnail, H2, Toast} from 'native-base';
-import CustomHeader from '../components/CustomHeader';
+import {Image, Linking} from 'react-native';
+import {Text, Button, Card, CardItem, Left, Body, Thumbnail} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
+import FetchedDataSectionList from "../components/FetchedDataSectionList";
 
 const ICON_AMICALE = require('../assets/amicale.png');
-
-type Props = {
-    navigation: Object,
-}
-
-type State = {
-    refreshing: boolean,
-    firstLoading: boolean,
-    data: Object,
-};
-
-const FB_URL = "https://graph.facebook.com/v3.3/amicale.deseleves/posts?fields=message%2Cfull_picture%2Ccreated_time%2Cpermalink_url&access_token=EAAGliUs4Ei8BAGwHmg7SNnosoEDMuDhP3i5lYOGrIGzZBNeMeGzGhpUigJt167cKXEIM0GiurSgaC0PS4Xg2GBzOVNiZCfr8u48VVB15a9YbOsuhjBqhHAMb2sz6ibwOuDhHSvwRZCUpBZCjmAW12e7RjWJp0jvyNoYYvIQbfaLWi3Nk2mBc";
-
-let test_data = [
-    {
-        title: "News de l'Amicale",
-        date: "June 15, 2019",
-        thumbnail: require("../assets/amicale.png"),
-        image: require("../assets/drawer-cover.png"),
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus congue sapien leo, ac dignissim odio dignissim sit amet. Quisque tempor, turpis sed scelerisque faucibus, dolor tortor porta sapien, eget tincidunt ante elit et ex. Sed sagittis dui non nisl aliquet viverra. Integer quis convallis enim, sit amet auctor ante. Praesent quis lacinia magna. Sed augue lacus, congue eu turpis vel, consectetur pellentesque nulla. Maecenas blandit diam odio, et finibus urna egestas non. Quisque congue finibus efficitur. Sed pretium mauris nec neque mattis, eu condimentum velit ultrices. Fusce eleifend porttitor nunc non suscipit. Aenean porttitor feugiat ipsum sit amet interdum. Maecenas tempor felis non tempus vehicula. Suspendisse sit amet eros neque. ",
-        link: "https://en.wikipedia.org/wiki/Main_Page"
-    },
-    {
-        title: "Lancement de la super appli de la mort avec un titre super long",
-        date: "June 14, 2019",
-        thumbnail: require("../assets/amicale.png"),
-        image: require("../assets/image-missing.png"),
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus congue sapien leo, eget tincidunt ante elit et ex. Sed sagittis dui non nisl aliquet viverra. Integer quis convallis enim, sit amet auctor ante. Praesent quis lacinia magna. Sed augue lacus, congue eu turpis vel, consectetur pellentesque nulla. Maecenas blandit diam odio, et finibus urna egestas non. Quisque congue finibus efficitur. Sed pretium mauris nec neque mattis, eu condimentum velit ultrices. Fusce eleifend porttitor nunc non suscipit.",
-        link: "https://en.wikipedia.org/wiki/Central_Link"
-    }
-];
+const NAME_AMICALE = 'Amicale INSA Toulouse';
+const FB_URL = "https://graph.facebook.com/v3.3/amicale.deseleves/posts?fields=message%2Cfull_picture%2Ccreated_time%2Cpermalink_url&&date_format=U&access_token=EAAGliUs4Ei8BAGwHmg7SNnosoEDMuDhP3i5lYOGrIGzZBNeMeGzGhpUigJt167cKXEIM0GiurSgaC0PS4Xg2GBzOVNiZCfr8u48VVB15a9YbOsuhjBqhHAMb2sz6ibwOuDhHSvwRZCUpBZCjmAW12e7RjWJp0jvyNoYYvIQbfaLWi3Nk2mBc";
 
 /**
  * Opens a link in the device's browser
@@ -51,68 +22,56 @@ function openWebLink(link) {
 /**
  * Class defining the app's home screen
  */
-export default class HomeScreen extends React.Component<Props, State> {
+export default class HomeScreen extends FetchedDataSectionList {
 
-    state = {
-        refreshing: false,
-        firstLoading: true,
-        data: {},
-    };
-
-    async readData() {
-        try {
-            let response = await fetch(FB_URL);
-            let responseJson = await response.json();
-            this.setState({
-                data: responseJson
-            });
-        } catch (error) {
-            console.log('Could not read data from server');
-            console.log(error);
-            this.setState({
-                data: {}
-            });
-        }
+    getHeaderTranslation() {
+        return i18n.t("screens.home");
     }
 
-    isDataObjectValid() {
-        return Object.keys(this.state.data).length > 0;
+    getUpdateToastTranslations () {
+        return [i18n.t("homeScreen.listUpdated"),i18n.t("homeScreen.listUpdateFail")];
     }
 
-    _onRefresh = () => {
-        this.setState({refreshing: true});
-        this.readData().then(() => {
-            this.setState({
-                refreshing: false,
-                firstLoading: false
-            });
-            if (this.isDataObjectValid()) {
-                Toast.show({
-                    text: i18n.t('proxiwashScreen.listUpdated'),
-                    buttonText: 'OK',
-                    type: "success",
-                    duration: 2000
-                })
-            } else {
-                Toast.show({
-                    text: i18n.t('proxiwashScreen.listUpdateFail'),
-                    buttonText: 'OK',
-                    type: "danger",
-                    duration: 4000
-                })
+    getKeyExtractor(item : Object) {
+        return item.id;
+    }
+
+    createDataset(fetchedData : Object) {
+        let data = [];
+        if (fetchedData.data !== undefined)
+            data = fetchedData.data;
+        return [
+            {
+                title: '',
+                data: data,
+                extraData: super.state
             }
-        });
-    };
+        ];
+    }
 
-    getRenderItem(item: Object) {
+    getFetchUrl() {
+        return FB_URL;
+    }
+
+    /**
+     * Converts a dateString using Unix Timestamp to a formatted date
+     * @param dateString {string} The Unix Timestamp representation of a date
+     * @return {string} The formatted output date
+     */
+    static getFormattedDate(dateString: string) {
+        let date = new Date(Number.parseInt(dateString) * 1000);
+        return date.toLocaleString();
+    }
+
+    getRenderItem(item: Object, section : Object, data : Object) {
         return (
             <Card style={{flex: 0}}>
                 <CardItem>
                     <Left>
                         <Thumbnail source={ICON_AMICALE}/>
                         <Body>
-                            <Text>Amicale</Text>
-                            <Text note>{item.created_time}</Text>
+                            <Text>{NAME_AMICALE}</Text>
+                            <Text note>{HomeScreen.getFormattedDate(item.created_time)}</Text>
                         </Body>
                     </Left>
                 </CardItem>
@@ -126,7 +85,7 @@ export default class HomeScreen extends React.Component<Props, State> {
                 <CardItem>
                     <Left>
                         <Button transparent
-                        onPress={() => openWebLink(item.permalink_url)}>
+                                onPress={() => openWebLink(item.permalink_url)}>
                             <CustomMaterialIcon
                                 icon="facebook"
                                 color="#57aeff"
@@ -139,38 +98,4 @@ export default class HomeScreen extends React.Component<Props, State> {
         );
     }
 
-    /**
-     * Refresh the data on first screen load
-     */
-    componentDidMount() {
-        this._onRefresh();
-    }
-
-
-    render() {
-        const nav = this.props.navigation;
-        let displayData = this.state.data.data;
-        return (
-            <Container>
-                <CustomHeader navigation={nav} title={i18n.t('screens.home')}/>
-                <Content padder>
-                    <FlatList
-                        data={displayData}
-                        extraData={this.state}
-                        keyExtractor={(item) => item.id}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={this.state.refreshing}
-                                onRefresh={this._onRefresh}
-                            />
-                        }
-                        renderItem={({item}) =>
-                            this.getRenderItem(item)
-                        }
-                        style={{minHeight: 300, width: '100%'}}
-                    />
-                </Content>
-            </Container>
-        );
-    }
 }

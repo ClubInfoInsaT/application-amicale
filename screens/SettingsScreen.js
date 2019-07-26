@@ -43,7 +43,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
     };
 
     /**
-     * Gets data from preferences before rendering components
+     * Gets FetchedData from preferences before rendering components
      *
      * @returns {Promise<void>}
      */

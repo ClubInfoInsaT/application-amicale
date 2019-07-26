@@ -31,7 +31,7 @@ export default class App extends React.Component<Props, State> {
     }
 
     /**
-     * Loads data before components are mounted, like fonts and themes
+     * Loads FetchedData before components are mounted, like fonts and themes
      * @returns {Promise}
      */
     async componentWillMount() {

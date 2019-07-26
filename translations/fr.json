@@ -2,6 +2,8 @@
   "screens": {
     "home": "Accueil",
     "planning": "Planning",
+    "proxiwash": "Proxiwash",
+    "proximo": "Proximo",
     "settings": "Paramètres",
     "about": "À Propos"
   },
@@ -21,6 +23,10 @@
       "20": "20 min",
       "30": "30 min"
     }
+  },
+  "homeScreen": {
+    "listUpdated": "List mise à jour!",
+    "listUpdateFail": "Erreur lors de la mise à jour de la liste"
   },
   "aboutScreen": {
     "appstore": "Voir sur l'Appstore",

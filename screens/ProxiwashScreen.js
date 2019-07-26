@@ -1,14 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {SectionList, RefreshControl, View} from 'react-native';
-import {Body, Container, Icon, Left, ListItem, Right, Text, Toast, H2, Button} from 'native-base';
-import CustomHeader from "../components/CustomHeader";
+import {AsyncStorage, View} from 'react-native';
+import {Body, Button, H2, Icon, Left, ListItem, Right, Text} from 'native-base';
 import ThemeManager from '../utils/ThemeManager';
-import NotificationsManager from '../utils/NotificationsManager';
 import i18n from "i18n-js";
-import {AsyncStorage} from 'react-native'
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
+import FetchedDataSectionList from "../components/FetchedDataSectionList";
+import NotificationsManager from "../utils/NotificationsManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/dataProxiwash.json";
 const WATCHED_MACHINES_PREFKEY = "proxiwash.watchedMachines";
@@ -27,37 +26,25 @@ let stateStrings = {};
 
 let stateColors = {};
 
-type Props = {
-    navigation: Object,
-};
-
-type State = {
-    refreshing: boolean,
-    firstLoading: boolean,
-    data: Object,
-    machinesWatched: Array<Object>
-};
 
 /**
  * Class defining the app's proxiwash screen. This screen shows information about washing machines and
  * dryers, taken from a scrapper reading proxiwash website
  */
-export default class ProxiwashScreen extends React.Component<Props, State> {
+export default class ProxiwashScreen extends FetchedDataSectionList {
 
     state = {
         refreshing: false,
         firstLoading: true,
-        data: {},
-        machinesWatched: [],
+        fetchedData: {},
+        machinesWatched : [],
     };
 
     /**
      * Creates machine state parameters using current theme and translations
-     *
-     * @param props
      */
-    constructor(props: Props) {
-        super(props);
+    constructor() {
+        super();
         let colors = ThemeManager.getInstance().getCurrentThemeVariables();
         stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
         stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;
@@ -72,34 +59,20 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         stateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.states.error');
     }
 
-    /**
-     * Check if the data object contains valid entries
-     *
-     * @returns {boolean}
-     */
-    isDataObjectValid() {
-        return Object.keys(this.state.data).length > 0;
+    getFetchUrl() {
+        return DATA_URL;
     }
 
-    /**
-     * Read the data from the proxiwash scrapper and set it to current state to reload the screen
-     *
-     * @returns {Promise<void>}
-     */
-    async readData() {
-        try {
-            let response = await fetch(DATA_URL);
-            let responseJson = await response.json();
-            this.setState({
-                data: responseJson
-            });
-        } catch (error) {
-            console.log('Could not read data from server');
-            console.log(error);
-            this.setState({
-                data: {}
-            });
-        }
+    getHeaderTranslation() {
+        return i18n.t("screens.proxiwash");
+    }
+
+    getUpdateToastTranslations() {
+        return [i18n.t("proxiwashScreen.listUpdated"), i18n.t("proxiwashScreen.listUpdateFail")];
+    }
+
+    getKeyExtractor(item: Object) {
+        return item.number;
     }
 
     /**
@@ -115,43 +88,6 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
             machinesWatched: JSON.parse(dataString)
         });
     }
-
-    /**
-     * Refresh the data on first screen load
-     */
-    componentDidMount() {
-        this._onRefresh();
-    }
-
-    /**
-     * Show the refresh indicator and wait for data to be fetched from the scrapper
-     *
-     * @private
-     */
-    _onRefresh = () => {
-        this.setState({refreshing: true});
-        this.readData().then(() => {
-            this.setState({
-                refreshing: false,
-                firstLoading: false
-            });
-            if (this.isDataObjectValid()) {
-                Toast.show({
-                    text: i18n.t('proxiwashScreen.listUpdated'),
-                    buttonText: 'OK',
-                    type: "success",
-                    duration: 2000
-                })
-            } else {
-                Toast.show({
-                    text: i18n.t('proxiwashScreen.listUpdateFail'),
-                    buttonText: 'OK',
-                    type: "danger",
-                    duration: 4000
-                })
-            }
-        });
-    };
 
     /**
      * Get the time remaining based on start/end time and done percent
@@ -247,15 +183,30 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         }) !== undefined;
     }
 
+    createDataset(fetchedData: Object) {
+        return [
+            {
+                title: i18n.t('proxiwashScreen.dryers'),
+                data: fetchedData.dryers === undefined ? [] : fetchedData.dryers,
+                extraData: super.state
+            },
+            {
+                title: i18n.t('proxiwashScreen.washers'),
+                data: fetchedData.washers === undefined ? [] : fetchedData.washers,
+                extraData: super.state
+            },
+        ];
+    }
+
     /**
      * Get list item to be rendered
      *
-     * @param item The object containing the item's data
+     * @param item The object containing the item's FetchedData
      * @param section The object describing the current SectionList section
-     * @param data The full data used by the SectionList
+     * @param data The full FetchedData used by the SectionList
      * @returns {React.Node}
      */
-    renderItem(item: Object, section: Object, data: Object) {
+    getRenderItem(item: Object, section: Object, data: Object) {
         return (
             <ListItem
                 thumbnail
@@ -293,13 +244,15 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                                 {backgroundColor: '#ba7c1f'} : {}}
                             onPress={() => {
                                 this.setupNotifications(item.number, ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent))
-                            }}>
+                            }}
+                        >
                             <Text>
                                 {ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent) + ' ' + i18n.t('proxiwashScreen.min')}
                             </Text>
-                            <Icon name={this.isMachineWatched(item.number) ? 'bell-ring' : 'bell'}
-                                  type={'MaterialCommunityIcons'}
-                                  style={{fontSize: 30, width: 30}}
+                            <Icon
+                                name={this.isMachineWatched(item.number) ? 'bell-ring' : 'bell'}
+                                type={'MaterialCommunityIcons'}
+                                style={{fontSize: 30, width: 30}}
                             />
                         </Button>
                         : <Text style={MACHINE_STATES[item.state] === MACHINE_STATES.TERMINE ?
@@ -311,63 +264,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
             </ListItem>);
     }
 
-    /**
-     * Renders the machines list.
-     * If we are loading for the first time, change the data for the SectionList to display a loading message.
-     *
-     * @returns {react.Node}
-     */
-    render() {
-        const nav = this.props.navigation;
-        let data = [];
-        if (!this.isDataObjectValid()) {
-            data = [
-                {
-                    title: i18n.t('proxiwashScreen.error'),
-                    data: []
-                }
-            ];
-        } else {
-            data = [
-                {
-                    title: i18n.t('proxiwashScreen.dryers'),
-                    data: this.state.data.dryers === undefined ? [] : this.state.data.dryers,
-                    extraData: this.state
-                },
-                {
-                    title: i18n.t('proxiwashScreen.washers'),
-                    data: this.state.data.washers === undefined ? [] : this.state.data.washers,
-                    extraData: this.state
-                },
-            ];
-        }
-
-        const loadingData = [
-            {
-                title: i18n.t('proxiwashScreen.loading'),
-                data: []
-            }
-        ];
-        return (
-            <Container>
-                <CustomHeader navigation={nav} title={'Proxiwash'}/>
-                <SectionList
-                    sections={this.state.firstLoading ? loadingData : data}
-                    keyExtractor={(item) => item.number}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this._onRefresh}
-                        />
-                    }
-                    renderSectionHeader={({section: {title}}) => (
-                        <H2 style={{textAlign: 'center', paddingVertical: 10}}>{title}</H2>
-                    )}
-                    renderItem={({item, section}) =>
-                        this.renderItem(item, section, data)
-                    }
-                />
-            </Container>
-        );
+    getRenderSectionHeader(title: String) {
+        return <H2 style={{textAlign: 'center', paddingVertical: 10}}>{title}</H2>;
     }
 }
