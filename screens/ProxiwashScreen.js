@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {AsyncStorage, View} from 'react-native';
-import {Body, Button, H2, Icon, Left, ListItem, Right, Text} from 'native-base';
+import {Body, Card, CardItem, H2, Left, Right, Text} from 'native-base';
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
@@ -23,7 +23,7 @@ const MACHINE_STATES = {
 };
 
 let stateStrings = {};
-
+let stateIcons = {};
 let stateColors = {};
 
 
@@ -37,7 +37,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         refreshing: false,
         firstLoading: true,
         fetchedData: {},
-        machinesWatched : [],
+        machinesWatched: [],
     };
 
     /**
@@ -57,6 +57,12 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         stateStrings[MACHINE_STATES.FONCTIONNE] = i18n.t('proxiwashScreen.states.running');
         stateStrings[MACHINE_STATES.HS] = i18n.t('proxiwashScreen.states.broken');
         stateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.states.error');
+
+        stateIcons[MACHINE_STATES.TERMINE] = 'check-circle';
+        stateIcons[MACHINE_STATES.DISPONIBLE] = 'radiobox-blank';
+        stateIcons[MACHINE_STATES.FONCTIONNE] = 'progress-check';
+        stateIcons[MACHINE_STATES.HS] = 'alert-octagram-outline';
+        stateIcons[MACHINE_STATES.ERREUR] = 'alert';
     }
 
     getFetchUrl() {
@@ -208,60 +214,70 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      */
     getRenderItem(item: Object, section: Object, data: Object) {
         return (
-            <ListItem
-                thumbnail
-                style={{
-                    marginLeft: 0,
-                    backgroundColor: stateColors[MACHINE_STATES[item.state]]
-                }}
-            >
-                <View style={{
-                    height: '100%',
-                    position: 'absolute',
-                    alignSelf: 'flex-end',
-                    right: 0,
-                    width: item.donePercent !== '' ? (100 - parseInt(item.donePercent)).toString() + '%' : 0,
-                    backgroundColor: ThemeManager.getInstance().getCurrentThemeVariables().containerBgColor
-                }}>
-                </View>
-                <Left>
-                    <CustomMaterialIcon icon={section.title === data[0].title ? 'tumble-dryer' : 'washing-machine'}
-                                        fontSize={30}
-                    />
-                </Left>
-                <Body>
-                    <Text>
-                        {section.title === data[0].title ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')} n°{item.number}
-                    </Text>
-                    <Text note>
-                        {item.startTime !== '' ? item.startTime + '/' + item.endTime : ''}
-                    </Text>
-                </Body>
-                <Right>
-                    {item.startTime !== '' ?
-                        <Button
-                            style={this.isMachineWatched(item.number) ?
-                                {backgroundColor: '#ba7c1f'} : {}}
-                            onPress={() => {
-                                this.setupNotifications(item.number, ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent))
-                            }}
-                        >
-                            <Text>
-                                {ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent) + ' ' + i18n.t('proxiwashScreen.min')}
-                            </Text>
-                            <Icon
-                                name={this.isMachineWatched(item.number) ? 'bell-ring' : 'bell'}
-                                type={'MaterialCommunityIcons'}
-                                style={{fontSize: 30, width: 30}}
-                            />
-                        </Button>
-                        : <Text style={MACHINE_STATES[item.state] === MACHINE_STATES.TERMINE ?
-                            {fontWeight: 'bold'} : {}}
-                        >{stateStrings[MACHINE_STATES[item.state]]}</Text>
+            <Card style={{
+                flex: 0,
+                height: 64
+            }}>
 
-                    }
-                </Right>
-            </ListItem>);
+                <CardItem
+                    style={{
+                        backgroundColor: stateColors[MACHINE_STATES[item.state]],
+                        height: '100%'
+                    }}
+                >
+                    <View style={{
+                        height: 64,
+                        position: 'absolute',
+                        right: 0,
+                        width: item.donePercent !== '' ? (100 - parseInt(item.donePercent)).toString() + '%' : 0,
+                        backgroundColor: ThemeManager.getInstance().getCurrentThemeVariables().containerBgColor
+                    }}/>
+                    <Left>
+                        <CustomMaterialIcon icon={section.title === data[0].title ? 'tumble-dryer' : 'washing-machine'}
+                                            fontSize={30}
+                        />
+                        <Body>
+                            <Text>
+                                {section.title === data[0].title ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')} n°{item.number}
+                            </Text>
+                            <Text note>
+                                {item.startTime !== '' ? item.startTime + '/' + item.endTime : ''}
+                            </Text>
+                        </Body>
+                    </Left>
+                    <Right style={{}}>
+                        <Text style={MACHINE_STATES[item.state] === MACHINE_STATES.TERMINE ?
+                            {fontWeight: 'bold'} : {}}
+                        >
+                            {stateStrings[MACHINE_STATES[item.state]]}
+                        </Text>
+                        <CustomMaterialIcon icon={stateIcons[MACHINE_STATES[item.state]]}
+                                            fontSize={25}
+                        />
+
+                        {/*{item.startTime !== '' ?*/}
+                        {/*    <Button*/}
+                        {/*        style={this.isMachineWatched(item.number) ?*/}
+                        {/*            {backgroundColor: '#ba7c1f'} : {}}*/}
+                        {/*        onPress={() => {*/}
+                        {/*            this.setupNotifications(item.number, ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent))*/}
+                        {/*        }}*/}
+                        {/*    >*/}
+                        {/*        <Text>*/}
+                        {/*            {ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent) + ' ' + i18n.t('proxiwashScreen.min')}*/}
+                        {/*        </Text>*/}
+                        {/*        <Icon*/}
+                        {/*            name={this.isMachineWatched(item.number) ? 'bell-ring' : 'bell'}*/}
+                        {/*            type={'MaterialCommunityIcons'}*/}
+                        {/*            style={{fontSize: 30, width: 30}}*/}
+                        {/*        />*/}
+                        {/*    </Button>*/}
+                        {/*    : (*/}
+                        {/*        )*/}
+                        {/*}*/}
+                    </Right>
+                </CardItem>
+            </Card>);
     }
 
     getRenderSectionHeader(title: String) {

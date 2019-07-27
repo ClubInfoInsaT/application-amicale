@@ -260,11 +260,11 @@ export default {
   customMaterialIconColor: "#5d5d5d",
 
   // PROXIWASH
-  proxiwashFinishedColor: "rgba(54,165,22,0.4)",
+  proxiwashFinishedColor: "rgba(54,165,22,0.31)",
   proxiwashReadyColor: "transparent",
-  proxiwashRunningColor: "rgba(94,104,241,0.4)",
-  proxiwashBrokenColor: "#a2a2a2",
-  proxiwashErrorColor: "rgba(204,7,0,0.4)",
+  proxiwashRunningColor: "rgba(94,104,241,0.3)",
+  proxiwashBrokenColor: "rgba(162,162,162,0.31)",
+  proxiwashErrorColor: "rgba(204,7,0,0.31)",
 
   // Other
   borderRadiusBase: platform === "ios" ? 5 : 2,
