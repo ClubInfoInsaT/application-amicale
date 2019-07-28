@@ -5,6 +5,8 @@ import WebDataManager from "../utils/WebDataManager";
 import {Container, Content, Tab, TabHeading, Tabs, Text} from "native-base";
 import CustomHeader from "./CustomHeader";
 import {RefreshControl, SectionList, View} from "react-native";
+import i18n from "i18n-js";
+import CustomMaterialIcon from "./CustomMaterialIcon";
 
 type Props = {
     navigation: Object,
@@ -45,6 +47,10 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return ["whoa", "nah"];
     }
 
+    shouldShowUpdateToast() {
+        return true;
+    }
+
     /**
      * Refresh the FetchedData on first screen load
      */
@@ -60,7 +66,8 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                 refreshing: false,
                 firstLoading: false
             });
-            this.webDataManager.showUpdateToast(this.getUpdateToastTranslations()[0], this.getUpdateToastTranslations()[1]);
+            if (this.shouldShowUpdateToast())
+                this.webDataManager.showUpdateToast(this.getUpdateToastTranslations()[0], this.getUpdateToastTranslations()[1]);
         });
     };
 
@@ -120,7 +127,14 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         let tabbedView = [];
         for (let i = 0; i < dataset.length; i++) {
             tabbedView.push(
-                <Tab heading={<TabHeading><Text>{dataset[i].title}</Text></TabHeading>}>
+                <Tab heading={
+                    <TabHeading>
+                        <CustomMaterialIcon icon={dataset[i].icon}
+                                            color={'#fff'}
+                                            fontSize={20}
+                        />
+                        <Text>{dataset[i].title}</Text>
+                    </TabHeading>}>
                     <Content padder>
                         {this.getSectionList(
                             [

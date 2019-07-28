@@ -193,11 +193,13 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         return [
             {
                 title: i18n.t('proxiwashScreen.dryers'),
+                icon: 'tumble-dryer',
                 data: fetchedData.dryers === undefined ? [] : fetchedData.dryers,
                 extraData: super.state
             },
             {
                 title: i18n.t('proxiwashScreen.washers'),
+                icon:  'washing-machine',
                 data: fetchedData.washers === undefined ? [] : fetchedData.washers,
                 extraData: super.state
             },

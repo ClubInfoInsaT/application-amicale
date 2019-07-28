@@ -29,8 +29,8 @@ export default class HomeScreen extends FetchedDataSectionList {
         return i18n.t("screens.home");
     }
 
-    getUpdateToastTranslations () {
-        return [i18n.t("homeScreen.listUpdated"),i18n.t("homeScreen.listUpdateFail")];
+    shouldShowUpdateToast(): boolean {
+        return false;
     }
 
     getKeyExtractor(item : Object) {
