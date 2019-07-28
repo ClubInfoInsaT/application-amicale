@@ -78,7 +78,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     }
 
     getKeyExtractor(item: Object) {
-        return item.number;
+        return item !== undefined ? item.number : undefined;
     }
 
     /**
@@ -204,6 +204,10 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         ];
     }
 
+    hasTabs(): boolean {
+        return true;
+    }
+
     /**
      * Get list item to be rendered
      *
@@ -233,12 +237,12 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                         backgroundColor: ThemeManager.getInstance().getCurrentThemeVariables().containerBgColor
                     }}/>
                     <Left>
-                        <CustomMaterialIcon icon={section.title === data[0].title ? 'tumble-dryer' : 'washing-machine'}
+                        <CustomMaterialIcon icon={section.title === i18n.t('proxiwashScreen.dryers') ? 'tumble-dryer' : 'washing-machine'}
                                             fontSize={30}
                         />
                         <Body>
                             <Text>
-                                {section.title === data[0].title ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')} n°{item.number}
+                                {section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')} n°{item.number}
                             </Text>
                             <Text note>
                                 {item.startTime !== '' ? item.startTime + '/' + item.endTime : ''}
@@ -280,7 +284,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
             </Card>);
     }
 
-    getRenderSectionHeader(title: String) {
-        return <H2 style={{textAlign: 'center', paddingVertical: 10}}>{title}</H2>;
-    }
+    // getRenderSectionHeader(title: String) {
+    //     return <H2 style={{textAlign: 'center', paddingVertical: 10}}>{title}</H2>;
+    // }
 }

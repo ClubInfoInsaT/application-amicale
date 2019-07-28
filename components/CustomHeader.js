@@ -11,6 +11,7 @@ type Props = {
     rightMenu: React.Node,
     title: string,
     navigation: Object,
+    hasTabs: boolean,
 };
 
 /**
@@ -26,6 +27,7 @@ export default class CustomHeader extends React.Component<Props> {
     static defaultProps = {
         backButton: false,
         rightMenu: <Right/>,
+        hasTabs: false,
     };
 
     render() {

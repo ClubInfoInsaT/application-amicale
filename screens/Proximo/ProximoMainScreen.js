@@ -36,7 +36,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
     }
 
     getKeyExtractor(item: Object) {
-        return item.type;
+        return item !== undefined ? item.type : undefined;
     }
 
     createDataset(fetchedData: Object) {

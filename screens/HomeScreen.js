@@ -9,7 +9,8 @@ import FetchedDataSectionList from "../components/FetchedDataSectionList";
 
 const ICON_AMICALE = require('../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
-const FB_URL = "https://graph.facebook.com/v3.3/amicale.deseleves/posts?fields=message%2Cfull_picture%2Ccreated_time%2Cpermalink_url&&date_format=U&access_token=EAAGliUs4Ei8BAGwHmg7SNnosoEDMuDhP3i5lYOGrIGzZBNeMeGzGhpUigJt167cKXEIM0GiurSgaC0PS4Xg2GBzOVNiZCfr8u48VVB15a9YbOsuhjBqhHAMb2sz6ibwOuDhHSvwRZCUpBZCjmAW12e7RjWJp0jvyNoYYvIQbfaLWi3Nk2mBc";
+const FB_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/facebook_data.json";
+
 
 /**
  * Opens a link in the device's browser
@@ -33,7 +34,7 @@ export default class HomeScreen extends FetchedDataSectionList {
     }
 
     getKeyExtractor(item : Object) {
-        return item.id;
+        return item !== undefined ? item.id : undefined;
     }
 
     createDataset(fetchedData : Object) {

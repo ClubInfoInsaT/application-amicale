@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 import WebDataManager from "../utils/WebDataManager";
-import {Container, Content, H2} from "native-base";
+import {Container, Content, Tab, TabHeading, Tabs, Text} from "native-base";
 import CustomHeader from "./CustomHeader";
-import {SectionList, RefreshControl, View} from "react-native";
+import {RefreshControl, SectionList, View} from "react-native";
 
 type Props = {
     navigation: Object,
@@ -14,12 +14,12 @@ type State = {
     refreshing: boolean,
     firstLoading: boolean,
     fetchedData: Object,
-    machinesWatched : Array<Object>
+    machinesWatched: Array<Object>
 };
 
 export default class FetchedDataSectionList extends React.Component<Props, State> {
 
-    webDataManager : WebDataManager;
+    webDataManager: WebDataManager;
 
     constructor() {
         super();
@@ -30,7 +30,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         refreshing: false,
         firstLoading: true,
         fetchedData: {},
-        machinesWatched : [],
+        machinesWatched: [],
     };
 
     getFetchUrl() {
@@ -41,7 +41,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return "Header";
     }
 
-    getUpdateToastTranslations () {
+    getUpdateToastTranslations() {
         return ["whoa", "nah"];
     }
 
@@ -64,12 +64,12 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         });
     };
 
-    getRenderItem(item: Object, section : Object, data : Object) {
-        return <View />;
+    getRenderItem(item: Object, section: Object, data: Object) {
+        return <View/>;
     }
 
     getRenderSectionHeader(title: String) {
-        return <View />;
+        return <View/>;
     }
 
     /**
@@ -77,7 +77,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      * @param fetchedData {Object}
      * @return {Array}
      */
-    createDataset(fetchedData : Object) : Array<Object> {
+    createDataset(fetchedData: Object): Array<Object> {
         return [];
     }
 
@@ -86,8 +86,55 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      * @param item {Object}
      * @return {*}
      */
-    getKeyExtractor(item : Object) {
+    getKeyExtractor(item: Object) {
         return item.id;
+    }
+
+    hasTabs() {
+        return false;
+    }
+
+    getSectionList(dataset: Array<Object>) {
+        return (
+            <SectionList
+                sections={dataset}
+                keyExtractor={(item) => this.getKeyExtractor(item)}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={this._onRefresh}
+                    />
+                }
+                renderSectionHeader={({section: {title}}) =>
+                    this.getRenderSectionHeader(title)
+                }
+                renderItem={({item, section}) =>
+                    this.getRenderItem(item, section, dataset)
+                }
+                style={{minHeight: 300, width: '100%'}}
+            />
+        );
+    }
+
+    getTabbedView(dataset: Array<Object>) {
+        let tabbedView = [];
+        for (let i = 0; i < dataset.length; i++) {
+            tabbedView.push(
+                <Tab heading={<TabHeading><Text>{dataset[i].title}</Text></TabHeading>}>
+                    <Content padder>
+                        {this.getSectionList(
+                            [
+                                {
+                                    title: dataset[i].title,
+                                    data: dataset[i].data,
+                                    extraData: dataset[i].extraData,
+                                }
+                            ]
+                        )}
+                    </Content>
+                </Tab>);
+        }
+        return tabbedView;
     }
 
     render() {
@@ -96,25 +143,15 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return (
             <Container>
                 <CustomHeader navigation={nav} title={this.getHeaderTranslation()}/>
-                <Content padder>
-                    <SectionList
-                        sections={dataset}
-                        keyExtractor={(item) => this.getKeyExtractor(item)}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={this.state.refreshing}
-                                onRefresh={this._onRefresh}
-                            />
-                        }
-                        renderSectionHeader={({section: {title}}) =>
-                            this.getRenderSectionHeader(title)
-                        }
-                        renderItem={({item, section}) =>
-                            this.getRenderItem(item, section, dataset)
-                        }
-                        style={{minHeight: 300, width: '100%'}}
-                    />
-                </Content>
+                {this.hasTabs() ?
+                    <Tabs>
+                        {this.getTabbedView(dataset)}
+                    </Tabs>
+                    :
+                    <Content padder>
+                        {this.getSectionList(dataset)}
+                    </Content>
+                }
             </Container>
         );
     }
