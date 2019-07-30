@@ -26,6 +26,10 @@ function openWebLink(link) {
  */
 export default class HomeScreen extends FetchedDataSectionList {
 
+    constructor() {
+        super(DATA_URL);
+    }
+
     getHeaderTranslation() {
         return i18n.t("screens.home");
     }
@@ -49,10 +53,6 @@ export default class HomeScreen extends FetchedDataSectionList {
                 extraData: super.state
             }
         ];
-    }
-
-    getFetchUrl() {
-        return DATA_URL;
     }
 
     /**

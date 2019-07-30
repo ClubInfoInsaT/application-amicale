@@ -1,13 +1,15 @@
 // @flow
 
 import * as React from 'react';
-import {AsyncStorage, View} from 'react-native';
-import {Body, Card, CardItem, H2, Left, Right, Text} from 'native-base';
+import {Alert, AsyncStorage, View} from 'react-native';
+import {Body, Card, CardItem, Left, Right, Text} from 'native-base';
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
 import NotificationsManager from "../utils/NotificationsManager";
+import PlatformTouchable from "react-native-platform-touchable";
+
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/dataProxiwash.json";
 const WATCHED_MACHINES_PREFKEY = "proxiwash.watchedMachines";
@@ -23,6 +25,7 @@ const MACHINE_STATES = {
 };
 
 let stateStrings = {};
+let modalStateStrings = {};
 let stateIcons = {};
 let stateColors = {};
 
@@ -44,7 +47,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * Creates machine state parameters using current theme and translations
      */
     constructor() {
-        super();
+        super(DATA_URL);
         let colors = ThemeManager.getInstance().getCurrentThemeVariables();
         stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
         stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;
@@ -58,15 +61,17 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         stateStrings[MACHINE_STATES.HS] = i18n.t('proxiwashScreen.states.broken');
         stateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.states.error');
 
+        modalStateStrings[MACHINE_STATES.TERMINE] = i18n.t('proxiwashScreen.modal.finished');
+        modalStateStrings[MACHINE_STATES.DISPONIBLE] = i18n.t('proxiwashScreen.modal.ready');
+        modalStateStrings[MACHINE_STATES.FONCTIONNE] = i18n.t('proxiwashScreen.modal.running');
+        modalStateStrings[MACHINE_STATES.HS] = i18n.t('proxiwashScreen.modal.broken');
+        modalStateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.modal.error');
+
         stateIcons[MACHINE_STATES.TERMINE] = 'check-circle';
         stateIcons[MACHINE_STATES.DISPONIBLE] = 'radiobox-blank';
         stateIcons[MACHINE_STATES.FONCTIONNE] = 'progress-check';
         stateIcons[MACHINE_STATES.HS] = 'alert-octagram-outline';
         stateIcons[MACHINE_STATES.ERREUR] = 'alert';
-    }
-
-    getFetchUrl() {
-        return DATA_URL;
     }
 
     getHeaderTranslation() {
@@ -199,7 +204,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
             },
             {
                 title: i18n.t('proxiwashScreen.washers'),
-                icon:  'washing-machine',
+                icon: 'washing-machine',
                 data: fetchedData.washers === undefined ? [] : fetchedData.washers,
                 extraData: super.state
             },
@@ -208,6 +213,35 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
 
     hasTabs(): boolean {
         return true;
+    }
+
+    showAlert(title : string, item : Object, remainingTime: number) {
+        let buttons = [{text: i18n.t("proxiwashScreen.modal.ok")}];
+        let message = modalStateStrings[MACHINE_STATES[item.state]];
+        if (MACHINE_STATES[item.state] === MACHINE_STATES.FONCTIONNE) {
+            buttons = [
+                {
+                    text: this.isMachineWatched(item.number) ?
+                        i18n.t("proxiwashScreen.modal.disableNotifications") :
+                        i18n.t("proxiwashScreen.modal.enableNotifications"),
+                    onPress: () => this.setupNotifications(item.number, remainingTime)
+                },
+                {
+                    text: i18n.t("proxiwashScreen.modal.cancel")
+                }
+            ];
+            message = i18n.t('proxiwashScreen.modal.running',
+                {
+                    start: item.startTime,
+                    end: item.endTime,
+                    remaining: remainingTime
+                });
+        }
+        Alert.alert(
+            title,
+            message,
+            buttons
+        );
     }
 
     /**
@@ -219,6 +253,12 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * @returns {React.Node}
      */
     getRenderItem(item: Object, section: Object, data: Object) {
+        let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES.FONCTIONNE;
+        let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
+        let remainingTime = 0;
+        if (isMachineRunning)
+            remainingTime = ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent);
+
         return (
             <Card style={{
                 flex: 0,
@@ -228,7 +268,9 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                 <CardItem
                     style={{
                         backgroundColor: stateColors[MACHINE_STATES[item.state]],
-                        height: '100%'
+                        paddingRight: 0,
+                        paddingLeft: 0,
+                        height: '100%',
                     }}
                 >
                     <View style={{
@@ -238,20 +280,38 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                         width: item.donePercent !== '' ? (100 - parseInt(item.donePercent)).toString() + '%' : 0,
                         backgroundColor: ThemeManager.getInstance().getCurrentThemeVariables().containerBgColor
                     }}/>
-                    <Left>
-                        <CustomMaterialIcon icon={section.title === i18n.t('proxiwashScreen.dryers') ? 'tumble-dryer' : 'washing-machine'}
-                                            fontSize={30}
+                    <PlatformTouchable
+                        onPress={() => this.showAlert(machineName, item, remainingTime)}
+                        style={{
+                            height: 64,
+                            position: 'absolute',
+                            right: 0,
+                            width: '100%'
+                        }}
+                    >
+                        <View/>
+                    </PlatformTouchable>
+                    <Left style={{marginLeft: 10}}>
+                        <CustomMaterialIcon
+                            icon={section.title === i18n.t('proxiwashScreen.dryers') ? 'tumble-dryer' : 'washing-machine'}
+                            fontSize={30}
                         />
                         <Body>
                             <Text>
-                                {section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')} n°{item.number}
+                                {machineName + ' '}
+                                {this.isMachineWatched(item.number) ?
+                                    <CustomMaterialIcon
+                                        icon='bell-ring'
+                                        color={ThemeManager.getInstance().getCurrentThemeVariables().brandPrimary}
+                                        fontSize={20}
+                                    /> : ''}
                             </Text>
                             <Text note>
-                                {item.startTime !== '' ? item.startTime + '/' + item.endTime : ''}
+                                {isMachineRunning ? item.startTime + '/' + item.endTime : ''}
                             </Text>
                         </Body>
                     </Left>
-                    <Right style={{}}>
+                    <Right style={{marginRight: 10}}>
                         <Text style={MACHINE_STATES[item.state] === MACHINE_STATES.TERMINE ?
                             {fontWeight: 'bold'} : {}}
                         >
@@ -260,33 +320,8 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                         <CustomMaterialIcon icon={stateIcons[MACHINE_STATES[item.state]]}
                                             fontSize={25}
                         />
-
-                        {/*{item.startTime !== '' ?*/}
-                        {/*    <Button*/}
-                        {/*        style={this.isMachineWatched(item.number) ?*/}
-                        {/*            {backgroundColor: '#ba7c1f'} : {}}*/}
-                        {/*        onPress={() => {*/}
-                        {/*            this.setupNotifications(item.number, ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent))*/}
-                        {/*        }}*/}
-                        {/*    >*/}
-                        {/*        <Text>*/}
-                        {/*            {ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent) + ' ' + i18n.t('proxiwashScreen.min')}*/}
-                        {/*        </Text>*/}
-                        {/*        <Icon*/}
-                        {/*            name={this.isMachineWatched(item.number) ? 'bell-ring' : 'bell'}*/}
-                        {/*            type={'MaterialCommunityIcons'}*/}
-                        {/*            style={{fontSize: 30, width: 30}}*/}
-                        {/*        />*/}
-                        {/*    </Button>*/}
-                        {/*    : (*/}
-                        {/*        )*/}
-                        {/*}*/}
                     </Right>
                 </CardItem>
             </Card>);
     }
-
-    // getRenderSectionHeader(title: String) {
-    //     return <H2 style={{textAlign: 'center', paddingVertical: 10}}>{title}</H2>;
-    // }
 }

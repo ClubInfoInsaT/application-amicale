@@ -4,7 +4,7 @@ import * as React from 'react';
 import WebDataManager from "../utils/WebDataManager";
 import {Container, Content, Tab, TabHeading, Tabs, Text} from "native-base";
 import CustomHeader from "./CustomHeader";
-import {RefreshControl, SectionList, View} from "react-native";
+import {RefreshControl, SectionList, View, TouchableHighlight} from "react-native";
 import CustomMaterialIcon from "./CustomMaterialIcon";
 
 type Props = {
@@ -15,16 +15,16 @@ type State = {
     refreshing: boolean,
     firstLoading: boolean,
     fetchedData: Object,
-    machinesWatched: Array<Object>
+    machinesWatched: Array<Object>,
 };
 
 export default class FetchedDataSectionList extends React.Component<Props, State> {
 
     webDataManager: WebDataManager;
 
-    constructor() {
+    constructor(fetchUrl: string) {
         super();
-        this.webDataManager = new WebDataManager(this.getFetchUrl());
+        this.webDataManager = new WebDataManager(fetchUrl);
     }
 
     state = {
@@ -33,10 +33,6 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         fetchedData: {},
         machinesWatched: [],
     };
-
-    getFetchUrl() {
-        return "";
-    }
 
     getHeaderTranslation() {
         return "Header";

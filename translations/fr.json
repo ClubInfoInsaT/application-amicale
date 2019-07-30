@@ -61,6 +61,17 @@
     "listUpdateFail": "Erreur lors de la mise à jour del'état des machines",
     "error": "Impossible de mettre a jour l'état des machines. Tirez vers le bas pour reessayer.",
     "loading": "Chargement...",
+    "modal": {
+      "enableNotifications": "Me Notifier",
+      "disableNotifications": "Désactiver les  notifications",
+      "ok": "OK",
+      "cancel": "Annuler",
+      "finished": "Cette machine est terminée. Si vous l'avez l'avez démarée, vous pouvez récupérer votre linge.",
+      "ready": "Cette machine est vide et prête à être utilisée. {Afficher prix ici}",
+      "running": "Cette machine a démarré à %{start} et terminera à %{end}.\nTemps restant : %{remaining} min",
+      "broken": "Cette machine est hors service. Merci pour votre compréhension.",
+      "error": "Il y a eu une erreur et il est impossible de récupérer les informations de cette machine. Veuillez nous excuser pour le gène occasionnée."
+    },
     "states": {
       "finished": "TERMINE",
       "ready": "DISPONIBLE",

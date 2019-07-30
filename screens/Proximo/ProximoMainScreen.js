@@ -23,8 +23,8 @@ const typesIcons = {
  */
 export default class ProximoMainScreen extends FetchedDataSectionList {
 
-    getFetchUrl() {
-        return DATA_URL;
+    constructor() {
+        super(DATA_URL);
     }
 
     getHeaderTranslation() {
