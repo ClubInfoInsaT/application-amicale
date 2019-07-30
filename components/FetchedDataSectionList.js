@@ -5,7 +5,6 @@ import WebDataManager from "../utils/WebDataManager";
 import {Container, Content, Tab, TabHeading, Tabs, Text} from "native-base";
 import CustomHeader from "./CustomHeader";
 import {RefreshControl, SectionList, View} from "react-native";
-import i18n from "i18n-js";
 import CustomMaterialIcon from "./CustomMaterialIcon";
 
 type Props = {

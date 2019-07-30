@@ -1,15 +1,16 @@
 // @flow
 
 import * as React from 'react';
-import {Image, Linking} from 'react-native';
-import {Text, Button, Card, CardItem, Left, Body, Thumbnail} from 'native-base';
+import {Image, Linking, TouchableOpacity, View} from 'react-native';
+import {Body, Button, Card, CardItem, Left, Text, Thumbnail} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
+import Autolink from 'react-native-autolink';
 
 const ICON_AMICALE = require('../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
-const FB_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/facebook_data.json";
+const DATA_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/facebook_data.json";
 
 
 /**
@@ -33,11 +34,11 @@ export default class HomeScreen extends FetchedDataSectionList {
         return false;
     }
 
-    getKeyExtractor(item : Object) {
+    getKeyExtractor(item: Object) {
         return item !== undefined ? item.id : undefined;
     }
 
-    createDataset(fetchedData : Object) {
+    createDataset(fetchedData: Object) {
         let data = [];
         if (fetchedData.data !== undefined)
             data = fetchedData.data;
@@ -51,7 +52,7 @@ export default class HomeScreen extends FetchedDataSectionList {
     }
 
     getFetchUrl() {
-        return FB_URL;
+        return DATA_URL;
     }
 
     /**
@@ -64,7 +65,7 @@ export default class HomeScreen extends FetchedDataSectionList {
         return date.toLocaleString();
     }
 
-    getRenderItem(item: Object, section : Object, data : Object) {
+    getRenderItem(item: Object, section: Object, data: Object) {
         return (
             <Card style={{flex: 0}}>
                 <CardItem>
@@ -78,9 +79,21 @@ export default class HomeScreen extends FetchedDataSectionList {
                 </CardItem>
                 <CardItem>
                     <Body>
-                        <Image source={{uri: item.full_picture}}
-                               style={{width: '100%', height: 200, flex: 1}}/>
-                        <Text>{item.message}</Text>
+                        {item.full_picture !== '' && item.full_picture !== undefined ?
+                            <TouchableOpacity onPress={() => openWebLink(item.full_picture)}
+                                              style={{width: '100%', height: 250}}>
+                                <Image source={{uri: item.full_picture}}
+                                       style={{flex: 1, resizeMode: "contain"}}
+                                       resizeMode="contain"
+                                />
+                            </TouchableOpacity>
+                            : <View/>}
+                        {item.message !== undefined ?
+                            <Autolink
+                                text={item.message}
+                                hashtag="facebook"
+                            /> : <View/>
+                        }
                     </Body>
                 </CardItem>
                 <CardItem>
