@@ -1,23 +1,18 @@
 // @flow
 
-import {AsyncStorage} from 'react-native'
 import platform from '../native-base-theme/variables/platform';
 import platformDark from '../native-base-theme/variables/platformDark';
 import getTheme from '../native-base-theme/components';
-
-const nightModeKey = 'nightMode';
-
+import AsyncStorageManager from "./AsyncStorageManager";
 /**
  * Singleton class used to manage themes
  */
 export default class ThemeManager {
 
     static instance: ThemeManager | null = null;
-    nightMode: boolean;
     updateThemeCallback: Function;
 
     constructor() {
-        this.nightMode = false;
         this.updateThemeCallback = null;
     }
 
@@ -40,25 +35,13 @@ export default class ThemeManager {
     }
 
     /**
-     * Read async storage to get preferences
-     * @returns {Promise<void>}
-     */
-    async getDataFromPreferences(): Promise<void> {
-        let result: string = await AsyncStorage.getItem(nightModeKey);
-
-        if (result === '1')
-            this.nightMode = true;
-        // console.log('nightmode: ' + this.nightMode);
-    }
-
-    /**
      * Set night mode and save it to preferences
      *
      * @param isNightMode Whether to enable night mode
      */
     setNightMode(isNightMode: boolean) {
-        this.nightMode = isNightMode;
-        AsyncStorage.setItem(nightModeKey, isNightMode ? '1' : '0');
+        let nightModeKey = AsyncStorageManager.getInstance().preferences.nightMode.key;
+        AsyncStorageManager.getInstance().savePref(nightModeKey, isNightMode ? '1' : '0');
         if (this.updateThemeCallback !== null)
             this.updateThemeCallback();
     }
@@ -66,16 +49,16 @@ export default class ThemeManager {
     /**
      * @returns {boolean} Night mode state
      */
-    getNightMode(): boolean {
-        return this.nightMode;
+    static getNightMode(): boolean {
+        return AsyncStorageManager.getInstance().preferences.nightMode.current === '1';
     }
 
     /**
      * Get the current theme based on night mode
      * @returns {Object}
      */
-    getCurrentTheme(): Object {
-        if (this.nightMode)
+    static getCurrentTheme(): Object {
+        if (ThemeManager.getNightMode())
             return getTheme(platformDark);
         else
             return getTheme(platform);
@@ -85,8 +68,8 @@ export default class ThemeManager {
      * Get the variables contained in the current theme
      * @returns {Object}
      */
-    getCurrentThemeVariables(): Object {
-        return this.getCurrentTheme().variables;
+    static getCurrentThemeVariables(): Object {
+        return ThemeManager.getCurrentTheme().variables;
     }
 
 };

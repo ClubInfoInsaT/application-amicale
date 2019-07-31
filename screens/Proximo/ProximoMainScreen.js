@@ -45,6 +45,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                 title: i18n.t('proximoScreen.listTitle'),
                 data: ProximoMainScreen.generateData(fetchedData),
                 extraData: super.state,
+                keyExtractor: this.getKeyExtractor
             }
         ];
     }

@@ -46,7 +46,7 @@ export default class NotificationsManager {
      * @param time Time at which we should send the notification
      * @returns {Promise<import("react").ReactText>} Notification Id
      */
-    static async scheduleNotification(title: string, body: string, time: number): Promise<void> {
+    static async scheduleNotification(title: string, body: string, time: number): Promise<string> {
         await NotificationsManager.askPermissions();
         return Notifications.scheduleLocalNotificationAsync(
             {

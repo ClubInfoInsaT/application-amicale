@@ -83,15 +83,6 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return [];
     }
 
-    /**
-     * What item field should be used as a key in the list
-     * @param item {Object}
-     * @return {*}
-     */
-    getKeyExtractor(item: Object) {
-        return item.id;
-    }
-
     hasTabs() {
         return false;
     }
@@ -100,7 +91,6 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return (
             <SectionList
                 sections={dataset}
-                keyExtractor={(item) => this.getKeyExtractor(item)}
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.refreshing}
@@ -121,7 +111,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     getTabbedView(dataset: Array<Object>) {
         let tabbedView = [];
         for (let i = 0; i < dataset.length; i++) {
-            tabbedView.push(
+             tabbedView.push(
                 <Tab heading={
                     <TabHeading>
                         <CustomMaterialIcon icon={dataset[i].icon}
@@ -129,7 +119,8 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                                             fontSize={20}
                         />
                         <Text>{dataset[i].title}</Text>
-                    </TabHeading>}>
+                    </TabHeading>}
+                key={dataset[i].title}>
                     <Content padder>
                         {this.getSectionList(
                             [
@@ -137,6 +128,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                                     title: dataset[i].title,
                                     data: dataset[i].data,
                                     extraData: dataset[i].extraData,
+                                    keyExtractor: dataset[i].keyExtractor
                                 }
                             ]
                         )}

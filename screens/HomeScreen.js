@@ -50,7 +50,8 @@ export default class HomeScreen extends FetchedDataSectionList {
             {
                 title: '',
                 data: data,
-                extraData: super.state
+                extraData: super.state,
+                keyExtractor: this.getKeyExtractor
             }
         ];
     }

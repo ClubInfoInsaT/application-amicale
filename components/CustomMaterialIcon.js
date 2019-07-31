@@ -41,8 +41,8 @@ export default class CustomMaterialIcon extends React.Component<Props> {
                         this.props.color !== undefined ?
                             this.props.color :
                             this.props.active ?
-                                ThemeManager.getInstance().getCurrentThemeVariables().brandPrimary :
-                                ThemeManager.getInstance().getCurrentThemeVariables().customMaterialIconColor,
+                                ThemeManager.getCurrentThemeVariables().brandPrimary :
+                                ThemeManager.getCurrentThemeVariables().customMaterialIconColor,
                     fontSize: this.props.fontSize,
                     width: this.props.width
                 }}

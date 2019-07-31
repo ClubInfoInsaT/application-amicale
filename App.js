@@ -10,6 +10,7 @@ import * as Font from 'expo-font';
 // https://github.com/GeekyAnts/theme/pull/5/files/91f67c55ca6e65fe3af779586b506950c9f331be#diff-4cfc2dd4d5dae7954012899f2268a422
 // to allow for dynamic theme switching
 import {clearThemeCache} from 'native-base-shoutem-theme';
+import AsyncStorageManager from "./utils/AsyncStorageManager";
 
 type Props = {};
 
@@ -39,11 +40,11 @@ export default class App extends React.Component<Props, State> {
             'Roboto': require('native-base/Fonts/Roboto.ttf'),
             'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
         });
+        await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
-        await ThemeManager.getInstance().getDataFromPreferences();
         this.setState({
             isLoading: false,
-            currentTheme: ThemeManager.getInstance().getCurrentTheme()
+            currentTheme: ThemeManager.getCurrentTheme()
         });
     }
 
@@ -53,9 +54,9 @@ export default class App extends React.Component<Props, State> {
     updateTheme() {
         // console.log('update theme called');
         this.setState({
-            currentTheme: ThemeManager.getInstance().getCurrentTheme()
+            currentTheme: ThemeManager.getCurrentTheme()
         });
-        clearThemeCache();
+        // clearThemeCache();
     }
 
     /**

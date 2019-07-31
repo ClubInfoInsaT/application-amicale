@@ -20,9 +20,7 @@ import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
 import {NavigationActions, StackActions} from "react-navigation";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
-import {AsyncStorage} from 'react-native'
-
-const proxiwashNotifKey = "proxiwashNotifKey";
+import AsyncStorageManager from "../utils/AsyncStorageManager";
 
 type Props = {
     navigation: Object,
@@ -38,23 +36,9 @@ type State = {
  */
 export default class SettingsScreen extends React.Component<Props, State> {
     state = {
-        nightMode: ThemeManager.getInstance().getNightMode(),
-        proxiwashNotifPickerSelected: "5"
+        nightMode: ThemeManager.getNightMode(),
+        proxiwashNotifPickerSelected: AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current,
     };
-
-    /**
-     * Gets FetchedData from preferences before rendering components
-     *
-     * @returns {Promise<void>}
-     */
-    async componentWillMount() {
-        let val = await AsyncStorage.getItem(proxiwashNotifKey);
-        if (val === null)
-            val = "5";
-        this.setState({
-            proxiwashNotifPickerSelected: val,
-        });
-    }
 
     /**
      * Save the value for the proxiwash reminder notification time
@@ -62,7 +46,8 @@ export default class SettingsScreen extends React.Component<Props, State> {
      * @param value The value to store
      */
     onProxiwashNotifPickerValueChange(value: string) {
-        AsyncStorage.setItem(proxiwashNotifKey, value);
+        let key = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.key;
+        AsyncStorageManager.getInstance().savePref(key, value);
         this.setState({
             proxiwashNotifPickerSelected: value
         });
