@@ -24,9 +24,14 @@ export default class FetchedDataSectionList extends React.Component<Props, State
 
     webDataManager: WebDataManager;
 
-    constructor(fetchUrl: string) {
+    willFocusSubscription : function;
+    willBlurSubscription : function;
+    refreshInterval: IntervalID;
+
+    constructor(fetchUrl: string, refreshTime : number) {
         super();
         this.webDataManager = new WebDataManager(fetchUrl);
+        this.refreshTime = refreshTime;
     }
 
     state = {
@@ -48,10 +53,40 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      * Refresh the FetchedData on first screen load
      */
     componentDidMount() {
-        this._onRefresh();
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            payload => {
+                this.onScreenFocus();
+            }
+        );
+        this.willBlurSubscription = this.props.navigation.addListener(
+            'willBlur',
+            payload => {
+                this.onScreenBlur();
+            }
+        );
     }
 
+    onScreenFocus() {
+        this._onRefresh();
+        if (this.refreshTime > 0)
+            this.refreshInterval = setInterval(() => this._onRefresh(), this.refreshTime)
+    }
+
+    onScreenBlur() {
+        clearInterval(this.refreshInterval);
+    }
+
+
+    componentWillUnmount() {
+        this.willBlurSubscription.remove();
+        this.willFocusSubscription.remove();
+
+    }
+
+
     _onRefresh = () => {
+        console.log('refresh');
         this.setState({refreshing: true});
         this.webDataManager.readData().then((fetchedData) => {
             this.setState({

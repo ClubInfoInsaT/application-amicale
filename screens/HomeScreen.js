@@ -27,7 +27,7 @@ function openWebLink(link) {
 export default class HomeScreen extends FetchedDataSectionList {
 
     constructor() {
-        super(DATA_URL);
+        super(DATA_URL, 0);
     }
 
     getHeaderTranslation() {

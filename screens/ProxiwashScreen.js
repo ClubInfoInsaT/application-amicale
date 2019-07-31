@@ -35,11 +35,13 @@ let stateColors = {};
  */
 export default class ProxiwashScreen extends FetchedDataSectionList {
 
+    refreshInterval : IntervalID;
+
     /**
      * Creates machine state parameters using current theme and translations
      */
     constructor() {
-        super(DATA_URL);
+        super(DATA_URL, 1000 * 60); // Refresh every minute
         let colors = ThemeManager.getCurrentThemeVariables();
         stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
         stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;
