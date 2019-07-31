@@ -286,7 +286,9 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         return (
             <Card style={{
                 flex: 0,
-                height: 64
+                height: 64,
+                marginLeft: 10,
+                marginRight: 10
             }}>
 
                 <CardItem

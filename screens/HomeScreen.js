@@ -34,8 +34,8 @@ export default class HomeScreen extends FetchedDataSectionList {
         return i18n.t("screens.home");
     }
 
-    shouldShowUpdateToast(): boolean {
-        return false;
+    getUpdateToastTranslations() {
+        return [i18n.t("homeScreen.listUpdated"), i18n.t("homeScreen.listUpdateFail")];
     }
 
     getKeyExtractor(item: Object) {
@@ -68,7 +68,11 @@ export default class HomeScreen extends FetchedDataSectionList {
 
     getRenderItem(item: Object, section: Object, data: Object) {
         return (
-            <Card style={{flex: 0}}>
+            <Card style={{
+                flex: 0,
+                marginLeft: 10,
+                marginRight: 10
+            }}>
                 <CardItem>
                     <Left>
                         <Thumbnail source={ICON_AMICALE}/>

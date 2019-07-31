@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 import WebDataManager from "../utils/WebDataManager";
-import {Container, Content, Tab, TabHeading, Tabs, Text} from "native-base";
+import {Container, Tab, TabHeading, Tabs, Text} from "native-base";
 import CustomHeader from "./CustomHeader";
-import {RefreshControl, SectionList, View, TouchableHighlight} from "react-native";
+import {RefreshControl, SectionList, View} from "react-native";
 import CustomMaterialIcon from "./CustomMaterialIcon";
 
 type Props = {
@@ -42,10 +42,6 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return ["whoa", "nah"];
     }
 
-    shouldShowUpdateToast() {
-        return true;
-    }
-
     /**
      * Refresh the FetchedData on first screen load
      */
@@ -61,8 +57,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                 refreshing: false,
                 firstLoading: false
             });
-            if (this.shouldShowUpdateToast())
-                this.webDataManager.showUpdateToast(this.getUpdateToastTranslations()[0], this.getUpdateToastTranslations()[1]);
+            this.webDataManager.showUpdateToast(this.getUpdateToastTranslations()[0], this.getUpdateToastTranslations()[1]);
         });
     };
 
@@ -111,7 +106,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     getTabbedView(dataset: Array<Object>) {
         let tabbedView = [];
         for (let i = 0; i < dataset.length; i++) {
-             tabbedView.push(
+            tabbedView.push(
                 <Tab heading={
                     <TabHeading>
                         <CustomMaterialIcon icon={dataset[i].icon}
@@ -120,19 +115,17 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                         />
                         <Text>{dataset[i].title}</Text>
                     </TabHeading>}
-                key={dataset[i].title}>
-                    <Content padder>
-                        {this.getSectionList(
-                            [
-                                {
-                                    title: dataset[i].title,
-                                    data: dataset[i].data,
-                                    extraData: dataset[i].extraData,
-                                    keyExtractor: dataset[i].keyExtractor
-                                }
-                            ]
-                        )}
-                    </Content>
+                     key={dataset[i].title}>
+                    {this.getSectionList(
+                        [
+                            {
+                                title: dataset[i].title,
+                                data: dataset[i].data,
+                                extraData: dataset[i].extraData,
+                                keyExtractor: dataset[i].keyExtractor
+                            }
+                        ]
+                    )}
                 </Tab>);
         }
         return tabbedView;
@@ -149,9 +142,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                         {this.getTabbedView(dataset)}
                     </Tabs>
                     :
-                    <Content padder>
-                        {this.getSectionList(dataset)}
-                    </Content>
+                    this.getSectionList(dataset)
                 }
             </Container>
         );
