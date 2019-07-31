@@ -55,7 +55,6 @@ export default class AsyncStorageManager {
                 val = this.preferences[key].default;
             this.preferences[key].current = val;
         }
-        console.log(this.preferences);
     }
 
     savePref(key : string, val : string) {

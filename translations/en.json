@@ -85,5 +85,9 @@
       "machineRunningTitle": "Laundry running: {{time}} minutes left",
       "machineRunningBody": "The machine n°{{number}} is still running"
     }
+  },
+  "general": {
+    "loading": "Loading...",
+    "networkError": "Unable to contact servers. Make sure you are connected to Internet."
   }
 }

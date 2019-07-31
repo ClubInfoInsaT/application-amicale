@@ -85,5 +85,9 @@
       "machineRunningTitle": "Machine en cours: {{time}} minutes restantes",
       "machineRunningBody": "La machine n°{{number}} n'est pas encore terminée"
     }
+  },
+  "general": {
+    "loading": "Chargement...",
+    "networkError": "Impossible de contacter les serveurs. Assurez vous d'être connecté à internet."
   }
 }

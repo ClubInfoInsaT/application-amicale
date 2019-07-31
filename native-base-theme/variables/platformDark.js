@@ -258,6 +258,7 @@ export default {
 
     // CUSTOM
     customMaterialIconColor: "#b3b3b3",
+    fetchedDataSectionListErrorText : "#acacac",
 
     // PROXIWASH
     proxiwashFinishedColor: "rgba(12,157,13,0.72)",

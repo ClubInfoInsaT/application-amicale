@@ -87,12 +87,10 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     }
 
     getDryersKeyExtractor(item: Object) {
-        console.log(item !== undefined ? "dryer" + item.number : undefined);
         return item !== undefined ? "dryer" + item.number : undefined;
     }
 
     getWashersKeyExtractor(item: Object) {
-        console.log(item !== undefined ? "washer" + item.number : undefined);
         return item !== undefined ? "washer" + item.number : undefined;
     }
 
@@ -155,7 +153,6 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
             reminderNotifTime = parseInt(val);
         else
             reminderNotifTime = -1;
-        console.log(reminderNotifTime);
         return reminderNotifTime;
     }
 

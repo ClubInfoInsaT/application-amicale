@@ -2,10 +2,12 @@
 
 import * as React from 'react';
 import WebDataManager from "../utils/WebDataManager";
-import {Container, Tab, TabHeading, Tabs, Text} from "native-base";
+import {Container, H3, Tab, TabHeading, Tabs, Text} from "native-base";
 import CustomHeader from "./CustomHeader";
 import {RefreshControl, SectionList, View} from "react-native";
 import CustomMaterialIcon from "./CustomMaterialIcon";
+import i18n from 'i18n-js';
+import ThemeManager from "../utils/ThemeManager";
 
 type Props = {
     navigation: Object,
@@ -69,6 +71,34 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return <View/>;
     }
 
+    getEmptyRenderItem(text: string, icon: string) {
+        return (
+            <View>
+                <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: 100,
+                    marginBottom: 20
+                }}>
+                    <CustomMaterialIcon
+                        icon={icon}
+                        fontSize={100}
+                        width={100}
+                        color={ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText}/>
+                </View>
+
+                <H3 style={{
+                    textAlign: 'center',
+                    marginRight: 20,
+                    marginLeft: 20,
+                    color: ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText
+                }}>
+                    {text}
+                </H3>
+            </View>);
+    }
+
     /**
      * Create the dataset to be used in the list from the data fetched
      * @param fetchedData {Object}
@@ -78,11 +108,33 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return [];
     }
 
+    createEmptyDataset() {
+        return [
+            {
+                title: '',
+                data: [
+                    {
+                        text: this.state.refreshing ?
+                            i18n.t('general.loading') :
+                            i18n.t('general.networkError'),
+                        icon: this.state.refreshing ?
+                            'refresh' :
+                            'access-point-network-off'
+                    }
+                ],
+                keyExtractor: (item: Object) => item.text,
+            }
+        ];
+    }
+
     hasTabs() {
         return false;
     }
 
     getSectionList(dataset: Array<Object>) {
+        let isEmpty = dataset[0].data.length === 0;
+        if (isEmpty)
+            dataset = this.createEmptyDataset();
         return (
             <SectionList
                 sections={dataset}
@@ -93,12 +145,20 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                     />
                 }
                 renderSectionHeader={({section: {title}}) =>
-                    this.getRenderSectionHeader(title)
+                    isEmpty ?
+                        <View/> :
+                        this.getRenderSectionHeader(title)
                 }
                 renderItem={({item, section}) =>
-                    this.getRenderItem(item, section, dataset)
+                    isEmpty ?
+                        this.getEmptyRenderItem(item.text, item.icon) :
+                        this.getRenderItem(item, section, dataset)
                 }
                 style={{minHeight: 300, width: '100%'}}
+                contentContainerStyle={
+                    isEmpty ?
+                        {flexGrow: 1, justifyContent: 'center', alignItems: 'center'} : {}
+                }
             />
         );
     }
