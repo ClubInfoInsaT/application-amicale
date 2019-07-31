@@ -11,6 +11,7 @@ const deviceHeight = Dimensions.get("window").height;
 const drawerCover = require("../assets/drawer-cover.png");
 
 const WIKETUD_LINK = "https://www.etud.insa-toulouse.fr/wiketud/index.php/Accueil";
+const Amicale_LINK = "https://www.etud.insa-toulouse.fr/~amicale";
 
 type Props = {
     navigation: Object,
@@ -68,8 +69,16 @@ export default class SideBar extends React.Component<Props, State> {
                 // types: "11"
             },
             {
+                name: "Amicale",
+                route: "amicale",
+                icon: "web",
+                bg: "#477EEA",
+                // types: "11"
+            },
+
+            {
                 name: "Wiketud",
-                route: "",
+                route: "wiketud",
                 icon: "web",
                 bg: "#477EEA",
                 // types: "11"
@@ -117,13 +126,15 @@ export default class SideBar extends React.Component<Props, State> {
                         renderItem={({item}) =>
                             <ListItem
                                 button
-                                noBorder={item.name !== 'Wiketud'} // Display a separator before settings
+                                noBorder={item.name !== 'Wiketud' && item.name !== 'Proximo'} // Display a separator before settings and Amicale
                                 selected={this.state.active === item.route}
                                 onPress={() => {
-                                    if (item.name !== 'Wiketud')
+                                    if (item.name !== 'Wiketud' && item.name !== 'Amicale')
                                         this.navigateToScreen(item.route);
-                                    else
+                                    else if (item.name === 'Wiketud')
                                         Linking.openURL(WIKETUD_LINK).catch((err) => console.error('Error opening link', err));
+                                    else if (item.name === 'Amicale')
+                                        Linking.openURL(Amicale_LINK).catch((err) => console.error('Error opening link', err));
                                 }}
                             >
                                 <Left>
