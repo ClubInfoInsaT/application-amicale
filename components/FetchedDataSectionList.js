@@ -27,6 +27,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     willFocusSubscription : function;
     willBlurSubscription : function;
     refreshInterval: IntervalID;
+    refreshTime: number;
 
     constructor(fetchUrl: string, refreshTime : number) {
         super();

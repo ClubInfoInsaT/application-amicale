@@ -8,9 +8,6 @@ import Touchable from 'react-native-platform-touchable';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import i18n from "i18n-js";
 
-const IMG_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/img/";
-const defaultImage = require('../../assets/image-missing.png');
-
 const sortMode = {
     price: "0",
     name: '1',
@@ -217,15 +214,18 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                             <ListItem
                                 thumbnail
                                 onPress={() => {
-                                    console.log(IMG_URL + item.name + '.jpg')
+                                    console.log(item.image)
                                 }}
                             >
                                 <Left>
-                                    <Thumbnail square source={{uri: IMG_URL + item.name + '.jpg'}}/>
+                                    <Thumbnail square source={{uri: item.image}}/>
                                 </Left>
                                 <Body>
                                     <Text style={{marginLeft: 20}}>
                                         {item.name}
+                                    </Text>
+                                    <Text note style={{marginLeft: 20}}>
+                                        {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
                                     </Text>
                                 </Body>
                                 <Right style={{flex: 1}}>

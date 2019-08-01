@@ -1,12 +1,13 @@
 // @flow
 
 import * as React from 'react';
+import {View} from 'react-native'
 import {Badge, Body, H2, Left, ListItem, Right, Text} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import FetchedDataSectionList from "../../components/FetchedDataSectionList";
 
-const DATA_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/dataProximo.json";
+const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~proximo/data/stock.json";
 
 const typesIcons = {
     Nouveau: "alert-decagram",
@@ -78,33 +79,38 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
     }
 
     getRenderItem(item: Object, section : Object, data : Object) {
-        return (
-            <ListItem
-                button
-                thumbnail
-                onPress={() => {
-                    this.props.navigation.navigate('ProximoListScreen', item);
-                }}
-            >
-                <Left>
-                    <CustomMaterialIcon
-                        icon={typesIcons[item.type] ? typesIcons[item.type] : typesIcons.Default}
-                        fontSize={30}
-                    />
-                </Left>
-                <Body>
-                    <Text>
-                        {item.type}
-                    </Text>
-                    <Badge><Text>
-                        {item.data.length} {item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article')}
-                    </Text></Badge>
-                </Body>
-                <Right>
-                    <CustomMaterialIcon icon="chevron-right"/>
-                </Right>
-            </ListItem>
-        );
+        if (item.data.length > 0) {
+            return (
+                <ListItem
+                    button
+                    thumbnail
+                    onPress={() => {
+                        this.props.navigation.navigate('ProximoListScreen', item);
+                    }}
+                >
+                    <Left>
+                        <CustomMaterialIcon
+                            icon={typesIcons[item.type] ? typesIcons[item.type] : typesIcons.Default}
+                            fontSize={30}
+                        />
+                    </Left>
+                    <Body>
+                        <Text>
+                            {item.type}
+                        </Text>
+                        <Badge><Text>
+                            {item.data.length} {item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article')}
+                        </Text></Badge>
+                    </Body>
+                    <Right>
+                        <CustomMaterialIcon icon="chevron-right"/>
+                    </Right>
+                </ListItem>
+            );
+        } else {
+            return <View/>;
+        }
+
     }
 
     getRenderSectionHeader(title: String) {
