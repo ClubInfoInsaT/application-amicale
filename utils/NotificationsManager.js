@@ -1,7 +1,7 @@
 // @flow
 
 import * as Permissions from 'expo-permissions';
-import { Notifications } from 'expo';
+import {Notifications} from 'expo';
 
 /**
  * Static class used to manage notifications sent to the user
@@ -30,7 +30,7 @@ export default class NotificationsManager {
      * @param body {String} Notification body text
      * @returns {Promise<import("react").ReactText>} Notification Id
      */
-    static async sendNotificationImmediately (title: string, body: string) {
+    static async sendNotificationImmediately(title: string, body: string) {
         await NotificationsManager.askPermissions();
         return await Notifications.presentLocalNotificationAsync({
             title: title,
@@ -44,14 +44,22 @@ export default class NotificationsManager {
      * @param title Notification title
      * @param body Notification body text
      * @param time Time at which we should send the notification
+     * @param data Data to send with the notification, used for listeners
      * @returns {Promise<import("react").ReactText>} Notification Id
      */
-    static async scheduleNotification(title: string, body: string, time: number): Promise<string> {
+    static async scheduleNotification(title: string, body: string, time: number, data: Object, androidChannelID: string): Promise<string> {
         await NotificationsManager.askPermissions();
         return Notifications.scheduleLocalNotificationAsync(
             {
                 title: title,
                 body: body,
+                data: data,
+                ios: { // configuration for iOS.
+                    sound: true
+                },
+                android: { // configuration for Android.
+                    channelId: androidChannelID,
+                }
             },
             {
                 time: time,
