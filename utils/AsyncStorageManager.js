@@ -22,6 +22,11 @@ export default class AsyncStorageManager {
 
 
     preferences = {
+        showIntro: {
+            key: 'showIntro',
+            default: '1',
+            current : '',
+        },
         proxiwashNotifications: {
             key: 'proxiwashNotifications',
             default: '5',
