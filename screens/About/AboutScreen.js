@@ -12,10 +12,11 @@ import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 const links = {
     appstore: 'https://qwant.com',
     playstore: 'https://qwant.com',
-    gitlab: 'https://qwant.com',
-    bugs: 'https://qwant.com',
-    changelog: 'https://qwant.com',
-    license: 'https://qwant.com',
+    expo: 'https://expo.io/@amicaleinsat/application-amicale',
+    git: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale',
+    bugs: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
+    changelog: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale',
+    license: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale',
     mail: "mailto:arnaud.vergnet@netc.fr?subject=Application Amicale INSA Toulouse&body=",
     linkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
     facebook: 'https://www.facebook.com/arnaud.vergnet',
@@ -50,9 +51,15 @@ export default class AboutScreen extends React.Component<Props> {
             showChevron: true
         },
         {
-            onPressCallback: () => openWebLink(links.gitlab),
+            onPressCallback: () => openWebLink(links.expo),
+            icon: 'worker',
+            text: i18n.t('aboutScreen.expoBeta'),
+            showChevron: true
+        },
+        {
+            onPressCallback: () => openWebLink(links.git),
             icon: 'git',
-            text: 'Gitlab',
+            text: 'Git',
             showChevron: true
         },
         {
