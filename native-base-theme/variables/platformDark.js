@@ -261,7 +261,7 @@ export default {
     fetchedDataSectionListErrorText : "#acacac",
 
     // PROXIWASH
-    proxiwashFinishedColor: "rgba(12,157,13,0.72)",
+    proxiwashFinishedColor: "rgba(17,149,32,0.53)",
     proxiwashReadyColor: "transparent",
     proxiwashRunningColor: "rgba(29,59,175,0.65)",
     proxiwashBrokenColor: "#000000",

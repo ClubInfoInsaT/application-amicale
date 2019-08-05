@@ -337,6 +337,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                         style={{
                             height: 64,
                             position: 'absolute',
+                            zIndex: 10, // Make sure the button is above the text
                             right: 0,
                             width: '100%'
                         }}

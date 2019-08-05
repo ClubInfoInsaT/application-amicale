@@ -80,8 +80,10 @@ export default class FetchedDataSectionList extends React.Component<Props, State
 
 
     componentWillUnmount() {
-        this.willBlurSubscription.remove();
-        this.willFocusSubscription.remove();
+        if (this.willBlurSubscription !== undefined)
+            this.willBlurSubscription.remove();
+        if (this.willFocusSubscription !== undefined)
+            this.willFocusSubscription.remove();
 
     }
 
@@ -211,7 +213,8 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                         />
                         <Text>{dataset[i].title}</Text>
                     </TabHeading>}
-                     key={dataset[i].title}>
+                     key={dataset[i].title}
+                style={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
                     {this.getSectionList(
                         [
                             {

@@ -56,7 +56,7 @@ export default class App extends React.Component<Props, State> {
         this.setState({
             currentTheme: ThemeManager.getCurrentTheme()
         });
-        // clearThemeCache();
+        clearThemeCache();
     }
 
     /**

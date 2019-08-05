@@ -7,6 +7,7 @@ import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
 import Autolink from 'react-native-autolink';
+import ThemeManager from "../utils/ThemeManager";
 
 const ICON_AMICALE = require('../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
@@ -97,6 +98,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                             <Autolink
                                 text={item.message}
                                 hashtag="facebook"
+                                style={{color: ThemeManager.getCurrentThemeVariables().textColor}}
                             /> : <View/>
                         }
                     </Body>
