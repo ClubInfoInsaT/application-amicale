@@ -28,6 +28,10 @@
     "listUpdated": "List mise à jour!",
     "listUpdateFail": "Erreur lors de la mise à jour de la liste"
   },
+  "planningScreen": {
+    "wipTitle": "WORK IN PROGRESS",
+    "wipSubtitle": "Bientôt, tous les évènements de l'INSA Toulouse en un seul endroit !"
+  },
   "aboutScreen": {
     "appstore": "Voir sur l'Appstore",
     "playstore": "Voir sur le Playstore",
