@@ -29,12 +29,14 @@ export default class WebDataManager {
 
     showUpdateToast(successString, errorString) {
         let isSuccess = this.isDataObjectValid();
-        Toast.show({
-            text: isSuccess ? successString : errorString,
-            buttonText: 'OK',
-            type: isSuccess ? "success" : "danger",
-            duration: 2000
-        })
+        if (!isSuccess) {
+            Toast.show({
+                text: isSuccess ? successString : errorString,
+                buttonText: 'OK',
+                type: isSuccess ? "success" : "danger",
+                duration: 2000
+            });
+        }
     }
 
 }
