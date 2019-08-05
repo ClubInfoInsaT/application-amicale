@@ -132,6 +132,17 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         this.setSortMode(this.state.currentSortMode, this.state.isSortReversed);
     }
 
+    getStockColor(availableStock: number) {
+        let color : string;
+        if (availableStock > 3)
+            color = ThemeManager.getCurrentThemeVariables().brandSuccess;
+        else if (availableStock > 0)
+            color = ThemeManager.getCurrentThemeVariables().brandWarning;
+        else
+            color = ThemeManager.getCurrentThemeVariables().brandDanger;
+        return color;
+    }
+
     /**
      * Set the sort menu icon based on the given mode.
      *
@@ -221,7 +232,9 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                                     <Text style={{marginLeft: 20}}>
                                         {item.name}
                                     </Text>
-                                    <Text note style={{marginLeft: 20}}>
+                                    <Text note style={{
+                                        marginLeft: 20,
+                                    color: this.getStockColor(parseInt(item.quantity))}}>
                                         {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
                                     </Text>
                                 </Body>
