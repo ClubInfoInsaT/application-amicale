@@ -51,7 +51,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     }
 
     /**
-     * Refresh the FetchedData on first screen load
+     * Register react navigation events on first screen load
      */
     componentDidMount() {
         this.willFocusSubscription = this.props.navigation.addListener(
