@@ -1,12 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import {Container, Text, Content, ListItem, Left, Thumbnail, Right, Body, Icon} from 'native-base';
+import {Container, Text, Content, ListItem, Left, Thumbnail, Right, Body} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
-import {FlatList} from "react-native";
+import {FlatList, Platform} from "react-native";
 import Touchable from 'react-native-platform-touchable';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import i18n from "i18n-js";
+import CustomMaterialIcon from "../../components/CustomMaterialIcon";
+import ThemeManager from "../../utils/ThemeManager";
 
 const sortMode = {
     price: "0",
@@ -138,15 +140,11 @@ export default class ProximoListScreen extends React.Component<Props, State> {
      */
     setupSortIcons(mode: string, isReverse: boolean) {
         const downSortIcon =
-            <Icon
-                active
-                name={'sort-descending'}
-                type={'MaterialCommunityIcons'}/>;
+            <CustomMaterialIcon
+                icon={'sort-descending'}/>;
         const upSortIcon =
-            <Icon
-                active
-                name={'sort-ascending'}
-                type={'MaterialCommunityIcons'}/>;
+            <CustomMaterialIcon
+                icon={'sort-ascending'}/>;
         switch (mode) {
             case sortMode.price:
                 this.setState({sortNameIcon: ''});
@@ -183,10 +181,9 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                                     onPress={() =>
                                         this._menu.show()
                                     }>
-                                    <Icon
-                                        style={{color: "#fff"}}
-                                        name="sort"
-                                        type={'MaterialCommunityIcons'}/>
+                                    <CustomMaterialIcon
+                                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                                        icon={'sort'}/>
                                 </Touchable>
                             }
                         >

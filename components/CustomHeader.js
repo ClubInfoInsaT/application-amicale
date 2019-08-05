@@ -2,9 +2,11 @@
 
 import * as React from "react";
 import {Body, Header, Icon, Left, Right, Title} from "native-base";
-import {StyleSheet} from "react-native";
+import {StyleSheet, Platform} from "react-native";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import Touchable from 'react-native-platform-touchable';
+import ThemeManager from "../utils/ThemeManager";
+import CustomMaterialIcon from "./CustomMaterialIcon";
 
 type Props = {
     backButton: boolean,
@@ -37,20 +39,18 @@ export default class CustomHeader extends React.Component<Props> {
                 <Touchable
                     style={{padding: 6}}
                     onPress={() => this.props.navigation.goBack()}>
-                    <Icon
-                        style={{color: "#fff"}}
-                        name="arrow-left"
-                        type={'MaterialCommunityIcons'}/>
+                    <CustomMaterialIcon
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                        icon="arrow-left"/>
                 </Touchable>;
         else
             button =
                 <Touchable
                     style={{padding: 6}}
                     onPress={() => this.props.navigation.toggleDrawer()}>
-                    <Icon
-                        style={{color: "#fff"}}
-                        name="menu"
-                        type={'MaterialCommunityIcons'}/>
+                    <CustomMaterialIcon
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                        icon="menu"/>
                 </Touchable>;
 
         return (
