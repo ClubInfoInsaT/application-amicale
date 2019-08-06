@@ -2,18 +2,18 @@
 
 import * as React from 'react';
 import {
+    Body,
+    Card,
+    CardItem,
+    CheckBox,
     Container,
     Content,
     Left,
+    List,
     ListItem,
+    Picker,
     Right,
     Text,
-    List,
-    CheckBox,
-    Body,
-    CardItem,
-    Card,
-    Picker,
 } from "native-base";
 import CustomHeader from "../components/CustomHeader";
 import ThemeManager from '../utils/ThemeManager';

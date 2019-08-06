@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from "react";
-import {Body, Header, Icon, Left, Right, Title} from "native-base";
-import {StyleSheet, Platform} from "react-native";
+import {Body, Header, Left, Right, Title} from "native-base";
+import {Platform, StyleSheet} from "react-native";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import Touchable from 'react-native-platform-touchable';
 import ThemeManager from "../utils/ThemeManager";
@@ -34,6 +34,7 @@ export default class CustomHeader extends React.Component<Props> {
 
     render() {
         let button;
+        // Does the app have a back button or a burger menu ?
         if (this.props.backButton)
             button =
                 <Touchable

@@ -9,7 +9,7 @@ type Props = {
     icon: string,
     color: ?string,
     fontSize: number,
-    width: number|string,
+    width: number | string,
 }
 
 /**

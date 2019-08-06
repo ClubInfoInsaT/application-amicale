@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, Dimensions, StyleSheet, Image, FlatList, Linking} from 'react-native';
-import {Badge, Text, Container, Content, Left, ListItem, Right} from "native-base";
+import {Dimensions, FlatList, Image, Linking, Platform, StyleSheet} from 'react-native';
+import {Badge, Container, Content, Left, ListItem, Right, Text} from "native-base";
 import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
 
@@ -40,72 +40,56 @@ export default class SideBar extends React.Component<Props, State> {
      */
     constructor(props: Props) {
         super(props);
+        // Dataset used to render the drawer
+        // If the link field is defined, clicking on the item will open the link
         this.dataSet = [
             {
                 name: i18n.t('screens.home'),
                 route: "Home",
                 icon: "home",
-                bg: "#C5F442"
-                // types: "11" // Shows the badge
             },
             {
                 name: i18n.t('screens.planning'),
                 route: "Planning",
                 icon: "calendar-range",
-                bg: "#477EEA",
-                // types: "11"
             },
             {
                 name: "Proxiwash",
                 route: "Proxiwash",
                 icon: "washing-machine",
-                bg: "#477EEA",
-                // types: "11"
             },
             {
                 name: "Proximo",
                 route: "Proximo",
                 icon: "shopping",
-                bg: "#477EEA",
-                // types: "11"
             },
             {
                 name: "Amicale",
                 route: "amicale",
                 icon: "web",
-                bg: "#477EEA",
                 link: Amicale_LINK
-                // types: "11"
             },
             {
                 name: i18n.t('screens.timetable'),
                 route: "timetable",
                 icon: "timetable",
-                bg: "#477EEA",
                 link: TIMETABLE_LINK
-                // types: "11"
             },
             {
                 name: "Wiketud",
                 route: "wiketud",
                 icon: "wikipedia",
-                bg: "#477EEA",
                 link: WIKETUD_LINK
-                // types: "11"
             },
             {
                 name: i18n.t('screens.settings'),
                 route: "Settings",
                 icon: "settings",
-                bg: "#477EEA",
-                // types: "11"
             },
             {
                 name: i18n.t('screens.about'),
                 route: "About",
                 icon: "information",
-                bg: "#477EEA",
-                // types: "11"
             },
         ];
     }

@@ -78,7 +78,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         return finalData;
     }
 
-    getRenderItem(item: Object, section : Object, data : Object) {
+    getRenderItem(item: Object, section: Object, data: Object) {
         if (item.data.length > 0) {
             return (
                 <ListItem

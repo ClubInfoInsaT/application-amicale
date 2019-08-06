@@ -1,9 +1,8 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import {Root, StyleProvider, Text} from 'native-base';
-import {Ionicons} from '@expo/vector-icons';
-import {StyleSheet, View, Image} from 'react-native'
+import {Image, StyleSheet, View} from 'react-native'
 import AppNavigator from './navigation/AppNavigator';
 import ThemeManager from './utils/ThemeManager';
 import LocaleManager from './utils/LocaleManager';
@@ -43,6 +42,7 @@ const styles = StyleSheet.create({
     },
 });
 
+// Content to be used int the intro slides
 const slides = [
     {
         key: '1',
@@ -61,7 +61,7 @@ const slides = [
     {
         key: '3',
         title: 'Le proximo',
-        text: 'Regardez le stock de la supérette de l\'INSA depuis n\'importe où' ,
+        text: 'Regardez le stock de la supérette de l\'INSA depuis n\'importe où',
         icon: 'shopping',
         colors: ['#f9a967', '#da5204'],
     },
@@ -101,12 +101,14 @@ export default class App extends React.Component<Props, State> {
      * @returns {Promise}
      */
     async componentWillMount() {
+        // Wait for custom fonts to be loaded before showing the app
         await Font.loadAsync({
             'Roboto': require('native-base/Fonts/Roboto.ttf'),
             'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
         });
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
+        // Only show intro if this is the first time starting the app
         this.setState({
             isLoading: false,
             currentTheme: ThemeManager.getCurrentTheme(),
@@ -115,17 +117,20 @@ export default class App extends React.Component<Props, State> {
     }
 
     /**
-     * Updates the theme and clears the cache to force reloading the app colors
+     * Updates the theme and clears the cache to force reloading the app colors. Need to edit shoutem theme for ti to work
      */
     updateTheme() {
-        // console.log('update theme called');
         this.setState({
             currentTheme: ThemeManager.getCurrentTheme()
         });
         clearThemeCache();
     }
 
-
+    /**
+     * Render item to be used for the intro slides
+     * @param item
+     * @param dimensions
+     */
     getIntroRenderItem(item: Object, dimensions: Object) {
         return (
             <LinearGradient
@@ -148,6 +153,9 @@ export default class App extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Callback when user ends the intro. Save in preferences to avaoid showing back the slides
+     */
     onIntroDone() {
         this.setState({showIntro: false});
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showIntro.key, '0');
@@ -155,8 +163,6 @@ export default class App extends React.Component<Props, State> {
 
     /**
      * Renders the app based on loading state
-     *
-     * @returns {*}
      */
     render() {
         if (this.state.isLoading) {

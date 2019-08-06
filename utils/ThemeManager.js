@@ -4,6 +4,7 @@ import platform from '../native-base-theme/variables/platform';
 import platformDark from '../native-base-theme/variables/platformDark';
 import getTheme from '../native-base-theme/components';
 import AsyncStorageManager from "./AsyncStorageManager";
+
 /**
  * Singleton class used to manage themes
  */

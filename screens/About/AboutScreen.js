@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, StyleSheet, Linking, Alert, FlatList} from 'react-native';
-import {Container, Content, Text, Card, CardItem, Body, Left, Right, Thumbnail, H1} from 'native-base';
+import {Alert, FlatList, Linking, Platform} from 'react-native';
+import {Body, Card, CardItem, Container, Content, H1, Left, Right, Text, Thumbnail} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
 import appJson from '../../app';

@@ -65,7 +65,7 @@ export default class PlanningScreen extends React.Component<Props> {
                     </Text>
                     {Platform.OS === 'android' ?
                         <Button block style={{marginTop: 20, marginRight: 10, marginLeft: 10}}
-                        onPress={() => openWebLink('https://expo.io/@amicaleinsat/application-amicale')}>
+                                onPress={() => openWebLink('https://expo.io/@amicaleinsat/application-amicale')}>
                             <Text>Try the beta</Text>
                         </Button>
                         : <View/>}

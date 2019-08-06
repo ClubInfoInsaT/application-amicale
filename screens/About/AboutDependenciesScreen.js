@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Container, Text, Content, ListItem, Body} from 'native-base';
+import {Body, Container, Content, ListItem, Text} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import {FlatList} from "react-native";
 import i18n from "i18n-js";
@@ -30,7 +30,7 @@ export default class AboutDependenciesScreen extends React.Component<Props> {
         const data = generateListFromObject(nav.getParam('data', {}));
         return (
             <Container>
-                <CustomHeader backButton={true} navigation={nav} title={i18n.t('aboutScreen.libs')} />
+                <CustomHeader backButton={true} navigation={nav} title={i18n.t('aboutScreen.libs')}/>
                 <Content>
                     <FlatList
                         data={data}

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Container, Text, Content, ListItem, Left, Thumbnail, Right, Body} from 'native-base';
+import {Body, Container, Content, Left, ListItem, Right, Text, Thumbnail} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import {FlatList, Platform} from "react-native";
 import Touchable from 'react-native-platform-touchable';
@@ -132,8 +132,14 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         this.setSortMode(this.state.currentSortMode, this.state.isSortReversed);
     }
 
+    /**
+     * get color depending on quantity available
+     *
+     * @param availableStock
+     * @return
+     */
     getStockColor(availableStock: number) {
-        let color : string;
+        let color: string;
         if (availableStock > 3)
             color = ThemeManager.getCurrentThemeVariables().brandSuccess;
         else if (availableStock > 0)
@@ -234,7 +240,8 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                                     </Text>
                                     <Text note style={{
                                         marginLeft: 20,
-                                    color: this.getStockColor(parseInt(item.quantity))}}>
+                                        color: this.getStockColor(parseInt(item.quantity))
+                                    }}>
                                         {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
                                     </Text>
                                 </Body>

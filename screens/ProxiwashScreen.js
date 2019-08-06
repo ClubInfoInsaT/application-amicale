@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Alert, View, Platform} from 'react-native';
+import {Alert, Platform, View} from 'react-native';
 import {Body, Card, CardItem, Left, Right, Text} from 'native-base';
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
@@ -36,7 +36,7 @@ let stateColors = {};
  */
 export default class ProxiwashScreen extends FetchedDataSectionList {
 
-    refreshInterval : IntervalID;
+    refreshInterval: IntervalID;
 
     /**
      * Creates machine state parameters using current theme and translations
@@ -77,6 +77,9 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         };
     }
 
+    /**
+     * Setup notification channel for android and add listeners to detect notifications fired
+     */
     componentDidMount() {
         super.componentDidMount();
         if (Platform.OS === 'android') {
@@ -102,10 +105,6 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
 
     getUpdateToastTranslations() {
         return [i18n.t("proxiwashScreen.listUpdated"), i18n.t("proxiwashScreen.listUpdateFail")];
-    }
-
-    getKeyExtractor(item: Object) {
-        return item !== undefined ? item.number : undefined;
     }
 
     getDryersKeyExtractor(item: Object) {
@@ -202,13 +201,26 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         }
     }
 
-    getMachineIndexInWatchList(machineId: string) {
+    /**
+     * Get the index of the given machine ID in the watchlist array
+     *
+     * @param machineId
+     * @return
+     */
+    getMachineIndexInWatchList(machineId: string): number {
         let elem = this.state.machinesWatched.find(function (elem) {
             return elem.machineNumber === machineId
         });
         return this.state.machinesWatched.indexOf(elem);
     }
 
+    /**
+     * Add the given notifications associated to a machine ID to the watchlist, and save the array to the preferences
+     *
+     * @param machineId
+     * @param endNotificationID
+     * @param reminderNotificationID
+     */
     saveNotificationToPrefs(machineId: string, endNotificationID: string, reminderNotificationID: string | null) {
         let data = this.state.machinesWatched;
         data.push({
@@ -219,13 +231,23 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         this.updateNotificationPrefs(data);
     }
 
+    /**
+     * remove the given index from the watchlist array and save it to preferences
+     *
+     * @param index
+     */
     removeNotificationFromPrefs(index: number) {
         let data = this.state.machinesWatched;
         data.splice(index, 1);
         this.updateNotificationPrefs(data);
     }
 
-    updateNotificationPrefs(data: Object) {
+    /**
+     * Set the given data as the watchlist and save it to preferences
+     *
+     * @param data
+     */
+    updateNotificationPrefs(data: Array<Object>) {
         this.setState({machinesWatched: data});
         let prefKey = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.key;
         AsyncStorageManager.getInstance().savePref(prefKey, JSON.stringify(data));
@@ -266,6 +288,13 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         return true;
     }
 
+    /**
+     * Show an alert fo a machine, allowing to enable/disable notifications if running
+     *
+     * @param title
+     * @param item
+     * @param remainingTime
+     */
     showAlert(title: string, item: Object, remainingTime: number) {
         let buttons = [{text: i18n.t("proxiwashScreen.modal.ok")}];
         let message = modalStateStrings[MACHINE_STATES[item.state]];
