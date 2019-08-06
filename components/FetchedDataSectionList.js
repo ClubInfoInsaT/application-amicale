@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import WebDataManager from "../utils/WebDataManager";
-import {Container, H3, Tab, TabHeading, Tabs, Text} from "native-base";
+import {Container, H3, Spinner, Tab, TabHeading, Tabs, Text} from "native-base";
 import CustomHeader from "./CustomHeader";
 import {RefreshControl, SectionList, View} from "react-native";
 import CustomMaterialIcon from "./CustomMaterialIcon";
@@ -50,7 +50,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      * Get the translation for the header in the current language
      * @return {string}
      */
-    getHeaderTranslation() : string {
+    getHeaderTranslation(): string {
         return "Header";
     }
 
@@ -152,10 +152,11 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      * No need to be overridden, has good defaults.
      *
      * @param text
+     * @param isSpinner
      * @param icon
      * @return {*}
      */
-    getEmptyRenderItem(text: string, icon: string) {
+    getEmptyRenderItem(text: string, isSpinner: boolean, icon: string) {
         return (
             <View>
                 <View style={{
@@ -165,11 +166,14 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                     height: 100,
                     marginBottom: 20
                 }}>
-                    <CustomMaterialIcon
-                        icon={icon}
-                        fontSize={100}
-                        width={100}
-                        color={ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText}/>
+                    {isSpinner ?
+                        <Spinner/>
+                        :
+                        <CustomMaterialIcon
+                            icon={icon}
+                            fontSize={100}
+                            width={100}
+                            color={ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText}/>}
                 </View>
 
                 <H3 style={{
@@ -209,6 +213,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                         text: this.state.refreshing ?
                             i18n.t('general.loading') :
                             i18n.t('general.networkError'),
+                        isSpinner: this.state.refreshing,
                         icon: this.state.refreshing ?
                             'refresh' :
                             'access-point-network-off'
@@ -256,7 +261,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                 }
                 renderItem={({item, section}) =>
                     isEmpty ?
-                        this.getEmptyRenderItem(item.text, item.icon) :
+                        this.getEmptyRenderItem(item.text, item.isSpinner, item.icon) :
                         this.getRenderItem(item, section, dataset)
                 }
                 style={{minHeight: 300, width: '100%'}}

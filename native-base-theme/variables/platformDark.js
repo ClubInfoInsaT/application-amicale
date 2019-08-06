@@ -2,7 +2,7 @@
 
 import color from "color";
 
-import { Platform, Dimensions, PixelRatio } from "react-native";
+import {Dimensions, PixelRatio, Platform} from "react-native";
 
 const deviceHeight = Dimensions.get("window").height;
 const deviceWidth = Dimensions.get("window").width;
@@ -226,7 +226,7 @@ export default {
     segmentBorderColorMain: platform === "ios" ? "#a7a6ab" : "#3F51B5",
 
     // Spinner
-    defaultSpinnerColor: "#45D56E",
+    defaultSpinnerColor: "#e42612",
     inverseSpinnerColor: "#1A191B",
 
     // Tab
@@ -258,7 +258,7 @@ export default {
 
     // CUSTOM
     customMaterialIconColor: "#b3b3b3",
-    fetchedDataSectionListErrorText : "#acacac",
+    fetchedDataSectionListErrorText: "#acacac",
 
     // PROXIWASH
     proxiwashFinishedColor: "rgba(17,149,32,0.53)",
