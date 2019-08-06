@@ -12,7 +12,6 @@ const drawerCover = require("../assets/drawer-cover.png");
 
 const WIKETUD_LINK = "https://www.etud.insa-toulouse.fr/wiketud";
 const Amicale_LINK = "https://www.etud.insa-toulouse.fr/~amicale";
-const TIMETABLE_LINK = "http://planex.insa-toulouse.fr";
 
 type Props = {
     navigation: Object,
@@ -64,16 +63,15 @@ export default class SideBar extends React.Component<Props, State> {
                 icon: "shopping",
             },
             {
+                name: 'Planex',
+                route: "Planex",
+                icon: "timetable",
+            },
+            {
                 name: "Amicale",
                 route: "amicale",
                 icon: "web",
                 link: Amicale_LINK
-            },
-            {
-                name: i18n.t('screens.timetable'),
-                route: "timetable",
-                icon: "timetable",
-                link: TIMETABLE_LINK
             },
             {
                 name: "Wiketud",
@@ -120,7 +118,7 @@ export default class SideBar extends React.Component<Props, State> {
                         renderItem={({item}) =>
                             <ListItem
                                 button
-                                noBorder={item.name !== 'Wiketud' && item.name !== 'Proximo'} // Display a separator before settings and Amicale
+                                noBorder={item.name !== 'Wiketud' && item.name !== 'Planex'} // Display a separator before settings and Amicale
                                 selected={this.state.active === item.route}
                                 onPress={() => {
                                     if (item.link !== undefined)

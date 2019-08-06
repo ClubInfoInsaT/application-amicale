@@ -10,7 +10,7 @@
       "android",
       "web"
     ],
-    "version": "0.0.5",
+    "version": "0.0.6",
     "orientation": "portrait",
     "primaryColor": "#e42612",
     "icon": "./assets/icon.png",
@@ -32,7 +32,7 @@
     ],
     "ios": {
       "bundleIdentifier": "amicale.insat.application",
-      "buildNumber": "0.0.5",
+      "buildNumber": "0.0.6",
       "icon": "./assets/ios.icon.png"
     },
     "android": {
