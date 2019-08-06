@@ -1,10 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {View} from 'react-native';
-import {Container, Content, Spinner} from 'native-base';
+import {Platform, View} from 'react-native';
+import {Container, Right, Spinner} from 'native-base';
 import CustomHeader from "../components/CustomHeader";
 import WebView from "react-native-webview";
+import Touchable from "react-native-platform-touchable";
+import CustomMaterialIcon from "../components/CustomMaterialIcon";
+import ThemeManager from "../utils/ThemeManager";
 
 type Props = {
     navigation: Object,
@@ -26,23 +29,53 @@ export default class PlanningScreen extends React.Component<Props, State> {
         isFinishedLoading: false,
     };
 
+    webview: WebView;
+
+    getRefreshButton() {
+        return (
+            <Right>
+                <Touchable
+                    style={{padding: 6}}
+                    onPress={() => this.refreshWebview()}>
+                    <CustomMaterialIcon
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                        icon="refresh"/>
+                </Touchable>
+            </Right>
+        );
+    };
+
+    refreshWebview() {
+        this.setState({isFinishedLoading: false});
+        this.webview.reload();
+    }
+
     render() {
         const nav = this.props.navigation;
         return (
             <Container>
-                <CustomHeader navigation={nav} title={'Planex'}/>
+                <CustomHeader navigation={nav} title={'Planex'} rightMenu={this.getRefreshButton()}/>
                 <WebView
+                    ref={ref => (this.webview = ref)}
                     source={{uri: PLANEX_URL}}
-                    style={{width: this.state.isFinishedLoading ? '100%' : 0}}
-                    onLoadEnd={() => {
-                        this.setState({isFinishedLoading: true})
+                    style={{
+                        width: '100%',
+                        height: '100%',
                     }}
+                    startInLoadingState={true}
+                    renderLoading={() =>
+                        <View style={{
+                            backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
+                            width: '100%',
+                            height: '100%',
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <Spinner/>
+                        </View>
+                    }
                 />
-                {this.state.isFinishedLoading ?
-                    <View/> :
-                    <Content>
-                        <Spinner/>
-                    </Content>}
             </Container>
         );
     }
