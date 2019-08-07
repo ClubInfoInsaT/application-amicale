@@ -7,6 +7,7 @@ import ProxiwashScreen from '../screens/ProxiwashScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
 import PlanexScreen from '../screens/PlanexScreen';
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
+import ThemeManager from "../utils/ThemeManager";
 
 const TAB_ICONS = {
     Home: 'coffee',
@@ -34,7 +35,7 @@ export default createMaterialBottomTabNavigator({
     order: ['Proximo', 'Planning', 'Home', 'Proxiwash', 'Planex'],
     initialRouteName: 'Home',
     activeColor: '#f0edf6',
-    inactiveColor: '#7f150a',
+    inactiveColor: '#4e1108',
     backBehavior: 'initialRoute',
-    barStyle: {backgroundColor: '#e42612'},
+    barStyle: {backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary},
 });

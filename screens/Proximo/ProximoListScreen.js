@@ -188,34 +188,32 @@ export default class ProximoListScreen extends React.Component<Props, State> {
 
         return (
             <Container>
-                <CustomHeader hasBackButton={true} navigation={nav} title={navType} rightMenu={
-                    <Right>
-                        <Menu
-                            ref={this.setMenuRef}
-                            button={
-                                <Touchable
-                                    style={{padding: 6}}
-                                    onPress={() =>
-                                        this._menu.show()
-                                    }>
-                                    <CustomMaterialIcon
-                                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                                        icon={'sort'}/>
-                                </Touchable>
-                            }
-                        >
-                            <MenuItem
-                                onPress={() => this.sortModeSelected(sortMode.name)}>
-                                {this.state.sortNameIcon}
-                                {i18n.t('proximoScreen.sortName')}
-                            </MenuItem>
-                            <MenuItem
-                                onPress={() => this.sortModeSelected(sortMode.price)}>
-                                {this.state.sortPriceIcon}
-                                {i18n.t('proximoScreen.sortPrice')}
-                            </MenuItem>
-                        </Menu>
-                    </Right>
+                <CustomHeader hasBackButton={true} navigation={nav} title={navType} rightButton={
+                    <Menu
+                        ref={this.setMenuRef}
+                        button={
+                            <Touchable
+                                style={{padding: 6}}
+                                onPress={() =>
+                                    this._menu.show()
+                                }>
+                                <CustomMaterialIcon
+                                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                                    icon={'sort'}/>
+                            </Touchable>
+                        }
+                    >
+                        <MenuItem
+                            onPress={() => this.sortModeSelected(sortMode.name)}>
+                            {this.state.sortNameIcon}
+                            {i18n.t('proximoScreen.sortName')}
+                        </MenuItem>
+                        <MenuItem
+                            onPress={() => this.sortModeSelected(sortMode.price)}>
+                            {this.state.sortPriceIcon}
+                            {i18n.t('proximoScreen.sortPrice')}
+                        </MenuItem>
+                    </Menu>
                 }/>
 
                 <Content>

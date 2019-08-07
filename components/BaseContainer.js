@@ -46,7 +46,6 @@ export default class BaseContainer extends React.Component<Props, State> {
     }
 
     render() {
-        console.log(this.state.isOpen);
         return (
             <CustomSideMenu navigation={this.props.navigation} isOpen={this.state.isOpen}
                             onChange={(isOpen) => this.updateMenuState(isOpen)}>

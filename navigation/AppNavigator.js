@@ -12,7 +12,7 @@ import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
  */
 export default createAppContainer(
     createStackNavigator({
-            Tabs: MainTabNavigator,
+            Main: MainTabNavigator,
             // Drawer: MainDrawerNavigator,
             ProximoListScreen: {screen: ProximoListScreen},
             SettingsScreen: {screen: SettingsScreen},
@@ -20,7 +20,7 @@ export default createAppContainer(
             AboutDependenciesScreen: {screen: AboutDependenciesScreen},
         },
         {
-            initialRouteName: "Tabs",
+            initialRouteName: "Main",
             mode: 'card',
             headerMode: "none"
         })

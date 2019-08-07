@@ -101,7 +101,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
             actions: [NavigationActions.navigate({routeName: 'Main'})],
         });
         this.props.navigation.dispatch(resetAction);
-        this.props.navigation.navigate('Settings');
+        // this.props.navigation.navigate('SettingsScreen');
     }
 
     /**

@@ -14,7 +14,6 @@ type Props = {
 
 export default class CustomSideMenu extends React.Component<Props> {
     render() {
-        console.log(this.props.isOpen);
         return (
             <SideMenu menu={<SideBar navigation={this.props.navigation}/>}
                       isOpen={this.props.isOpen}
