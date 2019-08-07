@@ -30,7 +30,7 @@ export default class AboutDependenciesScreen extends React.Component<Props> {
         const data = generateListFromObject(nav.getParam('data', {}));
         return (
             <Container>
-                <CustomHeader backButton={true} navigation={nav} title={i18n.t('aboutScreen.libs')}/>
+                <CustomHeader hasBackButton={true} navigation={nav} title={i18n.t('aboutScreen.libs')}/>
                 <Content>
                     <FlatList
                         data={data}

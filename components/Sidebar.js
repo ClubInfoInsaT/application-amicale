@@ -43,31 +43,6 @@ export default class SideBar extends React.Component<Props, State> {
         // If the link field is defined, clicking on the item will open the link
         this.dataSet = [
             {
-                name: i18n.t('screens.home'),
-                route: "Home",
-                icon: "home",
-            },
-            {
-                name: i18n.t('screens.planning'),
-                route: "Planning",
-                icon: "calendar-range",
-            },
-            {
-                name: "Proxiwash",
-                route: "Proxiwash",
-                icon: "washing-machine",
-            },
-            {
-                name: "Proximo",
-                route: "Proximo",
-                icon: "shopping",
-            },
-            {
-                name: 'Planex',
-                route: "Planex",
-                icon: "timetable",
-            },
-            {
                 name: "Amicale",
                 route: "amicale",
                 icon: "web",
@@ -79,16 +54,16 @@ export default class SideBar extends React.Component<Props, State> {
                 icon: "wikipedia",
                 link: WIKETUD_LINK
             },
-            {
-                name: i18n.t('screens.settings'),
-                route: "Settings",
-                icon: "settings",
-            },
-            {
-                name: i18n.t('screens.about'),
-                route: "About",
-                icon: "information",
-            },
+            // {
+            //     name: i18n.t('screens.settings'),
+            //     route: "Settings",
+            //     icon: "settings",
+            // },
+            // {
+            //     name: i18n.t('screens.about'),
+            //     route: "About",
+            //     icon: "information",
+            // },
         ];
     }
 
@@ -99,7 +74,6 @@ export default class SideBar extends React.Component<Props, State> {
     navigateToScreen(route: string) {
         this.props.navigation.navigate(route);
         this.props.navigation.closeDrawer();
-        this.setState({active: route});
     };
 
     render() {
@@ -118,7 +92,7 @@ export default class SideBar extends React.Component<Props, State> {
                         renderItem={({item}) =>
                             <ListItem
                                 button
-                                noBorder={item.name !== 'Wiketud' && item.name !== 'Planex'} // Display a separator before settings and Amicale
+                                noBorder
                                 selected={this.state.active === item.route}
                                 onPress={() => {
                                     if (item.link !== undefined)

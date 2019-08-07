@@ -3,6 +3,7 @@
 import {createAppContainer, createStackNavigator} from 'react-navigation';
 
 import MainDrawerNavigator from './MainDrawerNavigator';
+import MainTabNavigator from './MainTabNavigator';
 import ProximoListScreen from '../screens/Proximo/ProximoListScreen';
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 
@@ -11,12 +12,13 @@ import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
  */
 export default createAppContainer(
     createStackNavigator({
-            Main: MainDrawerNavigator,
+            Tabs: MainTabNavigator,
+            // Drawer: MainDrawerNavigator,
             ProximoListScreen: {screen: ProximoListScreen},
             AboutDependenciesScreen: {screen: AboutDependenciesScreen},
         },
         {
-            initialRouteName: "Main",
+            initialRouteName: "Tabs",
             mode: 'card',
             headerMode: "none"
         })

@@ -2,12 +2,12 @@
 
 import * as React from 'react';
 import WebDataManager from "../utils/WebDataManager";
-import {Container, H3, Spinner, Tab, TabHeading, Tabs, Text} from "native-base";
-import CustomHeader from "./CustomHeader";
+import {H3, Spinner, Tab, TabHeading, Tabs, Text} from "native-base";
 import {RefreshControl, SectionList, View} from "react-native";
 import CustomMaterialIcon from "./CustomMaterialIcon";
 import i18n from 'i18n-js';
 import ThemeManager from "../utils/ThemeManager";
+import BaseContainer from "./BaseContainer";
 
 type Props = {
     navigation: Object,
@@ -312,8 +312,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         const nav = this.props.navigation;
         const dataset = this.createDataset(this.state.fetchedData);
         return (
-            <Container>
-                <CustomHeader navigation={nav} title={this.getHeaderTranslation()}/>
+            <BaseContainer navigation={nav} headerTitle={this.getHeaderTranslation()}>
                 {this.hasTabs() ?
                     <Tabs>
                         {this.getTabbedView(dataset)}
@@ -321,7 +320,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                     :
                     this.getSectionList(dataset)
                 }
-            </Container>
+            </BaseContainer>
         );
     }
 

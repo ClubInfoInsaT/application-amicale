@@ -2,14 +2,15 @@
 
 import * as React from "react";
 import {Body, Header, Left, Right, Title} from "native-base";
-import {Platform, StyleSheet} from "react-native";
+import {Platform, StyleSheet, View} from "react-native";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import Touchable from 'react-native-platform-touchable';
 import ThemeManager from "../utils/ThemeManager";
 import CustomMaterialIcon from "./CustomMaterialIcon";
 
 type Props = {
-    backButton: boolean,
+    hasBackButton: boolean,
+    leftButton: React.Node,
     rightMenu: React.Node,
     title: string,
     navigation: Object,
@@ -19,7 +20,7 @@ type Props = {
 /**
  * Custom component defining a header using native base
  *
- * @prop backButton {boolean} Whether to show a back button or a burger menu. Use burger if unspecified
+ * @prop hasBackButton {boolean} Whether to show a back button or a burger menu. Use burger if unspecified
  * @prop rightMenu {React.Node} Element to place at the right of the header. Use nothing if unspecified
  * @prop title {string} This header title
  * @prop navigation {Object} The navigation object from react navigation
@@ -27,7 +28,8 @@ type Props = {
 export default class CustomHeader extends React.Component<Props> {
 
     static defaultProps = {
-        backButton: false,
+        hasBackButton: false,
+        leftButton: <View/>,
         rightMenu: <Right/>,
         hasTabs: false,
     };
@@ -35,7 +37,7 @@ export default class CustomHeader extends React.Component<Props> {
     render() {
         let button;
         // Does the app have a back button or a burger menu ?
-        if (this.props.backButton)
+        if (this.props.hasBackButton)
             button =
                 <Touchable
                     style={{padding: 6}}
@@ -45,14 +47,7 @@ export default class CustomHeader extends React.Component<Props> {
                         icon="arrow-left"/>
                 </Touchable>;
         else
-            button =
-                <Touchable
-                    style={{padding: 6}}
-                    onPress={() => this.props.navigation.toggleDrawer()}>
-                    <CustomMaterialIcon
-                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon="menu"/>
-                </Touchable>;
+            button = this.props.leftButton;
 
         return (
             <Header style={styles.header}>

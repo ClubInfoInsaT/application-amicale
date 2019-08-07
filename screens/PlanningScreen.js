@@ -1,13 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {Button, Container, H3, Text} from 'native-base';
-import CustomHeader from "../components/CustomHeader";
+import {Button, H3, Text} from 'native-base';
 import i18n from "i18n-js";
 import {Platform, View} from "react-native";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
 import {Linking} from "expo";
+import BaseContainer from "../components/BaseContainer";
 
 type Props = {
     navigation: Object,
@@ -28,8 +28,7 @@ export default class PlanningScreen extends React.Component<Props> {
     render() {
         const nav = this.props.navigation;
         return (
-            <Container>
-                <CustomHeader navigation={nav} title={i18n.t('screens.planning')}/>
+            <BaseContainer navigation={nav} headerTitle={i18n.t('screens.planning')}>
                 <View style={{
                     flexGrow: 1,
                     justifyContent: 'center',
@@ -70,7 +69,7 @@ export default class PlanningScreen extends React.Component<Props> {
                         </Button>
                         : <View/>}
                 </View>
-            </Container>
+            </BaseContainer>
         );
     }
 }

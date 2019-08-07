@@ -15,6 +15,8 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import {clearThemeCache} from 'native-base-shoutem-theme';
 import AsyncStorageManager from "./utils/AsyncStorageManager";
 import CustomMaterialIcon from "./components/CustomMaterialIcon";
+import SideBar from "./components/Sidebar";
+import SideMenu from "react-native-side-menu";
 
 const styles = StyleSheet.create({
     mainContent: {
@@ -175,10 +177,13 @@ export default class App extends React.Component<Props, State> {
             return (
                 <Root>
                     <StyleProvider style={this.state.currentTheme}>
-                        <AppNavigator/>
+
+                            <AppNavigator/>
                     </StyleProvider>
                 </Root>
             );
         }
     }
+
+    menu = <View/>;
 }

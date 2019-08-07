@@ -10,7 +10,7 @@ import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
 import PlanexScreen from '../screens/PlanexScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
-import SideMenu from "../components/SideMenu";
+import Sidebar from "../components/Sidebar";
 
 /**
  * Creates the drawer navigation stack
@@ -24,7 +24,7 @@ export default createDrawerNavigator({
         Settings: {screen: SettingsScreen,},
         About: {screen: AboutScreen,},
     }, {
-        contentComponent: SideMenu,
+        contentComponent: Sidebar,
         initialRouteName: 'Home',
         backBehavior: 'initialRoute',
         drawerType: 'front',

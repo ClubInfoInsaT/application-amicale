@@ -188,7 +188,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
 
         return (
             <Container>
-                <CustomHeader backButton={true} navigation={nav} title={navType} rightMenu={
+                <CustomHeader hasBackButton={true} navigation={nav} title={navType} rightMenu={
                     <Right>
                         <Menu
                             ref={this.setMenuRef}

@@ -8,6 +8,7 @@ import WebView from "react-native-webview";
 import Touchable from "react-native-platform-touchable";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
+import BaseContainer from "../components/BaseContainer";
 
 type Props = {
     navigation: Object,
@@ -17,7 +18,9 @@ type State = {
     isFinishedLoading: boolean
 }
 
-const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
+// const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
+// TODO use real url in prod
+const PLANEX_URL = 'https://srv-falcon.etud.insa-toulouse.fr/~vergnet/planex/planex.insa-toulouse.fr.html';
 
 /**
  * Class defining the app's planex screen.
@@ -53,8 +56,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         return (
-            <Container>
-                <CustomHeader navigation={nav} title={'Planex'} rightMenu={this.getRefreshButton()}/>
+            <BaseContainer navigation={nav} headerTitle={'Planex'} headerRightMenu={this.getRefreshButton()}>
                 <WebView
                     ref={ref => (this.webview = ref)}
                     source={{uri: PLANEX_URL}}
@@ -76,7 +78,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                         </View>
                     }
                 />
-            </Container>
+            </BaseContainer>
         );
     }
 }
