@@ -7,6 +7,32 @@
     "settings": "Paramètres",
     "about": "À Propos"
   },
+  "intro": {
+    "slide1": {
+      "title": "Bienvenue sur COFFEE",
+      "text": "La nouvelle app à consulter pendant la pause café pour être au courant de la vie du campus !"
+    },
+    "slide2": {
+      "title": "Restez informés",
+      "text": "COFFEE vous permettra bientôt d'être au courant de tous les événements qui ont lieu sur le campus, de la vente de crêpes jusqu'aux concerts enfoiros !"
+    },
+    "slide3": {
+      "title": "N'oubliez plus votre linge !",
+      "text": "COFFEE vous informe de la disponibilité des machines et vous permet d'être notifiés lorsque la vôtre se termine bientôt !"
+    },
+    "slide4": {
+      "title": "Proximo",
+      "text": "Il vous manque des pâtes ? Ou un petit creux au gouter, regardez les stocks de votre supérette insaienne en temps réel"
+    },
+    "slide5": {
+      "title": "Planex",
+      "text": "Consultez votre emploi du temps sur COFFEE"
+    },
+    "slide6": {
+      "title": "Toujours en développement",
+      "text": "D'autres fonctionnalités arrivent bientôt, n'hésitez pas à nous donner votre avis pour améliorer l'appli"
+    }
+  },
   "settingsScreen": {
     "appearanceCard": "Apparence",
     "nightMode": "Mode Nuit",
