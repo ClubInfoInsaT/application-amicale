@@ -13,7 +13,7 @@ import Touchable from "react-native-platform-touchable";
 type Props = {
     navigation: Object,
     headerTitle: string,
-    headerRightMenu: React.Node,
+    headerRightButton: React.Node,
     children: React.Node
 }
 
@@ -61,7 +61,7 @@ export default class BaseContainer extends React.Component<Props, State> {
                                               icon="menu"/>
                                       </Touchable>
                                   }
-                    rightMenu={this.props.headerRightMenu}/>
+                    rightButton={this.props.headerRightButton}/>
                     {this.props.children}
                 </Container>
             </CustomSideMenu>

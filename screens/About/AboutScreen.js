@@ -163,7 +163,7 @@ export default class AboutScreen extends React.Component<Props> {
         const nav = this.props.navigation;
         return (
             <Container>
-                <CustomHeader navigation={nav} title={i18n.t('screens.about')}/>
+                <CustomHeader navigation={nav} title={i18n.t('screens.about')} hasBackButton={true}/>
                 <Content padder>
                     <Card>
                         <CardItem>

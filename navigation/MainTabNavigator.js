@@ -9,7 +9,7 @@ import PlanexScreen from '../screens/PlanexScreen';
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 
 const TAB_ICONS = {
-    Home: 'home',
+    Home: 'coffee',
     Planning: 'calendar-range',
     Proxiwash: 'washing-machine',
     Proximo: 'shopping',

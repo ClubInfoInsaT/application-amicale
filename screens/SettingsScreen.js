@@ -21,6 +21,8 @@ import i18n from "i18n-js";
 import {NavigationActions, StackActions} from "react-navigation";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
+import Touchable from "react-native-platform-touchable";
+import {Platform} from "react-native";
 
 type Props = {
     navigation: Object,
@@ -170,11 +172,24 @@ export default class SettingsScreen extends React.Component<Props, State> {
         );
     }
 
+    getRightButton() {
+        return (
+            <Touchable
+                style={{padding: 6}}
+                onPress={() => this.props.navigation.navigate('AboutScreen')}>
+                <CustomMaterialIcon
+                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                    icon="information"/>
+            </Touchable>
+        );
+    }
+
     render() {
         const nav = this.props.navigation;
         return (
             <Container>
-                <CustomHeader navigation={nav} title={i18n.t('screens.settings')}/>
+                <CustomHeader navigation={nav} title={i18n.t('screens.settings')} hasBackButton={true}
+                rightButton={this.getRightButton()}/>
                 <Content padder>
                     <Card>
                         <CardItem header>

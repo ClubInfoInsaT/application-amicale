@@ -48,30 +48,44 @@ const styles = StyleSheet.create({
 const slides = [
     {
         key: '1',
-        title: 'L\'application de l\'Amicale',
-        text: 'Toutes les informations du campus de Toulouse',
+        title: 'Bienvenue sur COFFEE',
+        text: ' La nouvelle app à consulter pendant la pause café pour être au courant de la vie du campus !',
         image: require('./assets/amicale.png'),
         colors: ['#ff8a6d', '#aa1c0d'],
     },
     {
         key: '2',
-        title: 'N\'oubliez plus votre linge',
-        text: 'Visualisez les disponibilités des machines et rajoutez des alarmes',
-        icon: 'washing-machine',
+        title: 'Restez informés',
+        text: 'COFFEE vous permettra bientôt d\'être au courant de tous les événements qui ont lieu sur le campus, de la vente de crêpes jusqu\'aux concerts enfoiros !',
+        icon: 'calendar-range',
         colors: ['#9cd6d3', '#3186be'],
     },
     {
         key: '3',
-        title: 'Le proximo',
-        text: 'Regardez le stock de la supérette de l\'INSA depuis n\'importe où',
-        icon: 'shopping',
+        title: 'N\'oubliez plus votre linge !',
+        text: 'COFFEE vous informe de la disponibilité des machines et vous permet d\'être notifiés lorsque la vôtre se termine bientôt !',
+        icon: 'washing-machine',
         colors: ['#f9a967', '#da5204'],
     },
     {
         key: '4',
+        title: 'Proximo',
+        text: 'Il vous manque des pâtes ? Ou un petit creux au gouter, regardez les stocks de votre supérette insaienne en temps réel',
+        icon: 'shopping',
+        colors: ['#f9a967', '#da5204'],
+    },
+    {
+        key: '5',
+        title: 'Planex',
+        text: 'Consultez votre emploi du temps sur COFFEE',
+        icon: 'timetable',
+        colors: ['#f9a967', '#da5204'],
+    },
+    {
+        key: '6',
         title: 'Toujours en développement',
-        text: 'D\'autres fonctionnalités seront disponibles prochainement',
-        icon: 'settings-outline',
+        text: 'D\'autres fonctionnalités arrivent bientôt, n\'hésitez pas à nous donner votre avis pour améliorer l\'appli',
+        icon: 'cogs',
         colors: ['#9be238', '#1e6a22'],
     },
 ];
@@ -114,7 +128,8 @@ export default class App extends React.Component<Props, State> {
         this.setState({
             isLoading: false,
             currentTheme: ThemeManager.getCurrentTheme(),
-            showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1'
+            // showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1'
+            showIntro: true
         });
     }
 

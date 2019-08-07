@@ -11,7 +11,7 @@ import CustomMaterialIcon from "./CustomMaterialIcon";
 type Props = {
     hasBackButton: boolean,
     leftButton: React.Node,
-    rightMenu: React.Node,
+    rightButton: React.Node,
     title: string,
     navigation: Object,
     hasTabs: boolean,
@@ -30,7 +30,7 @@ export default class CustomHeader extends React.Component<Props> {
     static defaultProps = {
         hasBackButton: false,
         leftButton: <View/>,
-        rightMenu: <Right/>,
+        rightButton: <View/>,
         hasTabs: false,
     };
 
@@ -57,7 +57,17 @@ export default class CustomHeader extends React.Component<Props> {
                 <Body>
                     <Title>{this.props.title}</Title>
                 </Body>
-                {this.props.rightMenu}
+                <Right>
+                    {this.props.rightButton}
+                    {this.props.hasBackButton ? <View/> :
+                    <Touchable
+                        style={{padding: 6}}
+                        onPress={() => this.props.navigation.navigate('SettingsScreen')}>
+                        <CustomMaterialIcon
+                            color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                            icon="settings"/>
+                    </Touchable>}
+                </Right>
             </Header>);
     }
 };

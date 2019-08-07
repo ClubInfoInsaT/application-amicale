@@ -1,9 +1,9 @@
 // @flow
 
 import {createAppContainer, createStackNavigator} from 'react-navigation';
-
-import MainDrawerNavigator from './MainDrawerNavigator';
 import MainTabNavigator from './MainTabNavigator';
+import SettingsScreen from '../screens/SettingsScreen';
+import AboutScreen from '../screens/About/AboutScreen';
 import ProximoListScreen from '../screens/Proximo/ProximoListScreen';
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 
@@ -15,6 +15,8 @@ export default createAppContainer(
             Tabs: MainTabNavigator,
             // Drawer: MainDrawerNavigator,
             ProximoListScreen: {screen: ProximoListScreen},
+            SettingsScreen: {screen: SettingsScreen},
+            AboutScreen: {screen: AboutScreen},
             AboutDependenciesScreen: {screen: AboutDependenciesScreen},
         },
         {

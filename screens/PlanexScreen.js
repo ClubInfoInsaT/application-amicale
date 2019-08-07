@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 import {Platform, View} from 'react-native';
-import {Container, Right, Spinner} from 'native-base';
-import CustomHeader from "../components/CustomHeader";
+import {Spinner} from 'native-base';
 import WebView from "react-native-webview";
 import Touchable from "react-native-platform-touchable";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
@@ -36,15 +35,13 @@ export default class PlanningScreen extends React.Component<Props, State> {
 
     getRefreshButton() {
         return (
-            <Right>
-                <Touchable
-                    style={{padding: 6}}
-                    onPress={() => this.refreshWebview()}>
-                    <CustomMaterialIcon
-                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon="refresh"/>
-                </Touchable>
-            </Right>
+            <Touchable
+                style={{padding: 6}}
+                onPress={() => this.refreshWebview()}>
+                <CustomMaterialIcon
+                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                    icon="refresh"/>
+            </Touchable>
         );
     };
 
@@ -56,7 +53,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         return (
-            <BaseContainer navigation={nav} headerTitle={'Planex'} headerRightMenu={this.getRefreshButton()}>
+            <BaseContainer navigation={nav} headerTitle={'Planex'} headerRightButton={this.getRefreshButton()}>
                 <WebView
                     ref={ref => (this.webview = ref)}
                     source={{uri: PLANEX_URL}}
