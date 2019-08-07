@@ -58,7 +58,7 @@ const slides = [
         title: 'Restez informés',
         text: 'COFFEE vous permettra bientôt d\'être au courant de tous les événements qui ont lieu sur le campus, de la vente de crêpes jusqu\'aux concerts enfoiros !',
         icon: 'calendar-range',
-        colors: ['#e3cd20', '#ceba1d'],
+        colors: ['#d99e09', '#c28d08'],
     },
     {
         key: '3',
@@ -192,7 +192,6 @@ export default class App extends React.Component<Props, State> {
             return (
                 <Root>
                     <StyleProvider style={this.state.currentTheme}>
-
                             <AppNavigator/>
                     </StyleProvider>
                 </Root>
