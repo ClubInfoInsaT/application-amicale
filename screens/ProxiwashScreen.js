@@ -12,7 +12,7 @@ import PlatformTouchable from "react-native-platform-touchable";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import * as Expo from "expo";
 
-const DATA_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/dataProxiwash.json";
+const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/washinsa/washinsa.json";
 
 let reminderNotifTime = 5;
 
@@ -42,7 +42,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * Creates machine state parameters using current theme and translations
      */
     constructor() {
-        super(DATA_URL, 1000 * 30); // Refresh every half minute
+        super(DATA_URL, 1000 * 60); // Refresh every minute
         let colors = ThemeManager.getCurrentThemeVariables();
         stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
         stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;

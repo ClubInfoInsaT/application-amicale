@@ -25,7 +25,7 @@ type State = {
 export default class BaseContainer extends React.Component<Props, State> {
 
     static defaultProps = {
-        headerRightMenu: <Right/>
+        headerRightButton: <View/>
     };
 
 

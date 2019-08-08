@@ -11,7 +11,7 @@ import ThemeManager from "../utils/ThemeManager";
 
 const ICON_AMICALE = require('../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
-const DATA_URL = "https://etud.insa-toulouse.fr/~vergnet/appli-amicale/facebook_data.json";
+const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/facebook_data.json";
 
 
 /**
