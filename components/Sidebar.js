@@ -12,6 +12,7 @@ const drawerCover = require("../assets/drawer-cover.png");
 
 const WIKETUD_LINK = "https://www.etud.insa-toulouse.fr/wiketud";
 const Amicale_LINK = "https://www.etud.insa-toulouse.fr/~amicale";
+const RU_LINK = "http://m.insa-toulouse.fr/ru.html";
 
 type Props = {
     navigation: Object,
@@ -54,16 +55,11 @@ export default class SideBar extends React.Component<Props, State> {
                 icon: "wikipedia",
                 link: WIKETUD_LINK
             },
-            // {
-            //     name: i18n.t('screens.settings'),
-            //     route: "Settings",
-            //     icon: "settings",
-            // },
-            // {
-            //     name: i18n.t('screens.about'),
-            //     route: "About",
-            //     icon: "information",
-            // },
+            {
+                name: i18n.t('screens.menuSelf'),
+                route: "SelfMenuScreen",
+                icon: "silverware-fork-knife",
+            },
         ];
     }
 
@@ -73,7 +69,6 @@ export default class SideBar extends React.Component<Props, State> {
      */
     navigateToScreen(route: string) {
         this.props.navigation.navigate(route);
-        this.props.navigation.closeDrawer();
     };
 
     render() {

@@ -6,6 +6,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import ProximoListScreen from '../screens/Proximo/ProximoListScreen';
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
+import SelfMenuScreen from '../screens/SelfMenuScreen';
+import {fromRight} from "react-navigation-transitions";
 
 /**
  * Create a stack navigator using the drawer to handle navigation between screens
@@ -18,10 +20,12 @@ export default createAppContainer(
             SettingsScreen: {screen: SettingsScreen},
             AboutScreen: {screen: AboutScreen},
             AboutDependenciesScreen: {screen: AboutDependenciesScreen},
+            SelfMenuScreen: {screen: SelfMenuScreen},
         },
         {
             initialRouteName: "Main",
             mode: 'card',
-            headerMode: "none"
+            headerMode: "none",
+            transitionConfig: () => fromRight(),
         })
 );

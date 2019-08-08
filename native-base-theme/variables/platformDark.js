@@ -115,7 +115,7 @@ export default {
     brandLight: "#f4f4f4",
 
     //Container
-    containerBgColor: "#333333",
+    containerBgColor: "#222222",
 
     //Date Picker
     datePickerTextColor: "#fff",
@@ -150,7 +150,7 @@ export default {
 
     // Header
     toolbarBtnColor: platform === "ios" ? "#be1522" : "#fff",
-    toolbarDefaultBg: platform === "ios" ? "#F8F8F8" : "#be1522",
+    toolbarDefaultBg: platform === "ios" ? "#333333" : "#be1522",
     toolbarHeight: platform === "ios" ? 64 : 56,
     toolbarSearchIconSize: platform === "ios" ? 20 : 23,
     toolbarInputColor: platform === "ios" ? "#CECDD2" : "#fff",
@@ -241,7 +241,7 @@ export default {
     tabFontSize: 15,
 
     // Text
-    textColor: "#d6d6d6",
+    textColor: "#ebebeb",
     inverseTextColor: "#000",
     noteFontSize: 14,
     get defaultTextColor() {
@@ -253,7 +253,7 @@ export default {
     titleFontSize: platform === "ios" ? 17 : 19,
     subTitleFontSize: platform === "ios" ? 11 : 14,
     subtitleColor: platform === "ios" ? "#8e8e93" : "#FFF",
-    titleFontColor: platform === "ios" ? "#000" : "#FFF",
+    titleFontColor: platform === "ios" ? "#FFF" : "#FFF",
 
 
     // CUSTOM

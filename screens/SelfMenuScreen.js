@@ -2,25 +2,26 @@
 
 import * as React from 'react';
 import {Platform, View} from 'react-native';
-import {Spinner} from 'native-base';
+import {Container, Spinner} from 'native-base';
 import WebView from "react-native-webview";
 import Touchable from "react-native-platform-touchable";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
-import BaseContainer from "../components/BaseContainer";
+import CustomHeader from "../components/CustomHeader";
+import i18n from "i18n-js";
 
 type Props = {
     navigation: Object,
 }
 
 
-const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
+const RU_URL = 'http://m.insa-toulouse.fr/ru.html';
 
 /**
  * Class defining the app's planex screen.
  * This screen uses a webview to render the planex page
  */
-export default class PlanningScreen extends React.Component<Props> {
+export default class SelfMenuScreen extends React.Component<Props> {
 
     webview: WebView;
 
@@ -43,10 +44,12 @@ export default class PlanningScreen extends React.Component<Props> {
     render() {
         const nav = this.props.navigation;
         return (
-            <BaseContainer navigation={nav} headerTitle={'Planex'} headerRightButton={this.getRefreshButton()}>
+            <Container>
+                <CustomHeader navigation={nav} title={i18n.t('screens.menuSelf')} hasBackButton={true}
+                              rightButton={this.getRefreshButton()}/>
                 <WebView
                     ref={ref => (this.webview = ref)}
-                    source={{uri: PLANEX_URL}}
+                    source={{uri: RU_URL}}
                     style={{
                         width: '100%',
                         height: '100%',
@@ -68,7 +71,7 @@ export default class PlanningScreen extends React.Component<Props> {
                         </View>
                     }
                 />
-            </BaseContainer>
+            </Container>
         );
     }
 }

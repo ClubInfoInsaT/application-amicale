@@ -51,8 +51,8 @@ export default class App extends React.Component<Props, State> {
         this.setState({
             isLoading: false,
             currentTheme: ThemeManager.getCurrentTheme(),
-            // showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1'
-            showIntro: true
+            showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1'
+            // showIntro: true
         });
     }
 

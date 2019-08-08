@@ -76,7 +76,7 @@ export default class HomeScreen extends FetchedDataSectionList {
             }}>
                 <CardItem>
                     <Left>
-                        <Thumbnail source={ICON_AMICALE}/>
+                        <Thumbnail source={ICON_AMICALE} square/>
                         <Body>
                             <Text>{NAME_AMICALE}</Text>
                             <Text note>{HomeScreen.getFormattedDate(item.created_time)}</Text>
