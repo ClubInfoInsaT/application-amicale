@@ -40,14 +40,13 @@ export default class BaseContainer extends React.Component<Props, State> {
     }
 
     updateMenuState(isOpen: boolean) {
-
         this.setState({isOpen});
     }
 
     render() {
         return (
             <View style={{
-                backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
+                backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
                 width: '100%',
                 height: '100%'
             }}>

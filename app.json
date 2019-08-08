@@ -15,7 +15,7 @@
     "primaryColor": "#be1522",
     "icon": "./assets/android.icon.png",
     "splash": {
-      "backgroundColor": "#fff",
+      "backgroundColor": "#222222",
       "resizeMode": "contain",
       "image": "./assets/splash.png"
     },

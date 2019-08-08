@@ -116,6 +116,7 @@ export default {
 
     //Container
     containerBgColor: "#222222",
+    sideMenuBgColor: "#1c1c1c",
 
     //Date Picker
     datePickerTextColor: "#fff",
