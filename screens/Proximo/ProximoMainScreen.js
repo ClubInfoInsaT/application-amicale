@@ -1,11 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {View} from 'react-native'
+import {Platform, View} from 'react-native'
 import {Badge, Body, H2, Left, ListItem, Right, Text} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import FetchedDataSectionList from "../../components/FetchedDataSectionList";
+import ThemeManager from "../../utils/ThemeManager";
+import Touchable from "react-native-platform-touchable";
 
 const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~proximo/data/stock.json";
 
@@ -76,6 +78,18 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
             }
         }
         return finalData;
+    }
+
+    getRightButton() {
+        return (
+            <Touchable
+                style={{padding: 6}}
+                onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
+                <CustomMaterialIcon
+                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                    icon="information"/>
+            </Touchable>
+        );
     }
 
     getRenderItem(item: Object, section: Object, data: Object) {

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Image, Linking, View} from 'react-native';
-import {Body, Card, CardItem, Container, Content, H1, Left, Tab, TabHeading, Tabs, Text} from 'native-base';
+import {Card, CardItem, Container, Content, H2, Left, Tab, TabHeading, Tabs, Text} from 'native-base';
 import CustomHeader from "../components/CustomHeader";
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
@@ -62,9 +62,8 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        <Body>
-                                            <H1>Seche linge</H1>
-                                        </Body>
+                                        <CustomMaterialIcon icon={'tumble-dryer'}/>
+                                        <H2>Seche linge</H2>
                                     </Left>
                                 </CardItem>
                                 <CardItem>
@@ -74,9 +73,8 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        <Body>
-                                            <H1>Machine a laver</H1>
-                                        </Body>
+                                        <CustomMaterialIcon icon={'washing-machine'}/>
+                                        <H2>Machine a laver</H2>
                                     </Left>
                                 </CardItem>
                                 <CardItem>
@@ -102,9 +100,8 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        <Body>
-                                            <H1>Tarifs</H1>
-                                        </Body>
+                                        <CustomMaterialIcon icon={'coins'}/>
+                                        <H2>Tarifs</H2>
                                     </Left>
                                 </CardItem>
                                 <CardItem>
@@ -114,9 +111,8 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        <Body>
-                                            <H1>Moyens de Paiement</H1>
-                                        </Body>
+                                        <CustomMaterialIcon icon={'cash'}/>
+                                        <H2>Moyens de Paiement</H2>
                                     </Left>
                                 </CardItem>
                                 <CardItem>
