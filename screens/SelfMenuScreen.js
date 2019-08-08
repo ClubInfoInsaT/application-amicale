@@ -24,6 +24,16 @@ const RU_URL = 'http://m.insa-toulouse.fr/ru.html';
 export default class SelfMenuScreen extends React.Component<Props> {
 
     webview: WebView;
+    customInjectedJS: string;
+
+    constructor() {
+        super();
+        this.customInjectedJS =
+            'document.querySelector(\'head\').innerHTML += \'<meta name="viewport" content="width=device-width, initial-scale=1.0">\';' +
+            'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/RU/customGeneral.css" type="text/css"/>\';';
+        if (!ThemeManager.getNightMode())
+            this.customInjectedJS += 'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/RU/customLight.css" type="text/css"/>\';';
+    }
 
     getRefreshButton() {
         return (
@@ -43,6 +53,7 @@ export default class SelfMenuScreen extends React.Component<Props> {
 
     render() {
         const nav = this.props.navigation;
+        console.log(this.customInjectedJS);
         return (
             <Container>
                 <CustomHeader navigation={nav} title={i18n.t('screens.menuSelf')} hasBackButton={true}
@@ -55,6 +66,8 @@ export default class SelfMenuScreen extends React.Component<Props> {
                         height: '100%',
                     }}
                     startInLoadingState={true}
+                    injectedJavaScript={this.customInjectedJS}
+                    javaScriptEnabled={true}
                     renderLoading={() =>
                         <View style={{
                             backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,

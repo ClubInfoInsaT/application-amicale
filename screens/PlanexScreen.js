@@ -16,6 +16,8 @@ type Props = {
 
 const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
 
+const CUSTOM_CSS_LINK = 'https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/planex/generalCustom.css';
+
 /**
  * Class defining the app's planex screen.
  * This screen uses a webview to render the planex page
@@ -23,6 +25,17 @@ const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
 export default class PlanningScreen extends React.Component<Props> {
 
     webview: WebView;
+    customInjectedJS: string;
+
+    constructor() {
+        super();
+        this.customInjectedJS =
+            'document.querySelector(\'head\').innerHTML += \'<meta name="viewport" content="width=device-width, initial-scale=1.0">\';' +
+            'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/planex/customMobile.css" type="text/css"/>\';';
+        if (ThemeManager.getNightMode())
+            this.customInjectedJS += 'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/planex/customDark.css" type="text/css"/>\';';
+    }
+
 
     getRefreshButton() {
         return (
@@ -52,6 +65,8 @@ export default class PlanningScreen extends React.Component<Props> {
                         height: '100%',
                     }}
                     startInLoadingState={true}
+                    injectedJavaScript={this.customInjectedJS}
+                    javaScriptEnabled={true}
                     renderLoading={() =>
                         <View style={{
                             backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
