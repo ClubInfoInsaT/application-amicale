@@ -27,6 +27,7 @@ export default class WebDataManager {
         } catch (error) {
             console.log('Could not read FetchedData from server');
             console.log(error);
+            throw new Error('Could not read FetchedData from server');
         }
         this.lastDataFetched = fetchedData;
         return fetchedData;

@@ -20,6 +20,8 @@ type State = {
     machinesWatched: Array<Object>,
 };
 
+const minTimeBetweenRefresh = 60;
+
 /**
  * Class used to create a basic list view using online json data.
  * Used by inheriting from it and redefining getters.
@@ -32,6 +34,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     willBlurSubscription: function;
     refreshInterval: IntervalID;
     refreshTime: number;
+    lastRefresh: Date;
 
     constructor(fetchUrl: string, refreshTime: number) {
         super();
@@ -112,15 +115,33 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      * @private
      */
     _onRefresh = () => {
-        this.setState({refreshing: true});
-        this.webDataManager.readData().then((fetchedData) => {
-            this.setState({
-                fetchedData: fetchedData,
-                refreshing: false,
-                firstLoading: false
-            });
-            this.webDataManager.showUpdateToast(this.getUpdateToastTranslations()[0], this.getUpdateToastTranslations()[1]);
-        });
+        let canRefresh;
+        if (this.lastRefresh !== undefined)
+            canRefresh = (new Date().getTime() - this.lastRefresh.getTime())/1000 > minTimeBetweenRefresh;
+        else
+            canRefresh = true;
+
+        if (canRefresh) {
+            this.setState({refreshing: true});
+            this.webDataManager.readData()
+                .then((fetchedData) => {
+                    this.setState({
+                        fetchedData: fetchedData,
+                        refreshing: false,
+                        firstLoading: false
+                    });
+                    this.lastRefresh = new Date();
+                })
+                .catch((err) => {
+                    this.setState({
+                        fetchedData: {},
+                        refreshing: false,
+                        firstLoading: false
+                    });
+                    this.webDataManager.showUpdateToast(this.getUpdateToastTranslations()[0], this.getUpdateToastTranslations()[1]);
+                });
+        }
+
     };
 
     /**
@@ -316,7 +337,8 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         const nav = this.props.navigation;
         const dataset = this.createDataset(this.state.fetchedData);
         return (
-            <BaseContainer navigation={nav} headerTitle={this.getHeaderTranslation()} headerRightButton={this.getRightButton()}>
+            <BaseContainer navigation={nav} headerTitle={this.getHeaderTranslation()}
+                           headerRightButton={this.getRightButton()}>
                 {this.hasTabs() ?
                     <Tabs>
                         {this.getTabbedView(dataset)}
