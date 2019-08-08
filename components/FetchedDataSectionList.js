@@ -235,6 +235,10 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return false;
     }
 
+    getRightButton() {
+        return <View/>
+    }
+
     /**
      * Get the section list render using the generated dataset
      *
@@ -312,7 +316,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         const nav = this.props.navigation;
         const dataset = this.createDataset(this.state.fetchedData);
         return (
-            <BaseContainer navigation={nav} headerTitle={this.getHeaderTranslation()}>
+            <BaseContainer navigation={nav} headerTitle={this.getHeaderTranslation()} headerRightButton={this.getRightButton()}>
                 {this.hasTabs() ?
                     <Tabs>
                         {this.getTabbedView(dataset)}

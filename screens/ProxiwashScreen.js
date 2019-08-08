@@ -11,17 +11,18 @@ import NotificationsManager from "../utils/NotificationsManager";
 import PlatformTouchable from "react-native-platform-touchable";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import * as Expo from "expo";
+import Touchable from "react-native-platform-touchable";
 
 const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/washinsa/washinsa.json";
 
 let reminderNotifTime = 5;
 
 const MACHINE_STATES = {
-    TERMINE: "0",
-    DISPONIBLE: "1",
-    FONCTIONNE: "2",
-    HS: "3",
-    ERREUR: "4"
+    "TERMINE": "0",
+    "DISPONIBLE": "1",
+    "EN COURS": "2",
+    "HS": "3",
+    "ERREUR": "4"
 };
 
 let stateStrings = {};
@@ -46,25 +47,25 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         let colors = ThemeManager.getCurrentThemeVariables();
         stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
         stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;
-        stateColors[MACHINE_STATES.FONCTIONNE] = colors.proxiwashRunningColor;
+        stateColors[MACHINE_STATES["EN COURS"]] = colors.proxiwashRunningColor;
         stateColors[MACHINE_STATES.HS] = colors.proxiwashBrokenColor;
         stateColors[MACHINE_STATES.ERREUR] = colors.proxiwashErrorColor;
 
         stateStrings[MACHINE_STATES.TERMINE] = i18n.t('proxiwashScreen.states.finished');
         stateStrings[MACHINE_STATES.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
-        stateStrings[MACHINE_STATES.FONCTIONNE] = i18n.t('proxiwashScreen.states.running');
+        stateStrings[MACHINE_STATES["EN COURS"]] = i18n.t('proxiwashScreen.states.running');
         stateStrings[MACHINE_STATES.HS] = i18n.t('proxiwashScreen.states.broken');
         stateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.states.error');
 
         modalStateStrings[MACHINE_STATES.TERMINE] = i18n.t('proxiwashScreen.modal.finished');
         modalStateStrings[MACHINE_STATES.DISPONIBLE] = i18n.t('proxiwashScreen.modal.ready');
-        modalStateStrings[MACHINE_STATES.FONCTIONNE] = i18n.t('proxiwashScreen.modal.running');
+        modalStateStrings[MACHINE_STATES["EN COURS"]] = i18n.t('proxiwashScreen.modal.running');
         modalStateStrings[MACHINE_STATES.HS] = i18n.t('proxiwashScreen.modal.broken');
         modalStateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.modal.error');
 
         stateIcons[MACHINE_STATES.TERMINE] = 'check-circle';
         stateIcons[MACHINE_STATES.DISPONIBLE] = 'radiobox-blank';
-        stateIcons[MACHINE_STATES.FONCTIONNE] = 'progress-check';
+        stateIcons[MACHINE_STATES["EN COURS"]] = 'progress-check';
         stateIcons[MACHINE_STATES.HS] = 'alert-octagram-outline';
         stateIcons[MACHINE_STATES.ERREUR] = 'alert';
 
@@ -299,7 +300,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     showAlert(title: string, item: Object, remainingTime: number) {
         let buttons = [{text: i18n.t("proxiwashScreen.modal.ok")}];
         let message = modalStateStrings[MACHINE_STATES[item.state]];
-        if (MACHINE_STATES[item.state] === MACHINE_STATES.FONCTIONNE) {
+        if (MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"]) {
             buttons = [
                 {
                     text: this.isMachineWatched(item.number) ?
@@ -325,6 +326,18 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         );
     }
 
+    getRightButton(): * {
+        return (
+            <Touchable
+                style={{padding: 6}}
+                onPress={() => this.props.navigation.navigate('ProxiwashAboutScreen')}>
+                <CustomMaterialIcon
+                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                    icon="information"/>
+            </Touchable>
+        );
+    }
+
     /**
      * Get list item to be rendered
      *
@@ -334,12 +347,11 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * @returns {React.Node}
      */
     getRenderItem(item: Object, section: Object, data: Object) {
-        let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES.FONCTIONNE;
+        let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"];
         let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
         let remainingTime = 0;
         if (isMachineRunning)
             remainingTime = ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent);
-
         return (
             <Card style={{
                 flex: 0,
