@@ -43,17 +43,12 @@ export default class ProximoAboutScreen extends React.Component<Props> {
                             style={{flex: 1, resizeMode: "contain"}}
                             resizeMode="contain"/>
                     </View>
-                    <Text>
-                        Le Proximo c’est ta petite épicerie étudiante tenu par les étudiants directement sur le
-                        campus. Ouvert tous les jours de 18h30 à 19h30, nous t’accueillons et te souvent quand tu n’as
-                        plus de pâtes ou de diluant ! Différents produits pour différentes galère, le tout à prix
-                        coûtant. Tu peux payer par Lydia ou par espèce.
-                    </Text>
+                    <Text>{i18n.t('proximoScreen.description')}</Text>
                     <Card>
                         <CardItem>
                             <Left>
                                 <CustomMaterialIcon icon={'clock-outline'}/>
-                                <H2>Horaires</H2>
+                                <H2>{i18n.t('proximoScreen.openingHours')}</H2>
                             </Left>
                         </CardItem>
                         <CardItem>
@@ -64,11 +59,11 @@ export default class ProximoAboutScreen extends React.Component<Props> {
                         <CardItem>
                             <Left>
                                 <CustomMaterialIcon icon={'cash'}/>
-                                <H2>Paiement</H2>
+                                <H2>{i18n.t('proximoScreen.paymentMethods')}</H2>
                             </Left>
                         </CardItem>
                         <CardItem>
-                            <Text>Espèce ou Lydia</Text>
+                            <Text>{i18n.t('proximoScreen.paymentMethodsDescription')}</Text>
                         </CardItem>
                     </Card>
                 </Content>

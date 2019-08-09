@@ -82,7 +82,11 @@
     "listUpdateFail": "Erreur lors de la mise à jour de la list d'articles",
     "loading": "Chargement...",
     "listTitle": "Choisissez une catégorie",
-    "inStock": "en stock"
+    "inStock": "en stock",
+    "description": "Le Proximo c’est ta petite épicerie étudiante tenu par les étudiants directement sur le campus. Ouvert tous les jours de 18h30 à 19h30, nous t’accueillons et te souvent quand tu n’as plus de pâtes ou de diluant ! Différents produits pour différentes galère, le tout à prix coûtant. Tu peux payer par Lydia ou par espèce.",
+    "openingHours": "Horaires d'ouverture",
+    "paymentMethods" : "Moyens de Paiement",
+    "paymentMethodsDescription" : "Espèce ou Lydia"
   },
   "proxiwashScreen": {
     "dryer": "Sèche Linge",
@@ -94,13 +98,28 @@
     "listUpdateFail": "Erreur lors de la mise à jour del'état des machines",
     "error": "Impossible de mettre a jour l'état des machines. Tirez vers le bas pour reessayer.",
     "loading": "Chargement...",
+
+    "informationTab": "Informations",
+    "paymentTab" : "Paiement",
+    "tariffs": "Tarifs",
+    "washersTariff": "3€ la machine + 0.80€ avec la lessive.",
+    "dryersTariff": "0.35€ pour 5min de sèche linge.",
+    "paymentMethods": "Moyens de Paiement",
+    "paymentMethodsDescription" : "Toute monnaie jusqu'à 10€.\nCarte bancaire acceptée.",
+    "washerProcedure": "Déposer le linge dans le tambour sans le tasser et en respectant les charges.\n\nFermer la porte de l'appareil.\n\nSélectionner un programme avec l'une des quatre touches de programme favori standard.\n\nAprès avoir payé à la centrale de commande, appuyer sur le bouton marqué START du lave-linge.\n\nDès que le programme est terminé, l’afficheur indique 'Programme terminé', appuyer sur le bouton jaune d’ouverture du hublot pour récupérer le linge.",
+    "washerTips": "Programme blanc/couleur : 6kg de linge sec (textiles en coton, lin, linge de corps, draps, jeans,serviettes de toilettes).\n\nProgramme nonrepassable : 3,5 kg de linge sec (textiles en fibres synthétiques, cotonet polyester mélangés).\n\nProgramme fin 30°C : 2,5 kg de linge sec (textiles délicats en fibres synthétiques, rayonne).\n\nProgramme laine 30°C : 2,5 kg de linge sec (textiles en laine et lainages lavables).",
+    "dryerProcedure": "Déposer le linge dans le tambour sans le tasser et en respectant les charges.\n\nFermer la porte de l'appareil.\n\nSélectionner un programme avec l'une des quatre touches de programme favori standard.\n\nAprès avoir payé à la centrale de commande, appuyer sur le bouton marqué START du lave-linge.",
+    "dryerTips": "La durée conseillée est de 35 minutes pour 14kg de linge. Vous pouvez choisir une durée plus courte si le seche-linge n'est pas chargé.",
+    "procedure": "Procédure",
+    "tips": "Conseils",
+
     "modal": {
       "enableNotifications": "Me Notifier",
       "disableNotifications": "Désactiver les  notifications",
       "ok": "OK",
       "cancel": "Annuler",
       "finished": "Cette machine est terminée. Si vous l'avez l'avez démarée, vous pouvez récupérer votre linge.",
-      "ready": "Cette machine est vide et prête à être utilisée. {Afficher prix ici}",
+      "ready": "Cette machine est vide et prête à être utilisée.",
       "running": "Cette machine a démarré à %{start} et terminera à %{end}.\nTemps restant : %{remaining} min",
       "broken": "Cette machine est hors service. Merci pour votre compréhension.",
       "error": "Il y a eu une erreur et il est impossible de récupérer les informations de cette machine. Veuillez nous excuser pour le gène occasionnée."

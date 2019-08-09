@@ -53,7 +53,6 @@ export default class SelfMenuScreen extends React.Component<Props> {
 
     render() {
         const nav = this.props.navigation;
-        console.log(this.customInjectedJS);
         return (
             <Container>
                 <CustomHeader navigation={nav} title={i18n.t('screens.menuSelf')} hasBackButton={true}

@@ -4,14 +4,14 @@
     "planning": "Planning",
     "proxiwash": "Proxiwash",
     "proximo": "Proximo",
-    "menuSelf": "UR Menu",
+    "menuSelf": "RU Menu",
     "settings": "Settings",
     "about": "About"
   },
   "intro": {
     "slide1": {
       "title": "Welcome to COFFEE",
-      "text": "The new app to use during your coffee break to get updates on the campus life!",
+      "text": "The new app to use during your coffee break to get updates on the campus life!"
     },
     "slide2": {
       "title": "Stay up to date",
@@ -82,7 +82,11 @@
     "listUpdateFail": "Error while updating article list",
     "loading": "Loading...",
     "listTitle": "Choose a category",
-    "inStock": "in stock"
+    "inStock": "in stock",
+    "description": "The Proximo is your small grocery store maintained by students directly on the campus. Open every day from 18h30 to 19h30, we welcome you when you are short on pastas or sodas ! Different products for different problems, everything at cost price. You can pay by Lydia or cash.",
+    "openingHours": "Openning Hours",
+    "paymentMethods" : "Payment Methods",
+    "paymentMethodsDescription" : "Cash or Lydia"
   },
   "proxiwashScreen": {
     "dryer": "Dryer",
@@ -94,13 +98,28 @@
     "listUpdateFail": "Error while updating machines state",
     "error": "Could not update machines state. Pull down to retry.",
     "loading": "Loading...",
+
+    "informationTab": "Information",
+    "paymentTab" : "Payment",
+    "tariffs": "Tariffs",
+    "washersTariff": "3€ the washer + 0.80€ with detergent.",
+    "dryersTariff": "0.35€ for 5min of dryer usage.",
+    "paymentMethods": "Payment Methods",
+    "paymentMethodsDescription" : "Cash up until 10€.\nCredit Card also accepted.",
+    "washerProcedure": "Put your laundry in the tumble without tamping it and by respecting charge limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the command central, then press the START button on the machine.\n\nWhen the program is finished, the screen indicates 'Programme terminé', press the yellow button to open the lid and retrieve your laundry.",
+    "washerTips": "Program 'blanc/couleur': 6kg of dry laundry (cotton linen, linen, underwear, sheets, jeans, towels).\n\nProgram 'non repassable': 3,5 kg of dry laundry (synthetic fibre linen, cotton and polyester mixed).\n\nProgram 'fin 30°C': 2,5 kg of dry laundry (delicate linen in synthetic fibres).\n\nProgram 'laine 30°C': 2,5 kg of dry laundry (wool textiles).",
+    "dryerProcedure": "Put your laundry in the tumble without tamping it and by respecting charge limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the command central, then press the START button on the machine.",
+    "dryerTips": "The advised dryer length is 35 minutes for 14 kg of laundry. You can choose a shorter length if the dryer is not fully charged.",
+    "procedure": "Procedure",
+    "tips": "Tips",
+
     "modal": {
       "enableNotifications": "Notify me",
       "disableNotifications": "Stop notifications",
       "ok": "OK",
       "cancel": "Cancel",
       "finished": "This machine is finished. If you started it, you can get back your laundry.",
-      "ready": "This machine is empty and ready to use. {Put price here}",
+      "ready": "This machine is empty and ready to use.",
       "running": "This machine has been started at %{start} and will end at %{end}.\nRemaining time: %{remaining} min",
       "broken": "This machine is broken and cannot be used. Thank you for your comprehension.",
       "error": "There has been an error and we are unable to get information from this machine. Sorry for the inconvenience."

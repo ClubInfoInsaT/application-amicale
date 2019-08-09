@@ -9,9 +9,9 @@ import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
 import NotificationsManager from "../utils/NotificationsManager";
 import PlatformTouchable from "react-native-platform-touchable";
+import Touchable from "react-native-platform-touchable";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import * as Expo from "expo";
-import Touchable from "react-native-platform-touchable";
 
 const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/washinsa/washinsa.json";
 
@@ -296,8 +296,9 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * @param title
      * @param item
      * @param remainingTime
+     * @param isDryer
      */
-    showAlert(title: string, item: Object, remainingTime: number) {
+    showAlert(title: string, item: Object, remainingTime: number, isDryer: boolean) {
         let buttons = [{text: i18n.t("proxiwashScreen.modal.ok")}];
         let message = modalStateStrings[MACHINE_STATES[item.state]];
         if (MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"]) {
@@ -318,6 +319,11 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                     end: item.endTime,
                     remaining: remainingTime
                 });
+        } else if (MACHINE_STATES[item.state] === MACHINE_STATES.DISPONIBLE) {
+            if (isDryer)
+                message += '\n' + i18n.t('proxiwashScreen.dryersTariff');
+            else
+                message += '\n' + i18n.t('proxiwashScreen.washersTariff');
         }
         Alert.alert(
             title,
@@ -349,6 +355,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     getRenderItem(item: Object, section: Object, data: Object) {
         let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"];
         let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
+        let isDryer = section.title === i18n.t('proxiwashScreen.dryers');
         let remainingTime = 0;
         if (isMachineRunning)
             remainingTime = ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent);
@@ -376,7 +383,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                         backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor
                     }}/>
                     <PlatformTouchable
-                        onPress={() => this.showAlert(machineName, item, remainingTime)}
+                        onPress={() => this.showAlert(machineName, item, remainingTime, isDryer)}
                         style={{
                             height: 64,
                             position: 'absolute',
@@ -389,7 +396,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                     </PlatformTouchable>
                     <Left style={{marginLeft: 10}}>
                         <CustomMaterialIcon
-                            icon={section.title === i18n.t('proxiwashScreen.dryers') ? 'tumble-dryer' : 'washing-machine'}
+                            icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
                             fontSize={30}
                         />
                         <Body>
