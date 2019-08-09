@@ -13,7 +13,7 @@ const links = {
     appstore: 'https://qwant.com',
     playstore: 'https://qwant.com',
     expo: 'https://expo.io/@amicaleinsat/application-amicale',
-    git: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/branch/master/README.md',
+    git: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/README.md',
     bugs: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
     changelog: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
     license: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
