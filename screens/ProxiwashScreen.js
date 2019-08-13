@@ -83,6 +83,18 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      */
     componentDidMount() {
         super.componentDidMount();
+        // Get latest watchlist from server
+        NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
+            this.setState({machinesWatched: fetchedList})
+        });
+
+        // Get updated watchlist after received notification
+        Expo.Notifications.addListener((notification) => {
+            NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
+                this.setState({machinesWatched: fetchedList})
+            });
+        });
+
         if (Platform.OS === 'android') {
             Expo.Notifications.createChannelAndroidAsync('reminders', {
                 name: 'Reminders',
@@ -137,7 +149,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     setupNotifications(machineId: string) {
         if (!this.isMachineWatched(machineId)) {
             NotificationsManager.setupMachineNotification(machineId, true);
-            this.saveNotificationToPrefs(machineId);
+            this.saveNotificationToState(machineId);
         } else
             this.disableNotification(machineId);
     }
@@ -154,7 +166,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
             let arrayIndex = data.indexOf(machineId);
             if (arrayIndex !== -1) {
                 NotificationsManager.setupMachineNotification(machineId, false);
-                this.removeNotificationFromPrefs(arrayIndex);
+                this.removeNotificationFroState(arrayIndex);
             }
         }
     }
@@ -164,10 +176,10 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      *
      * @param machineId
      */
-    saveNotificationToPrefs(machineId: string) {
+    saveNotificationToState(machineId: string) {
         let data = this.state.machinesWatched;
         data.push(machineId);
-        this.updateNotificationPrefs(data);
+        this.updateNotificationState(data);
     }
 
     /**
@@ -175,10 +187,10 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      *
      * @param index
      */
-    removeNotificationFromPrefs(index: number) {
+    removeNotificationFroState(index: number) {
         let data = this.state.machinesWatched;
         data.splice(index, 1);
-        this.updateNotificationPrefs(data);
+        this.updateNotificationState(data);
     }
 
     /**
@@ -186,7 +198,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      *
      * @param data
      */
-    updateNotificationPrefs(data: Array<Object>) {
+    updateNotificationState(data: Array<Object>) {
         this.setState({machinesWatched: data});
         // let prefKey = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.key;
         // AsyncStorageManager.getInstance().savePref(prefKey, JSON.stringify(data));

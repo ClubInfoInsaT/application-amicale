@@ -100,6 +100,32 @@ export default class NotificationsManager {
         }
     }
 
+    static getMachineNotificationWatchlist(callback: Function) {
+        let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
+        if (token === '') {
+            throw Error('Expo token not available');
+        }
+        let data = {
+            function: 'get_machine_watchlist',
+            token: token,
+        };
+        fetch(EXPO_TOKEN_SERVER, {
+            method: 'POST',
+            headers: new Headers({
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }),
+            body: JSON.stringify(data) // <-- Post parameters
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                callback(responseJson);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     /**
      * Ask the server to enable/disable notifications for the specified machine
      *
