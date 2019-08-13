@@ -16,6 +16,8 @@ type Props = {
 
 
 const RU_URL = 'http://m.insa-toulouse.fr/ru.html';
+const CUSTOM_CSS_GENERAL = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/RU/customGeneral.css';
+const CUSTOM_CSS_LIGHT = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/RU/customLight.css';
 
 /**
  * Class defining the app's planex screen.
@@ -30,9 +32,9 @@ export default class SelfMenuScreen extends React.Component<Props> {
         super();
         this.customInjectedJS =
             'document.querySelector(\'head\').innerHTML += \'<meta name="viewport" content="width=device-width, initial-scale=1.0">\';' +
-            'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/RU/customGeneral.css" type="text/css"/>\';';
+            'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\';';
         if (!ThemeManager.getNightMode())
-            this.customInjectedJS += 'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/RU/customLight.css" type="text/css"/>\';';
+            this.customInjectedJS += 'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_LIGHT + '" type="text/css"/>\';';
     }
 
     getRefreshButton() {

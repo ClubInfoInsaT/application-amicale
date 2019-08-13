@@ -6,7 +6,7 @@ import i18n from "i18n-js";
 import {Platform, View} from "react-native";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
-import {Linking} from "expo";
+import {Linking, Notifications} from "expo";
 import BaseContainer from "../components/BaseContainer";
 
 type Props = {
@@ -25,6 +25,7 @@ function openWebLink(link) {
  * Class defining the app's planning screen
  */
 export default class PlanningScreen extends React.Component<Props> {
+
     render() {
         const nav = this.props.navigation;
         return (

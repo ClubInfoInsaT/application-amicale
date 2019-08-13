@@ -17,10 +17,8 @@ type State = {
     refreshing: boolean,
     firstLoading: boolean,
     fetchedData: Object,
-    machinesWatched: Array<Object>,
+    machinesWatched: Array<string>,
 };
-
-const minTimeBetweenRefresh = 60;
 
 /**
  * Class used to create a basic list view using online json data.
@@ -35,6 +33,8 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     refreshInterval: IntervalID;
     refreshTime: number;
     lastRefresh: Date;
+
+    minTimeBetweenRefresh = 60;
 
     constructor(fetchUrl: string, refreshTime: number) {
         super();
@@ -63,6 +63,10 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      */
     getUpdateToastTranslations(): Array<string> {
         return ["whoa", "nah"];
+    }
+
+    setMinTimeRefresh(value: number) {
+        this.minTimeBetweenRefresh = value;
     }
 
     /**
@@ -117,7 +121,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     _onRefresh = () => {
         let canRefresh;
         if (this.lastRefresh !== undefined)
-            canRefresh = (new Date().getTime() - this.lastRefresh.getTime())/1000 > minTimeBetweenRefresh;
+            canRefresh = (new Date().getTime() - this.lastRefresh.getTime())/1000 > this.minTimeBetweenRefresh;
         else
             canRefresh = true;
 

@@ -13,6 +13,8 @@ import * as Font from 'expo-font';
 import {clearThemeCache} from 'native-base-shoutem-theme';
 import AsyncStorageManager from "./utils/AsyncStorageManager";
 import CustomIntroSlider from "./components/CustomIntroSlider";
+import {Notifications} from 'expo';
+import NotificationsManager from "./utils/NotificationsManager";
 
 type Props = {};
 
@@ -47,6 +49,8 @@ export default class App extends React.Component<Props, State> {
         });
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
+        await NotificationsManager.initExpoToken();
+        console.log(AsyncStorageManager.getInstance().preferences.expoToken.current);
         // Only show intro if this is the first time starting the app
         this.setState({
             isLoading: false,

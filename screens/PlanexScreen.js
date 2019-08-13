@@ -16,8 +16,8 @@ type Props = {
 
 const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
 
-const CUSTOM_CSS_LINK = 'https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/planex/generalCustom.css';
-
+const CUSTOM_CSS_GENERAL = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customMobile.css';
+const CUSTOM_CSS_NIGHTMODE = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customDark.css';
 /**
  * Class defining the app's planex screen.
  * This screen uses a webview to render the planex page
@@ -31,9 +31,9 @@ export default class PlanningScreen extends React.Component<Props> {
         super();
         this.customInjectedJS =
             'document.querySelector(\'head\').innerHTML += \'<meta name="viewport" content="width=device-width, initial-scale=1.0">\';' +
-            'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/planex/customMobile.css" type="text/css"/>\';';
+            'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\';';
         if (ThemeManager.getNightMode())
-            this.customInjectedJS += 'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/planex/customDark.css" type="text/css"/>\';';
+            this.customInjectedJS += 'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_NIGHTMODE + '" type="text/css"/>\';';
     }
 
 

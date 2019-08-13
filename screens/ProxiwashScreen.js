@@ -13,9 +13,7 @@ import Touchable from "react-native-platform-touchable";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import * as Expo from "expo";
 
-const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~vergnet/appli-amicale/washinsa/washinsa.json";
-
-let reminderNotifTime = 5;
+const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
 const MACHINE_STATES = {
     "TERMINE": "0",
@@ -43,7 +41,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * Creates machine state parameters using current theme and translations
      */
     constructor() {
-        super(DATA_URL, 1000 * 60); // Refresh every minute
+        super(DATA_URL, 1000 * 30); // Refresh every half minute
         let colors = ThemeManager.getCurrentThemeVariables();
         stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
         stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;
@@ -69,13 +67,15 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         stateIcons[MACHINE_STATES.HS] = 'alert-octagram-outline';
         stateIcons[MACHINE_STATES.ERREUR] = 'alert';
 
-        let dataString = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current;
+        // let dataString = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current;
         this.state = {
             refreshing: false,
             firstLoading: true,
             fetchedData: {},
-            machinesWatched: JSON.parse(dataString),
+            // machinesWatched: JSON.parse(dataString),
+            machinesWatched: [],
         };
+        this.setMinTimeRefresh(30);
     }
 
     /**
@@ -90,14 +90,6 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                 vibrate: [0, 250, 250, 250],
             });
         }
-        // Remove machine from watch list when receiving last notification
-        Expo.Notifications.addListener((notification) => {
-            if (notification.data !== undefined) {
-                if (this.isMachineWatched(notification.data.id) && notification.data.isMachineFinished === true) {
-                    this.removeNotificationFromPrefs(this.getMachineIndexInWatchList(notification.data.id));
-                }
-            }
-        });
     }
 
     getHeaderTranslation() {
@@ -140,48 +132,15 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * Another will be send a few minutes before the end, based on the value of reminderNotifTime
      *
      * @param machineId The machine's ID
-     * @param remainingTime The time remaining for this machine
      * @returns {Promise<void>}
      */
-    async setupNotifications(machineId: string, remainingTime: number) {
+    setupNotifications(machineId: string) {
         if (!this.isMachineWatched(machineId)) {
-            let endNotificationID = await NotificationsManager.scheduleNotification(
-                i18n.t('proxiwashScreen.notifications.machineFinishedTitle'),
-                i18n.t('proxiwashScreen.notifications.machineFinishedBody', {number: machineId}),
-                new Date().getTime() + remainingTime * (60 * 1000), // Convert back to milliseconds
-                {id: machineId, isMachineFinished: true},
-                'reminders'
-            );
-            let reminderNotificationID = await ProxiwashScreen.setupReminderNotification(machineId, remainingTime);
-            this.saveNotificationToPrefs(machineId, endNotificationID, reminderNotificationID);
+            NotificationsManager.setupMachineNotification(machineId, true);
+            this.saveNotificationToPrefs(machineId);
         } else
             this.disableNotification(machineId);
     }
-
-    static async setupReminderNotification(machineId: string, remainingTime: number): Promise<string | null> {
-        let reminderNotificationID: string | null = null;
-        let reminderNotificationTime = ProxiwashScreen.getReminderNotificationTime();
-        if (remainingTime > reminderNotificationTime && reminderNotificationTime > 0) {
-            reminderNotificationID = await NotificationsManager.scheduleNotification(
-                i18n.t('proxiwashScreen.notifications.machineRunningTitle', {time: reminderNotificationTime}),
-                i18n.t('proxiwashScreen.notifications.machineRunningBody', {number: machineId}),
-                new Date().getTime() + (remainingTime - reminderNotificationTime) * (60 * 1000), // Convert back to milliseconds
-                {id: machineId, isMachineFinished: false},
-                'reminders'
-            );
-        }
-        return reminderNotificationID;
-    }
-
-    static getReminderNotificationTime(): number {
-        let val = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current;
-        if (val !== "never")
-            reminderNotifTime = parseInt(val);
-        else
-            reminderNotifTime = -1;
-        return reminderNotifTime;
-    }
-
 
     /**
      * Stop scheduled notifications for the machine of the given ID.
@@ -192,43 +151,22 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     disableNotification(machineId: string) {
         let data = this.state.machinesWatched;
         if (data.length > 0) {
-            let arrayIndex = this.getMachineIndexInWatchList(machineId);
+            let arrayIndex = data.indexOf(machineId);
             if (arrayIndex !== -1) {
-                NotificationsManager.cancelScheduledNotification(data[arrayIndex].endNotificationID);
-                if (data[arrayIndex].reminderNotificationID !== null)
-                    NotificationsManager.cancelScheduledNotification(data[arrayIndex].reminderNotificationID);
+                NotificationsManager.setupMachineNotification(machineId, false);
                 this.removeNotificationFromPrefs(arrayIndex);
             }
         }
     }
 
     /**
-     * Get the index of the given machine ID in the watchlist array
-     *
-     * @param machineId
-     * @return
-     */
-    getMachineIndexInWatchList(machineId: string): number {
-        let elem = this.state.machinesWatched.find(function (elem) {
-            return elem.machineNumber === machineId
-        });
-        return this.state.machinesWatched.indexOf(elem);
-    }
-
-    /**
      * Add the given notifications associated to a machine ID to the watchlist, and save the array to the preferences
      *
      * @param machineId
-     * @param endNotificationID
-     * @param reminderNotificationID
      */
-    saveNotificationToPrefs(machineId: string, endNotificationID: string, reminderNotificationID: string | null) {
+    saveNotificationToPrefs(machineId: string) {
         let data = this.state.machinesWatched;
-        data.push({
-            machineNumber: machineId,
-            endNotificationID: endNotificationID,
-            reminderNotificationID: reminderNotificationID
-        });
+        data.push(machineId);
         this.updateNotificationPrefs(data);
     }
 
@@ -250,8 +188,8 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      */
     updateNotificationPrefs(data: Array<Object>) {
         this.setState({machinesWatched: data});
-        let prefKey = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.key;
-        AsyncStorageManager.getInstance().savePref(prefKey, JSON.stringify(data));
+        // let prefKey = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.key;
+        // AsyncStorageManager.getInstance().savePref(prefKey, JSON.stringify(data));
     }
 
     /**
@@ -261,9 +199,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * @returns {boolean}
      */
     isMachineWatched(machineID: string) {
-        return this.state.machinesWatched.find(function (elem) {
-            return elem.machineNumber === machineID
-        }) !== undefined;
+        return this.state.machinesWatched.indexOf(machineID) !== -1;
     }
 
     createDataset(fetchedData: Object) {
@@ -307,7 +243,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                     text: this.isMachineWatched(item.number) ?
                         i18n.t("proxiwashScreen.modal.disableNotifications") :
                         i18n.t("proxiwashScreen.modal.enableNotifications"),
-                    onPress: () => this.setupNotifications(item.number, remainingTime)
+                    onPress: () => this.setupNotifications(item.number)
                 },
                 {
                     text: i18n.t("proxiwashScreen.modal.cancel")
