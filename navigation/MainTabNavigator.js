@@ -10,7 +10,7 @@ import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
 
 const TAB_ICONS = {
-    Home: 'coffee',
+    Home: 'triangle',
     Planning: 'calendar-range',
     Proxiwash: 'washing-machine',
     Proximo: 'shopping',

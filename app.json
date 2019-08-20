@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "COFFEE",
+    "name": "CAMPUS - Amicale INSAT",
     "description": "Application mobile compatible Android et iOS pour l'Amicale INSA Toulouse. Grâce à cette application, vous avez facilement accès aux news du campus, aux emplois du temps, à l'état de la laverie, et bien d'autres services ! Ceci est une version Beta, Toutes les fonctionnalités ne sont pas encore implémentées, et il est possible de rencontrer quelques bugs.",
     "slug": "application-amicale",
     "privacy": "public",
@@ -10,18 +10,18 @@
       "android",
       "web"
     ],
-    "version": "0.0.8",
+    "version": "0.0.9",
     "orientation": "portrait",
     "primaryColor": "#be1522",
     "icon": "./assets/android.icon.png",
     "splash": {
-      "backgroundColor": "#222222",
+      "backgroundColor": "#be1522",
       "resizeMode": "contain",
       "image": "./assets/splash.png"
     },
     "notification": {
-      "icon": "./assets/amicale-notification.png",
-      "color": "#e42612",
+      "icon": "./assets/icon-notification.png",
+      "color": "#be1522",
       "androidMode": "default"
     },
     "updates": {
@@ -31,17 +31,16 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "amicale.insat.application",
-      "buildNumber": "0.0.6",
+      "bundleIdentifier": "fr.amicaleinsat.application",
       "icon": "./assets/ios.icon.png"
     },
     "android": {
-      "package": "amicale.insat.application",
+      "package": "fr.amicaleinsat.application",
       "versionCode": 1,
       "icon": "./assets/android.icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/android.adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#be1522"
       },
       "permissions": [
         "VIBRATE"

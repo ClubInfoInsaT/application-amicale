@@ -18,8 +18,9 @@ const styles = StyleSheet.create({
         paddingBottom: 100
     },
     image: {
-        width: 200,
-        height: 200,
+        width: 300,
+        height: 300,
+        marginBottom: -50,
     },
     text: {
         color: 'rgba(255, 255, 255, 0.8)',
@@ -51,7 +52,7 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 key: '1',
                 title: i18n.t('intro.slide1.title'),
                 text: i18n.t('intro.slide1.text'),
-                image: require('../assets/drawer-cover.png'),
+                image: require('../assets/splash.png'),
                 colors: ['#e01928', '#be1522'],
             },
             {
