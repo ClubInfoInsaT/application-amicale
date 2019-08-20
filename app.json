@@ -10,7 +10,7 @@
       "android",
       "web"
     ],
-    "version": "0.0.9",
+    "version": "0.0.10",
     "orientation": "portrait",
     "primaryColor": "#be1522",
     "icon": "./assets/android.icon.png",
