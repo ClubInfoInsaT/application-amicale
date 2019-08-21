@@ -159,4 +159,36 @@ export default class NotificationsManager {
                 console.log(error);
             });
     }
+
+    /**
+     * Send the selected reminder time for notifications to the server
+     * @param time
+     */
+    static setMachineReminderNotificationTime(time: number) {
+        console.log(time);
+        let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
+        if (token === '') {
+            throw Error('Expo token not available');
+        }
+        let data = {
+            function: 'set_machine_reminder',
+            token: token,
+            time: time,
+        };
+        fetch(EXPO_TOKEN_SERVER, {
+            method: 'POST',
+            headers: new Headers({
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }),
+            body: JSON.stringify(data) // <-- Post parameters
+        })
+            .then((response) => response.text())
+            .then((responseText) => {
+                console.log(responseText);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 }

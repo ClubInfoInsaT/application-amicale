@@ -23,6 +23,7 @@ import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import Touchable from "react-native-platform-touchable";
 import {Platform} from "react-native";
+import NotificationsManager from "../utils/NotificationsManager";
 
 type Props = {
     navigation: Object,
@@ -53,6 +54,10 @@ export default class SettingsScreen extends React.Component<Props, State> {
         this.setState({
             proxiwashNotifPickerSelected: value
         });
+        let intVal = 0;
+        if (value !== 'never')
+            intVal = parseInt(value);
+        NotificationsManager.setMachineReminderNotificationTime(intVal);
     }
 
     /**
@@ -70,9 +75,6 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 onValueChange={(value) => this.onProxiwashNotifPickerValueChange(value)}
             >
                 <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.never')} value="never"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.1')} value="1"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.2')} value="2"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.3')} value="3"/>
                 <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.5')} value="5"/>
                 <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.10')} value="10"/>
                 <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.20')} value="20"/>
