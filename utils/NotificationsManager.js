@@ -3,6 +3,7 @@
 import * as Permissions from 'expo-permissions';
 import {Notifications} from 'expo';
 import AsyncStorageManager from "./AsyncStorageManager";
+import LocaleManager from "./LocaleManager";
 
 const EXPO_TOKEN_SERVER = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/expo_notifications/save_token.php';
 
@@ -139,6 +140,7 @@ export default class NotificationsManager {
         }
         let data = {
             function: 'setup_machine_notification',
+            locale: LocaleManager.getCurrentLocale(),
             token: token,
             machine_id: machineID,
             enabled: isEnabled

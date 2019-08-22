@@ -19,4 +19,8 @@ export default class LocaleManager {
         i18n.translations = {fr, en};
         i18n.locale = Localization.locale;
     }
+
+    static getCurrentLocale() {
+        return Localization.locale;
+    }
 }

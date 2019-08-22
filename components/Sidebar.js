@@ -130,8 +130,7 @@ export default class SideBar extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
     drawerCover: {
-        alignSelf: "stretch",
-        height: deviceHeight / 4,
+        height: deviceHeight / 5,
         width: null,
         position: "relative",
         marginBottom: 10,
