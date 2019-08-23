@@ -121,24 +121,6 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     }
 
     /**
-     * Get the time remaining based on start/end time and done percent
-     *
-     * @param startString The string representing the start time. Format: hh:mm
-     * @param endString The string representing the end time. Format: hh:mm
-     * @param percentDone The percentage done
-     * @returns {number} How many minutes are remaining for this machine
-     */
-    static getRemainingTime(startString: string, endString: string, percentDone: string): number {
-        let startArray = startString.split(':');
-        let endArray = endString.split(':');
-        let startDate = new Date().setHours(parseInt(startArray[0]), parseInt(startArray[1]), 0, 0);
-        let endDate = new Date().setHours(parseInt(endArray[0]), parseInt(endArray[1]), 0, 0);
-        // Convert milliseconds into minutes
-        let time: string = (((100 - parseFloat(percentDone)) / 100) * (endDate - startDate) / (60 * 1000)).toFixed(0);
-        return parseInt(time);
-    }
-
-    /**
      * Setup notifications for the machine with the given ID.
      * One notification will be sent at the end of the program.
      * Another will be send a few minutes before the end, based on the value of reminderNotifTime
@@ -243,10 +225,9 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      *
      * @param title
      * @param item
-     * @param remainingTime
      * @param isDryer
      */
-    showAlert(title: string, item: Object, remainingTime: number, isDryer: boolean) {
+    showAlert(title: string, item: Object, isDryer: boolean) {
         let buttons = [{text: i18n.t("proxiwashScreen.modal.ok")}];
         let message = modalStateStrings[MACHINE_STATES[item.state]];
         if (MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"]) {
@@ -265,7 +246,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                 {
                     start: item.startTime,
                     end: item.endTime,
-                    remaining: remainingTime
+                    remaining: item.remainingTime
                 });
         } else if (MACHINE_STATES[item.state] === MACHINE_STATES.DISPONIBLE) {
             if (isDryer)
@@ -304,9 +285,6 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"];
         let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
         let isDryer = section.title === i18n.t('proxiwashScreen.dryers');
-        let remainingTime = 0;
-        if (isMachineRunning)
-            remainingTime = ProxiwashScreen.getRemainingTime(item.startTime, item.endTime, item.donePercent);
         return (
             <Card style={{
                 flex: 0,
@@ -331,7 +309,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                         backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor
                     }}/>
                     <PlatformTouchable
-                        onPress={() => this.showAlert(machineName, item, remainingTime, isDryer)}
+                        onPress={() => this.showAlert(machineName, item, isDryer)}
                         style={{
                             height: 64,
                             position: 'absolute',
