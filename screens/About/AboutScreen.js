@@ -11,13 +11,13 @@ import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 
 const links = {
     appstore: 'https://qwant.com',
-    playstore: 'https://qwant.com',
+    playstore: 'https://play.google.com/store/apps/details?id=fr.amicaleinsat.application',
     expo: 'https://expo.io/@amicaleinsat/application-amicale',
     git: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/README.md',
     bugs: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
     changelog: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
     license: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
-    mail: "mailto:arnaud.vergnet@netc.fr?subject=Application Amicale INSA Toulouse&body=",
+    mail: "mailto:vergnet@etud.insa-toulouse.fr?subject=Application Amicale INSA Toulouse&body=",
     linkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
     facebook: 'https://www.facebook.com/arnaud.vergnet',
     react: 'https://facebook.github.io/react-native/',

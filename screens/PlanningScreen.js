@@ -3,10 +3,10 @@
 import * as React from 'react';
 import {Button, H3, Text} from 'native-base';
 import i18n from "i18n-js";
-import {Platform, View} from "react-native";
+import {View} from "react-native";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
-import {Linking, Notifications} from "expo";
+import {Linking} from "expo";
 import BaseContainer from "../components/BaseContainer";
 
 type Props = {
@@ -63,12 +63,10 @@ export default class PlanningScreen extends React.Component<Props> {
                     }}>
                         {i18n.t('planningScreen.wipSubtitle')}
                     </Text>
-                    {Platform.OS === 'android' ?
-                        <Button block style={{marginTop: 20, marginRight: 10, marginLeft: 10}}
-                                onPress={() => openWebLink('https://expo.io/@amicaleinsat/application-amicale')}>
-                            <Text>Try the beta</Text>
-                        </Button>
-                        : <View/>}
+                    <Button block style={{marginTop: 20, marginRight: 10, marginLeft: 10}}
+                            onPress={() => openWebLink('https://www.facebook.com/groups/2054302624595234/')}>
+                        <Text>Clubs et Evenements</Text>
+                    </Button>
                 </View>
             </BaseContainer>
         );
