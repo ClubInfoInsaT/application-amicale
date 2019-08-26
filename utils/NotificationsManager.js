@@ -4,6 +4,7 @@ import * as Permissions from 'expo-permissions';
 import {Notifications} from 'expo';
 import AsyncStorageManager from "./AsyncStorageManager";
 import LocaleManager from "./LocaleManager";
+import passwords from "../passwords";
 
 const EXPO_TOKEN_SERVER = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/expo_notifications/save_token.php';
 
@@ -54,10 +55,8 @@ export default class NotificationsManager {
      */
     static async scheduleNotification(title: string, body: string, time: number, data: Object, androidChannelID: string): Promise<string> {
         await NotificationsManager.askPermissions();
-        console.log(time);
         let date = new Date();
         date.setTime(time);
-        console.log(date);
         return Notifications.scheduleLocalNotificationAsync(
             {
                 title: title,
@@ -116,6 +115,7 @@ export default class NotificationsManager {
         }
         let data = {
             function: 'get_machine_watchlist',
+            password: passwords.expoNotifications,
             token: token,
         };
         fetch(EXPO_TOKEN_SERVER, {
@@ -148,6 +148,7 @@ export default class NotificationsManager {
         }
         let data = {
             function: 'setup_machine_notification',
+            password: passwords.expoNotifications,
             locale: LocaleManager.getCurrentLocale(),
             token: token,
             machine_id: machineID,
@@ -175,13 +176,13 @@ export default class NotificationsManager {
      * @param time
      */
     static setMachineReminderNotificationTime(time: number) {
-        console.log(time);
         let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
         if (token === '') {
             throw Error('Expo token not available');
         }
         let data = {
             function: 'set_machine_reminder',
+            password: passwords.expoNotifications,
             token: token,
             time: time,
         };
