@@ -6,7 +6,8 @@
     "proximo": "Proximo",
     "menuSelf": "Menu Ru",
     "settings": "Paramètres",
-    "about": "À Propos"
+    "about": "À Propos",
+    "debug": "Debug"
   },
   "intro": {
     "slide1": {
@@ -66,6 +67,7 @@
     "bugs": "Rapporter des Bugs",
     "changelog": "Historique des modifications",
     "license": "Licence",
+    "debug": "Debug",
     "author": "Auteur",
     "mail": "Envoyer un mail",
     "technologies": "Technologies",
@@ -127,7 +129,7 @@
     "states": {
       "finished": "TERMINE",
       "ready": "DISPONIBLE",
-      "running": "En COURS",
+      "running": "EN COURS",
       "broken": "HORS SERVICE",
       "error": "ERREUR"
     },

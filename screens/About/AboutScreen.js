@@ -1,13 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import {Alert, FlatList, Linking, Platform} from 'react-native';
+import {FlatList, Linking, Platform, View} from 'react-native';
 import {Body, Card, CardItem, Container, Content, H1, Left, Right, Text, Thumbnail} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
 import appJson from '../../app';
 import packageJson from '../../package';
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
+import AsyncStorageManager from "../../utils/AsyncStorageManager";
 
 const links = {
     appstore: 'https://qwant.com',
@@ -27,6 +28,10 @@ type Props = {
     navigation: Object,
 };
 
+type State = {
+    isDebugUnlocked: boolean,
+};
+
 /**
  * Opens a link in the device's browser
  * @param link The link to open
@@ -38,7 +43,13 @@ function openWebLink(link) {
 /**
  * Class defining an about screen. This screen shows the user information about the app and it's author.
  */
-export default class AboutScreen extends React.Component<Props> {
+export default class AboutScreen extends React.Component<Props, State> {
+
+    debugTapCounter = 0;
+
+    state = {
+        isDebugUnlocked: AsyncStorageManager.getInstance().preferences.debugUnlocked.current === '1'
+    };
 
     /**
      * Data to be displayed in the app card
@@ -80,6 +91,13 @@ export default class AboutScreen extends React.Component<Props> {
             text: i18n.t('aboutScreen.license'),
             showChevron: true
         },
+        {
+            onPressCallback: () => this.props.navigation.navigate('DebugScreen'),
+            icon: 'bug-check',
+            text: i18n.t('aboutScreen.debug'),
+            showChevron: true,
+            showOnlyDebug: true
+        },
     ];
 
     /**
@@ -87,7 +105,7 @@ export default class AboutScreen extends React.Component<Props> {
      */
     authorData: Array<Object> = [
         {
-            onPressCallback: () => Alert.alert('Coucou', 'Whaou'),
+            onPressCallback: () => this.tryUnlockDebugMode(),
             icon: 'account-circle',
             text: 'Arnaud VERGNET',
             showChevron: false
@@ -137,26 +155,48 @@ export default class AboutScreen extends React.Component<Props> {
      * @param icon The icon name to use from MaterialCommunityIcons
      * @param text The text to show
      * @param showChevron Whether to show a chevron indicating this button will change screen
+     * @param showOnlyInDebug Should we show te current item only in debug mode?
      * @returns {React.Node}
      */
-    static getCardItem(onPressCallback: Function, icon: string, text: string, showChevron: boolean) {
-        return (
-            <CardItem button
-                      onPress={onPressCallback}>
-                <Left>
-                    <CustomMaterialIcon icon={icon}/>
-                    <Text>{text}</Text>
-                </Left>
-                {showChevron ?
-                    <Right>
-                        <CustomMaterialIcon icon="chevron-right"
-                                            fontSize={20}/>
-                    </Right>
-                    :
-                    <Right/>
-                }
-            </CardItem>)
-            ;
+    getCardItem(onPressCallback: Function, icon: string, text: string, showChevron: boolean, showOnlyInDebug: boolean) {
+        let shouldShow = !showOnlyInDebug || (showOnlyInDebug && this.state.isDebugUnlocked);
+        if (shouldShow) {
+            return (
+                <CardItem button
+                          onPress={onPressCallback}>
+                    <Left>
+                        <CustomMaterialIcon icon={icon}/>
+                        <Text>{text}</Text>
+                    </Left>
+                    {showChevron ?
+                        <Right>
+                            <CustomMaterialIcon icon="chevron-right"
+                                                fontSize={20}/>
+                        </Right>
+                        :
+                        <Right/>
+                    }
+                </CardItem>)
+                ;
+        } else {
+            return <View/>
+        }
+
+    }
+
+    tryUnlockDebugMode() {
+        this.debugTapCounter = this.debugTapCounter + 1;
+        console.log(this.debugTapCounter);
+        if (this.debugTapCounter >= 4) {
+            this.unlockDebugMode();
+        }
+    }
+
+    unlockDebugMode() {
+        console.log('unlocked');
+        this.setState({isDebugUnlocked: true});
+        let key = AsyncStorageManager.getInstance().preferences.debugUnlocked.key;
+        AsyncStorageManager.getInstance().savePref(key, '1');
     }
 
     render() {
@@ -168,9 +208,9 @@ export default class AboutScreen extends React.Component<Props> {
                     <Card>
                         <CardItem>
                             <Left>
-                                <Thumbnail square source={require('../../assets/amicale.png')}/>
+                                <Thumbnail square source={require('../../assets/icon.png')}/>
                                 <Body>
-                                    <H1>Amicale INSA Toulouse</H1>
+                                    <H1>CAMPUS - Amicale INSAT</H1>
                                     <Text note>
                                         v.{appJson.expo.version}
                                     </Text>
@@ -179,9 +219,10 @@ export default class AboutScreen extends React.Component<Props> {
                         </CardItem>
                         <FlatList
                             data={this.appData}
+                            extraData={this.state}
                             keyExtractor={(item) => item.icon}
                             renderItem={({item}) =>
-                                AboutScreen.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
+                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
                             }
                         />
                     </Card>
@@ -192,9 +233,10 @@ export default class AboutScreen extends React.Component<Props> {
                         </CardItem>
                         <FlatList
                             data={this.authorData}
+                            extraData={this.state}
                             keyExtractor={(item) => item.icon}
                             renderItem={({item}) =>
-                                AboutScreen.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
+                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
                             }
                         />
                     </Card>
@@ -205,9 +247,10 @@ export default class AboutScreen extends React.Component<Props> {
                         </CardItem>
                         <FlatList
                             data={this.technoData}
+                            extraData={this.state}
                             keyExtractor={(item) => item.icon}
                             renderItem={({item}) =>
-                                AboutScreen.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron)
+                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
                             }
                         />
                     </Card>

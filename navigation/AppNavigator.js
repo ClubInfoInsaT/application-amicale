@@ -9,6 +9,7 @@ import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 import ProxiwashAboutScreen from '../screens/ProxiwashAboutScreen';
 import ProximoAboutScreen from '../screens/Proximo/ProximoAboutScreen';
 import SelfMenuScreen from '../screens/SelfMenuScreen';
+import DebugScreen from '../screens/DebugScreen';
 import {fromRight} from "react-navigation-transitions";
 
 /**
@@ -25,6 +26,7 @@ export default createAppContainer(
             SelfMenuScreen: {screen: SelfMenuScreen},
             ProxiwashAboutScreen: {screen: ProxiwashAboutScreen},
             ProximoAboutScreen: {screen: ProximoAboutScreen},
+            DebugScreen: {screen: DebugScreen},
         },
         {
             initialRouteName: "Main",

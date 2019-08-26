@@ -48,6 +48,11 @@ export default class AsyncStorageManager {
             key: 'expoToken',
             default: '',
             current: '',
+        },
+        debugUnlocked: {
+            key: 'debugUnlocked',
+            default: '0',
+            current: '',
         }
     };
 

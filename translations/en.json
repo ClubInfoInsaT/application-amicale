@@ -6,7 +6,8 @@
     "proximo": "Proximo",
     "menuSelf": "RU Menu",
     "settings": "Settings",
-    "about": "About"
+    "about": "About",
+    "debug": "Debug"
   },
   "intro": {
     "slide1": {
@@ -15,15 +16,15 @@
     },
     "slide2": {
       "title": "Stay up to date",
-      "text": "CAMPUS will soon allow you to be aware of any event occuring on the campus, from pancake sales to Enfoiros concerts!"
+      "text": "CAMPUS will soon allow you to be aware of any event occurring on the campus, from pancake sales to Enfoiros concerts!"
     },
     "slide3": {
       "title": "Never forget your laundry",
-      "text": "CAMPUS will inform you on the availability of washing machines and will remind you just before yours finishes !"
+      "text": "CAMPUS will inform you on the availability of washing machines and will remind you just before yours finishes!"
     },
     "slide4": {
       "title": "Proximo",
-      "text": "Are you short on pasta? Or you maybe you feel a little peckish, then lookup the stock for your insa shop in real time"
+      "text": "Are you short on pasta? Or you maybe you feel a little peckish, then look up your INSA shop's stock in real time"
     },
     "slide5": {
       "title": "Planex",
@@ -31,7 +32,7 @@
     },
     "slide6": {
       "title": "Still in development",
-      "text": "New features coming soon, do not hesitate to give us feedback to improve the app"
+      "text": "New features are coming soon, do not hesitate to give us feedback to improve the app"
     }
   },
   "settingsScreen": {
@@ -66,6 +67,7 @@
     "bugs": "Report Bugs",
     "changelog": "Changelog",
     "license": "License",
+    "debug": "Debug",
     "author": "Author",
     "mail": "Send an email",
     "technologies": "Technologies",
