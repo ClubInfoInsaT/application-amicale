@@ -10,7 +10,7 @@
       "android",
       "web"
     ],
-    "version": "0.0.15",
+    "version": "0.0.16",
     "orientation": "portrait",
     "primaryColor": "#be1522",
     "icon": "./assets/android.icon.png",
@@ -36,7 +36,7 @@
     },
     "android": {
       "package": "fr.amicaleinsat.application",
-      "versionCode": 3,
+      "versionCode": 4,
       "icon": "./assets/android.icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/android.adaptive-icon.png",

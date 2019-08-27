@@ -100,7 +100,7 @@
     "listUpdateFail": "Error while updating machines state",
     "error": "Could not update machines state. Pull down to retry.",
     "loading": "Loading...",
-
+    "description": "This is the washing service operated by Promologis for INSA's residences (We don't mind if you do not live on the campus and you do your laundry here). The room is right next to the R2, with 3 dryers and 9 washers, is open 7d/7 24h/24 ! Here you can check their availability ! You can bring your own detergent, use the one given on site or buy it at the Proximo (cheaper than the one given by the machines ). You can pay b credit card or cash.",
     "informationTab": "Information",
     "paymentTab" : "Payment",
     "tariffs": "Tariffs",

@@ -58,7 +58,7 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                                     style={{flex: 1, resizeMode: "contain"}}
                                     resizeMode="contain"/>
                             </View>
-                            <Text>Ta laverie directement sur le campus, au pied du R3.</Text>
+                            <Text>{i18n.t('proxiwashScreen.description')}</Text>
                             <Card>
                                 <CardItem>
                                     <Left>

@@ -100,7 +100,7 @@
     "listUpdateFail": "Erreur lors de la mise à jour del'état des machines",
     "error": "Impossible de mettre a jour l'état des machines. Tirez vers le bas pour reessayer.",
     "loading": "Chargement...",
-
+    "description": "C'est le service de laverie proposé par promologis pour les résidences INSA (On t'en voudra pas si tu loges pas sur le campus et que tu fais ta machine ici). Le local situé au pied du R2 avec ses 3 sèche-linges et 9 machines est ouvert 7J/7 24h/24 ! Ici tu peux vérifier leur disponibilité ! Tu peux amener ta lessive, la prendre sur place ou encore mieux l'acheter au Proximo (moins chère qu'à la laverie directement). Tu peux payer par CB ou espèces.",
     "informationTab": "Informations",
     "paymentTab" : "Paiement",
     "tariffs": "Tarifs",
