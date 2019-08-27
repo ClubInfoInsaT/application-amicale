@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Button, H3, Text} from 'native-base';
 import i18n from "i18n-js";
-import {View} from "react-native";
+import {View, Platform} from "react-native";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
 import {Linking} from "expo";
@@ -26,6 +26,7 @@ function openWebLink(link) {
  */
 export default class PlanningScreen extends React.Component<Props> {
 
+
     render() {
         const nav = this.props.navigation;
         return (
@@ -35,34 +36,48 @@ export default class PlanningScreen extends React.Component<Props> {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                    <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: '100%',
-                        height: 100,
-                        marginBottom: 20
-                    }}>
-                        <CustomMaterialIcon
-                            icon={'forklift'}
-                            fontSize={100}
-                            width={100}
-                            color={ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText}/>
-                    </View>
+                    { Platform.OS === 'android' ?
+                        <View
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                            <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: '100%',
+                                height: 100,
+                                marginBottom: 20
+                            }}>
+                                <CustomMaterialIcon
+                                    icon={'forklift'}
+                                    fontSize={100}
+                                    width={100}
+                                    color={ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText}/>
+                            </View>
 
-                    <H3 style={{
-                        textAlign: 'center',
-                        marginRight: 20,
-                        marginLeft: 20,
-                        color: ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText
-                    }}>
-                        {i18n.t('planningScreen.wipTitle')}
-                    </H3>
-                    <Text style={{
-                        textAlign: 'center',
-                        color: ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText
-                    }}>
-                        {i18n.t('planningScreen.wipSubtitle')}
-                    </Text>
+                            <H3 style={{
+                                textAlign: 'center',
+                                marginRight: 20,
+                                marginLeft: 20,
+                                color: ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText
+                            }}>
+                                {i18n.t('planningScreen.wipTitle')}
+                            </H3>
+                            <Text style={{
+                                textAlign: 'center',
+                                color: ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText
+                            }}>
+                                {i18n.t('planningScreen.wipSubtitle')}
+                            </Text>
+                        </View>
+                        :
+                        <View/>
+
+                    }
+
+
+
                     <Button block style={{marginTop: 20, marginRight: 10, marginLeft: 10}}
                             onPress={() => openWebLink('https://www.facebook.com/groups/2054302624595234/')}>
                         <Text>Clubs et Evenements</Text>
