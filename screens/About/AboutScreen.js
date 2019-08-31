@@ -11,7 +11,7 @@ import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 
 const links = {
-    appstore: 'https://qwant.com',
+    appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
     playstore: 'https://play.google.com/store/apps/details?id=fr.amicaleinsat.application',
     expo: 'https://expo.io/@amicaleinsat/application-amicale',
     git: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/README.md',
