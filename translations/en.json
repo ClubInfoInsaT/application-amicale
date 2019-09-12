@@ -126,7 +126,9 @@
       "ready": "This machine is empty and ready to use.",
       "running": "This machine has been started at %{start} and will end at %{end}.\nRemaining time: %{remaining} min",
       "broken": "This machine is broken and cannot be used. Thank you for your comprehension.",
-      "error": "There has been an error and we are unable to get information from this machine. Sorry for the inconvenience."
+      "error": "There has been an error and we are unable to get information from this machine. Sorry for the inconvenience.",
+      "notificationErrorTitle": "Error",
+      "notificationErrorDescription": "Impossible to create notifications. Please make sure you enabled notifications then restart the app."
     },
     "states": {
       "finished": "FINISHED",

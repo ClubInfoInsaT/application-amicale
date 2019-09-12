@@ -83,24 +83,25 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      */
     componentDidMount() {
         super.componentDidMount();
-        // Get latest watchlist from server
-        NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
-            this.setState({machinesWatched: fetchedList})
-        });
 
-        // Get updated watchlist after received notification
-        Expo.Notifications.addListener((notification) => {
+        if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
+            // Get latest watchlist from server
             NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
                 this.setState({machinesWatched: fetchedList})
             });
-        });
-
-        if (Platform.OS === 'android') {
-            Expo.Notifications.createChannelAndroidAsync('reminders', {
-                name: 'Reminders',
-                priority: 'max',
-                vibrate: [0, 250, 250, 250],
+            // Get updated watchlist after received notification
+            Expo.Notifications.addListener((notification) => {
+                NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
+                    this.setState({machinesWatched: fetchedList})
+                });
             });
+            if (Platform.OS === 'android') {
+                Expo.Notifications.createChannelAndroidAsync('reminders', {
+                    name: 'Reminders',
+                    priority: 'max',
+                    vibrate: [0, 250, 250, 250],
+                });
+            }
         }
     }
 
@@ -129,11 +130,22 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * @returns {Promise<void>}
      */
     setupNotifications(machineId: string) {
-        if (!this.isMachineWatched(machineId)) {
-            NotificationsManager.setupMachineNotification(machineId, true);
-            this.saveNotificationToState(machineId);
-        } else
-            this.disableNotification(machineId);
+        if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
+            if (!this.isMachineWatched(machineId)) {
+                NotificationsManager.setupMachineNotification(machineId, true);
+                this.saveNotificationToState(machineId);
+            } else
+                this.disableNotification(machineId);
+        } else {
+            this.showNotificationsDisabledWarning();
+        }
+    }
+
+    showNotificationsDisabledWarning() {
+        Alert.alert(
+            i18n.t("proxiwashScreen.modal.notificationErrorTitle"),
+            i18n.t("proxiwashScreen.modal.notificationErrorDescription"),
+        );
     }
 
     /**

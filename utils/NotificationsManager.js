@@ -110,29 +110,31 @@ export default class NotificationsManager {
 
     static getMachineNotificationWatchlist(callback: Function) {
         let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-        if (token === '') {
-            throw Error('Expo token not available');
-        }
-        let data = {
-            function: 'get_machine_watchlist',
-            password: passwords.expoNotifications,
-            token: token,
-        };
-        fetch(EXPO_TOKEN_SERVER, {
-            method: 'POST',
-            headers: new Headers({
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }),
-            body: JSON.stringify(data) // <-- Post parameters
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                callback(responseJson);
+        if (token !== '') {
+            let data = {
+                function: 'get_machine_watchlist',
+                password: passwords.expoNotifications,
+                token: token,
+            };
+            fetch(EXPO_TOKEN_SERVER, {
+                method: 'POST',
+                headers: new Headers({
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                }),
+                body: JSON.stringify(data) // <-- Post parameters
             })
-            .catch((error) => {
-                console.log(error);
-            });
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    callback(responseJson);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            console.log('Expo token not available');
+        }
+
     }
 
     /**
@@ -143,32 +145,33 @@ export default class NotificationsManager {
      */
     static setupMachineNotification(machineID: string, isEnabled: boolean) {
         let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-        if (token === '') {
-            throw Error('Expo token not available');
-        }
-        let data = {
-            function: 'setup_machine_notification',
-            password: passwords.expoNotifications,
-            locale: LocaleManager.getCurrentLocale(),
-            token: token,
-            machine_id: machineID,
-            enabled: isEnabled
-        };
-        fetch(EXPO_TOKEN_SERVER, {
-            method: 'POST',
-            headers: new Headers({
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }),
-            body: JSON.stringify(data) // <-- Post parameters
-        })
-            .then((response) => response.text())
-            .then((responseText) => {
-                console.log(responseText);
+        if (token !== '') {
+            let data = {
+                function: 'setup_machine_notification',
+                password: passwords.expoNotifications,
+                locale: LocaleManager.getCurrentLocale(),
+                token: token,
+                machine_id: machineID,
+                enabled: isEnabled
+            };
+            fetch(EXPO_TOKEN_SERVER, {
+                method: 'POST',
+                headers: new Headers({
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                }),
+                body: JSON.stringify(data) // <-- Post parameters
             })
-            .catch((error) => {
-                console.log(error);
-            });
+                .then((response) => response.text())
+                .then((responseText) => {
+                    console.log(responseText);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            console.log('Expo token not available');
+        }
     }
 
     /**
@@ -177,29 +180,30 @@ export default class NotificationsManager {
      */
     static setMachineReminderNotificationTime(time: number) {
         let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-        if (token === '') {
-            throw Error('Expo token not available');
-        }
-        let data = {
-            function: 'set_machine_reminder',
-            password: passwords.expoNotifications,
-            token: token,
-            time: time,
-        };
-        fetch(EXPO_TOKEN_SERVER, {
-            method: 'POST',
-            headers: new Headers({
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }),
-            body: JSON.stringify(data) // <-- Post parameters
-        })
-            .then((response) => response.text())
-            .then((responseText) => {
-                console.log(responseText);
+        if (token !== '') {
+            let data = {
+                function: 'set_machine_reminder',
+                password: passwords.expoNotifications,
+                token: token,
+                time: time,
+            };
+            fetch(EXPO_TOKEN_SERVER, {
+                method: 'POST',
+                headers: new Headers({
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                }),
+                body: JSON.stringify(data) // <-- Post parameters
             })
-            .catch((error) => {
-                console.log(error);
-            });
+                .then((response) => response.text())
+                .then((responseText) => {
+                    console.log(responseText);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            console.log('Expo token not available');
+        }
     }
 }

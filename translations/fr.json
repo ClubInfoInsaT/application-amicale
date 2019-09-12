@@ -126,7 +126,10 @@
       "ready": "Cette machine est vide et prête à être utilisée.",
       "running": "Cette machine a démarré à %{start} et terminera à %{end}.\nTemps restant : %{remaining} min",
       "broken": "Cette machine est hors service. Merci pour votre compréhension.",
-      "error": "Il y a eu une erreur et il est impossible de récupérer les informations de cette machine. Veuillez nous excuser pour le gène occasionnée."
+      "error": "Il y a eu une erreur et il est impossible de récupérer les informations de cette machine. Veuillez nous excuser pour le gène occasionnée.",
+      "notificationErrorTitle": "Erreur",
+      "notificationErrorDescription": "Impossible de créer les notifications. Merci de vérifier que vous avez activé les notifications puis redémarrez l'appli."
+
     },
     "states": {
       "finished": "TERMINE",
