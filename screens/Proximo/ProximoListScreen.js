@@ -298,8 +298,8 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                                         {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
                                     </Text>
                                 </Body>
-                                <Right style={{flex: 1}}>
-                                    <Text>
+                                <Right>
+                                    <Text style={{fontWeight: "bold"}}>
                                         {item.price}€
                                     </Text>
                                 </Right>
