@@ -58,7 +58,12 @@ type State = {
  */
 export default class ProximoListScreen extends React.Component<Props, State> {
 
-    modalRef = React.createRef();
+    modalRef:  { current: null | Modalize };
+
+    constructor(props: any) {
+        super(props);
+        this.modalRef = React.createRef();
+    }
 
     state = {
         navData: this.props.navigation.getParam('data', []).sort(sortPrice),
@@ -226,6 +231,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
             this.modalRef.current.open();
         }
     }
+
     render() {
         const nav = this.props.navigation;
         const navType = nav.getParam('type', '{name: "Error"}');
