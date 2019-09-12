@@ -53,6 +53,11 @@ export default class AsyncStorageManager {
             key: 'debugUnlocked',
             default: '0',
             current: '',
+        },
+        defaultStartScreen: {
+            key: 'defaultStartScreen',
+            default: 'Home',
+            current: '',
         }
     };
 

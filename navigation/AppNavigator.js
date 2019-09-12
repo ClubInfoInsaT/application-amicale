@@ -1,7 +1,7 @@
 // @flow
 
 import {createAppContainer, createStackNavigator} from 'react-navigation';
-import MainTabNavigator from './MainTabNavigator';
+import {createMaterialBottomTabNavigatorWithInitialRoute} from './MainTabNavigator';
 import SettingsScreen from '../screens/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import ProximoListScreen from '../screens/Proximo/ProximoListScreen';
@@ -15,23 +15,26 @@ import {fromRight} from "react-navigation-transitions";
 /**
  * Create a stack navigator using the drawer to handle navigation between screens
  */
-export default createAppContainer(
-    createStackNavigator({
-            Main: MainTabNavigator,
-            // Drawer: MainDrawerNavigator,
-            ProximoListScreen: {screen: ProximoListScreen},
-            SettingsScreen: {screen: SettingsScreen},
-            AboutScreen: {screen: AboutScreen},
-            AboutDependenciesScreen: {screen: AboutDependenciesScreen},
-            SelfMenuScreen: {screen: SelfMenuScreen},
-            ProxiwashAboutScreen: {screen: ProxiwashAboutScreen},
-            ProximoAboutScreen: {screen: ProximoAboutScreen},
-            DebugScreen: {screen: DebugScreen},
-        },
-        {
-            initialRouteName: "Main",
-            mode: 'card',
-            headerMode: "none",
-            transitionConfig: () => fromRight(),
-        })
-);
+function createAppContainerWithInitialRoute(initialRoute: string) {
+    return createAppContainer(
+        createStackNavigator({
+                Main: createMaterialBottomTabNavigatorWithInitialRoute(initialRoute),
+                // Drawer: MainDrawerNavigator,
+                ProximoListScreen: {screen: ProximoListScreen},
+                SettingsScreen: {screen: SettingsScreen},
+                AboutScreen: {screen: AboutScreen},
+                AboutDependenciesScreen: {screen: AboutDependenciesScreen},
+                SelfMenuScreen: {screen: SelfMenuScreen},
+                ProxiwashAboutScreen: {screen: ProxiwashAboutScreen},
+                ProximoAboutScreen: {screen: ProximoAboutScreen},
+                DebugScreen: {screen: DebugScreen},
+            },
+            {
+                initialRouteName: "Main",
+                mode: 'card',
+                headerMode: "none",
+                transitionConfig: () => fromRight(),
+            })
+    );
+}
+export {createAppContainerWithInitialRoute};

@@ -36,9 +36,11 @@
     }
   },
   "settingsScreen": {
-    "appearanceCard": "Apparence",
+    "generalCard": "Général",
     "nightMode": "Mode Nuit",
     "nightModeSub": "Passer l'application dans un thème sombre ou clair",
+    "startScreen": "Écran de démarrage",
+    "startScreenSub": "Choisissez l'écran utilisé au démarrage",
     "proxiwashNotifReminder": "Rappel de machine en cours",
     "proxiwashNotifReminderSub": "Choississez quand envoyer une notification pour vous rappeler qu'une machine avec votre linge est en cours",
     "proxiwashNotifReminderPicker": {

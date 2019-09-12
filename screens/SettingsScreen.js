@@ -32,6 +32,7 @@ type Props = {
 type State = {
     nightMode: boolean,
     proxiwashNotifPickerSelected: string,
+    startScreenPickerSelected: string,
 };
 
 /**
@@ -41,6 +42,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
     state = {
         nightMode: ThemeManager.getNightMode(),
         proxiwashNotifPickerSelected: AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current,
+        startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
     };
 
     /**
@@ -58,6 +60,19 @@ export default class SettingsScreen extends React.Component<Props, State> {
         if (value !== 'never')
             intVal = parseInt(value);
         NotificationsManager.setMachineReminderNotificationTime(intVal);
+    }
+
+    /**
+     * Save the value for the proxiwash reminder notification time
+     *
+     * @param value The value to store
+     */
+    onStartScreenPickerValueChange(value: string) {
+        let key = AsyncStorageManager.getInstance().preferences.defaultStartScreen.key;
+        AsyncStorageManager.getInstance().savePref(key, value);
+        this.setState({
+            startScreenPickerSelected: value
+        });
     }
 
     /**
@@ -84,12 +99,34 @@ export default class SettingsScreen extends React.Component<Props, State> {
     }
 
     /**
+     * Returns a picker allowing the user to select the start screen
+     *
+     * @returns {React.Node}
+     */
+    getStartScreenPicker() {
+        return (
+            <Picker
+                note
+                mode="dropdown"
+                style={{width: 120}}
+                selectedValue={this.state.startScreenPickerSelected}
+                onValueChange={(value) => this.onStartScreenPickerValueChange(value)}
+            >
+                <Picker.Item label={i18n.t('screens.home')} value="Home"/>
+                <Picker.Item label={i18n.t('screens.planning')} value="Planning"/>
+                <Picker.Item label={i18n.t('screens.proxiwash')} value="Proxiwash"/>
+                <Picker.Item label={i18n.t('screens.proximo')} value="Proximo"/>
+                <Picker.Item label={'Planex'} value="Planex"/>
+            </Picker>
+        );
+    }
+
+    /**
      * Toggle night mode and save it to preferences
      */
     toggleNightMode() {
         ThemeManager.getInstance().setNightMode(!this.state.nightMode);
         this.setState({nightMode: !this.state.nightMode});
-        // Alert.alert(i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.restart'));
         this.resetStack();
     }
 
@@ -133,7 +170,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                         {subtitle}
                     </Text>
                 </Body>
-                <Right style={{flex: 1}}>
+                <Right>
                     <CheckBox checked={this.state.nightMode}
                               onPress={() => this.toggleNightMode()}/>
                 </Right>
@@ -167,7 +204,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                     </Text>
                 </Body>
 
-                <Right style={{flex: 1}}>
+                <Right>
                     {control}
                 </Right>
             </ListItem>
@@ -195,10 +232,11 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 <Content padder>
                     <Card>
                         <CardItem header>
-                            <Text>{i18n.t('settingsScreen.appearanceCard')}</Text>
+                            <Text>{i18n.t('settingsScreen.generalCard')}</Text>
                         </CardItem>
                         <List>
                             {this.getToggleItem(() => this.toggleNightMode(), 'theme-light-dark', i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.nightModeSub'))}
+                            {SettingsScreen.getGeneralItem(this.getStartScreenPicker(), 'power', i18n.t('settingsScreen.startScreen'), i18n.t('settingsScreen.startScreenSub'))}
                         </List>
                     </Card>
                     <Card>

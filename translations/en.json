@@ -36,9 +36,11 @@
     }
   },
   "settingsScreen": {
-    "appearanceCard": "Appearance",
+    "generalCard": "General",
     "nightMode": "Night Mode",
     "nightModeSub": "Switch the app to a dark or light theme",
+    "startScreen": "Start Screen",
+    "startScreenSub": "Select which screen to start the app on",
     "proxiwashNotifReminder": "Machine running reminder",
     "proxiwashNotifReminderSub": "Choose when to send a notification to remind you a machine is running with your laundry",
     "proxiwashNotifReminderPicker": {

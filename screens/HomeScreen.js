@@ -8,6 +8,7 @@ import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
 import Autolink from 'react-native-autolink';
 import ThemeManager from "../utils/ThemeManager";
+import AsyncStorageManager from "../utils/AsyncStorageManager";
 
 const ICON_AMICALE = require('../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
