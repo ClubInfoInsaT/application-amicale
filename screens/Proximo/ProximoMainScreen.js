@@ -9,15 +9,7 @@ import FetchedDataSectionList from "../../components/FetchedDataSectionList";
 import ThemeManager from "../../utils/ThemeManager";
 import Touchable from "react-native-platform-touchable";
 
-const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~proximo/data/stock.json";
-
-const typesIcons = {
-    Nouveau: "alert-decagram",
-    Alimentaire: "food",
-    Boissons: "bottle-wine",
-    Utilitaires: "notebook",
-    Default: "information-outline",
-};
+const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 
 
 /**
@@ -71,7 +63,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                     data: []
                 });
                 for (let k = 0; k < articles.length; k++) {
-                    if (articles[k]['type'].includes(types[i])) {
+                    if (articles[k]['type'].includes(types[i].id)) {
                         finalData[i].data.push(articles[k]);
                     }
                 }
@@ -104,13 +96,13 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                 >
                     <Left>
                         <CustomMaterialIcon
-                            icon={typesIcons[item.type] ? typesIcons[item.type] : typesIcons.Default}
+                            icon={item.type.icon}
                             fontSize={30}
                         />
                     </Left>
                     <Body>
                         <Text>
-                            {item.type}
+                            {item.type.name}
                         </Text>
                         <Badge><Text>
                             {item.data.length} {item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article')}

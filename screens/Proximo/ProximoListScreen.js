@@ -1,14 +1,15 @@
 // @flow
 
 import * as React from 'react';
-import {Body, Container, Content, Left, ListItem, Right, Text, Thumbnail} from 'native-base';
+import {Body, Container, Content, Left, ListItem, Right, Text, Thumbnail, H1, H3} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
-import {FlatList, Platform} from "react-native";
+import {FlatList, Platform, View, Image} from "react-native";
 import Touchable from 'react-native-platform-touchable';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import ThemeManager from "../../utils/ThemeManager";
+import Modalize from 'react-native-modalize';
 
 const sortMode = {
     price: "0",
@@ -49,6 +50,7 @@ type State = {
     isSortReversed: boolean,
     sortPriceIcon: React.Node,
     sortNameIcon: React.Node,
+    modalCurrentDisplayItem: Object,
 };
 
 /**
@@ -56,12 +58,15 @@ type State = {
  */
 export default class ProximoListScreen extends React.Component<Props, State> {
 
+    modalRef = React.createRef();
+
     state = {
         navData: this.props.navigation.getParam('data', []).sort(sortPrice),
         currentSortMode: sortMode.price,
         isSortReversed: false,
         sortPriceIcon: '',
         sortNameIcon: '',
+        modalCurrentDisplayItem: {}
     };
 
     _menu: Menu;
@@ -182,13 +187,57 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         }
     }
 
+    getModalContent() {
+        return (
+            <View style={{
+                flex: 1,
+                padding: 20
+            }}>
+                <H1>{this.state.modalCurrentDisplayItem.name}</H1>
+                <View style={{
+                    flexDirection: 'row',
+                    width: '100%',
+                    marginTop: 10,
+                }}>
+                    <H3 style={{
+                        color: this.getStockColor(parseInt(this.state.modalCurrentDisplayItem.quantity)),
+                    }}>
+                        {this.state.modalCurrentDisplayItem.quantity + ' ' + i18n.t('proximoScreen.inStock')}
+                    </H3>
+                    <H3 style={{marginLeft: 'auto'}}>{this.state.modalCurrentDisplayItem.price}€</H3>
+                </View>
+
+                <Content>
+                    <View style={{width: '100%', height: 150, marginTop: 20, marginBottom: 20}}>
+                        <Image style={{flex: 1, resizeMode: "contain"}}
+                               source={{uri: this.state.modalCurrentDisplayItem.image}}/>
+                    </View>
+                    <Text>{this.state.modalCurrentDisplayItem.description}</Text>
+                </Content>
+            </View>
+        );
+    }
+
+    showItemDetails(item: Object) {
+        this.setState({
+            modalCurrentDisplayItem: item
+        });
+        if (this.modalRef.current) {
+            this.modalRef.current.open();
+        }
+    }
     render() {
         const nav = this.props.navigation;
-        const navType = nav.getParam('type', 'Empty');
+        const navType = nav.getParam('type', '{name: "Error"}');
 
         return (
             <Container>
-                <CustomHeader hasBackButton={true} navigation={nav} title={navType} rightButton={
+                <Modalize ref={this.modalRef}
+                          adjustToContentHeight
+                          modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
+                    {this.getModalContent()}
+                </Modalize>
+                <CustomHeader hasBackButton={true} navigation={nav} title={navType.name} rightButton={
                     <Menu
                         ref={this.setMenuRef}
                         button={
@@ -220,13 +269,13 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                     <FlatList
                         data={this.state.navData}
                         extraData={this.state.navData}
-                        keyExtractor={(item, index) => item.name}
+                        keyExtractor={(item) => item.name}
                         style={{minHeight: 300, width: '100%'}}
                         renderItem={({item}) =>
                             <ListItem
                                 thumbnail
                                 onPress={() => {
-                                    console.log(item.image)
+                                    this.showItemDetails(item);
                                 }}
                             >
                                 <Left>

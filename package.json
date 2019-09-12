@@ -23,6 +23,8 @@
     "react-native": "^0.59.9",
     "react-native-app-intro-slider": "^3.0.0",
     "react-native-autolink": "^1.8.1",
+    "react-native-modal": "^11.3.1",
+    "react-native-modalize": "^1.2.1",
     "react-native-paper": "^2.16.0",
     "react-native-platform-touchable": "^1.1.1",
     "react-native-side-menu": "^1.1.3",
