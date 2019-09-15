@@ -44,6 +44,9 @@ export default class PlanningScreen extends React.Component<Props, State> {
     modalRef: { current: null | Modalize };
     webDataManager: WebDataManager;
 
+    lastRefresh: Date;
+    minTimeBetweenRefresh = 60;
+
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
@@ -198,29 +201,65 @@ export default class PlanningScreen extends React.Component<Props, State> {
      * @private
      */
     _onRefresh = () => {
-        this.setState({refreshing: true});
-        this.webDataManager.readData()
-            .then((fetchedData) => {
-                this.setState({
-                    refreshing: false,
+        let canRefresh;
+        if (this.lastRefresh !== undefined)
+            canRefresh = (new Date().getTime() - this.lastRefresh.getTime())/1000 > this.minTimeBetweenRefresh;
+        else
+            canRefresh = true;
+
+        if (canRefresh) {
+            this.setState({refreshing: true});
+            this.webDataManager.readData()
+                .then((fetchedData) => {
+                    this.setState({
+                        refreshing: false,
+                    });
+                    this.generateEventAgenda(fetchedData);
+                    this.lastRefresh = new Date();
+                })
+                .catch((err) => {
+                    this.setState({
+                        refreshing: false,
+                    });
+                    console.log(err);
                 });
-                this.generateEventAgenda(fetchedData);
-            })
-            .catch((err) => {
-                this.setState({
-                    refreshing: false,
-                });
-                console.log(err);
-            });
+        }
     };
 
     generateEventAgenda(eventList: Array<Object>) {
         let agendaItems = this.generateEmptyCalendar();
         for (let i = 0; i < eventList.length; i++) {
-            if (agendaItems[this.getEventStartDate(eventList[i])] !== undefined)
-                agendaItems[this.getEventStartDate(eventList[i])].push(eventList[i]);
+            if (agendaItems[this.getEventStartDate(eventList[i])] !== undefined) {
+                this.pushEventInOrder(agendaItems, eventList[i], this.getEventStartDate(eventList[i]));
+            }
         }
         this.setState({agendaItems: agendaItems})
+    }
+
+    pushEventInOrder(agendaItems: Object, event: Object, startDate: string) {
+        if (agendaItems[startDate].length === 0)
+            agendaItems[startDate].push(event);
+        else {
+            for (let i = 0; i < agendaItems[startDate].length; i++) {
+                if (this.isEventBefore(event, agendaItems[startDate][i])) {
+                    agendaItems[startDate].splice(i, 0, event);
+                    break;
+                } else if (i === agendaItems[startDate].length - 1) {
+                    agendaItems[startDate].push(event);
+                    break;
+                }
+            }
+        }
+    }
+
+    isEventBefore(event1: Object, event2: Object) {
+        let date1 = new Date();
+        let date2 = new Date();
+        let timeArray = this.getEventStartTime(event1).split(":");
+        date1.setHours(parseInt(timeArray[0]), parseInt(timeArray[1]));
+        timeArray = this.getEventStartTime(event2).split(":");
+        date2.setHours(parseInt(timeArray[0]), parseInt(timeArray[1]));
+        return date1 < date2;
     }
 
     getEventStartDate(event: Object) {
