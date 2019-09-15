@@ -242,6 +242,7 @@ export default {
 
     // Text
     textColor: "#000",
+    textDisabledColor: "#d9e1e8",
     inverseTextColor: "#fff",
     noteFontSize: 14,
     get defaultTextColor() {
@@ -259,6 +260,10 @@ export default {
     // CUSTOM
     customMaterialIconColor: "#5d5d5d",
     fetchedDataSectionListErrorText: "#898989",
+
+    // Calendar/Agenda
+    agendaBackgroundColor: '#f3f3f4',
+    agendaEmptyLine: '#dbdbdc',
 
     // PROXIWASH
     proxiwashFinishedColor: "rgba(54,165,22,0.31)",
