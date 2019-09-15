@@ -39,15 +39,17 @@ const styles = StyleSheet.create({
 
 type Props = {
     onDone: Function,
+    isUpdate: boolean
 };
 
 export default class CustomIntroSlider extends React.Component<Props> {
 
-    slides: Array<Object>;
+    introSlides: Array<Object>;
+    updateSlides: Array<Object>;
 
     constructor() {
         super();
-        this.slides = [
+        this.introSlides = [
             {
                 key: '1',
                 title: i18n.t('intro.slide1.title'),
@@ -91,11 +93,20 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 colors: ['#37c13e', '#26852b'],
             },
         ];
+        this.updateSlides = [
+            {
+                key: '1',
+                title: i18n.t('intro.updateSlide.title'),
+                text: i18n.t('intro.updateSlide.text'),
+                icon: 'calendar-range',
+                colors: ['#e01928', '#be1522'],
+            },
+        ]
     }
 
 
     /**
-     * Render item to be used for the intro slides
+     * Render item to be used for the intro introSlides
      * @param item
      * @param dimensions
      */
@@ -125,7 +136,7 @@ export default class CustomIntroSlider extends React.Component<Props> {
     render() {
         return (
             <AppIntroSlider renderItem={({item, dimensions}) => CustomIntroSlider.getIntroRenderItem(item, dimensions)}
-                            slides={this.slides} onDone={() => this.props.onDone()} bottomButton showSkipButton/>
+                            slides={this.props.isUpdate ? this.updateSlides : this.introSlides} onDone={() => this.props.onDone()} bottomButton showSkipButton/>
         );
     }
 

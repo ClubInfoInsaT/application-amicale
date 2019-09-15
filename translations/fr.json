@@ -33,6 +33,10 @@
     "slide6": {
       "title": "Plus à venir...",
       "text": "D'autres fonctionnalités arrivent bientôt, n'hésitez pas à nous donner votre avis pour améliorer l'appli"
+    },
+    "updateSlide": {
+      "title": "Nouveau dans cette mise à jour !",
+      "text": "Découvre tous les événements du campus dans la nouvelle section Planning !"
     }
   },
   "settingsScreen": {

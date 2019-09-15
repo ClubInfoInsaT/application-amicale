@@ -60,7 +60,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     state = {
         modalCurrentDisplayItem: {},
         refreshing: false,
-        agendaItems: {}
+        agendaItems: {},
     };
 
     getCurrentDate() {
@@ -124,7 +124,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
 
     showItemDetails(item: Object) {
         this.setState({
-            modalCurrentDisplayItem: item
+            modalCurrentDisplayItem: item,
         });
         if (this.modalRef.current) {
             this.modalRef.current.open();
@@ -203,7 +203,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     _onRefresh = () => {
         let canRefresh;
         if (this.lastRefresh !== undefined)
-            canRefresh = (new Date().getTime() - this.lastRefresh.getTime())/1000 > this.minTimeBetweenRefresh;
+            canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) / 1000 > this.minTimeBetweenRefresh;
         else
             canRefresh = true;
 
@@ -292,6 +292,12 @@ export default class PlanningScreen extends React.Component<Props, State> {
         return array[0] + ':' + array[1];
     }
 
+    onModalClosed() {
+        this.setState({
+            modalCurrentDisplayItem: {},
+        });
+    }
+
     render() {
         const nav = this.props.navigation;
         return (
@@ -299,7 +305,9 @@ export default class PlanningScreen extends React.Component<Props, State> {
                 <Modalize ref={this.modalRef}
                           modalStyle={{
                               backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
-                          }}>
+                          }}
+                          adjustToContentHeight
+                          onClosed={() => this.onModalClosed()}>
                     {this.getModalContent()}
                 </Modalize>
                 <Agenda
@@ -310,7 +318,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     // initially selected day
                     selected={this.getCurrentDate()}
                     // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-                    minDate={"2019-09-01"}
+                    minDate={this.getCurrentDate()}
                     // Max amount of months allowed to scroll to the past. Default = 50
                     pastScrollRange={1}
                     // Max amount of months allowed to scroll to the future. Default = 50

@@ -29,6 +29,11 @@ export default class AsyncStorageManager {
             default: '1',
             current: '',
         },
+        showUpdate1: {
+            key: 'showUpdate1',
+            default: '1',
+            current: '',
+        },
         proxiwashNotifications: {
             key: 'proxiwashNotifications',
             default: '5',

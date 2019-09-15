@@ -20,6 +20,7 @@ type Props = {};
 type State = {
     isLoading: boolean,
     showIntro: boolean,
+    showUpdate: boolean,
     currentTheme: ?Object,
 };
 
@@ -28,6 +29,7 @@ export default class App extends React.Component<Props, State> {
     state = {
         isLoading: true,
         showIntro: true,
+        showUpdate: true,
         currentTheme: null,
     };
 
@@ -47,11 +49,15 @@ export default class App extends React.Component<Props, State> {
     }
 
     /**
-     * Callback when user ends the intro. Save in preferences to avaoid showing back the slides
+     * Callback when user ends the intro. Save in preferences to avaoid showing back the introSlides
      */
     onIntroDone() {
-        this.setState({showIntro: false});
+        this.setState({
+            showIntro: false,
+            showUpdate: false,
+        });
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showIntro.key, '0');
+        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showUpdate1.key, '0');
     }
 
     async loadAssetsAsync() {
@@ -73,7 +79,8 @@ export default class App extends React.Component<Props, State> {
         this.setState({
             isLoading: false,
             currentTheme: ThemeManager.getCurrentTheme(),
-            showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1'
+            showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1',
+            showUpdate: AsyncStorageManager.getInstance().preferences.showUpdate1.current === '1'
             // showIntro: true
         });
     }
@@ -91,8 +98,8 @@ export default class App extends React.Component<Props, State> {
                 />
             );
         }
-        if (this.state.showIntro) {
-            return <CustomIntroSlider onDone={() => this.onIntroDone()}/>;
+        if (this.state.showIntro || this.state.showUpdate) {
+            return <CustomIntroSlider onDone={() => this.onIntroDone()} isUpdate={this.state.showUpdate && !this.state.showIntro}/>;
         } else {
             const AppNavigator = createAppContainerWithInitialRoute(AsyncStorageManager.getInstance().preferences.defaultStartScreen.current);
             return (
