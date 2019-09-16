@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Content, H1, H2, H3, Text} from 'native-base';
+import {Content, H1, H2, H3, Text, Button} from 'native-base';
 import i18n from "i18n-js";
 import {View, Image} from "react-native";
 import ThemeManager from "../utils/ThemeManager";
@@ -12,6 +12,7 @@ import HTML from 'react-native-render-html';
 import Touchable from 'react-native-platform-touchable';
 import Modalize from 'react-native-modalize';
 import WebDataManager from "../utils/WebDataManager";
+import CustomMaterialIcon from "../components/CustomMaterialIcon";
 
 
 type Props = {
@@ -84,15 +85,29 @@ export default class PlanningScreen extends React.Component<Props, State> {
         return daysOfYear;
     }
 
+    getModalHeader() {
+        return (
+            <View style={{marginBottom: 0}}>
+                <Button
+                    onPress={() => this.modalRef.current.close()}
+                    style={{
+                        marginTop: 50,
+                        marginLeft: 'auto',
+                    }}
+                    transparent>
+                    <CustomMaterialIcon icon={'close'}/>
+                </Button>
+            </View>
+        );
+    }
+
     getModalContent() {
         return (
             <View style={{
                 flex: 1,
                 padding: 20
             }}>
-                <H1 style={{
-                    marginTop: 20,
-                }}>
+                <H1>
                     {this.state.modalCurrentDisplayItem.title}
                 </H1>
                 <H3 style={{
@@ -306,7 +321,8 @@ export default class PlanningScreen extends React.Component<Props, State> {
                           modalStyle={{
                               backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
                           }}
-                          adjustToContentHeight
+                    // adjustToContentHeight // Breaks when displaying full screen, half, then full again
+                          HeaderComponent={() => this.getModalHeader()}
                           onClosed={() => this.onModalClosed()}>
                     {this.getModalContent()}
                 </Modalize>
