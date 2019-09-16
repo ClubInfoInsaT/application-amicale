@@ -37,7 +37,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
     createDataset(fetchedData: Object) {
         return [
             {
-                title: i18n.t('proximoScreen.listTitle'),
+                title: '',
                 data: ProximoMainScreen.generateData(fetchedData),
                 extraData: super.state,
                 keyExtractor: this.getKeyExtractor
@@ -117,10 +117,6 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
             return <View/>;
         }
 
-    }
-
-    getRenderSectionHeader(title: String) {
-        return <H2 style={{textAlign: 'center', paddingVertical: 10}}>{title}</H2>;
     }
 }
 
