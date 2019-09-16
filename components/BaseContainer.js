@@ -24,6 +24,8 @@ type State = {
 
 export default class BaseContainer extends React.Component<Props, State> {
 
+    willBlurSubscription: function;
+
     static defaultProps = {
         headerRightButton: <View/>
     };
@@ -41,6 +43,26 @@ export default class BaseContainer extends React.Component<Props, State> {
 
     updateMenuState(isOpen: boolean) {
         this.setState({isOpen});
+    }
+
+    /**
+     * Register for blur event to close side menu on screen change
+     */
+    componentDidMount() {
+        this.willBlurSubscription = this.props.navigation.addListener(
+            'willBlur',
+            payload => {
+                this.setState({isOpen: false});
+            }
+        );
+    }
+
+    /**
+     * Unregister from event when un-mounting components
+     */
+    componentWillUnmount() {
+        if (this.willBlurSubscription !== undefined)
+            this.willBlurSubscription.remove();
     }
 
     render() {

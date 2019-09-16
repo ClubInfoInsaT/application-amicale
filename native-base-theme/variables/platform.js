@@ -238,6 +238,7 @@ export default {
 
     // Tabs
     tabBgColor: "#F8F8F8",
+    tabIconColor: platform === "ios" ? "#5d5d5d" : "#fff",
     tabFontSize: 15,
 
     // Text

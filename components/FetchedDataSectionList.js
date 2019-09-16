@@ -121,7 +121,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     _onRefresh = () => {
         let canRefresh;
         if (this.lastRefresh !== undefined)
-            canRefresh = (new Date().getTime() - this.lastRefresh.getTime())/1000 > this.minTimeBetweenRefresh;
+            canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) / 1000 > this.minTimeBetweenRefresh;
         else
             canRefresh = true;
 
@@ -314,9 +314,10 @@ export default class FetchedDataSectionList extends React.Component<Props, State
             tabbedView.push(
                 <Tab heading={
                     <TabHeading>
-                        <CustomMaterialIcon icon={dataset[i].icon}
-                                            color={'#fff'}
-                                            fontSize={20}
+                        <CustomMaterialIcon
+                            icon={dataset[i].icon}
+                            color={ThemeManager.getCurrentThemeVariables().tabIconColor}
+                            fontSize={20}
                         />
                         <Text>{dataset[i].title}</Text>
                     </TabHeading>}

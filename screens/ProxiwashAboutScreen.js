@@ -36,7 +36,7 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                             <TabHeading>
                                 <CustomMaterialIcon
                                     icon={'information'}
-                                    color={'#fff'}
+                                    color={ThemeManager.getCurrentThemeVariables().tabIconColor}
                                     fontSize={20}
                                 />
                                 <Text>{i18n.t('proxiwashScreen.informationTab')}</Text>
@@ -106,7 +106,7 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                             <TabHeading>
                                 <CustomMaterialIcon
                                     icon={'cash'}
-                                    color={'#fff'}
+                                    color={ThemeManager.getCurrentThemeVariables().tabIconColor}
                                     fontSize={20}
                                 />
                                 <Text>{i18n.t('proxiwashScreen.paymentTab')}</Text>
