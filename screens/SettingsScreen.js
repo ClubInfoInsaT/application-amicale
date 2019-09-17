@@ -171,8 +171,10 @@ export default class SettingsScreen extends React.Component<Props, State> {
                     </Text>
                 </Body>
                 <Right>
-                    <CheckBox checked={this.state.nightMode}
-                              onPress={() => this.toggleNightMode()}/>
+                    <CheckBox
+                        checked={this.state.nightMode}
+                        onPress={() => this.toggleNightMode()}
+                        style={{marginRight: 20}}/>
                 </Right>
             </ListItem>
         );
@@ -228,7 +230,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
         return (
             <Container>
                 <CustomHeader navigation={nav} title={i18n.t('screens.settings')} hasBackButton={true}
-                rightButton={this.getRightButton()}/>
+                              rightButton={this.getRightButton()}/>
                 <Content padder>
                     <Card>
                         <CardItem header>
