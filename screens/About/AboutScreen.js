@@ -2,23 +2,37 @@
 
 import * as React from 'react';
 import {FlatList, Linking, Platform, View} from 'react-native';
-import {Body, Card, CardItem, Container, Content, H1, Left, Right, Text, Thumbnail} from 'native-base';
+import {Body, Card, CardItem, Container, Content, H1, Left, Right, Text, Thumbnail, Button} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
 import appJson from '../../app';
 import packageJson from '../../package';
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
+import Modalize from "react-native-modalize";
+import ThemeManager from "../../utils/ThemeManager";
 
 const links = {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
     playstore: 'https://play.google.com/store/apps/details?id=fr.amicaleinsat.application',
-    expo: 'https://expo.io/@amicaleinsat/application-amicale',
     git: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/README.md',
-    bugs: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
+    bugsMail: 'mailto:vergnet@etud.insa-toulouse.fr?' +
+        'subject=' +
+        '[BUG] Application Amicale INSA Toulouse' +
+        '&body=' +
+        'Coucou Arnaud ça bug c\'est nul,\n\n' +
+        'Informations sur ton système si tu sais (iOS ou Android, modèle du tel, version):\n\n\n' +
+        'Nature du problème :\n\n\n' +
+        'Étapes pour reproduire ce pb :\n\n\n\n' +
+        'Stp corrige le pb, bien cordialement.',
+    bugsGit: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
     changelog: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
     license: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
-    mail: "mailto:vergnet@etud.insa-toulouse.fr?subject=Application Amicale INSA Toulouse&body=",
+    mail: "mailto:vergnet@etud.insa-toulouse.fr?" +
+        "subject=" +
+        "Application Amicale INSA Toulouse" +
+        "&body=" +
+        "Coucou !\n\n",
     linkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
     facebook: 'https://www.facebook.com/arnaud.vergnet',
     react: 'https://facebook.github.io/react-native/',
@@ -46,10 +60,16 @@ function openWebLink(link) {
 export default class AboutScreen extends React.Component<Props, State> {
 
     debugTapCounter = 0;
+    modalRef: { current: null | Modalize };
 
     state = {
         isDebugUnlocked: AsyncStorageManager.getInstance().preferences.debugUnlocked.current === '1'
     };
+
+    constructor(props: any) {
+        super(props);
+        this.modalRef = React.createRef();
+    }
 
     /**
      * Data to be displayed in the app card
@@ -62,21 +82,15 @@ export default class AboutScreen extends React.Component<Props, State> {
             showChevron: true
         },
         {
-            onPressCallback: () => openWebLink(links.expo),
-            icon: 'worker',
-            text: i18n.t('aboutScreen.expoBeta'),
+            onPressCallback: () => this.openBugReportModal(),
+            icon: 'bug',
+            text: i18n.t('aboutScreen.bugs'),
             showChevron: true
         },
         {
             onPressCallback: () => openWebLink(links.git),
             icon: 'git',
             text: 'Git',
-            showChevron: true
-        },
-        {
-            onPressCallback: () => openWebLink(links.bugs),
-            icon: 'bug',
-            text: i18n.t('aboutScreen.bugs'),
             showChevron: true
         },
         {
@@ -199,10 +213,59 @@ export default class AboutScreen extends React.Component<Props, State> {
         AsyncStorageManager.getInstance().savePref(key, '1');
     }
 
+    getBugReportModal() {
+        return (
+            <Modalize ref={this.modalRef}
+                      adjustToContentHeight
+                      modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
+                <View style={{
+                    flex: 1,
+                    padding: 20
+                }}>
+                    <H1>{i18n.t('aboutScreen.bugs')}</H1>
+                    <Text>
+                        {i18n.t('aboutScreen.bugsDescription')}
+                    </Text>
+                    <Button
+                        style={{
+                            marginTop: 20,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                        }}
+                        onPress={() => openWebLink(links.bugsMail)}>
+                        <CustomMaterialIcon
+                            icon={'email'}
+                            color={'#fff'}/>
+                        <Text>{i18n.t('aboutScreen.bugsMail')}</Text>
+                    </Button>
+                    <Button
+                        style={{
+                            marginTop: 20,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                        }}
+                        onPress={() => openWebLink(links.bugsGit)}>
+                        <CustomMaterialIcon
+                            icon={'git'}
+                            color={'#fff'}/>
+                        <Text>{i18n.t('aboutScreen.bugsGit')}</Text>
+                    </Button>
+                </View>
+            </Modalize>
+        );
+    }
+
+    openBugReportModal() {
+        if (this.modalRef.current) {
+            this.modalRef.current.open();
+        }
+    }
+
     render() {
         const nav = this.props.navigation;
         return (
             <Container>
+                {this.getBugReportModal()}
                 <CustomHeader navigation={nav} title={i18n.t('screens.about')} hasBackButton={true}/>
                 <Content padder>
                     <Card>

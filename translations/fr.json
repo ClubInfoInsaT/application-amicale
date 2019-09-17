@@ -69,8 +69,10 @@
   "aboutScreen": {
     "appstore": "Voir sur l'Appstore",
     "playstore": "Voir sur le Playstore",
-    "expoBeta": "Participer à la Beta !",
     "bugs": "Rapporter des Bugs",
+    "bugsDescription": "Rapporter les bugs nous aide à améliorer l'appli. Merci de décrire votre problème le plus précisément possible !",
+    "bugsMail": "Envoyer un Mail",
+    "bugsGit": "Ouvrir un ticket sur Git",
     "changelog": "Historique des modifications",
     "license": "Licence",
     "debug": "Debug",
