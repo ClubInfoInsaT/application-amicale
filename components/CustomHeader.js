@@ -50,7 +50,8 @@ export default class CustomHeader extends React.Component<Props> {
             button = this.props.leftButton;
 
         return (
-            <Header style={styles.header}>
+            <Header style={styles.header}
+                    hasTabs={this.props.hasTabs}>
                 <Left>
                     {button}
                 </Left>
@@ -60,13 +61,13 @@ export default class CustomHeader extends React.Component<Props> {
                 <Right>
                     {this.props.rightButton}
                     {this.props.hasBackButton ? <View/> :
-                    <Touchable
-                        style={{padding: 6}}
-                        onPress={() => this.props.navigation.navigate('SettingsScreen')}>
-                        <CustomMaterialIcon
-                            color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                            icon="settings"/>
-                    </Touchable>}
+                        <Touchable
+                            style={{padding: 6}}
+                            onPress={() => this.props.navigation.navigate('SettingsScreen')}>
+                            <CustomMaterialIcon
+                                color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                                icon="settings"/>
+                        </Touchable>}
                 </Right>
             </Header>);
     }

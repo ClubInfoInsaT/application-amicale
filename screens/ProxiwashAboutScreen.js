@@ -29,8 +29,14 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
         const nav = this.props.navigation;
         return (
             <Container>
-                <CustomHeader navigation={nav} title={i18n.t('screens.proxiwash')} hasBackButton={true}/>
-                <Tabs>
+                <CustomHeader
+                    navigation={nav} title={i18n.t('screens.proxiwash')}
+                    hasBackButton={true}
+                    hasTabs={true}/>
+                <Tabs
+                    tabContainerStyle={{
+                        elevation: 0, // Fix for android shadow
+                    }}>
                     <Tab
                         heading={
                             <TabHeading>

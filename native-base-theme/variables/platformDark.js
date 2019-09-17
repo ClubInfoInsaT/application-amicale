@@ -158,7 +158,7 @@ export default {
     searchBarHeight: platform === "ios" ? 30 : 40,
     searchBarInputHeight: platform === "ios" ? 30 : 50,
     toolbarBtnTextColor: platform === "ios" ? "#be1522" : "#fff",
-    toolbarDefaultBorder: platform === "ios" ? "#a7a6ab" : "#ba1f0f",
+    toolbarDefaultBorder: platform === "ios" ? "#3f3f3f" : "#ba1f0f",
     iosStatusbar: platform === "ios" ? "dark-content" : "light-content",
     get statusBarColor() {
         return color(this.toolbarDefaultBg)
@@ -199,7 +199,7 @@ export default {
 
     // List
     listBg: "transparent",
-    listBorderColor: "#727272",
+    listBorderColor: "#3e3e3e",
     listDividerBg: "#f4f4f4",
     listBtnUnderlayColor: "#DDD",
     listItemPadding: platform === "ios" ? 10 : 12,
@@ -231,10 +231,10 @@ export default {
     inverseSpinnerColor: "#1A191B",
 
     // Tab
-    tabDefaultBg: platform === "ios" ? "#2b2b2b" : "#be1522",
+    tabDefaultBg: platform === "ios" ? "#333333" : "#be1522",
     topTabBarTextColor: platform === "ios" ? "#6b6b6b" : "#b3c7f9",
     topTabBarActiveTextColor: platform === "ios" ? "#be1522" : "#fff",
-    topTabBarBorderColor: platform === "ios" ? "#a7a6ab" : "#fff",
+    topTabBarBorderColor: platform === "ios" ? "#3f3f3f" : "#fff",
     topTabBarActiveBorderColor: platform === "ios" ? "#be1522" : "#fff",
 
     // Tabs

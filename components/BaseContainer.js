@@ -14,7 +14,8 @@ type Props = {
     navigation: Object,
     headerTitle: string,
     headerRightButton: React.Node,
-    children: React.Node
+    children: React.Node,
+    hasTabs: boolean,
 }
 
 type State = {
@@ -27,7 +28,8 @@ export default class BaseContainer extends React.Component<Props, State> {
     willBlurSubscription: function;
 
     static defaultProps = {
-        headerRightButton: <View/>
+        headerRightButton: <View/>,
+        hasTabs: false,
     };
 
 
@@ -72,20 +74,23 @@ export default class BaseContainer extends React.Component<Props, State> {
                 width: '100%',
                 height: '100%'
             }}>
-                <CustomSideMenu navigation={this.props.navigation} isOpen={this.state.isOpen}
-                                onChange={(isOpen) => this.updateMenuState(isOpen)}>
+                <CustomSideMenu
+                    navigation={this.props.navigation} isOpen={this.state.isOpen}
+                    onChange={(isOpen) => this.updateMenuState(isOpen)}>
                     <Container>
-                        <CustomHeader navigation={this.props.navigation} title={this.props.headerTitle}
-                                      leftButton={
-                                          <Touchable
-                                              style={{padding: 6}}
-                                              onPress={() => this.toggle()}>
-                                              <CustomMaterialIcon
-                                                  color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                                                  icon="menu"/>
-                                          </Touchable>
-                                      }
-                                      rightButton={this.props.headerRightButton}/>
+                        <CustomHeader
+                            navigation={this.props.navigation} title={this.props.headerTitle}
+                            leftButton={
+                                <Touchable
+                                    style={{padding: 6}}
+                                    onPress={() => this.toggle()}>
+                                    <CustomMaterialIcon
+                                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                                        icon="menu"/>
+                                </Touchable>
+                            }
+                            rightButton={this.props.headerRightButton}
+                            hasTabs={this.props.hasTabs}/>
                         {this.props.children}
                     </Container>
                 </CustomSideMenu>

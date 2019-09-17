@@ -128,9 +128,13 @@ export default class PlanningScreen extends React.Component<Props, State> {
                         // Surround description with div to allow text styling if the description is not html
                         <HTML html={"<div>" + this.state.modalCurrentDisplayItem.description + "</div>"}
                               tagsStyles={{
-                                  p: {color: ThemeManager.getCurrentThemeVariables().textColor},
+                                  p: {
+                                      color: ThemeManager.getCurrentThemeVariables().textColor,
+                                      fontSize: ThemeManager.getCurrentThemeVariables().fontSizeBase
+                                  },
                                   div: {color: ThemeManager.getCurrentThemeVariables().textColor}
-                              }}/>
+                              }}
+                              onLinkPress={(event, link) => openWebLink(link)}/>
                         : <View/>}
                 </Content>
             </View>

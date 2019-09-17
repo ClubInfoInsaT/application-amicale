@@ -342,10 +342,16 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         const nav = this.props.navigation;
         const dataset = this.createDataset(this.state.fetchedData);
         return (
-            <BaseContainer navigation={nav} headerTitle={this.getHeaderTranslation()}
-                           headerRightButton={this.getRightButton()}>
+            <BaseContainer
+                navigation={nav} headerTitle={this.getHeaderTranslation()}
+                headerRightButton={this.getRightButton()}
+                hasTabs={this.hasTabs()}>
                 {this.hasTabs() ?
-                    <Tabs>
+                    <Tabs
+                        tabContainerStyle={{
+                            elevation: 0, // Fix for android shadow
+                        }}
+                    >
                         {this.getTabbedView(dataset)}
                     </Tabs>
                     :

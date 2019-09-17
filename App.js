@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react';
+import {StatusBar, Platform } from 'react-native';
 import {Root, StyleProvider} from 'native-base';
 import {createAppContainerWithInitialRoute} from './navigation/AppNavigator';
 import ThemeManager from './utils/ThemeManager';
@@ -45,7 +46,21 @@ export default class App extends React.Component<Props, State> {
         this.setState({
             currentTheme: ThemeManager.getCurrentTheme()
         });
+        this.setupStatusBar();
         clearThemeCache();
+    }
+
+    setupStatusBar() {
+        if (Platform.OS === 'ios') {
+            console.log(ThemeManager.getNightMode());
+            if (ThemeManager.getNightMode()) {
+                console.log('setting light mode');
+                StatusBar.setBarStyle('light-content', true);
+            } else {
+                console.log('setting dark mode');
+                StatusBar.setBarStyle('dark-content', true);
+            }
+        }
     }
 
     /**
@@ -70,7 +85,7 @@ export default class App extends React.Component<Props, State> {
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
         await NotificationsManager.initExpoToken();
-        console.log(AsyncStorageManager.getInstance().preferences.expoToken.current);
+        // console.log(AsyncStorageManager.getInstance().preferences.expoToken.current);
     }
 
     onLoadFinished() {
@@ -83,6 +98,10 @@ export default class App extends React.Component<Props, State> {
             showUpdate: AsyncStorageManager.getInstance().preferences.showUpdate1.current === '1'
             // showIntro: true
         });
+        // Status bar goes dark if set too fast
+        setTimeout(this.setupStatusBar,
+            1000
+        )
     }
 
     /**
