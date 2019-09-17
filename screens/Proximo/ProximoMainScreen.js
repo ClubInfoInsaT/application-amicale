@@ -69,7 +69,12 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                 }
             }
         }
+        finalData.sort(ProximoMainScreen.sortFinalData);
         return finalData;
+    }
+
+    static sortFinalData(a: Object, b: Object) {
+        return a.type.id - b.type.id;
     }
 
     getRightButton() {
