@@ -12,8 +12,8 @@ const deviceHeight = Dimensions.get("window").height;
 const drawerCover = require("../assets/drawer-cover.png");
 
 const WIKETUD_LINK = "https://www.etud.insa-toulouse.fr/wiketud";
-const Amicale_LINK = "https://www.etud.insa-toulouse.fr/~amicale";
-const RU_LINK = "http://m.insa-toulouse.fr/ru.html";
+const AMICALE_LINK = "https://www.etud.insa-toulouse.fr/~amicale";
+const TUTOR_INSA_LINK = "https://www.etud.insa-toulouse.fr/~tutorinsa/";
 
 type Props = {
     navigation: Object,
@@ -48,13 +48,19 @@ export default class SideBar extends React.Component<Props, State> {
                 name: "Amicale",
                 route: "amicale",
                 icon: "web",
-                link: Amicale_LINK
+                link: AMICALE_LINK
             },
             {
                 name: "Wiketud",
                 route: "wiketud",
                 icon: "wikipedia",
                 link: WIKETUD_LINK
+            },
+            {
+                name: "Tutor'INSA",
+                route: "tutorinsa",
+                icon: "school",
+                link: TUTOR_INSA_LINK
             },
             {
                 name: i18n.t('screens.menuSelf'),
