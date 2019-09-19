@@ -16,6 +16,7 @@ type Props = {
     headerRightButton: React.Node,
     children: React.Node,
     hasTabs: boolean,
+    hasBackButton: boolean
 }
 
 type State = {
@@ -30,6 +31,7 @@ export default class BaseContainer extends React.Component<Props, State> {
     static defaultProps = {
         headerRightButton: <View/>,
         hasTabs: false,
+        hasBackButton: false,
     };
 
 
@@ -90,7 +92,8 @@ export default class BaseContainer extends React.Component<Props, State> {
                                 </Touchable>
                             }
                             rightButton={this.props.headerRightButton}
-                            hasTabs={this.props.hasTabs}/>
+                            hasTabs={this.props.hasTabs}
+                            hasBackButton={this.props.hasBackButton}/>
                         {this.props.children}
                     </Container>
                 </CustomSideMenu>

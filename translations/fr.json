@@ -4,7 +4,7 @@
     "planning": "Planning",
     "proxiwash": "Proxiwash",
     "proximo": "Proximo",
-    "menuSelf": "Menu Ru",
+    "menuSelf": "Menu du RU",
     "settings": "Paramètres",
     "about": "À Propos",
     "debug": "Debug"
@@ -153,5 +153,30 @@
   "general": {
     "loading": "Chargement...",
     "networkError": "Impossible de contacter les serveurs. Assurez vous d'être connecté à internet."
+  },
+  "date": {
+    "daysOfWeek": {
+      "monday": "Lundi",
+      "tuesday": "Mardi",
+      "wednesday": "Mercredi",
+      "thursday": "Jeudi",
+      "friday": "Vendredi",
+      "saturday": "Samedi",
+      "sunday": "Dimanche"
+    },
+    "monthsOfYear": {
+      "january": "Janvier",
+      "february": "Février",
+      "march": "Mars",
+      "april": "Avril",
+      "may": "Mai",
+      "june": "Juin",
+      "july": "Juillet",
+      "august": "Août",
+      "september": "Septembre",
+      "october": "Octobre",
+      "november": "Novembre",
+      "december": "Décembre"
+    }
   }
 }

@@ -260,6 +260,10 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return false;
     }
 
+    hasBackButton() {
+        return false;
+    }
+
     getRightButton() {
         return <View/>
     }
@@ -277,6 +281,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return (
             <SectionList
                 sections={dataset}
+                stickySectionHeadersEnabled
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.refreshing}
@@ -345,7 +350,9 @@ export default class FetchedDataSectionList extends React.Component<Props, State
             <BaseContainer
                 navigation={nav} headerTitle={this.getHeaderTranslation()}
                 headerRightButton={this.getRightButton()}
-                hasTabs={this.hasTabs()}>
+                hasTabs={this.hasTabs()}
+                hasBackButton={this.hasBackButton()}
+            >
                 {this.hasTabs() ?
                     <Tabs
                         tabContainerStyle={{
