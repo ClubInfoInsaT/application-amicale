@@ -29,8 +29,8 @@ export default class AsyncStorageManager {
             default: '1',
             current: '',
         },
-        showUpdate1: {
-            key: 'showUpdate1',
+        showUpdate2: {
+            key: 'showUpdate2',
             default: '1',
             current: '',
         },

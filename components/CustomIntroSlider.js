@@ -98,7 +98,7 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 key: '1',
                 title: i18n.t('intro.updateSlide.title'),
                 text: i18n.t('intro.updateSlide.text'),
-                icon: 'calendar-range',
+                icon: 'silverware-fork-knife',
                 colors: ['#e01928', '#be1522'],
             },
         ]

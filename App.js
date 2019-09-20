@@ -72,7 +72,7 @@ export default class App extends React.Component<Props, State> {
             showUpdate: false,
         });
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showIntro.key, '0');
-        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showUpdate1.key, '0');
+        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showUpdate2.key, '0');
     }
 
     async loadAssetsAsync() {
@@ -95,7 +95,7 @@ export default class App extends React.Component<Props, State> {
             isLoading: false,
             currentTheme: ThemeManager.getCurrentTheme(),
             showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1',
-            showUpdate: AsyncStorageManager.getInstance().preferences.showUpdate1.current === '1'
+            showUpdate: AsyncStorageManager.getInstance().preferences.showUpdate2.current === '1'
             // showIntro: true
         });
         // Status bar goes dark if set too fast
