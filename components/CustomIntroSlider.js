@@ -89,6 +89,13 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 key: '6',
                 title: i18n.t('intro.slide6.title'),
                 text: i18n.t('intro.slide6.text'),
+                icon: 'silverware-fork-knife',
+                colors: ['#ec1213', '#ff372f'],
+            },
+            {
+                key: '7',
+                title: i18n.t('intro.slide7.title'),
+                text: i18n.t('intro.slide7.text'),
                 icon: 'cogs',
                 colors: ['#37c13e', '#26852b'],
             },
@@ -135,8 +142,16 @@ export default class CustomIntroSlider extends React.Component<Props> {
 
     render() {
         return (
-            <AppIntroSlider renderItem={({item, dimensions}) => CustomIntroSlider.getIntroRenderItem(item, dimensions)}
-                            slides={this.props.isUpdate ? this.updateSlides : this.introSlides} onDone={() => this.props.onDone()} bottomButton showSkipButton/>
+            <AppIntroSlider
+                renderItem={({item, dimensions}) => CustomIntroSlider.getIntroRenderItem(item, dimensions)}
+                slides={this.props.isUpdate ? this.updateSlides : this.introSlides}
+                onDone={() => this.props.onDone()}
+                bottomButton
+                showSkipButton
+                skipLabel={i18n.t('intro.buttons.skip')}
+                doneLabel={i18n.t('intro.buttons.done')}
+                nextLabel={i18n.t('intro.buttons.next')}
+            />
         );
     }
 

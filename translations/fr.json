@@ -31,12 +31,21 @@
       "text": "Consultez votre emploi du temps sur CAMPUS"
     },
     "slide6": {
+      "title": "Menu du RU",
+      "text": "Pour ceux qui ont faim, vérifiez le menu du RU de la semaine!"
+    },
+    "slide7": {
       "title": "Plus à venir...",
       "text": "D'autres fonctionnalités arrivent bientôt, n'hésitez pas à nous donner votre avis pour améliorer l'appli"
     },
     "updateSlide": {
       "title": "Nouveau dans cette mise à jour !",
       "text": "Le menu du RU marche enfin !\nAccessible depuis le menu à gauche"
+    },
+    "buttons": {
+      "next": "Suivant",
+      "skip": "Passer",
+      "done": "Commencer"
     }
   },
   "settingsScreen": {

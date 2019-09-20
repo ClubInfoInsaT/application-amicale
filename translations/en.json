@@ -16,7 +16,7 @@
     },
     "slide2": {
       "title": "Stay up to date",
-      "text": "CAMPUS will soon allow you to be aware of any event occurring on the campus, from pancake sales to Enfoiros concerts!"
+      "text": "CAMPUS allows you to be aware of any event occurring on the campus, from pancake sales to Enfoiros concerts!"
     },
     "slide3": {
       "title": "Never forget your laundry",
@@ -31,12 +31,21 @@
       "text": "Lookup your timetable on CAMPUS"
     },
     "slide6": {
+      "title": "RU Menu",
+      "text": "For the hungry, check this week's menu!"
+    },
+    "slide7": {
       "title": "More to come...",
       "text": "New features are coming soon, do not hesitate to give us feedback to improve the app"
     },
     "updateSlide": {
       "title": "New in this update!",
       "text": "The RU menu is now working!\nAvailable in the left side menu!"
+    },
+    "buttons": {
+      "next": "Next",
+      "skip": "Skip",
+      "done": "Done"
     }
   },
   "settingsScreen": {
