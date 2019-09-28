@@ -3,7 +3,7 @@ import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom
 
 import HomeScreen from '../screens/HomeScreen';
 import PlanningScreen from '../screens/PlanningScreen';
-import ProxiwashScreen from '../screens/ProxiwashScreen';
+import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
 import PlanexScreen from '../screens/PlanexScreen';
 import CustomMaterialIcon from "../components/CustomMaterialIcon";

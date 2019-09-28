@@ -6,7 +6,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import ProximoListScreen from '../screens/Proximo/ProximoListScreen';
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
-import ProxiwashAboutScreen from '../screens/ProxiwashAboutScreen';
+import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import ProximoAboutScreen from '../screens/Proximo/ProximoAboutScreen';
 import SelfMenuScreen from '../screens/SelfMenuScreen';
 import DebugScreen from '../screens/DebugScreen';

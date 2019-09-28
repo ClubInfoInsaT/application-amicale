@@ -3,14 +3,14 @@
 import * as React from 'react';
 import {Alert, Platform, View} from 'react-native';
 import {Body, Card, CardItem, Left, Right, Text} from 'native-base';
-import ThemeManager from '../utils/ThemeManager';
+import ThemeManager from '../../utils/ThemeManager';
 import i18n from "i18n-js";
-import CustomMaterialIcon from "../components/CustomMaterialIcon";
-import FetchedDataSectionList from "../components/FetchedDataSectionList";
-import NotificationsManager from "../utils/NotificationsManager";
+import CustomMaterialIcon from "../../components/CustomMaterialIcon";
+import FetchedDataSectionList from "../../components/FetchedDataSectionList";
+import NotificationsManager from "../../utils/NotificationsManager";
 import PlatformTouchable from "react-native-platform-touchable";
 import Touchable from "react-native-platform-touchable";
-import AsyncStorageManager from "../utils/AsyncStorageManager";
+import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
 
 const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";

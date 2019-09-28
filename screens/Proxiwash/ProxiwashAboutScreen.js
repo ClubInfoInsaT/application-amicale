@@ -3,10 +3,10 @@
 import * as React from 'react';
 import {Image, Linking, View} from 'react-native';
 import {Body, Card, CardItem, Container, Content, H2, H3, Left, Tab, TabHeading, Tabs, Text} from 'native-base';
-import CustomHeader from "../components/CustomHeader";
+import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
-import CustomMaterialIcon from "../components/CustomMaterialIcon";
-import ThemeManager from "../utils/ThemeManager";
+import CustomMaterialIcon from "../../components/CustomMaterialIcon";
+import ThemeManager from "../../utils/ThemeManager";
 
 type Props = {
     navigation: Object,
@@ -60,7 +60,7 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                                 alignItems: 'center'
                             }}>
                                 <Image
-                                    source={require('../assets/proxiwash-logo.png')}
+                                    source={require('../../assets/proxiwash-logo.png')}
                                     style={{flex: 1, resizeMode: "contain"}}
                                     resizeMode="contain"/>
                             </View>
