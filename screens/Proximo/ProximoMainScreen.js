@@ -63,7 +63,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                     data: []
                 });
                 for (let k = 0; k < articles.length; k++) {
-                    if (articles[k]['type'].includes(types[i].id)) {
+                    if (articles[k]['type'].includes(types[i].id) && parseInt(articles[k]['quantity']) > 0) {
                         finalData[i].data.push(articles[k]);
                     }
                 }
