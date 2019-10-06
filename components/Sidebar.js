@@ -71,7 +71,7 @@ export default class SideBar extends React.Component<Props, State> {
     }
 
     /**
-     * Navigate to the selected route, close the drawer, and mark the correct item as selected
+     * Navigate to the selected route
      * @param route {string} The route name to navigate to
      */
     navigateToScreen(route: string) {

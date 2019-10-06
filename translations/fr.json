@@ -69,7 +69,23 @@
   },
   "homeScreen": {
     "listUpdated": "List mise à jour!",
-    "listUpdateFail": "Erreur lors de la mise à jour de la liste"
+    "listUpdateFail": "Erreur lors de la mise à jour de la liste",
+    "newsFeed": "Nouvelles du campus",
+    "dashboard": {
+      "todayEventsTitle": "Événements aujourd'hui",
+      "todayEventsSubtitleNA": "Pas d'événements",
+      "todayEventsSubtitle": " événements aujourd'hui",
+      "proximoTitle": "Proximo",
+      "proximoSubtitleNA": "pas d'article en vente",
+      "proximoSubtitle": " articles disponibles",
+      "proxiwashTitle": "Machines disponibles",
+      "proxiwashSubtitleNA": "Pas de machine disponible",
+      "proxiwashSubtitle1": " sèches linges et ",
+      "proxiwashSubtitle2": " laves linges",
+      "menuTitle": "Menu d'aujourd'hui",
+      "menuSubtitleNA": "Pas de menu disponible",
+      "menuSubtitle": "Cliquez ici pour voir le menu"
+    }
   },
   "planningScreen": {
     "wipTitle": "WORK IN PROGRESS",
