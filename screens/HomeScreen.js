@@ -65,7 +65,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                 id: SECTIONS_ID[0]
             },
             {
-                title: 'News Feed',
+                title: i18n.t('homeScreen.newsFeed'),
                 data: newsData,
                 extraData: super.state,
                 keyExtractor: this.getKeyExtractor,
@@ -120,45 +120,95 @@ export default class HomeScreen extends FetchedDataSectionList {
     getDashboardItemData(item: Object) {
         let icon = '';
         let title = '';
-        let subtitle = '';
+        let subtitle;
         let clickAction;
+        let isAvailable = false;
+        let color = ThemeManager.getCurrentThemeVariables().disabledTextColor;
         switch (item['id']) {
             case 'today_events':
                 icon = 'calendar-range';
-                title = 'Today\s events';
-                if (item['data'].length === 0)
-                    subtitle = 'Pas d\'event ajd';
-                else
-                    subtitle = item['data'].length + ' events ajd';
+                color = ThemeManager.getCurrentThemeVariables().planningColor;
+                title = i18n.t('homeScreen.dashboard.todayEventsTitle');
+                isAvailable = item['data'].length > 0;
+                if (isAvailable) {
+                    subtitle =
+                        <Text>
+                            <Text style={{fontWeight: "bold"}}>{item['data'].length}</Text>
+                            <Text>{i18n.t('homeScreen.dashboard.todayEventsSubtitle')}</Text>
+                        </Text>;
+                } else
+                    subtitle = i18n.t('homeScreen.dashboard.todayEventsSubtitleNA');
                 clickAction = () => this.props.navigation.navigate('Planning');
                 break;
             case 'proximo_articles':
                 icon = 'shopping';
-                title = 'Proximo';
-                subtitle = item['data'] + ' articles disponibles';
+                color = ThemeManager.getCurrentThemeVariables().proximoColor;
+                title = i18n.t('homeScreen.dashboard.proximoTitle');
+                isAvailable = parseInt(item['data']) > 0;
+                if (isAvailable) {
+                    subtitle =
+                        <Text>
+                            <Text style={{fontWeight: "bold"}}>{item['data']}</Text>
+                            <Text>{i18n.t('homeScreen.dashboard.proximoSubtitle')}</Text>
+                        </Text>;
+                } else
+                    subtitle = i18n.t('homeScreen.dashboard.proximoSubtitleNA');
                 clickAction = () => this.props.navigation.navigate('Proximo');
                 break;
             case 'available_machines':
                 icon = 'washing-machine';
-                title = 'Machines disponibles';
-                subtitle = item['data']['dryers'] + ' dryers and ' + item['data']['washers'] + ' washers.';
+                color = ThemeManager.getCurrentThemeVariables().proxiwashColor;
+                title = i18n.t('homeScreen.dashboard.proxiwashTitle');
+                isAvailable = parseInt(item['data']['dryers']) > 0 || parseInt(item['data']['washers']) > 0;
+                if (isAvailable) {
+                    subtitle =
+                        <Text>
+                            <Text style={{
+                                fontWeight: parseInt(item['data']['dryers']) > 0 ?
+                                    'bold' :
+                                    'normal',
+                                color: parseInt(item['data']['dryers']) > 0 ?
+                                    ThemeManager.getCurrentThemeVariables().textColor :
+                                    ThemeManager.getCurrentThemeVariables().listNoteColor
+                            }}>
+                                {item['data']['dryers']}
+                            </Text>
+                            <Text>{i18n.t('homeScreen.dashboard.proxiwashSubtitle1')}</Text>
+                            <Text style={{
+                                fontWeight: parseInt(item['data']['washers']) > 0 ?
+                                    'bold' :
+                                    'normal',
+                                color: parseInt(item['data']['washers']) > 0 ?
+                                    ThemeManager.getCurrentThemeVariables().textColor :
+                                    ThemeManager.getCurrentThemeVariables().listNoteColor
+                            }}>
+                                {item['data']['washers']}
+                            </Text>
+                            <Text>{i18n.t('homeScreen.dashboard.proxiwashSubtitle2')}</Text>
+                        </Text>;
+                } else
+                    subtitle = i18n.t('homeScreen.dashboard.proxiwashSubtitleNA');
                 clickAction = () => this.props.navigation.navigate('Proxiwash');
                 break;
             case 'today_menu':
                 icon = 'silverware-fork-knife';
-                title = 'Menu du jour';
-                if (item['data'].length === 0)
-                    subtitle = 'non disponible';
-                else
-                    subtitle = 'Click here to show the menu';
+                color = ThemeManager.getCurrentThemeVariables().menuColor;
+                title = i18n.t('homeScreen.dashboard.menuTitle');
+                isAvailable = item['data'].length > 0;
+                if (isAvailable) {
+                    subtitle = i18n.t('homeScreen.dashboard.menuSubtitle');
+                } else
+                    subtitle = i18n.t('homeScreen.dashboard.menuSubtitleNA');
                 clickAction = () => this.props.navigation.navigate('SelfMenuScreen');
                 break;
         }
         return {
             icon: icon,
+            color: color,
             title: title,
             subtitle: subtitle,
-            clickAction: clickAction
+            clickAction: clickAction,
+            isAvailable: isAvailable
         }
     }
 
@@ -170,20 +220,46 @@ export default class HomeScreen extends FetchedDataSectionList {
                 <Card style={{
                     flex: 0,
                     marginLeft: 10,
-                    marginRight: 10
+                    marginRight: 10,
+                    borderRadius: 50,
+                    backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg
                 }}>
                     <PlatformTouchable
                         onPress={itemData['clickAction']}
+                        style={{
+                            zIndex: 100,
+                            borderRadius: 50
+                        }}
                     >
-                        <CardItem>
+                        <CardItem style={{
+                            borderRadius: 50,
+                            backgroundColor: 'transparent'
+                        }}>
                             <Left>
                                 <CustomMaterialIcon
                                     icon={itemData['icon']}
+                                    color={
+                                        itemData['isAvailable'] ?
+                                            itemData['color'] :
+                                            ThemeManager.getCurrentThemeVariables().textDisabledColor
+                                    }
                                     fontSize={40}
                                     width={40}/>
                                 <Body>
-                                    <H3>{itemData['title']}</H3>
-                                    <Text>{itemData['subtitle']}</Text>
+                                    <H3 style={{
+                                        color: itemData['isAvailable'] ?
+                                            ThemeManager.getCurrentThemeVariables().textColor :
+                                            ThemeManager.getCurrentThemeVariables().listNoteColor
+                                    }}>
+                                        {itemData['title']}
+                                    </H3>
+                                    <Text style={{
+                                        color: itemData['isAvailable'] ?
+                                            ThemeManager.getCurrentThemeVariables().listNoteColor :
+                                            ThemeManager.getCurrentThemeVariables().textDisabledColor
+                                    }}>
+                                        {itemData['subtitle']}
+                                    </Text>
                                 </Body>
                             </Left>
                         </CardItem>

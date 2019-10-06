@@ -244,7 +244,7 @@ export default {
 
     // Text
     textColor: "#ebebeb",
-    textDisabledColor: "#3b3f42",
+    textDisabledColor: "#5b5b5b",
     inverseTextColor: "#000",
     noteFontSize: 14,
     get defaultTextColor() {
@@ -274,6 +274,11 @@ export default {
     proxiwashBrokenColor: "#000000",
     proxiwashErrorColor: "rgba(213,8,0,0.57)",
 
+    // Screens
+    planningColor: '#d99e09',
+    proximoColor: '#ec5904',
+    proxiwashColor: '#1fa5ee',
+    menuColor: '#b81213',
 
     // Other
     borderRadiusBase: platform === "ios" ? 5 : 2,

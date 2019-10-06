@@ -53,7 +53,7 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
     }
 
     getKeyExtractor(item: Object) {
-        return item !== undefined ? item.name : undefined;
+        return item !== undefined ? item['date'] + '_' + item['name'] : undefined;
     }
 
     hasBackButton() {
@@ -79,12 +79,16 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         }
         // fetched data is an array here
         for (let i = 0; i < fetchedData.length; i++) {
+            // Add the date to the item to allow creation of unique list id
+            for (let item of fetchedData[i].meal[0].foodcategory) {
+                item['date'] = fetchedData[i]['date'];
+            }
             result.push(
                 {
                     title: this.getFormattedDate(fetchedData[i].date),
                     data: fetchedData[i].meal[0].foodcategory,
                     extraData: super.state,
-                    keyExtractor: this.getKeyExtractor
+                    keyExtractor: this.getKeyExtractor,
                 }
             );
         }
