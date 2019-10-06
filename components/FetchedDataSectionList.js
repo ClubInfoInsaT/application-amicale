@@ -168,7 +168,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      * @param title
      * @return {*}
      */
-    getRenderSectionHeader(title: String) {
+    getRenderSectionHeader(title: string) {
         return <View/>;
     }
 
@@ -268,6 +268,10 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return <View/>
     }
 
+    hasStickyHeader() {
+        return false;
+    }
+
     /**
      * Get the section list render using the generated dataset
      *
@@ -281,7 +285,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return (
             <SectionList
                 sections={dataset}
-                stickySectionHeadersEnabled
+                stickySectionHeadersEnabled={this.hasStickyHeader()}
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.refreshing}

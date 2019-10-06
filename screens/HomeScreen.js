@@ -2,17 +2,22 @@
 
 import * as React from 'react';
 import {Image, Linking, TouchableOpacity, View} from 'react-native';
-import {Body, Button, Card, CardItem, Left, Text, Thumbnail} from 'native-base';
+import {Body, Button, Card, CardItem, Left, Right, Text, Thumbnail, H1, H3} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
 import Autolink from 'react-native-autolink';
 import ThemeManager from "../utils/ThemeManager";
-import AsyncStorageManager from "../utils/AsyncStorageManager";
+import PlatformTouchable from "react-native-platform-touchable";
 
 const ICON_AMICALE = require('../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
-const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/facebook/facebook_data.json";
+const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/dashboard/dashboard_data.json";
+
+const SECTIONS_ID = [
+    'dashboard',
+    'news_feed'
+];
 
 
 /**
@@ -45,18 +50,43 @@ export default class HomeScreen extends FetchedDataSectionList {
     }
 
     createDataset(fetchedData: Object) {
-        let data = [];
-        if (fetchedData.data !== undefined)
-            data = fetchedData.data;
+        let newsData = [];
+        let dashboardData = [];
+        if (fetchedData['news_feed'] !== undefined)
+            newsData = fetchedData['news_feed']['data'];
+        if (fetchedData['dashboard'] !== undefined)
+            dashboardData = this.generateDashboardDataset(fetchedData['dashboard']);
         return [
             {
                 title: '',
-                data: data,
+                data: dashboardData,
                 extraData: super.state,
-                keyExtractor: this.getKeyExtractor
+                keyExtractor: this.getKeyExtractor,
+                id: SECTIONS_ID[0]
+            },
+            {
+                title: 'News Feed',
+                data: newsData,
+                extraData: super.state,
+                keyExtractor: this.getKeyExtractor,
+                id: SECTIONS_ID[1]
             }
         ];
     }
+
+    generateDashboardDataset(dashboardData: Object) {
+        let dataset = [];
+        for (let [key, value] of Object.entries(dashboardData)) {
+            dataset.push(
+                {
+                    id: key,
+                    data: value
+                }
+            )
+        }
+        return dataset
+    }
+
 
     /**
      * Converts a dateString using Unix Timestamp to a formatted date
@@ -68,56 +98,149 @@ export default class HomeScreen extends FetchedDataSectionList {
         return date.toLocaleString();
     }
 
+    getRenderSectionHeader(title: string) {
+        if (title === '') {
+            return <View/>;
+        } else {
+            return (
+                <View style={{
+                    backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor
+                }}>
+                    <H1 style={{
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        marginTop: 10,
+                        marginBottom: 10
+                    }}>{title}</H1>
+                </View>
+            );
+        }
+    }
+
+    getDashboardItemData(item: Object) {
+        let icon = '';
+        let title = '';
+        let subtitle = '';
+        let clickAction;
+        switch (item['id']) {
+            case 'today_events':
+                icon = 'calendar-range';
+                title = 'Today\s events';
+                if (item['data'].length === 0)
+                    subtitle = 'Pas d\'event ajd';
+                else
+                    subtitle = item['data'].length + ' events ajd';
+                clickAction = () => this.props.navigation.navigate('Planning');
+                break;
+            case 'proximo_articles':
+                icon = 'shopping';
+                title = 'Proximo';
+                subtitle = item['data'] + ' articles disponibles';
+                clickAction = () => this.props.navigation.navigate('Proximo');
+                break;
+            case 'available_machines':
+                icon = 'washing-machine';
+                title = 'Machines disponibles';
+                subtitle = item['data']['dryers'] + ' dryers and ' + item['data']['washers'] + ' washers.';
+                clickAction = () => this.props.navigation.navigate('Proxiwash');
+                break;
+            case 'today_menu':
+                icon = 'silverware-fork-knife';
+                title = 'Menu du jour';
+                if (item['data'].length === 0)
+                    subtitle = 'non disponible';
+                else
+                    subtitle = 'Click here to show the menu';
+                clickAction = () => this.props.navigation.navigate('SelfMenuScreen');
+                break;
+        }
+        return {
+            icon: icon,
+            title: title,
+            subtitle: subtitle,
+            clickAction: clickAction
+        }
+    }
+
+
     getRenderItem(item: Object, section: Object, data: Object) {
-        return (
-            <Card style={{
-                flex: 0,
-                marginLeft: 10,
-                marginRight: 10
-            }}>
-                <CardItem>
-                    <Left>
-                        <Thumbnail source={ICON_AMICALE} square/>
+        if (section['id'] === SECTIONS_ID[0]) {
+            let itemData = this.getDashboardItemData(item);
+            return (
+                <Card style={{
+                    flex: 0,
+                    marginLeft: 10,
+                    marginRight: 10
+                }}>
+                    <PlatformTouchable
+                        onPress={itemData['clickAction']}
+                    >
+                        <CardItem>
+                            <Left>
+                                <CustomMaterialIcon
+                                    icon={itemData['icon']}
+                                    fontSize={40}
+                                    width={40}/>
+                                <Body>
+                                    <H3>{itemData['title']}</H3>
+                                    <Text>{itemData['subtitle']}</Text>
+                                </Body>
+                            </Left>
+                        </CardItem>
+                    </PlatformTouchable>
+                </Card>
+            );
+        } else {
+            return (
+                <Card style={{
+                    flex: 0,
+                    marginLeft: 10,
+                    marginRight: 10
+                }}>
+                    <CardItem>
+                        <Left>
+                            <Thumbnail source={ICON_AMICALE} square/>
+                            <Body>
+                                <Text>{NAME_AMICALE}</Text>
+                                <Text note>{HomeScreen.getFormattedDate(item.created_time)}</Text>
+                            </Body>
+                        </Left>
+                    </CardItem>
+                    <CardItem>
                         <Body>
-                            <Text>{NAME_AMICALE}</Text>
-                            <Text note>{HomeScreen.getFormattedDate(item.created_time)}</Text>
+                            {item.full_picture !== '' && item.full_picture !== undefined ?
+                                <TouchableOpacity onPress={() => openWebLink(item.full_picture)}
+                                                  style={{width: '100%', height: 250}}>
+                                    <Image source={{uri: item.full_picture}}
+                                           style={{flex: 1, resizeMode: "contain"}}
+                                           resizeMode="contain"
+                                    />
+                                </TouchableOpacity>
+                                : <View/>}
+                            {item.message !== undefined ?
+                                <Autolink
+                                    text={item.message}
+                                    hashtag="facebook"
+                                    style={{color: ThemeManager.getCurrentThemeVariables().textColor}}
+                                /> : <View/>
+                            }
                         </Body>
-                    </Left>
-                </CardItem>
-                <CardItem>
-                    <Body>
-                        {item.full_picture !== '' && item.full_picture !== undefined ?
-                            <TouchableOpacity onPress={() => openWebLink(item.full_picture)}
-                                              style={{width: '100%', height: 250}}>
-                                <Image source={{uri: item.full_picture}}
-                                       style={{flex: 1, resizeMode: "contain"}}
-                                       resizeMode="contain"
-                                />
-                            </TouchableOpacity>
-                            : <View/>}
-                        {item.message !== undefined ?
-                            <Autolink
-                                text={item.message}
-                                hashtag="facebook"
-                                style={{color: ThemeManager.getCurrentThemeVariables().textColor}}
-                            /> : <View/>
-                        }
-                    </Body>
-                </CardItem>
-                <CardItem>
-                    <Left>
-                        <Button transparent
-                                onPress={() => openWebLink(item.permalink_url)}>
-                            <CustomMaterialIcon
-                                icon="facebook"
-                                color="#57aeff"
-                                width={20}/>
-                            <Text>En savoir plus</Text>
-                        </Button>
-                    </Left>
-                </CardItem>
-            </Card>
-        );
+                    </CardItem>
+                    <CardItem>
+                        <Left>
+                            <Button transparent
+                                    onPress={() => openWebLink(item.permalink_url)}>
+                                <CustomMaterialIcon
+                                    icon="facebook"
+                                    color="#57aeff"
+                                    width={20}/>
+                                <Text>En savoir plus</Text>
+                            </Button>
+                        </Left>
+                    </CardItem>
+                </Card>
+            );
+        }
     }
 
 }

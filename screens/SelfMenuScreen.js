@@ -60,6 +60,10 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         return true;
     }
 
+    hasStickyHeader(): boolean {
+        return true;
+    }
+
     createDataset(fetchedData: Object) {
         let result = [];
         // Prevent crash by giving a default value when fetchedData is empty (not yet available)
@@ -94,7 +98,7 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         return this.daysOfWeek[date.getDay() - 1] + " " + date.getDate() + " " + this.monthsOfYear[date.getMonth()] + " " + date.getFullYear();
     }
 
-    getRenderSectionHeader(title: String) {
+    getRenderSectionHeader(title: string) {
         return (
             <Card style={{
                 marginLeft: 10,
