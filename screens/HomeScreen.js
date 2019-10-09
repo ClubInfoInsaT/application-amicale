@@ -41,7 +41,7 @@ function openWebLink(link) {
 export default class HomeScreen extends FetchedDataSectionList {
 
     constructor() {
-        super('DATA_URL', REFRESH_TIME);
+        super(DATA_URL, REFRESH_TIME);
     }
 
     getHeaderTranslation() {
@@ -57,7 +57,7 @@ export default class HomeScreen extends FetchedDataSectionList {
     }
 
     createDataset(fetchedData: Object) {
-        fetchedData = DATA;
+        // fetchedData = DATA;
         let newsData = [];
         let dashboardData = [];
         if (fetchedData['news_feed'] !== undefined)
@@ -255,7 +255,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                 if (startDate > now)
                     validEvents.push(event);
                 else if (endDate !== undefined && endDate !== null) {
-                    if (endDate > now)
+                    if (endDate > now || endDate < startDate) // Display event if it ends the following day
                         validEvents.push(event);
                 }
             }
