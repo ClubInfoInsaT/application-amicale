@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Image, Linking, TouchableOpacity, View} from 'react-native';
-import {Body, Button, Card, CardItem, Left, Right, Text, Thumbnail, H1, H3, Content} from 'native-base';
+import {Body, Button, Card, CardItem, Left, Text, Thumbnail, H1, H3} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
@@ -11,6 +11,8 @@ import ThemeManager from "../utils/ThemeManager";
 import PlatformTouchable from "react-native-platform-touchable";
 import HTML from 'react-native-render-html';
 import {LinearGradient} from 'expo-linear-gradient';
+
+import DATA from '../data_test'
 
 
 const ICON_AMICALE = require('../assets/amicale.png');
@@ -21,6 +23,8 @@ const SECTIONS_ID = [
     'dashboard',
     'news_feed'
 ];
+
+const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 
 
 /**
@@ -37,7 +41,7 @@ function openWebLink(link) {
 export default class HomeScreen extends FetchedDataSectionList {
 
     constructor() {
-        super(DATA_URL, 0);
+        super('DATA_URL', REFRESH_TIME);
     }
 
     getHeaderTranslation() {
@@ -53,6 +57,7 @@ export default class HomeScreen extends FetchedDataSectionList {
     }
 
     createDataset(fetchedData: Object) {
+        fetchedData = DATA;
         let newsData = [];
         let dashboardData = [];
         if (fetchedData['news_feed'] !== undefined)
@@ -81,7 +86,7 @@ export default class HomeScreen extends FetchedDataSectionList {
         let dataset = [
             {
                 id: 'top',
-                content: {}
+                content: undefined
             },
             {
                 id: 'middle',
@@ -89,7 +94,7 @@ export default class HomeScreen extends FetchedDataSectionList {
             },
             {
                 id: 'bottom',
-                content: {}
+                content: undefined
             },
 
         ];
@@ -152,46 +157,150 @@ export default class HomeScreen extends FetchedDataSectionList {
             return this.getDashboardBottomItem(content);
     }
 
-    getDisplayEvent(events: Array<Object>): Object {
-        let displayEvent = undefined;
+    /**
+     * Convert the date string given by in the event list json to a date object
+     * @param dateString
+     * @return {Date}
+     */
+    stringToDate(dateString: ?string): ?Date {
+        let date = new Date();
+        if (dateString === undefined || dateString === null)
+            date = undefined;
+        else if (dateString.split(' ').length > 1) {
+            let timeStr = dateString.split(' ')[1];
+            date.setHours(parseInt(timeStr.split(':')[0]), parseInt(timeStr.split(':')[1]), 0);
+        } else
+            date = undefined;
+        return date;
+    }
 
-        if (events.length === 1) {
-            displayEvent = this.getEventDisplayData(events[0]);
-        } else {
-            for (let event of events) {
-                if (event['date_begin'] === undefined || event['date_end'] === undefined)
-                    continue;
+    /**
+     * Get the time limit depending on the current day:
+     * 17:30 for every day of the week except for thursday 11:30
+     * 00:00 on weekends
+     */
+    getTodayEventTimeLimit() {
+        let now = new Date();
+        if (now.getDay() === 4) // Thursday
+            now.setHours(11, 30, 0);
+        else if (now.getDay() === 6 || now.getDay() === 0) // Weekend
+            now.setHours(0, 0, 0);
+        else
+            now.setHours(17, 30, 0);
+        return now;
+    }
 
-                let date_begin = event['date_begin'].split(' ')[1];
-                let date_end = event['date_end'].split(' ')[1];
-                let startDate = new Date();
-                let endDate = new Date();
-                let limit = new Date();
-                let now = new Date();
-                startDate.setHours(parseInt(date_begin.split(':')[0]), date_begin.split(':')[1], 0);
-                endDate.setHours(parseInt(date_end.split(':')[0]), date_end.split(':')[1], 0);
-                limit.setHours(18, 0, 0); // Only display events after 18:00 as these are the most important
-                if (limit.getTime() < startDate.getTime() && now.getTime() < endDate.getTime()) {
-                    displayEvent = this.getEventDisplayData(event);
-                    break;
+    /**
+     * Get the duration (in milliseconds) of an event
+     * @param event {Object}
+     * @return {number} The number of milliseconds
+     */
+    getEventDuration(event: Object): number {
+        let start = this.stringToDate(event['date_begin']);
+        let end = this.stringToDate(event['date_end']);
+        let duration = 0;
+        if (start !== undefined && start !== null && end !== undefined && end !== null)
+            duration = end - start;
+        return duration;
+    }
+
+    /**
+     * Get events starting after the limit
+     *
+     * @param events
+     * @param limit
+     * @return {Array<Object>}
+     */
+    getEventsAfterLimit(events: Object, limit: Date): Array<Object> {
+        let validEvents = [];
+        for (let event of events) {
+            let startDate = this.stringToDate(event['date_begin']);
+            if (startDate !== undefined && startDate !== null && startDate >= limit) {
+                validEvents.push(event);
+            }
+        }
+        return validEvents;
+    }
+
+    /**
+     * Get the event with the longest duration in the given array.
+     * If all events have the same duration, return the first in the array.
+     * @param events
+     */
+    getLongestEvent(events: Array<Object>): Object {
+        let longestEvent = events[0];
+        let longestTime = 0;
+        for (let event of events) {
+            let time = this.getEventDuration(event);
+            if (time > longestTime) {
+                longestTime = time;
+                longestEvent = event;
+            }
+        }
+        return longestEvent;
+    }
+
+    /**
+     * Get events that have not yet ended/started
+     *
+     * @param events
+     */
+    getFutureEvents(events: Array<Object>): Array<Object> {
+        let validEvents = [];
+        let now = new Date();
+        for (let event of events) {
+            let startDate = this.stringToDate(event['date_begin']);
+            let endDate = this.stringToDate(event['date_end']);
+            if (startDate !== undefined && startDate !== null) {
+                if (startDate > now)
+                    validEvents.push(event);
+                else if (endDate !== undefined && endDate !== null) {
+                    if (endDate > now)
+                        validEvents.push(event);
                 }
             }
+        }
+        return validEvents;
+    }
+
+    /**
+     *
+     *
+     * @param events
+     * @return {Object}
+     */
+    getDisplayEvent(events: Array<Object>): Object {
+        let displayEvent = undefined;
+        if (events.length > 1) {
+            let eventsAfterLimit = this.getEventsAfterLimit(events, this.getTodayEventTimeLimit());
+            if (eventsAfterLimit.length > 0) {
+                if (eventsAfterLimit.length === 1)
+                    displayEvent = eventsAfterLimit[0];
+                else
+                    displayEvent = this.getLongestEvent(events);
+            } else {
+                displayEvent = this.getLongestEvent(events);
+            }
+        } else if (events.length === 1) {
+            displayEvent = events[0];
         }
         return displayEvent;
     }
 
-    getEventDisplayData(event: Object): Object {
-        let date = '';
-        if (event['date_begin'].split(' ').length > 2) {
-            date = event['date_begin'].split(' ')[1];
-            date = date.split(':')[0] + ':' + date.split(':')[1];
-        }
-        return {
-            logo: event['logo'],
-            title: event['title'],
-            date: date,
-            description: event['description'],
-        }
+    padStr(i: number) {
+        return (i < 10) ? "0" + i : "" + i;
+    }
+
+    getFormattedEventTime(event: Object): string {
+        let formattedStr = '';
+        let startDate = this.stringToDate(event['date_begin']);
+        let endDate = this.stringToDate(event['date_end']);
+        if (startDate !== undefined && startDate !== null && endDate !== undefined && endDate !== null)
+            formattedStr = this.padStr(startDate.getHours()) + ':' + this.padStr(startDate.getMinutes()) +
+                ' - ' + this.padStr(endDate.getHours()) + ':' + this.padStr(endDate.getMinutes());
+        else if (startDate !== undefined && startDate !== null)
+            formattedStr = this.padStr(startDate.getHours()) + ':' + this.padStr(startDate.getMinutes());
+        return formattedStr
     }
 
 
@@ -201,36 +310,43 @@ export default class HomeScreen extends FetchedDataSectionList {
         let title = i18n.t('homeScreen.dashboard.todayEventsTitle');
         let isAvailable = content.length > 0;
         let subtitle = '';
+        let futureEvents = this.getFutureEvents(content);
         if (isAvailable) {
             subtitle =
                 <Text>
-                    <Text style={{fontWeight: "bold"}}>{content.length}</Text>
-                    <Text>{i18n.t('homeScreen.dashboard.todayEventsSubtitle')}</Text>
+                    <Text style={{fontWeight: "bold"}}>{futureEvents.length}</Text>
+                    <Text>
+                        {
+                            futureEvents.length > 1 ?
+                                i18n.t('homeScreen.dashboard.todayEventsSubtitlePlural') :
+                                i18n.t('homeScreen.dashboard.todayEventsSubtitle')
+                        }
+                    </Text>
                 </Text>;
         } else
             subtitle = i18n.t('homeScreen.dashboard.todayEventsSubtitleNA');
         let clickAction = () => this.props.navigation.navigate('Planning');
 
-        let displayEvent = this.getDisplayEvent(content);
+        let displayEvent = this.getDisplayEvent(futureEvents);
 
         return (
             <Card style={{
                 flex: 0,
                 marginLeft: 10,
                 marginRight: 10,
-                borderRadius: 30,
-                backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg
+                marginTop: 10,
+                borderRadius: 20,
+                backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg,
+                overflow: 'hidden',
             }}>
                 <PlatformTouchable
                     onPress={clickAction}
                     style={{
                         zIndex: 100,
-                        borderRadius: 30
                     }}
                 >
                     <View>
                         <CardItem style={{
-                            borderRadius: 30,
                             backgroundColor: 'transparent',
                         }}>
                             <Left>
@@ -265,7 +381,8 @@ export default class HomeScreen extends FetchedDataSectionList {
                             <View>
                                 <CardItem style={{
                                     paddingTop: 0,
-                                    paddingBottom: 0
+                                    paddingBottom: 0,
+                                    backgroundColor: 'transparent',
                                 }}>
                                     <Left>
                                         {displayEvent['logo'] !== '' && displayEvent['logo'] !== null ?
@@ -273,7 +390,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                                             <View/>}
                                         <Body>
                                             <Text>{displayEvent['title']}</Text>
-                                            <Text note>{displayEvent['date']}</Text>
+                                            <Text note>{this.getFormattedEventTime(displayEvent)}</Text>
                                         </Body>
                                     </Left>
                                 </CardItem>
@@ -282,7 +399,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                                     backgroundColor: 'transparent',
                                 }}>
                                     <Body style={{
-                                        height: 70,
+                                        height: displayEvent['description'].length > 50 ? 70 : 20,
                                         overflow: 'hidden',
                                     }}>
                                         <HTML html={"<div>" + displayEvent['description'] + "</div>"}
@@ -301,7 +418,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                                                 position: 'absolute',
                                                 width: '100%',
                                                 height: 60,
-                                                bottom: 0
+                                                bottom: 0,
                                             }}>
                                             <View style={{
                                                 marginLeft: 'auto',
@@ -328,25 +445,25 @@ export default class HomeScreen extends FetchedDataSectionList {
         );
     }
 
-    getSquareDashboardItem(isAvailable: boolean, icon: string, color: string, title: string, subtitle: string, clickAction: Function, isLeftElement: boolean) {
+    getSquareDashboardItem(isAvailable: boolean, icon: string, color: string, title: string, subtitle: React.Node, clickAction: Function, isLeftElement: boolean) {
         return (
             <Card style={{
                 flex: 0,
                 width: '48%',
                 marginLeft: 0,
                 marginRight: isLeftElement ? '4%' : 0,
-                borderRadius: 30,
-                backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg
+                borderRadius: 20,
+                backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg,
+                overflow: 'hidden',
             }}>
                 <PlatformTouchable
                     onPress={clickAction}
                     style={{
                         zIndex: 100,
-                        borderRadius: 30
+                        minHeight: 150,
                     }}
                 >
                     <CardItem style={{
-                        borderRadius: 30,
                         backgroundColor: 'transparent'
                     }}>
                         <Body>
@@ -398,7 +515,13 @@ export default class HomeScreen extends FetchedDataSectionList {
             proximoSubtitle =
                 <Text>
                     <Text style={{fontWeight: "bold"}}>{proximoData}</Text>
-                    <Text>{i18n.t('homeScreen.dashboard.proximoSubtitle')}</Text>
+                    <Text>
+                        {
+                            proximoData > 1 ?
+                            i18n.t('homeScreen.dashboard.proximoSubtitlePlural') :
+                            i18n.t('homeScreen.dashboard.proximoSubtitle')
+                        }
+                    </Text>
                 </Text>;
         } else
             proximoSubtitle = i18n.t('homeScreen.dashboard.proximoSubtitleNA');
@@ -434,6 +557,14 @@ export default class HomeScreen extends FetchedDataSectionList {
         let title = i18n.t('homeScreen.dashboard.proxiwashTitle');
         let isAvailable = parseInt(content['dryers']) > 0 || parseInt(content['washers']) > 0;
         let subtitle;
+        let dryerColor = parseInt(content['dryers']) > 0 ?
+            ThemeManager.getCurrentThemeVariables().textColor :
+            ThemeManager.getCurrentThemeVariables().listNoteColor;
+        let washerColor = parseInt(content['washers']) > 0 ?
+            ThemeManager.getCurrentThemeVariables().textColor :
+            ThemeManager.getCurrentThemeVariables().listNoteColor;
+        let availableDryers = content['dryers'];
+        let availableWashers = content['washers'];
         if (isAvailable) {
             subtitle =
                 <Text>
@@ -441,24 +572,32 @@ export default class HomeScreen extends FetchedDataSectionList {
                         fontWeight: parseInt(content['dryers']) > 0 ?
                             'bold' :
                             'normal',
-                        color: parseInt(content['dryers']) > 0 ?
-                            ThemeManager.getCurrentThemeVariables().textColor :
-                            ThemeManager.getCurrentThemeVariables().listNoteColor
+                        color: dryerColor
                     }}>
-                        {content['dryers']}
+                        {availableDryers}
                     </Text>
-                    <Text>{i18n.t('homeScreen.dashboard.proxiwashSubtitle1')}</Text>
+                    <Text>
+                        {
+                            availableDryers > 1 ?
+                                i18n.t('homeScreen.dashboard.proxiwashSubtitle1Plural') :
+                                i18n.t('homeScreen.dashboard.proxiwashSubtitle1')
+                        }
+                    </Text>
                     <Text style={{
                         fontWeight: parseInt(content['washers']) > 0 ?
                             'bold' :
                             'normal',
-                        color: parseInt(content['washers']) > 0 ?
-                            ThemeManager.getCurrentThemeVariables().textColor :
-                            ThemeManager.getCurrentThemeVariables().listNoteColor
+                        color: washerColor
                     }}>
-                        {content['washers']}
+                        {availableWashers}
                     </Text>
-                    <Text>{i18n.t('homeScreen.dashboard.proxiwashSubtitle2')}</Text>
+                    <Text>
+                        {
+                            availableWashers > 1 ?
+                                i18n.t('homeScreen.dashboard.proxiwashSubtitle2Plural') :
+                                i18n.t('homeScreen.dashboard.proxiwashSubtitle2')
+                        }
+                    </Text>
                 </Text>;
         } else
             subtitle = i18n.t('homeScreen.dashboard.proxiwashSubtitleNA');
@@ -468,18 +607,17 @@ export default class HomeScreen extends FetchedDataSectionList {
                 flex: 0,
                 marginLeft: 10,
                 marginRight: 10,
-                borderRadius: 50,
-                backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg
+                borderRadius: 20,
+                backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg,
+                overflow: 'hidden',
             }}>
                 <PlatformTouchable
                     onPress={clickAction}
                     style={{
                         zIndex: 100,
-                        borderRadius: 50
                     }}
                 >
                     <CardItem style={{
-                        borderRadius: 50,
                         backgroundColor: 'transparent'
                     }}>
                         <Left>

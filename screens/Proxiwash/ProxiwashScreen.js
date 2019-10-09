@@ -28,6 +28,7 @@ let modalStateStrings = {};
 let stateIcons = {};
 let stateColors = {};
 
+const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 
 /**
  * Class defining the app's proxiwash screen. This screen shows information about washing machines and
@@ -35,13 +36,11 @@ let stateColors = {};
  */
 export default class ProxiwashScreen extends FetchedDataSectionList {
 
-    refreshInterval: IntervalID;
-
     /**
      * Creates machine state parameters using current theme and translations
      */
     constructor() {
-        super(DATA_URL, 1000 * 30); // Refresh every half minute
+        super(DATA_URL, REFRESH_TIME);
         let colors = ThemeManager.getCurrentThemeVariables();
         stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
         stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;
