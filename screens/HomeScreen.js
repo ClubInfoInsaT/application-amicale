@@ -12,8 +12,6 @@ import PlatformTouchable from "react-native-platform-touchable";
 import HTML from 'react-native-render-html';
 import {LinearGradient} from 'expo-linear-gradient';
 
-import DATA from '../data_test'
-
 
 const ICON_AMICALE = require('../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
@@ -24,7 +22,7 @@ const SECTIONS_ID = [
     'news_feed'
 ];
 
-const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
+const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
 
 /**
