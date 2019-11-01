@@ -24,6 +24,7 @@ const SECTIONS_ID = [
 
 const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
+const CARD_BORDER_RADIUS = 10;
 
 /**
  * Opens a link in the device's browser
@@ -333,7 +334,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                 marginLeft: 10,
                 marginRight: 10,
                 marginTop: 10,
-                borderRadius: 20,
+                borderRadius: CARD_BORDER_RADIUS,
                 backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg,
                 overflow: 'hidden',
             }}>
@@ -393,7 +394,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                                     </Left>
                                 </CardItem>
                                 <CardItem style={{
-                                    borderRadius: 30,
+                                    borderRadius: CARD_BORDER_RADIUS,
                                     backgroundColor: 'transparent',
                                 }}>
                                     <Body style={{
@@ -450,7 +451,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                 width: '48%',
                 marginLeft: 0,
                 marginRight: isLeftElement ? '4%' : 0,
-                borderRadius: 20,
+                borderRadius: CARD_BORDER_RADIUS,
                 backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg,
                 overflow: 'hidden',
             }}>
@@ -605,7 +606,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                 flex: 0,
                 marginLeft: 10,
                 marginRight: 10,
-                borderRadius: 20,
+                borderRadius: CARD_BORDER_RADIUS,
                 backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg,
                 overflow: 'hidden',
             }}>
@@ -660,9 +661,12 @@ export default class HomeScreen extends FetchedDataSectionList {
                 <Card style={{
                     flex: 0,
                     marginLeft: 10,
-                    marginRight: 10
+                    marginRight: 10,
+                    borderRadius: CARD_BORDER_RADIUS,
                 }}>
-                    <CardItem>
+                    <CardItem style={{
+                        backgroundColor: 'transparent'
+                    }}>
                         <Left>
                             <Thumbnail source={ICON_AMICALE} square/>
                             <Body>
@@ -671,11 +675,13 @@ export default class HomeScreen extends FetchedDataSectionList {
                             </Body>
                         </Left>
                     </CardItem>
-                    <CardItem>
+                    <CardItem style={{
+                        backgroundColor: 'transparent'
+                    }}>
                         <Body>
                             {item.full_picture !== '' && item.full_picture !== undefined ?
                                 <TouchableOpacity onPress={() => openWebLink(item.full_picture)}
-                                                  style={{width: '100%', height: 250}}>
+                                                  style={{width: '100%', height: 250, marginBottom: 5}}>
                                     <Image source={{uri: item.full_picture}}
                                            style={{flex: 1, resizeMode: "contain"}}
                                            resizeMode="contain"
@@ -691,7 +697,9 @@ export default class HomeScreen extends FetchedDataSectionList {
                             }
                         </Body>
                     </CardItem>
-                    <CardItem>
+                    <CardItem style={{
+                        backgroundColor: 'transparent'
+                    }}>
                         <Left>
                             <Button transparent
                                     onPress={() => openWebLink(item.permalink_url)}>
