@@ -275,7 +275,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                     <FlatList
                         data={this.state.navData}
                         extraData={this.state.navData}
-                        keyExtractor={(item) => item.name}
+                        keyExtractor={(item) => item.name + item.code}
                         style={{minHeight: 300, width: '100%'}}
                         renderItem={({item}) =>
                             <ListItem
