@@ -306,9 +306,9 @@ export default class HomeScreen extends FetchedDataSectionList {
         let icon = 'calendar-range';
         let color = ThemeManager.getCurrentThemeVariables().planningColor;
         let title = i18n.t('homeScreen.dashboard.todayEventsTitle');
-        let isAvailable = content.length > 0;
         let subtitle = '';
         let futureEvents = this.getFutureEvents(content);
+        let isAvailable = futureEvents.length > 0;
         if (isAvailable) {
             subtitle =
                 <Text>
