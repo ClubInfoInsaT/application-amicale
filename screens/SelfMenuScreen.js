@@ -64,6 +64,10 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         return true;
     }
 
+    hasSideMenu() : boolean {
+        return false;
+    }
+
     createDataset(fetchedData: Object) {
         let result = [];
         // Prevent crash by giving a default value when fetchedData is empty (not yet available)

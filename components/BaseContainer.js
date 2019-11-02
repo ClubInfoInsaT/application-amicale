@@ -16,7 +16,8 @@ type Props = {
     headerRightButton: React.Node,
     children: React.Node,
     hasTabs: boolean,
-    hasBackButton: boolean
+    hasBackButton: boolean,
+    hasSideMenu: boolean,
 }
 
 type State = {
@@ -32,6 +33,7 @@ export default class BaseContainer extends React.Component<Props, State> {
         headerRightButton: <View/>,
         hasTabs: false,
         hasBackButton: false,
+        hasSideMenu: true,
     };
 
 
@@ -69,6 +71,29 @@ export default class BaseContainer extends React.Component<Props, State> {
             this.willBlurSubscription.remove();
     }
 
+    getMainContainer() {
+        return (
+            <Container>
+                <CustomHeader
+                    navigation={this.props.navigation} title={this.props.headerTitle}
+                    leftButton={
+                        <Touchable
+                            style={{padding: 6}}
+                            onPress={() => this.toggle()}>
+                            <CustomMaterialIcon
+                                color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                                icon="menu"/>
+                        </Touchable>
+                    }
+                    rightButton={this.props.headerRightButton}
+                    hasTabs={this.props.hasTabs}
+                    hasBackButton={this.props.hasBackButton}/>
+                {this.props.children}
+            </Container>
+        );
+    }
+
+
     render() {
         return (
             <View style={{
@@ -76,27 +101,13 @@ export default class BaseContainer extends React.Component<Props, State> {
                 width: '100%',
                 height: '100%'
             }}>
-                <CustomSideMenu
-                    navigation={this.props.navigation} isOpen={this.state.isOpen}
-                    onChange={(isOpen) => this.updateMenuState(isOpen)}>
-                    <Container>
-                        <CustomHeader
-                            navigation={this.props.navigation} title={this.props.headerTitle}
-                            leftButton={
-                                <Touchable
-                                    style={{padding: 6}}
-                                    onPress={() => this.toggle()}>
-                                    <CustomMaterialIcon
-                                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                                        icon="menu"/>
-                                </Touchable>
-                            }
-                            rightButton={this.props.headerRightButton}
-                            hasTabs={this.props.hasTabs}
-                            hasBackButton={this.props.hasBackButton}/>
-                        {this.props.children}
-                    </Container>
-                </CustomSideMenu>
+                {this.props.hasSideMenu ?
+                    <CustomSideMenu
+                        navigation={this.props.navigation} isOpen={this.state.isOpen}
+                        onChange={(isOpen) => this.updateMenuState(isOpen)}>
+                        {this.getMainContainer()}
+                    </CustomSideMenu> :
+                    this.getMainContainer()}
             </View>
         );
     }

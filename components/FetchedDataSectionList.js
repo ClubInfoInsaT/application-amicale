@@ -272,6 +272,10 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return false;
     }
 
+    hasSideMenu() {
+        return true;
+    }
+
     /**
      * Get the section list render using the generated dataset
      *
@@ -356,6 +360,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                 headerRightButton={this.getRightButton()}
                 hasTabs={this.hasTabs()}
                 hasBackButton={this.hasBackButton()}
+                hasSideMenu={this.hasSideMenu()}
             >
                 {this.hasTabs() ?
                     <Tabs
