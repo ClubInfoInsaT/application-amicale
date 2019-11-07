@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Linking, Platform, View} from 'react-native';
-import {Spinner} from 'native-base';
+import {Spinner, Footer, Right, Left, Body} from 'native-base';
 import WebView from "react-native-webview";
 import Touchable from "react-native-platform-touchable";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
@@ -16,6 +16,7 @@ type Props = {
     headerTitle: string,
     hasHeaderBackButton: boolean,
     hasSideMenu: boolean,
+    hasFooter: boolean,
 }
 
 /**
@@ -27,6 +28,7 @@ export default class WebViewScreen extends React.Component<Props> {
         customInjectedJS: '',
         hasBackButton: false,
         hasSideMenu: true,
+        hasFooter: true,
     };
 
     webview: WebView;
@@ -50,7 +52,6 @@ export default class WebViewScreen extends React.Component<Props> {
     getRefreshButton() {
         return (
             <View style={{flexDirection: 'row'}}>
-                {this.getHeaderButton(() => this.openWebLink(), 'web')}
                 {this.getHeaderButton(() => this.refreshWebview(), 'refresh')}
             </View>
         );
@@ -58,6 +59,14 @@ export default class WebViewScreen extends React.Component<Props> {
 
     refreshWebview() {
         this.webview.reload();
+    }
+
+    goBackWebview() {
+        this.webview.goBack();
+    }
+
+    goForwardWebview() {
+        this.webview.goForward();
     }
 
     render() {
@@ -95,6 +104,29 @@ export default class WebViewScreen extends React.Component<Props> {
                         </View>
                     }
                 />
+                {this.props.hasFooter ?
+                    <Footer>
+                        <Left style={{
+                            paddingLeft: 6,
+                        }}>
+                            {this.getHeaderButton(() => this.openWebLink(), 'open-in-new')}
+                        </Left>
+                        <Body/>
+                        <Right style={{
+                            flexDirection: 'row',
+                            alignItems: 'flex-end',
+                            paddingRight: 6
+                        }}>
+                            <View style={{
+                                flexDirection: 'row',
+                                marginRight: 0,
+                                marginLeft: 'auto'
+                            }}>
+                                {this.getHeaderButton(() => this.goBackWebview(), 'chevron-left')}
+                                {this.getHeaderButton(() => this.goForwardWebview(), 'chevron-right')}
+                            </View>
+                        </Right>
+                    </Footer> : <View/>}
             </BaseContainer>
         );
     }

@@ -106,7 +106,7 @@ export default {
     checkboxTickColor: "#fff",
 
     // Color
-    brandPrimary: platform === "ios" ? "#be1522" : "#be1522",
+    brandPrimary: "#be1522",
     brandInfo: "#62B1F6",
     brandSuccess: "#5cb85c",
     brandDanger: "#d9534f",
@@ -137,7 +137,7 @@ export default {
 
     // Footer
     footerHeight: 55,
-    footerDefaultBg: platform === "ios" ? "#F8F8F8" : "#3F51B5",
+    footerDefaultBg: platform === "ios" ? "#F8F8F8" : "#be1522",
     footerPaddingBottom: 0,
 
     // FooterTab

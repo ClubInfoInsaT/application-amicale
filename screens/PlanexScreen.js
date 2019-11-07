@@ -39,7 +39,8 @@ export default class PlanexScreen extends React.Component<Props> {
                 url={PLANEX_URL}
                 customInjectedJS={this.customInjectedJS}
                 headerTitle={'Planex'}
-                hasHeaderBackButton={false}/>
+                hasHeaderBackButton={false}
+                hasFooter={false}/>
         );
     }
 }
