@@ -152,7 +152,7 @@ export default class AboutScreen extends React.Component<Props, State> {
             onPressCallback: () => openWebLink(links.react),
             icon: 'react',
             text: i18n.t('aboutScreen.reactNative'),
-            showChevron: false
+            showChevron: true
         },
         {
             onPressCallback: () => this.props.navigation.navigate('AboutDependenciesScreen', {data: packageJson.dependencies}),
