@@ -278,6 +278,7 @@ export default {
     proximoColor: '#ec5904',
     proxiwashColor: '#1fa5ee',
     menuColor: '#e91314',
+    tutorinsaColor: '#f93943',
 
 
     // Other

@@ -140,8 +140,8 @@ export default class DashboardItem extends React.Component<Props> {
                         this.props.color :
                         ThemeManager.getCurrentThemeVariables().textDisabledColor
                 }
-                fontSize={this.props.isSquare ? 60 : 40}
-                width={this.props.isSquare ? 60 : 40}/>
+                fontSize={this.props.isSquare ? 50 : 40}
+                width={this.props.isSquare ? 50 : 40}/>
         );
     }
 

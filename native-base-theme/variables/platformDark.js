@@ -138,7 +138,7 @@ export default {
 
     // Footer
     footerHeight: 55,
-    footerDefaultBg: platform === "ios" ? "#F8F8F8" : "#be1522",
+    footerDefaultBg: platform === "ios" ? "#333333" : "#be1522",
     footerPaddingBottom: 0,
 
     // FooterTab
@@ -279,6 +279,7 @@ export default {
     proximoColor: '#ec5904',
     proxiwashColor: '#1fa5ee',
     menuColor: '#b81213',
+    tutorinsaColor: '#f93943',
 
     // Other
     borderRadiusBase: platform === "ios" ? 5 : 2,
