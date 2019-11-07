@@ -8,9 +8,8 @@ import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
 import Autolink from 'react-native-autolink';
 import ThemeManager from "../utils/ThemeManager";
-import PlatformTouchable from "react-native-platform-touchable";
-import HTML from 'react-native-render-html';
-import {LinearGradient} from 'expo-linear-gradient';
+import DashboardItem from "../components/DashboardItem";
+// import DATA from "../dashboard_data.json";
 
 
 const ICON_AMICALE = require('../assets/amicale.png');
@@ -149,11 +148,11 @@ export default class HomeScreen extends FetchedDataSectionList {
     getDashboardItem(item: Object) {
         let content = item['content'];
         if (item['id'] === 'top')
-            return this.getDashboardTopItem(content);
+            return this.getDashboardEventItem(content);
         else if (item['id'] === 'middle')
             return this.getDashboardMiddleItem(content);
         else
-            return this.getDashboardBottomItem(content);
+            return this.getDashboardProxiwashItem(content);
     }
 
     /**
@@ -286,24 +285,8 @@ export default class HomeScreen extends FetchedDataSectionList {
         return displayEvent;
     }
 
-    padStr(i: number) {
-        return (i < 10) ? "0" + i : "" + i;
-    }
 
-    getFormattedEventTime(event: Object): string {
-        let formattedStr = '';
-        let startDate = this.stringToDate(event['date_begin']);
-        let endDate = this.stringToDate(event['date_end']);
-        if (startDate !== undefined && startDate !== null && endDate !== undefined && endDate !== null)
-            formattedStr = this.padStr(startDate.getHours()) + ':' + this.padStr(startDate.getMinutes()) +
-                ' - ' + this.padStr(endDate.getHours()) + ':' + this.padStr(endDate.getMinutes());
-        else if (startDate !== undefined && startDate !== null)
-            formattedStr = this.padStr(startDate.getHours()) + ':' + this.padStr(startDate.getMinutes());
-        return formattedStr
-    }
-
-
-    getDashboardTopItem(content: Array<Object>) {
+    getDashboardEventItem(content: Array<Object>) {
         let icon = 'calendar-range';
         let color = ThemeManager.getCurrentThemeVariables().planningColor;
         let title = i18n.t('homeScreen.dashboard.todayEventsTitle');
@@ -329,178 +312,18 @@ export default class HomeScreen extends FetchedDataSectionList {
         let displayEvent = this.getDisplayEvent(futureEvents);
 
         return (
-            <Card style={{
-                flex: 0,
-                marginLeft: 10,
-                marginRight: 10,
-                marginTop: 10,
-                borderRadius: CARD_BORDER_RADIUS,
-                backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg,
-                overflow: 'hidden',
-            }}>
-                <PlatformTouchable
-                    onPress={clickAction}
-                    style={{
-                        zIndex: 100,
-                    }}
-                >
-                    <View>
-                        <CardItem style={{
-                            backgroundColor: 'transparent',
-                        }}>
-                            <Left>
-                                <CustomMaterialIcon
-                                    icon={icon}
-                                    color={
-                                        isAvailable ?
-                                            color :
-                                            ThemeManager.getCurrentThemeVariables().textDisabledColor
-                                    }
-                                    fontSize={40}
-                                    width={40}/>
-                                <Body>
-                                    <H3 style={{
-                                        color: isAvailable ?
-                                            ThemeManager.getCurrentThemeVariables().textColor :
-                                            ThemeManager.getCurrentThemeVariables().listNoteColor
-                                    }}>
-                                        {title}
-                                    </H3>
-                                    <Text style={{
-                                        color: isAvailable ?
-                                            ThemeManager.getCurrentThemeVariables().listNoteColor :
-                                            ThemeManager.getCurrentThemeVariables().textDisabledColor
-                                    }}>
-                                        {subtitle}
-                                    </Text>
-                                </Body>
-                            </Left>
-                        </CardItem>
-                        {displayEvent !== undefined ?
-                            <View>
-                                <CardItem style={{
-                                    paddingTop: 0,
-                                    paddingBottom: 0,
-                                    backgroundColor: 'transparent',
-                                }}>
-                                    <Left>
-                                        {displayEvent['logo'] !== '' && displayEvent['logo'] !== null ?
-                                            <Thumbnail source={{uri: displayEvent['logo']}} square/> :
-                                            <View/>}
-                                        <Body>
-                                            <Text>{displayEvent['title']}</Text>
-                                            <Text note>{this.getFormattedEventTime(displayEvent)}</Text>
-                                        </Body>
-                                    </Left>
-                                </CardItem>
-                                <CardItem style={{
-                                    borderRadius: CARD_BORDER_RADIUS,
-                                    backgroundColor: 'transparent',
-                                }}>
-                                    <Body style={{
-                                        height: displayEvent['description'].length > 50 ? 70 : 20,
-                                        overflow: 'hidden',
-                                    }}>
-                                        <HTML html={"<div>" + displayEvent['description'] + "</div>"}
-                                              tagsStyles={{
-                                                  p: {
-                                                      color: ThemeManager.getCurrentThemeVariables().textColor,
-                                                      fontSize: ThemeManager.getCurrentThemeVariables().fontSizeBase,
-                                                  },
-                                                  div: {color: ThemeManager.getCurrentThemeVariables().textColor},
-                                              }}
-                                              onLinkPress={(event, link) => openWebLink(link)}/>
-                                        <LinearGradient
-                                            colors={['transparent', ThemeManager.getCurrentThemeVariables().cardDefaultBg]}
-                                            end={[0, 0.6]}
-                                            style={{
-                                                position: 'absolute',
-                                                width: '100%',
-                                                height: 60,
-                                                bottom: 0,
-                                            }}>
-                                            <View style={{
-                                                marginLeft: 'auto',
-                                                marginTop: 'auto',
-                                                flexDirection: 'row'
-                                            }}>
-                                                <Text style={{
-                                                    marginTop: 'auto',
-                                                    marginBottom: 'auto',
-                                                    padding: 0,
-                                                }}>
-                                                    Click to see more
-                                                </Text>
-                                                <CustomMaterialIcon icon={'chevron-right'}/>
-                                            </View>
-                                        </LinearGradient>
-                                    </Body>
-                                </CardItem>
-                            </View> :
-                            <View/>}
-                    </View>
-                </PlatformTouchable>
-            </Card>
+            <DashboardItem
+                subtitle={subtitle}
+                color={color}
+                icon={icon}
+                clickAction={() => clickAction()}
+                title={title}
+                isAvailable={isAvailable}
+                displayEvent={displayEvent}
+            />
         );
     }
 
-    getSquareDashboardItem(isAvailable: boolean, icon: string, color: string, title: string, subtitle: React.Node, clickAction: Function, isLeftElement: boolean) {
-        return (
-            <Card style={{
-                flex: 0,
-                width: '48%',
-                marginLeft: 0,
-                marginRight: isLeftElement ? '4%' : 0,
-                borderRadius: CARD_BORDER_RADIUS,
-                backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg,
-                overflow: 'hidden',
-            }}>
-                <PlatformTouchable
-                    onPress={clickAction}
-                    style={{
-                        zIndex: 100,
-                        minHeight: 150,
-                    }}
-                >
-                    <CardItem style={{
-                        backgroundColor: 'transparent'
-                    }}>
-                        <Body>
-                            <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                                <CustomMaterialIcon
-                                    icon={icon}
-                                    color={
-                                        isAvailable ?
-                                            color :
-                                            ThemeManager.getCurrentThemeVariables().textDisabledColor
-                                    }
-                                    fontSize={60}
-                                    width={60}/>
-                            </View>
-                            <H3 style={{
-                                color: isAvailable ?
-                                    ThemeManager.getCurrentThemeVariables().textColor :
-                                    ThemeManager.getCurrentThemeVariables().listNoteColor,
-                                textAlign: 'center',
-                                width: '100%'
-                            }}>
-                                {title}
-                            </H3>
-                            <Text style={{
-                                color: isAvailable ?
-                                    ThemeManager.getCurrentThemeVariables().listNoteColor :
-                                    ThemeManager.getCurrentThemeVariables().textDisabledColor,
-                                textAlign: 'center',
-                                width: '100%'
-                            }}>
-                                {subtitle}
-                            </Text>
-                        </Body>
-                    </CardItem>
-                </PlatformTouchable>
-            </Card>
-        );
-    }
 
     getDashboardMiddleItem(content: Object) {
         let proximoData = content[0]['data'];
@@ -517,8 +340,8 @@ export default class HomeScreen extends FetchedDataSectionList {
                     <Text>
                         {
                             proximoData > 1 ?
-                            i18n.t('homeScreen.dashboard.proximoSubtitlePlural') :
-                            i18n.t('homeScreen.dashboard.proximoSubtitle')
+                                i18n.t('homeScreen.dashboard.proximoSubtitlePlural') :
+                                i18n.t('homeScreen.dashboard.proximoSubtitle')
                         }
                     </Text>
                 </Text>;
@@ -543,14 +366,31 @@ export default class HomeScreen extends FetchedDataSectionList {
                 marginLeft: 10,
                 marginRight: 10,
             }}>
-                {this.getSquareDashboardItem(isProximoAvailable, proximoIcon, proximoColor, proximoTitle, proximoSubtitle, proximoClickAction, true)}
-                {this.getSquareDashboardItem(isMenuAvailable, menuIcon, menuColor, menuTitle, menuSubtitle, menuClickAction, false)}
+                <DashboardItem
+                    isSquare={true}
+                    subtitle={proximoSubtitle}
+                    color={proximoColor}
+                    icon={proximoIcon}
+                    clickAction={() => proximoClickAction()}
+                    title={proximoTitle}
+                    isAvailable={isProximoAvailable}
+                    isSquareLeft={true}/>
+                <DashboardItem
+                    isSquare={true}
+                    subtitle={menuSubtitle}
+                    color={menuColor}
+                    icon={menuIcon}
+                    clickAction={() => menuClickAction()}
+                    title={menuTitle}
+                    isAvailable={isMenuAvailable}/>
+                {/*{this.getSquareDashboardItem(isProximoAvailable, proximoIcon, proximoColor, proximoTitle, proximoSubtitle, proximoClickAction, true)}*/}
+                {/*{this.getSquareDashboardItem(isMenuAvailable, menuIcon, menuColor, menuTitle, menuSubtitle, menuClickAction, false)}*/}
             </View>
         );
     }
 
 
-    getDashboardBottomItem(content: Object) {
+    getDashboardProxiwashItem(content: Object) {
         let icon = 'washing-machine';
         let color = ThemeManager.getCurrentThemeVariables().proxiwashColor;
         let title = i18n.t('homeScreen.dashboard.proxiwashTitle');
@@ -602,53 +442,13 @@ export default class HomeScreen extends FetchedDataSectionList {
             subtitle = i18n.t('homeScreen.dashboard.proxiwashSubtitleNA');
         let clickAction = () => this.props.navigation.navigate('Proxiwash');
         return (
-            <Card style={{
-                flex: 0,
-                marginLeft: 10,
-                marginRight: 10,
-                borderRadius: CARD_BORDER_RADIUS,
-                backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg,
-                overflow: 'hidden',
-            }}>
-                <PlatformTouchable
-                    onPress={clickAction}
-                    style={{
-                        zIndex: 100,
-                    }}
-                >
-                    <CardItem style={{
-                        backgroundColor: 'transparent'
-                    }}>
-                        <Left>
-                            <CustomMaterialIcon
-                                icon={icon}
-                                color={
-                                    isAvailable ?
-                                        color :
-                                        ThemeManager.getCurrentThemeVariables().textDisabledColor
-                                }
-                                fontSize={40}
-                                width={40}/>
-                            <Body>
-                                <H3 style={{
-                                    color: isAvailable ?
-                                        ThemeManager.getCurrentThemeVariables().textColor :
-                                        ThemeManager.getCurrentThemeVariables().listNoteColor
-                                }}>
-                                    {title}
-                                </H3>
-                                <Text style={{
-                                    color: isAvailable ?
-                                        ThemeManager.getCurrentThemeVariables().listNoteColor :
-                                        ThemeManager.getCurrentThemeVariables().textDisabledColor
-                                }}>
-                                    {subtitle}
-                                </Text>
-                            </Body>
-                        </Left>
-                    </CardItem>
-                </PlatformTouchable>
-            </Card>
+            <DashboardItem
+                subtitle={subtitle}
+                color={color}
+                icon={icon}
+                clickAction={() => clickAction()}
+                title={title}
+                isAvailable={isAvailable}/>
         );
     }
 
