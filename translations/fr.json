@@ -6,6 +6,7 @@
     "proximo": "Proximo",
     "menuSelf": "Menu du RU",
     "settings": "Paramètres",
+    "availableRooms": "Salles dispo",
     "about": "À Propos",
     "debug": "Debug"
   },
@@ -72,6 +73,7 @@
     "listUpdateFail": "Erreur lors de la mise à jour de la liste",
     "newsFeed": "Nouvelles du campus",
     "dashboard": {
+      "seeMore": "Cliquez pour plus d'infos",
       "todayEventsTitle": "Événements aujourd'hui",
       "todayEventsSubtitleNA": "Pas d'événements",
       "todayEventsSubtitle": " événement aujourd'hui",

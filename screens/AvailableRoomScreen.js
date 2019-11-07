@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import ThemeManager from "../utils/ThemeManager";
 import WebViewScreen from "../components/WebViewScreen";
+import i18n from "i18n-js";
 
 type Props = {
     navigation: Object,
@@ -31,7 +31,7 @@ export default class AvailableRoomScreen extends React.Component<Props> {
                 navigation={nav}
                 url={URL}
                 customInjectedJS={this.customInjectedJS}
-                headerTitle={'SAlles dispo'}
+                headerTitle={i18n.t('screens.availableRooms')}
                 hasHeaderBackButton={true}
                 hasSideMenu={false}/>
         );

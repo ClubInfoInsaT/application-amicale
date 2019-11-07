@@ -6,6 +6,7 @@
     "proximo": "Proximo",
     "menuSelf": "RU Menu",
     "settings": "Settings",
+    "availableRooms": "Available rooms",
     "about": "About",
     "debug": "Debug"
   },
@@ -72,6 +73,7 @@
     "listUpdateFail": "Error while updating list",
     "newsFeed": "Campus News",
     "dashboard": {
+      "seeMore": "Click to see more",
       "todayEventsTitle": "Today's events",
       "todayEventsSubtitleNA": "No events today",
       "todayEventsSubtitle": " event coming today",

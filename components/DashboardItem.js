@@ -8,6 +8,7 @@ import ThemeManager from "../utils/ThemeManager";
 import HTML from "react-native-render-html";
 import {LinearGradient} from "expo-linear-gradient";
 import PlatformTouchable from "react-native-platform-touchable";
+import i18n from "i18n-js";
 
 const CARD_BORDER_RADIUS = 10;
 
@@ -101,12 +102,14 @@ export default class DashboardItem extends React.Component<Props> {
                                   }}/>
                             <LinearGradient
                                 colors={['transparent', ThemeManager.getCurrentThemeVariables().cardDefaultBg]}
-                                end={[0, 0.6]}
+                                start={{x: 0, y: 0}}
+                                end={{x: 0, y: 0.6}}
+                                // end={[0, 0.6]}
                                 style={{
                                     position: 'absolute',
                                     width: '100%',
-                                    height: 60,
-                                    bottom: 0,
+                                    height: 65,
+                                    bottom: -5,
                                 }}>
                                 <View style={{
                                     marginLeft: 'auto',
@@ -118,7 +121,7 @@ export default class DashboardItem extends React.Component<Props> {
                                         marginBottom: 'auto',
                                         padding: 0,
                                     }}>
-                                        Click to see more
+                                        {i18n.t("homeScreen.dashboard.seeMore")}
                                     </Text>
                                     <CustomMaterialIcon icon={'chevron-right'}/>
                                 </View>

@@ -56,7 +56,7 @@ export default class SideBar extends React.Component<Props, State> {
                 icon: "school",
             },
             {
-                name: "Salles dispo",
+                name: i18n.t('screens.availableRooms'),
                 route: "AvailableRoomScreen",
                 icon: "calendar-check",
             },

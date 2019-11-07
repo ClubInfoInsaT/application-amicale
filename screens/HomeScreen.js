@@ -9,7 +9,7 @@ import FetchedDataSectionList from "../components/FetchedDataSectionList";
 import Autolink from 'react-native-autolink';
 import ThemeManager from "../utils/ThemeManager";
 import DashboardItem from "../components/DashboardItem";
-import DATA from "../dashboard_data.json";
+// import DATA from "../dashboard_data.json";
 
 
 const ICON_AMICALE = require('../assets/amicale.png');
@@ -39,7 +39,7 @@ function openWebLink(link) {
 export default class HomeScreen extends FetchedDataSectionList {
 
     constructor() {
-        super('DATA_URL', REFRESH_TIME);
+        super(DATA_URL, REFRESH_TIME);
     }
 
     getHeaderTranslation() {
@@ -55,7 +55,7 @@ export default class HomeScreen extends FetchedDataSectionList {
     }
 
     createDataset(fetchedData: Object) {
-        fetchedData = DATA;
+        // fetchedData = DATA;
         let newsData = [];
         let dashboardData = [];
         if (fetchedData['news_feed'] !== undefined)
