@@ -156,12 +156,16 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
                                 <Text style={{
                                     marginTop: 5,
                                     marginBottom: 5
-                                }}>{object.name.toLowerCase()}</Text>
+                                }}>{this.formatName(object.name)}</Text>
                                 : <View/>}
                         </View>)}
                 </CardItem>
             </Card>
         );
+    }
+
+    formatName(name: String) {
+        return name.charAt(0) + name.substr(1).toLowerCase();
     }
 
 }
