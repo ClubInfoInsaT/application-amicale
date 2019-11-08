@@ -24,14 +24,22 @@ function createMaterialBottomTabNavigatorWithInitialRoute(initialRoute: string) 
         Planning: {screen: PlanningScreen,},
         Proxiwash: {screen: ProxiwashScreen,},
         Proximo: {screen: ProximoMainScreen,},
-        Planex: {screen: PlanexScreen},
+        Planex: {
+            screen: PlanexScreen,
+            navigationOptions: ({ navigation }) => {
+                const showTabBar = navigation.state && navigation.state.params ? navigation.state.params.showTabBar : true;
+                return {
+                    tabBarVisible: showTabBar,
+                };
+            },},
     }, {
         defaultNavigationOptions: ({navigation}) => ({
             tabBarIcon: ({focused, horizontal, tintColor}) => {
                 let icon = TAB_ICONS[navigation.state.routeName];
 
                 return <CustomMaterialIcon icon={icon} color={tintColor}/>;
-            }
+            },
+            tabBarVisible: true,
         }),
         order: ['Proximo', 'Planning', 'Home', 'Proxiwash', 'Planex'],
         initialRouteName: initialRoute,

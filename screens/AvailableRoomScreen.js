@@ -30,8 +30,8 @@ export default class AvailableRoomScreen extends React.Component<Props> {
             'document.querySelector(\'head\').innerHTML += \'<meta name="viewport" content="width=device-width, initial-scale=1.0">\';' +
             'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\';' +
             'let header = $(".table tbody tr:first");' +
-            '$("table").prepend("<thead></thead>");' +
-            '$("thead").append(header);';
+            '$("table").prepend("<thead></thead>");true;' + // Fix for crash on ios
+            '$("thead").append(header);true;';
 
         this.customBibInjectedJS =
             'document.querySelector(\'head\').innerHTML += \'<meta name="viewport" content="width=device-width, initial-scale=1.0">\';' +

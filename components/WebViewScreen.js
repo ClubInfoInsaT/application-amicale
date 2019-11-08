@@ -8,6 +8,8 @@ import Touchable from "react-native-platform-touchable";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
 import BaseContainer from "../components/BaseContainer";
+import {ScreenOrientation} from 'expo';
+import {NavigationActions} from 'react-navigation';
 
 type Props = {
     navigation: Object,
@@ -23,10 +25,14 @@ type Props = {
     hasFooter: boolean,
 }
 
+type State = {
+    isLandscape: boolean,
+}
+
 /**
  * Class defining a webview screen.
  */
-export default class WebViewScreen extends React.Component<Props> {
+export default class WebViewScreen extends React.Component<Props, State> {
 
     static defaultProps = {
         hasBackButton: false,
@@ -34,7 +40,52 @@ export default class WebViewScreen extends React.Component<Props> {
         hasFooter: true,
     };
 
+    state = {
+        isLandscape: false,
+    };
+
     webviewArray: Array<WebView> = [];
+    willFocusSubscription: function;
+    willBlurSubscription: function;
+
+    /**
+     * Register for blur event to close side menu on screen change
+     */
+    componentDidMount() {
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            payload => {
+                ScreenOrientation.unlockAsync();
+                ScreenOrientation.addOrientationChangeListener((OrientationChangeEvent) => {
+                    let isLandscape = OrientationChangeEvent.orientationInfo.orientation === ScreenOrientation.Orientation.LANDSCAPE ||
+                        OrientationChangeEvent.orientationInfo.orientation === ScreenOrientation.Orientation.LANDSCAPE_LEFT ||
+                        OrientationChangeEvent.orientationInfo.orientation === ScreenOrientation.Orientation.LANDSCAPE_RIGHT;
+                    this.setState({isLandscape: isLandscape});
+                    const setParamsAction = NavigationActions.setParams({
+                        params: {showTabBar: !isLandscape},
+                        key: this.props.navigation.state.key,
+                    });
+                    this.props.navigation.dispatch(setParamsAction);
+                });
+            }
+        );
+        this.willBlurSubscription = this.props.navigation.addListener(
+            'willBlur',
+            payload => {
+                ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
+            }
+        );
+    }
+
+    /**
+     * Unregister from event when un-mounting components
+     */
+    componentWillUnmount() {
+        if (this.willBlurSubscription !== undefined)
+            this.willBlurSubscription.remove();
+        if (this.willFocusSubscription !== undefined)
+            this.willFocusSubscription.remove();
+    }
 
     openWebLink(url: string) {
         Linking.openURL(url).catch((err) => console.error('Error opening link', err));
@@ -138,7 +189,8 @@ export default class WebViewScreen extends React.Component<Props> {
                 headerTitle={this.props.headerTitle}
                 headerRightButton={this.getRefreshButton()}
                 hasBackButton={this.props.hasHeaderBackButton}
-                hasSideMenu={this.props.hasSideMenu}>
+                hasSideMenu={this.props.hasSideMenu}
+                isHeaderVisible={!this.state.isLandscape}>
                 {this.props.data.length === 1 ?
                     this.getWebview(this.props.data[0]) :
                     <Tabs

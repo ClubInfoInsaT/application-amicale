@@ -18,6 +18,7 @@ type Props = {
     hasTabs: boolean,
     hasBackButton: boolean,
     hasSideMenu: boolean,
+    isHeaderVisible: boolean
 }
 
 type State = {
@@ -34,6 +35,7 @@ export default class BaseContainer extends React.Component<Props, State> {
         hasTabs: false,
         hasBackButton: false,
         hasSideMenu: true,
+        isHeaderVisible: true,
     };
 
 
@@ -95,20 +97,33 @@ export default class BaseContainer extends React.Component<Props, State> {
 
 
     render() {
-        return (
-            <View style={{
-                backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
-                width: '100%',
-                height: '100%'
-            }}>
-                {this.props.hasSideMenu ?
-                    <CustomSideMenu
-                        navigation={this.props.navigation} isOpen={this.state.isOpen}
-                        onChange={(isOpen) => this.updateMenuState(isOpen)}>
-                        {this.getMainContainer()}
-                    </CustomSideMenu> :
-                    this.getMainContainer()}
-            </View>
-        );
+        if (this.props.isHeaderVisible) {
+            return (
+                <View style={{
+                    backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
+                    width: '100%',
+                    height: '100%'
+                }}>
+                    {this.props.hasSideMenu ?
+                        <CustomSideMenu
+                            navigation={this.props.navigation} isOpen={this.state.isOpen}
+                            onChange={(isOpen) => this.updateMenuState(isOpen)}>
+                            {this.getMainContainer()}
+                        </CustomSideMenu> :
+                        this.getMainContainer()}
+                </View>
+            );
+        } else {
+            return (
+                <View style={{
+                    backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
+                    width: '100%',
+                    height: '100%'
+                }}>
+                    {this.props.children}
+                </View>
+            );
+        }
+
     }
 }
