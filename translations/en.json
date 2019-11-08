@@ -182,6 +182,10 @@
       "machineRunningBody": "The machine n°{{number}} is still running"
     }
   },
+  "planexScreen": {
+    "rotateToLandscape": "Turn your screen to see the whole week",
+    "rotateToPortrait": "Turn your screen to see only 2 days"
+  },
   "availableRoomScreen": {
     "normalRoom": "Work",
     "computerRoom": "Computer",

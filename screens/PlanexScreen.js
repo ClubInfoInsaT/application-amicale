@@ -3,6 +3,7 @@
 import * as React from 'react';
 import ThemeManager from "../utils/ThemeManager";
 import WebViewScreen from "../components/WebViewScreen";
+import i18n from "i18n-js";
 
 type Props = {
     navigation: Object,
@@ -26,7 +27,9 @@ export default class PlanexScreen extends React.Component<Props> {
         super();
         this.customInjectedJS =
             'document.querySelector(\'head\').innerHTML += \'<meta name="viewport" content="width=device-width, initial-scale=1.0">\';' +
-            'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\';';
+            'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\';' +
+            '$(".fc-toolbar .fc-center").append(\'<p id="rotateToLandscape">' + i18n.t("planexScreen.rotateToLandscape") + '</p>\');' +
+            '$(".fc-toolbar .fc-center").append(\'<p id="rotateToPortrait">' + i18n.t("planexScreen.rotateToPortrait") + '</p>\');';
         if (ThemeManager.getNightMode())
             this.customInjectedJS += 'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_NIGHTMODE + '" type="text/css"/>\';';
     }

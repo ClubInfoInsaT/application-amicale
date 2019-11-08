@@ -184,6 +184,10 @@
       "machineRunningBody": "La machine n°{{number}} n'est pas encore terminée"
     }
   },
+  "planexScreen": {
+    "rotateToLandscape": "Tournez votre téléphone pour voir la semaine entière",
+    "rotateToPortrait": "Tournez votre téléphone pour voir seulement 2 jours"
+  },
   "availableRoomScreen": {
     "normalRoom": "Travail",
     "computerRoom": "Ordi",
