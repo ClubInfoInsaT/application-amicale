@@ -22,7 +22,14 @@ export default class TutorInsaScreen extends React.Component<Props> {
         return (
             <WebViewScreen
                 navigation={nav}
-                url={URL}
+                data={[
+                    {
+                        url: URL,
+                        icon: '',
+                        name: '',
+                        customJS: ''
+                    },
+                ]}
                 headerTitle={'Tutor\'INSA'}
                 hasHeaderBackButton={true}
                 hasSideMenu={false}/>

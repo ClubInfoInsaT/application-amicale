@@ -36,7 +36,14 @@ export default class PlanexScreen extends React.Component<Props> {
         return (
             <WebViewScreen
                 navigation={nav}
-                url={PLANEX_URL}
+                data={[
+                    {
+                        url: PLANEX_URL,
+                        icon: '',
+                        name: '',
+                        customJS: this.customInjectedJS
+                    },
+                ]}
                 customInjectedJS={this.customInjectedJS}
                 headerTitle={'Planex'}
                 hasHeaderBackButton={false}

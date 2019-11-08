@@ -182,6 +182,11 @@
       "machineRunningBody": "The machine n°{{number}} is still running"
     }
   },
+  "availableRoomScreen": {
+    "normalRoom": "Work",
+    "computerRoom": "Computer",
+    "bibRoom": "Bib'Box"
+  },
   "general": {
     "loading": "Loading...",
     "networkError": "Unable to contact servers. Make sure you are connected to Internet."

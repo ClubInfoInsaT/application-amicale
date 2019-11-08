@@ -22,7 +22,14 @@ export default class WiketudScreen extends React.Component<Props> {
         return (
             <WebViewScreen
                 navigation={nav}
-                url={URL}
+                data={[
+                    {
+                        url: URL,
+                        icon: '',
+                        name: '',
+                        customJS: ''
+                    },
+                ]}
                 headerTitle={'Wiketud'}
                 hasHeaderBackButton={true}
                 hasSideMenu={false}/>

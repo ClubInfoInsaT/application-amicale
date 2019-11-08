@@ -184,6 +184,11 @@
       "machineRunningBody": "La machine n°{{number}} n'est pas encore terminée"
     }
   },
+  "availableRoomScreen": {
+    "normalRoom": "Travail",
+    "computerRoom": "Ordi",
+    "bibRoom": "Bib'Box"
+  },
   "general": {
     "loading": "Chargement...",
     "networkError": "Impossible de contacter les serveurs. Assurez vous d'être connecté à internet."

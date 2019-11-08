@@ -22,7 +22,14 @@ export default class AmicaleScreen extends React.Component<Props> {
         return (
             <WebViewScreen
                 navigation={nav}
-                url={URL}
+                data={[
+                    {
+                        url: URL,
+                        icon: '',
+                        name: '',
+                        customJS: ''
+                    },
+                ]}
                 headerTitle={'Amicale'}
                 hasHeaderBackButton={true}
                 hasSideMenu={false}/>
