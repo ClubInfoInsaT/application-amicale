@@ -35,7 +35,14 @@ export default class AvailableRoomScreen extends React.Component<Props> {
 
         this.customBibInjectedJS =
             'document.querySelector(\'head\').innerHTML += \'<meta name="viewport" content="width=device-width, initial-scale=1.0">\';' +
-            'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_Bib + '" type="text/css"/>\';';
+            'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_Bib + '" type="text/css"/>\';' +
+            'if ($(".hero-unit-form").length > 0 && $("#customBackButton").length === 0)' +
+            '$(".hero-unit-form").append("' +
+            '<div style=\'width: 100%; display: flex\'>' +
+            '<a style=\'margin: auto\' href=\'' + BIB_URL + '\'>' +
+            '<button id=\'customBackButton\' class=\'btn btn-primary\'>Retour</button>' +
+            '</a>' +
+            '</div>");';
     }
 
     render() {
