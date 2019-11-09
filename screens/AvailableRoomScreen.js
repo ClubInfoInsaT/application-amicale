@@ -42,7 +42,7 @@ export default class AvailableRoomScreen extends React.Component<Props> {
             '<a style=\'margin: auto\' href=\'' + BIB_URL + '\'>' +
             '<button id=\'customBackButton\' class=\'btn btn-primary\'>Retour</button>' +
             '</a>' +
-            '</div>");';
+            '</div>");true;';
     }
 
     render() {

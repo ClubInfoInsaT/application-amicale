@@ -200,7 +200,9 @@ export default class WebViewScreen extends React.Component<Props, State> {
                         locked={true}
                         style = {{
                             paddingTop: this.state.isLandscape ? 20 : 0,
-                            backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary
+                            backgroundColor: Platform.OS === 'ios' ?
+                                ThemeManager.getCurrentThemeVariables().tabDefaultBg :
+                                ThemeManager.getCurrentThemeVariables().brandPrimary
                         }}
 
                     >
