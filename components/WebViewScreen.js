@@ -198,6 +198,13 @@ export default class WebViewScreen extends React.Component<Props, State> {
                             elevation: 0, // Fix for android shadow
                         }}
                         locked={true}
+                        style = {{
+                            paddingTop: this.state.isLandscape ? 20 : 0,
+                            backgroundColor: Platform.OS === 'ios' ?
+                                ThemeManager.getCurrentThemeVariables().tabDefaultBg :
+                                ThemeManager.getCurrentThemeVariables().brandPrimary
+                        }}
+
                     >
                         {this.getTabbedWebview()}
                     </Tabs>}

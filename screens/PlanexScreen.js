@@ -29,7 +29,7 @@ export default class PlanexScreen extends React.Component<Props> {
             'document.querySelector(\'head\').innerHTML += \'<meta name="viewport" content="width=device-width, initial-scale=1.0">\';' +
             'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\';' +
             '$(".fc-toolbar .fc-center").append(\'<p id="rotateToLandscape">' + i18n.t("planexScreen.rotateToLandscape") + '</p>\');' +
-            '$(".fc-toolbar .fc-center").append(\'<p id="rotateToPortrait">' + i18n.t("planexScreen.rotateToPortrait") + '</p>\');';
+            '$(".fc-toolbar .fc-center").append(\'<p id="rotateToPortrait">' + i18n.t("planexScreen.rotateToPortrait") + '</p>\');true;';
         if (ThemeManager.getNightMode())
             this.customInjectedJS += 'document.querySelector(\'head\').innerHTML += \'<link rel="stylesheet" href="' + CUSTOM_CSS_NIGHTMODE + '" type="text/css"/>\';';
     }
