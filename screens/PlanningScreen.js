@@ -165,7 +165,9 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     flex: 1,
                     flexDirection: 'row'
                 }}>
-                    <View style={{width: '70%'}}>
+                    <View style={{
+                        width: item.logo !== null ? '70%' : '100%',
+                    }}>
                         <Text style={{
                             color: ThemeManager.getCurrentThemeVariables().listNoteColor,
                             marginTop: 5,
@@ -176,7 +178,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                         <H3 style={{marginBottom: 10}}>{item.title}</H3>
                     </View>
                     <View style={{
-                        width: '30%',
+                        width: item.logo !== null ? '30%' : 0,
                         height: 80
                     }}>
                         {item.logo !== null ?
