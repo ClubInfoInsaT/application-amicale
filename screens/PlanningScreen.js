@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react';
+import { BackHandler } from 'react-native';
 import {Content, H1, H2, H3, Text, Button} from 'native-base';
 import i18n from "i18n-js";
 import {View, Image} from "react-native";
@@ -8,11 +9,20 @@ import ThemeManager from "../utils/ThemeManager";
 import {Linking} from "expo";
 import BaseContainer from "../components/BaseContainer";
 import {Agenda} from 'react-native-calendars';
+import {LocaleConfig} from 'react-native-calendars';
 import HTML from 'react-native-render-html';
 import Touchable from 'react-native-platform-touchable';
 import Modalize from 'react-native-modalize';
 import WebDataManager from "../utils/WebDataManager";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
+
+LocaleConfig.locales['fr'] = {
+    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+    monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+    today: 'Aujourd\'hui'
+};
 
 
 type Props = {
@@ -23,6 +33,7 @@ type State = {
     modalCurrentDisplayItem: Object,
     refreshing: boolean,
     agendaItems: Object,
+    calendarShowing: boolean,
 };
 
 const FETCH_URL = "https://amicale-insat.fr/event/json/list";
@@ -48,20 +59,56 @@ export default class PlanningScreen extends React.Component<Props, State> {
     lastRefresh: Date;
     minTimeBetweenRefresh = 60;
 
+    _agenda: Agenda;
+
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
         this.webDataManager = new WebDataManager(FETCH_URL);
+        this._didFocusSubscription = props.navigation.addListener(
+            'didFocus',
+            payload =>
+                BackHandler.addEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
+        if (i18n.currentLocale().startsWith("fr")) {
+            LocaleConfig.defaultLocale = 'fr';
+        }
     }
 
     componentDidMount() {
         this._onRefresh();
+        this._willBlurSubscription = this.props.navigation.addListener(
+            'willBlur',
+            payload =>
+                BackHandler.removeEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
+    }
+
+    onBackButtonPressAndroid = () => {
+        if (this.state.calendarShowing) {
+            this._agenda.chooseDay(this._agenda.state.selectedDay);
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    componentWillUnmount() {
+        this._didFocusSubscription && this._didFocusSubscription.remove();
+        this._willBlurSubscription && this._willBlurSubscription.remove();
     }
 
     state = {
         modalCurrentDisplayItem: {},
         refreshing: false,
         agendaItems: {},
+        calendarShowing: false,
     };
 
     getCurrentDate() {
@@ -347,11 +394,17 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     futureScrollRange={AGENDA_MONTH_SPAN}
                     // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
                     onRefresh={() => this._onRefresh()}
+                    // callback that fires when the calendar is opened or closed
+                    onCalendarToggled={(calendarOpened) => {this.setState({calendarShowing: calendarOpened})}}
                     // Set this true while waiting for new data from a refresh
                     refreshing={this.state.refreshing}
                     renderItem={(item) => this.getRenderItem(item)}
                     renderEmptyDate={() => this.getRenderEmptyDate()}
                     rowHasChanged={() => this.rowHasChanged()}
+                    // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+                    firstDay={1}
+                    // ref to this agenda in order to handle back button event
+                    ref={(ref) => this._agenda = ref}
                     // agenda theme
                     theme={{
                         backgroundColor: ThemeManager.getCurrentThemeVariables().agendaBackgroundColor,
