@@ -79,13 +79,25 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
 
     getRightButton() {
         return (
-            <Touchable
-                style={{padding: 6}}
-                onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
-                <CustomMaterialIcon
-                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                    icon="information"/>
-            </Touchable>
+            <View
+                style={{
+                    flexDirection:'row'
+                }}>
+                <Touchable
+                    style={{padding: 6}}
+                    onPress={() => this.props.navigation.navigate('ProximoSearchScreen', {data: this.state.fetchedData})}>
+                    <CustomMaterialIcon
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                        icon="magnify" />
+                </Touchable>
+                <Touchable
+                    style={{padding: 6}}
+                    onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
+                    <CustomMaterialIcon
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                        icon="information"/>
+                </Touchable>
+            </View>
         );
     }
 

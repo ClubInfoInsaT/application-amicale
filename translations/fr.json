@@ -21,11 +21,11 @@
     },
     "slide3": {
       "title": "N'oubliez plus votre linge !",
-      "text": "CAMPUS vous informe de la disponibilité des machines et vous permet d'être notifiés lorsque la vôtre se termine bientôt !"
+      "text": "CAMPUS vous informe de la disponibilité des machines et vous permet d'être notifié lorsque la vôtre se termine bientôt !"
     },
     "slide4": {
       "title": "Proximo",
-      "text": "Il vous manque des pâtes ? Ou un petit creux au gouter, regardez les stocks de votre supérette insaienne en temps réel"
+      "text": "Il vous manque des pâtes ? Ou un petit creux au goûter, regardez les stocks de votre supérette insaienne en temps réel"
     },
     "slide5": {
       "title": "Planex",
@@ -75,7 +75,7 @@
     "dashboard": {
       "seeMore": "Cliquez pour plus d'infos",
       "todayEventsTitle": "Événements aujourd'hui",
-      "todayEventsSubtitleNA": "Pas d'événements",
+      "todayEventsSubtitleNA": "Pas d'événement",
       "todayEventsSubtitle": " événement aujourd'hui",
       "todayEventsSubtitlePlural": " événements aujourd'hui",
       "proximoTitle": "Proximo",
@@ -126,10 +126,11 @@
     "listUpdateFail": "Erreur lors de la mise à jour de la list d'articles",
     "loading": "Chargement...",
     "inStock": "en stock",
-    "description": "Le Proximo c’est ta petite épicerie étudiante tenu par les étudiants directement sur le campus. Ouvert tous les jours de 18h30 à 19h30, nous t’accueillons et te souvent quand tu n’as plus de pâtes ou de diluant ! Différents produits pour différentes galère, le tout à prix coûtant. Tu peux payer par Lydia ou par espèce.",
+    "description": "Le Proximo c’est ta petite épicerie étudiante tenue par les étudiants directement sur le campus. Ouverte tous les jours de 18h30 à 19h30, nous t’accueillons et te sauvons quand tu n’as plus de pâtes ou de diluant ! Différents produits pour différentes galères, le tout à prix coûtant. Tu peux payer par Lydia ou par espèce.",
     "openingHours": "Horaires d'ouverture",
     "paymentMethods" : "Moyens de Paiement",
-    "paymentMethodsDescription" : "Espèce ou Lydia"
+    "paymentMethodsDescription" : "Espèce ou Lydia",
+    "search": "Rechercher"
   },
   "proxiwashScreen": {
     "dryer": "Sèche-Linge",
@@ -137,9 +138,9 @@
     "washer": "Lave-Linge",
     "washers": "Lave-Linges",
     "min": "min",
-    "listUpdated": "Etat des machines mis à jour",
-    "listUpdateFail": "Erreur lors de la mise à jour del'état des machines",
-    "error": "Impossible de mettre a jour l'état des machines. Tirez vers le bas pour reessayer.",
+    "listUpdated": "État des machines mis à jour",
+    "listUpdateFail": "Erreur lors de la mise à jour de l'état des machines",
+    "error": "Impossible de mettre a jour l'état des machines. Tirez vers le bas pour réessayer.",
     "loading": "Chargement...",
     "description": "C'est le service de laverie proposé par promologis pour les résidences INSA (On t'en voudra pas si tu loges pas sur le campus et que tu fais ta machine ici). Le local situé au pied du R2 avec ses 3 sèche-linges et 9 machines est ouvert 7J/7 24h/24 ! Ici tu peux vérifier leur disponibilité ! Tu peux amener ta lessive, la prendre sur place ou encore mieux l'acheter au Proximo (moins chère qu'à la laverie directement). Tu peux payer par CB ou espèces.",
     "informationTab": "Informations",
@@ -152,7 +153,7 @@
     "washerProcedure": "Déposer le linge dans le tambour sans le tasser et en respectant les charges.\n\nFermer la porte de l'appareil.\n\nSélectionner un programme avec l'une des quatre touches de programme favori standard.\n\nAprès avoir payé à la centrale de commande, appuyer sur le bouton marqué START du lave-linge.\n\nDès que le programme est terminé, l’afficheur indique 'Programme terminé', appuyer sur le bouton jaune d’ouverture du hublot pour récupérer le linge.",
     "washerTips": "Programme blanc/couleur : 6kg de linge sec (textiles en coton, lin, linge de corps, draps, jeans,serviettes de toilettes).\n\nProgramme nonrepassable : 3,5 kg de linge sec (textiles en fibres synthétiques, cotonet polyester mélangés).\n\nProgramme fin 30°C : 2,5 kg de linge sec (textiles délicats en fibres synthétiques, rayonne).\n\nProgramme laine 30°C : 2,5 kg de linge sec (textiles en laine et lainages lavables).",
     "dryerProcedure": "Déposer le linge dans le tambour sans le tasser et en respectant les charges.\n\nFermer la porte de l'appareil.\n\nSélectionner un programme avec l'une des quatre touches de programme favori standard.\n\nAprès avoir payé à la centrale de commande, appuyer sur le bouton marqué START du lave-linge.",
-    "dryerTips": "La durée conseillée est de 35 minutes pour 14kg de linge. Vous pouvez choisir une durée plus courte si le seche-linge n'est pas chargé.",
+    "dryerTips": "La durée conseillée est de 35 minutes pour 14kg de linge. Vous pouvez choisir une durée plus courte si le sèche-linge n'est pas chargé.",
     "procedure": "Procédure",
     "tips": "Conseils",
 
@@ -161,7 +162,7 @@
       "disableNotifications": "Désactiver les  notifications",
       "ok": "OK",
       "cancel": "Annuler",
-      "finished": "Cette machine est terminée. Si vous l'avez l'avez démarée, vous pouvez récupérer votre linge.",
+      "finished": "Cette machine est terminée. Si vous l'avez démarrée, vous pouvez récupérer votre linge.",
       "ready": "Cette machine est vide et prête à être utilisée.",
       "running": "Cette machine a démarré à %{start} et terminera à %{end}.\nTemps restant : %{remaining} min",
       "broken": "Cette machine est hors service. Merci pour votre compréhension.",
@@ -171,7 +172,7 @@
 
     },
     "states": {
-      "finished": "TERMINE",
+      "finished": "TERMINÉ",
       "ready": "DISPONIBLE",
       "running": "EN COURS",
       "broken": "HORS SERVICE",
@@ -195,7 +196,7 @@
   },
   "general": {
     "loading": "Chargement...",
-    "networkError": "Impossible de contacter les serveurs. Assurez vous d'être connecté à internet."
+    "networkError": "Impossible de contacter les serveurs. Assurez-vous d'être connecté à internet."
   },
   "date": {
     "daysOfWeek": {
