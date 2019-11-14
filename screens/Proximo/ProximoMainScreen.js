@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Platform, View} from 'react-native'
-import {Badge, Body, H2, Left, ListItem, Right, Text} from 'native-base';
+import {Badge, Body, Left, ListItem, Right, Text} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import FetchedDataSectionList from "../../components/FetchedDataSectionList";
@@ -57,20 +57,43 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         if (fetchedData.types !== undefined && fetchedData.articles !== undefined) {
             let types = fetchedData.types;
             let articles = fetchedData.articles;
+            finalData.push({
+                type: {
+                    id: "0",
+                    name: i18n.t('proximoScreen.all'),
+                    icon: 'star'
+                },
+                data: this.getAvailableArticles(articles, undefined)
+            });
             for (let i = 0; i < types.length; i++) {
                 finalData.push({
                     type: types[i],
-                    data: []
+                    data: this.getAvailableArticles(articles, types[i])
                 });
-                for (let k = 0; k < articles.length; k++) {
-                    if (articles[k]['type'].includes(types[i].id) && parseInt(articles[k]['quantity']) > 0) {
-                        finalData[i].data.push(articles[k]);
-                    }
-                }
+
             }
         }
         finalData.sort(ProximoMainScreen.sortFinalData);
         return finalData;
+    }
+
+    /**
+     * Get an array of available articles (in stock) of the given type
+     *
+     * @param articles The list of all articles
+     * @param type The type of articles to find (undefined for any type)
+     * @return {Array} The array of available articles
+     */
+    static getAvailableArticles(articles: Array<Object>, type: ?Object) {
+        let availableArticles = [];
+        for (let k = 0; k < articles.length; k++) {
+            if ((type !== undefined && type !== null && articles[k]['type'].includes(type['id'])
+                || type === undefined)
+                && parseInt(articles[k]['quantity']) > 0) {
+                availableArticles.push(articles[k]);
+            }
+        }
+        return availableArticles;
     }
 
     static sortFinalData(a: Object, b: Object) {
@@ -81,14 +104,14 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         return (
             <View
                 style={{
-                    flexDirection:'row'
+                    flexDirection: 'row'
                 }}>
                 <Touchable
                     style={{padding: 6}}
                     onPress={() => this.props.navigation.navigate('ProximoSearchScreen', {data: this.state.fetchedData})}>
                     <CustomMaterialIcon
                         color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon="magnify" />
+                        icon="magnify"/>
                 </Touchable>
                 <Touchable
                     style={{padding: 6}}

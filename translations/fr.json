@@ -130,7 +130,8 @@
     "openingHours": "Horaires d'ouverture",
     "paymentMethods" : "Moyens de Paiement",
     "paymentMethodsDescription" : "Espèce ou Lydia",
-    "search": "Rechercher"
+    "search": "Rechercher",
+    "all": "Tout"
   },
   "proxiwashScreen": {
     "dryer": "Sèche-Linge",

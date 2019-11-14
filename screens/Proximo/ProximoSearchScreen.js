@@ -19,10 +19,10 @@ type State = {
  * Class defining proximo's article list of a certain category.
  */
 export default class ProximoSearchScreen extends React.Component<Props, State> {
+
     state = {
         filteredData: this.props.navigation.getParam('data', {articles: [{name: "Error"}]}).articles,
     };
-
 
     /**
      * get color depending on quantity available

@@ -130,7 +130,8 @@
     "openingHours": "Openning Hours",
     "paymentMethods": "Payment Methods",
     "paymentMethodsDescription": "Cash or Lydia",
-    "search": "Search"
+    "search": "Search",
+    "all": "All"
   },
   "proxiwashScreen": {
     "dryer": "Dryer",
