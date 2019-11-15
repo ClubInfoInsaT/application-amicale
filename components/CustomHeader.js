@@ -1,15 +1,18 @@
 // @flow
 
 import * as React from "react";
-import {Body, Header, Left, Right, Title} from "native-base";
+import {Body, Header, Input, Item, Left, Right, Title} from "native-base";
 import {Platform, StyleSheet, View} from "react-native";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import Touchable from 'react-native-platform-touchable';
 import ThemeManager from "../utils/ThemeManager";
 import CustomMaterialIcon from "./CustomMaterialIcon";
+import i18n from "i18n-js";
 
 type Props = {
     hasBackButton: boolean,
+    hasSearchField: boolean,
+    searchCallback: Function,
     leftButton: React.Node,
     rightButton: React.Node,
     title: string,
@@ -29,10 +32,26 @@ export default class CustomHeader extends React.Component<Props> {
 
     static defaultProps = {
         hasBackButton: false,
+        hasSearchField: false,
+        searchCallback: () => null,
+        title: '',
         leftButton: <View/>,
         rightButton: <View/>,
         hasTabs: false,
     };
+
+    getSearchBar() {
+        return (
+            <Item
+                style={{
+                    width: '100%',
+                    marginBottom: 7
+                }}>
+                <Input placeholder={i18n.t('proximoScreen.search')}
+                onChangeText={(text) => this.props.searchCallback(text)}/>
+            </Item>
+        );
+    }
 
     render() {
         let button;
@@ -56,7 +75,9 @@ export default class CustomHeader extends React.Component<Props> {
                     {button}
                 </Left>
                 <Body>
-                    <Title>{this.props.title}</Title>
+                    {this.props.hasSearchField ?
+                        this.getSearchBar() :
+                        <Title>{this.props.title}</Title>}
                 </Body>
                 <Right>
                     {this.props.rightButton}

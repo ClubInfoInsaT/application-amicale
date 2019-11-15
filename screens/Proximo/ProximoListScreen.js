@@ -58,7 +58,7 @@ type State = {
  */
 export default class ProximoListScreen extends React.Component<Props, State> {
 
-    modalRef:  { current: null | Modalize };
+    modalRef: { current: null | Modalize };
 
     constructor(props: any) {
         super(props);
@@ -232,6 +232,36 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         }
     }
 
+    getSortMenu() {
+        return (
+            <Menu
+                ref={this.setMenuRef}
+                button={
+                    <Touchable
+                        style={{padding: 6}}
+                        onPress={() =>
+                            this._menu.show()
+                        }>
+                        <CustomMaterialIcon
+                            color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                            icon={'sort'}/>
+                    </Touchable>
+                }
+            >
+                <MenuItem
+                    onPress={() => this.sortModeSelected(sortMode.name)}>
+                    {this.state.sortNameIcon}
+                    {i18n.t('proximoScreen.sortName')}
+                </MenuItem>
+                <MenuItem
+                    onPress={() => this.sortModeSelected(sortMode.price)}>
+                    {this.state.sortPriceIcon}
+                    {i18n.t('proximoScreen.sortPrice')}
+                </MenuItem>
+            </Menu>
+        );
+    }
+
     render() {
         const nav = this.props.navigation;
         const navType = nav.getParam('type', '{name: "Error"}');
@@ -243,33 +273,12 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                           modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
                     {this.getModalContent()}
                 </Modalize>
-                <CustomHeader hasBackButton={true} navigation={nav} title={navType.name} rightButton={
-                    <Menu
-                        ref={this.setMenuRef}
-                        button={
-                            <Touchable
-                                style={{padding: 6}}
-                                onPress={() =>
-                                    this._menu.show()
-                                }>
-                                <CustomMaterialIcon
-                                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                                    icon={'sort'}/>
-                            </Touchable>
-                        }
-                    >
-                        <MenuItem
-                            onPress={() => this.sortModeSelected(sortMode.name)}>
-                            {this.state.sortNameIcon}
-                            {i18n.t('proximoScreen.sortName')}
-                        </MenuItem>
-                        <MenuItem
-                            onPress={() => this.sortModeSelected(sortMode.price)}>
-                            {this.state.sortPriceIcon}
-                            {i18n.t('proximoScreen.sortPrice')}
-                        </MenuItem>
-                    </Menu>
-                }/>
+                <CustomHeader
+                    hasBackButton={true}
+                    navigation={nav}
+                    hasSearchField={true}
+                    searchCallback={(text) => console.log(text)}
+                    rightButton={this.getSortMenu()}/>
 
                 <Content>
                     <FlatList

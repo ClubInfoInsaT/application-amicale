@@ -5,7 +5,7 @@ import {Body, Container, Content, Left, ListItem, Right, Text, Thumbnail,} from 
 import {FlatList} from "react-native";
 import i18n from "i18n-js";
 import ThemeManager from "../../utils/ThemeManager";
-import SearchHeader from "../../components/SearchHeader";
+import CustomHeader from "../../components/CustomHeader";
 
 type Props = {
     navigation: Object,
@@ -73,7 +73,11 @@ export default class ProximoSearchScreen extends React.Component<Props, State> {
     render() {
         return (
             <Container>
-                <SearchHeader searchFunction={this.search.bind(this)} navigation={this.props.navigation}/>
+                <CustomHeader
+                    hasBackButton={true}
+                    navigation={this.props.navigation}
+                    hasSearchField={true}
+                    searchCallback={(text) => this.search(text)}/>
                 <Content>
                     <FlatList
                         data={this.state.filteredData}
