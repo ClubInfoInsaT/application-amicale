@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from "react";
-import {Body, Header, Input, Item, Left, Right, Title} from "native-base";
+import {Body, Header, Input, Item, Left, Right, Title, Form} from "native-base";
 import {Platform, StyleSheet, View} from "react-native";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import Touchable from 'react-native-platform-touchable';
@@ -42,15 +42,16 @@ export default class CustomHeader extends React.Component<Props> {
         hasTabs: false,
     };
 
-    searchBarRef: Input;
-
     componentDidMount() {
-        if (this.searchBarRef !== undefined && this.props.shouldFocusSearchBar)
-            this.searchBarRef.focus();
+        if (this.refs.searchInput !== undefined && this.props.shouldFocusSearchBar) {
+            // does not work if called to early for some reason...
+            setInterval(() => this.refs.searchInput._root.focus(), 500);
+        }
     }
 
     getSearchBar() {
         return (
+            <Form>
             <Item
                 style={{
                     width: '100%',
@@ -60,11 +61,12 @@ export default class CustomHeader extends React.Component<Props> {
                     icon={'magnify'}
                     color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
                 <Input
-                    ref={(ref) => this.searchBarRef = ref}
+                    ref="searchInput"
                     placeholder={i18n.t('proximoScreen.search')}
                     placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
                     onChangeText={(text) => this.props.searchCallback(text)}/>
             </Item>
+            </Form>
         );
     }
 

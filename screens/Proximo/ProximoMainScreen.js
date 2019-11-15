@@ -38,7 +38,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         return [
             {
                 title: '',
-                data: ProximoMainScreen.generateData(fetchedData),
+                data: this.generateData(fetchedData),
                 extraData: super.state,
                 keyExtractor: this.getKeyExtractor
             }
@@ -52,7 +52,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
      * @param fetchedData The array of articles represented by objects
      * @returns {Array} The formatted dataset
      */
-    static generateData(fetchedData: Object) {
+    generateData(fetchedData: Object) {
         let finalData = [];
         if (fetchedData.types !== undefined && fetchedData.articles !== undefined) {
             let types = fetchedData.types;
@@ -84,7 +84,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
      * @param type The type of articles to find (undefined for any type)
      * @return {Array} The array of available articles
      */
-    static getAvailableArticles(articles: Array<Object>, type: ?Object) {
+    getAvailableArticles(articles: Array<Object>, type: ?Object) {
         let availableArticles = [];
         for (let k = 0; k < articles.length; k++) {
             if ((type !== undefined && type !== null && articles[k]['type'].includes(type['id'])
@@ -109,7 +109,8 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                     name: i18n.t('proximoScreen.all'),
                     icon: 'star'
                 },
-                data: this.getAvailableArticles(this.state.fetchedData.articles, undefined)
+                data: this.state.fetchedData.articles !== undefined ?
+                    this.getAvailableArticles(this.state.fetchedData.articles, undefined) : []
             },
         };
 

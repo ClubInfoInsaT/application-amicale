@@ -45,7 +45,6 @@ type Props = {
 }
 
 type State = {
-    navData: Array<Object>,
     currentSortMode: string,
     isSortReversed: boolean,
     sortPriceIcon: React.Node,
@@ -62,13 +61,12 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     modalRef: { current: null | Modalize };
     originalData: Array<Object>;
     navData = this.props.navigation.getParam('data', []);
-    shouldFocusSearchBar = this.navData['shouldFocusSearchBar'];
+    shouldFocusSearchBar = this.props.navigation.getParam('shouldFocusSearchBar', false);
 
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
         this.originalData = this.navData['data'];
-
     }
 
     state = {
@@ -300,7 +298,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         const navType = nav.getParam('type', '{name: "Error"}');
-
         return (
             <Container>
                 <Modalize ref={this.modalRef}
