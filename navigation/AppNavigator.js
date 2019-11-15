@@ -5,7 +5,6 @@ import {createMaterialBottomTabNavigatorWithInitialRoute} from './MainTabNavigat
 import SettingsScreen from '../screens/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import ProximoListScreen from '../screens/Proximo/ProximoListScreen';
-import ProximoSearchScreen from "../screens/Proximo/ProximoSearchScreen";
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import ProximoAboutScreen from '../screens/Proximo/ProximoAboutScreen';
@@ -27,7 +26,6 @@ function createAppContainerWithInitialRoute(initialRoute: string) {
                 Main: createMaterialBottomTabNavigatorWithInitialRoute(initialRoute),
                 // Drawer: MainDrawerNavigator,
                 ProximoListScreen: {screen: ProximoListScreen},
-                ProximoSearchScreen: {screen: ProximoSearchScreen},
                 SettingsScreen: {screen: SettingsScreen},
                 AboutScreen: {screen: AboutScreen},
                 AboutDependenciesScreen: {screen: AboutDependenciesScreen},
@@ -44,7 +42,7 @@ function createAppContainerWithInitialRoute(initialRoute: string) {
                 initialRouteName: "Main",
                 mode: 'card',
                 headerMode: "none",
-                // transitionConfig: () => fromRight(),
+                transitionConfig: () => fromRight(),
             })
     );
 }

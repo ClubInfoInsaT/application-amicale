@@ -51,6 +51,7 @@ type State = {
     sortPriceIcon: React.Node,
     sortNameIcon: React.Node,
     modalCurrentDisplayItem: Object,
+    currentlyDisplayedData: Array<Object>,
 };
 
 /**
@@ -59,19 +60,21 @@ type State = {
 export default class ProximoListScreen extends React.Component<Props, State> {
 
     modalRef: { current: null | Modalize };
+    originalData: Array<Object>;
 
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
+        this.originalData = this.props.navigation.getParam('data', []);
     }
 
     state = {
-        navData: this.props.navigation.getParam('data', []).sort(sortPrice),
+        currentlyDisplayedData: this.props.navigation.getParam('data', []).sort(sortPrice),
         currentSortMode: sortMode.price,
         isSortReversed: false,
         sortPriceIcon: '',
         sortNameIcon: '',
-        modalCurrentDisplayItem: {}
+        modalCurrentDisplayItem: {},
     };
 
     _menu: Menu;
@@ -111,7 +114,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
             currentSortMode: mode,
             isSortReversed: isReverse
         });
-        let data = this.state.navData;
+        let data = this.state.currentlyDisplayedData;
         switch (mode) {
             case sortMode.price:
                 if (isReverse) {
@@ -190,6 +193,35 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 }
                 break;
         }
+    }
+
+
+    sanitizeString(str: string) {
+        return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    /**
+     * Returns only the articles whose name contains str. Case and accents insensitive.
+     * @param str
+     * @returns {[]}
+     */
+    filterData(str: string) {
+        let filteredData = [];
+        const testStr = this.sanitizeString(str);
+        const articles = this.originalData;
+        for (const article of articles) {
+            const name = this.sanitizeString(article.name);
+            if (name.includes(testStr)) {
+                filteredData.push(article)
+            }
+        }
+        return filteredData;
+    }
+
+    search(str: string) {
+        this.setState({
+            currentlyDisplayedData: this.filterData(str)
+        })
     }
 
     getModalContent() {
@@ -277,13 +309,13 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                     hasBackButton={true}
                     navigation={nav}
                     hasSearchField={true}
-                    searchCallback={(text) => console.log(text)}
+                    searchCallback={(text) => this.search(text)}
                     rightButton={this.getSortMenu()}/>
 
                 <Content>
                     <FlatList
-                        data={this.state.navData}
-                        extraData={this.state.navData}
+                        data={this.state.currentlyDisplayedData}
+                        extraData={this.state.currentlyDisplayedData}
                         keyExtractor={(item) => item.name + item.code}
                         style={{minHeight: 300, width: '100%'}}
                         renderItem={({item}) =>

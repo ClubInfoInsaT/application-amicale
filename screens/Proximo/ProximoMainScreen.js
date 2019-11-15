@@ -102,25 +102,13 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
 
     getRightButton() {
         return (
-            <View
-                style={{
-                    flexDirection: 'row'
-                }}>
-                <Touchable
-                    style={{padding: 6}}
-                    onPress={() => this.props.navigation.navigate('ProximoSearchScreen', {data: this.state.fetchedData})}>
-                    <CustomMaterialIcon
-                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon="magnify"/>
-                </Touchable>
-                <Touchable
-                    style={{padding: 6}}
-                    onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
-                    <CustomMaterialIcon
-                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon="information"/>
-                </Touchable>
-            </View>
+            <Touchable
+                style={{padding: 6}}
+                onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
+                <CustomMaterialIcon
+                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                    icon="information"/>
+            </Touchable>
         );
     }
 
@@ -138,15 +126,16 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                         <CustomMaterialIcon
                             icon={item.type.icon}
                             fontSize={30}
+                            color={ThemeManager.getCurrentThemeVariables().brandPrimary}
                         />
                     </Left>
                     <Body>
                         <Text>
                             {item.type.name}
                         </Text>
-                        <Badge><Text>
+                        <Text note>
                             {item.data.length} {item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article')}
-                        </Text></Badge>
+                        </Text>
                     </Body>
                     <Right>
                         <CustomMaterialIcon icon="chevron-right"/>
