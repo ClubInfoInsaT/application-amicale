@@ -47,8 +47,13 @@ export default class CustomHeader extends React.Component<Props> {
                     width: '100%',
                     marginBottom: 7
                 }}>
-                <Input placeholder={i18n.t('proximoScreen.search')}
-                onChangeText={(text) => this.props.searchCallback(text)}/>
+                <CustomMaterialIcon
+                    icon={'magnify'}
+                    color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
+                <Input
+                    placeholder={i18n.t('proximoScreen.search')}
+                    placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
+                    onChangeText={(text) => this.props.searchCallback(text)}/>
             </Item>
         );
     }
@@ -71,7 +76,7 @@ export default class CustomHeader extends React.Component<Props> {
         return (
             <Header style={styles.header}
                     hasTabs={this.props.hasTabs}>
-                <Left>
+                <Left style={{flex: 0}}>
                     {button}
                 </Left>
                 <Body>
@@ -79,7 +84,7 @@ export default class CustomHeader extends React.Component<Props> {
                         this.getSearchBar() :
                         <Title>{this.props.title}</Title>}
                 </Body>
-                <Right>
+                <Right style={{flex: this.props.hasSearchField ? 0 : 1}}>
                     {this.props.rightButton}
                     {this.props.hasBackButton ? <View/> :
                         <Touchable
