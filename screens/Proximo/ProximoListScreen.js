@@ -61,15 +61,18 @@ export default class ProximoListScreen extends React.Component<Props, State> {
 
     modalRef: { current: null | Modalize };
     originalData: Array<Object>;
+    navData = this.props.navigation.getParam('data', []);
+    shouldFocusSearchBar = this.navData['shouldFocusSearchBar'];
 
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
-        this.originalData = this.props.navigation.getParam('data', []);
+        this.originalData = this.navData['data'];
+
     }
 
     state = {
-        currentlyDisplayedData: this.props.navigation.getParam('data', []).sort(sortPrice),
+        currentlyDisplayedData: this.navData['data'].sort(sortPrice),
         currentSortMode: sortMode.price,
         isSortReversed: false,
         sortPriceIcon: '',
@@ -310,6 +313,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                     navigation={nav}
                     hasSearchField={true}
                     searchCallback={(text) => this.search(text)}
+                    shouldFocusSearchBar={this.shouldFocusSearchBar}
                     rightButton={this.getSortMenu()}/>
 
                 <Content>

@@ -13,6 +13,7 @@ type Props = {
     hasBackButton: boolean,
     hasSearchField: boolean,
     searchCallback: Function,
+    shouldFocusSearchBar: boolean,
     leftButton: React.Node,
     rightButton: React.Node,
     title: string,
@@ -34,11 +35,19 @@ export default class CustomHeader extends React.Component<Props> {
         hasBackButton: false,
         hasSearchField: false,
         searchCallback: () => null,
+        shouldFocusSearchBar: false,
         title: '',
         leftButton: <View/>,
         rightButton: <View/>,
         hasTabs: false,
     };
+
+    searchBarRef: Input;
+
+    componentDidMount() {
+        if (this.searchBarRef !== undefined && this.props.shouldFocusSearchBar)
+            this.searchBarRef.focus();
+    }
 
     getSearchBar() {
         return (
@@ -51,6 +60,7 @@ export default class CustomHeader extends React.Component<Props> {
                     icon={'magnify'}
                     color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
                 <Input
+                    ref={(ref) => this.searchBarRef = ref}
                     placeholder={i18n.t('proximoScreen.search')}
                     placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
                     onChangeText={(text) => this.props.searchCallback(text)}/>

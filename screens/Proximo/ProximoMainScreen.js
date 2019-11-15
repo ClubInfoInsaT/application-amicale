@@ -101,25 +101,54 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
     }
 
     getRightButton() {
+        let searchScreenData = {
+            shouldFocusSearchBar: true,
+            data: {
+                type: {
+                    id: "0",
+                    name: i18n.t('proximoScreen.all'),
+                    icon: 'star'
+                },
+                data: this.getAvailableArticles(this.state.fetchedData.articles, undefined)
+            },
+        };
+
+
         return (
-            <Touchable
-                style={{padding: 6}}
-                onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
-                <CustomMaterialIcon
-                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                    icon="information"/>
-            </Touchable>
+            <View
+                style={{
+                    flexDirection: 'row'
+                }}>
+                <Touchable
+                    style={{padding: 6}}
+                    onPress={() => this.props.navigation.navigate('ProximoListScreen', searchScreenData)}>
+                    <CustomMaterialIcon
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                        icon="magnify"/>
+                </Touchable>
+                <Touchable
+                    style={{padding: 6}}
+                    onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
+                    <CustomMaterialIcon
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                        icon="information"/>
+                </Touchable>
+            </View>
         );
     }
 
     getRenderItem(item: Object, section: Object, data: Object) {
+        let dataToSend = {
+            shouldFocusSearchBar: false,
+            data: item,
+        };
         if (item.data.length > 0) {
             return (
                 <ListItem
                     button
                     thumbnail
                     onPress={() => {
-                        this.props.navigation.navigate('ProximoListScreen', item);
+                        this.props.navigation.navigate('ProximoListScreen', dataToSend);
                     }}
                 >
                     <Left>
