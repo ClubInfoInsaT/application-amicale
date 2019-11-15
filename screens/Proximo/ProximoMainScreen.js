@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Platform, View} from 'react-native'
-import {Badge, Body, H2, Left, ListItem, Right, Text} from 'native-base';
+import {Badge, Body, Left, ListItem, Right, Text} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import FetchedDataSectionList from "../../components/FetchedDataSectionList";
@@ -38,7 +38,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         return [
             {
                 title: '',
-                data: ProximoMainScreen.generateData(fetchedData),
+                data: this.generateData(fetchedData),
                 extraData: super.state,
                 keyExtractor: this.getKeyExtractor
             }
@@ -52,25 +52,48 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
      * @param fetchedData The array of articles represented by objects
      * @returns {Array} The formatted dataset
      */
-    static generateData(fetchedData: Object) {
+    generateData(fetchedData: Object) {
         let finalData = [];
         if (fetchedData.types !== undefined && fetchedData.articles !== undefined) {
             let types = fetchedData.types;
             let articles = fetchedData.articles;
+            finalData.push({
+                type: {
+                    id: "0",
+                    name: i18n.t('proximoScreen.all'),
+                    icon: 'star'
+                },
+                data: this.getAvailableArticles(articles, undefined)
+            });
             for (let i = 0; i < types.length; i++) {
                 finalData.push({
                     type: types[i],
-                    data: []
+                    data: this.getAvailableArticles(articles, types[i])
                 });
-                for (let k = 0; k < articles.length; k++) {
-                    if (articles[k]['type'].includes(types[i].id) && parseInt(articles[k]['quantity']) > 0) {
-                        finalData[i].data.push(articles[k]);
-                    }
-                }
+
             }
         }
         finalData.sort(ProximoMainScreen.sortFinalData);
         return finalData;
+    }
+
+    /**
+     * Get an array of available articles (in stock) of the given type
+     *
+     * @param articles The list of all articles
+     * @param type The type of articles to find (undefined for any type)
+     * @return {Array} The array of available articles
+     */
+    getAvailableArticles(articles: Array<Object>, type: ?Object) {
+        let availableArticles = [];
+        for (let k = 0; k < articles.length; k++) {
+            if ((type !== undefined && type !== null && articles[k]['type'].includes(type['id'])
+                || type === undefined)
+                && parseInt(articles[k]['quantity']) > 0) {
+                availableArticles.push(articles[k]);
+            }
+        }
+        return availableArticles;
     }
 
     static sortFinalData(a: Object, b: Object) {
@@ -78,40 +101,71 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
     }
 
     getRightButton() {
+        let searchScreenData = {
+            shouldFocusSearchBar: true,
+            data: {
+                type: {
+                    id: "0",
+                    name: i18n.t('proximoScreen.all'),
+                    icon: 'star'
+                },
+                data: this.state.fetchedData.articles !== undefined ?
+                    this.getAvailableArticles(this.state.fetchedData.articles, undefined) : []
+            },
+        };
+
+
         return (
-            <Touchable
-                style={{padding: 6}}
-                onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
-                <CustomMaterialIcon
-                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                    icon="information"/>
-            </Touchable>
+            <View
+                style={{
+                    flexDirection: 'row'
+                }}>
+                <Touchable
+                    style={{padding: 6}}
+                    onPress={() => this.props.navigation.navigate('ProximoListScreen', searchScreenData)}>
+                    <CustomMaterialIcon
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                        icon="magnify"/>
+                </Touchable>
+                <Touchable
+                    style={{padding: 6}}
+                    onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
+                    <CustomMaterialIcon
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                        icon="information"/>
+                </Touchable>
+            </View>
         );
     }
 
     getRenderItem(item: Object, section: Object, data: Object) {
+        let dataToSend = {
+            shouldFocusSearchBar: false,
+            data: item,
+        };
         if (item.data.length > 0) {
             return (
                 <ListItem
                     button
                     thumbnail
                     onPress={() => {
-                        this.props.navigation.navigate('ProximoListScreen', item);
+                        this.props.navigation.navigate('ProximoListScreen', dataToSend);
                     }}
                 >
                     <Left>
                         <CustomMaterialIcon
                             icon={item.type.icon}
                             fontSize={30}
+                            color={ThemeManager.getCurrentThemeVariables().brandPrimary}
                         />
                     </Left>
                     <Body>
                         <Text>
                             {item.type.name}
                         </Text>
-                        <Badge><Text>
+                        <Text note>
                             {item.data.length} {item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article')}
-                        </Text></Badge>
+                        </Text>
                     </Body>
                     <Right>
                         <CustomMaterialIcon icon="chevron-right"/>

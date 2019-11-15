@@ -1,15 +1,19 @@
 // @flow
 
 import * as React from "react";
-import {Body, Header, Left, Right, Title} from "native-base";
+import {Body, Header, Input, Item, Left, Right, Title, Form} from "native-base";
 import {Platform, StyleSheet, View} from "react-native";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import Touchable from 'react-native-platform-touchable';
 import ThemeManager from "../utils/ThemeManager";
 import CustomMaterialIcon from "./CustomMaterialIcon";
+import i18n from "i18n-js";
 
 type Props = {
     hasBackButton: boolean,
+    hasSearchField: boolean,
+    searchCallback: Function,
+    shouldFocusSearchBar: boolean,
     leftButton: React.Node,
     rightButton: React.Node,
     title: string,
@@ -29,10 +33,42 @@ export default class CustomHeader extends React.Component<Props> {
 
     static defaultProps = {
         hasBackButton: false,
+        hasSearchField: false,
+        searchCallback: () => null,
+        shouldFocusSearchBar: false,
+        title: '',
         leftButton: <View/>,
         rightButton: <View/>,
         hasTabs: false,
     };
+
+    componentDidMount() {
+        if (this.refs.searchInput !== undefined && this.refs.searchInput._root !== undefined && this.props.shouldFocusSearchBar) {
+            // does not work if called to early for some reason...
+            setTimeout(() => this.refs.searchInput._root.focus(), 500);
+        }
+    }
+
+    getSearchBar() {
+        return (
+            <Form>
+            <Item
+                style={{
+                    width: '100%',
+                    marginBottom: 7
+                }}>
+                <CustomMaterialIcon
+                    icon={'magnify'}
+                    color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
+                <Input
+                    ref="searchInput"
+                    placeholder={i18n.t('proximoScreen.search')}
+                    placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
+                    onChangeText={(text) => this.props.searchCallback(text)}/>
+            </Item>
+            </Form>
+        );
+    }
 
     render() {
         let button;
@@ -52,13 +88,15 @@ export default class CustomHeader extends React.Component<Props> {
         return (
             <Header style={styles.header}
                     hasTabs={this.props.hasTabs}>
-                <Left>
+                <Left style={{flex: 0}}>
                     {button}
                 </Left>
                 <Body>
-                    <Title>{this.props.title}</Title>
+                    {this.props.hasSearchField ?
+                        this.getSearchBar() :
+                        <Title>{this.props.title}</Title>}
                 </Body>
-                <Right>
+                <Right style={{flex: this.props.hasSearchField ? 0 : 1}}>
                     {this.props.rightButton}
                     {this.props.hasBackButton ? <View/> :
                         <Touchable

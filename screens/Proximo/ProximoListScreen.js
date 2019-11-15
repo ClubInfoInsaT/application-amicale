@@ -45,12 +45,12 @@ type Props = {
 }
 
 type State = {
-    navData: Array<Object>,
     currentSortMode: string,
     isSortReversed: boolean,
     sortPriceIcon: React.Node,
     sortNameIcon: React.Node,
     modalCurrentDisplayItem: Object,
+    currentlyDisplayedData: Array<Object>,
 };
 
 /**
@@ -58,20 +58,24 @@ type State = {
  */
 export default class ProximoListScreen extends React.Component<Props, State> {
 
-    modalRef:  { current: null | Modalize };
+    modalRef: { current: null | Modalize };
+    originalData: Array<Object>;
+    navData = this.props.navigation.getParam('data', []);
+    shouldFocusSearchBar = this.props.navigation.getParam('shouldFocusSearchBar', false);
 
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
+        this.originalData = this.navData['data'];
     }
 
     state = {
-        navData: this.props.navigation.getParam('data', []).sort(sortPrice),
+        currentlyDisplayedData: this.navData['data'].sort(sortPrice),
         currentSortMode: sortMode.price,
         isSortReversed: false,
         sortPriceIcon: '',
         sortNameIcon: '',
-        modalCurrentDisplayItem: {}
+        modalCurrentDisplayItem: {},
     };
 
     _menu: Menu;
@@ -111,7 +115,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
             currentSortMode: mode,
             isSortReversed: isReverse
         });
-        let data = this.state.navData;
+        let data = this.state.currentlyDisplayedData;
         switch (mode) {
             case sortMode.price:
                 if (isReverse) {
@@ -192,6 +196,35 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         }
     }
 
+
+    sanitizeString(str: string) {
+        return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    /**
+     * Returns only the articles whose name contains str. Case and accents insensitive.
+     * @param str
+     * @returns {[]}
+     */
+    filterData(str: string) {
+        let filteredData = [];
+        const testStr = this.sanitizeString(str);
+        const articles = this.originalData;
+        for (const article of articles) {
+            const name = this.sanitizeString(article.name);
+            if (name.includes(testStr)) {
+                filteredData.push(article)
+            }
+        }
+        return filteredData;
+    }
+
+    search(str: string) {
+        this.setState({
+            currentlyDisplayedData: this.filterData(str)
+        })
+    }
+
     getModalContent() {
         return (
             <View style={{
@@ -232,10 +265,39 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         }
     }
 
+    getSortMenu() {
+        return (
+            <Menu
+                ref={this.setMenuRef}
+                button={
+                    <Touchable
+                        style={{padding: 6}}
+                        onPress={() =>
+                            this._menu.show()
+                        }>
+                        <CustomMaterialIcon
+                            color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
+                            icon={'sort'}/>
+                    </Touchable>
+                }
+            >
+                <MenuItem
+                    onPress={() => this.sortModeSelected(sortMode.name)}>
+                    {this.state.sortNameIcon}
+                    {i18n.t('proximoScreen.sortName')}
+                </MenuItem>
+                <MenuItem
+                    onPress={() => this.sortModeSelected(sortMode.price)}>
+                    {this.state.sortPriceIcon}
+                    {i18n.t('proximoScreen.sortPrice')}
+                </MenuItem>
+            </Menu>
+        );
+    }
+
     render() {
         const nav = this.props.navigation;
         const navType = nav.getParam('type', '{name: "Error"}');
-
         return (
             <Container>
                 <Modalize ref={this.modalRef}
@@ -243,38 +305,18 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                           modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
                     {this.getModalContent()}
                 </Modalize>
-                <CustomHeader hasBackButton={true} navigation={nav} title={navType.name} rightButton={
-                    <Menu
-                        ref={this.setMenuRef}
-                        button={
-                            <Touchable
-                                style={{padding: 6}}
-                                onPress={() =>
-                                    this._menu.show()
-                                }>
-                                <CustomMaterialIcon
-                                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                                    icon={'sort'}/>
-                            </Touchable>
-                        }
-                    >
-                        <MenuItem
-                            onPress={() => this.sortModeSelected(sortMode.name)}>
-                            {this.state.sortNameIcon}
-                            {i18n.t('proximoScreen.sortName')}
-                        </MenuItem>
-                        <MenuItem
-                            onPress={() => this.sortModeSelected(sortMode.price)}>
-                            {this.state.sortPriceIcon}
-                            {i18n.t('proximoScreen.sortPrice')}
-                        </MenuItem>
-                    </Menu>
-                }/>
+                <CustomHeader
+                    hasBackButton={true}
+                    navigation={nav}
+                    hasSearchField={true}
+                    searchCallback={(text) => this.search(text)}
+                    shouldFocusSearchBar={this.shouldFocusSearchBar}
+                    rightButton={this.getSortMenu()}/>
 
                 <Content>
                     <FlatList
-                        data={this.state.navData}
-                        extraData={this.state.navData}
+                        data={this.state.currentlyDisplayedData}
+                        extraData={this.state.currentlyDisplayedData}
                         keyExtractor={(item) => item.name + item.code}
                         style={{minHeight: 300, width: '100%'}}
                         renderItem={({item}) =>
