@@ -34,12 +34,12 @@ const links = {
         "&body=" +
         "Coucou !\n\n",
     authorLinkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
-    yohanMail: "mailto:TODO@etud.insa-toulouse.fr?" + // TODO set real email
+    yohanMail: "mailto:ysimard@etud.insa-toulouse.fr?" +
         "subject=" +
         "Application Amicale INSA Toulouse" +
         "&body=" +
         "Coucou !\n\n",
-    yohanLinkedin: 'https://www.linkedin.com/in/', // TODO set real link
+    yohanLinkedin: 'https://www.linkedin.com/in/yohan-simard', // TODO set real link
     react: 'https://facebook.github.io/react-native/',
 };
 
