@@ -51,7 +51,6 @@ export default class CustomHeader extends React.Component<Props> {
 
     getSearchBar() {
         return (
-            <Form>
             <Item
                 style={{
                     width: '100%',
@@ -66,7 +65,6 @@ export default class CustomHeader extends React.Component<Props> {
                     placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
                     onChangeText={(text) => this.props.searchCallback(text)}/>
             </Item>
-            </Form>
         );
     }
 
@@ -94,7 +92,9 @@ export default class CustomHeader extends React.Component<Props> {
                 <Body>
                     {this.props.hasSearchField ?
                         this.getSearchBar() :
-                        <Title>{this.props.title}</Title>}
+                        <Title style={{
+                            paddingLeft: 10
+                        }}>{this.props.title}</Title>}
                 </Body>
                 <Right style={{flex: this.props.hasSearchField ? 0 : 1}}>
                     {this.props.rightButton}
