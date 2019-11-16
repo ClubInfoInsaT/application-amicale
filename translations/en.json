@@ -110,8 +110,10 @@
     "changelog": "Changelog",
     "license": "License",
     "debug": "Debug",
+    "team": "Team",
     "author": "Author",
-    "mail": "Send an email",
+    "authorMail": "Send an email",
+    "additionalDev": "Additional developer",
     "technologies": "Technologies",
     "reactNative": "Made with React Native",
     "libs": "Libraries used"
