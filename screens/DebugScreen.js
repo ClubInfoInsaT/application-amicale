@@ -28,7 +28,7 @@ import Touchable from "react-native-platform-touchable";
 import {Alert, View, Clipboard, Image} from "react-native";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import NotificationsManager from "../utils/NotificationsManager";
-import Modalize from "react-native-modalize";
+import {Modalize} from "react-native-modalize";
 
 type Props = {
     navigation: Object,

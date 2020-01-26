@@ -9,7 +9,7 @@ import appJson from '../../app';
 import packageJson from '../../package';
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
-import Modalize from "react-native-modalize";
+import {Modalize} from "react-native-modalize";
 import ThemeManager from "../../utils/ThemeManager";
 
 const links = {

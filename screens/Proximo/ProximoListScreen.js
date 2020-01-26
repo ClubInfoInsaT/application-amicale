@@ -9,7 +9,7 @@ import Menu, {MenuItem} from 'react-native-material-menu';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import ThemeManager from "../../utils/ThemeManager";
-import Modalize from 'react-native-modalize';
+import {Modalize} from 'react-native-modalize';
 
 const sortMode = {
     price: "0",

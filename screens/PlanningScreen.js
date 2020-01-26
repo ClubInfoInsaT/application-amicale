@@ -11,7 +11,7 @@ import BaseContainer from "../components/BaseContainer";
 import {Agenda, LocaleConfig} from 'react-native-calendars';
 import HTML from 'react-native-render-html';
 import Touchable from 'react-native-platform-touchable';
-import Modalize from 'react-native-modalize';
+import {Modalize} from 'react-native-modalize';
 import WebDataManager from "../utils/WebDataManager";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 
