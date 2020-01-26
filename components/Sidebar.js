@@ -79,10 +79,6 @@ export default class SideBar extends React.Component<Props, State> {
     render() {
         return (
             <Container style={{backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor}}>
-                <Content
-                    bounces={false}
-                    style={{flex: 1, top: -1}}
-                >
                     <Image source={drawerCover} style={styles.drawerCover}/>
                     <FlatList
                         data={this.dataSet}
@@ -126,7 +122,6 @@ export default class SideBar extends React.Component<Props, State> {
                                 </Right>}
                             </ListItem>}
                     />
-                </Content>
             </Container>
         );
     }

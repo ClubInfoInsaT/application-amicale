@@ -311,43 +311,42 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                     hasSearchField={true}
                     searchCallback={(text) => this.search(text)}
                     shouldFocusSearchBar={this.shouldFocusSearchBar}
-                    rightButton={this.getSortMenu()}/>
+                    rightButton={this.getSortMenu()}
+                />
 
-                <Content>
-                    <FlatList
-                        data={this.state.currentlyDisplayedData}
-                        extraData={this.state.currentlyDisplayedData}
-                        keyExtractor={(item) => item.name + item.code}
-                        style={{minHeight: 300, width: '100%'}}
-                        renderItem={({item}) =>
-                            <ListItem
-                                thumbnail
-                                onPress={() => {
-                                    this.showItemDetails(item);
-                                }}
-                            >
-                                <Left>
-                                    <Thumbnail square source={{uri: item.image}}/>
-                                </Left>
-                                <Body>
-                                    <Text style={{marginLeft: 20}}>
-                                        {item.name}
-                                    </Text>
-                                    <Text note style={{
-                                        marginLeft: 20,
-                                        color: this.getStockColor(parseInt(item.quantity))
-                                    }}>
-                                        {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
-                                    </Text>
-                                </Body>
-                                <Right>
-                                    <Text style={{fontWeight: "bold"}}>
-                                        {item.price}€
-                                    </Text>
-                                </Right>
-                            </ListItem>}
-                    />
-                </Content>
+                <FlatList
+                    data={this.state.currentlyDisplayedData}
+                    extraData={this.state.currentlyDisplayedData}
+                    keyExtractor={(item) => item.name + item.code}
+                    style={{minHeight: 300, width: '100%'}}
+                    renderItem={({item}) =>
+                        <ListItem
+                            thumbnail
+                            onPress={() => {
+                                this.showItemDetails(item);
+                            }}
+                        >
+                            <Left>
+                                <Thumbnail square source={{uri: item.image}}/>
+                            </Left>
+                            <Body>
+                                <Text style={{marginLeft: 20}}>
+                                    {item.name}
+                                </Text>
+                                <Text note style={{
+                                    marginLeft: 20,
+                                    color: this.getStockColor(parseInt(item.quantity))
+                                }}>
+                                    {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
+                                </Text>
+                            </Body>
+                            <Right>
+                                <Text style={{fontWeight: "bold"}}>
+                                    {item.price}€
+                                </Text>
+                            </Right>
+                        </ListItem>}
+                />
             </Container>
         );
     }
