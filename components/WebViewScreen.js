@@ -189,8 +189,7 @@ export default class WebViewScreen extends React.Component<Props, State> {
                 headerTitle={this.props.headerTitle}
                 headerRightButton={this.getRefreshButton()}
                 hasBackButton={this.props.hasHeaderBackButton}
-                hasSideMenu={this.props.hasSideMenu}
-                isHeaderVisible={!this.state.isLandscape}>
+                hasSideMenu={this.props.hasSideMenu}>
                 {this.props.data.length === 1 ?
                     this.getWebview(this.props.data[0]) :
                     <Tabs
