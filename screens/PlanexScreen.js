@@ -15,7 +15,8 @@ const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
 const CUSTOM_CSS_GENERAL = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customMobile2.css';
 const CUSTOM_CSS_NIGHTMODE = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customDark2.css';
 
-// JS + JQuery functions used to remove alpha from events. Copy paste in browser console for quick testing
+// // JS + JQuery functions used to remove alpha from events. Copy paste in browser console for quick testing
+// // Remove alpha from given Jquery node
 // function removeAlpha(node) {
 //     console.log(node);
 //     let bg = node.css("background-color");
@@ -25,6 +26,7 @@ const CUSTOM_CSS_NIGHTMODE = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_
 //         node.css("background-color", newBg);
 //     }
 // }
+// // Observe for planning DOM changes
 // let observer = new MutationObserver(function(mutations) {
 //     for (let i = 0; i < mutations.length; i++) {
 //         if (mutations[i]['addedNodes'].length > 0 && $(mutations[i]['addedNodes'][0]).hasClass("fc-event"))
@@ -32,6 +34,10 @@ const CUSTOM_CSS_NIGHTMODE = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_
 //     }
 // });
 // observer.observe(document.querySelector(".fc-body"), {attributes: false, childList: true, characterData: false, subtree:true});
+// // Run remove alpha a first time on whole planning. Useful when code injected after planning fully loaded.
+// $(".fc-event-container .fc-event").each(function(index) {
+//     removeAlpha($(this));
+// });
 
 // Watch for changes in the calendar and call the remove alpha function
 const OBSERVE_MUTATIONS_INJECTED =
@@ -50,7 +56,10 @@ const OBSERVE_MUTATIONS_INJECTED =
     '            removeAlpha($(mutations[i][\'addedNodes\'][0]))\n' +
     '    }\n' +
     '});\n' +
-    'observer.observe(document.querySelector(".fc-body"), {attributes: false, childList: true, characterData: false, subtree:true});\n';
+    'observer.observe(document.querySelector(".fc-body"), {attributes: false, childList: true, characterData: false, subtree:true});\n' +
+    '$(".fc-event-container .fc-event").each(function(index) {\n' +
+    '    removeAlpha($(this));\n' +
+    '});';
 /**
  * Class defining the app's planex screen.
  * This screen uses a webview to render the planex page
