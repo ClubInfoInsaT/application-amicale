@@ -12,6 +12,7 @@ import SelfMenuScreen from '../screens/SelfMenuScreen';
 import TutorInsaScreen from "../screens/TutorInsaScreen";
 import AmicaleScreen from "../screens/AmicaleScreen";
 import WiketudScreen from "../screens/WiketudScreen";
+import ElusEtudScreen from "../screens/ElusEtudScreen";
 import AvailableRoomScreen from "../screens/AvailableRoomScreen";
 import DebugScreen from '../screens/DebugScreen';
 import {fromRight} from "react-navigation-transitions";
@@ -33,6 +34,7 @@ function createAppContainerWithInitialRoute(initialRoute: string) {
                 TutorInsaScreen: {screen: TutorInsaScreen},
                 AmicaleScreen: {screen: AmicaleScreen},
                 WiketudScreen: {screen: WiketudScreen},
+                ElusEtudScreen: {screen: ElusEtudScreen},
                 AvailableRoomScreen: {screen: AvailableRoomScreen},
                 ProxiwashAboutScreen: {screen: ProxiwashAboutScreen},
                 ProximoAboutScreen: {screen: ProximoAboutScreen},

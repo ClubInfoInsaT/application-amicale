@@ -46,6 +46,11 @@ export default class SideBar extends React.Component<Props, State> {
                 icon: "web",
             },
             {
+                name: "Élus Étudiants",
+                route: "ElusEtudScreen",
+                icon: "alpha-e-box",
+            },
+            {
                 name: "Wiketud",
                 route: "WiketudScreen",
                 icon: "wikipedia",
