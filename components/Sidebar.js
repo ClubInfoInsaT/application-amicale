@@ -8,6 +8,7 @@ import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import ThemeManager from "../utils/ThemeManager";
 
 const deviceHeight = Dimensions.get("window").height;
+const deviceWidth = Dimensions.get("window").width;
 
 const drawerCover = require("../assets/drawer-cover.png");
 
@@ -136,8 +137,8 @@ export default class SideBar extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
     drawerCover: {
-        height: deviceHeight / 5,
-        width: deviceHeight / 2.5,
+        height: deviceWidth / 3,
+        width: 2 * deviceWidth / 3,
         position: "relative",
         marginBottom: 10,
         marginTop: 20
