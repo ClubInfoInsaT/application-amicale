@@ -80,8 +80,10 @@ export default class PlanexScreen extends React.Component<Props> {
             this.customInjectedJS += '$("head").append(\'<link rel="stylesheet" href="' + CUSTOM_CSS_NIGHTMODE + '" type="text/css"/>\');';
 
         this.customInjectedJS +=
-            '$(".fc-toolbar .fc-center").append(\'<p id="rotateToLandscape">' + i18n.t("planexScreen.rotateToLandscape") + '</p>\');' +
-            '$(".fc-toolbar .fc-center").append(\'<p id="rotateToPortrait">' + i18n.t("planexScreen.rotateToPortrait") + '</p>\');' +
+            '$(".fc-toolbar .fc-center").append(\'<p id="rotateToLandscape" style="color: ' + ThemeManager.getCurrentThemeVariables().brandPrimary + '">' +
+            i18n.t("planexScreen.rotateToLandscape") + '</p>\');' +
+            '$(".fc-toolbar .fc-center").append(\'<p id="rotateToPortrait" style="color: ' + ThemeManager.getCurrentThemeVariables().brandPrimary + '">' +
+            i18n.t("planexScreen.rotateToPortrait") + '</p>\');' +
             'removeAlpha();' +
             '});true;'; // Prevent crash on ios
 
