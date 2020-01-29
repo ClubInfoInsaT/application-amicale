@@ -9,6 +9,7 @@ import {Platform, View} from "react-native";
 import ThemeManager from "../utils/ThemeManager";
 import Touchable from "react-native-platform-touchable";
 import {ScreenOrientation} from "expo";
+import {NavigationActions} from "react-navigation";
 
 
 type Props = {
@@ -19,6 +20,8 @@ type Props = {
     hasTabs: boolean,
     hasBackButton: boolean,
     hasSideMenu: boolean,
+    enableRotation: boolean,
+    hideHeaderOnLandscape: boolean,
 }
 
 type State = {
@@ -37,6 +40,8 @@ export default class BaseContainer extends React.Component<Props, State> {
         hasTabs: false,
         hasBackButton: false,
         hasSideMenu: true,
+        enableRotation: false,
+        hideHeaderOnLandscape: false,
     };
 
 
@@ -59,18 +64,31 @@ export default class BaseContainer extends React.Component<Props, State> {
      * Register for blur event to close side menu on screen change
      */
     componentDidMount() {
-        this.willFocusSubscription = this.props.navigation.addListener('willFocus', payload => {
-            ScreenOrientation.unlockAsync();
-            ScreenOrientation.addOrientationChangeListener((OrientationChangeEvent) => {
-                let isLandscape = OrientationChangeEvent.orientationInfo.orientation === ScreenOrientation.Orientation.LANDSCAPE ||
-                    OrientationChangeEvent.orientationInfo.orientation === ScreenOrientation.Orientation.LANDSCAPE_LEFT ||
-                    OrientationChangeEvent.orientationInfo.orientation === ScreenOrientation.Orientation.LANDSCAPE_RIGHT;
-                this.setState({isHeaderVisible: !isLandscape});
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            payload => {
+                if (this.props.enableRotation) {
+                    ScreenOrientation.unlockAsync();
+                    ScreenOrientation.addOrientationChangeListener((OrientationChangeEvent) => {
+                        if (this.props.hideHeaderOnLandscape) {
+                            let isLandscape = OrientationChangeEvent.orientationInfo.orientation === ScreenOrientation.Orientation.LANDSCAPE ||
+                                OrientationChangeEvent.orientationInfo.orientation === ScreenOrientation.Orientation.LANDSCAPE_LEFT ||
+                                OrientationChangeEvent.orientationInfo.orientation === ScreenOrientation.Orientation.LANDSCAPE_RIGHT;
+                            this.setState({isHeaderVisible: !isLandscape});
+                            const setParamsAction = NavigationActions.setParams({
+                                params: {showTabBar: !isLandscape},
+                                key: this.props.navigation.state.key,
+                            });
+                            this.props.navigation.dispatch(setParamsAction);
+                        }
+                    });
+                }
             });
-        });
         this.willBlurSubscription = this.props.navigation.addListener(
             'willBlur',
             payload => {
+                if (this.props.enableRotation)
+                    ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
                 this.setState({isOpen: false});
             }
         );
@@ -104,7 +122,7 @@ export default class BaseContainer extends React.Component<Props, State> {
                         rightButton={this.props.headerRightButton}
                         hasTabs={this.props.hasTabs}
                         hasBackButton={this.props.hasBackButton}/>
-                    : null}
+                    : <View style={{paddingTop: 20}}/>}
                 {this.props.children}
             </Container>
         );
@@ -112,33 +130,20 @@ export default class BaseContainer extends React.Component<Props, State> {
 
 
     render() {
-        // if (this.state.isHeaderVisible) {
-            return (
-                <View style={{
-                    backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
-                    width: '100%',
-                    height: '100%'
-                }}>
-                    {this.props.hasSideMenu ?
-                        <CustomSideMenu
-                            navigation={this.props.navigation} isOpen={this.state.isOpen}
-                            onChange={(isOpen) => this.updateMenuState(isOpen)}>
-                            {this.getMainContainer()}
-                        </CustomSideMenu> :
-                        this.getMainContainer()}
-                </View>
-            );
-        // } else {
-        //     return (
-        //         <View style={{
-        //             backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
-        //             width: '100%',
-        //             height: '100%'
-        //         }}>
-        //             {this.props.children}
-        //         </View>
-        //     );
-        // }
-
+        return (
+            <View style={{
+                backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
+                width: '100%',
+                height: '100%'
+            }}>
+                {this.props.hasSideMenu ?
+                    <CustomSideMenu
+                        navigation={this.props.navigation} isOpen={this.state.isOpen}
+                        onChange={(isOpen) => this.updateMenuState(isOpen)}>
+                        {this.getMainContainer()}
+                    </CustomSideMenu> :
+                    this.getMainContainer()}
+            </View>
+        );
     }
 }
