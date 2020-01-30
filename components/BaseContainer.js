@@ -5,7 +5,7 @@ import {Container} from "native-base";
 import CustomHeader from "./CustomHeader";
 import CustomSideMenu from "./CustomSideMenu";
 import CustomMaterialIcon from "./CustomMaterialIcon";
-import {Platform, View} from "react-native";
+import {Platform, View, StatusBar} from "react-native";
 import ThemeManager from "../utils/ThemeManager";
 import Touchable from "react-native-platform-touchable";
 import {ScreenOrientation} from "expo";
@@ -80,6 +80,7 @@ export default class BaseContainer extends React.Component<Props, State> {
                                 key: this.props.navigation.state.key,
                             });
                             this.props.navigation.dispatch(setParamsAction);
+                            StatusBar.setHidden(isLandscape);
                         }
                     });
                 }
@@ -122,7 +123,7 @@ export default class BaseContainer extends React.Component<Props, State> {
                         rightButton={this.props.headerRightButton}
                         hasTabs={this.props.hasTabs}
                         hasBackButton={this.props.hasBackButton}/>
-                    : <View style={{paddingTop: 20}}/>}
+                    : <View/>}
                 {this.props.children}
             </Container>
         );

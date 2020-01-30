@@ -12,7 +12,7 @@ type Props = {
 
 const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
 
-const CUSTOM_CSS_GENERAL = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customMobile2.css';
+const CUSTOM_CSS_GENERAL = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customMobile3.css';
 const CUSTOM_CSS_NIGHTMODE = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customDark2.css';
 
 // // JS + JQuery functions used to remove alpha from events. Copy paste in browser console for quick testing
@@ -73,7 +73,7 @@ export default class PlanexScreen extends React.Component<Props> {
         this.customInjectedJS =
             '$(document).ready(function() {' +
             OBSERVE_MUTATIONS_INJECTED +
-            '$("head").append(\'<meta name="viewport" content="width=device-width, initial-scale=0.8">\');' +
+            '$("head").append(\'<meta name="viewport" content="width=device-width, initial-scale=0.7">\');' +
             '$("head").append(\'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\');';
 
         if (ThemeManager.getNightMode())
