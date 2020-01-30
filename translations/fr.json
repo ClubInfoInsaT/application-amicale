@@ -7,12 +7,13 @@
     "menuSelf": "Menu du RU",
     "settings": "Paramètres",
     "availableRooms": "Salles dispo",
+    "bluemind": "Mails INSA",
     "about": "À Propos",
     "debug": "Debug"
   },
   "sidenav": {
-    "divider1": "Sites bien",
-    "divider2": "Services utiles",
+    "divider1": "Sites utiles",
+    "divider2": "Services",
     "divider3": "Personnalisation"
   },
   "intro": {

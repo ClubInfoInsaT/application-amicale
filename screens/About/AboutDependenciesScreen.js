@@ -31,24 +31,22 @@ export default class AboutDependenciesScreen extends React.Component<Props> {
         return (
             <Container>
                 <CustomHeader hasBackButton={true} navigation={nav} title={i18n.t('aboutScreen.libs')}/>
-                <Content>
-                    <FlatList
-                        data={data}
-                        keyExtractor={(item) => item.name}
-                        style={{minHeight: 300, width: '100%'}}
-                        renderItem={({item}) =>
-                            <ListItem>
-                                <Body>
-                                    <Text>
-                                        {item.name}
-                                    </Text>
-                                    <Text note>
-                                        {item.version.replace('^', '')}
-                                    </Text>
-                                </Body>
-                            </ListItem>}
-                    />
-                </Content>
+                <FlatList
+                    data={data}
+                    keyExtractor={(item) => item.name}
+                    style={{minHeight: 300, width: '100%'}}
+                    renderItem={({item}) =>
+                        <ListItem>
+                            <Body>
+                                <Text>
+                                    {item.name}
+                                </Text>
+                                <Text note>
+                                    {item.version.replace('^', '')}
+                                </Text>
+                            </Body>
+                        </ListItem>}
+                />
             </Container>
         );
     }

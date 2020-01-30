@@ -185,6 +185,107 @@ export default class AboutScreen extends React.Component<Props, State> {
         },
     ];
 
+    dataOrder: Array<Object> = [
+        {
+            id: 'app',
+        },
+        {
+            id: 'team',
+        },
+        {
+            id: 'techno',
+        },
+    ];
+
+    getAppCard() {
+        return (
+            <Card>
+                <CardItem>
+                    <Left>
+                        <Thumbnail square source={require('../../assets/icon.png')}/>
+                        <Body>
+                            <H1>{appJson.expo.name}</H1>
+                            <Text note>
+                                v.{appJson.expo.version}
+                            </Text>
+                        </Body>
+                    </Left>
+                </CardItem>
+                <FlatList
+                    data={this.appData}
+                    extraData={this.state}
+                    keyExtractor={(item) => item.icon}
+                    listKey={(item) => "app"}
+                    renderItem={({item}) =>
+                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
+                    }
+                />
+            </Card>
+        );
+    }
+
+    getTeamCard() {
+        return (
+            <Card>
+                <CardItem>
+                    <Left>
+                        <CustomMaterialIcon
+                            icon={'account-multiple'}
+                            fontSize={40}
+                            width={40}
+                            color={ThemeManager.getCurrentThemeVariables().brandPrimary}/>
+                        <Body>
+                            <H1>{i18n.t('aboutScreen.team')}</H1>
+                        </Body>
+                    </Left>
+                </CardItem>
+                <CardItem header>
+                    <Text>{i18n.t('aboutScreen.author')}</Text>
+                </CardItem>
+                <FlatList
+                    data={this.authorData}
+                    extraData={this.state}
+                    keyExtractor={(item) => item.icon}
+                    listKey={(item) => "team1"}
+                    renderItem={({item}) =>
+                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
+                    }
+                />
+                <CardItem header>
+                    <Text>{i18n.t('aboutScreen.additionalDev')}</Text>
+                </CardItem>
+                <FlatList
+                    data={this.additionalDevData}
+                    extraData={this.state}
+                    keyExtractor={(item) => item.icon}
+                    listKey={(item) => "team2"}
+                    renderItem={({item}) =>
+                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
+                    }
+                />
+            </Card>
+        );
+    }
+
+    getTechnoCard() {
+        return (
+            <Card>
+                <CardItem header>
+                    <Text>{i18n.t('aboutScreen.technologies')}</Text>
+                </CardItem>
+                <FlatList
+                    data={this.technoData}
+                    extraData={this.state}
+                    keyExtractor={(item) => item.icon}
+                    listKey={(item) => "techno"}
+                    renderItem={({item}) =>
+                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
+                    }
+                />
+            </Card>
+        );
+    }
+
     /**
      * Get a clickable card item to be rendered inside a card.
      *
@@ -284,86 +385,33 @@ export default class AboutScreen extends React.Component<Props, State> {
         }
     }
 
+    getMainCard(item: Object) {
+        switch (item.id) {
+            case 'app':
+                return this.getAppCard();
+            case 'team':
+                return this.getTeamCard();
+            case 'techno':
+                return this.getTechnoCard();
+        }
+        return <View/>;
+    }
+
     render() {
         const nav = this.props.navigation;
         return (
             <Container>
                 {this.getBugReportModal()}
                 <CustomHeader navigation={nav} title={i18n.t('screens.about')} hasBackButton={true}/>
-                <Content padder>
-                    <Card>
-                        <CardItem>
-                            <Left>
-                                <Thumbnail square source={require('../../assets/icon.png')}/>
-                                <Body>
-                                    <H1>{appJson.expo.name}</H1>
-                                    <Text note>
-                                        v.{appJson.expo.version}
-                                    </Text>
-                                </Body>
-                            </Left>
-                        </CardItem>
-                        <FlatList
-                            data={this.appData}
-                            extraData={this.state}
-                            keyExtractor={(item) => item.icon}
-                            renderItem={({item}) =>
-                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                            }
-                        />
-                    </Card>
-
-                    <Card>
-                        <CardItem>
-                            <Left>
-                                <CustomMaterialIcon
-                                    icon={'account-multiple'}
-                                    fontSize={40}
-                                    width={40}
-                                    color={ThemeManager.getCurrentThemeVariables().brandPrimary}/>
-                                <Body>
-                                    <H1>{i18n.t('aboutScreen.team')}</H1>
-                                </Body>
-                            </Left>
-                        </CardItem>
-                        <CardItem header>
-                            <Text>{i18n.t('aboutScreen.author')}</Text>
-                        </CardItem>
-                        <FlatList
-                            data={this.authorData}
-                            extraData={this.state}
-                            keyExtractor={(item) => item.icon}
-                            renderItem={({item}) =>
-                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                            }
-                        />
-                        <CardItem header>
-                            <Text>{i18n.t('aboutScreen.additionalDev')}</Text>
-                        </CardItem>
-                        <FlatList
-                            data={this.additionalDevData}
-                            extraData={this.state}
-                            keyExtractor={(item) => item.icon}
-                            renderItem={({item}) =>
-                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                            }
-                        />
-                    </Card>
-
-                    <Card>
-                        <CardItem header>
-                            <Text>{i18n.t('aboutScreen.technologies')}</Text>
-                        </CardItem>
-                        <FlatList
-                            data={this.technoData}
-                            extraData={this.state}
-                            keyExtractor={(item) => item.icon}
-                            renderItem={({item}) =>
-                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                            }
-                        />
-                    </Card>
-                </Content>
+                <FlatList
+                    style={{padding: 5}}
+                    data={this.dataOrder}
+                    extraData={this.state}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({item}) =>
+                        this.getMainCard(item)
+                    }
+                />
             </Container>
         );
     }
