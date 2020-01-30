@@ -4,13 +4,13 @@
     "description": "Application mobile compatible Android et iOS pour l'Amicale INSA Toulouse. Grâce à cette application, vous avez facilement accès aux news du campus, aux emplois du temps, à l'état de la laverie, et bien d'autres services ! Ceci est une version Beta, Toutes les fonctionnalités ne sont pas encore implémentées, et il est possible de rencontrer quelques bugs.",
     "slug": "application-amicale",
     "privacy": "public",
-    "sdkVersion": "33.0.0",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.3.1",
+    "version": "1.3.3",
     "orientation": "portrait",
     "primaryColor": "#be1522",
     "icon": "./assets/android.icon.png",

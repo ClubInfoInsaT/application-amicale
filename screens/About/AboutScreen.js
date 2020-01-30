@@ -9,7 +9,7 @@ import appJson from '../../app';
 import packageJson from '../../package';
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
-import Modalize from "react-native-modalize";
+import {Modalize} from "react-native-modalize";
 import ThemeManager from "../../utils/ThemeManager";
 
 const links = {
@@ -28,13 +28,18 @@ const links = {
     bugsGit: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
     changelog: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
     license: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
-    mail: "mailto:vergnet@etud.insa-toulouse.fr?" +
+    authorMail: "mailto:vergnet@etud.insa-toulouse.fr?" +
         "subject=" +
         "Application Amicale INSA Toulouse" +
         "&body=" +
         "Coucou !\n\n",
-    linkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
-    facebook: 'https://www.facebook.com/arnaud.vergnet',
+    authorLinkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
+    yohanMail: "mailto:ysimard@etud.insa-toulouse.fr?" +
+        "subject=" +
+        "Application Amicale INSA Toulouse" +
+        "&body=" +
+        "Coucou !\n\n",
+    yohanLinkedin: 'https://www.linkedin.com/in/yohan-simard', // TODO set real link
     react: 'https://facebook.github.io/react-native/',
 };
 
@@ -125,21 +130,39 @@ export default class AboutScreen extends React.Component<Props, State> {
             showChevron: false
         },
         {
-            onPressCallback: () => openWebLink(links.mail),
+            onPressCallback: () => openWebLink(links.authorMail),
             icon: 'email',
-            text: i18n.t('aboutScreen.mail'),
+            text: i18n.t('aboutScreen.authorMail'),
             showChevron: true
         },
         {
-            onPressCallback: () => openWebLink(links.linkedin),
+            onPressCallback: () => openWebLink(links.authorLinkedin),
             icon: 'linkedin',
             text: 'Linkedin',
             showChevron: true
         },
+    ];
+
+    /**
+     * Data to be displayed in the additional developer card
+     */
+    additionalDevData: Array<Object> = [
         {
-            onPressCallback: () => openWebLink(links.facebook),
-            icon: 'facebook',
-            text: 'Facebook',
+            onPressCallback: () => console.log('Meme this'),
+            icon: 'account',
+            text: 'Yohan SIMARD',
+            showChevron: false
+        },
+        {
+            onPressCallback: () => openWebLink(links.yohanMail),
+            icon: 'email',
+            text: i18n.t('aboutScreen.authorMail'),
+            showChevron: true
+        },
+        {
+            onPressCallback: () => openWebLink(links.yohanLinkedin),
+            icon: 'linkedin',
+            text: 'Linkedin',
             showChevron: true
         },
     ];
@@ -291,11 +314,34 @@ export default class AboutScreen extends React.Component<Props, State> {
                     </Card>
 
                     <Card>
+                        <CardItem>
+                            <Left>
+                                <CustomMaterialIcon
+                                    icon={'account-multiple'}
+                                    fontSize={40}
+                                    width={40}
+                                    color={ThemeManager.getCurrentThemeVariables().brandPrimary}/>
+                                <Body>
+                                    <H1>{i18n.t('aboutScreen.team')}</H1>
+                                </Body>
+                            </Left>
+                        </CardItem>
                         <CardItem header>
                             <Text>{i18n.t('aboutScreen.author')}</Text>
                         </CardItem>
                         <FlatList
                             data={this.authorData}
+                            extraData={this.state}
+                            keyExtractor={(item) => item.icon}
+                            renderItem={({item}) =>
+                                this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
+                            }
+                        />
+                        <CardItem header>
+                            <Text>{i18n.t('aboutScreen.additionalDev')}</Text>
+                        </CardItem>
+                        <FlatList
+                            data={this.additionalDevData}
                             extraData={this.state}
                             keyExtractor={(item) => item.icon}
                             renderItem={({item}) =>

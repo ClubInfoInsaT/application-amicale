@@ -1,15 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {StatusBar, Platform } from 'react-native';
+import {StatusBar, Platform} from 'react-native';
 import {Root, StyleProvider} from 'native-base';
 import {createAppContainerWithInitialRoute} from './navigation/AppNavigator';
 import ThemeManager from './utils/ThemeManager';
 import LocaleManager from './utils/LocaleManager';
 import * as Font from 'expo-font';
-// edited native-base-shoutem-theme according to
-// https://github.com/GeekyAnts/theme/pull/5/files/91f67c55ca6e65fe3af779586b506950c9f331be#diff-4cfc2dd4d5dae7954012899f2268a422
-// to allow for dynamic theme switching
 import {clearThemeCache} from 'native-base-shoutem-theme';
 import AsyncStorageManager from "./utils/AsyncStorageManager";
 import CustomIntroSlider from "./components/CustomIntroSlider";
@@ -81,6 +78,7 @@ export default class App extends React.Component<Props, State> {
         await Font.loadAsync({
             'Roboto': require('native-base/Fonts/Roboto.ttf'),
             'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+            'material-community': require('native-base/Fonts/MaterialCommunityIcons.ttf'),
         });
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
@@ -118,7 +116,8 @@ export default class App extends React.Component<Props, State> {
             );
         }
         if (this.state.showIntro || this.state.showUpdate) {
-            return <CustomIntroSlider onDone={() => this.onIntroDone()} isUpdate={this.state.showUpdate && !this.state.showIntro}/>;
+            return <CustomIntroSlider onDone={() => this.onIntroDone()}
+                                      isUpdate={this.state.showUpdate && !this.state.showIntro}/>;
         } else {
             const AppNavigator = createAppContainerWithInitialRoute(AsyncStorageManager.getInstance().preferences.defaultStartScreen.current);
             return (

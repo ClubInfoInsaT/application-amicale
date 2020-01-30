@@ -8,6 +8,7 @@ import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import ThemeManager from "../utils/ThemeManager";
 
 const deviceHeight = Dimensions.get("window").height;
+const deviceWidth = Dimensions.get("window").width;
 
 const drawerCover = require("../assets/drawer-cover.png");
 
@@ -46,6 +47,11 @@ export default class SideBar extends React.Component<Props, State> {
                 icon: "web",
             },
             {
+                name: "Élus Étudiants",
+                route: "ElusEtudScreen",
+                icon: "alpha-e-box",
+            },
+            {
                 name: "Wiketud",
                 route: "WiketudScreen",
                 icon: "wikipedia",
@@ -78,55 +84,52 @@ export default class SideBar extends React.Component<Props, State> {
 
     render() {
         return (
-            <Container style={{backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor}}>
-                <Content
-                    bounces={false}
-                    style={{flex: 1, top: -1}}
-                >
-                    <Image source={drawerCover} style={styles.drawerCover}/>
-                    <FlatList
-                        data={this.dataSet}
-                        extraData={this.state}
-                        keyExtractor={(item) => item.route}
-                        renderItem={({item}) =>
-                            <ListItem
-                                button
-                                noBorder
-                                selected={this.state.active === item.route}
-                                onPress={() => {
-                                    if (item.link !== undefined)
-                                        Linking.openURL(item.link).catch((err) => console.error('Error opening link', err));
-                                    else
-                                        this.navigateToScreen(item.route);
-                                }}
-                            >
-                                <Left>
-                                    <CustomMaterialIcon
-                                        icon={item.icon}
-                                        active={this.state.active === item.route}
-                                    />
-                                    <Text style={styles.text}>
-                                        {item.name}
-                                    </Text>
-                                </Left>
-                                {item.types &&
-                                <Right style={{flex: 1}}>
-                                    <Badge
-                                        style={{
-                                            borderRadius: 3,
-                                            height: 25,
-                                            width: 72,
-                                            backgroundColor: item.bg
-                                        }}
-                                    >
-                                        <Text
-                                            style={styles.badgeText}
-                                        >{`${item.types} Types`}</Text>
-                                    </Badge>
-                                </Right>}
-                            </ListItem>}
-                    />
-                </Content>
+            <Container style={{
+                backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
+            }}>
+                <Image source={drawerCover} style={styles.drawerCover}/>
+                <FlatList
+                    data={this.dataSet}
+                    extraData={this.state}
+                    keyExtractor={(item) => item.route}
+                    renderItem={({item}) =>
+                        <ListItem
+                            button
+                            noBorder
+                            selected={this.state.active === item.route}
+                            onPress={() => {
+                                if (item.link !== undefined)
+                                    Linking.openURL(item.link).catch((err) => console.error('Error opening link', err));
+                                else
+                                    this.navigateToScreen(item.route);
+                            }}
+                        >
+                            <Left>
+                                <CustomMaterialIcon
+                                    icon={item.icon}
+                                    active={this.state.active === item.route}
+                                />
+                                <Text style={styles.text}>
+                                    {item.name}
+                                </Text>
+                            </Left>
+                            {item.types &&
+                            <Right style={{flex: 1}}>
+                                <Badge
+                                    style={{
+                                        borderRadius: 3,
+                                        height: 25,
+                                        width: 72,
+                                        backgroundColor: item.bg
+                                    }}
+                                >
+                                    <Text
+                                        style={styles.badgeText}
+                                    >{`${item.types} Types`}</Text>
+                                </Badge>
+                            </Right>}
+                        </ListItem>}
+                />
             </Container>
         );
     }
@@ -134,8 +137,8 @@ export default class SideBar extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
     drawerCover: {
-        height: deviceHeight / 5,
-        width: null,
+        height: deviceWidth / 3,
+        width: 2 * deviceWidth / 3,
         position: "relative",
         marginBottom: 10,
         marginTop: 20

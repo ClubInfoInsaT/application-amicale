@@ -26,18 +26,20 @@ function createMaterialBottomTabNavigatorWithInitialRoute(initialRoute: string) 
         Proximo: {screen: ProximoMainScreen,},
         Planex: {
             screen: PlanexScreen,
-            navigationOptions: ({ navigation }) => {
+            navigationOptions: ({navigation}) => {
                 const showTabBar = navigation.state && navigation.state.params ? navigation.state.params.showTabBar : true;
                 return {
                     tabBarVisible: showTabBar,
                 };
-            },},
+            },
+        },
     }, {
         defaultNavigationOptions: ({navigation}) => ({
-            tabBarIcon: ({focused, horizontal, tintColor}) => {
+            tabBarIcon: ({focused, tintColor}) => {
                 let icon = TAB_ICONS[navigation.state.routeName];
-
-                return <CustomMaterialIcon icon={icon} color={tintColor}/>;
+                // tintColor is ignoring activeColor et inactiveColor for some reason
+                let color = focused ? "#f0edf6" : "#4e1108";
+                return <CustomMaterialIcon icon={icon} color={color}/>;
             },
             tabBarVisible: true,
         }),
