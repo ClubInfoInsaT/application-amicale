@@ -39,7 +39,7 @@ const links = {
         "Application Amicale INSA Toulouse" +
         "&body=" +
         "Coucou !\n\n",
-    yohanLinkedin: 'https://www.linkedin.com/in/yohan-simard', // TODO set real link
+    yohanLinkedin: 'https://www.linkedin.com/in/yohan-simard',
     react: 'https://facebook.github.io/react-native/',
 };
 

@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import ThemeManager from "../utils/ThemeManager";
-import WebViewScreen from "../components/WebViewScreen";
+import ThemeManager from "../../utils/ThemeManager";
+import WebViewScreen from "../../components/WebViewScreen";
 
 type Props = {
     navigation: Object,

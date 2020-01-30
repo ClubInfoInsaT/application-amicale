@@ -250,7 +250,7 @@ export default {
   // List
   listBg: 'transparent',
   listBorderColor: '#c9c9c9',
-  listDividerBg: '#f4f4f4',
+  listDividerBg: '#e2e2e2',
   listBtnUnderlayColor: '#DDD',
   listItemPadding: platform === PLATFORM.IOS ? 10 : 12,
   listNoteColor: '#808080',

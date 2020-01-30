@@ -7,7 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import PlanningScreen from '../screens/PlanningScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
-import PlanexScreen from '../screens/PlanexScreen';
+import PlanexScreen from '../screens/Websites/PlanexScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import Sidebar from "../components/Sidebar";

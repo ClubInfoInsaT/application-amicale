@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import WebViewScreen from "../components/WebViewScreen";
+import WebViewScreen from "../../components/WebViewScreen";
 import i18n from "i18n-js";
 
 type Props = {

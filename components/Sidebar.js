@@ -42,6 +42,10 @@ export default class SideBar extends React.Component<Props, State> {
         // If the link field is defined, clicking on the item will open the link
         this.dataSet = [
             {
+                name: i18n.t('sidenav.divider1'),
+                route: "Divider1"
+            },
+            {
                 name: "Amicale",
                 route: "AmicaleScreen",
                 icon: "web",
@@ -62,6 +66,15 @@ export default class SideBar extends React.Component<Props, State> {
                 icon: "school",
             },
             {
+                name: "Mails BlueMind",
+                route: "BlueMindScreen",
+                icon: "email",
+            },
+            {
+                name: i18n.t('sidenav.divider2'),
+                route: "Divider2"
+            },
+            {
                 name: i18n.t('screens.availableRooms'),
                 route: "AvailableRoomScreen",
                 icon: "calendar-check",
@@ -71,7 +84,66 @@ export default class SideBar extends React.Component<Props, State> {
                 route: "SelfMenuScreen",
                 icon: "silverware-fork-knife",
             },
+            {
+                name: i18n.t('sidenav.divider3'),
+                route: "Divider3"
+            },
+            {
+                name: i18n.t('screens.settings'),
+                route: "SettingsScreen",
+                icon: "settings",
+            },
         ];
+    }
+
+    getRenderItem(item: Object) {
+        if (item.icon !== undefined) {
+            return (
+                <ListItem
+                    button
+                    noBorder
+                    selected={this.state.active === item.route}
+                    onPress={() => {
+                        if (item.link !== undefined)
+                            Linking.openURL(item.link).catch((err) => console.error('Error opening link', err));
+                        else
+                            this.navigateToScreen(item.route);
+                    }}
+                >
+                    <Left>
+                        <CustomMaterialIcon
+                            icon={item.icon}
+                            active={this.state.active === item.route}
+                        />
+                        <Text style={styles.text}>
+                            {item.name}
+                        </Text>
+                    </Left>
+                    {item.types &&
+                    <Right style={{flex: 1}}>
+                        <Badge
+                            style={{
+                                borderRadius: 3,
+                                height: 25,
+                                width: 72,
+                                backgroundColor: item.bg
+                            }}
+                        >
+                            <Text
+                                style={styles.badgeText}
+                            >{`${item.types} Types`}</Text>
+                        </Badge>
+                    </Right>}
+                </ListItem>
+            );
+        } else {
+            return (
+                <ListItem itemDivider>
+                    <Text>{item.name}</Text>
+                </ListItem>
+            );
+        }
+
     }
 
     /**
@@ -92,43 +164,7 @@ export default class SideBar extends React.Component<Props, State> {
                     data={this.dataSet}
                     extraData={this.state}
                     keyExtractor={(item) => item.route}
-                    renderItem={({item}) =>
-                        <ListItem
-                            button
-                            noBorder
-                            selected={this.state.active === item.route}
-                            onPress={() => {
-                                if (item.link !== undefined)
-                                    Linking.openURL(item.link).catch((err) => console.error('Error opening link', err));
-                                else
-                                    this.navigateToScreen(item.route);
-                            }}
-                        >
-                            <Left>
-                                <CustomMaterialIcon
-                                    icon={item.icon}
-                                    active={this.state.active === item.route}
-                                />
-                                <Text style={styles.text}>
-                                    {item.name}
-                                </Text>
-                            </Left>
-                            {item.types &&
-                            <Right style={{flex: 1}}>
-                                <Badge
-                                    style={{
-                                        borderRadius: 3,
-                                        height: 25,
-                                        width: 72,
-                                        backgroundColor: item.bg
-                                    }}
-                                >
-                                    <Text
-                                        style={styles.badgeText}
-                                    >{`${item.types} Types`}</Text>
-                                </Badge>
-                            </Right>}
-                        </ListItem>}
+                    renderItem={({item}) => this.getRenderItem(item)}
                 />
             </Container>
         );

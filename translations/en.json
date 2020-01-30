@@ -10,6 +10,11 @@
     "about": "About",
     "debug": "Debug"
   },
+  "sidenav": {
+    "divider1": "Nice websites",
+    "divider2": "Useful services",
+    "divider3": "Personalisation"
+  },
   "intro": {
     "slide1": {
       "title": "Welcome to CAMPUS",

@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import ThemeManager from "../utils/ThemeManager";
-import WebViewScreen from "../components/WebViewScreen";
+import ThemeManager from "../../utils/ThemeManager";
+import WebViewScreen from "../../components/WebViewScreen";
 import i18n from "i18n-js";
 
 type Props = {
@@ -73,7 +73,7 @@ export default class PlanexScreen extends React.Component<Props> {
         this.customInjectedJS =
             '$(document).ready(function() {' +
             OBSERVE_MUTATIONS_INJECTED +
-            '$("head").append(\'<meta name="viewport" content="width=device-width, initial-scale=1.0">\');' +
+            '$("head").append(\'<meta name="viewport" content="width=device-width, initial-scale=0.8">\');' +
             '$("head").append(\'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\');';
 
         if (ThemeManager.getNightMode())

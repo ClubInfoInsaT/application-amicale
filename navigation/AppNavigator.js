@@ -9,11 +9,12 @@ import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import ProximoAboutScreen from '../screens/Proximo/ProximoAboutScreen';
 import SelfMenuScreen from '../screens/SelfMenuScreen';
-import TutorInsaScreen from "../screens/TutorInsaScreen";
-import AmicaleScreen from "../screens/AmicaleScreen";
-import WiketudScreen from "../screens/WiketudScreen";
-import ElusEtudScreen from "../screens/ElusEtudScreen";
-import AvailableRoomScreen from "../screens/AvailableRoomScreen";
+import TutorInsaScreen from "../screens/Websites/TutorInsaScreen";
+import AmicaleScreen from "../screens/Websites/AmicaleScreen";
+import WiketudScreen from "../screens/Websites/WiketudScreen";
+import ElusEtudScreen from "../screens/Websites/ElusEtudScreen";
+import BlueMindScreen from "../screens/Websites/BlueMindScreen";
+import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
 import DebugScreen from '../screens/DebugScreen';
 import {fromRight} from "react-navigation-transitions";
 
@@ -35,6 +36,7 @@ function createAppContainerWithInitialRoute(initialRoute: string) {
                 AmicaleScreen: {screen: AmicaleScreen},
                 WiketudScreen: {screen: WiketudScreen},
                 ElusEtudScreen: {screen: ElusEtudScreen},
+                BlueMindScreen: {screen: BlueMindScreen},
                 AvailableRoomScreen: {screen: AvailableRoomScreen},
                 ProxiwashAboutScreen: {screen: ProxiwashAboutScreen},
                 ProximoAboutScreen: {screen: ProximoAboutScreen},

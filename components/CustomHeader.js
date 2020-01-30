@@ -98,14 +98,6 @@ export default class CustomHeader extends React.Component<Props> {
                 </Body>
                 <Right style={{flex: this.props.hasSearchField ? 0 : 1}}>
                     {this.props.rightButton}
-                    {this.props.hasBackButton ? <View/> :
-                        <Touchable
-                            style={{padding: 6}}
-                            onPress={() => this.props.navigation.navigate('SettingsScreen')}>
-                            <CustomMaterialIcon
-                                color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                                icon="settings"/>
-                        </Touchable>}
                 </Right>
             </Header>);
     }
