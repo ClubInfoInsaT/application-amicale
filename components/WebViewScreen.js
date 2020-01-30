@@ -62,19 +62,22 @@ export default class WebViewScreen extends React.Component<Props> {
 
     refreshWebview() {
         for (let view of this.webviewArray) {
-            view.reload();
+            if (view !== null)
+                view.reload();
         }
     }
 
     goBackWebview() {
         for (let view of this.webviewArray) {
-            view.goBack();
+            if (view !== null)
+                view.goBack();
         }
     }
 
     goForwardWebview() {
         for (let view of this.webviewArray) {
-            view.goForward();
+            if (view !== null)
+                view.goForward();
         }
     }
 
@@ -132,6 +135,7 @@ export default class WebViewScreen extends React.Component<Props> {
 
     render() {
         const nav = this.props.navigation;
+        this.webviewArray = [];
         return (
             <BaseContainer
                 navigation={nav}
