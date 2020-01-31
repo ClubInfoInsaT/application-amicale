@@ -14,6 +14,7 @@ import AmicaleScreen from "../screens/Websites/AmicaleScreen";
 import WiketudScreen from "../screens/Websites/WiketudScreen";
 import ElusEtudScreen from "../screens/Websites/ElusEtudScreen";
 import BlueMindScreen from "../screens/Websites/BlueMindScreen";
+import EntScreen from "../screens/Websites/EntScreen";
 import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
 import DebugScreen from '../screens/DebugScreen';
 import {fromRight} from "react-navigation-transitions";
@@ -37,6 +38,7 @@ function createAppContainerWithInitialRoute(initialRoute: string) {
                 WiketudScreen: {screen: WiketudScreen},
                 ElusEtudScreen: {screen: ElusEtudScreen},
                 BlueMindScreen: {screen: BlueMindScreen},
+                EntScreen: {screen: EntScreen},
                 AvailableRoomScreen: {screen: AvailableRoomScreen},
                 ProxiwashAboutScreen: {screen: ProxiwashAboutScreen},
                 ProximoAboutScreen: {screen: ProximoAboutScreen},

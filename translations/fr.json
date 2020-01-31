@@ -8,11 +8,12 @@
     "settings": "Paramètres",
     "availableRooms": "Salles dispo",
     "bluemind": "Mails INSA",
+    "ent": "ENT INSA",
     "about": "À Propos",
     "debug": "Debug"
   },
   "sidenav": {
-    "divider1": "Sites utiles",
+    "divider1": "Sites étudiants",
     "divider2": "Services",
     "divider3": "Personnalisation"
   },

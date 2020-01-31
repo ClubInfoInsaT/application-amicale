@@ -48,7 +48,7 @@ export default class SideBar extends React.Component<Props, State> {
             {
                 name: "Amicale",
                 route: "AmicaleScreen",
-                icon: "web",
+                icon: "alpha-a-box",
             },
             {
                 name: "Élus Étudiants",
@@ -73,6 +73,11 @@ export default class SideBar extends React.Component<Props, State> {
                 name: i18n.t('screens.bluemind'),
                 route: "BlueMindScreen",
                 icon: "email",
+            },
+            {
+                name: i18n.t('screens.ent'),
+                route: "EntScreen",
+                icon: "notebook",
             },
             {
                 name: i18n.t('screens.availableRooms'),

@@ -12,21 +12,20 @@ type Props = {
 
 const URL = 'https://etud-mel.insa-toulouse.fr/webmail/';
 
-const CUSTOM_CSS_GENERAL = '';
+const CUSTOM_CSS_GENERAL = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/bluemind/customMobile.css';
 
 
 /**
  * Class defining the app's planex screen.
  * This screen uses a webview to render the planex page
  */
-export default class AmicaleScreen extends React.Component<Props> {
+export default class BlueMindScreen extends React.Component<Props> {
 
     customInjectedJS: string;
 
     constructor() {
         super();
         this.customInjectedJS =
-            '$(document).ready(function() {' +
             '$("head").append(\'<meta name="viewport" content="width=device-width, initial-scale=1.0">\');' +
             '$("head").append(\'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\');true;';
     }
@@ -41,10 +40,10 @@ export default class AmicaleScreen extends React.Component<Props> {
                         url: URL,
                         icon: '',
                         name: '',
-                        customJS: ''
+                        customJS: this.customInjectedJS
                     },
                 ]}
-                headerTitle={'Mails BlueMind'}
+                headerTitle={i18n.t('screens.bluemind')}
                 hasHeaderBackButton={true}
                 hasSideMenu={false}/>
         );
