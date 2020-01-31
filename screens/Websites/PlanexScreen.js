@@ -3,7 +3,6 @@
 import * as React from 'react';
 import ThemeManager from "../../utils/ThemeManager";
 import WebViewScreen from "../../components/WebViewScreen";
-import i18n from "i18n-js";
 
 type Props = {
     navigation: Object,

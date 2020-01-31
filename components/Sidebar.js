@@ -2,12 +2,11 @@
 
 import * as React from 'react';
 import {Dimensions, FlatList, Image, Linking, Platform, StyleSheet} from 'react-native';
-import {Badge, Container, Content, Left, ListItem, Right, Text} from "native-base";
+import {Badge, Container, Left, ListItem, Right, Text} from "native-base";
 import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import ThemeManager from "../utils/ThemeManager";
 
-const deviceHeight = Dimensions.get("window").height;
 const deviceWidth = Dimensions.get("window").width;
 
 const drawerCover = require("../assets/drawer-cover.png");

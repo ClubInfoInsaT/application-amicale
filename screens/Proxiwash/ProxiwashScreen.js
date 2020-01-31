@@ -89,7 +89,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                 this.setState({machinesWatched: fetchedList})
             });
             // Get updated watchlist after received notification
-            Expo.Notifications.addListener((notification) => {
+            Expo.Notifications.addListener(() => {
                 NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
                     this.setState({machinesWatched: fetchedList})
                 });

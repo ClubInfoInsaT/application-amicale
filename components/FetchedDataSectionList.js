@@ -35,19 +35,18 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     lastRefresh: Date;
 
     minTimeBetweenRefresh = 60;
-
-    constructor(fetchUrl: string, refreshTime: number) {
-        super();
-        this.webDataManager = new WebDataManager(fetchUrl);
-        this.refreshTime = refreshTime;
-    }
-
     state = {
         refreshing: false,
         firstLoading: true,
         fetchedData: {},
         machinesWatched: [],
     };
+
+    constructor(fetchUrl: string, refreshTime: number) {
+        super();
+        this.webDataManager = new WebDataManager(fetchUrl);
+        this.refreshTime = refreshTime;
+    }
 
     /**
      * Get the translation for the header in the current language
@@ -76,13 +75,13 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     componentDidMount() {
         this.willFocusSubscription = this.props.navigation.addListener(
             'willFocus',
-            payload => {
+            () => {
                 this.onScreenFocus();
             }
         );
         this.willBlurSubscription = this.props.navigation.addListener(
             'willBlur',
-            payload => {
+            () => {
                 this.onScreenBlur();
             }
         );
@@ -136,7 +135,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                     });
                     this.lastRefresh = new Date();
                 })
-                .catch((err) => {
+                .catch(() => {
                     this.setState({
                         fetchedData: {},
                         refreshing: false,

@@ -52,4 +52,5 @@ function createAppContainerWithInitialRoute(initialRoute: string) {
             })
     );
 }
+
 export {createAppContainerWithInitialRoute};

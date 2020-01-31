@@ -2,13 +2,12 @@
 
 import * as React from 'react';
 import {Linking, Platform, View} from 'react-native';
-import {Spinner, Footer, Right, Left, Body, Tab, TabHeading, Text, Tabs} from 'native-base';
+import {Body, Footer, Left, Right, Spinner, Tab, TabHeading, Tabs, Text} from 'native-base';
 import WebView from "react-native-webview";
 import Touchable from "react-native-platform-touchable";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
 import BaseContainer from "../components/BaseContainer";
-import {NavigationActions} from 'react-navigation';
 
 type Props = {
     navigation: Object,
@@ -153,7 +152,7 @@ export default class WebViewScreen extends React.Component<Props> {
                             elevation: 0, // Fix for android shadow
                         }}
                         locked={true}
-                        style = {{
+                        style={{
                             backgroundColor: Platform.OS === 'ios' ?
                                 ThemeManager.getCurrentThemeVariables().tabDefaultBg :
                                 ThemeManager.getCurrentThemeVariables().brandPrimary

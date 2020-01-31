@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {FlatList, Linking, Platform, View} from 'react-native';
-import {Body, Card, CardItem, Container, Content, H1, Left, Right, Text, Thumbnail, Button} from 'native-base';
+import {Body, Button, Card, CardItem, Container, H1, Left, Right, Text, Thumbnail} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
 import appJson from '../../app';
@@ -70,12 +70,6 @@ export default class AboutScreen extends React.Component<Props, State> {
     state = {
         isDebugUnlocked: AsyncStorageManager.getInstance().preferences.debugUnlocked.current === '1'
     };
-
-    constructor(props: any) {
-        super(props);
-        this.modalRef = React.createRef();
-    }
-
     /**
      * Data to be displayed in the app card
      */
@@ -118,7 +112,6 @@ export default class AboutScreen extends React.Component<Props, State> {
             showOnlyDebug: true
         },
     ];
-
     /**
      * Data to be displayed in the author card
      */
@@ -142,7 +135,6 @@ export default class AboutScreen extends React.Component<Props, State> {
             showChevron: true
         },
     ];
-
     /**
      * Data to be displayed in the additional developer card
      */
@@ -166,7 +158,6 @@ export default class AboutScreen extends React.Component<Props, State> {
             showChevron: true
         },
     ];
-
     /**
      * Data to be displayed in the technologies card
      */
@@ -184,7 +175,6 @@ export default class AboutScreen extends React.Component<Props, State> {
             showChevron: true
         },
     ];
-
     dataOrder: Array<Object> = [
         {
             id: 'app',
@@ -196,6 +186,11 @@ export default class AboutScreen extends React.Component<Props, State> {
             id: 'techno',
         },
     ];
+
+    constructor(props: any) {
+        super(props);
+        this.modalRef = React.createRef();
+    }
 
     getAppCard() {
         return (

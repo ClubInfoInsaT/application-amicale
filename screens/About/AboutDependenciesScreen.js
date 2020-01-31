@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Body, Container, Content, ListItem, Text} from 'native-base';
+import {Body, Container, ListItem, Text} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import {FlatList} from "react-native";
 import i18n from "i18n-js";

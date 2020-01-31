@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from "react";
-import {Body, Header, Input, Item, Left, Right, Title, Form} from "native-base";
+import {Body, Header, Input, Item, Left, Right, Title} from "native-base";
 import {Platform, StyleSheet, View} from "react-native";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import Touchable from 'react-native-platform-touchable';

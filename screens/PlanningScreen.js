@@ -1,10 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {BackHandler} from 'react-native';
-import {Content, H1, H3, Text, Button} from 'native-base';
+import {BackHandler, Image, View} from 'react-native';
+import {Button, Content, H1, H3, Text} from 'native-base';
 import i18n from "i18n-js";
-import {View, Image} from "react-native";
 import ThemeManager from "../utils/ThemeManager";
 import {Linking} from "expo";
 import BaseContainer from "../components/BaseContainer";
@@ -61,6 +60,12 @@ export default class PlanningScreen extends React.Component<Props, State> {
 
     didFocusSubscription: Function;
     willBlurSubscription: Function;
+    state = {
+        modalCurrentDisplayItem: {},
+        refreshing: false,
+        agendaItems: {},
+        calendarShowing: false,
+    };
 
     constructor(props: any) {
         super(props);
@@ -68,7 +73,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
         this.webDataManager = new WebDataManager(FETCH_URL);
         this.didFocusSubscription = props.navigation.addListener(
             'didFocus',
-            payload =>
+            () =>
                 BackHandler.addEventListener(
                     'hardwareBackPress',
                     this.onBackButtonPressAndroid
@@ -83,7 +88,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
         this._onRefresh();
         this.willBlurSubscription = this.props.navigation.addListener(
             'willBlur',
-            payload =>
+            () =>
                 BackHandler.removeEventListener(
                     'hardwareBackPress',
                     this.onBackButtonPressAndroid
@@ -104,13 +109,6 @@ export default class PlanningScreen extends React.Component<Props, State> {
         this.didFocusSubscription && this.didFocusSubscription.remove();
         this.willBlurSubscription && this.willBlurSubscription.remove();
     }
-
-    state = {
-        modalCurrentDisplayItem: {},
-        refreshing: false,
-        agendaItems: {},
-        calendarShowing: false,
-    };
 
     getCurrentDate() {
         let today = new Date();
@@ -351,7 +349,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
 
     getFormattedTime(event: Object) {
         if (this.getEventEndTime(event) !== "")
-            return this.getEventStartTime(event) + " - " + this.getEventEndTime(event)
+            return this.getEventStartTime(event) + " - " + this.getEventEndTime(event);
         else
             return this.getEventStartTime(event);
     }

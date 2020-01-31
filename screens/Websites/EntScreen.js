@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react';
-import ThemeManager from "../../utils/ThemeManager";
 import WebViewScreen from "../../components/WebViewScreen";
 import i18n from "i18n-js";
 
@@ -50,7 +49,7 @@ export default class EntScreen extends React.Component<Props> {
             'let stylesheet = document.createElement(\'link\');\n' +
             'stylesheet.type = \'text/css\';\n' +
             'stylesheet.rel = \'stylesheet\';\n' +
-            'stylesheet.href = \'' + CUSTOM_CSS_GENERAL +'\';\n' +
+            'stylesheet.href = \'' + CUSTOM_CSS_GENERAL + '\';\n' +
             'let mobileSpec = document.createElement(\'meta\');\n' +
             'mobileSpec.name = \'viewport\';\n' +
             'mobileSpec.content = \'width=device-width, initial-scale=1.0\';\n' +
