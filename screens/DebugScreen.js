@@ -3,29 +3,28 @@
 import * as React from 'react';
 import {
     Body,
+    Button,
     Card,
     CardItem,
     Container,
     Content,
+    Form,
     H1,
     H3,
+    Input,
+    Item,
+    Label,
     Left,
     List,
     ListItem,
     Right,
-    Text,
-    Form,
-    Item,
-    Label,
-    Input,
-    Button
+    Text
 } from "native-base";
 import CustomHeader from "../components/CustomHeader";
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
-import Touchable from "react-native-platform-touchable";
-import {Alert, View, Clipboard, Image} from "react-native";
+import {Alert, Clipboard, View} from "react-native";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import NotificationsManager from "../utils/NotificationsManager";
 import {Modalize} from "react-native-modalize";
@@ -46,35 +45,15 @@ export default class DebugScreen extends React.Component<Props, State> {
 
     modalRef: { current: null | Modalize };
     modalInputValue = '';
-
-    constructor(props: any) {
-        super(props);
-        this.modalRef = React.createRef();
-    }
-
     state = {
         modalCurrentDisplayItem: {},
         currentPreferences: JSON.parse(JSON.stringify(AsyncStorageManager.getInstance().preferences))
     };
 
-    alertCurrentExpoToken() {
-        let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-        console.log(token);
-        Alert.alert(
-            'Expo Token',
-            token,
-            [
-                {text: 'Copy', onPress: () => Clipboard.setString(token)},
-                {text: 'OK'}
-            ]
-        );
+    constructor(props: any) {
+        super(props);
+        this.modalRef = React.createRef();
     }
-
-    async forceExpoTokenUpdate() {
-        await NotificationsManager.forceExpoTokenUpdate();
-        this.alertCurrentExpoToken();
-    }
-
 
     static getGeneralItem(onPressCallback: Function, icon: ?string, title: string, subtitle: string) {
         return (
@@ -100,6 +79,24 @@ export default class DebugScreen extends React.Component<Props, State> {
                 <Right/>
             </ListItem>
         );
+    }
+
+    alertCurrentExpoToken() {
+        let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
+        console.log(token);
+        Alert.alert(
+            'Expo Token',
+            token,
+            [
+                {text: 'Copy', onPress: () => Clipboard.setString(token)},
+                {text: 'OK'}
+            ]
+        );
+    }
+
+    async forceExpoTokenUpdate() {
+        await NotificationsManager.forceExpoTokenUpdate();
+        this.alertCurrentExpoToken();
     }
 
     showEditModal(item: Object) {

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Image, Linking, TouchableOpacity, View} from 'react-native';
-import {Body, Button, Card, CardItem, Left, Text, Thumbnail, H1, H3} from 'native-base';
+import {Body, Button, Card, CardItem, H1, Left, Text, Thumbnail} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
@@ -40,6 +40,16 @@ export default class HomeScreen extends FetchedDataSectionList {
 
     constructor() {
         super(DATA_URL, REFRESH_TIME);
+    }
+
+    /**
+     * Converts a dateString using Unix Timestamp to a formatted date
+     * @param dateString {string} The Unix Timestamp representation of a date
+     * @return {string} The formatted output date
+     */
+    static getFormattedDate(dateString: string) {
+        let date = new Date(Number.parseInt(dateString) * 1000);
+        return date.toLocaleString();
     }
 
     getHeaderTranslation() {
@@ -117,17 +127,6 @@ export default class HomeScreen extends FetchedDataSectionList {
             }
         }
         return dataset
-    }
-
-
-    /**
-     * Converts a dateString using Unix Timestamp to a formatted date
-     * @param dateString {string} The Unix Timestamp representation of a date
-     * @return {string} The formatted output date
-     */
-    static getFormattedDate(dateString: string) {
-        let date = new Date(Number.parseInt(dateString) * 1000);
-        return date.toLocaleString();
     }
 
     getRenderSectionHeader(title: string) {
@@ -294,7 +293,7 @@ export default class HomeScreen extends FetchedDataSectionList {
         let icon = 'calendar-range';
         let color = ThemeManager.getCurrentThemeVariables().planningColor;
         let title = i18n.t('homeScreen.dashboard.todayEventsTitle');
-        let subtitle = '';
+        let subtitle;
         let futureEvents = this.getFutureEvents(content);
         let isAvailable = futureEvents.length > 0;
         if (isAvailable) {
@@ -336,7 +335,7 @@ export default class HomeScreen extends FetchedDataSectionList {
         let proximoColor = ThemeManager.getCurrentThemeVariables().proximoColor;
         let proximoTitle = i18n.t('homeScreen.dashboard.proximoTitle');
         let isProximoAvailable = parseInt(proximoData) > 0;
-        let proximoSubtitle = '';
+        let proximoSubtitle;
         if (isProximoAvailable) {
             proximoSubtitle =
                 <Text>
@@ -358,7 +357,7 @@ export default class HomeScreen extends FetchedDataSectionList {
         let menuColor = ThemeManager.getCurrentThemeVariables().menuColor;
         let menuTitle = i18n.t('homeScreen.dashboard.menuTitle');
         let isMenuAvailable = menuData.length > 0;
-        let menuSubtitle = '';
+        let menuSubtitle;
         if (isMenuAvailable) {
             menuSubtitle = i18n.t('homeScreen.dashboard.menuSubtitle');
         } else
@@ -410,39 +409,39 @@ export default class HomeScreen extends FetchedDataSectionList {
         let availableWashers = proxiwashData['washers'];
         if (proxiwashIsAvailable) {
             proxiwashSubtitle =
+                <Text>
+                    <Text style={{
+                        fontWeight: parseInt(proxiwashData['dryers']) > 0 ?
+                            'bold' :
+                            'normal',
+                        color: dryerColor
+                    }}>
+                        {availableDryers}
+                    </Text>
                     <Text>
-                        <Text style={{
-                            fontWeight: parseInt(proxiwashData['dryers']) > 0 ?
-                                'bold' :
-                                'normal',
-                            color: dryerColor
-                        }}>
-                            {availableDryers}
-                        </Text>
-                        <Text>
-                            {
-                                availableDryers > 1 ?
-                                    i18n.t('homeScreen.dashboard.proxiwashSubtitle1Plural') :
-                                    i18n.t('homeScreen.dashboard.proxiwashSubtitle1')
-                            }
-                        </Text>
-                        {"\n"}
-                        <Text style={{
-                            fontWeight: parseInt(proxiwashData['washers']) > 0 ?
-                                'bold' :
-                                'normal',
-                            color: washerColor
-                        }}>
-                            {availableWashers}
-                        </Text>
-                        <Text>
-                            {
-                                availableWashers > 1 ?
-                                    i18n.t('homeScreen.dashboard.proxiwashSubtitle2Plural') :
-                                    i18n.t('homeScreen.dashboard.proxiwashSubtitle2')
-                            }
-                        </Text>
-                    </Text>;
+                        {
+                            availableDryers > 1 ?
+                                i18n.t('homeScreen.dashboard.proxiwashSubtitle1Plural') :
+                                i18n.t('homeScreen.dashboard.proxiwashSubtitle1')
+                        }
+                    </Text>
+                    {"\n"}
+                    <Text style={{
+                        fontWeight: parseInt(proxiwashData['washers']) > 0 ?
+                            'bold' :
+                            'normal',
+                        color: washerColor
+                    }}>
+                        {availableWashers}
+                    </Text>
+                    <Text>
+                        {
+                            availableWashers > 1 ?
+                                i18n.t('homeScreen.dashboard.proxiwashSubtitle2Plural') :
+                                i18n.t('homeScreen.dashboard.proxiwashSubtitle2')
+                        }
+                    </Text>
+                </Text>;
         } else
             proxiwashSubtitle = i18n.t('homeScreen.dashboard.proxiwashSubtitleNA');
         let proxiwashClickAction = () => this.props.navigation.navigate('Proxiwash');
@@ -497,10 +496,8 @@ export default class HomeScreen extends FetchedDataSectionList {
 
 
     getRenderItem(item: Object, section: Object, data: Object) {
-        if (section['id'] === SECTIONS_ID[0]) {
-            return this.getDashboardItem(item);
-        } else {
-            return (
+        return (
+            section['id'] === SECTIONS_ID[0] ? this.getDashboardItem(item) :
                 <Card style={{
                     flex: 0,
                     marginLeft: 10,
@@ -555,8 +552,6 @@ export default class HomeScreen extends FetchedDataSectionList {
                         </Left>
                     </CardItem>
                 </Card>
-            );
-        }
+        );
     }
-
 }

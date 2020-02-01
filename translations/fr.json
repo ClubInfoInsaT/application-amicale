@@ -7,8 +7,15 @@
     "menuSelf": "Menu du RU",
     "settings": "Paramètres",
     "availableRooms": "Salles dispo",
+    "bluemind": "Mails INSA",
+    "ent": "ENT INSA",
     "about": "À Propos",
     "debug": "Debug"
+  },
+  "sidenav": {
+    "divider1": "Sites étudiants",
+    "divider2": "Services",
+    "divider3": "Personnalisation"
   },
   "intro": {
     "slide1": {
@@ -41,7 +48,7 @@
     },
     "updateSlide": {
       "title": "Nouveau dans cette mise à jour !",
-      "text": "Préparez vos exams avec Tutor'INSA! Réservez une Bib'Box ou trouvez une salle libre pour travailler, disponible dans le menu à gauche. "
+      "text": "Ne ratez plus jamais un email ! Accédez à vos mails INSA depuis le menu à gauche.\nPlanex a aussi été un peu amélioré !\n\nUne partie de vos remarques ont été prises en compte pour cette mise à jour, d'autres sont à venir.\nMerci pour votre retour lors du sondage !"
     },
     "buttons": {
       "next": "Suivant",

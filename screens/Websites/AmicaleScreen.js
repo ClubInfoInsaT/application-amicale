@@ -1,21 +1,20 @@
 // @flow
 
 import * as React from 'react';
-import ThemeManager from "../utils/ThemeManager";
-import WebViewScreen from "../components/WebViewScreen";
+import WebViewScreen from "../../components/WebViewScreen";
 
 type Props = {
     navigation: Object,
 }
 
 
-const URL = 'https://srv-falcon.etud.insa-toulouse.fr/~eeinsat/';
+const URL = 'https://www.etud.insa-toulouse.fr/~amicale';
 
 /**
  * Class defining the app's planex screen.
  * This screen uses a webview to render the planex page
  */
-export default class ElusEtudScreen extends React.Component<Props> {
+export default class AmicaleScreen extends React.Component<Props> {
 
     render() {
         const nav = this.props.navigation;
@@ -30,7 +29,7 @@ export default class ElusEtudScreen extends React.Component<Props> {
                         customJS: ''
                     },
                 ]}
-                headerTitle={'Élus Étudiants'}
+                headerTitle={'Amicale'}
                 hasHeaderBackButton={true}
                 hasSideMenu={false}/>
         );

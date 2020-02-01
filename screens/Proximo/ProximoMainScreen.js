@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Platform, View} from 'react-native'
-import {Badge, Body, Left, ListItem, Right, Text} from 'native-base';
+import {Body, Left, ListItem, Right, Text} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 import FetchedDataSectionList from "../../components/FetchedDataSectionList";
@@ -20,6 +20,10 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
 
     constructor() {
         super(DATA_URL, 0);
+    }
+
+    static sortFinalData(a: Object, b: Object) {
+        return a.type.id - b.type.id;
     }
 
     getHeaderTranslation() {
@@ -94,10 +98,6 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
             }
         }
         return availableArticles;
-    }
-
-    static sortFinalData(a: Object, b: Object) {
-        return a.type.id - b.type.id;
     }
 
     getRightButton() {

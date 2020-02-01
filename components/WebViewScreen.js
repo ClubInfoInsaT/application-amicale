@@ -2,13 +2,12 @@
 
 import * as React from 'react';
 import {Linking, Platform, View} from 'react-native';
-import {Spinner, Footer, Right, Left, Body, Tab, TabHeading, Text, Tabs} from 'native-base';
+import {Body, Footer, Left, Right, Spinner, Tab, TabHeading, Tabs, Text} from 'native-base';
 import WebView from "react-native-webview";
 import Touchable from "react-native-platform-touchable";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
 import BaseContainer from "../components/BaseContainer";
-import {NavigationActions} from 'react-navigation';
 
 type Props = {
     navigation: Object,
@@ -62,19 +61,22 @@ export default class WebViewScreen extends React.Component<Props> {
 
     refreshWebview() {
         for (let view of this.webviewArray) {
-            view.reload();
+            if (view !== null)
+                view.reload();
         }
     }
 
     goBackWebview() {
         for (let view of this.webviewArray) {
-            view.goBack();
+            if (view !== null)
+                view.goBack();
         }
     }
 
     goForwardWebview() {
         for (let view of this.webviewArray) {
-            view.goForward();
+            if (view !== null)
+                view.goForward();
         }
     }
 
@@ -132,6 +134,7 @@ export default class WebViewScreen extends React.Component<Props> {
 
     render() {
         const nav = this.props.navigation;
+        this.webviewArray = [];
         return (
             <BaseContainer
                 navigation={nav}
@@ -140,7 +143,8 @@ export default class WebViewScreen extends React.Component<Props> {
                 hasBackButton={this.props.hasHeaderBackButton}
                 hasSideMenu={this.props.hasSideMenu}
                 enableRotation={true}
-                hideHeaderOnLandscape={true}>
+                hideHeaderOnLandscape={true}
+                hasTabs={this.props.data.length > 1}>
                 {this.props.data.length === 1 ?
                     this.getWebview(this.props.data[0]) :
                     <Tabs
@@ -148,7 +152,7 @@ export default class WebViewScreen extends React.Component<Props> {
                             elevation: 0, // Fix for android shadow
                         }}
                         locked={true}
-                        style = {{
+                        style={{
                             backgroundColor: Platform.OS === 'ios' ?
                                 ThemeManager.getCurrentThemeVariables().tabDefaultBg :
                                 ThemeManager.getCurrentThemeVariables().brandPrimary

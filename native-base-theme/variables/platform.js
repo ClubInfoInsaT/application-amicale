@@ -210,6 +210,7 @@ export default {
   toolbarBtnTextColor: platform === PLATFORM.IOS ? '#be1522' : '#fff',
   toolbarDefaultBorder: platform === PLATFORM.IOS ? '#a7a6ab' : '#be1522',
   iosStatusbar: platform === PLATFORM.IOS ? 'dark-content' : 'light-content',
+  toolbarTextColor: platform === PLATFORM.IOS ? '#000000' : '#ffffff',
   get statusBarColor() {
     return color(this.toolbarDefaultBg)
       .darken(0.2)
@@ -250,7 +251,7 @@ export default {
   // List
   listBg: 'transparent',
   listBorderColor: '#c9c9c9',
-  listDividerBg: '#f4f4f4',
+  listDividerBg: '#e2e2e2',
   listBtnUnderlayColor: '#DDD',
   listItemPadding: platform === PLATFORM.IOS ? 10 : 12,
   listNoteColor: '#808080',

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Body, Container, Content, ListItem, Text} from 'native-base';
+import {Body, Container, ListItem, Text} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import {FlatList} from "react-native";
 import i18n from "i18n-js";
@@ -31,24 +31,22 @@ export default class AboutDependenciesScreen extends React.Component<Props> {
         return (
             <Container>
                 <CustomHeader hasBackButton={true} navigation={nav} title={i18n.t('aboutScreen.libs')}/>
-                <Content>
-                    <FlatList
-                        data={data}
-                        keyExtractor={(item) => item.name}
-                        style={{minHeight: 300, width: '100%'}}
-                        renderItem={({item}) =>
-                            <ListItem>
-                                <Body>
-                                    <Text>
-                                        {item.name}
-                                    </Text>
-                                    <Text note>
-                                        {item.version.replace('^', '')}
-                                    </Text>
-                                </Body>
-                            </ListItem>}
-                    />
-                </Content>
+                <FlatList
+                    data={data}
+                    keyExtractor={(item) => item.name}
+                    style={{minHeight: 300, width: '100%'}}
+                    renderItem={({item}) =>
+                        <ListItem>
+                            <Body>
+                                <Text>
+                                    {item.name}
+                                </Text>
+                                <Text note>
+                                    {item.version.replace('^', '')}
+                                </Text>
+                            </Body>
+                        </ListItem>}
+                />
             </Container>
         );
     }

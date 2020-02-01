@@ -1,9 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {Body, Container, Content, Left, ListItem, Right, Text, Thumbnail, H1, H3} from 'native-base';
+import {Body, Container, Content, H1, H3, Left, ListItem, Right, Text, Thumbnail} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
-import {FlatList, Platform, View, Image} from "react-native";
+import {FlatList, Image, Platform, View} from "react-native";
 import Touchable from 'react-native-platform-touchable';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import i18n from "i18n-js";
@@ -62,13 +62,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     originalData: Array<Object>;
     navData = this.props.navigation.getParam('data', []);
     shouldFocusSearchBar = this.props.navigation.getParam('shouldFocusSearchBar', false);
-
-    constructor(props: any) {
-        super(props);
-        this.modalRef = React.createRef();
-        this.originalData = this.navData['data'];
-    }
-
     state = {
         currentlyDisplayedData: this.navData['data'].sort(sortPrice),
         currentSortMode: sortMode.price,
@@ -77,8 +70,13 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         sortNameIcon: '',
         modalCurrentDisplayItem: {},
     };
-
     _menu: Menu;
+
+    constructor(props: any) {
+        super(props);
+        this.modalRef = React.createRef();
+        this.originalData = this.navData['data'];
+    }
 
     /**
      * Saves the reference to the sort menu for later use
@@ -132,9 +130,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 }
                 break;
         }
-        this.setState({
-            navData: data,
-        });
         this.setupSortIcons(mode, isReverse);
         this._menu.hide();
     }
@@ -297,7 +292,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
 
     render() {
         const nav = this.props.navigation;
-        const navType = nav.getParam('type', '{name: "Error"}');
         return (
             <Container>
                 <Modalize ref={this.modalRef}

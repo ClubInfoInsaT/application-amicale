@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Image, Linking, View} from 'react-native';
-import {Body, Card, CardItem, Container, Content, H2, Left, Text} from 'native-base';
+import {Card, CardItem, Container, Content, H2, Left, Text} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
@@ -10,14 +10,6 @@ import CustomMaterialIcon from "../../components/CustomMaterialIcon";
 type Props = {
     navigation: Object,
 };
-
-/**
- * Opens a link in the device's browser
- * @param link The link to open
- */
-function openWebLink(link) {
-    Linking.openURL(link).catch((err) => console.error('Error opening link', err));
-}
 
 /**
  * Class defining an about screen. This screen shows the user information about the app and it's author.

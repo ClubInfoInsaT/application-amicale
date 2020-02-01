@@ -7,8 +7,15 @@
     "menuSelf": "RU Menu",
     "settings": "Settings",
     "availableRooms": "Available rooms",
+    "bluemind": "INSA Mails",
+    "ent": "INSA ENT",
     "about": "About",
     "debug": "Debug"
+  },
+  "sidenav": {
+    "divider1": "Student websites",
+    "divider2": "Services",
+    "divider3": "Personalisation"
   },
   "intro": {
     "slide1": {
@@ -41,7 +48,7 @@
     },
     "updateSlide": {
       "title": "New in this update!",
-      "text": "Get ready for your exams with Tutor'INSA! Book a Bib'Box or find an empty room to study, available in the side menu."
+      "text": "Never miss an email anymore! Acces your INSA webmail from the app using the left menu.\nPlanex has also seen some improvements!\n\nSome of your remarks where taken into account for this update, more to come.\nThanks for your feedback on the survey! "
     },
     "buttons": {
       "next": "Next",

@@ -5,7 +5,7 @@ import {Container} from "native-base";
 import CustomHeader from "./CustomHeader";
 import CustomSideMenu from "./CustomSideMenu";
 import CustomMaterialIcon from "./CustomMaterialIcon";
-import {Platform, View} from "react-native";
+import {Platform, StatusBar, View} from "react-native";
 import ThemeManager from "../utils/ThemeManager";
 import Touchable from "react-native-platform-touchable";
 import {ScreenOrientation} from "expo";
@@ -32,9 +32,6 @@ type State = {
 
 export default class BaseContainer extends React.Component<Props, State> {
 
-    willBlurSubscription: function;
-    willFocusSubscription: function;
-
     static defaultProps = {
         headerRightButton: <View/>,
         hasTabs: false,
@@ -43,8 +40,8 @@ export default class BaseContainer extends React.Component<Props, State> {
         enableRotation: false,
         hideHeaderOnLandscape: false,
     };
-
-
+    willBlurSubscription: function;
+    willFocusSubscription: function;
     state = {
         isOpen: false,
         isHeaderVisible: true,
@@ -66,7 +63,7 @@ export default class BaseContainer extends React.Component<Props, State> {
     componentDidMount() {
         this.willFocusSubscription = this.props.navigation.addListener(
             'willFocus',
-            payload => {
+            () => {
                 if (this.props.enableRotation) {
                     ScreenOrientation.unlockAsync();
                     ScreenOrientation.addOrientationChangeListener((OrientationChangeEvent) => {
@@ -80,13 +77,14 @@ export default class BaseContainer extends React.Component<Props, State> {
                                 key: this.props.navigation.state.key,
                             });
                             this.props.navigation.dispatch(setParamsAction);
+                            StatusBar.setHidden(isLandscape);
                         }
                     });
                 }
             });
         this.willBlurSubscription = this.props.navigation.addListener(
             'willBlur',
-            payload => {
+            () => {
                 if (this.props.enableRotation)
                     ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
                 this.setState({isOpen: false});
@@ -122,7 +120,7 @@ export default class BaseContainer extends React.Component<Props, State> {
                         rightButton={this.props.headerRightButton}
                         hasTabs={this.props.hasTabs}
                         hasBackButton={this.props.hasBackButton}/>
-                    : <View style={{paddingTop: 20}}/>}
+                    : <View/>}
                 {this.props.children}
             </Container>
         );

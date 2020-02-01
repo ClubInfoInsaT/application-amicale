@@ -5,10 +5,9 @@ import HomeScreen from '../screens/HomeScreen';
 import PlanningScreen from '../screens/PlanningScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
-import PlanexScreen from '../screens/PlanexScreen';
+import PlanexScreen from '../screens/Websites/PlanexScreen';
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
-import AsyncStorageManager from "../utils/AsyncStorageManager";
 
 const TAB_ICONS = {
     Home: 'triangle',

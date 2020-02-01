@@ -2,11 +2,10 @@
 
 import * as React from 'react';
 import {View} from 'react-native';
-import {Text, H2, H3, Card, CardItem} from 'native-base';
+import {Card, CardItem, H2, H3, Text} from 'native-base';
 import ThemeManager from "../utils/ThemeManager";
 import i18n from "i18n-js";
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
-import LocaleManager from "../utils/LocaleManager";
 
 const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
 
@@ -64,7 +63,7 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         return true;
     }
 
-    hasSideMenu() : boolean {
+    hasSideMenu(): boolean {
         return false;
     }
 
@@ -150,7 +149,7 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
                     flexDirection: 'column',
                     paddingTop: 0,
                 }}>
-                    {item.dishes.map((object, i) =>
+                    {item.dishes.map((object) =>
                         <View>
                             {object.name !== "" ?
                                 <Text style={{

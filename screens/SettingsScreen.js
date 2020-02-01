@@ -21,8 +21,6 @@ import i18n from "i18n-js";
 import {NavigationActions, StackActions} from "react-navigation";
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
-import Touchable from "react-native-platform-touchable";
-import {Platform} from "react-native";
 import NotificationsManager from "../utils/NotificationsManager";
 
 type Props = {
@@ -44,6 +42,39 @@ export default class SettingsScreen extends React.Component<Props, State> {
         proxiwashNotifPickerSelected: AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current,
         startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
     };
+
+    /**
+     * Get a list item using the specified control
+     *
+     * @param control The custom control to use
+     * @param icon The icon name to display on the list item
+     * @param title The text to display as this list item title
+     * @param subtitle The text to display as this list item subtitle
+     * @returns {React.Node}
+     */
+    static getGeneralItem(control: React.Node, icon: string, title: string, subtitle: string) {
+        return (
+            <ListItem
+                thumbnail
+            >
+                <Left>
+                    <CustomMaterialIcon icon={icon}/>
+                </Left>
+                <Body>
+                    <Text>
+                        {title}
+                    </Text>
+                    <Text note>
+                        {subtitle}
+                    </Text>
+                </Body>
+
+                <Right>
+                    {control}
+                </Right>
+            </ListItem>
+        );
+    }
 
     /**
      * Save the value for the proxiwash reminder notification time
@@ -179,57 +210,11 @@ export default class SettingsScreen extends React.Component<Props, State> {
         );
     }
 
-    /**
-     * Get a list item using the specified control
-     *
-     * @param control The custom control to use
-     * @param icon The icon name to display on the list item
-     * @param title The text to display as this list item title
-     * @param subtitle The text to display as this list item subtitle
-     * @returns {React.Node}
-     */
-    static getGeneralItem(control: React.Node, icon: string, title: string, subtitle: string) {
-        return (
-            <ListItem
-                thumbnail
-            >
-                <Left>
-                    <CustomMaterialIcon icon={icon}/>
-                </Left>
-                <Body>
-                    <Text>
-                        {title}
-                    </Text>
-                    <Text note>
-                        {subtitle}
-                    </Text>
-                </Body>
-
-                <Right>
-                    {control}
-                </Right>
-            </ListItem>
-        );
-    }
-
-    getRightButton() {
-        return (
-            <Touchable
-                style={{padding: 6}}
-                onPress={() => this.props.navigation.navigate('AboutScreen')}>
-                <CustomMaterialIcon
-                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                    icon="information"/>
-            </Touchable>
-        );
-    }
-
     render() {
         const nav = this.props.navigation;
         return (
             <Container>
-                <CustomHeader navigation={nav} title={i18n.t('screens.settings')} hasBackButton={true}
-                              rightButton={this.getRightButton()}/>
+                <CustomHeader navigation={nav} title={i18n.t('screens.settings')} hasBackButton={true}/>
                 <Content padder>
                     <Card>
                         <CardItem header>
