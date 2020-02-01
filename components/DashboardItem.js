@@ -101,7 +101,11 @@ export default class DashboardItem extends React.Component<Props> {
                                       div: {color: ThemeManager.getCurrentThemeVariables().textColor},
                                   }}/>
                             <LinearGradient
-                                colors={['rgba(255,255,255,0)', ThemeManager.getCurrentThemeVariables().cardDefaultBg]}
+                                colors={[
+                                    // Fix for ios gradient: transparent color must match final color
+                                    ThemeManager.getNightMode() ? 'rgba(42,42,42,0)' : 'rgba(255,255,255,0)',
+                                    ThemeManager.getCurrentThemeVariables().cardDefaultBg
+                                ]}
                                 start={{x: 0, y: 0}}
                                 end={{x: 0, y: 0.6}}
                                 // end={[0, 0.6]}

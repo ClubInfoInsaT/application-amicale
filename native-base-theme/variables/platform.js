@@ -210,6 +210,7 @@ export default {
   toolbarBtnTextColor: platform === PLATFORM.IOS ? '#be1522' : '#fff',
   toolbarDefaultBorder: platform === PLATFORM.IOS ? '#a7a6ab' : '#be1522',
   iosStatusbar: platform === PLATFORM.IOS ? 'dark-content' : 'light-content',
+  toolbarTextColor: platform === PLATFORM.IOS ? '#000000' : '#ffffff',
   get statusBarColor() {
     return color(this.toolbarDefaultBg)
       .darken(0.2)

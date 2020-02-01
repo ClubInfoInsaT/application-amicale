@@ -24,9 +24,10 @@ export default class BlueMindScreen extends React.Component<Props> {
 
     constructor() {
         super();
-        this.customInjectedJS =
-            '$("head").append(\'<meta name="viewport" content="width=device-width, initial-scale=1.0">\');' +
-            '$("head").append(\'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\');true;';
+        // Breaks website on ios
+        this.customInjectedJS = '';
+            // '$("head").append(\'<meta name="viewport" content="width=device-width, initial-scale=1.0">\');' +
+            // '$("head").append(\'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\');true;';
     }
 
     render() {

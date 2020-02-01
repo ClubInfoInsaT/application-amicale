@@ -93,7 +93,8 @@ export default class CustomHeader extends React.Component<Props> {
                     {this.props.hasSearchField ?
                         this.getSearchBar() :
                         <Title style={{
-                            paddingLeft: 10
+                            paddingLeft: 10,
+                            color: ThemeManager.getCurrentThemeVariables().toolbarTextColor
                         }}>{this.props.title}</Title>}
                 </Body>
                 <Right style={{flex: this.props.hasSearchField ? 0 : 1}}>
