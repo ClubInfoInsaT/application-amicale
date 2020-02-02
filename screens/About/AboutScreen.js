@@ -319,14 +319,12 @@ export default class AboutScreen extends React.Component<Props, State> {
 
     tryUnlockDebugMode() {
         this.debugTapCounter = this.debugTapCounter + 1;
-        console.log(this.debugTapCounter);
         if (this.debugTapCounter >= 4) {
             this.unlockDebugMode();
         }
     }
 
     unlockDebugMode() {
-        console.log('unlocked');
         this.setState({isDebugUnlocked: true});
         let key = AsyncStorageManager.getInstance().preferences.debugUnlocked.key;
         AsyncStorageManager.getInstance().savePref(key, '1');
