@@ -1,13 +1,18 @@
 import * as React from 'react';
+import {createStackNavigator} from 'react-navigation';
 import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom-tabs";
 
 import HomeScreen from '../screens/HomeScreen';
 import PlanningScreen from '../screens/PlanningScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
+import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
+import ProximoListScreen from "../screens/Proximo/ProximoListScreen";
+import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
+import {fromRight} from "react-navigation-transitions";
 
 const TAB_ICONS = {
     Home: 'triangle',
@@ -17,12 +22,35 @@ const TAB_ICONS = {
     Planex: 'timetable',
 };
 
+const ProximoStack = createStackNavigator({
+        ProximoMainScreen: {screen: ProximoMainScreen},
+        ProximoListScreen: {screen: ProximoListScreen},
+        ProximoAboutScreen: {screen: ProximoAboutScreen},
+    },
+    {
+        initialRouteName: "ProximoMainScreen",
+        mode: 'card',
+        headerMode: "none",
+        transitionConfig: () => fromRight(),
+    });
+
+const ProxiwashStack = createStackNavigator({
+        ProxiwashScreen: {screen: ProxiwashScreen},
+        ProxiwashAboutScreen: {screen: ProxiwashAboutScreen},
+    },
+    {
+        initialRouteName: "ProxiwashScreen",
+        mode: 'card',
+        headerMode: "none",
+        transitionConfig: () => fromRight(),
+    });
+
 function createMaterialBottomTabNavigatorWithInitialRoute(initialRoute: string) {
     return createMaterialBottomTabNavigator({
         Home: {screen: HomeScreen},
-        Planning: {screen: PlanningScreen,},
-        Proxiwash: {screen: ProxiwashScreen,},
-        Proximo: {screen: ProximoMainScreen,},
+        Planning: {screen: PlanningScreen},
+        Proxiwash: ProxiwashStack,
+        Proximo: ProximoStack,
         Planex: {
             screen: PlanexScreen,
             navigationOptions: ({navigation}) => {

@@ -3,7 +3,6 @@
 import * as React from 'react';
 import {Container} from "native-base";
 import CustomHeader from "./CustomHeader";
-import CustomSideMenu from "./CustomSideMenu";
 import CustomMaterialIcon from "./CustomMaterialIcon";
 import {Platform, StatusBar, View} from "react-native";
 import ThemeManager from "../utils/ThemeManager";
@@ -25,7 +24,6 @@ type Props = {
 }
 
 type State = {
-    isOpen: boolean,
     isHeaderVisible: boolean
 }
 
@@ -43,20 +41,12 @@ export default class BaseContainer extends React.Component<Props, State> {
     willBlurSubscription: function;
     willFocusSubscription: function;
     state = {
-        isOpen: false,
         isHeaderVisible: true,
     };
 
     toggle() {
-        this.setState({
-            isOpen: !this.state.isOpen,
-        });
+        this.props.navigation.toggleDrawer();
     }
-
-    updateMenuState(isOpen: boolean) {
-        this.setState({isOpen});
-    }
-
     /**
      * Register for blur event to close side menu on screen change
      */
@@ -87,7 +77,6 @@ export default class BaseContainer extends React.Component<Props, State> {
             () => {
                 if (this.props.enableRotation)
                     ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
-                this.setState({isOpen: false});
             }
         );
     }
@@ -128,20 +117,6 @@ export default class BaseContainer extends React.Component<Props, State> {
 
 
     render() {
-        return (
-            <View style={{
-                backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
-                width: '100%',
-                height: '100%'
-            }}>
-                {this.props.hasSideMenu ?
-                    <CustomSideMenu
-                        navigation={this.props.navigation} isOpen={this.state.isOpen}
-                        onChange={(isOpen) => this.updateMenuState(isOpen)}>
-                        {this.getMainContainer()}
-                    </CustomSideMenu> :
-                    this.getMainContainer()}
-            </View>
-        );
+        return (this.getMainContainer());
     }
 }
