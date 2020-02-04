@@ -33,22 +33,40 @@ const AboutStack = createStackNavigator({
         },
     });
 
+
+// Create a stack to use animations
+function createDrawerStackWithInitialRoute(initialRoute: string) {
+    return createStackNavigator({
+            Main: createMaterialBottomTabNavigatorWithInitialRoute(initialRoute),
+            SettingsScreen: {screen: SettingsScreen},
+            AboutScreen: AboutStack,
+            SelfMenuScreen: {screen: SelfMenuScreen},
+            TutorInsaScreen: {screen: TutorInsaScreen},
+            AmicaleScreen: {screen: AmicaleScreen},
+            WiketudScreen: {screen: WiketudScreen},
+            ElusEtudScreen: {screen: ElusEtudScreen},
+            BlueMindScreen: {screen: BlueMindScreen},
+            EntScreen: {screen: EntScreen},
+            AvailableRoomScreen: {screen: AvailableRoomScreen},
+        },
+        {
+            initialRouteName: "Main",
+            mode: 'card',
+            headerMode: "none",
+            defaultNavigationOptions: {
+                gestureEnabled: true,
+                cardOverlayEnabled: true,
+                ...TransitionPresets.SlideFromRightIOS,
+            },
+        });
+}
+
 /**
  * Creates the drawer navigation stack
  */
 function createDrawerNavigatorWithInitialRoute(initialRoute: string) {
     return createDrawerNavigator({
-        Main: createMaterialBottomTabNavigatorWithInitialRoute(initialRoute),
-        SettingsScreen: {screen: SettingsScreen},
-        AboutScreen: AboutStack,
-        SelfMenuScreen: {screen: SelfMenuScreen},
-        TutorInsaScreen: {screen: TutorInsaScreen},
-        AmicaleScreen: {screen: AmicaleScreen},
-        WiketudScreen: {screen: WiketudScreen},
-        ElusEtudScreen: {screen: ElusEtudScreen},
-        BlueMindScreen: {screen: BlueMindScreen},
-        EntScreen: {screen: EntScreen},
-        AvailableRoomScreen: {screen: AvailableRoomScreen},
+        Main: createDrawerStackWithInitialRoute(initialRoute),
     }, {
         contentComponent: Sidebar,
         initialRouteName: 'Main',

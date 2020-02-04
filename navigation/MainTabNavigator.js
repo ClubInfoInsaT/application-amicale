@@ -27,8 +27,8 @@ const ProximoStack = createStackNavigator({
         ProximoListScreen: {screen: ProximoListScreen},
         ProximoAboutScreen: {
             screen: ProximoAboutScreen,
-            navigationOptions: ({ navigation }) => ({
-                ...TransitionPresets.ModalPresentationIOS,
+            navigationOptions: () => ({
+                ...TransitionPresets.ModalSlideFromBottomIOS,
             }),
         },
     },
@@ -54,7 +54,7 @@ const ProxiwashStack = createStackNavigator({
         defaultNavigationOptions: {
             gestureEnabled: true,
             cardOverlayEnabled: true,
-            ...TransitionPresets.ModalPresentationIOS,
+            ...TransitionPresets.ModalSlideFromBottomIOS,
         },
     });
 
@@ -69,7 +69,7 @@ const PlanningStack = createStackNavigator({
         defaultNavigationOptions: {
             gestureEnabled: true,
             cardOverlayEnabled: true,
-            ...TransitionPresets.ModalPresentationIOS,
+            ...TransitionPresets.ModalSlideFromBottomIOS,
         },
     });
 
@@ -84,7 +84,7 @@ const HomeStack = createStackNavigator({
         defaultNavigationOptions: {
             gestureEnabled: true,
             cardOverlayEnabled: true,
-            ...TransitionPresets.ModalPresentationIOS,
+            ...TransitionPresets.ModalSlideFromBottomIOS,
         },
     });
 

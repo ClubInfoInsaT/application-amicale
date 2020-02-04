@@ -30,7 +30,7 @@ export default class PlanningDisplayScreen extends React.Component<Props> {
             <Container>
                 <CustomHeader
                     navigation={nav}
-                    title={i18n.t('screens.planningDisplayScreen')}
+                    title={displayData.title}
                     subtitle={PlanningEventManager.getFormattedTime(displayData)}
                     hasBackButton={true}/>
                 <Content padder>
