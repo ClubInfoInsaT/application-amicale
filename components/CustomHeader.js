@@ -100,7 +100,7 @@ export default class CustomHeader extends React.Component<Props> {
                     }}>
                     <CustomMaterialIcon
                         color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon={Platform.OS === 'chevron-left' ? "" : "arrow-left"}/>
+                        icon={Platform.OS === 'ios' ? 'chevron-left' : "arrow-left"}/>
                 </Touchable>;
         else
             button = this.props.leftButton;
