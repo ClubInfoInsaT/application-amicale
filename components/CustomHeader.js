@@ -8,6 +8,7 @@ import Touchable from 'react-native-platform-touchable';
 import ThemeManager from "../utils/ThemeManager";
 import CustomMaterialIcon from "./CustomMaterialIcon";
 import i18n from "i18n-js";
+import { NavigationActions } from 'react-navigation';
 
 type Props = {
     hasBackButton: boolean,
@@ -75,10 +76,13 @@ export default class CustomHeader extends React.Component<Props> {
             button =
                 <Touchable
                     style={{padding: 6}}
-                    onPress={() => this.props.navigation.goBack()}>
+                    onPress={() => {
+                        const backAction = NavigationActions.back();
+                        this.props.navigation.dispatch(backAction);
+                    }}>
                     <CustomMaterialIcon
                         color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon="arrow-left"/>
+                        icon={Platform.OS === 'chevron-left' ? "" : "arrow-left"}/>
                 </Touchable>;
         else
             button = this.props.leftButton;
