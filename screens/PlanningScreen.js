@@ -1,18 +1,16 @@
 // @flow
 
 import * as React from 'react';
-import {BackHandler, Image, View} from 'react-native';
-import {Button, Content, H1, H3, Text} from 'native-base';
+import {BackHandler, Image} from 'react-native';
+import {H3, Text, View} from 'native-base';
 import i18n from "i18n-js";
 import ThemeManager from "../utils/ThemeManager";
 import {Linking} from "expo";
 import BaseContainer from "../components/BaseContainer";
 import {Agenda, LocaleConfig} from 'react-native-calendars';
-import HTML from 'react-native-render-html';
 import Touchable from 'react-native-platform-touchable';
-import {Modalize} from 'react-native-modalize';
 import WebDataManager from "../utils/WebDataManager";
-import CustomMaterialIcon from "../components/CustomMaterialIcon";
+import PlanningEventManager from '../utils/PlanningEventManager';
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
@@ -28,7 +26,6 @@ type Props = {
 }
 
 type State = {
-    modalCurrentDisplayItem: Object,
     refreshing: boolean,
     agendaItems: Object,
     calendarShowing: boolean,
@@ -51,7 +48,6 @@ function openWebLink(link) {
  */
 export default class PlanningScreen extends React.Component<Props, State> {
 
-    modalRef: Modalize;
     agendaRef: Agenda;
     webDataManager: WebDataManager;
 
@@ -61,7 +57,6 @@ export default class PlanningScreen extends React.Component<Props, State> {
     didFocusSubscription: Function;
     willBlurSubscription: Function;
     state = {
-        modalCurrentDisplayItem: {},
         refreshing: false,
         agendaItems: {},
         calendarShowing: false,
@@ -69,7 +64,6 @@ export default class PlanningScreen extends React.Component<Props, State> {
 
     constructor(props: any) {
         super(props);
-        this.modalRef = React.createRef();
         this.webDataManager = new WebDataManager(FETCH_URL);
         this.didFocusSubscription = props.navigation.addListener(
             'didFocus',
@@ -131,72 +125,11 @@ export default class PlanningScreen extends React.Component<Props, State> {
         return daysOfYear;
     }
 
-    getModalHeader() {
-        return (
-            <View style={{marginBottom: 0}}>
-                <Button
-                    onPress={() => this.modalRef.current.close()}
-                    style={{
-                        marginTop: 50,
-                        marginLeft: 'auto',
-                    }}
-                    transparent>
-                    <CustomMaterialIcon icon={'close'}/>
-                </Button>
-            </View>
-        );
-    }
-
-    getModalContent() {
-        return (
-            <View style={{
-                flex: 1,
-                padding: 20
-            }}>
-                <H1>
-                    {this.state.modalCurrentDisplayItem.title}
-                </H1>
-                <H3 style={{
-                    marginTop: 10,
-                    color: ThemeManager.getCurrentThemeVariables().listNoteColor
-                }}>
-                    {this.getFormattedTime(this.state.modalCurrentDisplayItem)}
-                </H3>
-                <Content>
-                    {this.state.modalCurrentDisplayItem.logo !== null ?
-                        <View style={{width: '100%', height: 200, marginTop: 20, marginBottom: 20}}>
-                            <Image style={{flex: 1, resizeMode: "contain"}}
-                                   source={{uri: this.state.modalCurrentDisplayItem.logo}}/>
-                        </View>
-                        : <View/>}
-
-                    {this.state.modalCurrentDisplayItem.description !== null ?
-                        // Surround description with div to allow text styling if the description is not html
-                        <HTML html={"<div>" + this.state.modalCurrentDisplayItem.description + "</div>"}
-                              tagsStyles={{
-                                  p: {
-                                      color: ThemeManager.getCurrentThemeVariables().textColor,
-                                      fontSize: ThemeManager.getCurrentThemeVariables().fontSizeBase
-                                  },
-                                  div: {color: ThemeManager.getCurrentThemeVariables().textColor}
-                              }}
-                              onLinkPress={(event, link) => openWebLink(link)}/>
-                        : <View/>}
-                </Content>
-            </View>
-        );
-    }
-
-    showItemDetails(item: Object) {
-        this.setState({
-            modalCurrentDisplayItem: item,
-        });
-        if (this.modalRef.current) {
-            this.modalRef.current.open();
-        }
-    }
-
     getRenderItem(item: Object) {
+        let navData = {
+            data: item
+        };
+        const nav = this.props.navigation;
         return (
             <Touchable
                 style={{
@@ -205,7 +138,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     marginRight: 10,
                     marginTop: 17,
                 }}
-                onPress={() => this.showItemDetails(item)}>
+                onPress={() => nav.navigate('PlanningDisplayScreen', navData)}>
                 <View style={{
                     padding: 10,
                     flex: 1,
@@ -219,7 +152,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                             marginTop: 5,
                             marginBottom: 10
                         }}>
-                            {this.getFormattedTime(item)}
+                            {PlanningEventManager.getFormattedTime(item)}
                         </Text>
                         <H3 style={{marginBottom: 10}}>{item.title}</H3>
                     </View>
@@ -296,8 +229,8 @@ export default class PlanningScreen extends React.Component<Props, State> {
     generateEventAgenda(eventList: Array<Object>) {
         let agendaItems = this.generateEmptyCalendar();
         for (let i = 0; i < eventList.length; i++) {
-            if (agendaItems[this.getEventStartDate(eventList[i])] !== undefined) {
-                this.pushEventInOrder(agendaItems, eventList[i], this.getEventStartDate(eventList[i]));
+            if (agendaItems[PlanningEventManager.getEventStartDate(eventList[i])] !== undefined) {
+                this.pushEventInOrder(agendaItems, eventList[i], PlanningEventManager.getEventStartDate(eventList[i]));
             }
         }
         this.setState({agendaItems: agendaItems})
@@ -308,7 +241,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
             agendaItems[startDate].push(event);
         else {
             for (let i = 0; i < agendaItems[startDate].length; i++) {
-                if (this.isEventBefore(event, agendaItems[startDate][i])) {
+                if (PlanningEventManager.isEventBefore(event, agendaItems[startDate][i])) {
                     agendaItems[startDate].splice(i, 0, event);
                     break;
                 } else if (i === agendaItems[startDate].length - 1) {
@@ -319,65 +252,10 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
     }
 
-    isEventBefore(event1: Object, event2: Object) {
-        let date1 = new Date();
-        let date2 = new Date();
-        let timeArray = this.getEventStartTime(event1).split(":");
-        date1.setHours(parseInt(timeArray[0]), parseInt(timeArray[1]));
-        timeArray = this.getEventStartTime(event2).split(":");
-        date2.setHours(parseInt(timeArray[0]), parseInt(timeArray[1]));
-        return date1 < date2;
-    }
-
-    getEventStartDate(event: Object) {
-        return event.date_begin.split(" ")[0];
-    }
-
-    getEventStartTime(event: Object) {
-        if (event !== undefined && Object.keys(event).length > 0 && event.date_begin !== null)
-            return this.formatTime(event.date_begin.split(" ")[1]);
-        else
-            return "";
-    }
-
-    getEventEndTime(event: Object) {
-        if (event !== undefined && Object.keys(event).length > 0 && event.date_end !== null)
-            return this.formatTime(event.date_end.split(" ")[1]);
-        else
-            return "";
-    }
-
-    getFormattedTime(event: Object) {
-        if (this.getEventEndTime(event) !== "")
-            return this.getEventStartTime(event) + " - " + this.getEventEndTime(event);
-        else
-            return this.getEventStartTime(event);
-    }
-
-    formatTime(time: string) {
-        let array = time.split(':');
-        return array[0] + ':' + array[1];
-    }
-
-    onModalClosed() {
-        this.setState({
-            modalCurrentDisplayItem: {},
-        });
-    }
-
     render() {
         const nav = this.props.navigation;
         return (
             <BaseContainer navigation={nav} headerTitle={i18n.t('screens.planning')}>
-                <Modalize ref={this.modalRef}
-                          modalStyle={{
-                              backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
-                          }}
-                    // adjustToContentHeight // Breaks when displaying full screen, half, then full again
-                          HeaderComponent={() => this.getModalHeader()}
-                          onClosed={() => this.onModalClosed()}>
-                    {this.getModalContent()}
-                </Modalize>
                 <Agenda
                     // the list of items that have to be displayed in agenda. If you want to render item as empty date
                     // the value of date key kas to be an empty array []. If there exists no value for date key it is
@@ -431,14 +309,6 @@ export default class PlanningScreen extends React.Component<Props, State> {
                         agendaDayNumColor: ThemeManager.getCurrentThemeVariables().listNoteColor,
                         agendaTodayColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
                         agendaKnobColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                        // Fix for days hiding behind knob
-                        'stylesheet.calendar.header': {
-                            week: {
-                                marginTop: 0,
-                                flexDirection: 'row',
-                                justifyContent: 'space-between'
-                            }
-                        }
                     }}
                 />
             </BaseContainer>

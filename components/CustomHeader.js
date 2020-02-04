@@ -1,14 +1,14 @@
 // @flow
 
 import * as React from "react";
-import {Body, Header, Input, Item, Left, Right, Title} from "native-base";
+import {Body, Header, Input, Item, Left, Right, Subtitle, Title} from "native-base";
 import {Platform, StyleSheet, View} from "react-native";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import Touchable from 'react-native-platform-touchable';
 import ThemeManager from "../utils/ThemeManager";
 import CustomMaterialIcon from "./CustomMaterialIcon";
 import i18n from "i18n-js";
-import { NavigationActions } from 'react-navigation';
+import {NavigationActions} from 'react-navigation';
 
 type Props = {
     hasBackButton: boolean,
@@ -18,6 +18,7 @@ type Props = {
     leftButton: React.Node,
     rightButton: React.Node,
     title: string,
+    subtitle: string,
     navigation: Object,
     hasTabs: boolean,
 };
@@ -38,6 +39,7 @@ export default class CustomHeader extends React.Component<Props> {
         searchCallback: () => null,
         shouldFocusSearchBar: false,
         title: '',
+        subtitle: '',
         leftButton: <View/>,
         rightButton: <View/>,
         hasTabs: false,
@@ -52,22 +54,38 @@ export default class CustomHeader extends React.Component<Props> {
 
     getSearchBar() {
         return (
-            <Item
-                style={{
-                    width: '100%',
-                    marginBottom: 7
-                }}>
-                <CustomMaterialIcon
-                    icon={'magnify'}
-                    color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
-                <Input
-                    ref="searchInput"
-                    placeholder={i18n.t('proximoScreen.search')}
-                    placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
-                    onChangeText={(text) => this.props.searchCallback(text)}/>
-            </Item>
+            <Body>
+                <Item
+                    style={{
+                        width: '100%',
+                        marginBottom: 7
+                    }}>
+                    <CustomMaterialIcon
+                        icon={'magnify'}
+                        color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
+                    <Input
+                        ref="searchInput"
+                        placeholder={i18n.t('proximoScreen.search')}
+                        placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
+                        onChangeText={(text) => this.props.searchCallback(text)}/>
+                </Item>
+            </Body>
         );
     }
+
+    getHeaderTitle() {
+        return (
+            <Body>
+                <Title style={{
+                    color: ThemeManager.getCurrentThemeVariables().toolbarTextColor
+                }}>
+                    {this.props.title}
+                </Title>
+                {this.props.subtitle !== '' ? <Subtitle>{this.props.subtitle}</Subtitle> : null}
+            </Body>
+        );
+    }
+
 
     render() {
         let button;
@@ -93,21 +111,15 @@ export default class CustomHeader extends React.Component<Props> {
                 <Left style={{flex: 0}}>
                     {button}
                 </Left>
-                <Body>
-                    {this.props.hasSearchField ?
-                        this.getSearchBar() :
-                        <Title style={{
-                            paddingLeft: 10,
-                            color: ThemeManager.getCurrentThemeVariables().toolbarTextColor
-                        }}>{this.props.title}</Title>}
-                </Body>
+                {this.props.hasSearchField ?
+                    this.getSearchBar() :
+                    this.getHeaderTitle()}
                 <Right style={{flex: this.props.hasSearchField ? 0 : 1}}>
                     {this.props.rightButton}
                 </Right>
             </Header>);
     }
 };
-
 
 // Fix header in status bar on Android
 const styles = StyleSheet.create({

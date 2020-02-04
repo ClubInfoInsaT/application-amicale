@@ -4,6 +4,7 @@ import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom
 
 import HomeScreen from '../screens/HomeScreen';
 import PlanningScreen from '../screens/PlanningScreen';
+import PlanningDisplayScreen from '../screens/PlanningDisplayScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
 import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
@@ -57,10 +58,40 @@ const ProxiwashStack = createStackNavigator({
         },
     });
 
+const PlanningStack = createStackNavigator({
+        PlanningScreen: {screen: PlanningScreen},
+        PlanningDisplayScreen: {screen: PlanningDisplayScreen},
+    },
+    {
+        initialRouteName: "PlanningScreen",
+        mode: 'card',
+        headerMode: "none",
+        defaultNavigationOptions: {
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            ...TransitionPresets.ModalPresentationIOS,
+        },
+    });
+
+const HomeStack = createStackNavigator({
+        HomeScreen: {screen: HomeScreen},
+        PlanningDisplayScreen: {screen: PlanningDisplayScreen},
+    },
+    {
+        initialRouteName: "HomeScreen",
+        mode: 'card',
+        headerMode: "none",
+        defaultNavigationOptions: {
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            ...TransitionPresets.ModalPresentationIOS,
+        },
+    });
+
 function createMaterialBottomTabNavigatorWithInitialRoute(initialRoute: string) {
     return createMaterialBottomTabNavigator({
-        Home: {screen: HomeScreen},
-        Planning: {screen: PlanningScreen},
+        Home: HomeStack,
+        Planning: PlanningStack,
         Proxiwash: ProxiwashStack,
         Proximo: ProximoStack,
         Planex: {

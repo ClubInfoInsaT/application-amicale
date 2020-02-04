@@ -14,6 +14,7 @@ import {NavigationActions} from "react-navigation";
 type Props = {
     navigation: Object,
     headerTitle: string,
+    headerSubtitle: string,
     headerRightButton: React.Node,
     children: React.Node,
     hasTabs: boolean,
@@ -37,6 +38,7 @@ export default class BaseContainer extends React.Component<Props, State> {
         hasSideMenu: true,
         enableRotation: false,
         hideHeaderOnLandscape: false,
+        headerSubtitle: '',
     };
     willBlurSubscription: function;
     willFocusSubscription: function;
@@ -96,7 +98,9 @@ export default class BaseContainer extends React.Component<Props, State> {
             <Container>
                 {this.state.isHeaderVisible ?
                     <CustomHeader
-                        navigation={this.props.navigation} title={this.props.headerTitle}
+                        navigation={this.props.navigation}
+                        title={this.props.headerTitle}
+                        subtitle={this.props.headerSubtitle}
                         leftButton={
                             <Touchable
                                 style={{padding: 6}}
