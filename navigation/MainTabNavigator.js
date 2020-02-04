@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {createStackNavigator} from 'react-navigation';
+import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
 import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom-tabs";
 
 import HomeScreen from '../screens/HomeScreen';
@@ -12,7 +12,6 @@ import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
-import {fromRight} from "react-navigation-transitions";
 
 const TAB_ICONS = {
     Home: 'triangle',
@@ -25,13 +24,22 @@ const TAB_ICONS = {
 const ProximoStack = createStackNavigator({
         ProximoMainScreen: {screen: ProximoMainScreen},
         ProximoListScreen: {screen: ProximoListScreen},
-        ProximoAboutScreen: {screen: ProximoAboutScreen},
+        ProximoAboutScreen: {
+            screen: ProximoAboutScreen,
+            navigationOptions: ({ navigation }) => ({
+                ...TransitionPresets.ModalPresentationIOS,
+            }),
+        },
     },
     {
         initialRouteName: "ProximoMainScreen",
         mode: 'card',
         headerMode: "none",
-        transitionConfig: () => fromRight(),
+        defaultNavigationOptions: {
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            ...TransitionPresets.SlideFromRightIOS,
+        },
     });
 
 const ProxiwashStack = createStackNavigator({
@@ -42,7 +50,11 @@ const ProxiwashStack = createStackNavigator({
         initialRouteName: "ProxiwashScreen",
         mode: 'card',
         headerMode: "none",
-        transitionConfig: () => fromRight(),
+        defaultNavigationOptions: {
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            ...TransitionPresets.ModalPresentationIOS,
+        },
     });
 
 function createMaterialBottomTabNavigatorWithInitialRoute(initialRoute: string) {

@@ -1,10 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {StatusBar, Platform} from 'react-native';
+import {Platform, StatusBar} from 'react-native';
 import {Root, StyleProvider} from 'native-base';
 import {createAppContainerWithInitialRoute} from './navigation/AppNavigator';
-import ThemeManager from './utils/ThemeManager';
 import LocaleManager from './utils/LocaleManager';
 import * as Font from 'expo-font';
 import {clearThemeCache} from 'native-base-shoutem-theme';
@@ -12,6 +11,7 @@ import AsyncStorageManager from "./utils/AsyncStorageManager";
 import CustomIntroSlider from "./components/CustomIntroSlider";
 import {AppLoading} from 'expo';
 import NotificationsManager from "./utils/NotificationsManager";
+import ThemeManager from './utils/ThemeManager';
 
 type Props = {};
 

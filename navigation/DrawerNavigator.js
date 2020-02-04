@@ -14,9 +14,8 @@ import BlueMindScreen from "../screens/Websites/BlueMindScreen";
 import EntScreen from "../screens/Websites/EntScreen";
 import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
 import DebugScreen from '../screens/DebugScreen';
-import {fromRight} from "react-navigation-transitions";
 import Sidebar from "../components/Sidebar";
-import {createStackNavigator} from "react-navigation";
+import {createStackNavigator, TransitionPresets} from "react-navigation-stack";
 
 const AboutStack = createStackNavigator({
         AboutScreen: {screen: AboutScreen},
@@ -27,7 +26,11 @@ const AboutStack = createStackNavigator({
         initialRouteName: "AboutScreen",
         mode: 'card',
         headerMode: "none",
-        transitionConfig: () => fromRight(),
+        defaultNavigationOptions: {
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            ...TransitionPresets.SlideFromRightIOS,
+        },
     });
 
 /**
