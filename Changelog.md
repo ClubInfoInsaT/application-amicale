@@ -9,6 +9,7 @@ Pensez à garder l'appli à jour pour profiter des dernières fonctionnalités !
     - Affichage de l'événement de l'accueil directement au clic, au lieu de juste amener sur la liste
     - _Notes de développement :_
         - Passage de React Navigation 3 à 4
+        - Mise à jour d'autres librairies
 
  - **v1.4.0** - _01/02/2020_
     - Correction d'un crash lors du rafraichissement de planex
