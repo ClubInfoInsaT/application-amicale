@@ -1,10 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {StatusBar, Platform} from 'react-native';
+import {Platform, StatusBar} from 'react-native';
 import {Root, StyleProvider} from 'native-base';
 import {createAppContainerWithInitialRoute} from './navigation/AppNavigator';
-import ThemeManager from './utils/ThemeManager';
 import LocaleManager from './utils/LocaleManager';
 import * as Font from 'expo-font';
 import {clearThemeCache} from 'native-base-shoutem-theme';
@@ -12,6 +11,7 @@ import AsyncStorageManager from "./utils/AsyncStorageManager";
 import CustomIntroSlider from "./components/CustomIntroSlider";
 import {AppLoading} from 'expo';
 import NotificationsManager from "./utils/NotificationsManager";
+import ThemeManager from './utils/ThemeManager';
 
 type Props = {};
 
@@ -49,12 +49,9 @@ export default class App extends React.Component<Props, State> {
 
     setupStatusBar() {
         if (Platform.OS === 'ios') {
-            console.log(ThemeManager.getNightMode());
             if (ThemeManager.getNightMode()) {
-                console.log('setting light mode');
                 StatusBar.setBarStyle('light-content', true);
             } else {
-                console.log('setting dark mode');
                 StatusBar.setBarStyle('dark-content', true);
             }
         }
@@ -73,7 +70,6 @@ export default class App extends React.Component<Props, State> {
     }
 
     async loadAssetsAsync() {
-        console.log('Starting loading assets...');
         // Wait for custom fonts to be loaded before showing the app
         await Font.loadAsync({
             'Roboto': require('native-base/Fonts/Roboto.ttf'),
@@ -83,18 +79,15 @@ export default class App extends React.Component<Props, State> {
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
         await NotificationsManager.initExpoToken();
-        // console.log(AsyncStorageManager.getInstance().preferences.expoToken.current);
     }
 
     onLoadFinished() {
         // Only show intro if this is the first time starting the app
-        console.log('Finished loading');
         this.setState({
             isLoading: false,
             currentTheme: ThemeManager.getCurrentTheme(),
             showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1',
             showUpdate: AsyncStorageManager.getInstance().preferences.showUpdate5.current === '1'
-            // showIntro: true
         });
         // Status bar goes dark if set too fast
         setTimeout(this.setupStatusBar,

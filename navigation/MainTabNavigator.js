@@ -1,10 +1,15 @@
 import * as React from 'react';
+import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
 import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom-tabs";
 
 import HomeScreen from '../screens/HomeScreen';
 import PlanningScreen from '../screens/PlanningScreen';
+import PlanningDisplayScreen from '../screens/PlanningDisplayScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
+import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
+import ProximoListScreen from "../screens/Proximo/ProximoListScreen";
+import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
 import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import ThemeManager from "../utils/ThemeManager";
@@ -17,12 +22,78 @@ const TAB_ICONS = {
     Planex: 'timetable',
 };
 
+const ProximoStack = createStackNavigator({
+        ProximoMainScreen: {screen: ProximoMainScreen},
+        ProximoListScreen: {screen: ProximoListScreen},
+        ProximoAboutScreen: {
+            screen: ProximoAboutScreen,
+            navigationOptions: () => ({
+                ...TransitionPresets.ModalSlideFromBottomIOS,
+            }),
+        },
+    },
+    {
+        initialRouteName: "ProximoMainScreen",
+        mode: 'card',
+        headerMode: "none",
+        defaultNavigationOptions: {
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            ...TransitionPresets.SlideFromRightIOS,
+        },
+    });
+
+const ProxiwashStack = createStackNavigator({
+        ProxiwashScreen: {screen: ProxiwashScreen},
+        ProxiwashAboutScreen: {screen: ProxiwashAboutScreen},
+    },
+    {
+        initialRouteName: "ProxiwashScreen",
+        mode: 'card',
+        headerMode: "none",
+        defaultNavigationOptions: {
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+        },
+    });
+
+const PlanningStack = createStackNavigator({
+        PlanningScreen: {screen: PlanningScreen},
+        PlanningDisplayScreen: {screen: PlanningDisplayScreen},
+    },
+    {
+        initialRouteName: "PlanningScreen",
+        mode: 'card',
+        headerMode: "none",
+        defaultNavigationOptions: {
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+        },
+    });
+
+const HomeStack = createStackNavigator({
+        HomeScreen: {screen: HomeScreen},
+        PlanningDisplayScreen: {screen: PlanningDisplayScreen},
+    },
+    {
+        initialRouteName: "HomeScreen",
+        mode: 'card',
+        headerMode: "none",
+        defaultNavigationOptions: {
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+        },
+    });
+
 function createMaterialBottomTabNavigatorWithInitialRoute(initialRoute: string) {
     return createMaterialBottomTabNavigator({
-        Home: {screen: HomeScreen},
-        Planning: {screen: PlanningScreen,},
-        Proxiwash: {screen: ProxiwashScreen,},
-        Proximo: {screen: ProximoMainScreen,},
+        Home: HomeStack,
+        Planning: PlanningStack,
+        Proxiwash: ProxiwashStack,
+        Proximo: ProximoStack,
         Planex: {
             screen: PlanexScreen,
             navigationOptions: ({navigation}) => {

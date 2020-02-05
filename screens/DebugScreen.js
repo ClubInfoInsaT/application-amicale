@@ -83,7 +83,6 @@ export default class DebugScreen extends React.Component<Props, State> {
 
     alertCurrentExpoToken() {
         let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-        console.log(token);
         Alert.alert(
             'Expo Token',
             token,

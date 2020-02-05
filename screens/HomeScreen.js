@@ -310,7 +310,12 @@ export default class HomeScreen extends FetchedDataSectionList {
                 </Text>;
         } else
             subtitle = i18n.t('homeScreen.dashboard.todayEventsSubtitleNA');
-        let clickAction = () => this.props.navigation.navigate('Planning');
+        let clickAction = () => {
+            if (isAvailable)
+                this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});
+            else
+                this.props.navigation.navigate('PlanningScreen');
+        };
 
         let displayEvent = this.getDisplayEvent(futureEvents);
 

@@ -2,6 +2,7 @@
   "screens": {
     "home": "Home",
     "planning": "Planning",
+    "planningDisplayScreen": "Event Details",
     "proxiwash": "Proxiwash",
     "proximo": "Proximo",
     "menuSelf": "RU Menu",
