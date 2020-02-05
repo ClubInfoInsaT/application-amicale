@@ -37,6 +37,12 @@ export default class PlanningDisplayScreen extends React.Component<Props> {
                     <H1>
                         {displayData.title}
                     </H1>
+                    <H3 style={{
+                        marginTop: 10,
+                        color: ThemeManager.getCurrentThemeVariables().listNoteColor
+                    }}>
+                        {PlanningEventManager.getFormattedTime(displayData)}
+                    </H3>
                     {displayData.logo !== null ?
                         <View style={{width: '100%', height: 300, marginTop: 20, marginBottom: 20}}>
                             <Image style={{flex: 1, resizeMode: "contain"}}
