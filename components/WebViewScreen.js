@@ -133,6 +133,7 @@ export default class WebViewScreen extends React.Component<Props> {
     }
 
     render() {
+        // console.log("rendering WebViewScreen");
         const nav = this.props.navigation;
         this.webviewArray = [];
         return (

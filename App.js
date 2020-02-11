@@ -34,6 +34,9 @@ export default class App extends React.Component<Props, State> {
     constructor(props: Object) {
         super(props);
         LocaleManager.initTranslations();
+        this.onIntroDone = this.onIntroDone.bind(this);
+        this.loadAssetsAsync = this.loadAssetsAsync.bind(this);
+        this.onLoadFinished = this.onLoadFinished.bind(this);
     }
 
     /**
@@ -102,14 +105,14 @@ export default class App extends React.Component<Props, State> {
         if (this.state.isLoading) {
             return (
                 <AppLoading
-                    startAsync={() => this.loadAssetsAsync()}
-                    onFinish={() => this.onLoadFinished()}
+                    startAsync={this.loadAssetsAsync}
+                    onFinish={this.onLoadFinished}
                     onError={console.warn}
                 />
             );
         }
         if (this.state.showIntro || this.state.showUpdate) {
-            return <CustomIntroSlider onDone={() => this.onIntroDone()}
+            return <CustomIntroSlider onDone={this.onIntroDone}
                                       isUpdate={this.state.showUpdate && !this.state.showIntro}/>;
         } else {
             const AppNavigator = createAppContainerWithInitialRoute(AsyncStorageManager.getInstance().preferences.defaultStartScreen.current);

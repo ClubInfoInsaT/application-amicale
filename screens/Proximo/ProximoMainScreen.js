@@ -20,6 +20,8 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
 
     constructor() {
         super(DATA_URL, 0);
+        this.onPressSearchBtn = this.onPressSearchBtn.bind(this);
+        this.onPressAboutBtn = this.onPressAboutBtn.bind(this);
     }
 
     static sortFinalData(a: Object, b: Object) {
@@ -100,7 +102,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         return availableArticles;
     }
 
-    getRightButton() {
+    onPressSearchBtn() {
         let searchScreenData = {
             shouldFocusSearchBar: true,
             data: {
@@ -113,8 +115,14 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                     this.getAvailableArticles(this.state.fetchedData.articles, undefined) : []
             },
         };
+        this.props.navigation.navigate('ProximoListScreen', searchScreenData);
+    }
 
+    onPressAboutBtn() {
+        this.props.navigation.navigate('ProximoAboutScreen');
+    }
 
+    getRightButton() {
         return (
             <View
                 style={{
@@ -122,14 +130,14 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                 }}>
                 <Touchable
                     style={{padding: 6}}
-                    onPress={() => this.props.navigation.navigate('ProximoListScreen', searchScreenData)}>
+                    onPress={this.onPressSearchBtn}>
                     <CustomMaterialIcon
                         color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                         icon="magnify"/>
                 </Touchable>
                 <Touchable
                     style={{padding: 6}}
-                    onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
+                    onPress={this.onPressAboutBtn}>
                     <CustomMaterialIcon
                         color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                         icon="information"/>
@@ -138,7 +146,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         );
     }
 
-    getRenderItem(item: Object, section: Object, data: Object) {
+    getRenderItem(item: Object, section: Object) {
         let dataToSend = {
             shouldFocusSearchBar: false,
             data: item,

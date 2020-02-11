@@ -75,6 +75,8 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
             machinesWatched: [],
         };
         this.setMinTimeRefresh(30);
+
+        this.navigateToAboutScreen = this.navigateToAboutScreen.bind(this);
     }
 
     /**
@@ -272,11 +274,15 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         );
     }
 
+    navigateToAboutScreen() {
+        this.props.navigation.navigate('ProxiwashAboutScreen');
+    }
+
     getRightButton(): * {
         return (
             <Touchable
                 style={{padding: 6}}
-                onPress={() => this.props.navigation.navigate('ProxiwashAboutScreen')}>
+                onPress={this.navigateToAboutScreen}>
                 <CustomMaterialIcon
                     color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                     icon="information"/>
@@ -289,10 +295,9 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      *
      * @param item The object containing the item's FetchedData
      * @param section The object describing the current SectionList section
-     * @param data The full FetchedData used by the SectionList
      * @returns {React.Node}
      */
-    getRenderItem(item: Object, section: Object, data: Object) {
+    getRenderItem(item: Object, section: Object) {
         let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"];
         let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
         let isDryer = section.title === i18n.t('proxiwashScreen.dryers');

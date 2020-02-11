@@ -40,6 +40,10 @@ export default class HomeScreen extends FetchedDataSectionList {
 
     constructor() {
         super(DATA_URL, REFRESH_TIME);
+        this.proxiwashClickAction = this.proxiwashClickAction.bind(this);
+        this.tutorinsaClickAction = this.tutorinsaClickAction.bind(this);
+        this.menuClickAction = this.menuClickAction.bind(this);
+        this.proximoClickAction = this.proximoClickAction.bind(this);
     }
 
     /**
@@ -289,6 +293,14 @@ export default class HomeScreen extends FetchedDataSectionList {
     }
 
 
+    clickAction(isAvailable, displayEvent) {
+        if (isAvailable)
+            this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});
+        else
+            this.props.navigation.navigate('PlanningScreen');
+    };
+
+
     getDashboardEventItem(content: Array<Object>) {
         let icon = 'calendar-range';
         let color = ThemeManager.getCurrentThemeVariables().planningColor;
@@ -310,12 +322,6 @@ export default class HomeScreen extends FetchedDataSectionList {
                 </Text>;
         } else
             subtitle = i18n.t('homeScreen.dashboard.todayEventsSubtitleNA');
-        let clickAction = () => {
-            if (isAvailable)
-                this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});
-            else
-                this.props.navigation.navigate('PlanningScreen');
-        };
 
         let displayEvent = this.getDisplayEvent(futureEvents);
 
@@ -324,12 +330,20 @@ export default class HomeScreen extends FetchedDataSectionList {
                 subtitle={subtitle}
                 color={color}
                 icon={icon}
-                clickAction={() => clickAction()}
+                clickAction={this.clickAction.bind(this, isAvailable, displayEvent)}
                 title={title}
                 isAvailable={isAvailable}
                 displayEvent={displayEvent}
             />
         );
+    }
+
+    proximoClickAction() {
+        this.props.navigation.navigate('Proximo');
+    }
+
+    menuClickAction() {
+        this.props.navigation.navigate('SelfMenuScreen');
     }
 
 
@@ -355,7 +369,6 @@ export default class HomeScreen extends FetchedDataSectionList {
                 </Text>;
         } else
             proximoSubtitle = i18n.t('homeScreen.dashboard.proximoSubtitleNA');
-        let proximoClickAction = () => this.props.navigation.navigate('Proximo');
 
 
         let menuIcon = 'silverware-fork-knife';
@@ -367,7 +380,6 @@ export default class HomeScreen extends FetchedDataSectionList {
             menuSubtitle = i18n.t('homeScreen.dashboard.menuSubtitle');
         } else
             menuSubtitle = i18n.t('homeScreen.dashboard.menuSubtitleNA');
-        let menuClickAction = () => this.props.navigation.navigate('SelfMenuScreen');
         return (
             <View style={{
                 flexDirection: 'row',
@@ -379,7 +391,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                     subtitle={menuSubtitle}
                     color={menuColor}
                     icon={menuIcon}
-                    clickAction={() => menuClickAction()}
+                    clickAction={this.menuClickAction}
                     title={menuTitle}
                     isAvailable={isMenuAvailable}
                     isSquareLeft={true}/>
@@ -388,12 +400,21 @@ export default class HomeScreen extends FetchedDataSectionList {
                     subtitle={proximoSubtitle}
                     color={proximoColor}
                     icon={proximoIcon}
-                    clickAction={() => proximoClickAction()}
+                    clickAction={this.proximoClickAction}
                     title={proximoTitle}
                     isAvailable={isProximoAvailable}/>
             </View>
         );
     }
+
+    proxiwashClickAction() {
+        this.props.navigation.navigate('Proxiwash');
+    }
+
+    tutorinsaClickAction() {
+        this.props.navigation.navigate('TutorInsaScreen');
+    }
+
 
     getDashboardMiddleItem(content: Array<Object>) {
         let proxiwashData = content[0]['data'];
@@ -449,7 +470,6 @@ export default class HomeScreen extends FetchedDataSectionList {
                 </Text>;
         } else
             proxiwashSubtitle = i18n.t('homeScreen.dashboard.proxiwashSubtitleNA');
-        let proxiwashClickAction = () => this.props.navigation.navigate('Proxiwash');
 
         let tutorinsaIcon = 'school';
         let tutorinsaColor = ThemeManager.getCurrentThemeVariables().tutorinsaColor;
@@ -470,7 +490,6 @@ export default class HomeScreen extends FetchedDataSectionList {
                 </Text>;
         } else
             tutorinsaSubtitle = i18n.t('homeScreen.dashboard.tutorinsaSubtitleNA');
-        let tutorinsaClickAction = () => this.props.navigation.navigate('TutorInsaScreen');
 
         return (
             <View style={{
@@ -483,7 +502,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                     subtitle={proxiwashSubtitle}
                     color={proxiwashColor}
                     icon={proxiwashIcon}
-                    clickAction={() => proxiwashClickAction()}
+                    clickAction={this.proxiwashClickAction}
                     title={proxiwashTitle}
                     isAvailable={proxiwashIsAvailable}
                     isSquareLeft={true}/>
@@ -492,7 +511,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                     subtitle={tutorinsaSubtitle}
                     color={tutorinsaColor}
                     icon={tutorinsaIcon}
-                    clickAction={() => tutorinsaClickAction()}
+                    clickAction={this.tutorinsaClickAction}
                     title={tutorinsaTitle}
                     isAvailable={tutorinsaIsAvailable}/>
             </View>
@@ -500,7 +519,7 @@ export default class HomeScreen extends FetchedDataSectionList {
     }
 
 
-    getRenderItem(item: Object, section: Object, data: Object) {
+    getRenderItem(item: Object, section: Object) {
         return (
             section['id'] === SECTIONS_ID[0] ? this.getDashboardItem(item) :
                 <Card style={{
@@ -525,7 +544,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                     }}>
                         <Body>
                             {item.full_picture !== '' && item.full_picture !== undefined ?
-                                <TouchableOpacity onPress={() => openWebLink(item.full_picture)}
+                                <TouchableOpacity onPress={openWebLink.bind(null, item.full_picture)}
                                                   style={{width: '100%', height: 250, marginBottom: 5}}>
                                     <Image source={{uri: item.full_picture}}
                                            style={{flex: 1, resizeMode: "contain"}}
@@ -547,7 +566,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                     }}>
                         <Left>
                             <Button transparent
-                                    onPress={() => openWebLink(item.permalink_url)}>
+                                    onPress={openWebLink.bind(null, item.permalink_url)}>
                                 <CustomMaterialIcon
                                     icon="facebook"
                                     color="#57aeff"

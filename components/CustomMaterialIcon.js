@@ -30,7 +30,16 @@ export default class CustomMaterialIcon extends React.Component<Props> {
         width: 30,
     };
 
+    shouldComponentUpdate(nextProps: Props): boolean {
+        return nextProps.icon !== this.props.icon ||
+            nextProps.active !== this.props.active ||
+            nextProps.width !== this.props.width ||
+            nextProps.fontSize !== this.props.fontSize ||
+            nextProps.color !== this.props.color;
+    }
+
     render() {
+        // console.log("rendering icon " + this.props.icon);
         return (
             <Icon
                 active

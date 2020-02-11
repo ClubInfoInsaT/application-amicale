@@ -56,6 +56,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
 
     didFocusSubscription: Function;
     willBlurSubscription: Function;
+
     state = {
         refreshing: false,
         agendaItems: {},
@@ -76,6 +77,22 @@ export default class PlanningScreen extends React.Component<Props, State> {
         if (i18n.currentLocale().startsWith("fr")) {
             LocaleConfig.defaultLocale = 'fr';
         }
+
+        // Create references for functions required in the render function
+        this._onRefresh = this._onRefresh.bind(this);
+        this.onCalendarToggled = this.onCalendarToggled.bind(this);
+        this.getRenderItem = this.getRenderItem.bind(this);
+        this.getRenderEmptyDate = this.getRenderEmptyDate.bind(this);
+        this.setAgendaRef = this.setAgendaRef.bind(this);
+        this.onCalendarToggled = this.onCalendarToggled.bind(this);
+        this.onCalendarToggled = this.onCalendarToggled.bind(this);
+        this.onBackButtonPressAndroid = this.onBackButtonPressAndroid.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+        return nextState.refreshing === false && this.state.refreshing === true ||
+            nextState.agendaItems !== this.state.agendaItems ||
+            nextState.calendarShowing !== this.state.calendarShowing;
     }
 
     componentDidMount() {
@@ -90,7 +107,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
         );
     }
 
-    onBackButtonPressAndroid = () => {
+    onBackButtonPressAndroid() {
         if (this.state.calendarShowing) {
             this.agendaRef.chooseDay(this.agendaRef.state.selectedDay);
             return true;
@@ -126,10 +143,6 @@ export default class PlanningScreen extends React.Component<Props, State> {
     }
 
     getRenderItem(item: Object) {
-        let navData = {
-            data: item
-        };
-        const nav = this.props.navigation;
         return (
             <Touchable
                 style={{
@@ -138,7 +151,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     marginRight: 10,
                     marginTop: 17,
                 }}
-                onPress={() => nav.navigate('PlanningDisplayScreen', navData)}>
+                onPress={() => this.props.navigation.navigate('PlanningDisplayScreen', {data: item})}>
                 <View style={{
                     padding: 10,
                     flex: 1,
@@ -252,38 +265,46 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
     }
 
+    setAgendaRef(ref) {
+        this.agendaRef = ref;
+    }
+
+    onCalendarToggled(calendarOpened) {
+        this.setState({calendarShowing: calendarOpened});
+    }
+
+    currentDate = this.getCurrentDate();
+
     render() {
-        const nav = this.props.navigation;
+        // console.log("rendering PlanningScreen");
         return (
-            <BaseContainer navigation={nav} headerTitle={i18n.t('screens.planning')}>
+            <BaseContainer navigation={this.props.navigation} headerTitle={i18n.t('screens.planning')}>
                 <Agenda
                     // the list of items that have to be displayed in agenda. If you want to render item as empty date
                     // the value of date key kas to be an empty array []. If there exists no value for date key it is
                     // considered that the date in question is not yet loaded
                     items={this.state.agendaItems}
                     // initially selected day
-                    selected={this.getCurrentDate()}
+                    selected={this.currentDate}
                     // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-                    minDate={this.getCurrentDate()}
+                    minDate={this.currentDate}
                     // Max amount of months allowed to scroll to the past. Default = 50
                     pastScrollRange={1}
                     // Max amount of months allowed to scroll to the future. Default = 50
                     futureScrollRange={AGENDA_MONTH_SPAN}
                     // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
-                    onRefresh={() => this._onRefresh()}
+                    onRefresh={this._onRefresh}
                     // callback that fires when the calendar is opened or closed
-                    onCalendarToggled={(calendarOpened) => {
-                        this.setState({calendarShowing: calendarOpened})
-                    }}
+                    onCalendarToggled={this.onCalendarToggled}
                     // Set this true while waiting for new data from a refresh
                     refreshing={this.state.refreshing}
-                    renderItem={(item) => this.getRenderItem(item)}
-                    renderEmptyDate={() => this.getRenderEmptyDate()}
-                    rowHasChanged={() => this.rowHasChanged()}
+                    renderItem={this.getRenderItem}
+                    renderEmptyDate={this.getRenderEmptyDate}
+                    rowHasChanged={this.rowHasChanged}
                     // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
                     firstDay={1}
                     // ref to this agenda in order to handle back button event
-                    ref={(ref) => this.agendaRef = ref}
+                    ref={this.setAgendaRef}
                     // agenda theme
                     theme={{
                         backgroundColor: ThemeManager.getCurrentThemeVariables().agendaBackgroundColor,

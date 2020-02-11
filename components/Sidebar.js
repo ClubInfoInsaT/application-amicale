@@ -103,21 +103,35 @@ export default class SideBar extends React.Component<Props, State> {
                 icon: "information",
             },
         ];
+        this.getRenderItem = this.getRenderItem.bind(this);
     }
 
-    getRenderItem(item: Object) {
+    shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+        return nextState.active !== this.state.active;
+    }
+
+
+    onListItemPress(item) {
+        if (item.link !== undefined)
+            Linking.openURL(item.link).catch((err) => console.error('Error opening link', err));
+        else
+            this.navigateToScreen(item.route);
+    }
+
+
+    listKeyExtractor(item) {
+        return item.route;
+    }
+
+
+    getRenderItem({item}: Object) {
         if (item.icon !== undefined) {
             return (
                 <ListItem
                     button
                     noBorder
                     selected={this.state.active === item.route}
-                    onPress={() => {
-                        if (item.link !== undefined)
-                            Linking.openURL(item.link).catch((err) => console.error('Error opening link', err));
-                        else
-                            this.navigateToScreen(item.route);
-                    }}
+                    onPress={this.onListItemPress.bind(this, item)}
                 >
                     <Left>
                         <CustomMaterialIcon
@@ -164,6 +178,7 @@ export default class SideBar extends React.Component<Props, State> {
     };
 
     render() {
+        // console.log("rendering SideBar");
         return (
             <Container style={{
                 backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
@@ -172,8 +187,8 @@ export default class SideBar extends React.Component<Props, State> {
                 <FlatList
                     data={this.dataSet}
                     extraData={this.state}
-                    keyExtractor={(item) => item.route}
-                    renderItem={({item}) => this.getRenderItem(item)}
+                    keyExtractor={this.listKeyExtractor}
+                    renderItem={this.getRenderItem}
                 />
             </Container>
         );

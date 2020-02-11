@@ -32,7 +32,6 @@ type Props = {
  * @prop navigation {Object} The navigation object from react navigation
  */
 export default class CustomHeader extends React.Component<Props> {
-
     static defaultProps = {
         hasBackButton: false,
         hasSearchField: false,
@@ -45,9 +44,25 @@ export default class CustomHeader extends React.Component<Props> {
         hasTabs: false,
     };
 
+    constructor() {
+        super();
+        this.onPressBack = this.onPressBack.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps: Props): boolean {
+        return nextProps.title !== this.props.title ||
+            nextProps.subtitle !== this.props.subtitle ||
+            nextProps.hasBackButton !== this.props.hasBackButton ||
+            nextProps.hasSearchField !== this.props.hasSearchField ||
+            nextProps.shouldFocusSearchBar !== this.props.shouldFocusSearchBar ||
+            nextProps.hasTabs !== this.props.hasTabs ||
+            nextProps.rightButton !== this.props.rightButton ||
+            nextProps.leftButton !== this.props.leftButton;
+    }
+
     componentDidMount() {
         if (this.refs.searchInput !== undefined && this.refs.searchInput._root !== undefined && this.props.shouldFocusSearchBar) {
-            // does not work if called to early for some reason...
+            // does not work if called too early for some reason...
             setTimeout(() => this.refs.searchInput._root.focus(), 500);
         }
     }
@@ -67,7 +82,7 @@ export default class CustomHeader extends React.Component<Props> {
                         ref="searchInput"
                         placeholder={i18n.t('proximoScreen.search')}
                         placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
-                        onChangeText={(text) => this.props.searchCallback(text)}/>
+                        onChangeText={this.props.searchCallback}/>
                 </Item>
             </Body>
         );
@@ -87,17 +102,20 @@ export default class CustomHeader extends React.Component<Props> {
     }
 
 
+    onPressBack() {
+        const backAction = NavigationActions.back();
+        this.props.navigation.dispatch(backAction);
+    }
+
     render() {
+        console.log("rendering CustomHeader");
         let button;
         // Does the app have a back button or a burger menu ?
         if (this.props.hasBackButton)
             button =
                 <Touchable
                     style={{padding: 6}}
-                    onPress={() => {
-                        const backAction = NavigationActions.back();
-                        this.props.navigation.dispatch(backAction);
-                    }}>
+                    onPress={this.onPressBack}>
                     <CustomMaterialIcon
                         color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                         icon={Platform.OS === 'ios' ? 'chevron-left' : "arrow-left"}/>

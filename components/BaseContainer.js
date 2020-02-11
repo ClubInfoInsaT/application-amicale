@@ -30,7 +30,6 @@ type State = {
 
 
 export default class BaseContainer extends React.Component<Props, State> {
-
     static defaultProps = {
         headerRightButton: <View/>,
         hasTabs: false,
@@ -46,9 +45,15 @@ export default class BaseContainer extends React.Component<Props, State> {
         isHeaderVisible: true,
     };
 
+    constructor() {
+        super();
+        this.toggle = this.toggle.bind(this);
+    }
+
     toggle() {
         this.props.navigation.toggleDrawer();
     }
+
     /**
      * Register for blur event to close side menu on screen change
      */
@@ -93,7 +98,9 @@ export default class BaseContainer extends React.Component<Props, State> {
             this.willFocusSubscription.remove();
     }
 
-    getMainContainer() {
+
+    render() {
+        // console.log("rendering BaseContainer");
         return (
             <Container>
                 {this.state.isHeaderVisible ?
@@ -104,7 +111,7 @@ export default class BaseContainer extends React.Component<Props, State> {
                         leftButton={
                             <Touchable
                                 style={{padding: 6}}
-                                onPress={() => this.toggle()}>
+                                onPress={this.toggle}>
                                 <CustomMaterialIcon
                                     color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                                     icon="menu"/>
@@ -117,10 +124,5 @@ export default class BaseContainer extends React.Component<Props, State> {
                 {this.props.children}
             </Container>
         );
-    }
-
-
-    render() {
-        return (this.getMainContainer());
     }
 }
