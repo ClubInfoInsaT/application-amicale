@@ -108,7 +108,7 @@ export default class CustomHeader extends React.Component<Props> {
     }
 
     render() {
-        console.log("rendering CustomHeader");
+        // console.log("rendering CustomHeader");
         let button;
         // Does the app have a back button or a burger menu ?
         if (this.props.hasBackButton)
