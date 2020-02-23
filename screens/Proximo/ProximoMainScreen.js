@@ -9,7 +9,7 @@ import FetchedDataSectionList from "../../components/FetchedDataSectionList";
 import ThemeManager from "../../utils/ThemeManager";
 import Touchable from "react-native-platform-touchable";
 
-const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
+const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 
 
 /**
@@ -23,7 +23,21 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
     }
 
     static sortFinalData(a: Object, b: Object) {
-        return a.type.id - b.type.id;
+        let str1 = a.type.name.toLowerCase();
+        let str2 = b.type.name.toLowerCase();
+
+        // Make 'All' category with id -1 stick to the top
+        if (a.type.id === -1)
+            return -1;
+        if (b.type.id === -1)
+            return 1;
+
+        // Sort others by name ascending
+        if (str1 < str2)
+            return -1;
+        if (str1 > str2)
+            return 1;
+        return 0;
     }
 
     getHeaderTranslation() {
@@ -63,7 +77,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
             let articles = fetchedData.articles;
             finalData.push({
                 type: {
-                    id: "0",
+                    id: -1,
                     name: i18n.t('proximoScreen.all'),
                     icon: 'star'
                 },

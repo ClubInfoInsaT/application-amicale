@@ -11,12 +11,12 @@ type Props = {
 
 const URL = 'https://ent.insa-toulouse.fr/';
 
-const CUSTOM_CSS_GENERAL = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/ent/customMobile.css';
+const CUSTOM_CSS_GENERAL = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/ent/customMobile.css';
 
 // let stylesheet = document.createElement('link');
 // stylesheet.type = 'text/css';
 // stylesheet.rel = 'stylesheet';
-// stylesheet.href = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/ent/customMobile.css';
+// stylesheet.href = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/ent/customMobile.css';
 // let mobileSpec = document.createElement('meta');
 // mobileSpec.name = 'viewport';
 // mobileSpec.content = 'width=device-width, initial-scale=1.0';

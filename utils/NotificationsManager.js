@@ -6,7 +6,7 @@ import AsyncStorageManager from "./AsyncStorageManager";
 import LocaleManager from "./LocaleManager";
 import passwords from "../passwords";
 
-const EXPO_TOKEN_SERVER = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/expo_notifications/save_token.php';
+const EXPO_TOKEN_SERVER = 'https://etud.insa-toulouse.fr/~amicale_app/expo_notifications/save_token.php';
 
 /**
  * Static class used to manage notifications sent to the user

@@ -7,7 +7,7 @@ import ThemeManager from "../utils/ThemeManager";
 import i18n from "i18n-js";
 import FetchedDataSectionList from "../components/FetchedDataSectionList";
 
-const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
+const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
 
 /**
  * Class defining the app's menu screen.

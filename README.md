@@ -13,7 +13,7 @@ Ce dépot contient les source de cette application, modifiable par les étudiant
 
 Si vous voulez influencer le développement ? C'est très simple !
 
-Pas besoin de connaissance, il est possible d'aider simplement en proposant des améliorations ou en rapportant des bugs par mail (vergnet@etud.insa-toulouse.fr) ou sur [cette page](https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/issues), en vous connectant avec vos login INSA.
+Pas besoin de connaissance, il est possible d'aider simplement en proposant des améliorations ou en rapportant des bugs par mail (vergnet@etud.insa-toulouse.fr) ou sur [cette page](https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues), en vous connectant avec vos login INSA.
 
 Si vous avez assez de connaissances et vous souhaitez proposer des modification dans le code, installez l'application sur votre machine, réalisez votre modification et créez une 'pull request'.
 

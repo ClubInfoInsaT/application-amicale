@@ -15,7 +15,7 @@ import ThemeManager from "../../utils/ThemeManager";
 const links = {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
     playstore: 'https://play.google.com/store/apps/details?id=fr.amicaleinsat.application',
-    git: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/README.md',
+    git: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/README.md',
     bugsMail: 'mailto:vergnet@etud.insa-toulouse.fr?' +
         'subject=' +
         '[BUG] Application Amicale INSA Toulouse' +
@@ -25,9 +25,9 @@ const links = {
         'Nature du problème :\n\n\n' +
         'Étapes pour reproduire ce pb :\n\n\n\n' +
         'Stp corrige le pb, bien cordialement.',
-    bugsGit: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
-    changelog: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
-    license: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
+    bugsGit: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
+    changelog: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
+    license: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
     authorMail: "mailto:vergnet@etud.insa-toulouse.fr?" +
         "subject=" +
         "Application Amicale INSA Toulouse" +

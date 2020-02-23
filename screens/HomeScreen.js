@@ -14,7 +14,7 @@ import DashboardItem from "../components/DashboardItem";
 
 const ICON_AMICALE = require('../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
-const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/dashboard/dashboard_data.json";
+const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/dashboard/dashboard_data.json";
 
 const SECTIONS_ID = [
     'dashboard',

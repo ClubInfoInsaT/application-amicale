@@ -13,7 +13,7 @@ import Touchable from "react-native-platform-touchable";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
 
-const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
+const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
 const MACHINE_STATES = {
     "TERMINE": "0",
