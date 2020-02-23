@@ -8,7 +8,7 @@ type Props = {
 }
 
 
-const URL = 'https://www.etud.insa-toulouse.fr/~amicale';
+const URL = 'https://amicale-insat.fr/';
 
 /**
  * Class defining the app's planex screen.
