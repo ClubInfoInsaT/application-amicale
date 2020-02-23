@@ -202,7 +202,7 @@ export default class AboutScreen extends React.Component<Props, State> {
             <Card>
                 <CardItem>
                     <Left>
-                        <Thumbnail square source={require('../../assets/icon.png')}/>
+                        <Thumbnail square source={require('../../assets/android.icon.png')}/>
                         <Body>
                             <H1>{appJson.expo.name}</H1>
                             <Text note>
