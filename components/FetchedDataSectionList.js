@@ -63,13 +63,6 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         this.renderItemNotEmpty = this.renderItem.bind(this, false);
     }
 
-    shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-        return this.state.refreshing !== nextState.refreshing ||
-            nextState.firstLoading !== this.state.firstLoading ||
-            nextState.machinesWatched.length !== this.state.machinesWatched.length ||
-            nextState.fetchedData.len !== this.state.fetchedData.len;
-    }
-
 
     /**
      * Get the translation for the header in the current language

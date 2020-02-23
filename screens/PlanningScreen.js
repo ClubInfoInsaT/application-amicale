@@ -232,7 +232,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     this.setState({
                         refreshing: false,
                     });
-                    console.log(err);
+                    // console.log(err);
                 });
         }
     };
