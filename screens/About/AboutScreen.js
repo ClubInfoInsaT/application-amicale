@@ -210,7 +210,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     data={this.appData}
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
-                    listKey={(item) => "app"}
+                    listKey={"app"}
                     renderItem={({item}) =>
                         this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
                     }
@@ -241,7 +241,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     data={this.authorData}
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
-                    listKey={(item) => "team1"}
+                    listKey={"team1"}
                     renderItem={({item}) =>
                         this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
                     }
@@ -253,7 +253,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     data={this.additionalDevData}
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
-                    listKey={(item) => "team2"}
+                    listKey={"team2"}
                     renderItem={({item}) =>
                         this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
                     }
@@ -272,7 +272,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     data={this.technoData}
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
-                    listKey={(item) => "techno"}
+                    listKey={"techno"}
                     renderItem={({item}) =>
                         this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
                     }

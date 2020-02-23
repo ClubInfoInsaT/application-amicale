@@ -36,6 +36,8 @@ const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
  */
 export default class ProxiwashScreen extends FetchedDataSectionList {
 
+    onAboutPress: Function;
+
     /**
      * Creates machine state parameters using current theme and translations
      */
@@ -76,7 +78,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         };
         this.setMinTimeRefresh(30);
 
-        this.navigateToAboutScreen = this.navigateToAboutScreen.bind(this);
+        this.onAboutPress = this.onAboutPress.bind(this);
     }
 
     /**
@@ -274,7 +276,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         );
     }
 
-    navigateToAboutScreen() {
+    onAboutPress() {
         this.props.navigation.navigate('ProxiwashAboutScreen');
     }
 
@@ -282,7 +284,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         return (
             <Touchable
                 style={{padding: 6}}
-                onPress={this.navigateToAboutScreen}>
+                onPress={this.onAboutPress}>
                 <CustomMaterialIcon
                     color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                     icon="information"/>

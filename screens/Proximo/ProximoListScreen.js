@@ -70,16 +70,25 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         sortNameIcon: '',
         modalCurrentDisplayItem: {},
     };
-    _menu: Menu;
+    sortMenuRef: Menu;
+
+    onMenuRef: Function;
+    onSearchStringChange: Function;
+    onSelectSortModeName: Function;
+    onSelectSortModePrice: Function;
+    onSortMenuPress: Function;
+    renderItem: Function;
 
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
         this.originalData = this.navData['data'];
-        this.search = this.search.bind(this);
-        this.selectSortModeName = this.selectSortModeName.bind(this);
-        this.selectSortModePrice = this.selectSortModePrice.bind(this);
-        this.showMenu = this.showMenu.bind(this);
+
+        this.onMenuRef = this.onMenuRef.bind(this);
+        this.onSearchStringChange = this.onSearchStringChange.bind(this);
+        this.onSelectSortModeName = this.onSelectSortModeName.bind(this);
+        this.onSelectSortModePrice = this.onSelectSortModePrice.bind(this);
+        this.onSortMenuPress = this.onSortMenuPress.bind(this);
         this.renderItem = this.renderItem.bind(this);
     }
 
@@ -88,8 +97,8 @@ export default class ProximoListScreen extends React.Component<Props, State> {
      *
      * @param ref The menu reference
      */
-    setMenuRef = (ref: Menu) => {
-        this._menu = ref;
+    onMenuRef(ref: Menu) {
+        this.sortMenuRef = ref;
     };
 
     /**
@@ -136,7 +145,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 break;
         }
         this.setupSortIcons(mode, isReverse);
-        this._menu.hide();
+        this.sortMenuRef.hide();
     }
 
     /**
@@ -219,7 +228,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         return filteredData;
     }
 
-    search(str: string) {
+    onSearchStringChange(str: string) {
         this.setState({
             currentlyDisplayedData: this.filterData(str)
         })
@@ -265,27 +274,27 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         }
     }
 
-    selectSortModeName() {
+    onSelectSortModeName() {
         this.sortModeSelected(sortMode.name);
     }
 
-    selectSortModePrice() {
+    onSelectSortModePrice() {
         this.sortModeSelected(sortMode.price);
     }
 
-    showMenu() {
-        this._menu.show();
+    onSortMenuPress() {
+        this.sortMenuRef.show();
     }
 
 
     getSortMenu() {
         return (
             <Menu
-                ref={this.setMenuRef}
+                ref={this.onMenuRef}
                 button={
                     <Touchable
                         style={{padding: 6}}
-                        onPress={this.showMenu}>
+                        onPress={this.onSortMenuPress}>
                         <CustomMaterialIcon
                             color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                             icon={'sort'}/>
@@ -293,12 +302,12 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 }
             >
                 <MenuItem
-                    onPress={this.selectSortModeName}>
+                    onPress={this.onSelectSortModeName}>
                     {this.state.sortNameIcon}
                     {i18n.t('proximoScreen.sortName')}
                 </MenuItem>
                 <MenuItem
-                    onPress={this.selectSortModePrice}>
+                    onPress={this.onSelectSortModePrice}>
                     {this.state.sortPriceIcon}
                     {i18n.t('proximoScreen.sortPrice')}
                 </MenuItem>
@@ -306,7 +315,8 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         );
     }
 
-    renderItem({item}) {
+    renderItem({item}: Object) {
+        console.log(item);
         return (<ListItem
             thumbnail
             onPress={() => {
@@ -335,7 +345,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         </ListItem>);
     }
 
-    keyExtractor(item) {
+    keyExtractor(item: Object) {
         return item.name + item.code;
     }
 
@@ -353,7 +363,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                     hasBackButton={true}
                     navigation={nav}
                     hasSearchField={true}
-                    searchCallback={this.search}
+                    searchCallback={this.onSearchStringChange}
                     shouldFocusSearchBar={this.shouldFocusSearchBar}
                     rightButton={this.getSortMenu()}
                 />

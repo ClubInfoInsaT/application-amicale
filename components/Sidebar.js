@@ -30,6 +30,8 @@ export default class SideBar extends React.Component<Props, State> {
         active: 'Home',
     };
 
+    getRenderItem: Function;
+
     /**
      * Generate the datasets
      *
@@ -111,7 +113,7 @@ export default class SideBar extends React.Component<Props, State> {
     }
 
 
-    onListItemPress(item) {
+    onListItemPress(item: Object) {
         if (item.link !== undefined)
             Linking.openURL(item.link).catch((err) => console.error('Error opening link', err));
         else
@@ -119,7 +121,7 @@ export default class SideBar extends React.Component<Props, State> {
     }
 
 
-    listKeyExtractor(item) {
+    listKeyExtractor(item: Object) {
         return item.route;
     }
 

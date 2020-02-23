@@ -5,7 +5,6 @@ import {BackHandler, Image} from 'react-native';
 import {H3, Text, View} from 'native-base';
 import i18n from "i18n-js";
 import ThemeManager from "../utils/ThemeManager";
-import {Linking} from "expo";
 import BaseContainer from "../components/BaseContainer";
 import {Agenda, LocaleConfig} from 'react-native-calendars';
 import Touchable from 'react-native-platform-touchable';
@@ -36,14 +35,6 @@ const FETCH_URL = "https://amicale-insat.fr/event/json/list";
 const AGENDA_MONTH_SPAN = 6;
 
 /**
- * Opens a link in the device's browser
- * @param link The link to open
- */
-function openWebLink(link) {
-    Linking.openURL(link).catch((err) => console.error('Error opening link', err));
-}
-
-/**
  * Class defining the app's planning screen
  */
 export default class PlanningScreen extends React.Component<Props, State> {
@@ -63,6 +54,14 @@ export default class PlanningScreen extends React.Component<Props, State> {
         calendarShowing: false,
     };
 
+    onRefresh: Function;
+    onCalendarToggled: Function;
+    getRenderItem: Function;
+    getRenderEmptyDate: Function;
+    onAgendaRef: Function;
+    onCalendarToggled: Function;
+    onBackButtonPressAndroid: Function;
+
     constructor(props: any) {
         super(props);
         this.webDataManager = new WebDataManager(FETCH_URL);
@@ -79,12 +78,11 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
 
         // Create references for functions required in the render function
-        this._onRefresh = this._onRefresh.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
         this.onCalendarToggled = this.onCalendarToggled.bind(this);
         this.getRenderItem = this.getRenderItem.bind(this);
         this.getRenderEmptyDate = this.getRenderEmptyDate.bind(this);
-        this.setAgendaRef = this.setAgendaRef.bind(this);
-        this.onCalendarToggled = this.onCalendarToggled.bind(this);
+        this.onAgendaRef = this.onAgendaRef.bind(this);
         this.onCalendarToggled = this.onCalendarToggled.bind(this);
         this.onBackButtonPressAndroid = this.onBackButtonPressAndroid.bind(this);
     }
@@ -96,7 +94,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        this._onRefresh();
+        this.onRefresh();
         this.willBlurSubscription = this.props.navigation.addListener(
             'willBlur',
             () =>
@@ -213,7 +211,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
      * Refresh data and show a toast if any error occurred
      * @private
      */
-    _onRefresh = () => {
+    onRefresh = () => {
         let canRefresh;
         if (this.lastRefresh !== undefined)
             canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) / 1000 > this.minTimeBetweenRefresh;
@@ -265,12 +263,12 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
     }
 
-    setAgendaRef(ref) {
+    onAgendaRef(ref: Agenda) {
         this.agendaRef = ref;
     }
 
-    onCalendarToggled(calendarOpened) {
-        this.setState({calendarShowing: calendarOpened});
+    onCalendarToggled(isCalendarOpened: boolean) {
+        this.setState({calendarShowing: isCalendarOpened});
     }
 
     currentDate = this.getCurrentDate();
@@ -293,7 +291,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     // Max amount of months allowed to scroll to the future. Default = 50
                     futureScrollRange={AGENDA_MONTH_SPAN}
                     // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
-                    onRefresh={this._onRefresh}
+                    onRefresh={this.onRefresh}
                     // callback that fires when the calendar is opened or closed
                     onCalendarToggled={this.onCalendarToggled}
                     // Set this true while waiting for new data from a refresh
@@ -304,7 +302,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
                     firstDay={1}
                     // ref to this agenda in order to handle back button event
-                    ref={this.setAgendaRef}
+                    ref={this.onAgendaRef}
                     // agenda theme
                     theme={{
                         backgroundColor: ThemeManager.getCurrentThemeVariables().agendaBackgroundColor,

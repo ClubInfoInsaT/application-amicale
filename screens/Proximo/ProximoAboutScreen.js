@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Image, Linking, View} from 'react-native';
+import {Image, View} from 'react-native';
 import {Card, CardItem, Container, Content, H2, Left, Text} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";

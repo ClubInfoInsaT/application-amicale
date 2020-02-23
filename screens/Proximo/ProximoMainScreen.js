@@ -18,6 +18,9 @@ const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~proximo/data/stock-v
  */
 export default class ProximoMainScreen extends FetchedDataSectionList {
 
+    onPressSearchBtn: Function;
+    onPressAboutBtn: Function;
+
     constructor() {
         super(DATA_URL, 0);
         this.onPressSearchBtn = this.onPressSearchBtn.bind(this);

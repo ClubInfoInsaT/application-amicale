@@ -8,7 +8,6 @@ import ThemeManager from "../utils/ThemeManager";
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
 import PlanningEventManager from '../utils/PlanningEventManager';
-import i18n from 'i18n-js';
 
 type Props = {
     navigation: Object,

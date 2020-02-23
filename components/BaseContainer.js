@@ -45,12 +45,14 @@ export default class BaseContainer extends React.Component<Props, State> {
         isHeaderVisible: true,
     };
 
+    onDrawerPress: Function;
+
     constructor() {
         super();
-        this.toggle = this.toggle.bind(this);
+        this.onDrawerPress = this.onDrawerPress.bind(this);
     }
 
-    toggle() {
+    onDrawerPress() {
         this.props.navigation.toggleDrawer();
     }
 
@@ -111,7 +113,7 @@ export default class BaseContainer extends React.Component<Props, State> {
                         leftButton={
                             <Touchable
                                 style={{padding: 6}}
-                                onPress={this.toggle}>
+                                onPress={this.onDrawerPress}>
                                 <CustomMaterialIcon
                                     color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                                     icon="menu"/>

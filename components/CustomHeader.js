@@ -44,6 +44,8 @@ export default class CustomHeader extends React.Component<Props> {
         hasTabs: false,
     };
 
+    onPressBack: Function;
+
     constructor() {
         super();
         this.onPressBack = this.onPressBack.bind(this);
@@ -80,7 +82,7 @@ export default class CustomHeader extends React.Component<Props> {
                         color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
                     <Input
                         ref="searchInput"
-                        placeholder={i18n.t('proximoScreen.search')}
+                        placeholder={i18n.t('proximoScreen.onSearchStringChange')}
                         placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
                         onChangeText={this.props.searchCallback}/>
                 </Item>

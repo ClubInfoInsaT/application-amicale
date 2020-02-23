@@ -38,12 +38,33 @@ function openWebLink(link) {
  */
 export default class HomeScreen extends FetchedDataSectionList {
 
+    onProxiwashClick: Function;
+    onTutorInsaClick: Function;
+    onMenuClick: Function;
+    onProximoClick: Function;
+
     constructor() {
         super(DATA_URL, REFRESH_TIME);
-        this.proxiwashClickAction = this.proxiwashClickAction.bind(this);
-        this.tutorinsaClickAction = this.tutorinsaClickAction.bind(this);
-        this.menuClickAction = this.menuClickAction.bind(this);
-        this.proximoClickAction = this.proximoClickAction.bind(this);
+        this.onProxiwashClick = this.onProxiwashClick.bind(this);
+        this.onTutorInsaClick = this.onTutorInsaClick.bind(this);
+        this.onMenuClick = this.onMenuClick.bind(this);
+        this.onProximoClick = this.onProximoClick.bind(this);
+    }
+
+    onProxiwashClick() {
+        this.props.navigation.navigate('Proxiwash');
+    }
+
+    onTutorInsaClick() {
+        this.props.navigation.navigate('TutorInsaScreen');
+    }
+
+    onProximoClick() {
+        this.props.navigation.navigate('Proximo');
+    }
+
+    onMenuClick() {
+        this.props.navigation.navigate('SelfMenuScreen');
     }
 
     /**
@@ -293,7 +314,7 @@ export default class HomeScreen extends FetchedDataSectionList {
     }
 
 
-    clickAction(isAvailable, displayEvent) {
+    clickAction(isAvailable: boolean, displayEvent: Object) {
         if (isAvailable)
             this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});
         else
@@ -336,14 +357,6 @@ export default class HomeScreen extends FetchedDataSectionList {
                 displayEvent={displayEvent}
             />
         );
-    }
-
-    proximoClickAction() {
-        this.props.navigation.navigate('Proximo');
-    }
-
-    menuClickAction() {
-        this.props.navigation.navigate('SelfMenuScreen');
     }
 
 
@@ -391,7 +404,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                     subtitle={menuSubtitle}
                     color={menuColor}
                     icon={menuIcon}
-                    clickAction={this.menuClickAction}
+                    clickAction={this.onMenuClick}
                     title={menuTitle}
                     isAvailable={isMenuAvailable}
                     isSquareLeft={true}/>
@@ -400,19 +413,11 @@ export default class HomeScreen extends FetchedDataSectionList {
                     subtitle={proximoSubtitle}
                     color={proximoColor}
                     icon={proximoIcon}
-                    clickAction={this.proximoClickAction}
+                    clickAction={this.onProximoClick}
                     title={proximoTitle}
                     isAvailable={isProximoAvailable}/>
             </View>
         );
-    }
-
-    proxiwashClickAction() {
-        this.props.navigation.navigate('Proxiwash');
-    }
-
-    tutorinsaClickAction() {
-        this.props.navigation.navigate('TutorInsaScreen');
     }
 
 
@@ -502,7 +507,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                     subtitle={proxiwashSubtitle}
                     color={proxiwashColor}
                     icon={proxiwashIcon}
-                    clickAction={this.proxiwashClickAction}
+                    clickAction={this.onProxiwashClick}
                     title={proxiwashTitle}
                     isAvailable={proxiwashIsAvailable}
                     isSquareLeft={true}/>
@@ -511,7 +516,7 @@ export default class HomeScreen extends FetchedDataSectionList {
                     subtitle={tutorinsaSubtitle}
                     color={tutorinsaColor}
                     icon={tutorinsaIcon}
-                    clickAction={this.tutorinsaClickAction}
+                    clickAction={this.onTutorInsaClick}
                     title={tutorinsaTitle}
                     isAvailable={tutorinsaIsAvailable}/>
             </View>

@@ -41,12 +41,18 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         machinesWatched: [],
     };
 
+    onRefresh: Function;
+    renderSectionHeaderEmpty: Function;
+    renderSectionHeaderNotEmpty: Function;
+    renderItemEmpty: Function;
+    renderItemNotEmpty: Function;
+
     constructor(fetchUrl: string, refreshTime: number) {
         super();
         this.webDataManager = new WebDataManager(fetchUrl);
         this.refreshTime = refreshTime;
         // creating references to functions used in render()
-        this._onRefresh = this._onRefresh.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
         this.renderSectionHeaderEmpty = this.renderSectionHeader.bind(this, true);
         this.renderSectionHeaderNotEmpty = this.renderSectionHeader.bind(this, false);
         this.renderItemEmpty = this.renderItem.bind(this, true);
@@ -96,9 +102,9 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      * Refresh data when focusing the screen and setup a refresh interval if asked to
      */
     onScreenFocus() {
-        this._onRefresh();
+        this.onRefresh();
         if (this.refreshTime > 0)
-            this.refreshInterval = setInterval(this._onRefresh.bind(this), this.refreshTime)
+            this.refreshInterval = setInterval(this.onRefresh.bind(this), this.refreshTime)
     }
 
     /**
@@ -122,7 +128,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      * Refresh data and show a toast if any error occurred
      * @private
      */
-    _onRefresh() {
+    onRefresh() {
         let canRefresh;
         if (this.lastRefresh !== undefined)
             canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) / 1000 > this.minTimeBetweenRefresh;
@@ -284,13 +290,13 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     }
 
 
-    renderSectionHeader(isEmpty, {section: {title}}) {
+    renderSectionHeader(isEmpty: boolean, {section: {title}} : Object) {
         return isEmpty ?
             <View/> :
             this.getRenderSectionHeader(title)
     }
 
-    renderItem(isEmpty, {item, section}) {
+    renderItem(isEmpty: boolean, {item, section}: Object) {
         return isEmpty ?
             this.getEmptyRenderItem(item.text, item.isSpinner, item.icon) :
             this.getRenderItem(item, section)
@@ -313,7 +319,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.refreshing}
-                        onRefresh={this._onRefresh}
+                        onRefresh={this.onRefresh}
                     />
                 }
                 renderSectionHeader={isEmpty ? this.renderSectionHeaderEmpty : this.renderSectionHeaderNotEmpty}
