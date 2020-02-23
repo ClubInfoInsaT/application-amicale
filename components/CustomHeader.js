@@ -82,7 +82,7 @@ export default class CustomHeader extends React.Component<Props> {
                         color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
                     <Input
                         ref="searchInput"
-                        placeholder={i18n.t('proximoScreen.onSearchStringChange')}
+                        placeholder={i18n.t('proximoScreen.search')}
                         placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
                         onChangeText={this.props.searchCallback}/>
                 </Item>

@@ -316,7 +316,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     }
 
     renderItem({item}: Object) {
-        console.log(item);
         return (<ListItem
             thumbnail
             onPress={() => {
