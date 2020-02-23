@@ -35,7 +35,7 @@ export default class CustomHeader extends React.Component<Props> {
     static defaultProps = {
         hasBackButton: false,
         hasSearchField: false,
-        searchCallback: () => null,
+        searchCallback: null,
         shouldFocusSearchBar: false,
         title: '',
         subtitle: '',
@@ -65,7 +65,7 @@ export default class CustomHeader extends React.Component<Props> {
     componentDidMount() {
         if (this.refs.searchInput !== undefined && this.refs.searchInput._root !== undefined && this.props.shouldFocusSearchBar) {
             // does not work if called too early for some reason...
-            setTimeout(() => this.refs.searchInput._root.focus(), 500);
+            setTimeout(this.refs.searchInput._root.focus, 500);
         }
     }
 

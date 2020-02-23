@@ -187,9 +187,14 @@ export default class AboutScreen extends React.Component<Props, State> {
         },
     ];
 
+    getCardItem: Function;
+    getMainCard: Function;
+
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
+        this.getCardItem = this.getCardItem.bind(this);
+        this.getMainCard = this.getMainCard.bind(this);
     }
 
     getAppCard() {
@@ -211,9 +216,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
                     listKey={"app"}
-                    renderItem={({item}) =>
-                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                    }
+                    renderItem={this.getCardItem}
                 />
             </Card>
         );
@@ -242,9 +245,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
                     listKey={"team1"}
-                    renderItem={({item}) =>
-                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                    }
+                    renderItem={this.getCardItem}
                 />
                 <CardItem header>
                     <Text>{i18n.t('aboutScreen.additionalDev')}</Text>
@@ -254,9 +255,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
                     listKey={"team2"}
-                    renderItem={({item}) =>
-                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                    }
+                    renderItem={this.getCardItem}
                 />
             </Card>
         );
@@ -273,9 +272,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
                     listKey={"techno"}
-                    renderItem={({item}) =>
-                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                    }
+                    renderItem={this.getCardItem}
                 />
             </Card>
         );
@@ -284,24 +281,19 @@ export default class AboutScreen extends React.Component<Props, State> {
     /**
      * Get a clickable card item to be rendered inside a card.
      *
-     * @param onPressCallback The callback to use when the item is clicked
-     * @param icon The icon name to use from MaterialCommunityIcons
-     * @param text The text to show
-     * @param showChevron Whether to show a chevron indicating this button will change screen
-     * @param showOnlyInDebug Should we show te current item only in debug mode?
      * @returns {React.Node}
      */
-    getCardItem(onPressCallback: Function, icon: string, text: string, showChevron: boolean, showOnlyInDebug: boolean) {
-        let shouldShow = !showOnlyInDebug || (showOnlyInDebug && this.state.isDebugUnlocked);
+    getCardItem({item}: Object) {
+        let shouldShow = !item.showOnlyInDebug || (item.showOnlyInDebug && this.state.isDebugUnlocked);
         if (shouldShow) {
             return (
                 <CardItem button
-                          onPress={onPressCallback}>
+                          onPress={item.onPressCallback}>
                     <Left>
-                        <CustomMaterialIcon icon={icon}/>
-                        <Text>{text}</Text>
+                        <CustomMaterialIcon icon={item.icon}/>
+                        <Text>{item.text}</Text>
                     </Left>
-                    {showChevron ?
+                    {item.showChevron ?
                         <Right>
                             <CustomMaterialIcon icon="chevron-right"
                                                 fontSize={20}/>
@@ -331,6 +323,8 @@ export default class AboutScreen extends React.Component<Props, State> {
     }
 
     getBugReportModal() {
+        const onPressMail = openWebLink.bind(this, links.bugsMail);
+        const onPressGit = openWebLink.bind(this, links.bugsGit);
         return (
             <Modalize ref={this.modalRef}
                       adjustToContentHeight
@@ -349,7 +343,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                             marginLeft: 'auto',
                             marginRight: 'auto',
                         }}
-                        onPress={() => openWebLink(links.bugsMail)}>
+                        onPress={onPressMail}>
                         <CustomMaterialIcon
                             icon={'email'}
                             color={'#fff'}/>
@@ -361,7 +355,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                             marginLeft: 'auto',
                             marginRight: 'auto',
                         }}
-                        onPress={() => openWebLink(links.bugsGit)}>
+                        onPress={onPressGit}>
                         <CustomMaterialIcon
                             icon={'git'}
                             color={'#fff'}/>
@@ -378,7 +372,7 @@ export default class AboutScreen extends React.Component<Props, State> {
         }
     }
 
-    getMainCard(item: Object) {
+    getMainCard({item}: Object) {
         switch (item.id) {
             case 'app':
                 return this.getAppCard();
@@ -401,9 +395,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     data={this.dataOrder}
                     extraData={this.state}
                     keyExtractor={(item) => item.id}
-                    renderItem={({item}) =>
-                        this.getMainCard(item)
-                    }
+                    renderItem={this.getMainCard}
                 />
             </Container>
         );

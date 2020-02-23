@@ -154,14 +154,13 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
             shouldFocusSearchBar: false,
             data: item,
         };
+        const onPress = this.props.navigation.navigate.bind(this, 'ProximoListScreen', dataToSend);
         if (item.data.length > 0) {
             return (
                 <ListItem
                     button
                     thumbnail
-                    onPress={() => {
-                        this.props.navigation.navigate('ProximoListScreen', dataToSend);
-                    }}
+                    onPress={onPress}
                 >
                     <Left>
                         <CustomMaterialIcon

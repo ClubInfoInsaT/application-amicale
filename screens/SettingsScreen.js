@@ -43,6 +43,17 @@ export default class SettingsScreen extends React.Component<Props, State> {
         startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
     };
 
+    onProxiwashNotifPickerValueChange: Function;
+    onStartScreenPickerValueChange: Function;
+    onToggleNightMode: Function;
+
+    constructor() {
+        super();
+        this.onProxiwashNotifPickerValueChange = this.onProxiwashNotifPickerValueChange.bind(this);
+        this.onStartScreenPickerValueChange = this.onStartScreenPickerValueChange.bind(this);
+        this.onToggleNightMode = this.onToggleNightMode.bind(this);
+    }
+
     /**
      * Get a list item using the specified control
      *
@@ -118,7 +129,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 mode="dropdown"
                 style={{width: 120}}
                 selectedValue={this.state.proxiwashNotifPickerSelected}
-                onValueChange={(value) => this.onProxiwashNotifPickerValueChange(value)}
+                onValueChange={this.onProxiwashNotifPickerValueChange}
             >
                 <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.never')} value="never"/>
                 <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.5')} value="5"/>
@@ -141,7 +152,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 mode="dropdown"
                 style={{width: 120}}
                 selectedValue={this.state.startScreenPickerSelected}
-                onValueChange={(value) => this.onStartScreenPickerValueChange(value)}
+                onValueChange={this.onStartScreenPickerValueChange}
             >
                 <Picker.Item label={i18n.t('screens.home')} value="Home"/>
                 <Picker.Item label={i18n.t('screens.planning')} value="Planning"/>
@@ -155,7 +166,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
     /**
      * Toggle night mode and save it to preferences
      */
-    toggleNightMode() {
+    onToggleNightMode() {
         ThemeManager.getInstance().setNightMode(!this.state.nightMode);
         this.setState({nightMode: !this.state.nightMode});
         this.resetStack();
@@ -203,7 +214,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 <Right>
                     <CheckBox
                         checked={this.state.nightMode}
-                        onPress={() => this.toggleNightMode()}
+                        onPress={onPressCallback}
                         style={{marginRight: 20}}/>
                 </Right>
             </ListItem>
@@ -221,7 +232,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                             <Text>{i18n.t('settingsScreen.generalCard')}</Text>
                         </CardItem>
                         <List>
-                            {this.getToggleItem(() => this.toggleNightMode(), 'theme-light-dark', i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.nightModeSub'))}
+                            {this.getToggleItem(this.onToggleNightMode, 'theme-light-dark', i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.nightModeSub'))}
                             {SettingsScreen.getGeneralItem(this.getStartScreenPicker(), 'power', i18n.t('settingsScreen.startScreen'), i18n.t('settingsScreen.startScreenSub'))}
                         </List>
                     </Card>

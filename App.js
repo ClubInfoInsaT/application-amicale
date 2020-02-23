@@ -31,6 +31,10 @@ export default class App extends React.Component<Props, State> {
         currentTheme: null,
     };
 
+    onIntroDone: Function;
+    loadAssetsAsync: Function;
+    onLoadFinished: Function;
+
     constructor(props: Object) {
         super(props);
         LocaleManager.initTranslations();

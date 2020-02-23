@@ -86,7 +86,6 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      */
     componentDidMount() {
         super.componentDidMount();
-
         if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
             // Get latest watchlist from server
             NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
@@ -245,13 +244,14 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     showAlert(title: string, item: Object, isDryer: boolean) {
         let buttons = [{text: i18n.t("proxiwashScreen.modal.ok")}];
         let message = modalStateStrings[MACHINE_STATES[item.state]];
+        const onPress = this.setupNotifications.bind(this, item.number);
         if (MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"]) {
             buttons = [
                 {
                     text: this.isMachineWatched(item.number) ?
                         i18n.t("proxiwashScreen.modal.disableNotifications") :
                         i18n.t("proxiwashScreen.modal.enableNotifications"),
-                    onPress: () => this.setupNotifications(item.number)
+                    onPress: onPress
                 },
                 {
                     text: i18n.t("proxiwashScreen.modal.cancel")
@@ -303,6 +303,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"];
         let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
         let isDryer = section.title === i18n.t('proxiwashScreen.dryers');
+        const onPress = this.showAlert.bind(this, machineName, item, isDryer);
         return (
             <Card style={{
                 flex: 0,
@@ -327,7 +328,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                         backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor
                     }}/>
                     <PlatformTouchable
-                        onPress={() => this.showAlert(machineName, item, isDryer)}
+                        onPress={onPress}
                         style={{
                             height: 64,
                             position: 'absolute',

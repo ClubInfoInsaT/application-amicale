@@ -40,7 +40,6 @@ export default class SideBar extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         // Dataset used to render the drawer
-        // If the link field is defined, clicking on the item will open the link
         this.dataSet = [
             {
                 name: i18n.t('sidenav.divider1'),
@@ -113,11 +112,8 @@ export default class SideBar extends React.Component<Props, State> {
     }
 
 
-    onListItemPress(item: Object) {
-        if (item.link !== undefined)
-            Linking.openURL(item.link).catch((err) => console.error('Error opening link', err));
-        else
-            this.navigateToScreen(item.route);
+    onListItemPress(route: string) {
+        this.props.navigation.navigate(route);
     }
 
 
@@ -127,13 +123,15 @@ export default class SideBar extends React.Component<Props, State> {
 
 
     getRenderItem({item}: Object) {
+        const onListItemPress = this.onListItemPress.bind(this, item.route);
+
         if (item.icon !== undefined) {
             return (
                 <ListItem
                     button
                     noBorder
                     selected={this.state.active === item.route}
-                    onPress={this.onListItemPress.bind(this, item)}
+                    onPress={onListItemPress}
                 >
                     <Left>
                         <CustomMaterialIcon
@@ -170,14 +168,6 @@ export default class SideBar extends React.Component<Props, State> {
         }
 
     }
-
-    /**
-     * Navigate to the selected route
-     * @param route {string} The route name to navigate to
-     */
-    navigateToScreen(route: string) {
-        this.props.navigation.navigate(route);
-    };
 
     render() {
         // console.log("rendering SideBar");

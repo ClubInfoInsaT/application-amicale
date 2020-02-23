@@ -78,6 +78,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     onSelectSortModePrice: Function;
     onSortMenuPress: Function;
     renderItem: Function;
+    onListItemPress: Function;
 
     constructor(props: any) {
         super(props);
@@ -90,6 +91,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         this.onSelectSortModePrice = this.onSelectSortModePrice.bind(this);
         this.onSortMenuPress = this.onSortMenuPress.bind(this);
         this.renderItem = this.renderItem.bind(this);
+        this.onListItemPress = this.onListItemPress.bind(this);
     }
 
     /**
@@ -265,7 +267,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         );
     }
 
-    showItemDetails(item: Object) {
+    onListItemPress(item: Object) {
         this.setState({
             modalCurrentDisplayItem: item
         });
@@ -318,9 +320,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     renderItem({item}: Object) {
         return (<ListItem
             thumbnail
-            onPress={() => {
-                this.showItemDetails(item);
-            }}
+            onPress={this.onListItemPress}
         >
             <Left>
                 <Thumbnail square source={{uri: item.image}}/>

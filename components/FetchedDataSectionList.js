@@ -42,6 +42,8 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     };
 
     onRefresh: Function;
+    onFetchSuccess: Function;
+    onFetchError: Function;
     renderSectionHeaderEmpty: Function;
     renderSectionHeaderNotEmpty: Function;
     renderItemEmpty: Function;
@@ -53,6 +55,8 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         this.refreshTime = refreshTime;
         // creating references to functions used in render()
         this.onRefresh = this.onRefresh.bind(this);
+        this.onFetchSuccess = this.onFetchSuccess.bind(this);
+        this.onFetchError = this.onFetchError.bind(this);
         this.renderSectionHeaderEmpty = this.renderSectionHeader.bind(this, true);
         this.renderSectionHeaderNotEmpty = this.renderSectionHeader.bind(this, false);
         this.renderItemEmpty = this.renderItem.bind(this, true);
@@ -124,6 +128,24 @@ export default class FetchedDataSectionList extends React.Component<Props, State
             this.willFocusSubscription.remove();
     }
 
+    onFetchSuccess(fetchedData: Object) {
+        this.setState({
+            fetchedData: fetchedData,
+            refreshing: false,
+            firstLoading: false
+        });
+        this.lastRefresh = new Date();
+    }
+
+    onFetchError() {
+        this.setState({
+            fetchedData: {},
+            refreshing: false,
+            firstLoading: false
+        });
+        this.webDataManager.showUpdateToast(this.getUpdateToastTranslations()[0], this.getUpdateToastTranslations()[1]);
+    }
+
     /**
      * Refresh data and show a toast if any error occurred
      * @private
@@ -138,22 +160,8 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         if (canRefresh) {
             this.setState({refreshing: true});
             this.webDataManager.readData()
-                .then((fetchedData) => {
-                    this.setState({
-                        fetchedData: fetchedData,
-                        refreshing: false,
-                        firstLoading: false
-                    });
-                    this.lastRefresh = new Date();
-                })
-                .catch(() => {
-                    this.setState({
-                        fetchedData: {},
-                        refreshing: false,
-                        firstLoading: false
-                    });
-                    this.webDataManager.showUpdateToast(this.getUpdateToastTranslations()[0], this.getUpdateToastTranslations()[1]);
-                });
+                .then(this.onFetchSuccess)
+                .catch(this.onFetchError);
         }
     }
 
