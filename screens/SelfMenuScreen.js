@@ -119,7 +119,7 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         );
     }
 
-    getRenderItem(item: Object, section: Object, data: Object) {
+    getRenderItem(item: Object, section: Object) {
         return (
             <Card style={{
                 flex: 0,

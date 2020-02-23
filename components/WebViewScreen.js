@@ -35,6 +35,21 @@ export default class WebViewScreen extends React.Component<Props> {
     };
     webviewArray: Array<WebView> = [];
 
+    onRefreshClicked: Function;
+    onWebviewRef: Function;
+    onGoBackWebview: Function;
+    onGoForwardWebview: Function;
+    onOpenWebLink: Function;
+
+    constructor() {
+        super();
+        this.onRefreshClicked = this.onRefreshClicked.bind(this);
+        this.onWebviewRef = this.onWebviewRef.bind(this);
+        this.onGoBackWebview = this.onGoBackWebview.bind(this);
+        this.onGoForwardWebview = this.onGoForwardWebview.bind(this);
+        this.onOpenWebLink = this.onOpenWebLink.bind(this);
+    }
+
     openWebLink(url: string) {
         Linking.openURL(url).catch((err) => console.error('Error opening link', err));
     }
@@ -43,7 +58,7 @@ export default class WebViewScreen extends React.Component<Props> {
         return (
             <Touchable
                 style={{padding: 6}}
-                onPress={() => clickAction()}>
+                onPress={clickAction}>
                 <CustomMaterialIcon
                     color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                     icon={icon}/>
@@ -54,36 +69,62 @@ export default class WebViewScreen extends React.Component<Props> {
     getRefreshButton() {
         return (
             <View style={{flexDirection: 'row'}}>
-                {this.getHeaderButton(() => this.refreshWebview(), 'refresh')}
+                {this.getHeaderButton(this.onRefreshClicked, 'refresh')}
             </View>
         );
     };
 
-    refreshWebview() {
+    onRefreshClicked() {
         for (let view of this.webviewArray) {
             if (view !== null)
                 view.reload();
         }
     }
 
-    goBackWebview() {
+    onGoBackWebview() {
         for (let view of this.webviewArray) {
             if (view !== null)
                 view.goBack();
         }
     }
 
-    goForwardWebview() {
+    onGoForwardWebview() {
         for (let view of this.webviewArray) {
             if (view !== null)
                 view.goForward();
         }
     }
 
+    onOpenWebLink() {
+        this.openWebLink(this.props.data[0]['url'])
+    }
+
+    onWebviewRef(ref: WebView) {
+        this.webviewArray.push(ref)
+    }
+
+    getRenderLoading() {
+        return (
+            <View style={{
+                backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: '100%',
+                height: '100%',
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <Spinner/>
+            </View>
+        );
+    }
+
     getWebview(obj: Object) {
         return (
             <WebView
-                ref={ref => (this.webviewArray.push(ref))}
+                ref={this.onWebviewRef}
                 source={{uri: obj['url']}}
                 style={{
                     width: '100%',
@@ -92,21 +133,7 @@ export default class WebViewScreen extends React.Component<Props> {
                 startInLoadingState={true}
                 injectedJavaScript={obj['customJS']}
                 javaScriptEnabled={true}
-                renderLoading={() =>
-                    <View style={{
-                        backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                        width: '100%',
-                        height: '100%',
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <Spinner/>
-                    </View>
-                }
+                renderLoading={this.getRenderLoading}
             />
         );
     }
@@ -133,6 +160,7 @@ export default class WebViewScreen extends React.Component<Props> {
     }
 
     render() {
+        // console.log("rendering WebViewScreen");
         const nav = this.props.navigation;
         this.webviewArray = [];
         return (
@@ -166,7 +194,7 @@ export default class WebViewScreen extends React.Component<Props> {
                         <Left style={{
                             paddingLeft: 6,
                         }}>
-                            {this.getHeaderButton(() => this.openWebLink(this.props.data[0]['url']), 'open-in-new')}
+                            {this.getHeaderButton(this.onOpenWebLink, 'open-in-new')}
                         </Left>
                         <Body/>
                         <Right style={{
@@ -179,8 +207,8 @@ export default class WebViewScreen extends React.Component<Props> {
                                 marginRight: 0,
                                 marginLeft: 'auto'
                             }}>
-                                {this.getHeaderButton(() => this.goBackWebview(), 'chevron-left')}
-                                {this.getHeaderButton(() => this.goForwardWebview(), 'chevron-right')}
+                                {this.getHeaderButton(this.onGoBackWebview, 'chevron-left')}
+                                {this.getHeaderButton(this.onGoForwardWebview, 'chevron-right')}
                             </View>
                         </Right>
                     </Footer> : <View/>}

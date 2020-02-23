@@ -25,7 +25,6 @@ type State = {
  * Used by inheriting from it and redefining getters.
  */
 export default class FetchedDataSectionList extends React.Component<Props, State> {
-
     webDataManager: WebDataManager;
 
     willFocusSubscription: function;
@@ -42,11 +41,35 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         machinesWatched: [],
     };
 
+    onRefresh: Function;
+    onFetchSuccess: Function;
+    onFetchError: Function;
+    renderSectionHeaderEmpty: Function;
+    renderSectionHeaderNotEmpty: Function;
+    renderItemEmpty: Function;
+    renderItemNotEmpty: Function;
+
     constructor(fetchUrl: string, refreshTime: number) {
         super();
         this.webDataManager = new WebDataManager(fetchUrl);
         this.refreshTime = refreshTime;
+        // creating references to functions used in render()
+        this.onRefresh = this.onRefresh.bind(this);
+        this.onFetchSuccess = this.onFetchSuccess.bind(this);
+        this.onFetchError = this.onFetchError.bind(this);
+        this.renderSectionHeaderEmpty = this.renderSectionHeader.bind(this, true);
+        this.renderSectionHeaderNotEmpty = this.renderSectionHeader.bind(this, false);
+        this.renderItemEmpty = this.renderItem.bind(this, true);
+        this.renderItemNotEmpty = this.renderItem.bind(this, false);
     }
+
+    shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+        return this.state.refreshing !== nextState.refreshing ||
+            nextState.firstLoading !== this.state.firstLoading ||
+            nextState.machinesWatched.length !== this.state.machinesWatched.length ||
+            nextState.fetchedData.len !== this.state.fetchedData.len;
+    }
+
 
     /**
      * Get the translation for the header in the current language
@@ -74,26 +97,18 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      */
     componentDidMount() {
         this.willFocusSubscription = this.props.navigation.addListener(
-            'willFocus',
-            () => {
-                this.onScreenFocus();
-            }
-        );
+            'willFocus', this.onScreenFocus.bind(this));
         this.willBlurSubscription = this.props.navigation.addListener(
-            'willBlur',
-            () => {
-                this.onScreenBlur();
-            }
-        );
+            'willBlur', this.onScreenBlur.bind(this));
     }
 
     /**
      * Refresh data when focusing the screen and setup a refresh interval if asked to
      */
     onScreenFocus() {
-        this._onRefresh();
+        this.onRefresh();
         if (this.refreshTime > 0)
-            this.refreshInterval = setInterval(() => this._onRefresh(), this.refreshTime)
+            this.refreshInterval = setInterval(this.onRefresh.bind(this), this.refreshTime)
     }
 
     /**
@@ -113,11 +128,29 @@ export default class FetchedDataSectionList extends React.Component<Props, State
             this.willFocusSubscription.remove();
     }
 
+    onFetchSuccess(fetchedData: Object) {
+        this.setState({
+            fetchedData: fetchedData,
+            refreshing: false,
+            firstLoading: false
+        });
+        this.lastRefresh = new Date();
+    }
+
+    onFetchError() {
+        this.setState({
+            fetchedData: {},
+            refreshing: false,
+            firstLoading: false
+        });
+        this.webDataManager.showUpdateToast(this.getUpdateToastTranslations()[0], this.getUpdateToastTranslations()[1]);
+    }
+
     /**
      * Refresh data and show a toast if any error occurred
      * @private
      */
-    _onRefresh = () => {
+    onRefresh() {
         let canRefresh;
         if (this.lastRefresh !== undefined)
             canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) / 1000 > this.minTimeBetweenRefresh;
@@ -127,25 +160,10 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         if (canRefresh) {
             this.setState({refreshing: true});
             this.webDataManager.readData()
-                .then((fetchedData) => {
-                    this.setState({
-                        fetchedData: fetchedData,
-                        refreshing: false,
-                        firstLoading: false
-                    });
-                    this.lastRefresh = new Date();
-                })
-                .catch(() => {
-                    this.setState({
-                        fetchedData: {},
-                        refreshing: false,
-                        firstLoading: false
-                    });
-                    this.webDataManager.showUpdateToast(this.getUpdateToastTranslations()[0], this.getUpdateToastTranslations()[1]);
-                });
+                .then(this.onFetchSuccess)
+                .catch(this.onFetchError);
         }
-
-    };
+    }
 
     /**
      * Get the render item to be used for display in the list.
@@ -153,10 +171,9 @@ export default class FetchedDataSectionList extends React.Component<Props, State
      *
      * @param item
      * @param section
-     * @param data
      * @return {*}
      */
-    getRenderItem(item: Object, section: Object, data: Object) {
+    getRenderItem(item: Object, section: Object) {
         return <View/>;
     }
 
@@ -222,6 +239,11 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return [];
     }
 
+
+    datasetKeyExtractor(item: Object) {
+        return item.text
+    }
+
     /**
      * Create the dataset when no fetched data is available.
      * No need to be overridden, has good defaults.
@@ -243,7 +265,7 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                             'access-point-network-off'
                     }
                 ],
-                keyExtractor: (item: Object) => item.text,
+                keyExtractor: this.datasetKeyExtractor,
             }
         ];
     }
@@ -275,6 +297,19 @@ export default class FetchedDataSectionList extends React.Component<Props, State
         return true;
     }
 
+
+    renderSectionHeader(isEmpty: boolean, {section: {title}} : Object) {
+        return isEmpty ?
+            <View/> :
+            this.getRenderSectionHeader(title)
+    }
+
+    renderItem(isEmpty: boolean, {item, section}: Object) {
+        return isEmpty ?
+            this.getEmptyRenderItem(item.text, item.isSpinner, item.icon) :
+            this.getRenderItem(item, section)
+    }
+
     /**
      * Get the section list render using the generated dataset
      *
@@ -292,19 +327,11 @@ export default class FetchedDataSectionList extends React.Component<Props, State
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.refreshing}
-                        onRefresh={this._onRefresh}
+                        onRefresh={this.onRefresh}
                     />
                 }
-                renderSectionHeader={({section: {title}}) =>
-                    isEmpty ?
-                        <View/> :
-                        this.getRenderSectionHeader(title)
-                }
-                renderItem={({item, section}) =>
-                    isEmpty ?
-                        this.getEmptyRenderItem(item.text, item.isSpinner, item.icon) :
-                        this.getRenderItem(item, section, dataset)
-                }
+                renderSectionHeader={isEmpty ? this.renderSectionHeaderEmpty : this.renderSectionHeaderNotEmpty}
+                renderItem={isEmpty ? this.renderItemEmpty : this.renderItemNotEmpty}
                 style={{minHeight: 300, width: '100%'}}
                 contentContainerStyle={
                     isEmpty ?
@@ -351,11 +378,12 @@ export default class FetchedDataSectionList extends React.Component<Props, State
     }
 
     render() {
-        const nav = this.props.navigation;
+        // console.log("rendering FetchedDataSectionList");
         const dataset = this.createDataset(this.state.fetchedData);
         return (
             <BaseContainer
-                navigation={nav} headerTitle={this.getHeaderTranslation()}
+                navigation={this.props.navigation}
+                headerTitle={this.getHeaderTranslation()}
                 headerRightButton={this.getRightButton()}
                 hasTabs={this.hasTabs()}
                 hasBackButton={this.hasBackButton()}
@@ -375,5 +403,4 @@ export default class FetchedDataSectionList extends React.Component<Props, State
             </BaseContainer>
         );
     }
-
 }

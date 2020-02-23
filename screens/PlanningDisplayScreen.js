@@ -8,13 +8,12 @@ import ThemeManager from "../utils/ThemeManager";
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
 import PlanningEventManager from '../utils/PlanningEventManager';
-import i18n from 'i18n-js';
 
 type Props = {
     navigation: Object,
 };
 
-function openWebLink(link) {
+function openWebLink(event, link) {
     Linking.openURL(link).catch((err) => console.error('Error opening link', err));
 }
 
@@ -22,8 +21,8 @@ function openWebLink(link) {
  * Class defining an about screen. This screen shows the user information about the app and it's author.
  */
 export default class PlanningDisplayScreen extends React.Component<Props> {
-
     render() {
+        // console.log("rendering planningDisplayScreen");
         const nav = this.props.navigation;
         const displayData = nav.getParam('data', []);
         return (
@@ -60,7 +59,7 @@ export default class PlanningDisplayScreen extends React.Component<Props> {
                                   },
                                   div: {color: ThemeManager.getCurrentThemeVariables().textColor}
                               }}
-                              onLinkPress={(event, link) => openWebLink(link)}/>
+                              onLinkPress={openWebLink}/>
                         : <View/>}
                 </Content>
             </Container>
