@@ -6,7 +6,7 @@ import AsyncStorageManager from "./AsyncStorageManager";
 import LocaleManager from "./LocaleManager";
 import passwords from "../passwords";
 
-const EXPO_TOKEN_SERVER = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/expo_notifications/save_token.php';
+const EXPO_TOKEN_SERVER = 'https://etud.insa-toulouse.fr/~amicale_app/expo_notifications/save_token.php';
 
 /**
  * Static class used to manage notifications sent to the user
@@ -123,18 +123,8 @@ export default class NotificationsManager {
                     'Content-Type': 'application/json',
                 }),
                 body: JSON.stringify(data) // <-- Post parameters
-            })
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    callback(responseJson);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else {
-            console.log('Expo token not available');
+            });
         }
-
     }
 
     /**
@@ -161,16 +151,7 @@ export default class NotificationsManager {
                     'Content-Type': 'application/json',
                 }),
                 body: JSON.stringify(data) // <-- Post parameters
-            })
-                .then((response) => response.text())
-                .then((responseText) => {
-                    console.log(responseText);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else {
-            console.log('Expo token not available');
+            });
         }
     }
 
@@ -194,16 +175,7 @@ export default class NotificationsManager {
                     'Content-Type': 'application/json',
                 }),
                 body: JSON.stringify(data) // <-- Post parameters
-            })
-                .then((response) => response.text())
-                .then((responseText) => {
-                    console.log(responseText);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else {
-            console.log('Expo token not available');
+            });
         }
     }
 }

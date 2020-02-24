@@ -15,7 +15,7 @@ import ThemeManager from "../../utils/ThemeManager";
 const links = {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
     playstore: 'https://play.google.com/store/apps/details?id=fr.amicaleinsat.application',
-    git: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/README.md',
+    git: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/README.md',
     bugsMail: 'mailto:vergnet@etud.insa-toulouse.fr?' +
         'subject=' +
         '[BUG] Application Amicale INSA Toulouse' +
@@ -25,9 +25,9 @@ const links = {
         'Nature du problème :\n\n\n' +
         'Étapes pour reproduire ce pb :\n\n\n\n' +
         'Stp corrige le pb, bien cordialement.',
-    bugsGit: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
-    changelog: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
-    license: 'https://git.srv-falcon.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
+    bugsGit: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
+    changelog: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
+    license: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
     authorMail: "mailto:vergnet@etud.insa-toulouse.fr?" +
         "subject=" +
         "Application Amicale INSA Toulouse" +
@@ -187,9 +187,14 @@ export default class AboutScreen extends React.Component<Props, State> {
         },
     ];
 
+    getCardItem: Function;
+    getMainCard: Function;
+
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
+        this.getCardItem = this.getCardItem.bind(this);
+        this.getMainCard = this.getMainCard.bind(this);
     }
 
     getAppCard() {
@@ -197,7 +202,7 @@ export default class AboutScreen extends React.Component<Props, State> {
             <Card>
                 <CardItem>
                     <Left>
-                        <Thumbnail square source={require('../../assets/icon.png')}/>
+                        <Thumbnail square source={require('../../assets/android.icon.png')}/>
                         <Body>
                             <H1>{appJson.expo.name}</H1>
                             <Text note>
@@ -210,10 +215,8 @@ export default class AboutScreen extends React.Component<Props, State> {
                     data={this.appData}
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
-                    listKey={(item) => "app"}
-                    renderItem={({item}) =>
-                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                    }
+                    listKey={"app"}
+                    renderItem={this.getCardItem}
                 />
             </Card>
         );
@@ -241,10 +244,8 @@ export default class AboutScreen extends React.Component<Props, State> {
                     data={this.authorData}
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
-                    listKey={(item) => "team1"}
-                    renderItem={({item}) =>
-                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                    }
+                    listKey={"team1"}
+                    renderItem={this.getCardItem}
                 />
                 <CardItem header>
                     <Text>{i18n.t('aboutScreen.additionalDev')}</Text>
@@ -253,10 +254,8 @@ export default class AboutScreen extends React.Component<Props, State> {
                     data={this.additionalDevData}
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
-                    listKey={(item) => "team2"}
-                    renderItem={({item}) =>
-                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                    }
+                    listKey={"team2"}
+                    renderItem={this.getCardItem}
                 />
             </Card>
         );
@@ -272,10 +271,8 @@ export default class AboutScreen extends React.Component<Props, State> {
                     data={this.technoData}
                     extraData={this.state}
                     keyExtractor={(item) => item.icon}
-                    listKey={(item) => "techno"}
-                    renderItem={({item}) =>
-                        this.getCardItem(item.onPressCallback, item.icon, item.text, item.showChevron, item.showOnlyDebug)
-                    }
+                    listKey={"techno"}
+                    renderItem={this.getCardItem}
                 />
             </Card>
         );
@@ -284,24 +281,19 @@ export default class AboutScreen extends React.Component<Props, State> {
     /**
      * Get a clickable card item to be rendered inside a card.
      *
-     * @param onPressCallback The callback to use when the item is clicked
-     * @param icon The icon name to use from MaterialCommunityIcons
-     * @param text The text to show
-     * @param showChevron Whether to show a chevron indicating this button will change screen
-     * @param showOnlyInDebug Should we show te current item only in debug mode?
      * @returns {React.Node}
      */
-    getCardItem(onPressCallback: Function, icon: string, text: string, showChevron: boolean, showOnlyInDebug: boolean) {
-        let shouldShow = !showOnlyInDebug || (showOnlyInDebug && this.state.isDebugUnlocked);
+    getCardItem({item}: Object) {
+        let shouldShow = !item.showOnlyInDebug || (item.showOnlyInDebug && this.state.isDebugUnlocked);
         if (shouldShow) {
             return (
                 <CardItem button
-                          onPress={onPressCallback}>
+                          onPress={item.onPressCallback}>
                     <Left>
-                        <CustomMaterialIcon icon={icon}/>
-                        <Text>{text}</Text>
+                        <CustomMaterialIcon icon={item.icon}/>
+                        <Text>{item.text}</Text>
                     </Left>
-                    {showChevron ?
+                    {item.showChevron ?
                         <Right>
                             <CustomMaterialIcon icon="chevron-right"
                                                 fontSize={20}/>
@@ -331,6 +323,8 @@ export default class AboutScreen extends React.Component<Props, State> {
     }
 
     getBugReportModal() {
+        const onPressMail = openWebLink.bind(this, links.bugsMail);
+        const onPressGit = openWebLink.bind(this, links.bugsGit);
         return (
             <Modalize ref={this.modalRef}
                       adjustToContentHeight
@@ -349,7 +343,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                             marginLeft: 'auto',
                             marginRight: 'auto',
                         }}
-                        onPress={() => openWebLink(links.bugsMail)}>
+                        onPress={onPressMail}>
                         <CustomMaterialIcon
                             icon={'email'}
                             color={'#fff'}/>
@@ -361,7 +355,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                             marginLeft: 'auto',
                             marginRight: 'auto',
                         }}
-                        onPress={() => openWebLink(links.bugsGit)}>
+                        onPress={onPressGit}>
                         <CustomMaterialIcon
                             icon={'git'}
                             color={'#fff'}/>
@@ -378,7 +372,7 @@ export default class AboutScreen extends React.Component<Props, State> {
         }
     }
 
-    getMainCard(item: Object) {
+    getMainCard({item}: Object) {
         switch (item.id) {
             case 'app':
                 return this.getAppCard();
@@ -401,9 +395,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     data={this.dataOrder}
                     extraData={this.state}
                     keyExtractor={(item) => item.id}
-                    renderItem={({item}) =>
-                        this.getMainCard(item)
-                    }
+                    renderItem={this.getMainCard}
                 />
             </Container>
         );

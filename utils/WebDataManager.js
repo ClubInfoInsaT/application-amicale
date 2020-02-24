@@ -25,8 +25,8 @@ export default class WebDataManager {
             let response = await fetch(this.FETCH_URL);
             fetchedData = await response.json();
         } catch (error) {
-            console.log('Could not read FetchedData from server');
-            console.log(error);
+            // console.log('Could not read FetchedData from server');
+            // console.log(error);
             throw new Error('Could not read FetchedData from server');
         }
         this.lastDataFetched = fetchedData;

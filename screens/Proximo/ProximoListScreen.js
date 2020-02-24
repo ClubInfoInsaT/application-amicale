@@ -70,12 +70,28 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         sortNameIcon: '',
         modalCurrentDisplayItem: {},
     };
-    _menu: Menu;
+    sortMenuRef: Menu;
+
+    onMenuRef: Function;
+    onSearchStringChange: Function;
+    onSelectSortModeName: Function;
+    onSelectSortModePrice: Function;
+    onSortMenuPress: Function;
+    renderItem: Function;
+    onListItemPress: Function;
 
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
         this.originalData = this.navData['data'];
+
+        this.onMenuRef = this.onMenuRef.bind(this);
+        this.onSearchStringChange = this.onSearchStringChange.bind(this);
+        this.onSelectSortModeName = this.onSelectSortModeName.bind(this);
+        this.onSelectSortModePrice = this.onSelectSortModePrice.bind(this);
+        this.onSortMenuPress = this.onSortMenuPress.bind(this);
+        this.renderItem = this.renderItem.bind(this);
+        this.onListItemPress = this.onListItemPress.bind(this);
     }
 
     /**
@@ -83,8 +99,8 @@ export default class ProximoListScreen extends React.Component<Props, State> {
      *
      * @param ref The menu reference
      */
-    setMenuRef = (ref: Menu) => {
-        this._menu = ref;
+    onMenuRef(ref: Menu) {
+        this.sortMenuRef = ref;
     };
 
     /**
@@ -131,7 +147,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 break;
         }
         this.setupSortIcons(mode, isReverse);
-        this._menu.hide();
+        this.sortMenuRef.hide();
     }
 
     /**
@@ -214,7 +230,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         return filteredData;
     }
 
-    search(str: string) {
+    onSearchStringChange(str: string) {
         this.setState({
             currentlyDisplayedData: this.filterData(str)
         })
@@ -251,7 +267,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         );
     }
 
-    showItemDetails(item: Object) {
+    onListItemPress(item: Object) {
         this.setState({
             modalCurrentDisplayItem: item
         });
@@ -260,16 +276,27 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         }
     }
 
+    onSelectSortModeName() {
+        this.sortModeSelected(sortMode.name);
+    }
+
+    onSelectSortModePrice() {
+        this.sortModeSelected(sortMode.price);
+    }
+
+    onSortMenuPress() {
+        this.sortMenuRef.show();
+    }
+
+
     getSortMenu() {
         return (
             <Menu
-                ref={this.setMenuRef}
+                ref={this.onMenuRef}
                 button={
                     <Touchable
                         style={{padding: 6}}
-                        onPress={() =>
-                            this._menu.show()
-                        }>
+                        onPress={this.onSortMenuPress}>
                         <CustomMaterialIcon
                             color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                             icon={'sort'}/>
@@ -277,12 +304,12 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 }
             >
                 <MenuItem
-                    onPress={() => this.sortModeSelected(sortMode.name)}>
+                    onPress={this.onSelectSortModeName}>
                     {this.state.sortNameIcon}
                     {i18n.t('proximoScreen.sortName')}
                 </MenuItem>
                 <MenuItem
-                    onPress={() => this.sortModeSelected(sortMode.price)}>
+                    onPress={this.onSelectSortModePrice}>
                     {this.state.sortPriceIcon}
                     {i18n.t('proximoScreen.sortPrice')}
                 </MenuItem>
@@ -290,7 +317,39 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         );
     }
 
+    renderItem({item}: Object) {
+        return (<ListItem
+            thumbnail
+            onPress={this.onListItemPress}
+        >
+            <Left>
+                <Thumbnail square source={{uri: item.image}}/>
+            </Left>
+            <Body>
+                <Text style={{marginLeft: 20}}>
+                    {item.name}
+                </Text>
+                <Text note style={{
+                    marginLeft: 20,
+                    color: this.getStockColor(parseInt(item.quantity))
+                }}>
+                    {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
+                </Text>
+            </Body>
+            <Right>
+                <Text style={{fontWeight: "bold"}}>
+                    {item.price}€
+                </Text>
+            </Right>
+        </ListItem>);
+    }
+
+    keyExtractor(item: Object) {
+        return item.name + item.code;
+    }
+
     render() {
+        // console.log("rendering ProximoListScreen");
         const nav = this.props.navigation;
         return (
             <Container>
@@ -303,7 +362,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                     hasBackButton={true}
                     navigation={nav}
                     hasSearchField={true}
-                    searchCallback={(text) => this.search(text)}
+                    searchCallback={this.onSearchStringChange}
                     shouldFocusSearchBar={this.shouldFocusSearchBar}
                     rightButton={this.getSortMenu()}
                 />
@@ -311,35 +370,9 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 <FlatList
                     data={this.state.currentlyDisplayedData}
                     extraData={this.state.currentlyDisplayedData}
-                    keyExtractor={(item) => item.name + item.code}
+                    keyExtractor={this.keyExtractor}
                     style={{minHeight: 300, width: '100%'}}
-                    renderItem={({item}) =>
-                        <ListItem
-                            thumbnail
-                            onPress={() => {
-                                this.showItemDetails(item);
-                            }}
-                        >
-                            <Left>
-                                <Thumbnail square source={{uri: item.image}}/>
-                            </Left>
-                            <Body>
-                                <Text style={{marginLeft: 20}}>
-                                    {item.name}
-                                </Text>
-                                <Text note style={{
-                                    marginLeft: 20,
-                                    color: this.getStockColor(parseInt(item.quantity))
-                                }}>
-                                    {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
-                                </Text>
-                            </Body>
-                            <Right>
-                                <Text style={{fontWeight: "bold"}}>
-                                    {item.price}€
-                                </Text>
-                            </Right>
-                        </ListItem>}
+                    renderItem={this.renderItem}
                 />
             </Container>
         );

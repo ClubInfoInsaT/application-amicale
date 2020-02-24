@@ -11,8 +11,8 @@ type Props = {
 
 const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
 
-const CUSTOM_CSS_GENERAL = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customMobile3.css';
-const CUSTOM_CSS_NIGHTMODE = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customDark2.css';
+const CUSTOM_CSS_GENERAL = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customMobile3.css';
+const CUSTOM_CSS_NIGHTMODE = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customDark2.css';
 
 // // JS + JQuery functions used to remove alpha from events. Copy paste in browser console for quick testing
 // // Remove alpha from given Jquery node

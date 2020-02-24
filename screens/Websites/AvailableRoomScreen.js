@@ -12,8 +12,8 @@ type Props = {
 const ROOM_URL = 'http://planex.insa-toulouse.fr/salles.php';
 const PC_URL = 'http://planex.insa-toulouse.fr/sallesInfo.php';
 const BIB_URL = 'https://bibbox.insa-toulouse.fr/';
-const CUSTOM_CSS_GENERAL = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/rooms/customMobile.css';
-const CUSTOM_CSS_Bib = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/rooms/customBibMobile.css';
+const CUSTOM_CSS_GENERAL = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/rooms/customMobile.css';
+const CUSTOM_CSS_Bib = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/rooms/customBibMobile.css';
 
 /**
  * Class defining the app's planex screen.

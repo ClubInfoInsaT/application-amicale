@@ -13,7 +13,7 @@ import Touchable from "react-native-platform-touchable";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
 
-const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
+const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
 const MACHINE_STATES = {
     "TERMINE": "0",
@@ -35,6 +35,8 @@ const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
  * dryers, taken from a scrapper reading proxiwash website
  */
 export default class ProxiwashScreen extends FetchedDataSectionList {
+
+    onAboutPress: Function;
 
     /**
      * Creates machine state parameters using current theme and translations
@@ -75,6 +77,8 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
             machinesWatched: [],
         };
         this.setMinTimeRefresh(30);
+
+        this.onAboutPress = this.onAboutPress.bind(this);
     }
 
     /**
@@ -82,7 +86,6 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      */
     componentDidMount() {
         super.componentDidMount();
-
         if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
             // Get latest watchlist from server
             NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
@@ -241,13 +244,14 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     showAlert(title: string, item: Object, isDryer: boolean) {
         let buttons = [{text: i18n.t("proxiwashScreen.modal.ok")}];
         let message = modalStateStrings[MACHINE_STATES[item.state]];
+        const onPress = this.setupNotifications.bind(this, item.number);
         if (MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"]) {
             buttons = [
                 {
                     text: this.isMachineWatched(item.number) ?
                         i18n.t("proxiwashScreen.modal.disableNotifications") :
                         i18n.t("proxiwashScreen.modal.enableNotifications"),
-                    onPress: () => this.setupNotifications(item.number)
+                    onPress: onPress
                 },
                 {
                     text: i18n.t("proxiwashScreen.modal.cancel")
@@ -272,11 +276,15 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         );
     }
 
+    onAboutPress() {
+        this.props.navigation.navigate('ProxiwashAboutScreen');
+    }
+
     getRightButton(): * {
         return (
             <Touchable
                 style={{padding: 6}}
-                onPress={() => this.props.navigation.navigate('ProxiwashAboutScreen')}>
+                onPress={this.onAboutPress}>
                 <CustomMaterialIcon
                     color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                     icon="information"/>
@@ -289,13 +297,13 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      *
      * @param item The object containing the item's FetchedData
      * @param section The object describing the current SectionList section
-     * @param data The full FetchedData used by the SectionList
      * @returns {React.Node}
      */
-    getRenderItem(item: Object, section: Object, data: Object) {
+    getRenderItem(item: Object, section: Object) {
         let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"];
         let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
         let isDryer = section.title === i18n.t('proxiwashScreen.dryers');
+        const onPress = this.showAlert.bind(this, machineName, item, isDryer);
         return (
             <Card style={{
                 flex: 0,
@@ -320,7 +328,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                         backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor
                     }}/>
                     <PlatformTouchable
-                        onPress={() => this.showAlert(machineName, item, isDryer)}
+                        onPress={onPress}
                         style={{
                             height: 64,
                             position: 'absolute',

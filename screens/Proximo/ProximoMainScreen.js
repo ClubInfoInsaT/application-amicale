@@ -9,7 +9,7 @@ import FetchedDataSectionList from "../../components/FetchedDataSectionList";
 import ThemeManager from "../../utils/ThemeManager";
 import Touchable from "react-native-platform-touchable";
 
-const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
+const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 
 
 /**
@@ -18,12 +18,31 @@ const DATA_URL = "https://srv-falcon.etud.insa-toulouse.fr/~proximo/data/stock-v
  */
 export default class ProximoMainScreen extends FetchedDataSectionList {
 
+    onPressSearchBtn: Function;
+    onPressAboutBtn: Function;
+
     constructor() {
         super(DATA_URL, 0);
+        this.onPressSearchBtn = this.onPressSearchBtn.bind(this);
+        this.onPressAboutBtn = this.onPressAboutBtn.bind(this);
     }
 
     static sortFinalData(a: Object, b: Object) {
-        return a.type.id - b.type.id;
+        let str1 = a.type.name.toLowerCase();
+        let str2 = b.type.name.toLowerCase();
+
+        // Make 'All' category with id -1 stick to the top
+        if (a.type.id === -1)
+            return -1;
+        if (b.type.id === -1)
+            return 1;
+
+        // Sort others by name ascending
+        if (str1 < str2)
+            return -1;
+        if (str1 > str2)
+            return 1;
+        return 0;
     }
 
     getHeaderTranslation() {
@@ -63,7 +82,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
             let articles = fetchedData.articles;
             finalData.push({
                 type: {
-                    id: "0",
+                    id: -1,
                     name: i18n.t('proximoScreen.all'),
                     icon: 'star'
                 },
@@ -100,7 +119,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         return availableArticles;
     }
 
-    getRightButton() {
+    onPressSearchBtn() {
         let searchScreenData = {
             shouldFocusSearchBar: true,
             data: {
@@ -113,8 +132,14 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                     this.getAvailableArticles(this.state.fetchedData.articles, undefined) : []
             },
         };
+        this.props.navigation.navigate('ProximoListScreen', searchScreenData);
+    }
 
+    onPressAboutBtn() {
+        this.props.navigation.navigate('ProximoAboutScreen');
+    }
 
+    getRightButton() {
         return (
             <View
                 style={{
@@ -122,14 +147,14 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                 }}>
                 <Touchable
                     style={{padding: 6}}
-                    onPress={() => this.props.navigation.navigate('ProximoListScreen', searchScreenData)}>
+                    onPress={this.onPressSearchBtn}>
                     <CustomMaterialIcon
                         color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                         icon="magnify"/>
                 </Touchable>
                 <Touchable
                     style={{padding: 6}}
-                    onPress={() => this.props.navigation.navigate('ProximoAboutScreen')}>
+                    onPress={this.onPressAboutBtn}>
                     <CustomMaterialIcon
                         color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                         icon="information"/>
@@ -138,19 +163,18 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         );
     }
 
-    getRenderItem(item: Object, section: Object, data: Object) {
+    getRenderItem(item: Object, section: Object) {
         let dataToSend = {
             shouldFocusSearchBar: false,
             data: item,
         };
+        const onPress = this.props.navigation.navigate.bind(this, 'ProximoListScreen', dataToSend);
         if (item.data.length > 0) {
             return (
                 <ListItem
                     button
                     thumbnail
-                    onPress={() => {
-                        this.props.navigation.navigate('ProximoListScreen', dataToSend);
-                    }}
+                    onPress={onPress}
                 >
                     <Left>
                         <CustomMaterialIcon

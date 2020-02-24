@@ -117,7 +117,7 @@ export default class CustomIntroSlider extends React.Component<Props> {
      * @param item
      * @param dimensions
      */
-    static getIntroRenderItem(item: Object, dimensions: Object) {
+    static getIntroRenderItem({item, dimensions}: Object) {
 
         return (
             <LinearGradient
@@ -143,9 +143,9 @@ export default class CustomIntroSlider extends React.Component<Props> {
     render() {
         return (
             <AppIntroSlider
-                renderItem={({item, dimensions}) => CustomIntroSlider.getIntroRenderItem(item, dimensions)}
+                renderItem={CustomIntroSlider.getIntroRenderItem}
                 slides={this.props.isUpdate ? this.updateSlides : this.introSlides}
-                onDone={() => this.props.onDone()}
+                onDone={this.props.onDone}
                 bottomButton
                 showSkipButton
                 skipLabel={i18n.t('intro.buttons.skip')}

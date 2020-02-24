@@ -11,7 +11,7 @@ type Props = {
 
 const URL = 'https://etud-mel.insa-toulouse.fr/webmail/';
 
-const CUSTOM_CSS_GENERAL = 'https://srv-falcon.etud.insa-toulouse.fr/~amicale_app/custom_css/bluemind/customMobile.css';
+const CUSTOM_CSS_GENERAL = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/bluemind/customMobile.css';
 
 
 /**
