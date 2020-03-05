@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Body, Card, CardItem, H3, Left, Text, Thumbnail} from "native-base";
-import CustomMaterialIcon from "./CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {View} from "react-native";
 import ThemeManager from "../utils/ThemeManager";
 import HTML from "react-native-render-html";
@@ -132,7 +132,9 @@ export default class DashboardItem extends React.Component<Props> {
                                     }}>
                                         {i18n.t("homeScreen.dashboard.seeMore")}
                                     </Text>
-                                    <CustomMaterialIcon icon={'chevron-right'}/>
+                                    <MaterialCommunityIcons
+                                        name={'chevron-right'}
+                                        size={26}/>
                                 </View>
                             </LinearGradient>
                         </Body>
@@ -145,15 +147,14 @@ export default class DashboardItem extends React.Component<Props> {
 
     getIcon() {
         return (
-            <CustomMaterialIcon
-                icon={this.props.icon}
+            <MaterialCommunityIcons
+                name={this.props.icon}
                 color={
                     this.props.isAvailable ?
                         this.props.color :
                         ThemeManager.getCurrentThemeVariables().textDisabledColor
                 }
-                fontSize={this.props.isSquare ? 50 : 40}
-                width={this.props.isSquare ? 50 : 40}/>
+                size={this.props.isSquare ? 50 : 40}/>
         );
     }
 

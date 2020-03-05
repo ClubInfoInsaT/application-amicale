@@ -11,6 +11,7 @@ import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
 import DebugScreen from '../screens/DebugScreen';
 import Sidebar from "../components/Sidebar";
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
+import PerfHomeScreen from '../screens/PerfHomeScreen';
 
 const AboutStack = createStackNavigator();
 
@@ -84,47 +85,24 @@ export default function DrawerNavigator() {
         </Drawer.Navigator>
     );
 }
-//
-// // Create a stack to use animations
-// function createDrawerStackWithInitialRoute(initialRoute: string) {
-//     return createStackNavigator({
-//             Main: createMaterialBottomTabNavigatorWithInitialRoute(initialRoute),
-//             SettingsScreen: {screen: SettingsScreen},
-//             AboutScreen: AboutStack,
-//             SelfMenuScreen: {screen: SelfMenuScreen},
-//             TutorInsaScreen: {screen: TutorInsaScreen},
-//             AmicaleScreen: {screen: AmicaleScreen},
-//             WiketudScreen: {screen: WiketudScreen},
-//             ElusEtudScreen: {screen: ElusEtudScreen},
-//             BlueMindScreen: {screen: BlueMindScreen},
-//             EntScreen: {screen: EntScreen},
-//             AvailableRoomScreen: {screen: AvailableRoomScreen},
-//         },
-//         {
-//             initialRouteName: "Main",
-//             mode: 'card',
-//             headerMode: "none",
-//             defaultNavigationOptions: {
-//                 gestureEnabled: true,
-//                 cardOverlayEnabled: true,
-//                 ...TransitionPresets.SlideFromRightIOS,
-//             },
-//         });
-// }
 
-// /**
-//  * Creates the drawer navigation stack
-//  */
-// function createDrawerNavigatorWithInitialRoute(initialRoute: string) {
-//     return createDrawerNavigator({
-//         Main: createDrawerStackWithInitialRoute(initialRoute),
-//     }, {
-//         contentComponent: Sidebar,
-//         initialRouteName: 'Main',
-//         backBehavior: 'initialRoute',
-//         drawerType: 'front',
-//         useNativeAnimations: true,
-//     });
-// }
-//
-// export {createDrawerNavigatorWithInitialRoute};
+const basicStack = createStackNavigator();
+
+function DrawerNavigator1() {
+    return (
+        <basicStack.Navigator
+            initialRouteName={'Main'}
+            mode='card'
+            screenOptions={{
+                gestureEnabled: true,
+                cardOverlayEnabled: true,
+                ...TransitionPresets.SlideFromRightIOS,
+            }}
+        >
+            <basicStack.Screen
+                name="Main"
+                component={TabNavigator}
+            />
+        </basicStack.Navigator>
+    );
+}

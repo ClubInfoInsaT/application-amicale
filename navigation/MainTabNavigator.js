@@ -3,6 +3,7 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from "@react-navigation/material-bottom-tabs";
 
 import HomeScreen from '../screens/HomeScreen';
+import PerfHomeScreen from '../screens/PerfHomeScreen';
 import PlanningScreen from '../screens/PlanningScreen';
 import PlanningDisplayScreen from '../screens/PlanningDisplayScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
@@ -11,12 +12,8 @@ import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
 import ProximoListScreen from "../screens/Proximo/ProximoListScreen";
 import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
-import CustomMaterialIcon from "../components/CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
-import AboutScreen from "../screens/About/AboutScreen";
-import AboutDependenciesScreen from "../screens/About/AboutDependenciesScreen";
-import DebugScreen from "../screens/DebugScreen";
-import SettingsScreen from "../screens/SettingsScreen";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 
 const TAB_ICONS = {
@@ -145,12 +142,12 @@ export default function TabNavigator() {
         <Tab.Navigator
             initialRouteName={AsyncStorageManager.getInstance().preferences.defaultStartScreen.current}
             barStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary}}
-            screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
+            screenOptions={({route}) => ({
+                tabBarIcon: ({focused, color, size}) => {
                     let icon = TAB_ICONS[route.name];
                     // tintColor is ignoring activeColor and inactiveColor for some reason
                     color = focused ? "#f0edf6" : "#4e1108";
-                    return <CustomMaterialIcon icon={icon} color={color}/>;
+                    return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
                 },
             })}
         >

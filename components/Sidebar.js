@@ -1,16 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import {Dimensions, FlatList, Image, Linking, Platform, StyleSheet} from 'react-native';
-import {Badge, Container, Left, ListItem, Right, Text} from "native-base";
+import {Dimensions, FlatList, Image,Platform, StyleSheet} from 'react-native';
+import {Container, Left, ListItem, Text} from "native-base";
 import i18n from "i18n-js";
-import CustomMaterialIcon from '../components/CustomMaterialIcon';
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
 import * as WebBrowser from 'expo-web-browser';
 
 const deviceWidth = Dimensions.get("window").width;
-
-const drawerCover = require("../assets/drawer-cover.png");
 
 type Props = {
     navigation: Object,
@@ -134,7 +132,7 @@ export default class SideBar extends React.Component<Props, State> {
 
     getRenderItem({item}: Object) {
         const onListItemPress = this.onListItemPress.bind(this, item);
-
+        // return <View/>;
         if (item.icon !== undefined) {
             return (
                 <ListItem
@@ -144,29 +142,15 @@ export default class SideBar extends React.Component<Props, State> {
                     onPress={onListItemPress}
                 >
                     <Left>
-                        <CustomMaterialIcon
-                            icon={item.icon}
-                            active={this.state.active === item.route}
+                        <MaterialCommunityIcons
+                            name={item.icon}
+                            size={26}
+                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}
                         />
                         <Text style={styles.text}>
                             {item.name}
                         </Text>
                     </Left>
-                    {item.types &&
-                    <Right style={{flex: 1}}>
-                        <Badge
-                            style={{
-                                borderRadius: 3,
-                                height: 25,
-                                width: 72,
-                                backgroundColor: item.bg
-                            }}
-                        >
-                            <Text
-                                style={styles.badgeText}
-                            >{`${item.types} Types`}</Text>
-                        </Badge>
-                    </Right>}
                 </ListItem>
             );
         } else {
@@ -180,12 +164,12 @@ export default class SideBar extends React.Component<Props, State> {
     }
 
     render() {
-        // console.log("rendering SideBar");
+        console.log("rendering SideBar");
         return (
             <Container style={{
                 backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
             }}>
-                <Image source={drawerCover} style={styles.drawerCover}/>
+                <Image source={require("../assets/drawer-cover.png")} style={styles.drawerCover}/>
                 <FlatList
                     data={this.dataSet}
                     extraData={this.state}

@@ -7,7 +7,7 @@ import {FlatList, Image, Platform, View} from "react-native";
 import Touchable from 'react-native-platform-touchable';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import i18n from "i18n-js";
-import CustomMaterialIcon from "../../components/CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../../utils/ThemeManager";
 import {Modalize} from 'react-native-modalize';
 
@@ -182,11 +182,15 @@ export default class ProximoListScreen extends React.Component<Props, State> {
      */
     setupSortIcons(mode: string, isReverse: boolean) {
         const downSortIcon =
-            <CustomMaterialIcon
-                icon={'sort-descending'}/>;
+            <MaterialCommunityIcons
+                name={'sort-descending'}
+                color={'#000'}
+                size={26}/>;
         const upSortIcon =
-            <CustomMaterialIcon
-                icon={'sort-ascending'}/>;
+            <MaterialCommunityIcons
+                name={'sort-ascending'}
+                color={'#000'}
+                size={26}/>;
         switch (mode) {
             case sortMode.price:
                 this.setState({sortNameIcon: ''});
@@ -297,9 +301,10 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                     <Touchable
                         style={{padding: 6}}
                         onPress={this.onSortMenuPress}>
-                        <CustomMaterialIcon
+                        <MaterialCommunityIcons
                             color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                            icon={'sort'}/>
+                            name={'sort'}
+                            size={26}/>
                     </Touchable>
                 }
             >

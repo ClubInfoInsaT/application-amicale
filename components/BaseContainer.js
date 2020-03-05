@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Container} from "native-base";
 import CustomHeader from "./CustomHeader";
-import CustomMaterialIcon from "./CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {Platform, View} from "react-native";
 import ThemeManager from "../utils/ThemeManager";
 import Touchable from "react-native-platform-touchable";
@@ -66,9 +66,10 @@ export default class BaseContainer extends React.Component<Props, State> {
                             <Touchable
                                 style={{padding: 6}}
                                 onPress={this.onDrawerPress}>
-                                <CustomMaterialIcon
+                                <MaterialCommunityIcons
                                     color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                                    icon="menu"/>
+                                    size={26}
+                                    name="menu"/>
                             </Touchable>
                         }
                         rightButton={this.props.headerRightButton}

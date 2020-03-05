@@ -18,8 +18,8 @@ import {
 import CustomHeader from "../components/CustomHeader";
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
-import {NavigationActions, StackActions} from "react-navigation";
-import CustomMaterialIcon from "../components/CustomMaterialIcon";
+import {NavigationActions, StackActions} from "@react-navigation/native";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import NotificationsManager from "../utils/NotificationsManager";
 
@@ -69,7 +69,10 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 thumbnail
             >
                 <Left>
-                    <CustomMaterialIcon icon={icon}/>
+                    <MaterialCommunityIcons
+                        name={icon}
+                        size={26}
+                        color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
                 </Left>
                 <Body>
                     <Text>
@@ -201,7 +204,10 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 onPress={onPressCallback}
             >
                 <Left>
-                    <CustomMaterialIcon icon={icon}/>
+                    <MaterialCommunityIcons
+                        name={icon}
+                        size={26}
+                        color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
                 </Left>
                 <Body>
                     <Text>

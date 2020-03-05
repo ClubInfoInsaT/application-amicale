@@ -5,7 +5,7 @@ import {Image, View} from 'react-native';
 import {Card, CardItem, Container, Content, H2, Left, Text} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
-import CustomMaterialIcon from "../../components/CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 
 type Props = {
     navigation: Object,
@@ -39,7 +39,9 @@ export default class ProximoAboutScreen extends React.Component<Props> {
                     <Card>
                         <CardItem>
                             <Left>
-                                <CustomMaterialIcon icon={'clock-outline'}/>
+                                <MaterialCommunityIcons
+                                    name={'clock-outline'}
+                                    size={30}/>
                                 <H2>{i18n.t('proximoScreen.openingHours')}</H2>
                             </Left>
                         </CardItem>
@@ -50,7 +52,9 @@ export default class ProximoAboutScreen extends React.Component<Props> {
                     <Card>
                         <CardItem>
                             <Left>
-                                <CustomMaterialIcon icon={'cash'}/>
+                                <MaterialCommunityIcons
+                                    name={'cash'}
+                                    size={30}/>
                                 <H2>{i18n.t('proximoScreen.paymentMethods')}</H2>
                             </Left>
                         </CardItem>

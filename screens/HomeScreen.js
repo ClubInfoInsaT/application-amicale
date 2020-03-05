@@ -4,7 +4,7 @@ import * as React from 'react';
 import {Image, TouchableOpacity, View} from 'react-native';
 import {Body, Button, Card, CardItem, Left, Text, Thumbnail} from 'native-base';
 import i18n from "i18n-js";
-import CustomMaterialIcon from '../components/CustomMaterialIcon';
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import Autolink from 'react-native-autolink';
 import ThemeManager from "../utils/ThemeManager";
 import DashboardItem from "../components/DashboardItem";
@@ -551,10 +551,10 @@ export default class HomeScreen extends React.Component<Props> {
                     <Left>
                         <Button transparent
                                 onPress={onOutLinkPress}>
-                            <CustomMaterialIcon
-                                icon="facebook"
+                            <MaterialCommunityIcons
+                                name="facebook"
                                 color="#57aeff"
-                                width={20}/>
+                                size={26}/>
                             <Text>En savoir plus</Text>
                         </Button>
                     </Left>

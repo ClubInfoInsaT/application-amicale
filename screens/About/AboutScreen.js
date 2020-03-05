@@ -7,7 +7,7 @@ import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
 import appJson from '../../app';
 import packageJson from '../../package';
-import CustomMaterialIcon from "../../components/CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import {Modalize} from "react-native-modalize";
 import ThemeManager from "../../utils/ThemeManager";
@@ -227,11 +227,10 @@ export default class AboutScreen extends React.Component<Props, State> {
             <Card>
                 <CardItem>
                     <Left>
-                        <CustomMaterialIcon
-                            icon={'account-multiple'}
-                            fontSize={40}
-                            width={40}
-                            color={ThemeManager.getCurrentThemeVariables().brandPrimary}/>
+                        <MaterialCommunityIcons
+                            name='account-multiple'
+                            size={40}
+                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
                         <Body>
                             <H1>{i18n.t('aboutScreen.team')}</H1>
                         </Body>
@@ -290,13 +289,18 @@ export default class AboutScreen extends React.Component<Props, State> {
                 <CardItem button
                           onPress={item.onPressCallback}>
                     <Left>
-                        <CustomMaterialIcon icon={item.icon}/>
+                        <MaterialCommunityIcons
+                            name={item.icon}
+                            size={26}
+                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
                         <Text>{item.text}</Text>
                     </Left>
                     {item.showChevron ?
                         <Right>
-                            <CustomMaterialIcon icon="chevron-right"
-                                                fontSize={20}/>
+                            <MaterialCommunityIcons
+                                name={'chevron-right'}
+                                size={26}
+                                color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
                         </Right>
                         :
                         <Right/>
@@ -344,8 +348,9 @@ export default class AboutScreen extends React.Component<Props, State> {
                             marginRight: 'auto',
                         }}
                         onPress={onPressMail}>
-                        <CustomMaterialIcon
-                            icon={'email'}
+                        <MaterialCommunityIcons
+                            name={'email'}
+                            size={26}
                             color={'#fff'}/>
                         <Text>{i18n.t('aboutScreen.bugsMail')}</Text>
                     </Button>
@@ -356,8 +361,9 @@ export default class AboutScreen extends React.Component<Props, State> {
                             marginRight: 'auto',
                         }}
                         onPress={onPressGit}>
-                        <CustomMaterialIcon
-                            icon={'git'}
+                        <MaterialCommunityIcons
+                            name={'git'}
+                            size={26}
                             color={'#fff'}/>
                         <Text>{i18n.t('aboutScreen.bugsGit')}</Text>
                     </Button>

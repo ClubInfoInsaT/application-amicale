@@ -9,12 +9,11 @@ import {clearThemeCache} from 'native-base-shoutem-theme';
 import AsyncStorageManager from "./utils/AsyncStorageManager";
 import CustomIntroSlider from "./components/CustomIntroSlider";
 import {SplashScreen} from 'expo';
-import NotificationsManager from "./utils/NotificationsManager";
 import ThemeManager from './utils/ThemeManager';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DrawerNavigator from './navigation/DrawerNavigator';
-import { enableScreens } from 'react-native-screens';
+import NotificationsManager from "./utils/NotificationsManager";
 
 type Props = {};
 
@@ -36,10 +35,12 @@ export default class App extends React.Component<Props, State> {
         currentTheme: null,
     };
 
-    constructor(props: Object) {
-        super(props);
+    onIntroDone: Function;
+
+    constructor() {
+        super();
         LocaleManager.initTranslations();
-        enableScreens();
+        this.onIntroDone = this.onIntroDone.bind(this);
     }
 
     /**
@@ -81,23 +82,21 @@ export default class App extends React.Component<Props, State> {
 
     async loadAssetsAsync() {
         // Wait for custom fonts to be loaded before showing the app
-        console.log("loading Fonts");
+        // console.log("loading Fonts");
         SplashScreen.preventAutoHide();
         await Font.loadAsync({
             'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
         });
-        console.log("loading preferences");
+        // console.log("loading preferences");
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
-        console.log("loading Expo token");
+        // console.log("loading Expo token");
         await NotificationsManager.initExpoToken();
-        console.log("loaded");
         this.onLoadFinished();
     }
 
     onLoadFinished() {
-
-        console.log("finished");
+        // console.log("finished");
         // Only show intro if this is the first time starting the app
         this.setState({
             isLoading: false,

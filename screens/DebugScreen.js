@@ -23,7 +23,7 @@ import {
 import CustomHeader from "../components/CustomHeader";
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
-import CustomMaterialIcon from "../components/CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {Alert, Clipboard, View} from "react-native";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import NotificationsManager from "../utils/NotificationsManager";
@@ -64,7 +64,7 @@ export default class DebugScreen extends React.Component<Props, State> {
             >
                 {icon !== undefined ?
                     <Left>
-                        <CustomMaterialIcon icon={icon}/>
+                        <MaterialCommunityIcons name={icon} size={26}/>
                     </Left>
                     : <View/>
                 }

@@ -5,7 +5,7 @@ import {Linking, Platform, View} from 'react-native';
 import {Body, Footer, Left, Right, Spinner, Tab, TabHeading, Tabs, Text} from 'native-base';
 import WebView from "react-native-webview";
 import Touchable from "react-native-platform-touchable";
-import CustomMaterialIcon from "../components/CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
 import BaseContainer from "../components/BaseContainer";
 
@@ -59,9 +59,10 @@ export default class WebViewScreen extends React.Component<Props> {
             <Touchable
                 style={{padding: 6}}
                 onPress={clickAction}>
-                <CustomMaterialIcon
+                <MaterialCommunityIcons
                     color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                    icon={icon}/>
+                    name={icon}
+                    size={26}/>
             </Touchable>
         );
     }
@@ -144,10 +145,10 @@ export default class WebViewScreen extends React.Component<Props> {
             tabbedView.push(
                 <Tab heading={
                     <TabHeading>
-                        <CustomMaterialIcon
-                            icon={this.props.data[i]['icon']}
+                        <MaterialCommunityIcons
+                            name={this.props.data[i]['icon']}
                             color={ThemeManager.getCurrentThemeVariables().tabIconColor}
-                            fontSize={20}
+                            size={20}
                         />
                         <Text>{this.props.data[i]['name']}</Text>
                     </TabHeading>}

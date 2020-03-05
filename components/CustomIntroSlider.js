@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {LinearGradient} from "expo-linear-gradient";
 import {Image, StyleSheet, View} from "react-native";
-import CustomMaterialIcon from "./CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {Text} from "native-base";
 import i18n from 'i18n-js';
 import AppIntroSlider from "react-native-app-intro-slider";
@@ -131,7 +131,10 @@ export default class CustomIntroSlider extends React.Component<Props> {
             >
                 {item.image !== undefined ?
                     <Image source={item.image} style={styles.image}/>
-                    : <CustomMaterialIcon icon={item.icon} color={'#fff'} fontSize={200} width={200}/>}
+                    : <MaterialCommunityIcons
+                        name={item.icon}
+                        color={'#fff'}
+                        size={200}/>}
                 <View style={{marginTop: 20}}>
                     <Text style={styles.title}>{item.title}</Text>
                     <Text style={styles.text}>{item.text}</Text>

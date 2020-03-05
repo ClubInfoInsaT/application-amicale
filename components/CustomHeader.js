@@ -6,7 +6,7 @@ import {Platform, StyleSheet, View} from "react-native";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import Touchable from 'react-native-platform-touchable';
 import ThemeManager from "../utils/ThemeManager";
-import CustomMaterialIcon from "./CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import i18n from "i18n-js";
 
 type Props = {
@@ -76,8 +76,9 @@ export default class CustomHeader extends React.Component<Props> {
                         width: '100%',
                         marginBottom: 7
                     }}>
-                    <CustomMaterialIcon
-                        icon={'magnify'}
+                    <MaterialCommunityIcons
+                        name={'magnify'}
+                        size={26}
                         color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
                     <Input
                         ref="searchInput"
@@ -116,9 +117,10 @@ export default class CustomHeader extends React.Component<Props> {
                 <Touchable
                     style={{padding: 6}}
                     onPress={this.onPressBack}>
-                    <CustomMaterialIcon
+                    <MaterialCommunityIcons
                         color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon={Platform.OS === 'ios' ? 'chevron-left' : "arrow-left"}/>
+                        name={Platform.OS === 'ios' ? 'chevron-left' : "arrow-left"}
+                        size={26}/>
                 </Touchable>;
         else
             button = this.props.leftButton;

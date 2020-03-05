@@ -5,7 +5,7 @@ import {Image, View} from 'react-native';
 import {Body, Card, CardItem, Container, Content, H2, H3, Left, Tab, TabHeading, Tabs, Text} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import i18n from "i18n-js";
-import CustomMaterialIcon from "../../components/CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../../utils/ThemeManager";
 
 type Props = {
@@ -32,10 +32,10 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                     <Tab
                         heading={
                             <TabHeading>
-                                <CustomMaterialIcon
-                                    icon={'information'}
+                                <MaterialCommunityIcons
+                                    name={'information'}
                                     color={ThemeManager.getCurrentThemeVariables().tabIconColor}
-                                    fontSize={20}
+                                    size={20}
                                 />
                                 <Text>{i18n.t('proxiwashScreen.informationTab')}</Text>
                             </TabHeading>
@@ -60,7 +60,9 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        <CustomMaterialIcon icon={'tumble-dryer'}/>
+                                        <MaterialCommunityIcons
+                                            name={'tumble-dryer'}
+                                            size={26}/>
                                         <H2>{i18n.t('proxiwashScreen.dryer')}</H2>
                                     </Left>
                                 </CardItem>
@@ -80,7 +82,9 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        <CustomMaterialIcon icon={'washing-machine'}/>
+                                        <MaterialCommunityIcons
+                                            name={'washing-machine'}
+                                            size={26}/>
                                         <H2>{i18n.t('proxiwashScreen.washer')}</H2>
                                     </Left>
                                 </CardItem>
@@ -102,10 +106,10 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                     <Tab
                         heading={
                             <TabHeading>
-                                <CustomMaterialIcon
-                                    icon={'cash'}
+                                <MaterialCommunityIcons
+                                    name={'cash'}
                                     color={ThemeManager.getCurrentThemeVariables().tabIconColor}
-                                    fontSize={20}
+                                    size={20}
                                 />
                                 <Text>{i18n.t('proxiwashScreen.paymentTab')}</Text>
                             </TabHeading>
@@ -116,7 +120,9 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        <CustomMaterialIcon icon={'coins'}/>
+                                        <MaterialCommunityIcons
+                                            name={'coins'}
+                                            size={26}/>
                                         <H2>{i18n.t('proxiwashScreen.tariffs')}</H2>
                                     </Left>
                                 </CardItem>
@@ -130,7 +136,9 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                             <Card>
                                 <CardItem>
                                     <Left>
-                                        <CustomMaterialIcon icon={'cash'}/>
+                                        <MaterialCommunityIcons
+                                            name={'cash'}
+                                            size={26}/>
                                         <H2>{i18n.t('proxiwashScreen.paymentMethods')}</H2>
                                     </Left>
                                 </CardItem>

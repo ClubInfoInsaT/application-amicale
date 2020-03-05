@@ -4,7 +4,7 @@ import * as React from 'react';
 import {Platform, View} from 'react-native'
 import {Body, Left, ListItem, Right, Text} from 'native-base';
 import i18n from "i18n-js";
-import CustomMaterialIcon from "../../components/CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../../utils/ThemeManager";
 import Touchable from "react-native-platform-touchable";
 import BaseContainer from "../../components/BaseContainer";
@@ -155,16 +155,18 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
                 <Touchable
                     style={{padding: 6}}
                     onPress={this.onPressSearchBtn}>
-                    <CustomMaterialIcon
-                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon="magnify"/>
+                    <MaterialCommunityIcons
+                        name="magnify"
+                        size={26}
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}/>
                 </Touchable>
                 <Touchable
                     style={{padding: 6}}
                     onPress={this.onPressAboutBtn}>
-                    <CustomMaterialIcon
-                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon="information"/>
+                    <MaterialCommunityIcons
+                        name="information"
+                        size={26}
+                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}/>
                 </Touchable>
             </View>
         );
@@ -184,9 +186,9 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
                     onPress={onPress}
                 >
                     <Left>
-                        <CustomMaterialIcon
-                            icon={item.type.icon}
-                            fontSize={30}
+                        <MaterialCommunityIcons
+                            name={item.type.icon}
+                            size={30}
                             color={ThemeManager.getCurrentThemeVariables().brandPrimary}
                         />
                     </Left>
@@ -199,7 +201,10 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
                         </Text>
                     </Body>
                     <Right>
-                        <CustomMaterialIcon icon="chevron-right"/>
+                        <MaterialCommunityIcons
+                            icon="chevron-right"
+                            size={26}
+                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
                     </Right>
                 </ListItem>
             );

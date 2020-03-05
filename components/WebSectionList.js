@@ -4,7 +4,7 @@ import * as React from 'react';
 import {H3, Spinner, View} from "native-base";
 import ThemeManager from '../utils/ThemeManager';
 import WebDataManager from "../utils/WebDataManager";
-import CustomMaterialIcon from "./CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import i18n from "i18n-js";
 import {RefreshControl, SectionList} from "react-native";
 
@@ -150,10 +150,9 @@ export default class WebSectionList extends React.Component<Props, State> {
                     {this.state.refreshing ?
                         <Spinner/>
                         :
-                        <CustomMaterialIcon
-                            icon={item.icon}
-                            fontSize={100}
-                            width={100}
+                        <MaterialCommunityIcons
+                            name={item.icon}
+                            size={100}
                             color={ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText}/>}
                 </View>
 

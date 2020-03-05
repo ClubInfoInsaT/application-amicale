@@ -5,7 +5,7 @@ import {Alert, Platform, View} from 'react-native';
 import {Body, Card, CardItem, Left, Right, Text} from 'native-base';
 import ThemeManager from '../../utils/ThemeManager';
 import i18n from "i18n-js";
-import CustomMaterialIcon from "../../components/CustomMaterialIcon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import WebSectionList from "../../components/WebSectionList";
 import NotificationsManager from "../../utils/NotificationsManager";
 import PlatformTouchable from "react-native-platform-touchable";
@@ -288,9 +288,10 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
             <Touchable
                 style={{padding: 6}}
                 onPress={this.onAboutPress}>
-                <CustomMaterialIcon
+                <MaterialCommunityIcons
                     color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                    icon="information"/>
+                    name="information"
+                    size={26}/>
             </Touchable>
         );
     }
@@ -320,7 +321,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
      * @param section The object describing the current SectionList section
      * @returns {React.Node}
      */
-    getRenderItem({item, section} : Object) {
+    getRenderItem({item, section}: Object) {
         let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"];
         let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
         let isDryer = section.title === i18n.t('proxiwashScreen.dryers');
@@ -361,18 +362,19 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                         <View/>
                     </PlatformTouchable>
                     <Left style={{marginLeft: 10}}>
-                        <CustomMaterialIcon
-                            icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
-                            fontSize={30}
+                        <MaterialCommunityIcons
+                            name={isDryer ? 'tumble-dryer' : 'washing-machine'}
+                            size={30}
+                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}
                         />
                         <Body>
                             <Text>
                                 {machineName + ' '}
                                 {this.isMachineWatched(item.number) ?
-                                    <CustomMaterialIcon
-                                        icon='bell-ring'
+                                    <MaterialCommunityIcons
+                                        name='bell-ring'
                                         color={ThemeManager.getCurrentThemeVariables().brandPrimary}
-                                        fontSize={20}
+                                        size={20}
                                     /> : ''}
                             </Text>
                             <Text note>
@@ -386,8 +388,10 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                         >
                             {stateStrings[MACHINE_STATES[item.state]]}
                         </Text>
-                        <CustomMaterialIcon icon={stateIcons[MACHINE_STATES[item.state]]}
-                                            fontSize={25}
+                        <MaterialCommunityIcons
+                            name={stateIcons[MACHINE_STATES[item.state]]}
+                            size={25}
+                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}
                         />
                     </Right>
                 </CardItem>
