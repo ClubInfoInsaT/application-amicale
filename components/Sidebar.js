@@ -6,6 +6,7 @@ import {Badge, Container, Left, ListItem, Right, Text} from "native-base";
 import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
 import ThemeManager from "../utils/ThemeManager";
+import * as WebBrowser from 'expo-web-browser';
 
 const deviceWidth = Dimensions.get("window").width;
 
@@ -48,21 +49,25 @@ export default class SideBar extends React.Component<Props, State> {
             {
                 name: "Amicale",
                 route: "AmicaleScreen",
+                link: "https://amicale-insat.fr/",
                 icon: "alpha-a-box",
             },
             {
                 name: "Élus Étudiants",
                 route: "ElusEtudScreen",
+                link: "https://etud.insa-toulouse.fr/~eeinsat/",
                 icon: "alpha-e-box",
             },
             {
                 name: "Wiketud",
                 route: "WiketudScreen",
+                link: "https://wiki.etud.insa-toulouse.fr",
                 icon: "wikipedia",
             },
             {
                 name: "Tutor'INSA",
                 route: "TutorInsaScreen",
+                link: "https://www.etud.insa-toulouse.fr/~tutorinsa/",
                 icon: "school",
             },
             {
@@ -72,11 +77,13 @@ export default class SideBar extends React.Component<Props, State> {
             {
                 name: i18n.t('screens.bluemind'),
                 route: "BlueMindScreen",
+                link: "https://etud-mel.insa-toulouse.fr/webmail/",
                 icon: "email",
             },
             {
                 name: i18n.t('screens.ent'),
                 route: "EntScreen",
+                link: "https://ent.insa-toulouse.fr/",
                 icon: "notebook",
             },
             {
@@ -112,8 +119,11 @@ export default class SideBar extends React.Component<Props, State> {
     }
 
 
-    onListItemPress(route: string) {
-        this.props.navigation.navigate(route);
+    onListItemPress(item: Object) {
+        if (item.link === undefined)
+            this.props.navigation.navigate(item.route);
+        else
+            WebBrowser.openBrowserAsync(item.link);
     }
 
 
@@ -123,7 +133,7 @@ export default class SideBar extends React.Component<Props, State> {
 
 
     getRenderItem({item}: Object) {
-        const onListItemPress = this.onListItemPress.bind(this, item.route);
+        const onListItemPress = this.onListItemPress.bind(this, item);
 
         if (item.icon !== undefined) {
             return (

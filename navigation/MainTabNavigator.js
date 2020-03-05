@@ -143,7 +143,7 @@ const Tab = createMaterialBottomTabNavigator();
 export default function TabNavigator() {
     return (
         <Tab.Navigator
-            initialRouteName={AsyncStorageManager.getInstance().preferences.defaultStartScreen}
+            initialRouteName={AsyncStorageManager.getInstance().preferences.defaultStartScreen.current}
             barStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary}}
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
