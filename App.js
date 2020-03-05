@@ -3,15 +3,17 @@
 import * as React from 'react';
 import {Platform, StatusBar} from 'react-native';
 import {Root, StyleProvider} from 'native-base';
-import {createAppContainerWithInitialRoute} from './navigation/AppNavigator';
 import LocaleManager from './utils/LocaleManager';
 import * as Font from 'expo-font';
 import {clearThemeCache} from 'native-base-shoutem-theme';
 import AsyncStorageManager from "./utils/AsyncStorageManager";
 import CustomIntroSlider from "./components/CustomIntroSlider";
-import {AppLoading} from 'expo';
+import {SplashScreen} from 'expo';
 import NotificationsManager from "./utils/NotificationsManager";
 import ThemeManager from './utils/ThemeManager';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import DrawerNavigator from './navigation/DrawerNavigator';
 
 type Props = {};
 
@@ -22,6 +24,8 @@ type State = {
     currentTheme: ?Object,
 };
 
+const Stack = createStackNavigator();
+
 export default class App extends React.Component<Props, State> {
 
     state = {
@@ -31,16 +35,9 @@ export default class App extends React.Component<Props, State> {
         currentTheme: null,
     };
 
-    onIntroDone: Function;
-    loadAssetsAsync: Function;
-    onLoadFinished: Function;
-
     constructor(props: Object) {
         super(props);
         LocaleManager.initTranslations();
-        this.onIntroDone = this.onIntroDone.bind(this);
-        this.loadAssetsAsync = this.loadAssetsAsync.bind(this);
-        this.onLoadFinished = this.onLoadFinished.bind(this);
     }
 
     /**
@@ -76,19 +73,29 @@ export default class App extends React.Component<Props, State> {
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showUpdate5.key, '0');
     }
 
+    async componentDidMount() {
+        await this.loadAssetsAsync();
+    }
+
     async loadAssetsAsync() {
         // Wait for custom fonts to be loaded before showing the app
+        console.log("loading Fonts");
+        SplashScreen.preventAutoHide();
         await Font.loadAsync({
-            'Roboto': require('native-base/Fonts/Roboto.ttf'),
             'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-            'material-community': require('native-base/Fonts/MaterialCommunityIcons.ttf'),
         });
+        console.log("loading preferences");
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
+        console.log("loading Expo token");
         await NotificationsManager.initExpoToken();
+        console.log("loaded");
+        this.onLoadFinished();
     }
 
     onLoadFinished() {
+
+        console.log("finished");
         // Only show intro if this is the first time starting the app
         this.setState({
             isLoading: false,
@@ -97,33 +104,30 @@ export default class App extends React.Component<Props, State> {
             showUpdate: AsyncStorageManager.getInstance().preferences.showUpdate5.current === '1'
         });
         // Status bar goes dark if set too fast
-        setTimeout(this.setupStatusBar,
-            1000
-        )
+        setTimeout(this.setupStatusBar, 1000);
+        SplashScreen.hide();
     }
 
     /**
      * Renders the app based on loading state
      */
     render() {
+        console.log("render");
         if (this.state.isLoading) {
-            return (
-                <AppLoading
-                    startAsync={this.loadAssetsAsync}
-                    onFinish={this.onLoadFinished}
-                    onError={console.warn}
-                />
-            );
-        }
-        if (this.state.showIntro || this.state.showUpdate) {
+            return null;
+        } else if (this.state.showIntro || this.state.showUpdate) {
             return <CustomIntroSlider onDone={this.onIntroDone}
                                       isUpdate={this.state.showUpdate && !this.state.showIntro}/>;
         } else {
-            const AppNavigator = createAppContainerWithInitialRoute(AsyncStorageManager.getInstance().preferences.defaultStartScreen.current);
+
             return (
                 <Root>
                     <StyleProvider style={this.state.currentTheme}>
-                        <AppNavigator/>
+                        <NavigationContainer>
+                            <Stack.Navigator headerMode="none">
+                                <Stack.Screen name="Root" component={DrawerNavigator} />
+                            </Stack.Navigator>
+                        </NavigationContainer>
                     </StyleProvider>
                 </Root>
             );

@@ -9,11 +9,17 @@
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.5",
+    "@react-navigation/bottom-tabs": "^5.1.1",
+    "@react-navigation/drawer": "^5.1.1",
+    "@react-navigation/material-bottom-tabs": "^5.1.1",
+    "@react-navigation/native": "^5.0.9",
+    "@react-navigation/stack": "^5.1.1",
     "expo": "^36.0.0",
     "expo-font": "~8.0.0",
     "expo-linear-gradient": "~8.0.0",
     "expo-localization": "~8.0.0",
     "expo-permissions": "~8.0.0",
+    "expo-web-browser": "~8.0.0",
     "i18n-js": "^3.3.0",
     "native-base": "^2.12.1",
     "native-base-shoutem-theme": "^0.3.1",
@@ -33,12 +39,7 @@
     "react-native-safe-area-context": "0.6.0",
     "react-native-screens": "2.0.0-alpha.12",
     "react-native-status-bar-height": "^2.3.1",
-    "react-native-webview": "7.4.3",
-    "react-navigation": "^4.1.0",
-    "react-navigation-drawer": "^2.3.3",
-    "react-navigation-material-bottom-tabs": "^2.1.5",
-    "react-navigation-stack": "^2.1.0",
-    "react-navigation-transitions": "^1.0.12"
+    "react-native-webview": "7.4.3"
   },
   "devDependencies": {
     "babel-preset-expo": "^8.0.0"
