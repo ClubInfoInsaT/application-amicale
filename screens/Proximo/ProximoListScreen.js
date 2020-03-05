@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Body, Container, Content, H1, H3, Left, ListItem, Right, Text, Thumbnail} from 'native-base';
+import {Body, Container, Content, H1, H3, Input, Item, Left, ListItem, Right, Text, Thumbnail} from 'native-base';
 import CustomHeader from "../../components/CustomHeader";
 import {FlatList, Image, Platform, View} from "react-native";
 import Touchable from 'react-native-platform-touchable';
@@ -147,14 +147,43 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 break;
         }
         this.setupSortIcons(mode, isReverse);
-        this.sortMenuRef.hide();
+        if (this.sortMenuRef !== undefined)
+            this.sortMenuRef.hide();
     }
 
     /**
      * Set the sort mode from state when components are ready
      */
     componentDidMount() {
+        const button = this.getSortMenu.bind(this);
+        const title = this.getSearchBar.bind(this);
+        this.props.navigation.setOptions({
+            headerRight: button,
+            headerTitle: title,
+        });
         this.setSortMode(this.state.currentSortMode, this.state.isSortReversed);
+    }
+
+    getSearchBar() {
+        return (
+            <Body style={{width: '100%'}}>
+                <Item
+                    style={{
+                        width: '100%',
+                        marginBottom: 7
+                    }}>
+                    <MaterialCommunityIcons
+                        name={'magnify'}
+                        size={26}
+                        color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
+                    <Input
+                        ref="searchInput"
+                        placeholder={i18n.t('proximoScreen.search')}
+                        placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
+                        onChangeText={this.onSearchStringChange}/>
+                </Item>
+            </Body>
+        );
     }
 
     /**
@@ -299,7 +328,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 ref={this.onMenuRef}
                 button={
                     <Touchable
-                        style={{padding: 6}}
+                        style={{padding: 6, marginRight: 10}}
                         onPress={this.onSortMenuPress}>
                         <MaterialCommunityIcons
                             color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
@@ -364,14 +393,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                           modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
                     {this.getModalContent()}
                 </Modalize>
-                <CustomHeader
-                    hasBackButton={true}
-                    navigation={nav}
-                    hasSearchField={true}
-                    searchCallback={this.onSearchStringChange}
-                    shouldFocusSearchBar={this.shouldFocusSearchBar}
-                    rightButton={this.getSortMenu()}
-                />
                 <FlatList
                     data={this.state.currentlyDisplayedData}
                     extraData={this.state.currentlyDisplayedData}

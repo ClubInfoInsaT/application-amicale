@@ -20,7 +20,6 @@ export default class ProximoAboutScreen extends React.Component<Props> {
         const nav = this.props.navigation;
         return (
             <Container>
-                <CustomHeader navigation={nav} title={i18n.t('screens.proximo')} hasBackButton={true}/>
                 <Content padder>
                     <View style={{
                         width: '100%',

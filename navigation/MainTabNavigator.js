@@ -3,7 +3,6 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from "@react-navigation/material-bottom-tabs";
 
 import HomeScreen from '../screens/HomeScreen';
-import PerfHomeScreen from '../screens/PerfHomeScreen';
 import PlanningScreen from '../screens/PlanningScreen';
 import PlanningDisplayScreen from '../screens/PlanningDisplayScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
@@ -15,6 +14,8 @@ import PlanexScreen from '../screens/Websites/PlanexScreen';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
+import {StyleSheet, View} from "react-native";
+import Touchable from "react-native-platform-touchable";
 
 const TAB_ICONS = {
     Home: 'triangle',
@@ -26,13 +27,24 @@ const TAB_ICONS = {
 
 const ProximoStack = createStackNavigator();
 
+const styles = StyleSheet.create({
+    header: {
+        backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+    },
+    headerTitle: {
+        color: "#ffffff",
+    },
+});
+
+
 function ProximoStackComponent() {
     return (
         <ProximoStack.Navigator
             initialRouteName="ProximoMainScreen"
-            mode='card'
-            headerMode="none"
+            headerMode="float"
             screenOptions={{
+                headerTintColor: 'white',
+                headerStyle: styles.header,
                 gestureEnabled: true,
                 cardOverlayEnabled: true,
                 ...TransitionPresets.SlideFromRightIOS,
@@ -40,16 +52,23 @@ function ProximoStackComponent() {
         >
             <ProximoStack.Screen
                 name="ProximoMainScreen"
+                options={{
+                    title: 'Proximo',
+                }}
                 component={ProximoMainScreen}
             />
             <ProximoStack.Screen
                 name="ProximoListScreen"
+                options={{
+                    title: 'Articles'
+                }}
                 component={ProximoListScreen}
             />
             <ProximoStack.Screen
                 name="ProximoAboutScreen"
                 component={ProximoAboutScreen}
                 options={{
+                    title: 'Proximo',
                     ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
@@ -116,7 +135,7 @@ function HomeStackComponent() {
         <HomeStack.Navigator
             initialRouteName="HomeScreen"
             mode='card'
-            headerMode="none"
+            headerMode="float"
             screenOptions={{
                 gestureEnabled: true,
                 cardOverlayEnabled: true,

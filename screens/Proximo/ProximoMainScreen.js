@@ -2,12 +2,11 @@
 
 import * as React from 'react';
 import {Platform, View} from 'react-native'
-import {Body, Left, ListItem, Right, Text} from 'native-base';
+import {Body, Left, ListItem, Right, Text, Container} from 'native-base';
 import i18n from "i18n-js";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../../utils/ThemeManager";
 import Touchable from "react-native-platform-touchable";
-import BaseContainer from "../../components/BaseContainer";
 import WebSectionList from "../../components/WebSectionList";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
@@ -39,6 +38,14 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         this.onPressAboutBtn = this.onPressAboutBtn.bind(this);
         this.getRenderItem = this.getRenderItem.bind(this);
         this.createDataset = this.createDataset.bind(this);
+    }
+
+    componentDidMount() {
+        const button = this.getRightButton.bind(this);
+        this.props.navigation.setOptions({
+            headerRight: button
+            ,
+        });
     }
 
     static sortFinalData(a: Object, b: Object) {
@@ -150,7 +157,8 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         return (
             <View
                 style={{
-                    flexDirection: 'row'
+                    flexDirection: 'row',
+                    marginRight: 10,
                 }}>
                 <Touchable
                     style={{padding: 6}}
@@ -215,10 +223,7 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         return (
-            <BaseContainer
-                navigation={nav}
-                headerTitle={i18n.t('screens.proximo')}
-                headerRightButton={this.getRightButton()}>
+            <Container>
                 <WebSectionList
                     createDataset={this.createDataset}
                     navigation={nav}
@@ -226,7 +231,7 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
                     fetchUrl={DATA_URL}
                     renderItem={this.getRenderItem}
                     updateErrorText={i18n.t("homeScreen.listUpdateFail")}/>
-            </BaseContainer>
+            </Container>
         );
     }
 }
