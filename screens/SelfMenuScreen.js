@@ -5,22 +5,31 @@ import {View} from 'react-native';
 import {Card, CardItem, H2, H3, Text} from 'native-base';
 import ThemeManager from "../utils/ThemeManager";
 import i18n from "i18n-js";
-import FetchedDataSectionList from "../components/FetchedDataSectionList";
+import BaseContainer from "../components/BaseContainer";
+import WebSectionList from "../components/WebSectionList";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
+
+type Props = {
+    navigation: Object,
+}
 
 /**
  * Class defining the app's menu screen.
  * This screen fetches data from etud to render the RU menu
  */
-export default class SelfMenuScreen extends FetchedDataSectionList {
+export default class SelfMenuScreen extends React.Component<Props> {
 
     // Hard code strings as toLocaleDateString does not work on current android JS engine
     daysOfWeek = [];
     monthsOfYear = [];
 
+    getRenderItem: Function;
+    getRenderSectionHeader: Function;
+    createDataset: Function;
+
     constructor() {
-        super(DATA_URL, 0);
+        super();
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.monday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.tuesday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.wednesday"));
@@ -41,30 +50,14 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         this.monthsOfYear.push(i18n.t("date.monthsOfYear.october"));
         this.monthsOfYear.push(i18n.t("date.monthsOfYear.november"));
         this.monthsOfYear.push(i18n.t("date.monthsOfYear.december"));
-    }
 
-    getHeaderTranslation() {
-        return i18n.t("screens.menuSelf");
-    }
-
-    getUpdateToastTranslations() {
-        return [i18n.t("homeScreen.listUpdated"), i18n.t("homeScreen.listUpdateFail")];
+        this.getRenderItem = this.getRenderItem.bind(this);
+        this.getRenderSectionHeader = this.getRenderSectionHeader.bind(this);
+        this.createDataset = this.createDataset.bind(this);
     }
 
     getKeyExtractor(item: Object) {
         return item !== undefined ? item['name'] : undefined;
-    }
-
-    hasBackButton() {
-        return true;
-    }
-
-    hasStickyHeader(): boolean {
-        return true;
-    }
-
-    hasSideMenu(): boolean {
-        return false;
     }
 
     createDataset(fetchedData: Object) {
@@ -101,7 +94,8 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         return this.daysOfWeek[date.getDay() - 1] + " " + date.getDate() + " " + this.monthsOfYear[date.getMonth()] + " " + date.getFullYear();
     }
 
-    getRenderSectionHeader(title: string) {
+    getRenderSectionHeader({section}: Object) {
+        let title = "";
         return (
             <Card style={{
                 marginLeft: 10,
@@ -114,12 +108,12 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
                     textAlign: 'center',
                     marginTop: 10,
                     marginBottom: 10
-                }}>{title}</H2>
+                }}>{section.title}</H2>
             </Card>
         );
     }
 
-    getRenderItem(item: Object, section: Object) {
+    getRenderItem({item}: Object) {
         return (
             <Card style={{
                 flex: 0,
@@ -167,5 +161,24 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         return name.charAt(0) + name.substr(1).toLowerCase();
     }
 
+    render() {
+        const nav = this.props.navigation;
+        return (
+            <BaseContainer
+                navigation={nav}
+                headerTitle={i18n.t('screens.menuSelf')}
+                hasBackButton={true}>
+                <WebSectionList
+                    createDataset={this.createDataset}
+                    navigation={nav}
+                    refreshTime={0}
+                    fetchUrl={DATA_URL}
+                    renderItem={this.getRenderItem}
+                    renderSectionHeader={this.getRenderSectionHeader}
+                    updateErrorText={i18n.t("homeScreen.listUpdateFail")}
+                    stickyHeader={true}/>
+            </BaseContainer>
+        );
+    }
 }
 

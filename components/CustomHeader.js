@@ -8,7 +8,6 @@ import Touchable from 'react-native-platform-touchable';
 import ThemeManager from "../utils/ThemeManager";
 import CustomMaterialIcon from "./CustomMaterialIcon";
 import i18n from "i18n-js";
-import {NavigationActions} from 'react-navigation';
 
 type Props = {
     hasBackButton: boolean,
@@ -105,8 +104,7 @@ export default class CustomHeader extends React.Component<Props> {
 
 
     onPressBack() {
-        const backAction = NavigationActions.back();
-        this.props.navigation.dispatch(backAction);
+        this.props.navigation.goBack();
     }
 
     render() {

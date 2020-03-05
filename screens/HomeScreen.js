@@ -1,14 +1,16 @@
 // @flow
 
 import * as React from 'react';
-import {Image, Linking, TouchableOpacity, View} from 'react-native';
-import {Body, Button, Card, CardItem, H1, Left, Text, Thumbnail} from 'native-base';
+import {Image, TouchableOpacity, View} from 'react-native';
+import {Body, Button, Card, CardItem, Left, Text, Thumbnail} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from '../components/CustomMaterialIcon';
-import FetchedDataSectionList from "../components/FetchedDataSectionList";
 import Autolink from 'react-native-autolink';
 import ThemeManager from "../utils/ThemeManager";
 import DashboardItem from "../components/DashboardItem";
+import * as WebBrowser from 'expo-web-browser';
+import BaseContainer from "../components/BaseContainer";
+import WebSectionList from "../components/WebSectionList";
 // import DATA from "../dashboard_data.json";
 
 
@@ -25,46 +27,30 @@ const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
 const CARD_BORDER_RADIUS = 10;
 
-/**
- * Opens a link in the device's browser
- * @param link The link to open
- */
-function openWebLink(link) {
-    Linking.openURL(link).catch((err) => console.error('Error opening link', err));
+type Props = {
+    navigation: Object,
 }
 
 /**
  * Class defining the app's home screen
  */
-export default class HomeScreen extends FetchedDataSectionList {
+export default class HomeScreen extends React.Component<Props> {
 
     onProxiwashClick: Function;
     onTutorInsaClick: Function;
     onMenuClick: Function;
     onProximoClick: Function;
+    getRenderItem: Function;
+    createDataset: Function;
 
     constructor() {
-        super(DATA_URL, REFRESH_TIME);
+        super();
         this.onProxiwashClick = this.onProxiwashClick.bind(this);
         this.onTutorInsaClick = this.onTutorInsaClick.bind(this);
         this.onMenuClick = this.onMenuClick.bind(this);
         this.onProximoClick = this.onProximoClick.bind(this);
-    }
-
-    onProxiwashClick() {
-        this.props.navigation.navigate('Proxiwash');
-    }
-
-    onTutorInsaClick() {
-        this.props.navigation.navigate('TutorInsaScreen');
-    }
-
-    onProximoClick() {
-        this.props.navigation.navigate('Proximo');
-    }
-
-    onMenuClick() {
-        this.props.navigation.navigate('SelfMenuScreen');
+        this.getRenderItem = this.getRenderItem.bind(this);
+        this.createDataset = this.createDataset.bind(this);
     }
 
     /**
@@ -77,12 +63,20 @@ export default class HomeScreen extends FetchedDataSectionList {
         return date.toLocaleString();
     }
 
-    getHeaderTranslation() {
-        return i18n.t("screens.home");
+    onProxiwashClick() {
+        this.props.navigation.navigate('Proxiwash');
     }
 
-    getUpdateToastTranslations() {
-        return [i18n.t("homeScreen.listUpdated"), i18n.t("homeScreen.listUpdateFail")];
+    onTutorInsaClick() {
+        WebBrowser.openBrowserAsync("https://www.etud.insa-toulouse.fr/~tutorinsa/");
+    }
+
+    onProximoClick() {
+        this.props.navigation.navigate('Proximo');
+    }
+
+    onMenuClick() {
+        this.props.navigation.navigate('SelfMenuScreen');
     }
 
     getKeyExtractor(item: Object) {
@@ -152,25 +146,6 @@ export default class HomeScreen extends FetchedDataSectionList {
             }
         }
         return dataset
-    }
-
-    getRenderSectionHeader(title: string) {
-        if (title === '') {
-            return <View/>;
-        } else {
-            return (
-                <View style={{
-                    backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor
-                }}>
-                    <H1 style={{
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                        marginTop: 10,
-                        marginBottom: 10
-                    }}>{title}</H1>
-                </View>
-            );
-        }
     }
 
     getDashboardItem(item: Object) {
@@ -318,7 +293,7 @@ export default class HomeScreen extends FetchedDataSectionList {
         if (isAvailable)
             this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});
         else
-            this.props.navigation.navigate('PlanningScreen');
+            this.props.navigation.navigate('Planning');
     };
 
 
@@ -345,13 +320,13 @@ export default class HomeScreen extends FetchedDataSectionList {
             subtitle = i18n.t('homeScreen.dashboard.todayEventsSubtitleNA');
 
         let displayEvent = this.getDisplayEvent(futureEvents);
-
+        const clickAction = this.clickAction.bind(this, isAvailable, displayEvent);
         return (
             <DashboardItem
                 subtitle={subtitle}
                 color={color}
                 icon={icon}
-                clickAction={this.clickAction.bind(this, isAvailable, displayEvent)}
+                clickAction={clickAction}
                 title={title}
                 isAvailable={isAvailable}
                 displayEvent={displayEvent}
@@ -523,64 +498,90 @@ export default class HomeScreen extends FetchedDataSectionList {
         );
     }
 
+    openLink(link: string) {
+        WebBrowser.openBrowserAsync(link);
+    }
 
-    getRenderItem(item: Object, section: Object) {
+    getFeedItem(item: Object) {
+        const onImagePress = this.openLink.bind(this, item.full_picture);
+        const onOutLinkPress = this.openLink.bind(this, item.permalink_url);
         return (
-            section['id'] === SECTIONS_ID[0] ? this.getDashboardItem(item) :
-                <Card style={{
-                    flex: 0,
-                    marginLeft: 10,
-                    marginRight: 10,
-                    borderRadius: CARD_BORDER_RADIUS,
+            <Card style={{
+                flex: 0,
+                marginLeft: 10,
+                marginRight: 10,
+                borderRadius: CARD_BORDER_RADIUS,
+            }}>
+                <CardItem style={{
+                    backgroundColor: 'transparent'
                 }}>
-                    <CardItem style={{
-                        backgroundColor: 'transparent'
-                    }}>
-                        <Left>
-                            <Thumbnail source={ICON_AMICALE} square/>
-                            <Body>
-                                <Text>{NAME_AMICALE}</Text>
-                                <Text note>{HomeScreen.getFormattedDate(item.created_time)}</Text>
-                            </Body>
-                        </Left>
-                    </CardItem>
-                    <CardItem style={{
-                        backgroundColor: 'transparent'
-                    }}>
+                    <Left>
+                        <Thumbnail source={ICON_AMICALE} square/>
                         <Body>
-                            {item.full_picture !== '' && item.full_picture !== undefined ?
-                                <TouchableOpacity onPress={openWebLink.bind(null, item.full_picture)}
-                                                  style={{width: '100%', height: 250, marginBottom: 5}}>
-                                    <Image source={{uri: item.full_picture}}
-                                           style={{flex: 1, resizeMode: "contain"}}
-                                           resizeMode="contain"
-                                    />
-                                </TouchableOpacity>
-                                : <View/>}
-                            {item.message !== undefined ?
-                                <Autolink
-                                    text={item.message}
-                                    hashtag="facebook"
-                                    style={{color: ThemeManager.getCurrentThemeVariables().textColor}}
-                                /> : <View/>
-                            }
+                            <Text>{NAME_AMICALE}</Text>
+                            <Text note>{HomeScreen.getFormattedDate(item.created_time)}</Text>
                         </Body>
-                    </CardItem>
-                    <CardItem style={{
-                        backgroundColor: 'transparent'
-                    }}>
-                        <Left>
-                            <Button transparent
-                                    onPress={openWebLink.bind(null, item.permalink_url)}>
-                                <CustomMaterialIcon
-                                    icon="facebook"
-                                    color="#57aeff"
-                                    width={20}/>
-                                <Text>En savoir plus</Text>
-                            </Button>
-                        </Left>
-                    </CardItem>
-                </Card>
+                    </Left>
+                </CardItem>
+                <CardItem style={{
+                    backgroundColor: 'transparent'
+                }}>
+                    <Body>
+                        {item.full_picture !== '' && item.full_picture !== undefined ?
+                            <TouchableOpacity onPress={onImagePress}
+                                              style={{width: '100%', height: 250, marginBottom: 5}}>
+                                <Image source={{uri: item.full_picture}}
+                                       style={{flex: 1, resizeMode: "contain"}}
+                                       resizeMode="contain"
+                                />
+                            </TouchableOpacity>
+                            : <View/>}
+                        {item.message !== undefined ?
+                            <Autolink
+                                text={item.message}
+                                hashtag="facebook"
+                                style={{color: ThemeManager.getCurrentThemeVariables().textColor}}
+                            /> : <View/>
+                        }
+                    </Body>
+                </CardItem>
+                <CardItem style={{
+                    backgroundColor: 'transparent'
+                }}>
+                    <Left>
+                        <Button transparent
+                                onPress={onOutLinkPress}>
+                            <CustomMaterialIcon
+                                icon="facebook"
+                                color="#57aeff"
+                                width={20}/>
+                            <Text>En savoir plus</Text>
+                        </Button>
+                    </Left>
+                </CardItem>
+            </Card>
+        );
+    }
+
+    getRenderItem({item, section}: Object) {
+        return (section['id'] === SECTIONS_ID[0] ?
+            this.getDashboardItem(item) : this.getFeedItem(item));
+    }
+
+    render() {
+        const nav = this.props.navigation;
+        return (
+            <BaseContainer
+                navigation={nav}
+                headerTitle={i18n.t('screens.home')}>
+                <WebSectionList
+                    createDataset={this.createDataset}
+                    navigation={nav}
+                    refreshTime={REFRESH_TIME}
+                    fetchUrl={DATA_URL}
+                    renderItem={this.getRenderItem}
+                    updateErrorText={i18n.t("homeScreen.listUpdateFail")}/>
+            </BaseContainer>
         );
     }
 }

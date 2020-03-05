@@ -5,26 +5,40 @@ import {Platform, View} from 'react-native'
 import {Body, Left, ListItem, Right, Text} from 'native-base';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
-import FetchedDataSectionList from "../../components/FetchedDataSectionList";
 import ThemeManager from "../../utils/ThemeManager";
 import Touchable from "react-native-platform-touchable";
+import BaseContainer from "../../components/BaseContainer";
+import WebSectionList from "../../components/WebSectionList";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 
+type Props = {
+    navigation: Object,
+}
+
+type State = {
+    fetchedData: Object,
+}
 
 /**
  * Class defining the main proximo screen. This screen shows the different categories of articles
  * offered by proximo.
  */
-export default class ProximoMainScreen extends FetchedDataSectionList {
+export default class ProximoMainScreen extends React.Component<Props, State> {
+
+    articles: Object;
 
     onPressSearchBtn: Function;
     onPressAboutBtn: Function;
+    getRenderItem: Function;
+    createDataset: Function;
 
     constructor() {
-        super(DATA_URL, 0);
+        super();
         this.onPressSearchBtn = this.onPressSearchBtn.bind(this);
         this.onPressAboutBtn = this.onPressAboutBtn.bind(this);
+        this.getRenderItem = this.getRenderItem.bind(this);
+        this.createDataset = this.createDataset.bind(this);
     }
 
     static sortFinalData(a: Object, b: Object) {
@@ -45,14 +59,6 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         return 0;
     }
 
-    getHeaderTranslation() {
-        return i18n.t("screens.proximo");
-    }
-
-    getUpdateToastTranslations() {
-        return [i18n.t("proximoScreen.listUpdated"), i18n.t("proximoScreen.listUpdateFail")];
-    }
-
     getKeyExtractor(item: Object) {
         return item !== undefined ? item.type['id'] : undefined;
     }
@@ -62,7 +68,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
             {
                 title: '',
                 data: this.generateData(fetchedData),
-                extraData: super.state,
+                extraData: this.state,
                 keyExtractor: this.getKeyExtractor
             }
         ];
@@ -77,21 +83,22 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
      */
     generateData(fetchedData: Object) {
         let finalData = [];
+        this.articles = undefined;
         if (fetchedData.types !== undefined && fetchedData.articles !== undefined) {
             let types = fetchedData.types;
-            let articles = fetchedData.articles;
+            this.articles = fetchedData.articles;
             finalData.push({
                 type: {
                     id: -1,
                     name: i18n.t('proximoScreen.all'),
                     icon: 'star'
                 },
-                data: this.getAvailableArticles(articles, undefined)
+                data: this.getAvailableArticles(this.articles, undefined)
             });
             for (let i = 0; i < types.length; i++) {
                 finalData.push({
                     type: types[i],
-                    data: this.getAvailableArticles(articles, types[i])
+                    data: this.getAvailableArticles(this.articles, types[i])
                 });
 
             }
@@ -128,8 +135,8 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                     name: i18n.t('proximoScreen.all'),
                     icon: 'star'
                 },
-                data: this.state.fetchedData.articles !== undefined ?
-                    this.getAvailableArticles(this.state.fetchedData.articles, undefined) : []
+                data: this.articles !== undefined ?
+                    this.getAvailableArticles(this.articles, undefined) : []
             },
         };
         this.props.navigation.navigate('ProximoListScreen', searchScreenData);
@@ -163,7 +170,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         );
     }
 
-    getRenderItem(item: Object, section: Object) {
+    getRenderItem({item}: Object) {
         let dataToSend = {
             shouldFocusSearchBar: false,
             data: item,
@@ -196,10 +203,26 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                     </Right>
                 </ListItem>
             );
-        } else {
+        } else
             return <View/>;
-        }
+    }
 
+    render() {
+        const nav = this.props.navigation;
+        return (
+            <BaseContainer
+                navigation={nav}
+                headerTitle={i18n.t('screens.proximo')}
+                headerRightButton={this.getRightButton()}>
+                <WebSectionList
+                    createDataset={this.createDataset}
+                    navigation={nav}
+                    refreshTime={0}
+                    fetchUrl={DATA_URL}
+                    renderItem={this.getRenderItem}
+                    updateErrorText={i18n.t("homeScreen.listUpdateFail")}/>
+            </BaseContainer>
+        );
     }
 }
 

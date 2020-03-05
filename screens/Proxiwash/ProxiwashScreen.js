@@ -6,12 +6,13 @@ import {Body, Card, CardItem, Left, Right, Text} from 'native-base';
 import ThemeManager from '../../utils/ThemeManager';
 import i18n from "i18n-js";
 import CustomMaterialIcon from "../../components/CustomMaterialIcon";
-import FetchedDataSectionList from "../../components/FetchedDataSectionList";
+import WebSectionList from "../../components/WebSectionList";
 import NotificationsManager from "../../utils/NotificationsManager";
 import PlatformTouchable from "react-native-platform-touchable";
 import Touchable from "react-native-platform-touchable";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
+import BaseContainer from "../../components/BaseContainer";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -30,19 +31,41 @@ let stateColors = {};
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 
+type Props = {
+    navigation: Object,
+}
+
+type State = {
+    refreshing: boolean,
+    firstLoading: boolean,
+    fetchedData: Object,
+    machinesWatched: Array<string>,
+};
+
+
 /**
  * Class defining the app's proxiwash screen. This screen shows information about washing machines and
  * dryers, taken from a scrapper reading proxiwash website
  */
-export default class ProxiwashScreen extends FetchedDataSectionList {
+export default class ProxiwashScreen extends React.Component<Props, State> {
 
     onAboutPress: Function;
+    getRenderItem: Function;
+    createDataset: Function;
+
+    state = {
+        refreshing: false,
+        firstLoading: true,
+        fetchedData: {},
+        // machinesWatched: JSON.parse(dataString),
+        machinesWatched: [],
+    };
 
     /**
      * Creates machine state parameters using current theme and translations
      */
     constructor() {
-        super(DATA_URL, REFRESH_TIME);
+        super();
         let colors = ThemeManager.getCurrentThemeVariables();
         stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
         stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;
@@ -69,23 +92,16 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         stateIcons[MACHINE_STATES.ERREUR] = 'alert';
 
         // let dataString = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current;
-        this.state = {
-            refreshing: false,
-            firstLoading: true,
-            fetchedData: {},
-            // machinesWatched: JSON.parse(dataString),
-            machinesWatched: [],
-        };
-        this.setMinTimeRefresh(30);
-
+        // this.setMinTimeRefresh(30);
         this.onAboutPress = this.onAboutPress.bind(this);
+        this.getRenderItem = this.getRenderItem.bind(this);
+        this.createDataset = this.createDataset.bind(this);
     }
 
     /**
      * Setup notification channel for android and add listeners to detect notifications fired
      */
     componentDidMount() {
-        super.componentDidMount();
         if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
             // Get latest watchlist from server
             NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
@@ -105,14 +121,6 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                 });
             }
         }
-    }
-
-    getHeaderTranslation() {
-        return i18n.t("screens.proxiwash");
-    }
-
-    getUpdateToastTranslations() {
-        return [i18n.t("proxiwashScreen.listUpdated"), i18n.t("proxiwashScreen.listUpdateFail")];
     }
 
     getDryersKeyExtractor(item: Object) {
@@ -213,25 +221,20 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     createDataset(fetchedData: Object) {
         return [
             {
-                title: i18n.t('proxiwashScreen.washers'),
-                icon: 'washing-machine',
-                data: fetchedData.washers === undefined ? [] : fetchedData.washers,
-                extraData: super.state,
-                keyExtractor: this.getWashersKeyExtractor
-            },
-            {
                 title: i18n.t('proxiwashScreen.dryers'),
                 icon: 'tumble-dryer',
                 data: fetchedData.dryers === undefined ? [] : fetchedData.dryers,
-                extraData: super.state,
+                extraData: this.state,
                 keyExtractor: this.getDryersKeyExtractor
             },
-
+            {
+                title: i18n.t('proxiwashScreen.washers'),
+                icon: 'washing-machine',
+                data: fetchedData.washers === undefined ? [] : fetchedData.washers,
+                extraData: this.state,
+                keyExtractor: this.getWashersKeyExtractor
+            },
         ];
-    }
-
-    hasTabs(): boolean {
-        return true;
     }
 
     /**
@@ -292,6 +295,24 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         );
     }
 
+    render() {
+        const nav = this.props.navigation;
+        return (
+            <BaseContainer
+                navigation={nav}
+                headerTitle={i18n.t('screens.proxiwash')}
+                headerRightButton={this.getRightButton()}>
+                <WebSectionList
+                    createDataset={this.createDataset}
+                    navigation={nav}
+                    refreshTime={REFRESH_TIME}
+                    fetchUrl={DATA_URL}
+                    renderItem={this.getRenderItem}
+                    updateErrorText={i18n.t("proxiwashScreen.listUpdateFail")}/>
+            </BaseContainer>
+        );
+    }
+
     /**
      * Get list item to be rendered
      *
@@ -299,7 +320,7 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * @param section The object describing the current SectionList section
      * @returns {React.Node}
      */
-    getRenderItem(item: Object, section: Object) {
+    getRenderItem({item, section} : Object) {
         let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"];
         let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
         let isDryer = section.title === i18n.t('proxiwashScreen.dryers');

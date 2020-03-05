@@ -41,7 +41,8 @@ function sortNameReverse(a, b) {
 }
 
 type Props = {
-    navigation: Object
+    navigation: Object,
+    route: Object,
 }
 
 type State = {
@@ -60,16 +61,8 @@ export default class ProximoListScreen extends React.Component<Props, State> {
 
     modalRef: { current: null | Modalize };
     originalData: Array<Object>;
-    navData = this.props.navigation.getParam('data', []);
-    shouldFocusSearchBar = this.props.navigation.getParam('shouldFocusSearchBar', false);
-    state = {
-        currentlyDisplayedData: this.navData['data'].sort(sortPrice),
-        currentSortMode: sortMode.price,
-        isSortReversed: false,
-        sortPriceIcon: '',
-        sortNameIcon: '',
-        modalCurrentDisplayItem: {},
-    };
+    shouldFocusSearchBar: boolean;
+
     sortMenuRef: Menu;
 
     onMenuRef: Function;
@@ -82,7 +75,16 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     constructor(props: any) {
         super(props);
         this.modalRef = React.createRef();
-        this.originalData = this.navData['data'];
+        this.originalData = this.props.route.params['data']['data'];
+        this.shouldFocusSearchBar = this.props.route.params['shouldFocusSearchBar'];
+        this.state = {
+            currentlyDisplayedData: this.originalData,
+            currentSortMode: sortMode.price,
+            isSortReversed: false,
+            sortPriceIcon: '',
+            sortNameIcon: '',
+            modalCurrentDisplayItem: {},
+        };
 
         this.onMenuRef = this.onMenuRef.bind(this);
         this.onSearchStringChange = this.onSearchStringChange.bind(this);
@@ -365,7 +367,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                     shouldFocusSearchBar={this.shouldFocusSearchBar}
                     rightButton={this.getSortMenu()}
                 />
-
                 <FlatList
                     data={this.state.currentlyDisplayedData}
                     extraData={this.state.currentlyDisplayedData}

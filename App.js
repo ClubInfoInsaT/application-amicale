@@ -14,6 +14,7 @@ import ThemeManager from './utils/ThemeManager';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DrawerNavigator from './navigation/DrawerNavigator';
+import { enableScreens } from 'react-native-screens';
 
 type Props = {};
 
@@ -38,6 +39,7 @@ export default class App extends React.Component<Props, State> {
     constructor(props: Object) {
         super(props);
         LocaleManager.initTranslations();
+        enableScreens();
     }
 
     /**

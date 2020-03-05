@@ -45,14 +45,13 @@ export default class WebDataManager {
     /**
      * Show a toast message depending on the validity of the fetched data
      *
-     * @param successString
      * @param errorString
      */
-    showUpdateToast(successString, errorString) {
+    showUpdateToast(errorString) {
         let isSuccess = this.isDataObjectValid();
         if (!isSuccess) {
             Toast.show({
-                text: isSuccess ? successString : errorString,
+                text: errorString,
                 buttonText: 'OK',
                 type: isSuccess ? "success" : "danger",
                 duration: 2000
