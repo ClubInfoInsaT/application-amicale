@@ -1,9 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {Body, ListItem, Text} from 'native-base';
 import {FlatList} from "react-native";
 import packageJson from '../../package';
+import {List} from 'react-native-paper';
 
 function generateListFromObject(object) {
     let list = [];
@@ -33,16 +33,10 @@ export default class AboutDependenciesScreen extends React.Component<Props> {
                 keyExtractor={(item) => item.name}
                 style={{minHeight: 300, width: '100%'}}
                 renderItem={({item}) =>
-                    <ListItem>
-                        <Body>
-                            <Text>
-                                {item.name}
-                            </Text>
-                            <Text note>
-                                {item.version.replace('^', '')}
-                            </Text>
-                        </Body>
-                    </ListItem>}
+                    <List.Item
+                        title={item.name}
+                        description={item.version.replace('^', '').replace('~', '')}
+                    />}
             />
         );
     }

@@ -1,12 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Image} from 'react-native';
-import {Container, Content, H1, H3, View} from 'native-base';
+import {Image, ScrollView, View} from 'react-native';
 import ThemeManager from "../utils/ThemeManager";
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
 import PlanningEventManager from '../utils/PlanningEventManager';
+import {Subheading, Title} from 'react-native-paper';
 
 type Props = {
     navigation: Object,
@@ -27,38 +27,32 @@ export default class PlanningDisplayScreen extends React.Component<Props> {
     render() {
         // console.log("rendering planningDisplayScreen");
         return (
-            <Container>
-                <Content padder>
-                    <H1>
-                        {this.displayData.title}
-                    </H1>
-                    <H3 style={{
-                        marginTop: 10,
-                        color: ThemeManager.getCurrentThemeVariables().listNoteColor
-                    }}>
-                        {PlanningEventManager.getFormattedTime(this.displayData)}
-                    </H3>
-                    {this.displayData.logo !== null ?
-                        <View style={{width: '100%', height: 300, marginTop: 20, marginBottom: 20}}>
-                            <Image style={{flex: 1, resizeMode: "contain"}}
-                                   source={{uri: this.displayData.logo}}/>
-                        </View>
-                        : <View/>}
+            <ScrollView style={{padding: 5}}>
+                <Title>
+                    {this.displayData.title}
+                </Title>
+                <Subheading style={{marginTop: 10,}}>
+                    {PlanningEventManager.getFormattedTime(this.displayData)}
+                </Subheading>
+                {this.displayData.logo !== null ?
+                    <View style={{width: '100%', height: 300, marginTop: 20, marginBottom: 20}}>
+                        <Image style={{flex: 1, resizeMode: "contain"}}
+                               source={{uri: this.displayData.logo}}/>
+                    </View>
+                    : <View/>}
 
-                    {this.displayData.description !== null ?
-                        // Surround description with div to allow text styling if the description is not html
-                        <HTML html={"<div>" + this.displayData.description + "</div>"}
-                              tagsStyles={{
-                                  p: {
-                                      color: ThemeManager.getCurrentThemeVariables().textColor,
-                                      fontSize: ThemeManager.getCurrentThemeVariables().fontSizeBase
-                                  },
-                                  div: {color: ThemeManager.getCurrentThemeVariables().textColor}
-                              }}
-                              onLinkPress={openWebLink}/>
-                        : <View/>}
-                </Content>
-            </Container>
+                {this.displayData.description !== null ?
+                    // Surround description with div to allow text styling if the description is not html
+                    <HTML html={"<div>" + this.displayData.description + "</div>"}
+                          tagsStyles={{
+                              p: {
+                                  color: ThemeManager.getCurrentThemeVariables().text,
+                              },
+                              div: {color: ThemeManager.getCurrentThemeVariables().text}
+                          }}
+                          onLinkPress={openWebLink}/>
+                    : <View/>}
+            </ScrollView>
         );
     }
 }

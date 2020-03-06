@@ -1,8 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Image, TouchableOpacity, View} from 'react-native';
-import {Body, Button, Card, CardItem, Left, Text, Thumbnail} from 'native-base';
+import {TouchableOpacity, View} from 'react-native';
 import i18n from "i18n-js";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import Autolink from 'react-native-autolink';
@@ -10,6 +9,8 @@ import ThemeManager from "../utils/ThemeManager";
 import DashboardItem from "../components/DashboardItem";
 import * as WebBrowser from 'expo-web-browser';
 import WebSectionList from "../components/WebSectionList";
+import PlatformTouchable from "react-native-platform-touchable";
+import {Avatar, Card, Text} from 'react-native-paper';
 // import DATA from "../dashboard_data.json";
 
 
@@ -405,11 +406,11 @@ export default class HomeScreen extends React.Component<Props> {
         let proxiwashIsAvailable = parseInt(proxiwashData['dryers']) > 0 || parseInt(proxiwashData['washers']) > 0;
         let proxiwashSubtitle;
         let dryerColor = parseInt(proxiwashData['dryers']) > 0 ?
-            ThemeManager.getCurrentThemeVariables().textColor :
-            ThemeManager.getCurrentThemeVariables().listNoteColor;
+            ThemeManager.getCurrentThemeVariables().text :
+            ThemeManager.getCurrentThemeVariables().textDisabled;
         let washerColor = parseInt(proxiwashData['washers']) > 0 ?
-            ThemeManager.getCurrentThemeVariables().textColor :
-            ThemeManager.getCurrentThemeVariables().listNoteColor;
+            ThemeManager.getCurrentThemeVariables().text :
+            ThemeManager.getCurrentThemeVariables().textDisabled;
         let availableDryers = proxiwashData['dryers'];
         let availableWashers = proxiwashData['washers'];
         if (proxiwashIsAvailable) {
@@ -505,59 +506,35 @@ export default class HomeScreen extends React.Component<Props> {
         const onImagePress = this.openLink.bind(this, item.full_picture);
         const onOutLinkPress = this.openLink.bind(this, item.permalink_url);
         return (
-            <Card style={{
-                flex: 0,
-                marginLeft: 10,
-                marginRight: 10,
-                borderRadius: CARD_BORDER_RADIUS,
-            }}>
-                <CardItem style={{
-                    backgroundColor: 'transparent'
-                }}>
-                    <Left>
-                        <Thumbnail source={ICON_AMICALE} square/>
-                        <Body>
-                            <Text>{NAME_AMICALE}</Text>
-                            <Text note>{HomeScreen.getFormattedDate(item.created_time)}</Text>
-                        </Body>
-                    </Left>
-                </CardItem>
-                <CardItem style={{
-                    backgroundColor: 'transparent'
-                }}>
-                    <Body>
-                        {item.full_picture !== '' && item.full_picture !== undefined ?
-                            <TouchableOpacity onPress={onImagePress}
-                                              style={{width: '100%', height: 250, marginBottom: 5}}>
-                                <Image source={{uri: item.full_picture}}
-                                       style={{flex: 1, resizeMode: "contain"}}
-                                       resizeMode="contain"
-                                />
-                            </TouchableOpacity>
-                            : <View/>}
-                        {item.message !== undefined ?
-                            <Autolink
-                                text={item.message}
-                                hashtag="facebook"
-                                style={{color: ThemeManager.getCurrentThemeVariables().textColor}}
-                            /> : <View/>
-                        }
-                    </Body>
-                </CardItem>
-                <CardItem style={{
-                    backgroundColor: 'transparent'
-                }}>
-                    <Left>
-                        <Button transparent
-                                onPress={onOutLinkPress}>
+            <Card style={{margin: 5}}>
+                <Card.Title
+                    title={NAME_AMICALE}
+                    subtitle={HomeScreen.getFormattedDate(item.created_time)}
+                    left={props => <Avatar.Image size={48} source={ICON_AMICALE}
+                                                 style={{backgroundColor: 'transparent'}}/>}
+                />
+                {item.full_picture !== '' && item.full_picture !== undefined ?
+                    <TouchableOpacity onPress={onImagePress}>
+                        <Card.Cover source={{uri: item.full_picture}}/>
+                    </TouchableOpacity> : <View/>}
+                <Card.Content>
+                    {item.message !== undefined ?
+                        <Autolink
+                            text={item.message}
+                            hashtag="facebook"
+                            style={{color: ThemeManager.getCurrentThemeVariables().text}}
+                        /> : <View/>
+                    }
+                    <PlatformTouchable onPress={onOutLinkPress}>
+                        <View style={{flexDirection: 'row', marginTop: 5}}>
                             <MaterialCommunityIcons
                                 name="facebook"
                                 color="#57aeff"
                                 size={26}/>
-                            <Text>En savoir plus</Text>
-                        </Button>
-                    </Left>
-                </CardItem>
+                            <Text style={{color: "#57aeff"}}>En savoir plus</Text>
+                        </View>
+                    </PlatformTouchable>
+                </Card.Content>
             </Card>
         );
     }

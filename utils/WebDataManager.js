@@ -1,4 +1,3 @@
-import {Toast} from "native-base";
 
 /**
  * Class used to get json data from the web
@@ -48,15 +47,15 @@ export default class WebDataManager {
      * @param errorString
      */
     showUpdateToast(errorString) {
-        let isSuccess = this.isDataObjectValid();
-        if (!isSuccess) {
-            Toast.show({
-                text: errorString,
-                buttonText: 'OK',
-                type: isSuccess ? "success" : "danger",
-                duration: 2000
-            });
-        }
+        // let isSuccess = this.isDataObjectValid();
+        // if (!isSuccess) {
+        //     Toast.show({
+        //         text: errorString,
+        //         buttonText: 'OK',
+        //         type: isSuccess ? "success" : "danger",
+        //         duration: 2000
+        //     });
+        // }
     }
 
 }

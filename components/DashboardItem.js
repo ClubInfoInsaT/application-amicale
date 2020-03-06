@@ -1,16 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {Body, Card, CardItem, H3, Left, Text, Thumbnail} from "native-base";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {View} from "react-native";
 import ThemeManager from "../utils/ThemeManager";
 import HTML from "react-native-render-html";
 import {LinearGradient} from "expo-linear-gradient";
-import PlatformTouchable from "react-native-platform-touchable";
 import i18n from "i18n-js";
-
-const CARD_BORDER_RADIUS = 10;
+import {Avatar, Card, Text, Title} from 'react-native-paper';
 
 type Props = {
     isAvailable: boolean,
@@ -72,74 +69,73 @@ export default class DashboardItem extends React.Component<Props> {
 
     getEventPreviewContainer() {
         if (this.props.displayEvent !== undefined && this.props.displayEvent !== null) {
+            const hasImage = this.props.displayEvent['logo'] !== '' && this.props.displayEvent['logo'] !== null;
             return (
-                <View>
-                    <CardItem style={{
-                        paddingTop: 0,
-                        paddingBottom: 0,
-                        backgroundColor: 'transparent',
-                    }}>
-                        <Left>
-                            {this.props.displayEvent['logo'] !== '' && this.props.displayEvent['logo'] !== null ?
-                                <Thumbnail source={{uri: this.props.displayEvent['logo']}} square/> :
-                                <View/>}
-                            <Body>
-                                <Text>{this.props.displayEvent['title']}</Text>
-                                <Text note>{this.getFormattedEventTime(this.props.displayEvent)}</Text>
-                            </Body>
-                        </Left>
-                    </CardItem>
-                    <CardItem style={{
-                        borderRadius: CARD_BORDER_RADIUS,
-                        backgroundColor: 'transparent',
-                    }}>
-                        <Body style={{
-                            height: this.props.displayEvent['description'].length > 50 ? 70 : 20,
+                <Card style={{marginBottom: 10}}>
+                    {hasImage ?
+                        <Card.Title
+                            title={this.props.displayEvent['title']}
+                            subtitle={this.getFormattedEventTime(this.props.displayEvent)}
+                            left={() =>
+                                <Avatar.Image
+                                    source={{uri: this.props.displayEvent['logo']}}
+                                    size={60}
+                                    style={{backgroundColor: 'transparent'}}/>
+                            }
+                        /> :
+                        <Card.Title
+                            title={this.props.displayEvent['title']}
+                            subtitle={this.getFormattedEventTime(this.props.displayEvent)}
+                        />}
+                    <View>
+                        <Card.Content style={{
+                            height: this.props.displayEvent['description'].length > 70 ? 100 : 50,
                             overflow: 'hidden',
                         }}>
                             <HTML html={"<div>" + this.props.displayEvent['description'] + "</div>"}
                                   tagsStyles={{
                                       p: {
-                                          color: ThemeManager.getCurrentThemeVariables().textColor,
-                                          fontSize: ThemeManager.getCurrentThemeVariables().fontSizeBase,
+                                          color: ThemeManager.getCurrentThemeVariables().text,
                                       },
-                                      div: {color: ThemeManager.getCurrentThemeVariables().textColor},
+                                      div: {color: ThemeManager.getCurrentThemeVariables().text},
                                   }}/>
-                            <LinearGradient
-                                colors={[
-                                    // Fix for ios gradient: transparent color must match final color
-                                    ThemeManager.getNightMode() ? 'rgba(42,42,42,0)' : 'rgba(255,255,255,0)',
-                                    ThemeManager.getCurrentThemeVariables().cardDefaultBg
-                                ]}
-                                start={{x: 0, y: 0}}
-                                end={{x: 0, y: 0.6}}
-                                // end={[0, 0.6]}
-                                style={{
-                                    position: 'absolute',
-                                    width: '100%',
-                                    height: 65,
-                                    bottom: -5,
-                                }}>
-                                <View style={{
-                                    marginLeft: 'auto',
+
+                        </Card.Content>
+                        <LinearGradient
+                            colors={[
+                                // Fix for ios gradient: transparent color must match final color
+                                ThemeManager.getNightMode() ? 'rgba(42,42,42,0)' : 'rgba(255,255,255,0)',
+                                ThemeManager.getCurrentThemeVariables().card
+                            ]}
+                            start={{x: 0, y: 0}}
+                            end={{x: 0, y: 0.6}}
+                            // end={[0, 0.6]}
+                            style={{
+                                position: 'absolute',
+                                width: '100%',
+                                height: 65,
+                                bottom: -5,
+                            }}>
+                            <View style={{
+                                marginLeft: 'auto',
+                                marginTop: 'auto',
+                                flexDirection: 'row'
+                            }}>
+                                <Text style={{
                                     marginTop: 'auto',
-                                    flexDirection: 'row'
+                                    marginBottom: 'auto',
+                                    padding: 0,
                                 }}>
-                                    <Text style={{
-                                        marginTop: 'auto',
-                                        marginBottom: 'auto',
-                                        padding: 0,
-                                    }}>
-                                        {i18n.t("homeScreen.dashboard.seeMore")}
-                                    </Text>
-                                    <MaterialCommunityIcons
-                                        name={'chevron-right'}
-                                        size={26}/>
-                                </View>
-                            </LinearGradient>
-                        </Body>
-                    </CardItem>
-                </View>
+                                    {i18n.t("homeScreen.dashboard.seeMore")}
+                                </Text>
+                                <MaterialCommunityIcons
+                                    name={'chevron-right'}
+                                    size={26}
+                                    color={ThemeManager.getCurrentThemeVariables().text}/>
+                            </View>
+                        </LinearGradient>
+                    </View>
+                </Card>
             );
         } else
             return <View/>
@@ -152,7 +148,7 @@ export default class DashboardItem extends React.Component<Props> {
                 color={
                     this.props.isAvailable ?
                         this.props.color :
-                        ThemeManager.getCurrentThemeVariables().textDisabledColor
+                        ThemeManager.getCurrentThemeVariables().textDisabled
                 }
                 size={this.props.isSquare ? 50 : 40}/>
         );
@@ -163,19 +159,19 @@ export default class DashboardItem extends React.Component<Props> {
             <View style={{
                 width: this.props.isSquare ? '100%' : 'auto',
             }}>
-                <H3 style={{
+                <Title style={{
                     color: this.props.isAvailable ?
-                        ThemeManager.getCurrentThemeVariables().textColor :
-                        ThemeManager.getCurrentThemeVariables().listNoteColor,
+                        ThemeManager.getCurrentThemeVariables().text :
+                        ThemeManager.getCurrentThemeVariables().textDisabled,
                     textAlign: this.props.isSquare ? 'center' : 'left',
                     width: this.props.isSquare ? '100%' : 'auto',
                 }}>
                     {this.props.title}
-                </H3>
+                </Title>
                 <Text style={{
                     color: this.props.isAvailable ?
-                        ThemeManager.getCurrentThemeVariables().listNoteColor :
-                        ThemeManager.getCurrentThemeVariables().textDisabledColor,
+                        ThemeManager.getCurrentThemeVariables().text :
+                        ThemeManager.getCurrentThemeVariables().textDisabled,
                     textAlign: this.props.isSquare ? 'center' : 'left',
                     width: this.props.isSquare ? '100%' : 'auto',
                 }}>
@@ -188,21 +184,12 @@ export default class DashboardItem extends React.Component<Props> {
     getContent() {
         if (this.props.isSquare) {
             return (
-                <Body>
+                <View>
                     <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
                         {this.getIcon()}
                     </View>
                     {this.getText()}
-                </Body>
-            );
-        } else {
-            return (
-                <Left>
-                    {this.getIcon()}
-                    <Body>
-                        {this.getText()}
-                    </Body>
-                </Left>
+                </View>
             );
         }
     }
@@ -217,33 +204,41 @@ export default class DashboardItem extends React.Component<Props> {
             else
                 marginRight = 0
         }
+        const color = this.props.isAvailable ?
+            ThemeManager.getCurrentThemeVariables().text :
+            ThemeManager.getCurrentThemeVariables().textDisabled;
         return (
-            <Card style={{
-                flex: 0,
-                width: this.props.isSquare ? '48%' : 'auto',
-                marginLeft: this.props.isSquare ? 0 : 10,
-                marginRight: marginRight,
-                marginTop: 10,
-                borderRadius: CARD_BORDER_RADIUS,
-                backgroundColor: ThemeManager.getCurrentThemeVariables().cardDefaultBg,
-                overflow: 'hidden',
-            }}>
-                <PlatformTouchable
-                    onPress={this.props.clickAction}
-                    style={{
-                        zIndex: 100,
-                        minHeight: this.props.isSquare ? 150 : 'auto',
-                    }}
-                >
+            <Card
+                style={{
+                    width: this.props.isSquare ? '48%' : 'auto',
+                    marginLeft: this.props.isSquare ? 0 : 10,
+                    marginRight: marginRight,
+                    marginTop: 10,
+                    overflow: 'hidden',
+                }}
+                onPress={this.props.clickAction}>
+                {this.props.isSquare ?
+                    <Card.Content>
+                        {this.getContent()}
+                    </Card.Content>
+                    :
                     <View>
-                        <CardItem style={{
-                            backgroundColor: 'transparent',
-                        }}>
-                            {this.getContent()}
-                        </CardItem>
-                        {this.getEventPreviewContainer()}
-                    </View>
-                </PlatformTouchable>
+                        <Card.Title
+                            title={this.props.title}
+                            titleStyle={{color: color}}
+                            subtitle={this.props.subtitle}
+                            subtitleStyle={{color: color}}
+                            left={(props) => <Avatar.Icon
+                                {...props}
+                                icon={this.props.icon}
+                                color={this.props.isAvailable ? this.props.color : ThemeManager.getCurrentThemeVariables().textDisabled}
+                                size={60}
+                                style={{backgroundColor: 'transparent'}}/>}
+                        />
+                        <Card.Content>
+                            {this.getEventPreviewContainer()}
+                        </Card.Content>
+                    </View>}
             </Card>
         );
     }

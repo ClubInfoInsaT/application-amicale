@@ -1,12 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {H3, Spinner, View} from "native-base";
 import ThemeManager from '../utils/ThemeManager';
 import WebDataManager from "../utils/WebDataManager";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import i18n from "i18n-js";
-import {RefreshControl, SectionList} from "react-native";
+import {ActivityIndicator, Subheading} from 'react-native-paper';
+import {RefreshControl, SectionList, View} from "react-native";
 
 type Props = {
     navigation: Object,
@@ -148,22 +148,25 @@ export default class WebSectionList extends React.Component<Props, State> {
                     marginBottom: 20
                 }}>
                     {this.state.refreshing ?
-                        <Spinner/>
+                        <ActivityIndicator
+                            animating={true}
+                            size={'large'}
+                            color={ThemeManager.getCurrentThemeVariables().primary}/>
                         :
                         <MaterialCommunityIcons
                             name={item.icon}
                             size={100}
-                            color={ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText}/>}
+                            color={ThemeManager.getCurrentThemeVariables().textDisabled}/>}
                 </View>
 
-                <H3 style={{
+                <Subheading style={{
                     textAlign: 'center',
                     marginRight: 20,
                     marginLeft: 20,
-                    color: ThemeManager.getCurrentThemeVariables().fetchedDataSectionListErrorText
+                    color: ThemeManager.getCurrentThemeVariables().textDisabled
                 }}>
                     {item.text}
-                </H3>
+                </Subheading>
             </View>);
     }
 

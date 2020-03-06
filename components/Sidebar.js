@@ -1,17 +1,19 @@
 // @flow
 
 import * as React from 'react';
-import {Dimensions, FlatList, Image,Platform, StyleSheet} from 'react-native';
-import {Container, Left, ListItem, Text} from "native-base";
+import {Dimensions, FlatList, Image, Platform, StyleSheet, View} from 'react-native';
 import i18n from "i18n-js";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
 import * as WebBrowser from 'expo-web-browser';
+import {List} from 'react-native-paper';
+import {DrawerItem} from '@react-navigation/drawer';
 
 const deviceWidth = Dimensions.get("window").width;
 
 type Props = {
     navigation: Object,
+    state: Object,
 };
 
 type State = {
@@ -142,32 +144,29 @@ export default class SideBar extends React.Component<Props, State> {
 
     getRenderItem({item}: Object) {
         const onListItemPress = this.onListItemPress.bind(this, item);
-        // return <View/>;
         if (item.icon !== undefined) {
             return (
-                <ListItem
-                    button
-                    noBorder
+                <DrawerItem
+                    label={item.name}
+                    focused={false}
+                    icon={({color, size}) =>
+                        <MaterialCommunityIcons color={color} size={size} name={item.icon}/>}
                     selected={this.state.active === item.route}
                     onPress={onListItemPress}
-                >
-                    <Left>
-                        <MaterialCommunityIcons
-                            name={item.icon}
-                            size={26}
-                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}
-                        />
-                        <Text style={styles.text}>
-                            {item.name}
-                        </Text>
-                    </Left>
-                </ListItem>
+                    style={{
+                        marginLeft: 0,
+                        marginRight: 0,
+                        padding: 0,
+                        borderRadius: 0
+                    }}
+                />
             );
         } else {
             return (
-                <ListItem itemDivider>
-                    <Text>{item.name}</Text>
-                </ListItem>
+                <List.Item
+                    title={item.name}
+                    style={{backgroundColor: ThemeManager.getCurrentThemeVariables().dividerBackground}}
+                />
             );
         }
 
@@ -176,9 +175,7 @@ export default class SideBar extends React.Component<Props, State> {
     render() {
         console.log("rendering SideBar");
         return (
-            <Container style={{
-                backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
-            }}>
+            <View style={{height: '100%'}}>
                 <Image source={require("../assets/drawer-cover.png")} style={styles.drawerCover}/>
                 <FlatList
                     data={this.dataSet}
@@ -186,7 +183,7 @@ export default class SideBar extends React.Component<Props, State> {
                     keyExtractor={this.listKeyExtractor}
                     renderItem={this.getRenderItem}
                 />
-            </Container>
+            </View>
         );
     }
 }

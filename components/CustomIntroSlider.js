@@ -4,7 +4,7 @@ import * as React from 'react';
 import {LinearGradient} from "expo-linear-gradient";
 import {Image, StyleSheet, View} from "react-native";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
-import {Text} from "native-base";
+import {Text} from "react-native-paper";
 import i18n from 'i18n-js';
 import AppIntroSlider from "react-native-app-intro-slider";
 

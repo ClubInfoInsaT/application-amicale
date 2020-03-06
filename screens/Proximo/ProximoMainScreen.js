@@ -1,13 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, View} from 'react-native'
-import {Body, Left, ListItem, Right, Text} from 'native-base';
+import {View} from 'react-native'
 import i18n from "i18n-js";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../../utils/ThemeManager";
-import Touchable from "react-native-platform-touchable";
 import WebSectionList from "../../components/WebSectionList";
+import {IconButton, List} from 'react-native-paper';
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 
@@ -157,24 +155,19 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
             <View
                 style={{
                     flexDirection: 'row',
-                    marginRight: 10,
                 }}>
-                <Touchable
-                    style={{padding: 6}}
-                    onPress={this.onPressSearchBtn}>
-                    <MaterialCommunityIcons
-                        name="magnify"
-                        size={26}
-                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}/>
-                </Touchable>
-                <Touchable
-                    style={{padding: 6}}
-                    onPress={this.onPressAboutBtn}>
-                    <MaterialCommunityIcons
-                        name="information"
-                        size={26}
-                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}/>
-                </Touchable>
+                <IconButton
+                    icon="magnify"
+                    size={26}
+                    color={ThemeManager.getCurrentThemeVariables().text}
+                    onPress={this.onPressSearchBtn}
+                />
+                <IconButton
+                    icon="information"
+                    size={26}
+                    color={ThemeManager.getCurrentThemeVariables().text}
+                    onPress={this.onPressAboutBtn}
+                />
             </View>
         );
     }
@@ -185,36 +178,20 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
             shouldFocusSearchBar: false,
             data: item,
         };
+        const subtitle = item.data.length + " " + (item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article'));
         const onPress = this.props.navigation.navigate.bind(this, 'ProximoListScreen', dataToSend);
         if (item.data.length > 0) {
             return (
-                <ListItem
-                    button
-                    thumbnail
+                <List.Item
+                    title={item.type.name}
+                    description={subtitle}
                     onPress={onPress}
-                >
-                    <Left>
-                        <MaterialCommunityIcons
-                            name={item.type.icon}
-                            size={30}
-                            color={ThemeManager.getCurrentThemeVariables().brandPrimary}
-                        />
-                    </Left>
-                    <Body>
-                        <Text>
-                            {item.type.name}
-                        </Text>
-                        <Text note>
-                            {item.data.length} {item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article')}
-                        </Text>
-                    </Body>
-                    <Right>
-                        <MaterialCommunityIcons
-                            icon="chevron-right"
-                            size={26}
-                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
-                    </Right>
-                </ListItem>
+                    left={props => <List.Icon
+                        {...props}
+                        icon={item.type.icon}
+                        color={ThemeManager.getCurrentThemeVariables().primary}/>}
+                    right={props => <List.Icon {...props} icon={'chevron-right'}/>}
+                />
             );
         } else
             return <View/>;

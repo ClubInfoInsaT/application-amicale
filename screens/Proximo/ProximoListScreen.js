@@ -1,14 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Body, Content, H1, H3, Input, Item, Left, ListItem, Right, Text, Thumbnail} from 'native-base';
-import {FlatList, Image, Platform, View} from "react-native";
-import Touchable from 'react-native-platform-touchable';
-import Menu, {MenuItem} from 'react-native-material-menu';
+import {FlatList, Image, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../../utils/ThemeManager";
 import {Modalize} from 'react-native-modalize';
+import {Avatar, Divider, IconButton, List, Menu, Searchbar, Subheading, Text, Title} from "react-native-paper";
 
 const sortMode = {
     price: "0",
@@ -51,6 +49,7 @@ type State = {
     sortNameIcon: React.Node,
     modalCurrentDisplayItem: Object,
     currentlyDisplayedData: Array<Object>,
+    menuVisible: boolean,
 };
 
 /**
@@ -62,13 +61,11 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     originalData: Array<Object>;
     shouldFocusSearchBar: boolean;
 
-    sortMenuRef: Menu;
-
-    onMenuRef: Function;
     onSearchStringChange: Function;
     onSelectSortModeName: Function;
     onSelectSortModePrice: Function;
     onSortMenuPress: Function;
+    onSortMenuDismiss: Function;
     renderItem: Function;
 
     constructor(props: any) {
@@ -83,24 +80,17 @@ export default class ProximoListScreen extends React.Component<Props, State> {
             sortPriceIcon: '',
             sortNameIcon: '',
             modalCurrentDisplayItem: {},
+            menuVisible: false,
         };
 
-        this.onMenuRef = this.onMenuRef.bind(this);
         this.onSearchStringChange = this.onSearchStringChange.bind(this);
         this.onSelectSortModeName = this.onSelectSortModeName.bind(this);
         this.onSelectSortModePrice = this.onSelectSortModePrice.bind(this);
         this.onSortMenuPress = this.onSortMenuPress.bind(this);
+        this.onSortMenuDismiss = this.onSortMenuPress.bind(this);
         this.renderItem = this.renderItem.bind(this);
     }
 
-    /**
-     * Saves the reference to the sort menu for later use
-     *
-     * @param ref The menu reference
-     */
-    onMenuRef(ref: Menu) {
-        this.sortMenuRef = ref;
-    };
 
     /**
      * Sets the sort mode based on the one selected.
@@ -146,8 +136,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 break;
         }
         this.setupSortIcons(mode, isReverse);
-        if (this.sortMenuRef !== undefined)
-            this.sortMenuRef.hide();
     }
 
     /**
@@ -165,23 +153,10 @@ export default class ProximoListScreen extends React.Component<Props, State> {
 
     getSearchBar() {
         return (
-            <Body style={{width: '100%'}}>
-                <Item
-                    style={{
-                        width: '100%',
-                        marginBottom: 7
-                    }}>
-                    <MaterialCommunityIcons
-                        name={'magnify'}
-                        size={26}
-                        color={ThemeManager.getCurrentThemeVariables().toolbarBtnColor}/>
-                    <Input
-                        ref="searchInput"
-                        placeholder={i18n.t('proximoScreen.search')}
-                        placeholderTextColor={ThemeManager.getCurrentThemeVariables().toolbarPlaceholderColor}
-                        onChangeText={this.onSearchStringChange}/>
-                </Item>
-            </Body>
+            <Searchbar
+                placeholder={i18n.t('proximoScreen.search')}
+                onChangeText={this.onSearchStringChange}
+            />
         );
     }
 
@@ -194,11 +169,11 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     getStockColor(availableStock: number) {
         let color: string;
         if (availableStock > 3)
-            color = ThemeManager.getCurrentThemeVariables().brandSuccess;
+            color = ThemeManager.getCurrentThemeVariables().success;
         else if (availableStock > 0)
-            color = ThemeManager.getCurrentThemeVariables().brandWarning;
+            color = ThemeManager.getCurrentThemeVariables().warning;
         else
-            color = ThemeManager.getCurrentThemeVariables().brandDanger;
+            color = ThemeManager.getCurrentThemeVariables().danger;
         return color;
     }
 
@@ -212,12 +187,10 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         const downSortIcon =
             <MaterialCommunityIcons
                 name={'sort-descending'}
-                color={'#000'}
                 size={26}/>;
         const upSortIcon =
             <MaterialCommunityIcons
                 name={'sort-ascending'}
-                color={'#000'}
                 size={26}/>;
         switch (mode) {
             case sortMode.price:
@@ -274,27 +247,27 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 flex: 1,
                 padding: 20
             }}>
-                <H1>{this.state.modalCurrentDisplayItem.name}</H1>
+                <Title>{this.state.modalCurrentDisplayItem.name}</Title>
                 <View style={{
                     flexDirection: 'row',
                     width: '100%',
                     marginTop: 10,
                 }}>
-                    <H3 style={{
+                    <Subheading style={{
                         color: this.getStockColor(parseInt(this.state.modalCurrentDisplayItem.quantity)),
                     }}>
                         {this.state.modalCurrentDisplayItem.quantity + ' ' + i18n.t('proximoScreen.inStock')}
-                    </H3>
-                    <H3 style={{marginLeft: 'auto'}}>{this.state.modalCurrentDisplayItem.price}€</H3>
+                    </Subheading>
+                    <Subheading style={{marginLeft: 'auto'}}>{this.state.modalCurrentDisplayItem.price}€</Subheading>
                 </View>
 
-                <Content>
+                <ScrollView>
                     <View style={{width: '100%', height: 150, marginTop: 20, marginBottom: 20}}>
                         <Image style={{flex: 1, resizeMode: "contain"}}
                                source={{uri: this.state.modalCurrentDisplayItem.image}}/>
                     </View>
                     <Text>{this.state.modalCurrentDisplayItem.description}</Text>
-                </Content>
+                </ScrollView>
             </View>
         );
     }
@@ -317,65 +290,50 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     }
 
     onSortMenuPress() {
-        this.sortMenuRef.show();
+        this.setState({menuVisible: true});
+        console.log('pressed');
     }
 
+    onSortMenuDismiss() {
+        this.setState({menuVisible: false});
+    }
 
     getSortMenu() {
         return (
             <Menu
-                ref={this.onMenuRef}
-                button={
-                    <Touchable
-                        style={{padding: 6, marginRight: 10}}
-                        onPress={this.onSortMenuPress}>
-                        <MaterialCommunityIcons
-                            color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                            name={'sort'}
-                            size={26}/>
-                    </Touchable>
+                visible={this.state.menuVisible}
+                onDismiss={this.onSortMenuDismiss}
+                anchor={
+                    <IconButton
+                        icon="sort"
+                        color={ThemeManager.getCurrentThemeVariables().text}
+                        size={26}
+                        onPress={this.onSortMenuPress}
+                    />
                 }
             >
-                <MenuItem
-                    onPress={this.onSelectSortModeName}>
-                    {this.state.sortNameIcon}
-                    {i18n.t('proximoScreen.sortName')}
-                </MenuItem>
-                <MenuItem
-                    onPress={this.onSelectSortModePrice}>
-                    {this.state.sortPriceIcon}
-                    {i18n.t('proximoScreen.sortPrice')}
-                </MenuItem>
+                <Menu.Item onPress={this.onSelectSortModeName} title={i18n.t('proximoScreen.sortName')}/>
+                <Divider/>
+                <Menu.Item onPress={this.onSelectSortModePrice} title={i18n.t('proximoScreen.sortPrice')}/>
             </Menu>
         );
     }
 
     renderItem({item}: Object) {
-        const onListItemPress = this.onListItemPress.bind(this, item);
-        return (<ListItem
-            thumbnail
-            onPress={onListItemPress}
-        >
-            <Left>
-                <Thumbnail square source={{uri: item.image}}/>
-            </Left>
-            <Body>
-                <Text style={{marginLeft: 20}}>
-                    {item.name}
-                </Text>
-                <Text note style={{
-                    marginLeft: 20,
-                    color: this.getStockColor(parseInt(item.quantity))
-                }}>
-                    {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
-                </Text>
-            </Body>
-            <Right>
-                <Text style={{fontWeight: "bold"}}>
-                    {item.price}€
-                </Text>
-            </Right>
-        </ListItem>);
+        const onPress = this.onListItemPress.bind(this, item);
+        return (
+            <List.Item
+                title={item.name}
+                description={item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
+                descriptionStyle={{color: this.getStockColor(parseInt(item.quantity))}}
+                onPress={onPress}
+                left={props => <Avatar.Image size={64} source={{uri: item.image}}/>}
+                right={props =>
+                    <Text style={{fontWeight: "bold"}}>
+                        {item.price}€
+                    </Text>}
+            />
+        );
     }
 
     keyExtractor(item: Object) {
@@ -384,12 +342,11 @@ export default class ProximoListScreen extends React.Component<Props, State> {
 
     render() {
         // console.log("rendering ProximoListScreen");
-        const nav = this.props.navigation;
         return (
             <View>
                 <Modalize ref={this.modalRef}
                           adjustToContentHeight
-                          modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
+                          modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().card}}>
                     {this.getModalContent()}
                 </Modalize>
                 <FlatList

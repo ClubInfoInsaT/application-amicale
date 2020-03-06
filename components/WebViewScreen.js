@@ -1,12 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, View} from 'react-native';
-import {Container, Spinner, Tab, TabHeading, Tabs, Text} from 'native-base';
+import {View} from 'react-native';
 import WebView from "react-native-webview";
 import Touchable from "react-native-platform-touchable";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
+import {ActivityIndicator} from 'react-native-paper';
 
 type Props = {
     navigation: Object,
@@ -62,9 +62,9 @@ export default class WebViewScreen extends React.Component<Props> {
                 style={{padding: 6}}
                 onPress={clickAction}>
                 <MaterialCommunityIcons
-                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
                     name={icon}
-                    size={26}/>
+                    size={26}
+                    color={ThemeManager.getCurrentThemeVariables().text}/>
             </Touchable>
         );
     }
@@ -112,7 +112,7 @@ export default class WebViewScreen extends React.Component<Props> {
     getRenderLoading() {
         return (
             <View style={{
-                backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
+                backgroundColor: ThemeManager.getCurrentThemeVariables().background,
                 position: 'absolute',
                 top: 0,
                 right: 0,
@@ -122,7 +122,10 @@ export default class WebViewScreen extends React.Component<Props> {
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
-                <Spinner/>
+                <ActivityIndicator
+                    animating={true}
+                    size={'large'}
+                    color={ThemeManager.getCurrentThemeVariables().primary}/>
             </View>
         );
     }
@@ -144,50 +147,11 @@ export default class WebViewScreen extends React.Component<Props> {
         );
     }
 
-    getTabbedWebview() {
-        let tabbedView = [];
-        for (let i = 0; i < this.props.data.length; i++) {
-            tabbedView.push(
-                <Tab heading={
-                    <TabHeading>
-                        <MaterialCommunityIcons
-                            name={this.props.data[i]['icon']}
-                            color={ThemeManager.getCurrentThemeVariables().tabIconColor}
-                            size={20}
-                        />
-                        <Text>{this.props.data[i]['name']}</Text>
-                    </TabHeading>}
-                     key={this.props.data[i]['url']}
-                     style={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
-                    {this.getWebview(this.props.data[i])}
-                </Tab>);
-        }
-        return tabbedView;
-    }
-
     render() {
         // console.log("rendering WebViewScreen");
-        const nav = this.props.navigation;
         this.webviewArray = [];
         return (
-            <Container>
-                {this.props.data.length === 1 ?
-                    this.getWebview(this.props.data[0]) :
-                    <Tabs
-                        tabContainerStyle={{
-                            elevation: 0, // Fix for android shadow
-                        }}
-                        locked={true}
-                        style={{
-                            backgroundColor: Platform.OS === 'ios' ?
-                                ThemeManager.getCurrentThemeVariables().tabDefaultBg :
-                                ThemeManager.getCurrentThemeVariables().brandPrimary
-                        }}
-
-                    >
-                        {this.getTabbedWebview()}
-                    </Tabs>}
-            </Container>
+            this.getWebview(this.props.data[0])
         );
     }
 }

@@ -2,13 +2,12 @@
 
 import * as React from 'react';
 import {FlatList, Linking, Platform, View} from 'react-native';
-import {Body, Button, Card, CardItem, Content, H1, Left, Right, Text, Thumbnail} from 'native-base';
 import i18n from "i18n-js";
 import appJson from '../../app';
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import {Modalize} from "react-native-modalize";
 import ThemeManager from "../../utils/ThemeManager";
+import {Avatar, Card, Text, Title, List, Button} from 'react-native-paper';
 
 const links = {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
@@ -197,80 +196,65 @@ export default class AboutScreen extends React.Component<Props, State> {
 
     getAppCard() {
         return (
-            <Card>
-                <CardItem>
-                    <Left>
-                        <Thumbnail square source={require('../../assets/android.icon.png')}/>
-                        <Body>
-                            <H1>{appJson.expo.name}</H1>
-                            <Text note>
-                                v.{appJson.expo.version}
-                            </Text>
-                        </Body>
-                    </Left>
-                </CardItem>
-                <FlatList
-                    data={this.appData}
-                    extraData={this.state}
-                    keyExtractor={(item) => item.icon}
-                    listKey={"app"}
-                    renderItem={this.getCardItem}
-                />
+            <Card style={{marginBottom: 10}}>
+                <Card.Title
+                    title={appJson.expo.name}
+                    subtitle={appJson.expo.version}
+                    left={(props) => <Avatar.Image {...props} source={require('../../assets/android.icon.png')}/>}/>
+                <Card.Content>
+                    <FlatList
+                        data={this.appData}
+                        extraData={this.state}
+                        keyExtractor={(item) => item.icon}
+                        listKey={"app"}
+                        renderItem={this.getCardItem}
+                    />
+                </Card.Content>
             </Card>
         );
     }
 
     getTeamCard() {
         return (
-            <Card>
-                <CardItem>
-                    <Left>
-                        <MaterialCommunityIcons
-                            name='account-multiple'
-                            size={40}
-                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
-                        <Body>
-                            <H1>{i18n.t('aboutScreen.team')}</H1>
-                        </Body>
-                    </Left>
-                </CardItem>
-                <CardItem header>
-                    <Text>{i18n.t('aboutScreen.author')}</Text>
-                </CardItem>
-                <FlatList
-                    data={this.authorData}
-                    extraData={this.state}
-                    keyExtractor={(item) => item.icon}
-                    listKey={"team1"}
-                    renderItem={this.getCardItem}
-                />
-                <CardItem header>
-                    <Text>{i18n.t('aboutScreen.additionalDev')}</Text>
-                </CardItem>
-                <FlatList
-                    data={this.additionalDevData}
-                    extraData={this.state}
-                    keyExtractor={(item) => item.icon}
-                    listKey={"team2"}
-                    renderItem={this.getCardItem}
-                />
+            <Card style={{marginBottom: 10}}>
+                <Card.Title
+                    title={i18n.t('aboutScreen.team')}
+                    left={(props) => <Avatar.Icon {...props} icon={'account-multiple'}/>}/>
+                <Card.Content>
+                    <Title>{i18n.t('aboutScreen.author')}</Title>
+                    <FlatList
+                        data={this.authorData}
+                        extraData={this.state}
+                        keyExtractor={(item) => item.icon}
+                        listKey={"team1"}
+                        renderItem={this.getCardItem}
+                    />
+                    <Title>{i18n.t('aboutScreen.additionalDev')}</Title>
+                    <FlatList
+                        data={this.additionalDevData}
+                        extraData={this.state}
+                        keyExtractor={(item) => item.icon}
+                        listKey={"team2"}
+                        renderItem={this.getCardItem}
+                    />
+                </Card.Content>
             </Card>
         );
     }
 
     getTechnoCard() {
         return (
-            <Card>
-                <CardItem header>
-                    <Text>{i18n.t('aboutScreen.technologies')}</Text>
-                </CardItem>
-                <FlatList
-                    data={this.technoData}
-                    extraData={this.state}
-                    keyExtractor={(item) => item.icon}
-                    listKey={"techno"}
-                    renderItem={this.getCardItem}
-                />
+            <Card style={{marginBottom: 10}}>
+                <Card.Content>
+                    <Title>{i18n.t('aboutScreen.technologies')}</Title>
+                    <FlatList
+                        data={this.technoData}
+                        extraData={this.state}
+                        keyExtractor={(item) => item.icon}
+                        listKey={"techno"}
+                        renderItem={this.getCardItem}
+                    />
+                </Card.Content>
             </Card>
         );
     }
@@ -282,31 +266,29 @@ export default class AboutScreen extends React.Component<Props, State> {
      */
     getCardItem({item}: Object) {
         let shouldShow = !item.showOnlyInDebug || (item.showOnlyInDebug && this.state.isDebugUnlocked);
+        console.log(item.text);
         if (shouldShow) {
-            return (
-                <CardItem button
-                          onPress={item.onPressCallback}>
-                    <Left>
-                        <MaterialCommunityIcons
-                            name={item.icon}
-                            size={26}
-                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
-                        <Text>{item.text}</Text>
-                    </Left>
-                    {item.showChevron ?
-                        <Right>
-                            <MaterialCommunityIcons
-                                name={'chevron-right'}
-                                size={26}
-                                color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
-                        </Right>
-                        :
-                        <Right/>
-                    }
-                </CardItem>)
-                ;
+            if (item.showChevron) {
+                return (
+                    <List.Item
+                        title={item.text}
+                        left={props => <List.Icon {...props} icon={item.icon} />}
+                        right={props => <List.Icon {...props} icon={'chevron-right'} />}
+                        onPress={item.onPressCallback}
+                    />
+                );
+            } else {
+                return (
+                    <List.Item
+                        title={item.text}
+                        left={props => <List.Icon {...props} icon={item.icon} />}
+                        onPress={item.onPressCallback}
+                    />
+                );
+            }
+
         } else {
-            return <View/>
+            return null;
         }
 
     }
@@ -330,39 +312,39 @@ export default class AboutScreen extends React.Component<Props, State> {
         return (
             <Modalize ref={this.modalRef}
                       adjustToContentHeight
-                      modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
+                      modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().surface}}>
                 <View style={{
                     flex: 1,
                     padding: 20
                 }}>
-                    <H1>{i18n.t('aboutScreen.bugs')}</H1>
+                    <Title>{i18n.t('aboutScreen.bugs')}</Title>
                     <Text>
                         {i18n.t('aboutScreen.bugsDescription')}
                     </Text>
                     <Button
+                        icon="email"
+                        mode="contained"
+                        dark={true}
+                        color={ThemeManager.getCurrentThemeVariables().primary}
                         style={{
                             marginTop: 20,
                             marginLeft: 'auto',
                             marginRight: 'auto',
                         }}
                         onPress={onPressMail}>
-                        <MaterialCommunityIcons
-                            name={'email'}
-                            size={26}
-                            color={'#fff'}/>
                         <Text>{i18n.t('aboutScreen.bugsMail')}</Text>
                     </Button>
                     <Button
+                        icon="git"
+                        mode="contained"
+                        dark={true}
+                        color={ThemeManager.getCurrentThemeVariables().primary}
                         style={{
                             marginTop: 20,
                             marginLeft: 'auto',
                             marginRight: 'auto',
                         }}
                         onPress={onPressGit}>
-                        <MaterialCommunityIcons
-                            name={'git'}
-                            size={26}
-                            color={'#fff'}/>
                         <Text>{i18n.t('aboutScreen.bugsGit')}</Text>
                     </Button>
                 </View>
@@ -390,7 +372,7 @@ export default class AboutScreen extends React.Component<Props, State> {
 
     render() {
         return (
-            <Content padder>
+            <View style={{padding: 5}}>
                 {this.getBugReportModal()}
                 <FlatList
                     style={{padding: 5}}
@@ -399,7 +381,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     keyExtractor={(item) => item.id}
                     renderItem={this.getMainCard}
                 />
-            </Content>
+            </View>
         );
     }
 }

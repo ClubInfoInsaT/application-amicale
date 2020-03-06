@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 import {View} from 'react-native';
-import {Card, CardItem, H2, H3, Text} from 'native-base';
 import ThemeManager from "../utils/ThemeManager";
 import i18n from "i18n-js";
 import WebSectionList from "../components/WebSectionList";
+import {Card, Text, Title} from 'react-native-paper';
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
 
@@ -102,11 +102,11 @@ export default class SelfMenuScreen extends React.Component<Props> {
                 marginBottom: 10,
                 borderRadius: 50
             }}>
-                <H2 style={{
+                <Title style={{
                     textAlign: 'center',
                     marginTop: 10,
                     marginBottom: 10
-                }}>{section.title}</H2>
+                }}>{section.title}</Title>
             </Card>
         );
     }
@@ -115,42 +115,32 @@ export default class SelfMenuScreen extends React.Component<Props> {
         return (
             <Card style={{
                 flex: 0,
-                marginLeft: 20,
-                marginRight: 20
+                margin: 10,
             }}>
-                <CardItem style={{
-                    paddingBottom: 0,
-                    flexDirection: 'column'
-                }}>
-                    <H3 style={{
-                        marginTop: 10,
-                        marginBottom: 0,
-                        color: ThemeManager.getCurrentThemeVariables().listNoteColor
-                    }}>{item.name}</H3>
+                    <Card.Title
+                        title={item.name}
+                        titleStyle={{textAlign: 'center'}}/>
                     <View style={{
                         width: '80%',
                         marginLeft: 'auto',
                         marginRight: 'auto',
                         borderBottomWidth: 1,
-                        borderBottomColor: ThemeManager.getCurrentThemeVariables().listBorderColor,
+                        borderBottomColor: ThemeManager.getCurrentThemeVariables().primary,
                         marginTop: 10,
                         marginBottom: 5,
                     }}/>
-                </CardItem>
-                <CardItem style={{
-                    flexDirection: 'column',
-                    paddingTop: 0,
-                }}>
+                <Card.Content>
                     {item.dishes.map((object) =>
                         <View>
                             {object.name !== "" ?
                                 <Text style={{
                                     marginTop: 5,
-                                    marginBottom: 5
+                                    marginBottom: 5,
+                                    textAlign: 'center'
                                 }}>{this.formatName(object.name)}</Text>
                                 : <View/>}
                         </View>)}
-                </CardItem>
+                </Card.Content>
             </Card>
         );
     }

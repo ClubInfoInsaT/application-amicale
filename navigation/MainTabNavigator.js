@@ -14,7 +14,7 @@ import PlanexScreen from '../screens/Websites/PlanexScreen';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
-import {Platform, StyleSheet, View} from "react-native";
+import {View} from "react-native";
 import Touchable from "react-native-platform-touchable";
 
 const TAB_ICONS = {
@@ -25,18 +25,7 @@ const TAB_ICONS = {
     Planex: 'timetable',
 };
 
-const styles = StyleSheet.create({
-    header: {
-        backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-    },
-    headerTitle: {
-        color: "#ffffff",
-    },
-});
-
 const defaultScreenOptions = {
-    headerTintColor: 'white',
-    headerStyle: styles.header,
     gestureEnabled: true,
     cardOverlayEnabled: true,
     ...TransitionPresets.SlideFromRightIOS,
@@ -55,7 +44,7 @@ function getDrawerButton(navigation: Object) {
                 <MaterialCommunityIcons
                     name="menu"
                     size={26}
-                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}/>
+                    color={ThemeManager.getCurrentThemeVariables().text}/>
             </Touchable>
         </View>
     );
@@ -226,7 +215,7 @@ export default function TabNavigator() {
     return (
         <Tab.Navigator
             initialRouteName={AsyncStorageManager.getInstance().preferences.defaultStartScreen.current}
-            barStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary}}
+            barStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().primary}}
             screenOptions={({route}) => ({
                 tabBarIcon: ({focused, color, size}) => {
                     let icon = TAB_ICONS[route.name];

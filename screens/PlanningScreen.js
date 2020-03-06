@@ -1,14 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {BackHandler, Image} from 'react-native';
-import {H3, Text, View} from 'native-base';
+import {BackHandler, Image, View} from 'react-native';
 import i18n from "i18n-js";
 import ThemeManager from "../utils/ThemeManager";
 import {Agenda, LocaleConfig} from 'react-native-calendars';
-import Touchable from 'react-native-platform-touchable';
 import WebDataManager from "../utils/WebDataManager";
 import PlanningEventManager from '../utils/PlanningEventManager';
+import {Text, Title, List, Avatar, Divider} from 'react-native-paper';
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
@@ -87,12 +86,6 @@ export default class PlanningScreen extends React.Component<Props, State> {
         this.onBackButtonPressAndroid = this.onBackButtonPressAndroid.bind(this);
     }
 
-    shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-        return nextState.refreshing === false && this.state.refreshing === true ||
-            nextState.agendaItems !== this.state.agendaItems ||
-            nextState.calendarShowing !== this.state.calendarShowing;
-    }
-
     componentDidMount() {
         this.onRefresh();
         this.willBlurSubscription = this.props.navigation.addListener(
@@ -113,11 +106,6 @@ export default class PlanningScreen extends React.Component<Props, State> {
             return false;
         }
     };
-
-    componentWillUnmount() {
-        this.didFocusSubscription && this.didFocusSubscription.remove();
-        this.willBlurSubscription && this.willBlurSubscription.remove();
-    }
 
     getCurrentDate() {
         let today = new Date();
@@ -141,63 +129,36 @@ export default class PlanningScreen extends React.Component<Props, State> {
     }
 
     getRenderItem(item: Object) {
-        return (
-            <Touchable
-                style={{
-                    backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
-                    borderRadius: 10,
-                    marginRight: 10,
-                    marginTop: 17,
-                }}
-                onPress={() => this.props.navigation.navigate('PlanningDisplayScreen', {data: item})}>
-                <View style={{
-                    padding: 10,
-                    flex: 1,
-                    flexDirection: 'row'
-                }}>
-                    <View style={{
-                        width: item.logo !== null ? '70%' : '100%',
-                    }}>
-                        <Text style={{
-                            color: ThemeManager.getCurrentThemeVariables().listNoteColor,
-                            marginTop: 5,
-                            marginBottom: 10
-                        }}>
-                            {PlanningEventManager.getFormattedTime(item)}
-                        </Text>
-                        <H3 style={{marginBottom: 10}}>{item.title}</H3>
-                    </View>
-                    <View style={{
-                        width: item.logo !== null ? '30%' : 0,
-                        height: 80
-                    }}>
-                        {item.logo !== null ?
-                            <Image source={{uri: item.logo}}
-                                   style={{
-                                       flex: 1,
-                                       resizeMode: "contain"
-                                   }}/>
-                            : <View/>}
-                    </View>
+        const onPress = this.props.navigation.navigate.bind(this, 'PlanningDisplayScreen', {data: item});
+        if (item.logo !== null) {
+            return (
+                <View>
+                    <Divider/>
+                    <List.Item
+                        title={item.title}
+                        description={PlanningEventManager.getFormattedTime(item)}
+                        left={props => <Avatar.Image source={{uri: item.logo}} />}
+                        onPress={onPress}
+                    />
                 </View>
-            </Touchable>
-        );
+            );
+        } else {
+            return (
+                <View>
+                    <Divider/>
+                    <List.Item
+                        title={item.title}
+                        description={PlanningEventManager.getFormattedTime(item)}
+                        onPress={onPress}
+                    />
+                </View>
+            );
+        }
     }
 
     getRenderEmptyDate() {
         return (
-            <View style={{
-                padding: 10,
-                flex: 1,
-            }}>
-                <View style={{
-                    width: '100%',
-                    height: 1,
-                    backgroundColor: ThemeManager.getCurrentThemeVariables().agendaEmptyLine,
-                    marginTop: 'auto',
-                    marginBottom: 'auto',
-                }}/>
-            </View>
+            <Divider/>
         );
     }
 
@@ -303,28 +264,28 @@ export default class PlanningScreen extends React.Component<Props, State> {
                 // agenda theme
                 theme={{
                     backgroundColor: ThemeManager.getCurrentThemeVariables().agendaBackgroundColor,
-                    calendarBackground: ThemeManager.getCurrentThemeVariables().containerBgColor,
-                    textSectionTitleColor: ThemeManager.getCurrentThemeVariables().listNoteColor,
-                    selectedDayBackgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                    calendarBackground: ThemeManager.getCurrentThemeVariables().background,
+                    textSectionTitleColor: ThemeManager.getCurrentThemeVariables().agendaDayTextColor,
+                    selectedDayBackgroundColor: ThemeManager.getCurrentThemeVariables().primary,
                     selectedDayTextColor: '#ffffff',
-                    todayTextColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                    dayTextColor: ThemeManager.getCurrentThemeVariables().textColor,
-                    textDisabledColor: ThemeManager.getCurrentThemeVariables().textDisabledColor,
-                    dotColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                    todayTextColor: ThemeManager.getCurrentThemeVariables().primary,
+                    dayTextColor: ThemeManager.getCurrentThemeVariables().text,
+                    textDisabledColor: ThemeManager.getCurrentThemeVariables().agendaDayTextColor,
+                    dotColor: ThemeManager.getCurrentThemeVariables().primary,
                     selectedDotColor: '#ffffff',
                     arrowColor: 'orange',
-                    monthTextColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                    indicatorColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                    monthTextColor: ThemeManager.getCurrentThemeVariables().primary,
+                    indicatorColor: ThemeManager.getCurrentThemeVariables().primary,
                     textDayFontWeight: '300',
                     textMonthFontWeight: 'bold',
                     textDayHeaderFontWeight: '300',
                     textDayFontSize: 16,
                     textMonthFontSize: 16,
                     textDayHeaderFontSize: 16,
-                    agendaDayTextColor: ThemeManager.getCurrentThemeVariables().listNoteColor,
-                    agendaDayNumColor: ThemeManager.getCurrentThemeVariables().listNoteColor,
-                    agendaTodayColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                    agendaKnobColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                    agendaDayTextColor: ThemeManager.getCurrentThemeVariables().agendaDayTextColor,
+                    agendaDayNumColor: ThemeManager.getCurrentThemeVariables().agendaDayTextColor,
+                    agendaTodayColor: ThemeManager.getCurrentThemeVariables().primary,
+                    agendaKnobColor: ThemeManager.getCurrentThemeVariables().primary,
                 }}
             />
         );

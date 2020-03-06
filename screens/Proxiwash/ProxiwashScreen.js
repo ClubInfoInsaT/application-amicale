@@ -2,16 +2,13 @@
 
 import * as React from 'react';
 import {Alert, Platform, View} from 'react-native';
-import {Body, Card, CardItem, Left, Right, Text} from 'native-base';
 import ThemeManager from '../../utils/ThemeManager';
 import i18n from "i18n-js";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import WebSectionList from "../../components/WebSectionList";
 import NotificationsManager from "../../utils/NotificationsManager";
-import PlatformTouchable from "react-native-platform-touchable";
-import Touchable from "react-native-platform-touchable";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
+import {Divider, IconButton, List, Text} from 'react-native-paper';
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -288,17 +285,12 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
 
     getRightButton() {
         return (
-            <Touchable
-                style={{
-                    padding: 6,
-                    marginRight: 10
-                }}
-                onPress={this.onAboutPress}>
-                <MaterialCommunityIcons
-                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                    name="information"
-                    size={26}/>
-            </Touchable>
+            <IconButton
+                icon="information"
+                size={26}
+                color={ThemeManager.getCurrentThemeVariables().text}
+                onPress={this.onAboutPress}
+            />
         );
     }
 
@@ -327,75 +319,52 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
         let isDryer = section.title === i18n.t('proxiwashScreen.dryers');
         const onPress = this.showAlert.bind(this, machineName, item, isDryer);
+        let width = item.donePercent !== '' ? (parseInt(item.donePercent)).toString() + '%' : 0;
+        if (MACHINE_STATES[item.state] === '0')
+            width = '100%';
         return (
-            <Card style={{
-                flex: 0,
-                height: 64,
-                marginLeft: 10,
-                marginRight: 10
-            }}>
-
-                <CardItem
+            <View>
+                <View style={{
+                    height: '100%',
+                    position: 'absolute',
+                    left: 0,
+                    width: width,
+                    backgroundColor: stateColors[MACHINE_STATES[item.state]]
+                }}/>
+                <List.Item
+                    title={machineName}
+                    description={isMachineRunning ? item.startTime + '/' + item.endTime : ''}
+                    onPress={onPress}
                     style={{
-                        backgroundColor: stateColors[MACHINE_STATES[item.state]],
-                        paddingRight: 0,
-                        paddingLeft: 0,
-                        height: '100%',
+                        backgroundColor: 'transparent',
+                        height: 64
                     }}
-                >
-                    <View style={{
-                        height: 64,
-                        position: 'absolute',
-                        right: 0,
-                        width: item.donePercent !== '' ? (100 - parseInt(item.donePercent)).toString() + '%' : 0,
-                        backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor
-                    }}/>
-                    <PlatformTouchable
-                        onPress={onPress}
-                        style={{
-                            height: 64,
-                            position: 'absolute',
-                            zIndex: 10, // Make sure the button is above the text
-                            right: 0,
-                            width: '100%'
-                        }}
-                    >
-                        <View/>
-                    </PlatformTouchable>
-                    <Left style={{marginLeft: 10}}>
-                        <MaterialCommunityIcons
-                            name={isDryer ? 'tumble-dryer' : 'washing-machine'}
-                            size={30}
-                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}
-                        />
-                        <Body>
-                            <Text>
-                                {machineName + ' '}
-                                {this.isMachineWatched(item.number) ?
-                                    <MaterialCommunityIcons
-                                        name='bell-ring'
-                                        color={ThemeManager.getCurrentThemeVariables().brandPrimary}
-                                        size={20}
-                                    /> : ''}
-                            </Text>
-                            <Text note>
-                                {isMachineRunning ? item.startTime + '/' + item.endTime : ''}
-                            </Text>
-                        </Body>
-                    </Left>
-                    <Right style={{marginRight: 10}}>
-                        <Text style={MACHINE_STATES[item.state] === MACHINE_STATES.TERMINE ?
-                            {fontWeight: 'bold'} : {}}
-                        >
-                            {stateStrings[MACHINE_STATES[item.state]]}
-                        </Text>
-                        <MaterialCommunityIcons
-                            name={stateIcons[MACHINE_STATES[item.state]]}
-                            size={25}
-                            color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}
-                        />
-                    </Right>
-                </CardItem>
-            </Card>);
+                    left={props => this.isMachineWatched(item.number) ?
+                        <List.Icon {...props} icon={'bell-ring'}
+                                   color={ThemeManager.getCurrentThemeVariables().primary}/> :
+                        <List.Icon {...props} icon={isDryer ? 'tumble-dryer' : 'washing-machine'}/>}
+                    right={props => (
+                        <View style={{flexDirection: 'row'}}>
+                            <View style={{
+                                justifyContent: 'center',
+                            }}>
+                                <Text style={
+                                    MACHINE_STATES[item.state] === MACHINE_STATES.TERMINE ?
+                                        {fontWeight: 'bold',} : {}}
+                                >
+                                    {stateStrings[MACHINE_STATES[item.state]]}
+                                </Text>
+                            </View>
+
+                            <List.Icon
+                                {...props}
+                                color={ThemeManager.getCurrentThemeVariables().text}
+                                icon={stateIcons[MACHINE_STATES[item.state]]}
+                            />
+                        </View>)}
+                />
+                <Divider/>
+            </View>
+        );
     }
 }

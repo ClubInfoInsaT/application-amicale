@@ -1,13 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Body, Card, CardItem, CheckBox, Content, Left, List, ListItem, Picker, Right, Text,} from "native-base";
+import {ScrollView, View} from "react-native";
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
-import {NavigationActions, StackActions} from "@react-navigation/native";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import NotificationsManager from "../utils/NotificationsManager";
+import {Card, List, Switch, RadioButton, Text, TouchableRipple} from 'react-native-paper';
 
 type Props = {
     navigation: Object,
@@ -51,28 +50,25 @@ export default class SettingsScreen extends React.Component<Props, State> {
      */
     static getGeneralItem(control: React.Node, icon: string, title: string, subtitle: string) {
         return (
-            <ListItem
-                thumbnail
-            >
-                <Left>
-                    <MaterialCommunityIcons
-                        name={icon}
-                        size={26}
-                        color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
-                </Left>
-                <Body>
-                    <Text>
-                        {title}
-                    </Text>
-                    <Text note>
-                        {subtitle}
-                    </Text>
-                </Body>
+            <List.Item
+                title={title}
+                description={subtitle}
+                left={props => <List.Icon {...props} icon={icon}/>}
+                right={props => control}
+            />
+        );
+    }
 
-                <Right>
-                    {control}
-                </Right>
-            </ListItem>
+    getRadioButton(onPress: Function, value: string, label: string) {
+        return (
+            <TouchableRipple
+                onPress={onPress}
+            >
+                <View pointerEvents="none">
+                    <Text>{label}</Text>
+                    <RadioButton value={value} />
+                </View>
+            </TouchableRipple>
         );
     }
 
@@ -113,19 +109,16 @@ export default class SettingsScreen extends React.Component<Props, State> {
      */
     getProxiwashNotifPicker() {
         return (
-            <Picker
-                note
-                mode="dropdown"
-                style={{width: 120}}
-                selectedValue={this.state.proxiwashNotifPickerSelected}
+            <RadioButton.Group
                 onValueChange={this.onProxiwashNotifPickerValueChange}
+                value={this.state.proxiwashNotifPickerSelected}
             >
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.never')} value="never"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.5')} value="5"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.10')} value="10"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.20')} value="20"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.30')} value="30"/>
-            </Picker>
+                <RadioButton.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.never')} value="never"/>
+                <RadioButton.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.5')} value="5"/>
+                <RadioButton.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.10')} value="10"/>
+                <RadioButton.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.20')} value="20"/>
+                <RadioButton.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.30')} value="30"/>
+            </RadioButton.Group>
         );
     }
 
@@ -136,19 +129,16 @@ export default class SettingsScreen extends React.Component<Props, State> {
      */
     getStartScreenPicker() {
         return (
-            <Picker
-                note
-                mode="dropdown"
-                style={{width: 120}}
-                selectedValue={this.state.startScreenPickerSelected}
+            <RadioButton.Group
                 onValueChange={this.onStartScreenPickerValueChange}
+                value={this.state.startScreenPickerSelected}
             >
-                <Picker.Item label={i18n.t('screens.home')} value="Home"/>
-                <Picker.Item label={i18n.t('screens.planning')} value="Planning"/>
-                <Picker.Item label={i18n.t('screens.proxiwash')} value="Proxiwash"/>
-                <Picker.Item label={i18n.t('screens.proximo')} value="Proximo"/>
-                <Picker.Item label={'Planex'} value="Planex"/>
-            </Picker>
+                <RadioButton.Item label={i18n.t('screens.home')} value="Home" style={{color: "#fff"}}/>
+                <RadioButton.Item label={i18n.t('screens.planning')} value="Planning"/>
+                <RadioButton.Item label={i18n.t('screens.proxiwash')} value="Proxiwash"/>
+                <RadioButton.Item label={i18n.t('screens.proximo')} value="Proximo"/>
+                <RadioButton.Item label={'Planex'} value="Planex"/>
+            </RadioButton.Group>
         );
     }
 
@@ -158,19 +148,6 @@ export default class SettingsScreen extends React.Component<Props, State> {
     onToggleNightMode() {
         ThemeManager.getInstance().setNightMode(!this.state.nightMode);
         this.setState({nightMode: !this.state.nightMode});
-        this.resetStack();
-    }
-
-    /**
-     * Reset react navigation stack to allow for a theme reset
-     */
-    resetStack() {
-        const resetAction = StackActions.reset({
-            index: 0,
-            key: null,
-            actions: [NavigationActions.navigate({routeName: 'Main'})],
-        });
-        this.props.navigation.dispatch(resetAction);
     }
 
     /**
@@ -184,57 +161,47 @@ export default class SettingsScreen extends React.Component<Props, State> {
      */
     getToggleItem(onPressCallback: Function, icon: string, title: string, subtitle: string) {
         return (
-            <ListItem
-                button
-                thumbnail
-                onPress={onPressCallback}
-            >
-                <Left>
-                    <MaterialCommunityIcons
-                        name={icon}
-                        size={26}
-                        color={ThemeManager.getCurrentThemeVariables().customMaterialIconColor}/>
-                </Left>
-                <Body>
-                    <Text>
-                        {title}
-                    </Text>
-                    <Text note>
-                        {subtitle}
-                    </Text>
-                </Body>
-                <Right>
-                    <CheckBox
-                        checked={this.state.nightMode}
-                        onPress={onPressCallback}
-                        style={{marginRight: 20}}/>
-                </Right>
-            </ListItem>
+            <List.Item
+                title={title}
+                description={subtitle}
+                left={props => <List.Icon {...props} icon={icon}/>}
+                right={props =>
+                    <Switch
+                        value={this.state.nightMode}
+                        onValueChange={onPressCallback}
+                    />}
+            />
         );
     }
 
     render() {
         return (
-            <Content padder>
-                <Card>
-                    <CardItem header>
-                        <Text>{i18n.t('settingsScreen.generalCard')}</Text>
-                    </CardItem>
-                    <List>
+            <ScrollView>
+                <Card style={{margin: 5}}>
+                    <Card.Title title={i18n.t('settingsScreen.generalCard')}/>
+                    <List.Section>
                         {this.getToggleItem(this.onToggleNightMode, 'theme-light-dark', i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.nightModeSub'))}
-                        {SettingsScreen.getGeneralItem(this.getStartScreenPicker(), 'power', i18n.t('settingsScreen.startScreen'), i18n.t('settingsScreen.startScreenSub'))}
-                    </List>
+                        <List.Accordion
+                            title={i18n.t('settingsScreen.startScreen')}
+                            description={i18n.t('settingsScreen.startScreenSub')}
+                            left={props => <List.Icon {...props} icon="power" />}
+                        >
+                            {this.getStartScreenPicker()}
+                        </List.Accordion>
+                    </List.Section>
                 </Card>
-                <Card>
-                    <CardItem header>
-                        <Text>Proxiwash</Text>
-                    </CardItem>
-                    <List>
-                        {SettingsScreen.getGeneralItem(this.getProxiwashNotifPicker(), 'washing-machine', i18n.t('settingsScreen.proxiwashNotifReminder'), i18n.t('settingsScreen.proxiwashNotifReminderSub'))}
-                    </List>
+                <Card style={{margin: 5}}>
+                    <Card.Title title="Proxiwash"/>
+                    <List.Accordion
+                        title={i18n.t('settingsScreen.proxiwashNotifReminder')}
+                        description={i18n.t('settingsScreen.proxiwashNotifReminderSub')}
+                        left={props => <List.Icon {...props} icon="washing-machine" />}
+                    >
+                        {this.getProxiwashNotifPicker()}
+                    </List.Accordion>
                 </Card>
-            </Content>
 
+            </ScrollView>
         );
     }
 }

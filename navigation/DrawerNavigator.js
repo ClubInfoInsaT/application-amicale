@@ -12,25 +12,12 @@ import BibScreen from "../screens/Websites/BibScreen";
 import DebugScreen from '../screens/DebugScreen';
 import Sidebar from "../components/Sidebar";
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
-import PerfHomeScreen from '../screens/PerfHomeScreen';
-import {Platform, StyleSheet, View} from "react-native";
-import ThemeManager from "../utils/ThemeManager";
+import {View} from "react-native";
 import Touchable from "react-native-platform-touchable";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
-
-
-const styles = StyleSheet.create({
-    header: {
-        backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-    },
-    headerTitle: {
-        color: "#ffffff",
-    },
-});
+import ThemeManager from "../utils/ThemeManager";
 
 const defaultScreenOptions = {
-    headerTintColor: 'white',
-    headerStyle: styles.header,
     gestureEnabled: true,
     cardOverlayEnabled: true,
     ...TransitionPresets.SlideFromRightIOS,
@@ -49,7 +36,7 @@ function getDrawerButton(navigation: Object) {
                 <MaterialCommunityIcons
                     name="menu"
                     size={26}
-                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}/>
+                    color={ThemeManager.getCurrentThemeVariables().text}/>
             </Touchable>
         </View>
     );
@@ -191,8 +178,8 @@ function BibStackComponent() {
 
 const Drawer = createDrawerNavigator();
 
-function getDrawerContent(nav) {
-    return <Sidebar navigation={nav}/>
+function getDrawerContent(props) {
+    return <Sidebar {...props}/>
 }
 
 export default function DrawerNavigator() {
@@ -201,8 +188,8 @@ export default function DrawerNavigator() {
             initialRouteName={'Main'}
             headerMode={'float'}
             backBehavior={'initialRoute'}
-            drawerType={'back'}
-            drawerContent={props => getDrawerContent(props.navigation)}
+            drawerType={'front'}
+            drawerContent={(props) => getDrawerContent(props)}
             screenOptions={defaultScreenOptions}
         >
             <Drawer.Screen
