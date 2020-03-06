@@ -1,10 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {Body, Container, ListItem, Text} from 'native-base';
-import CustomHeader from "../../components/CustomHeader";
+import {Body, ListItem, Text} from 'native-base';
 import {FlatList} from "react-native";
-import i18n from "i18n-js";
+import packageJson from '../../package';
 
 function generateListFromObject(object) {
     let list = [];
@@ -17,7 +16,8 @@ function generateListFromObject(object) {
 }
 
 type Props = {
-    navigation: Object
+    navigation: Object,
+    route: Object
 }
 
 /**
@@ -26,28 +26,24 @@ type Props = {
 export default class AboutDependenciesScreen extends React.Component<Props> {
 
     render() {
-        const nav = this.props.navigation;
-        const data = generateListFromObject(nav.getParam('data', {}));
+        const data = generateListFromObject(packageJson.dependencies);
         return (
-            <Container>
-                <CustomHeader hasBackButton={true} navigation={nav} title={i18n.t('aboutScreen.libs')}/>
-                <FlatList
-                    data={data}
-                    keyExtractor={(item) => item.name}
-                    style={{minHeight: 300, width: '100%'}}
-                    renderItem={({item}) =>
-                        <ListItem>
-                            <Body>
-                                <Text>
-                                    {item.name}
-                                </Text>
-                                <Text note>
-                                    {item.version.replace('^', '')}
-                                </Text>
-                            </Body>
-                        </ListItem>}
-                />
-            </Container>
+            <FlatList
+                data={data}
+                keyExtractor={(item) => item.name}
+                style={{minHeight: 300, width: '100%'}}
+                renderItem={({item}) =>
+                    <ListItem>
+                        <Body>
+                            <Text>
+                                {item.name}
+                            </Text>
+                            <Text note>
+                                {item.version.replace('^', '')}
+                            </Text>
+                        </Body>
+                    </ListItem>}
+            />
         );
     }
 }

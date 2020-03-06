@@ -12,7 +12,6 @@ import PlatformTouchable from "react-native-platform-touchable";
 import Touchable from "react-native-platform-touchable";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
-import BaseContainer from "../../components/BaseContainer";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -102,6 +101,10 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
      * Setup notification channel for android and add listeners to detect notifications fired
      */
     componentDidMount() {
+        const rightButton = this.getRightButton.bind(this);
+        this.props.navigation.setOptions({
+            headerRight: rightButton,
+        });
         if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
             // Get latest watchlist from server
             NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
@@ -283,10 +286,13 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         this.props.navigation.navigate('ProxiwashAboutScreen');
     }
 
-    getRightButton(): * {
+    getRightButton() {
         return (
             <Touchable
-                style={{padding: 6}}
+                style={{
+                    padding: 6,
+                    marginRight: 10
+                }}
                 onPress={this.onAboutPress}>
                 <MaterialCommunityIcons
                     color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
@@ -299,18 +305,13 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         return (
-            <BaseContainer
+            <WebSectionList
+                createDataset={this.createDataset}
                 navigation={nav}
-                headerTitle={i18n.t('screens.proxiwash')}
-                headerRightButton={this.getRightButton()}>
-                <WebSectionList
-                    createDataset={this.createDataset}
-                    navigation={nav}
-                    refreshTime={REFRESH_TIME}
-                    fetchUrl={DATA_URL}
-                    renderItem={this.getRenderItem}
-                    updateErrorText={i18n.t("proxiwashScreen.listUpdateFail")}/>
-            </BaseContainer>
+                refreshTime={REFRESH_TIME}
+                fetchUrl={DATA_URL}
+                renderItem={this.getRenderItem}
+                updateErrorText={i18n.t("proxiwashScreen.listUpdateFail")}/>
         );
     }
 

@@ -8,10 +8,52 @@ import AboutScreen from '../screens/About/AboutScreen';
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 import SelfMenuScreen from '../screens/SelfMenuScreen';
 import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
+import BibScreen from "../screens/Websites/BibScreen";
 import DebugScreen from '../screens/DebugScreen';
 import Sidebar from "../components/Sidebar";
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
 import PerfHomeScreen from '../screens/PerfHomeScreen';
+import {Platform, StyleSheet, View} from "react-native";
+import ThemeManager from "../utils/ThemeManager";
+import Touchable from "react-native-platform-touchable";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
+
+
+const styles = StyleSheet.create({
+    header: {
+        backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+    },
+    headerTitle: {
+        color: "#ffffff",
+    },
+});
+
+const defaultScreenOptions = {
+    headerTintColor: 'white',
+    headerStyle: styles.header,
+    gestureEnabled: true,
+    cardOverlayEnabled: true,
+    ...TransitionPresets.SlideFromRightIOS,
+};
+
+function getDrawerButton(navigation: Object) {
+    return (
+        <View
+            style={{
+                flexDirection: 'row',
+                marginLeft: 10
+            }}>
+            <Touchable
+                style={{padding: 6}}
+                onPress={navigation.openDrawer}>
+                <MaterialCommunityIcons
+                    name="menu"
+                    size={26}
+                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}/>
+            </Touchable>
+        </View>
+    );
+}
 
 const AboutStack = createStackNavigator();
 
@@ -19,27 +61,131 @@ function AboutStackComponent() {
     return (
         <AboutStack.Navigator
             initialRouteName="AboutScreen"
-            mode='card'
-            headerMode="none"
-            screenOptions={{
-                gestureEnabled: true,
-                cardOverlayEnabled: true,
-                ...TransitionPresets.SlideFromRightIOS,
-            }}
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
         >
             <AboutStack.Screen
                 name="AboutScreen"
                 component={AboutScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'About',
+                        headerLeft: openDrawer
+                    };
+                }}
             />
             <AboutStack.Screen
                 name="AboutDependenciesScreen"
                 component={AboutDependenciesScreen}
+                options={{
+                    title: 'Dependencies'
+                }}
             />
             <AboutStack.Screen
                 name="DebugScreen"
                 component={DebugScreen}
+                options={{
+                    title: 'Debug'
+                }}
             />
         </AboutStack.Navigator>
+    );
+}
+
+const SettingsStack = createStackNavigator();
+
+function SettingsStackComponent() {
+    return (
+        <SettingsStack.Navigator
+            initialRouteName="SettingsScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <SettingsStack.Screen
+                name="SettingsScreen"
+                component={SettingsScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Settings',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </SettingsStack.Navigator>
+    );
+}
+
+const SelfMenuStack = createStackNavigator();
+
+function SelfMenuStackComponent() {
+    return (
+        <SelfMenuStack.Navigator
+            initialRouteName="SelfMenuScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <SelfMenuStack.Screen
+                name="SelfMenuScreen"
+                component={SelfMenuScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Menu RU',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </SelfMenuStack.Navigator>
+    );
+}
+
+const AvailableRoomStack = createStackNavigator();
+
+function AvailableRoomStackComponent() {
+    return (
+        <AvailableRoomStack.Navigator
+            initialRouteName="AvailableRoomScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <AvailableRoomStack.Screen
+                name="AvailableRoomScreen"
+                component={AvailableRoomScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Available Rooms',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </AvailableRoomStack.Navigator>
+    );
+}
+
+const BibStack = createStackNavigator();
+
+function BibStackComponent() {
+    return (
+        <BibStack.Navigator
+            initialRouteName="BibScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <BibStack.Screen
+                name="BibScreen"
+                component={BibScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Bib',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </BibStack.Navigator>
     );
 }
 
@@ -53,13 +199,11 @@ export default function DrawerNavigator() {
     return (
         <Drawer.Navigator
             initialRouteName={'Main'}
-            mode='card'
+            headerMode={'float'}
+            backBehavior={'initialRoute'}
+            drawerType={'back'}
             drawerContent={props => getDrawerContent(props.navigation)}
-            screenOptions={{
-                gestureEnabled: true,
-                cardOverlayEnabled: true,
-                ...TransitionPresets.SlideFromRightIOS,
-            }}
+            screenOptions={defaultScreenOptions}
         >
             <Drawer.Screen
                 name="Main"
@@ -68,7 +212,7 @@ export default function DrawerNavigator() {
             </Drawer.Screen>
             <Drawer.Screen
                 name="SettingsScreen"
-                component={SettingsScreen}
+                component={SettingsStackComponent}
             />
             <Drawer.Screen
                 name="AboutScreen"
@@ -76,33 +220,16 @@ export default function DrawerNavigator() {
             />
             <Drawer.Screen
                 name="SelfMenuScreen"
-                component={SelfMenuScreen}
+                component={SelfMenuStackComponent}
             />
             <Drawer.Screen
                 name="AvailableRoomScreen"
-                component={AvailableRoomScreen}
+                component={AvailableRoomStackComponent}
+            />
+            <Drawer.Screen
+                name="BibScreen"
+                component={BibStackComponent}
             />
         </Drawer.Navigator>
-    );
-}
-
-const basicStack = createStackNavigator();
-
-function DrawerNavigator1() {
-    return (
-        <basicStack.Navigator
-            initialRouteName={'Main'}
-            mode='card'
-            screenOptions={{
-                gestureEnabled: true,
-                cardOverlayEnabled: true,
-                ...TransitionPresets.SlideFromRightIOS,
-            }}
-        >
-            <basicStack.Screen
-                name="Main"
-                component={TabNavigator}
-            />
-        </basicStack.Navigator>
     );
 }

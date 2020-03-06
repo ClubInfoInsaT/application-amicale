@@ -5,7 +5,6 @@ import {View} from 'react-native';
 import {Card, CardItem, H2, H3, Text} from 'native-base';
 import ThemeManager from "../utils/ThemeManager";
 import i18n from "i18n-js";
-import BaseContainer from "../components/BaseContainer";
 import WebSectionList from "../components/WebSectionList";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
@@ -95,7 +94,6 @@ export default class SelfMenuScreen extends React.Component<Props> {
     }
 
     getRenderSectionHeader({section}: Object) {
-        let title = "";
         return (
             <Card style={{
                 marginLeft: 10,
@@ -164,20 +162,15 @@ export default class SelfMenuScreen extends React.Component<Props> {
     render() {
         const nav = this.props.navigation;
         return (
-            <BaseContainer
+            <WebSectionList
+                createDataset={this.createDataset}
                 navigation={nav}
-                headerTitle={i18n.t('screens.menuSelf')}
-                hasBackButton={true}>
-                <WebSectionList
-                    createDataset={this.createDataset}
-                    navigation={nav}
-                    refreshTime={0}
-                    fetchUrl={DATA_URL}
-                    renderItem={this.getRenderItem}
-                    renderSectionHeader={this.getRenderSectionHeader}
-                    updateErrorText={i18n.t("homeScreen.listUpdateFail")}
-                    stickyHeader={true}/>
-            </BaseContainer>
+                refreshTime={0}
+                fetchUrl={DATA_URL}
+                renderItem={this.getRenderItem}
+                renderSectionHeader={this.getRenderSectionHeader}
+                updateErrorText={i18n.t("homeScreen.listUpdateFail")}
+                stickyHeader={true}/>
         );
     }
 }

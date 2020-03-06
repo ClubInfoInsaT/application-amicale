@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Platform, View} from 'react-native'
-import {Body, Left, ListItem, Right, Text, Container} from 'native-base';
+import {Body, Left, ListItem, Right, Text} from 'native-base';
 import i18n from "i18n-js";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../../utils/ThemeManager";
@@ -40,14 +40,6 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         this.createDataset = this.createDataset.bind(this);
     }
 
-    componentDidMount() {
-        const button = this.getRightButton.bind(this);
-        this.props.navigation.setOptions({
-            headerRight: button
-            ,
-        });
-    }
-
     static sortFinalData(a: Object, b: Object) {
         let str1 = a.type.name.toLowerCase();
         let str2 = b.type.name.toLowerCase();
@@ -64,6 +56,13 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         if (str1 > str2)
             return 1;
         return 0;
+    }
+
+    componentDidMount() {
+        const rightButton = this.getRightButton.bind(this);
+        this.props.navigation.setOptions({
+            headerRight: rightButton,
+        });
     }
 
     getKeyExtractor(item: Object) {
@@ -180,6 +179,7 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
         );
     }
 
+
     getRenderItem({item}: Object) {
         let dataToSend = {
             shouldFocusSearchBar: false,
@@ -223,15 +223,13 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         return (
-            <Container>
-                <WebSectionList
-                    createDataset={this.createDataset}
-                    navigation={nav}
-                    refreshTime={0}
-                    fetchUrl={DATA_URL}
-                    renderItem={this.getRenderItem}
-                    updateErrorText={i18n.t("homeScreen.listUpdateFail")}/>
-            </Container>
+            <WebSectionList
+                createDataset={this.createDataset}
+                navigation={nav}
+                refreshTime={0}
+                fetchUrl={DATA_URL}
+                renderItem={this.getRenderItem}
+                updateErrorText={i18n.t("homeScreen.listUpdateFail")}/>
         );
     }
 }

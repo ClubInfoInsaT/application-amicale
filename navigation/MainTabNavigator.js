@@ -14,7 +14,7 @@ import PlanexScreen from '../screens/Websites/PlanexScreen';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
-import {StyleSheet, View} from "react-native";
+import {Platform, StyleSheet, View} from "react-native";
 import Touchable from "react-native-platform-touchable";
 
 const TAB_ICONS = {
@@ -25,8 +25,6 @@ const TAB_ICONS = {
     Planex: 'timetable',
 };
 
-const ProximoStack = createStackNavigator();
-
 const styles = StyleSheet.create({
     header: {
         backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
@@ -36,24 +34,50 @@ const styles = StyleSheet.create({
     },
 });
 
+const defaultScreenOptions = {
+    headerTintColor: 'white',
+    headerStyle: styles.header,
+    gestureEnabled: true,
+    cardOverlayEnabled: true,
+    ...TransitionPresets.SlideFromRightIOS,
+};
+
+function getDrawerButton(navigation: Object) {
+    return (
+        <View
+            style={{
+                flexDirection: 'row',
+                marginLeft: 10
+            }}>
+            <Touchable
+                style={{padding: 6}}
+                onPress={navigation.openDrawer}>
+                <MaterialCommunityIcons
+                    name="menu"
+                    size={26}
+                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}/>
+            </Touchable>
+        </View>
+    );
+}
+
+const ProximoStack = createStackNavigator();
 
 function ProximoStackComponent() {
     return (
         <ProximoStack.Navigator
             initialRouteName="ProximoMainScreen"
             headerMode="float"
-            screenOptions={{
-                headerTintColor: 'white',
-                headerStyle: styles.header,
-                gestureEnabled: true,
-                cardOverlayEnabled: true,
-                ...TransitionPresets.SlideFromRightIOS,
-            }}
+            screenOptions={defaultScreenOptions}
         >
             <ProximoStack.Screen
                 name="ProximoMainScreen"
-                options={{
-                    title: 'Proximo',
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Proximo',
+                        headerLeft: openDrawer
+                    };
                 }}
                 component={ProximoMainScreen}
             />
@@ -82,21 +106,27 @@ function ProxiwashStackComponent() {
     return (
         <ProxiwashStack.Navigator
             initialRouteName="ProxiwashScreen"
-            mode='card'
-            headerMode="none"
-            screenOptions={{
-                gestureEnabled: true,
-                cardOverlayEnabled: true,
-                ...TransitionPresets.ModalSlideFromBottomIOS,
-            }}
+            headerMode='float'
+            screenOptions={defaultScreenOptions}
         >
             <ProxiwashStack.Screen
                 name="ProxiwashScreen"
                 component={ProxiwashScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Proxiwash',
+                        headerLeft: openDrawer
+                    };
+                }}
             />
             <ProxiwashStack.Screen
                 name="ProxiwashAboutScreen"
                 component={ProxiwashAboutScreen}
+                options={{
+                    title: 'Proxiwash',
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                }}
             />
         </ProxiwashStack.Navigator>
     );
@@ -108,21 +138,27 @@ function PlanningStackComponent() {
     return (
         <PlanningStack.Navigator
             initialRouteName="PlanningScreen"
-            mode='card'
-            headerMode="none"
-            screenOptions={{
-                gestureEnabled: true,
-                cardOverlayEnabled: true,
-                ...TransitionPresets.ModalSlideFromBottomIOS,
-            }}
+            headerMode='float'
+            screenOptions={defaultScreenOptions}
         >
             <PlanningStack.Screen
                 name="PlanningScreen"
                 component={PlanningScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Planning',
+                        headerLeft: openDrawer
+                    };
+                }}
             />
             <PlanningStack.Screen
                 name="PlanningDisplayScreen"
                 component={PlanningDisplayScreen}
+                options={{
+                    title: 'Details',
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                }}
             />
         </PlanningStack.Navigator>
     );
@@ -134,23 +170,53 @@ function HomeStackComponent() {
     return (
         <HomeStack.Navigator
             initialRouteName="HomeScreen"
-            mode='card'
             headerMode="float"
-            screenOptions={{
-                gestureEnabled: true,
-                cardOverlayEnabled: true,
-                ...TransitionPresets.ModalSlideFromBottomIOS,
-            }}
+            screenOptions={defaultScreenOptions}
         >
             <HomeStack.Screen
                 name="HomeScreen"
                 component={HomeScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Home',
+                        headerLeft: openDrawer
+                    };
+                }}
             />
             <HomeStack.Screen
                 name="PlanningDisplayScreen"
                 component={PlanningDisplayScreen}
+                options={{
+                    title: 'Details',
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                }}
             />
         </HomeStack.Navigator>
+    );
+}
+
+const PlanexStack = createStackNavigator();
+
+function PlanexStackComponent() {
+    return (
+        <PlanexStack.Navigator
+            initialRouteName="HomeScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <PlanexStack.Screen
+                name="PlanexScreen"
+                component={PlanexScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Planex',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </PlanexStack.Navigator>
     );
 }
 
@@ -188,7 +254,7 @@ export default function TabNavigator() {
             />
             <Tab.Screen
                 name="Planex"
-                component={PlanexScreen}
+                component={PlanexStackComponent}
             />
         </Tab.Navigator>
     );

@@ -20,9 +20,7 @@ import {
     Right,
     Text
 } from "native-base";
-import CustomHeader from "../components/CustomHeader";
 import ThemeManager from '../utils/ThemeManager';
-import i18n from "i18n-js";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {Alert, Clipboard, View} from "react-native";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
@@ -150,7 +148,6 @@ export default class DebugScreen extends React.Component<Props, State> {
     }
 
     render() {
-        const nav = this.props.navigation;
         return (
             <Container>
                 <Modalize
@@ -159,7 +156,6 @@ export default class DebugScreen extends React.Component<Props, State> {
                     modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
                     {this.getModalContent()}
                 </Modalize>
-                <CustomHeader navigation={nav} title={i18n.t('screens.debug')} hasBackButton={true}/>
                 <Content padder>
                     <Card>
                         <CardItem header>

@@ -1,8 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Body, Container, Content, H1, H3, Input, Item, Left, ListItem, Right, Text, Thumbnail} from 'native-base';
-import CustomHeader from "../../components/CustomHeader";
+import {Body, Content, H1, H3, Input, Item, Left, ListItem, Right, Text, Thumbnail} from 'native-base';
 import {FlatList, Image, Platform, View} from "react-native";
 import Touchable from 'react-native-platform-touchable';
 import Menu, {MenuItem} from 'react-native-material-menu';
@@ -387,7 +386,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         // console.log("rendering ProximoListScreen");
         const nav = this.props.navigation;
         return (
-            <Container>
+            <View>
                 <Modalize ref={this.modalRef}
                           adjustToContentHeight
                           modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
@@ -400,7 +399,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                     style={{minHeight: 300, width: '100%'}}
                     renderItem={this.renderItem}
                 />
-            </Container>
+            </View>
         );
     }
 }

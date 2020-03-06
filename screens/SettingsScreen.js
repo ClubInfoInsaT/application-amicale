@@ -1,21 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {
-    Body,
-    Card,
-    CardItem,
-    CheckBox,
-    Container,
-    Content,
-    Left,
-    List,
-    ListItem,
-    Picker,
-    Right,
-    Text,
-} from "native-base";
-import CustomHeader from "../components/CustomHeader";
+import {Body, Card, CardItem, CheckBox, Content, Left, List, ListItem, Picker, Right, Text,} from "native-base";
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
 import {NavigationActions, StackActions} from "@react-navigation/native";
@@ -228,30 +214,26 @@ export default class SettingsScreen extends React.Component<Props, State> {
     }
 
     render() {
-        const nav = this.props.navigation;
         return (
-            <Container>
-                <CustomHeader navigation={nav} title={i18n.t('screens.settings')} hasBackButton={true}/>
-                <Content padder>
-                    <Card>
-                        <CardItem header>
-                            <Text>{i18n.t('settingsScreen.generalCard')}</Text>
-                        </CardItem>
-                        <List>
-                            {this.getToggleItem(this.onToggleNightMode, 'theme-light-dark', i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.nightModeSub'))}
-                            {SettingsScreen.getGeneralItem(this.getStartScreenPicker(), 'power', i18n.t('settingsScreen.startScreen'), i18n.t('settingsScreen.startScreenSub'))}
-                        </List>
-                    </Card>
-                    <Card>
-                        <CardItem header>
-                            <Text>Proxiwash</Text>
-                        </CardItem>
-                        <List>
-                            {SettingsScreen.getGeneralItem(this.getProxiwashNotifPicker(), 'washing-machine', i18n.t('settingsScreen.proxiwashNotifReminder'), i18n.t('settingsScreen.proxiwashNotifReminderSub'))}
-                        </List>
-                    </Card>
-                </Content>
-            </Container>
+            <Content padder>
+                <Card>
+                    <CardItem header>
+                        <Text>{i18n.t('settingsScreen.generalCard')}</Text>
+                    </CardItem>
+                    <List>
+                        {this.getToggleItem(this.onToggleNightMode, 'theme-light-dark', i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.nightModeSub'))}
+                        {SettingsScreen.getGeneralItem(this.getStartScreenPicker(), 'power', i18n.t('settingsScreen.startScreen'), i18n.t('settingsScreen.startScreenSub'))}
+                    </List>
+                </Card>
+                <Card>
+                    <CardItem header>
+                        <Text>Proxiwash</Text>
+                    </CardItem>
+                    <List>
+                        {SettingsScreen.getGeneralItem(this.getProxiwashNotifPicker(), 'washing-machine', i18n.t('settingsScreen.proxiwashNotifReminder'), i18n.t('settingsScreen.proxiwashNotifReminderSub'))}
+                    </List>
+                </Card>
+            </Content>
 
         );
     }

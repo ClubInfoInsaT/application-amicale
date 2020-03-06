@@ -1,13 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Linking, Platform, View} from 'react-native';
-import {Body, Footer, Left, Right, Spinner, Tab, TabHeading, Tabs, Text} from 'native-base';
+import {Platform, View} from 'react-native';
+import {Container, Spinner, Tab, TabHeading, Tabs, Text} from 'native-base';
 import WebView from "react-native-webview";
 import Touchable from "react-native-platform-touchable";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
-import BaseContainer from "../components/BaseContainer";
 
 type Props = {
     navigation: Object,
@@ -50,8 +49,11 @@ export default class WebViewScreen extends React.Component<Props> {
         this.onOpenWebLink = this.onOpenWebLink.bind(this);
     }
 
-    openWebLink(url: string) {
-        Linking.openURL(url).catch((err) => console.error('Error opening link', err));
+    componentDidMount() {
+        const rightButton = this.getRefreshButton.bind(this);
+        this.props.navigation.setOptions({
+            headerRight: rightButton,
+        });
     }
 
     getHeaderButton(clickAction: Function, icon: string) {
@@ -69,7 +71,10 @@ export default class WebViewScreen extends React.Component<Props> {
 
     getRefreshButton() {
         return (
-            <View style={{flexDirection: 'row'}}>
+            <View style={{
+                flexDirection: 'row',
+                marginRight: 10
+            }}>
                 {this.getHeaderButton(this.onRefreshClicked, 'refresh')}
             </View>
         );
@@ -165,15 +170,7 @@ export default class WebViewScreen extends React.Component<Props> {
         const nav = this.props.navigation;
         this.webviewArray = [];
         return (
-            <BaseContainer
-                navigation={nav}
-                headerTitle={this.props.headerTitle}
-                headerRightButton={this.getRefreshButton()}
-                hasBackButton={this.props.hasHeaderBackButton}
-                hasSideMenu={this.props.hasSideMenu}
-                enableRotation={true}
-                hideHeaderOnLandscape={true}
-                hasTabs={this.props.data.length > 1}>
+            <Container>
                 {this.props.data.length === 1 ?
                     this.getWebview(this.props.data[0]) :
                     <Tabs
@@ -190,30 +187,7 @@ export default class WebViewScreen extends React.Component<Props> {
                     >
                         {this.getTabbedWebview()}
                     </Tabs>}
-                {this.props.hasFooter && this.props.data.length === 1 ?
-                    <Footer>
-                        <Left style={{
-                            paddingLeft: 6,
-                        }}>
-                            {this.getHeaderButton(this.onOpenWebLink, 'open-in-new')}
-                        </Left>
-                        <Body/>
-                        <Right style={{
-                            flexDirection: 'row',
-                            alignItems: 'flex-end',
-                            paddingRight: 6
-                        }}>
-                            <View style={{
-                                flexDirection: 'row',
-                                marginRight: 0,
-                                marginLeft: 'auto'
-                            }}>
-                                {this.getHeaderButton(this.onGoBackWebview, 'chevron-left')}
-                                {this.getHeaderButton(this.onGoForwardWebview, 'chevron-right')}
-                            </View>
-                        </Right>
-                    </Footer> : <View/>}
-            </BaseContainer>
+            </Container>
         );
     }
 }

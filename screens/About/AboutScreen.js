@@ -2,11 +2,9 @@
 
 import * as React from 'react';
 import {FlatList, Linking, Platform, View} from 'react-native';
-import {Body, Button, Card, CardItem, Container, H1, Left, Right, Text, Thumbnail} from 'native-base';
-import CustomHeader from "../../components/CustomHeader";
+import {Body, Button, Card, CardItem, Content, H1, Left, Right, Text, Thumbnail} from 'native-base';
 import i18n from "i18n-js";
 import appJson from '../../app';
-import packageJson from '../../package';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import {Modalize} from "react-native-modalize";
@@ -169,7 +167,7 @@ export default class AboutScreen extends React.Component<Props, State> {
             showChevron: true
         },
         {
-            onPressCallback: () => this.props.navigation.navigate('AboutDependenciesScreen', {data: packageJson.dependencies}),
+            onPressCallback: () => this.props.navigation.navigate('AboutDependenciesScreen'),
             icon: 'developer-board',
             text: i18n.t('aboutScreen.libs'),
             showChevron: true
@@ -391,11 +389,9 @@ export default class AboutScreen extends React.Component<Props, State> {
     }
 
     render() {
-        const nav = this.props.navigation;
         return (
-            <Container>
+            <Content padder>
                 {this.getBugReportModal()}
-                <CustomHeader navigation={nav} title={i18n.t('screens.about')} hasBackButton={true}/>
                 <FlatList
                     style={{padding: 5}}
                     data={this.dataOrder}
@@ -403,7 +399,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     keyExtractor={(item) => item.id}
                     renderItem={this.getMainCard}
                 />
-            </Container>
+            </Content>
         );
     }
 }

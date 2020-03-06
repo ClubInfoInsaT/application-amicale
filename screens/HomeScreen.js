@@ -9,7 +9,6 @@ import Autolink from 'react-native-autolink';
 import ThemeManager from "../utils/ThemeManager";
 import DashboardItem from "../components/DashboardItem";
 import * as WebBrowser from 'expo-web-browser';
-import BaseContainer from "../components/BaseContainer";
 import WebSectionList from "../components/WebSectionList";
 // import DATA from "../dashboard_data.json";
 
@@ -571,17 +570,13 @@ export default class HomeScreen extends React.Component<Props> {
     render() {
         const nav = this.props.navigation;
         return (
-            <BaseContainer
+            <WebSectionList
+                createDataset={this.createDataset}
                 navigation={nav}
-                headerTitle={i18n.t('screens.home')}>
-                <WebSectionList
-                    createDataset={this.createDataset}
-                    navigation={nav}
-                    refreshTime={REFRESH_TIME}
-                    fetchUrl={DATA_URL}
-                    renderItem={this.getRenderItem}
-                    updateErrorText={i18n.t("homeScreen.listUpdateFail")}/>
-            </BaseContainer>
+                refreshTime={REFRESH_TIME}
+                fetchUrl={DATA_URL}
+                renderItem={this.getRenderItem}
+                updateErrorText={i18n.t("homeScreen.listUpdateFail")}/>
         );
     }
 }

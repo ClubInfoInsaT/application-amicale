@@ -5,7 +5,6 @@ import {BackHandler, Image} from 'react-native';
 import {H3, Text, View} from 'native-base';
 import i18n from "i18n-js";
 import ThemeManager from "../utils/ThemeManager";
-import BaseContainer from "../components/BaseContainer";
 import {Agenda, LocaleConfig} from 'react-native-calendars';
 import Touchable from 'react-native-platform-touchable';
 import WebDataManager from "../utils/WebDataManager";
@@ -61,6 +60,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     onAgendaRef: Function;
     onCalendarToggled: Function;
     onBackButtonPressAndroid: Function;
+    currentDate = this.getCurrentDate();
 
     constructor(props: any) {
         super(props);
@@ -271,66 +271,62 @@ export default class PlanningScreen extends React.Component<Props, State> {
         this.setState({calendarShowing: isCalendarOpened});
     }
 
-    currentDate = this.getCurrentDate();
-
     render() {
         // console.log("rendering PlanningScreen");
         return (
-            <BaseContainer navigation={this.props.navigation} headerTitle={i18n.t('screens.planning')}>
-                <Agenda
-                    // the list of items that have to be displayed in agenda. If you want to render item as empty date
-                    // the value of date key kas to be an empty array []. If there exists no value for date key it is
-                    // considered that the date in question is not yet loaded
-                    items={this.state.agendaItems}
-                    // initially selected day
-                    selected={this.currentDate}
-                    // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-                    minDate={this.currentDate}
-                    // Max amount of months allowed to scroll to the past. Default = 50
-                    pastScrollRange={1}
-                    // Max amount of months allowed to scroll to the future. Default = 50
-                    futureScrollRange={AGENDA_MONTH_SPAN}
-                    // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
-                    onRefresh={this.onRefresh}
-                    // callback that fires when the calendar is opened or closed
-                    onCalendarToggled={this.onCalendarToggled}
-                    // Set this true while waiting for new data from a refresh
-                    refreshing={this.state.refreshing}
-                    renderItem={this.getRenderItem}
-                    renderEmptyDate={this.getRenderEmptyDate}
-                    rowHasChanged={this.rowHasChanged}
-                    // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-                    firstDay={1}
-                    // ref to this agenda in order to handle back button event
-                    ref={this.onAgendaRef}
-                    // agenda theme
-                    theme={{
-                        backgroundColor: ThemeManager.getCurrentThemeVariables().agendaBackgroundColor,
-                        calendarBackground: ThemeManager.getCurrentThemeVariables().containerBgColor,
-                        textSectionTitleColor: ThemeManager.getCurrentThemeVariables().listNoteColor,
-                        selectedDayBackgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                        selectedDayTextColor: '#ffffff',
-                        todayTextColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                        dayTextColor: ThemeManager.getCurrentThemeVariables().textColor,
-                        textDisabledColor: ThemeManager.getCurrentThemeVariables().textDisabledColor,
-                        dotColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                        selectedDotColor: '#ffffff',
-                        arrowColor: 'orange',
-                        monthTextColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                        indicatorColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                        textDayFontWeight: '300',
-                        textMonthFontWeight: 'bold',
-                        textDayHeaderFontWeight: '300',
-                        textDayFontSize: 16,
-                        textMonthFontSize: 16,
-                        textDayHeaderFontSize: 16,
-                        agendaDayTextColor: ThemeManager.getCurrentThemeVariables().listNoteColor,
-                        agendaDayNumColor: ThemeManager.getCurrentThemeVariables().listNoteColor,
-                        agendaTodayColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                        agendaKnobColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
-                    }}
-                />
-            </BaseContainer>
+            <Agenda
+                // the list of items that have to be displayed in agenda. If you want to render item as empty date
+                // the value of date key kas to be an empty array []. If there exists no value for date key it is
+                // considered that the date in question is not yet loaded
+                items={this.state.agendaItems}
+                // initially selected day
+                selected={this.currentDate}
+                // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+                minDate={this.currentDate}
+                // Max amount of months allowed to scroll to the past. Default = 50
+                pastScrollRange={1}
+                // Max amount of months allowed to scroll to the future. Default = 50
+                futureScrollRange={AGENDA_MONTH_SPAN}
+                // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
+                onRefresh={this.onRefresh}
+                // callback that fires when the calendar is opened or closed
+                onCalendarToggled={this.onCalendarToggled}
+                // Set this true while waiting for new data from a refresh
+                refreshing={this.state.refreshing}
+                renderItem={this.getRenderItem}
+                renderEmptyDate={this.getRenderEmptyDate}
+                rowHasChanged={this.rowHasChanged}
+                // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+                firstDay={1}
+                // ref to this agenda in order to handle back button event
+                ref={this.onAgendaRef}
+                // agenda theme
+                theme={{
+                    backgroundColor: ThemeManager.getCurrentThemeVariables().agendaBackgroundColor,
+                    calendarBackground: ThemeManager.getCurrentThemeVariables().containerBgColor,
+                    textSectionTitleColor: ThemeManager.getCurrentThemeVariables().listNoteColor,
+                    selectedDayBackgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                    selectedDayTextColor: '#ffffff',
+                    todayTextColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                    dayTextColor: ThemeManager.getCurrentThemeVariables().textColor,
+                    textDisabledColor: ThemeManager.getCurrentThemeVariables().textDisabledColor,
+                    dotColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                    selectedDotColor: '#ffffff',
+                    arrowColor: 'orange',
+                    monthTextColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                    indicatorColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                    textDayFontWeight: '300',
+                    textMonthFontWeight: 'bold',
+                    textDayHeaderFontWeight: '300',
+                    textDayFontSize: 16,
+                    textMonthFontSize: 16,
+                    textDayHeaderFontSize: 16,
+                    agendaDayTextColor: ThemeManager.getCurrentThemeVariables().listNoteColor,
+                    agendaDayNumColor: ThemeManager.getCurrentThemeVariables().listNoteColor,
+                    agendaTodayColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                    agendaKnobColor: ThemeManager.getCurrentThemeVariables().brandPrimary,
+                }}
+            />
         );
     }
 }

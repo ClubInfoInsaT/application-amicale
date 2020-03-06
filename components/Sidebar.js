@@ -41,6 +41,42 @@ export default class SideBar extends React.Component<Props, State> {
         // Dataset used to render the drawer
         this.dataSet = [
             {
+                name: "Home",
+                route: "Main",
+                icon: "home",
+            },
+            {
+                name: i18n.t('sidenav.divider2'),
+                route: "Divider2"
+            },
+            {
+                name: i18n.t('screens.menuSelf'),
+                route: "SelfMenuScreen",
+                icon: "silverware-fork-knife",
+            },
+            {
+                name: i18n.t('screens.availableRooms'),
+                route: "AvailableRoomScreen",
+                icon: "calendar-check",
+            },
+            {
+                name: 'Bib',
+                route: "BibScreen",
+                icon: "book",
+            },
+            {
+                name: i18n.t('screens.bluemind'),
+                route: "BlueMindScreen",
+                link: "https://etud-mel.insa-toulouse.fr/webmail/",
+                icon: "email",
+            },
+            {
+                name: i18n.t('screens.ent'),
+                route: "EntScreen",
+                link: "https://ent.insa-toulouse.fr/",
+                icon: "notebook",
+            },
+            {
                 name: i18n.t('sidenav.divider1'),
                 route: "Divider1"
             },
@@ -67,32 +103,6 @@ export default class SideBar extends React.Component<Props, State> {
                 route: "TutorInsaScreen",
                 link: "https://www.etud.insa-toulouse.fr/~tutorinsa/",
                 icon: "school",
-            },
-            {
-                name: i18n.t('sidenav.divider2'),
-                route: "Divider2"
-            },
-            {
-                name: i18n.t('screens.bluemind'),
-                route: "BlueMindScreen",
-                link: "https://etud-mel.insa-toulouse.fr/webmail/",
-                icon: "email",
-            },
-            {
-                name: i18n.t('screens.ent'),
-                route: "EntScreen",
-                link: "https://ent.insa-toulouse.fr/",
-                icon: "notebook",
-            },
-            {
-                name: i18n.t('screens.availableRooms'),
-                route: "AvailableRoomScreen",
-                icon: "calendar-check",
-            },
-            {
-                name: i18n.t('screens.menuSelf'),
-                route: "SelfMenuScreen",
-                icon: "silverware-fork-knife",
             },
             {
                 name: i18n.t('sidenav.divider3'),
