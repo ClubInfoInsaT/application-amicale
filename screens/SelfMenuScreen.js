@@ -95,7 +95,27 @@ export default class SelfMenuScreen extends React.Component<Props> {
 
     getRenderSectionHeader({section}: Object) {
         return (
-            <Title>{section.title}</Title>
+            <Card style={{
+                width: '90%',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginBottom: 10,
+                marginTop: 20,
+                elevation: 4,
+            }}>
+                <Card.Title
+                    title={section.title}
+                    titleStyle={{
+                        textAlign: 'center'
+                    }}
+                    subtitleStyle={{
+                        textAlign: 'center'
+                    }}
+                    style={{
+                        paddingLeft: 0,
+                    }}
+                />
+            </Card>
         );
     }
 
