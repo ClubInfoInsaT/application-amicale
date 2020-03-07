@@ -8,7 +8,7 @@ import WebSectionList from "../../components/WebSectionList";
 import NotificationsManager from "../../utils/NotificationsManager";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
-import {Divider, IconButton, List, Text} from 'react-native-paper';
+import {Divider, IconButton, List, Text, Title} from 'react-native-paper';
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -47,6 +47,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
 
     onAboutPress: Function;
     getRenderItem: Function;
+    getRenderSectionHeader: Function;
     createDataset: Function;
 
     state = {
@@ -88,9 +89,9 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         stateIcons[MACHINE_STATES.ERREUR] = 'alert';
 
         // let dataString = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current;
-        // this.setMinTimeRefresh(30);
         this.onAboutPress = this.onAboutPress.bind(this);
         this.getRenderItem = this.getRenderItem.bind(this);
+        this.getRenderSectionHeader = this.getRenderSectionHeader.bind(this);
         this.createDataset = this.createDataset.bind(this);
     }
 
@@ -303,7 +304,18 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                 refreshTime={REFRESH_TIME}
                 fetchUrl={DATA_URL}
                 renderItem={this.getRenderItem}
-                updateErrorText={i18n.t("proxiwashScreen.listUpdateFail")}/>
+                renderSectionHeader={this.getRenderSectionHeader}/>
+        );
+    }
+
+    getRenderSectionHeader({section}: Object) {
+        return (
+            <Title style={{
+                marginTop: 10,
+                textAlign: 'center'
+            }}>
+                {section.title}
+            </Title>
         );
     }
 

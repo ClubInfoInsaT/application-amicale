@@ -327,7 +327,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 description={item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
                 descriptionStyle={{color: this.getStockColor(parseInt(item.quantity))}}
                 onPress={onPress}
-                left={props => <Avatar.Image size={64} source={{uri: item.image}}/>}
+                left={props => <Avatar.Image style={{backgroundColor: 'transparent'}} size={64} source={{uri: item.image}}/>}
                 right={props =>
                     <Text style={{fontWeight: "bold"}}>
                         {item.price}€

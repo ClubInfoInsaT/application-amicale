@@ -95,19 +95,7 @@ export default class SelfMenuScreen extends React.Component<Props> {
 
     getRenderSectionHeader({section}: Object) {
         return (
-            <Card style={{
-                marginLeft: 10,
-                marginRight: 10,
-                marginTop: 10,
-                marginBottom: 10,
-                borderRadius: 50
-            }}>
-                <Title style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    marginBottom: 10
-                }}>{section.title}</Title>
-            </Card>
+            <Title>{section.title}</Title>
         );
     }
 
@@ -119,7 +107,7 @@ export default class SelfMenuScreen extends React.Component<Props> {
             }}>
                     <Card.Title
                         title={item.name}
-                        titleStyle={{textAlign: 'center'}}/>
+                    />
                     <View style={{
                         width: '80%',
                         marginLeft: 'auto',
@@ -159,7 +147,6 @@ export default class SelfMenuScreen extends React.Component<Props> {
                 fetchUrl={DATA_URL}
                 renderItem={this.getRenderItem}
                 renderSectionHeader={this.getRenderSectionHeader}
-                updateErrorText={i18n.t("homeScreen.listUpdateFail")}
                 stickyHeader={true}/>
         );
     }

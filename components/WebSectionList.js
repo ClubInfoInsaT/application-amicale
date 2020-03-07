@@ -5,7 +5,7 @@ import ThemeManager from '../utils/ThemeManager';
 import WebDataManager from "../utils/WebDataManager";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import i18n from "i18n-js";
-import {ActivityIndicator, Subheading} from 'react-native-paper';
+import {ActivityIndicator, Snackbar, Subheading} from 'react-native-paper';
 import {RefreshControl, SectionList, View} from "react-native";
 
 type Props = {
@@ -16,13 +16,13 @@ type Props = {
     renderSectionHeader: React.Node,
     stickyHeader: boolean,
     createDataset: Function,
-    updateErrorText: string,
 }
 
 type State = {
     refreshing: boolean,
     firstLoading: boolean,
     fetchedData: Object,
+    snackbarVisible: boolean
 };
 
 /**
@@ -37,7 +37,7 @@ type State = {
 export default class WebSectionList extends React.Component<Props, State> {
 
     static defaultProps = {
-        renderSectionHeader: undefined,
+        renderSectionHeader: null,
         stickyHeader: false,
     };
 
@@ -50,6 +50,7 @@ export default class WebSectionList extends React.Component<Props, State> {
         refreshing: false,
         firstLoading: true,
         fetchedData: {},
+        snackbarVisible: false
     };
 
     onRefresh: Function;
@@ -57,6 +58,8 @@ export default class WebSectionList extends React.Component<Props, State> {
     onFetchError: Function;
     getEmptyRenderItem: Function;
     getEmptySectionHeader: Function;
+    showSnackBar: Function;
+    hideSnackBar: Function;
 
     constructor() {
         super();
@@ -66,6 +69,8 @@ export default class WebSectionList extends React.Component<Props, State> {
         this.onFetchError = this.onFetchError.bind(this);
         this.getEmptyRenderItem = this.getEmptyRenderItem.bind(this);
         this.getEmptySectionHeader = this.getEmptySectionHeader.bind(this);
+        this.showSnackBar = this.showSnackBar.bind(this);
+        this.hideSnackBar = this.hideSnackBar.bind(this);
     }
 
     /**
@@ -112,7 +117,8 @@ export default class WebSectionList extends React.Component<Props, State> {
             refreshing: false,
             firstLoading: false
         });
-        this.webDataManager.showUpdateToast(this.props.updateErrorText);
+        this.showSnackBar();
+        // this.webDataManager.showUpdateToast(this.props.updateErrorText);
     }
 
     /**
@@ -194,30 +200,51 @@ export default class WebSectionList extends React.Component<Props, State> {
         return item.text
     }
 
+    showSnackBar() {
+        this.setState({snackbarVisible: true})
+    }
+
+    hideSnackBar() {
+        this.setState({snackbarVisible: false})
+    }
+
     render() {
         let dataset = this.props.createDataset(this.state.fetchedData);
         const isEmpty = dataset[0].data.length === 0;
-        const shouldRenderHeader = isEmpty || (this.props.renderSectionHeader !== undefined);
+        const shouldRenderHeader = !isEmpty || (this.props.renderSectionHeader !== null);
         if (isEmpty)
             dataset = this.createEmptyDataset();
         return (
-            <SectionList
-                sections={dataset}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={this.state.refreshing}
-                        onRefresh={this.onRefresh}
-                    />
-                }
-                renderSectionHeader={shouldRenderHeader ? this.getEmptySectionHeader : this.props.renderSectionHeader}
-                renderItem={isEmpty ? this.getEmptyRenderItem : this.props.renderItem}
-                style={{minHeight: 300, width: '100%'}}
-                stickySectionHeadersEnabled={this.props.stickyHeader}
-                contentContainerStyle={
-                    isEmpty ?
-                        {flexGrow: 1, justifyContent: 'center', alignItems: 'center'} : {}
-                }
-            />
+            <View>
+                <Snackbar
+                    visible={this.state.snackbarVisible}
+                    onDismiss={this.hideSnackBar}
+                    action={{
+                        label: 'OK',
+                        onPress: this.hideSnackBar,
+                    }}
+                    duration={4000}
+                >
+                    {i18n.t("homeScreen.listUpdateFail")}
+                </Snackbar>
+                <SectionList
+                    sections={dataset}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this.onRefresh}
+                        />
+                    }
+                    renderSectionHeader={shouldRenderHeader ? this.props.renderSectionHeader : this.getEmptySectionHeader}
+                    renderItem={isEmpty ? this.getEmptyRenderItem : this.props.renderItem}
+                    style={{minHeight: 300, width: '100%'}}
+                    stickySectionHeadersEnabled={this.props.stickyHeader}
+                    contentContainerStyle={
+                        isEmpty ?
+                            {flexGrow: 1, justifyContent: 'center', alignItems: 'center'} : {}
+                    }
+                />
+            </View>
         );
     }
 }

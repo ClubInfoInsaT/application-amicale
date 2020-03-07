@@ -552,8 +552,7 @@ export default class HomeScreen extends React.Component<Props> {
                 navigation={nav}
                 refreshTime={REFRESH_TIME}
                 fetchUrl={DATA_URL}
-                renderItem={this.getRenderItem}
-                updateErrorText={i18n.t("homeScreen.listUpdateFail")}/>
+                renderItem={this.getRenderItem}/>
         );
     }
 }

@@ -205,8 +205,7 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
                 navigation={nav}
                 refreshTime={0}
                 fetchUrl={DATA_URL}
-                renderItem={this.getRenderItem}
-                updateErrorText={i18n.t("homeScreen.listUpdateFail")}/>
+                renderItem={this.getRenderItem}/>
         );
     }
 }
