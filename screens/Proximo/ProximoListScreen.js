@@ -3,15 +3,9 @@
 import * as React from 'react';
 import {FlatList, Image, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../../utils/ThemeManager";
 import {Modalize} from 'react-native-modalize';
-import {Avatar, Divider, IconButton, List, Menu, Searchbar, Subheading, Text, Title} from "react-native-paper";
-
-const sortMode = {
-    price: "0",
-    name: '1',
-};
+import {Avatar, IconButton, List, RadioButton, Searchbar, Subheading, Text, Title} from "react-native-paper";
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -22,17 +16,17 @@ function sortPriceReverse(a, b) {
 }
 
 function sortName(a, b) {
-    if (a.name < b.name)
+    if (a.name.toLowerCase() < b.name.toLowerCase())
         return -1;
-    if (a.name > b.name)
+    if (a.name.toLowerCase() > b.name.toLowerCase())
         return 1;
     return 0;
 }
 
 function sortNameReverse(a, b) {
-    if (a.name < b.name)
+    if (a.name.toLowerCase() < b.name.toLowerCase())
         return 1;
-    if (a.name > b.name)
+    if (a.name.toLowerCase() > b.name.toLowerCase())
         return -1;
     return 0;
 }
@@ -43,13 +37,9 @@ type Props = {
 }
 
 type State = {
-    currentSortMode: string,
-    isSortReversed: boolean,
-    sortPriceIcon: React.Node,
-    sortNameIcon: React.Node,
-    modalCurrentDisplayItem: Object,
+    currentSortMode: number,
+    modalCurrentDisplayItem: React.Node,
     currentlyDisplayedData: Array<Object>,
-    menuVisible: boolean,
 };
 
 /**
@@ -62,10 +52,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     shouldFocusSearchBar: boolean;
 
     onSearchStringChange: Function;
-    onSelectSortModeName: Function;
-    onSelectSortModePrice: Function;
     onSortMenuPress: Function;
-    onSortMenuDismiss: Function;
     renderItem: Function;
 
     constructor(props: any) {
@@ -75,67 +62,42 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         this.shouldFocusSearchBar = this.props.route.params['shouldFocusSearchBar'];
         this.state = {
             currentlyDisplayedData: this.originalData,
-            currentSortMode: sortMode.price,
-            isSortReversed: false,
-            sortPriceIcon: '',
-            sortNameIcon: '',
-            modalCurrentDisplayItem: {},
-            menuVisible: false,
+            currentSortMode: 1,
+            modalCurrentDisplayItem: <View/>,
         };
 
         this.onSearchStringChange = this.onSearchStringChange.bind(this);
-        this.onSelectSortModeName = this.onSelectSortModeName.bind(this);
-        this.onSelectSortModePrice = this.onSelectSortModePrice.bind(this);
         this.onSortMenuPress = this.onSortMenuPress.bind(this);
-        this.onSortMenuDismiss = this.onSortMenuPress.bind(this);
         this.renderItem = this.renderItem.bind(this);
-    }
-
-
-    /**
-     * Sets the sort mode based on the one selected.
-     * If the selected mode is the current one, reverse it.
-     *
-     * @param mode The string representing the mode
-     */
-    sortModeSelected(mode: string) {
-        let isReverse = this.state.isSortReversed;
-        if (mode === this.state.currentSortMode) // reverse mode
-            isReverse = !isReverse; // this.state not updating on this function cycle
-        else
-            isReverse = false;
-        this.setSortMode(mode, isReverse);
     }
 
     /**
      * Set the current sort mode.
      *
-     * @param mode The string representing the mode
-     * @param isReverse Whether to use a reverse sort
+     * @param mode The number representing the mode
      */
-    setSortMode(mode: string, isReverse: boolean) {
+    setSortMode(mode: number) {
         this.setState({
             currentSortMode: mode,
-            isSortReversed: isReverse
         });
         let data = this.state.currentlyDisplayedData;
         switch (mode) {
-            case sortMode.price:
-                if (isReverse) {
-                    data.sort(sortPriceReverse);
-                } else {
-                    data.sort(sortPrice);
-                }
+            case 1:
+                data.sort(sortPrice);
                 break;
-            case sortMode.name:
-                if (isReverse) {
-                    data.sort(sortNameReverse);
-                } else {
-                    data.sort(sortName);
-                }
+            case 2:
+                data.sort(sortPriceReverse);
+                break;
+            case 3:
+                data.sort(sortName);
+                break;
+            case 4:
+                data.sort(sortNameReverse);
                 break;
         }
-        this.setupSortIcons(mode, isReverse);
+        if (this.modalRef.current && mode !== this.state.currentSortMode) {
+            this.modalRef.current.close();
+        }
     }
 
     /**
@@ -148,7 +110,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
             headerRight: button,
             headerTitle: title,
         });
-        this.setSortMode(this.state.currentSortMode, this.state.isSortReversed);
+        this.setSortMode(1);
     }
 
     getSearchBar() {
@@ -176,42 +138,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
             color = ThemeManager.getCurrentThemeVariables().danger;
         return color;
     }
-
-    /**
-     * Set the sort menu icon based on the given mode.
-     *
-     * @param mode The string representing the mode
-     * @param isReverse Whether to use a reversed icon
-     */
-    setupSortIcons(mode: string, isReverse: boolean) {
-        const downSortIcon =
-            <MaterialCommunityIcons
-                name={'sort-descending'}
-                size={26}/>;
-        const upSortIcon =
-            <MaterialCommunityIcons
-                name={'sort-ascending'}
-                size={26}/>;
-        switch (mode) {
-            case sortMode.price:
-                this.setState({sortNameIcon: ''});
-                if (isReverse) {
-                    this.setState({sortPriceIcon: upSortIcon});
-                } else {
-                    this.setState({sortPriceIcon: downSortIcon});
-                }
-                break;
-            case sortMode.name:
-                this.setState({sortPriceIcon: ''});
-                if (isReverse) {
-                    this.setState({sortNameIcon: upSortIcon});
-                } else {
-                    this.setState({sortNameIcon: downSortIcon});
-                }
-                break;
-        }
-    }
-
 
     sanitizeString(str: string) {
         return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -241,81 +167,112 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         })
     }
 
-    getModalContent() {
+    getModalItemContent(item: Object) {
         return (
             <View style={{
                 flex: 1,
                 padding: 20
             }}>
-                <Title>{this.state.modalCurrentDisplayItem.name}</Title>
+                <Title>{item.name}</Title>
                 <View style={{
                     flexDirection: 'row',
                     width: '100%',
                     marginTop: 10,
                 }}>
                     <Subheading style={{
-                        color: this.getStockColor(parseInt(this.state.modalCurrentDisplayItem.quantity)),
+                        color: this.getStockColor(parseInt(item.quantity)),
                     }}>
-                        {this.state.modalCurrentDisplayItem.quantity + ' ' + i18n.t('proximoScreen.inStock')}
+                        {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
                     </Subheading>
-                    <Subheading style={{marginLeft: 'auto'}}>{this.state.modalCurrentDisplayItem.price}€</Subheading>
+                    <Subheading style={{marginLeft: 'auto'}}>{item.price}€</Subheading>
                 </View>
 
                 <ScrollView>
                     <View style={{width: '100%', height: 150, marginTop: 20, marginBottom: 20}}>
                         <Image style={{flex: 1, resizeMode: "contain"}}
-                               source={{uri: this.state.modalCurrentDisplayItem.image}}/>
+                               source={{uri: item.image}}/>
                     </View>
-                    <Text>{this.state.modalCurrentDisplayItem.description}</Text>
+                    <Text>{item.description}</Text>
                 </ScrollView>
+            </View>
+        );
+    }
+
+    getModalSortMenu() {
+        console.log(this.state.currentSortMode);
+        return (
+            <View style={{
+                flex: 1,
+                padding: 20
+            }}>
+                <Title>Sort Order</Title>
+                <RadioButton.Group
+                    onValueChange={value => this.setSortMode(value)}
+                    value={this.state.currentSortMode}
+                >
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Text>{i18n.t('proximoScreen.sortPrice')}</Text>
+                        <RadioButton value={1}/>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Text>{i18n.t('proximoScreen.sortPriceReverse')}</Text>
+                        <RadioButton value={2}/>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Text>{i18n.t('proximoScreen.sortName')}</Text>
+                        <RadioButton value={3}/>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Text>{i18n.t('proximoScreen.sortNameReverse')}</Text>
+                        <RadioButton value={4}/>
+                    </View>
+                </RadioButton.Group>
             </View>
         );
     }
 
     onListItemPress(item: Object) {
         this.setState({
-            modalCurrentDisplayItem: item
+            modalCurrentDisplayItem: this.getModalItemContent(item)
         });
         if (this.modalRef.current) {
             this.modalRef.current.open();
         }
     }
 
-    onSelectSortModeName() {
-        this.sortModeSelected(sortMode.name);
-    }
-
-    onSelectSortModePrice() {
-        this.sortModeSelected(sortMode.price);
-    }
-
     onSortMenuPress() {
-        this.setState({menuVisible: true});
-        console.log('pressed');
-    }
-
-    onSortMenuDismiss() {
-        this.setState({menuVisible: false});
+        this.setState({
+            modalCurrentDisplayItem: this.getModalSortMenu()
+        });
+        if (this.modalRef.current) {
+            this.modalRef.current.open();
+        }
     }
 
     getSortMenu() {
         return (
-            <Menu
-                visible={this.state.menuVisible}
-                onDismiss={this.onSortMenuDismiss}
-                anchor={
-                    <IconButton
-                        icon="sort"
-                        color={ThemeManager.getCurrentThemeVariables().text}
-                        size={26}
-                        onPress={this.onSortMenuPress}
-                    />
-                }
-            >
-                <Menu.Item onPress={this.onSelectSortModeName} title={i18n.t('proximoScreen.sortName')}/>
-                <Divider/>
-                <Menu.Item onPress={this.onSelectSortModePrice} title={i18n.t('proximoScreen.sortPrice')}/>
-            </Menu>
+            <IconButton
+                icon="sort"
+                color={ThemeManager.getCurrentThemeVariables().text}
+                size={26}
+                onPress={this.onSortMenuPress}
+            />
         );
     }
 
@@ -327,7 +284,8 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 description={item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
                 descriptionStyle={{color: this.getStockColor(parseInt(item.quantity))}}
                 onPress={onPress}
-                left={props => <Avatar.Image style={{backgroundColor: 'transparent'}} size={64} source={{uri: item.image}}/>}
+                left={props => <Avatar.Image style={{backgroundColor: 'transparent'}} size={64}
+                                             source={{uri: item.image}}/>}
                 right={props =>
                     <Text style={{fontWeight: "bold"}}>
                         {item.price}€
@@ -344,10 +302,14 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         console.log("rendering ProximoListScreen");
         return (
             <View>
-                <Modalize ref={this.modalRef}
-                          adjustToContentHeight
-                          modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().card}}>
-                    {this.getModalContent()}
+                <Modalize
+                    ref={this.modalRef}
+                    adjustToContentHeight
+                    handlePosition={'inside'}
+                    modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().card}}
+                    handleStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().text}}
+                >
+                    {this.state.modalCurrentDisplayItem}
                 </Modalize>
                 <FlatList
                     data={this.state.currentlyDisplayedData}

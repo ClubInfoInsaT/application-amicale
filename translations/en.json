@@ -65,7 +65,7 @@
     "startScreen": "Start Screen",
     "startScreenSub": "Select which screen to start the app on",
     "proxiwashNotifReminder": "Machine running reminder",
-    "proxiwashNotifReminderSub": "How many minutes before",
+    "proxiwashNotifReminderSub": "How many minutes before"
   },
   "homeScreen": {
     "listUpdated": "List updated!",
@@ -122,7 +122,9 @@
     "article": "Article",
     "articles": "Articles",
     "sortName": "Sort by name",
+    "sortNameReverse": "Sort by name (reverse)",
     "sortPrice": "Sort by price",
+    "sortPriceReverse": "Sort by price (reverse)",
     "listUpdated": "Article list updated!",
     "listUpdateFail": "Error while updating article list",
     "loading": "Loading...",

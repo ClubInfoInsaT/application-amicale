@@ -65,7 +65,7 @@
     "startScreen": "Écran de démarrage",
     "startScreenSub": "Choisissez l'écran utilisé au démarrage",
     "proxiwashNotifReminder": "Rappel de machine en cours",
-    "proxiwashNotifReminderSub": "Combien de minutes avant",
+    "proxiwashNotifReminderSub": "Combien de minutes avant"
   },
   "homeScreen": {
     "listUpdated": "List mise à jour!",
@@ -122,7 +122,9 @@
     "article": "Article",
     "articles": "Articles",
     "sortName": "Trier par nom",
+    "sortNameReverse": "Trier par nom (inversé)",
     "sortPrice": "Trier par prix",
+    "sortPriceReverse": "Trier par prix (inversé)",
     "listUpdated": "Liste d'articles mise à jour !",
     "listUpdateFail": "Erreur lors de la mise à jour de la list d'articles",
     "loading": "Chargement...",
