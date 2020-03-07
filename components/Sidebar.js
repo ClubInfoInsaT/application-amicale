@@ -6,7 +6,7 @@ import i18n from "i18n-js";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
 import * as WebBrowser from 'expo-web-browser';
-import {List} from 'react-native-paper';
+import SidebarDivider from "./SidebarDivider";
 import {DrawerItem} from '@react-navigation/drawer';
 
 const deviceWidth = Dimensions.get("window").width;
@@ -143,6 +143,7 @@ export default class SideBar extends React.Component<Props, State> {
 
 
     getRenderItem({item}: Object) {
+        console.log("rendering SideBar Item");
         const onListItemPress = this.onListItemPress.bind(this, item);
         if (item.icon !== undefined) {
             return (
@@ -151,7 +152,6 @@ export default class SideBar extends React.Component<Props, State> {
                     focused={false}
                     icon={({color, size}) =>
                         <MaterialCommunityIcons color={color} size={size} name={item.icon}/>}
-                    selected={this.state.active === item.route}
                     onPress={onListItemPress}
                     style={{
                         marginLeft: 0,
@@ -163,10 +163,7 @@ export default class SideBar extends React.Component<Props, State> {
             );
         } else {
             return (
-                <List.Item
-                    title={item.name}
-                    style={{backgroundColor: ThemeManager.getCurrentThemeVariables().dividerBackground}}
-                />
+                <SidebarDivider title={item.name}/>
             );
         }
 

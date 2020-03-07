@@ -12,10 +12,7 @@ import BibScreen from "../screens/Websites/BibScreen";
 import DebugScreen from '../screens/DebugScreen';
 import Sidebar from "../components/Sidebar";
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
-import {View} from "react-native";
-import Touchable from "react-native-platform-touchable";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
-import ThemeManager from "../utils/ThemeManager";
+import HeaderButton from "../components/HeaderButton";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -25,20 +22,7 @@ const defaultScreenOptions = {
 
 function getDrawerButton(navigation: Object) {
     return (
-        <View
-            style={{
-                flexDirection: 'row',
-                marginLeft: 10
-            }}>
-            <Touchable
-                style={{padding: 6}}
-                onPress={navigation.openDrawer}>
-                <MaterialCommunityIcons
-                    name="menu"
-                    size={26}
-                    color={ThemeManager.getCurrentThemeVariables().text}/>
-            </Touchable>
-        </View>
+        <HeaderButton icon={'menu'} onPress={navigation.openDrawer}/>
     );
 }
 

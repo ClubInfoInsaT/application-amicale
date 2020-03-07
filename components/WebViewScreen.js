@@ -3,10 +3,9 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import WebView from "react-native-webview";
-import Touchable from "react-native-platform-touchable";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
 import {ActivityIndicator} from 'react-native-paper';
+import HeaderButton from "./HeaderButton";
 
 type Props = {
     navigation: Object,
@@ -58,14 +57,7 @@ export default class WebViewScreen extends React.Component<Props> {
 
     getHeaderButton(clickAction: Function, icon: string) {
         return (
-            <Touchable
-                style={{padding: 6}}
-                onPress={clickAction}>
-                <MaterialCommunityIcons
-                    name={icon}
-                    size={26}
-                    color={ThemeManager.getCurrentThemeVariables().text}/>
-            </Touchable>
+            <HeaderButton icon={icon} onPress={clickAction}/>
         );
     }
 

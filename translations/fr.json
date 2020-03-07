@@ -60,21 +60,12 @@
   "settingsScreen": {
     "generalCard": "Général",
     "nightMode": "Mode Nuit",
-    "nightModeSub": "Passer l'application dans un thème sombre ou clair",
+    "nightModeSubOn": "Vos yeux brulent",
+    "nightModeSubOff": "Vos yeux vous remercient",
     "startScreen": "Écran de démarrage",
     "startScreenSub": "Choisissez l'écran utilisé au démarrage",
     "proxiwashNotifReminder": "Rappel de machine en cours",
-    "proxiwashNotifReminderSub": "Choississez quand envoyer une notification pour vous rappeler qu'une machine avec votre linge est en cours",
-    "proxiwashNotifReminderPicker": {
-      "never": "Jamais",
-      "1": "1 min",
-      "2": "2 min",
-      "3": "3 min",
-      "5": "5 min",
-      "10": "10 min",
-      "20": "20 min",
-      "30": "30 min"
-    }
+    "proxiwashNotifReminderSub": "Combien de minutes avant",
   },
   "homeScreen": {
     "listUpdated": "List mise à jour!",

@@ -9,21 +9,15 @@ import NotificationsManager from "../../utils/NotificationsManager";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
 import {Divider, IconButton, List, Text, Title} from 'react-native-paper';
+import HeaderButton from "../../components/HeaderButton";
+import ProxiwashListItem from "../../components/ProxiwashListItem";
+import ProxiwashConstants from "../../constants/ProxiwashConstants";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
-
-const MACHINE_STATES = {
-    "TERMINE": "0",
-    "DISPONIBLE": "1",
-    "EN COURS": "2",
-    "HS": "3",
-    "ERREUR": "4"
-};
 
 let stateStrings = {};
 let modalStateStrings = {};
 let stateIcons = {};
-let stateColors = {};
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 
@@ -63,30 +57,23 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
      */
     constructor() {
         super();
-        let colors = ThemeManager.getCurrentThemeVariables();
-        stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
-        stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;
-        stateColors[MACHINE_STATES["EN COURS"]] = colors.proxiwashRunningColor;
-        stateColors[MACHINE_STATES.HS] = colors.proxiwashBrokenColor;
-        stateColors[MACHINE_STATES.ERREUR] = colors.proxiwashErrorColor;
+        stateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.states.finished');
+        stateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
+        stateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.states.running');
+        stateStrings[ProxiwashConstants.machineStates.HS] = i18n.t('proxiwashScreen.states.broken');
+        stateStrings[ProxiwashConstants.machineStates.ERREUR] = i18n.t('proxiwashScreen.states.error');
 
-        stateStrings[MACHINE_STATES.TERMINE] = i18n.t('proxiwashScreen.states.finished');
-        stateStrings[MACHINE_STATES.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
-        stateStrings[MACHINE_STATES["EN COURS"]] = i18n.t('proxiwashScreen.states.running');
-        stateStrings[MACHINE_STATES.HS] = i18n.t('proxiwashScreen.states.broken');
-        stateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.states.error');
+        modalStateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.modal.finished');
+        modalStateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.modal.ready');
+        modalStateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.modal.running');
+        modalStateStrings[ProxiwashConstants.machineStates.HS] = i18n.t('proxiwashScreen.modal.broken');
+        modalStateStrings[ProxiwashConstants.machineStates.ERREUR] = i18n.t('proxiwashScreen.modal.error');
 
-        modalStateStrings[MACHINE_STATES.TERMINE] = i18n.t('proxiwashScreen.modal.finished');
-        modalStateStrings[MACHINE_STATES.DISPONIBLE] = i18n.t('proxiwashScreen.modal.ready');
-        modalStateStrings[MACHINE_STATES["EN COURS"]] = i18n.t('proxiwashScreen.modal.running');
-        modalStateStrings[MACHINE_STATES.HS] = i18n.t('proxiwashScreen.modal.broken');
-        modalStateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.modal.error');
-
-        stateIcons[MACHINE_STATES.TERMINE] = 'check-circle';
-        stateIcons[MACHINE_STATES.DISPONIBLE] = 'radiobox-blank';
-        stateIcons[MACHINE_STATES["EN COURS"]] = 'progress-check';
-        stateIcons[MACHINE_STATES.HS] = 'alert-octagram-outline';
-        stateIcons[MACHINE_STATES.ERREUR] = 'alert';
+        stateIcons[ProxiwashConstants.machineStates.TERMINE] = 'check-circle';
+        stateIcons[ProxiwashConstants.machineStates.DISPONIBLE] = 'radiobox-blank';
+        stateIcons[ProxiwashConstants.machineStates["EN COURS"]] = 'progress-check';
+        stateIcons[ProxiwashConstants.machineStates.HS] = 'alert-octagram-outline';
+        stateIcons[ProxiwashConstants.machineStates.ERREUR] = 'alert';
 
         // let dataString = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current;
         this.onAboutPress = this.onAboutPress.bind(this);
@@ -247,9 +234,9 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
      */
     showAlert(title: string, item: Object, isDryer: boolean) {
         let buttons = [{text: i18n.t("proxiwashScreen.modal.ok")}];
-        let message = modalStateStrings[MACHINE_STATES[item.state]];
+        let message = modalStateStrings[ProxiwashConstants.machineStates[item.state]];
         const onPress = this.setupNotifications.bind(this, item.number);
-        if (MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"]) {
+        if (ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"]) {
             buttons = [
                 {
                     text: this.isMachineWatched(item.number) ?
@@ -267,7 +254,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                     end: item.endTime,
                     remaining: item.remainingTime
                 });
-        } else if (MACHINE_STATES[item.state] === MACHINE_STATES.DISPONIBLE) {
+        } else if (ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates.DISPONIBLE) {
             if (isDryer)
                 message += '\n' + i18n.t('proxiwashScreen.dryersTariff');
             else
@@ -286,12 +273,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
 
     getRightButton() {
         return (
-            <IconButton
-                icon="information"
-                size={26}
-                color={ThemeManager.getCurrentThemeVariables().text}
-                onPress={this.onAboutPress}
-            />
+            <HeaderButton icon={'information'} onPress={this.onAboutPress}/>
         );
     }
 
@@ -327,56 +309,25 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
      * @returns {React.Node}
      */
     getRenderItem({item, section}: Object) {
-        let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"];
-        let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
-        let isDryer = section.title === i18n.t('proxiwashScreen.dryers');
+        const isMachineRunning = ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"];
+        const machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
+        const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
         const onPress = this.showAlert.bind(this, machineName, item, isDryer);
         let width = item.donePercent !== '' ? (parseInt(item.donePercent)).toString() + '%' : 0;
-        if (MACHINE_STATES[item.state] === '0')
+        if (ProxiwashConstants.machineStates[item.state] === '0')
             width = '100%';
         return (
-            <View>
-                <View style={{
-                    height: '100%',
-                    position: 'absolute',
-                    left: 0,
-                    width: width,
-                    backgroundColor: stateColors[MACHINE_STATES[item.state]]
-                }}/>
-                <List.Item
-                    title={machineName}
-                    description={isMachineRunning ? item.startTime + '/' + item.endTime : ''}
-                    onPress={onPress}
-                    style={{
-                        backgroundColor: 'transparent',
-                        height: 64
-                    }}
-                    left={props => this.isMachineWatched(item.number) ?
-                        <List.Icon {...props} icon={'bell-ring'}
-                                   color={ThemeManager.getCurrentThemeVariables().primary}/> :
-                        <List.Icon {...props} icon={isDryer ? 'tumble-dryer' : 'washing-machine'}/>}
-                    right={props => (
-                        <View style={{flexDirection: 'row'}}>
-                            <View style={{
-                                justifyContent: 'center',
-                            }}>
-                                <Text style={
-                                    MACHINE_STATES[item.state] === MACHINE_STATES.TERMINE ?
-                                        {fontWeight: 'bold',} : {}}
-                                >
-                                    {stateStrings[MACHINE_STATES[item.state]]}
-                                </Text>
-                            </View>
-
-                            <List.Icon
-                                {...props}
-                                color={ThemeManager.getCurrentThemeVariables().text}
-                                icon={stateIcons[MACHINE_STATES[item.state]]}
-                            />
-                        </View>)}
-                />
-                <Divider/>
-            </View>
+            <ProxiwashListItem
+                title={machineName}
+                description={isMachineRunning ? item.startTime + '/' + item.endTime : ''}
+                onPress={onPress}
+                progress={width}
+                state={item.state}
+                isWatched={this.isMachineWatched(item.number)}
+                isDryer={isDryer}
+                statusText={stateStrings[ProxiwashConstants.machineStates[item.state]]}
+                statusIcon={stateIcons[ProxiwashConstants.machineStates[item.state]]}
+            />
         );
     }
 }

@@ -4,10 +4,11 @@ import * as React from 'react';
 import {BackHandler, Image, View} from 'react-native';
 import i18n from "i18n-js";
 import ThemeManager from "../utils/ThemeManager";
-import {Agenda, LocaleConfig} from 'react-native-calendars';
+import {LocaleConfig} from 'react-native-calendars';
 import WebDataManager from "../utils/WebDataManager";
 import PlanningEventManager from '../utils/PlanningEventManager';
 import {Text, Title, List, Avatar, Divider} from 'react-native-paper';
+import CustomAgenda from "../components/CustomAgenda";
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
@@ -64,14 +65,6 @@ export default class PlanningScreen extends React.Component<Props, State> {
     constructor(props: any) {
         super(props);
         this.webDataManager = new WebDataManager(FETCH_URL);
-        this.didFocusSubscription = props.navigation.addListener(
-            'didFocus',
-            () =>
-                BackHandler.addEventListener(
-                    'hardwareBackPress',
-                    this.onBackButtonPressAndroid
-                )
-        );
         if (i18n.currentLocale().startsWith("fr")) {
             LocaleConfig.defaultLocale = 'fr';
         }
@@ -88,8 +81,16 @@ export default class PlanningScreen extends React.Component<Props, State> {
 
     componentDidMount() {
         this.onRefresh();
+        this.didFocusSubscription = this.props.navigation.addListener(
+            'focus',
+            () =>
+                BackHandler.addEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
         this.willBlurSubscription = this.props.navigation.addListener(
-            'willBlur',
+            'blur',
             () =>
                 BackHandler.removeEventListener(
                     'hardwareBackPress',
@@ -235,7 +236,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     render() {
         // console.log("rendering PlanningScreen");
         return (
-            <Agenda
+            <CustomAgenda
                 // the list of items that have to be displayed in agenda. If you want to render item as empty date
                 // the value of date key kas to be an empty array []. If there exists no value for date key it is
                 // considered that the date in question is not yet loaded
@@ -260,33 +261,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                 // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
                 firstDay={1}
                 // ref to this agenda in order to handle back button event
-                ref={this.onAgendaRef}
-                // agenda theme
-                theme={{
-                    backgroundColor: ThemeManager.getCurrentThemeVariables().agendaBackgroundColor,
-                    calendarBackground: ThemeManager.getCurrentThemeVariables().background,
-                    textSectionTitleColor: ThemeManager.getCurrentThemeVariables().agendaDayTextColor,
-                    selectedDayBackgroundColor: ThemeManager.getCurrentThemeVariables().primary,
-                    selectedDayTextColor: '#ffffff',
-                    todayTextColor: ThemeManager.getCurrentThemeVariables().primary,
-                    dayTextColor: ThemeManager.getCurrentThemeVariables().text,
-                    textDisabledColor: ThemeManager.getCurrentThemeVariables().agendaDayTextColor,
-                    dotColor: ThemeManager.getCurrentThemeVariables().primary,
-                    selectedDotColor: '#ffffff',
-                    arrowColor: 'orange',
-                    monthTextColor: ThemeManager.getCurrentThemeVariables().primary,
-                    indicatorColor: ThemeManager.getCurrentThemeVariables().primary,
-                    textDayFontWeight: '300',
-                    textMonthFontWeight: 'bold',
-                    textDayHeaderFontWeight: '300',
-                    textDayFontSize: 16,
-                    textMonthFontSize: 16,
-                    textDayHeaderFontSize: 16,
-                    agendaDayTextColor: ThemeManager.getCurrentThemeVariables().agendaDayTextColor,
-                    agendaDayNumColor: ThemeManager.getCurrentThemeVariables().agendaDayTextColor,
-                    agendaTodayColor: ThemeManager.getCurrentThemeVariables().primary,
-                    agendaKnobColor: ThemeManager.getCurrentThemeVariables().primary,
-                }}
+                onRef={this.onAgendaRef}
             />
         );
     }

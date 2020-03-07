@@ -38,6 +38,7 @@ export default class ThemeManager {
                 proxiwashFinishedColor: "rgba(54,165,22,0.31)",
                 proxiwashReadyColor: "transparent",
                 proxiwashRunningColor: "rgba(94,104,241,0.3)",
+                proxiwashRunningBgColor: "rgba(99,109,255,0.14)",
                 proxiwashBrokenColor: "rgba(162,162,162,0.31)",
                 proxiwashErrorColor: "rgba(204,7,0,0.31)",
 
@@ -74,6 +75,7 @@ export default class ThemeManager {
                 proxiwashFinishedColor: "rgba(17,149,32,0.53)",
                 proxiwashReadyColor: "transparent",
                 proxiwashRunningColor: "rgba(29,59,175,0.65)",
+                proxiwashRunningBgColor: "rgba(99,109,255,0.14)",
                 proxiwashBrokenColor: "#000000",
                 proxiwashErrorColor: "rgba(213,8,0,0.57)",
 

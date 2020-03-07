@@ -28,12 +28,6 @@ export default class DashboardItem extends React.Component<Props> {
         displayEvent: undefined,
     };
 
-    shouldComponentUpdate(nextProps: Props): boolean {
-        return nextProps.isAvailable !== this.props.isAvailable ||
-            nextProps.subtitle !== this.props.subtitle;
-    }
-
-
     /**
      * Convert the date string given by in the event list json to a date object
      * @param dateString

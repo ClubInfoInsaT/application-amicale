@@ -1,12 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {ScrollView, View} from "react-native";
+import {ScrollView} from "react-native";
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import NotificationsManager from "../utils/NotificationsManager";
-import {Card, List, Switch, RadioButton, Text, TouchableRipple} from 'react-native-paper';
+import {Card, List, Switch, ToggleButton} from 'react-native-paper';
 
 type Props = {
     navigation: Object,
@@ -40,39 +40,6 @@ export default class SettingsScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Get a list item using the specified control
-     *
-     * @param control The custom control to use
-     * @param icon The icon name to display on the list item
-     * @param title The text to display as this list item title
-     * @param subtitle The text to display as this list item subtitle
-     * @returns {React.Node}
-     */
-    static getGeneralItem(control: React.Node, icon: string, title: string, subtitle: string) {
-        return (
-            <List.Item
-                title={title}
-                description={subtitle}
-                left={props => <List.Icon {...props} icon={icon}/>}
-                right={props => control}
-            />
-        );
-    }
-
-    getRadioButton(onPress: Function, value: string, label: string) {
-        return (
-            <TouchableRipple
-                onPress={onPress}
-            >
-                <View pointerEvents="none">
-                    <Text>{label}</Text>
-                    <RadioButton value={value} />
-                </View>
-            </TouchableRipple>
-        );
-    }
-
-    /**
      * Save the value for the proxiwash reminder notification time
      *
      * @param value The value to store
@@ -95,11 +62,13 @@ export default class SettingsScreen extends React.Component<Props, State> {
      * @param value The value to store
      */
     onStartScreenPickerValueChange(value: string) {
-        let key = AsyncStorageManager.getInstance().preferences.defaultStartScreen.key;
-        AsyncStorageManager.getInstance().savePref(key, value);
-        this.setState({
-            startScreenPickerSelected: value
-        });
+        if (value != null) {
+            let key = AsyncStorageManager.getInstance().preferences.defaultStartScreen.key;
+            AsyncStorageManager.getInstance().savePref(key, value);
+            this.setState({
+                startScreenPickerSelected: value
+            });
+        }
     }
 
     /**
@@ -109,16 +78,14 @@ export default class SettingsScreen extends React.Component<Props, State> {
      */
     getProxiwashNotifPicker() {
         return (
-            <RadioButton.Group
+            <ToggleButton.Row
                 onValueChange={this.onProxiwashNotifPickerValueChange}
                 value={this.state.proxiwashNotifPickerSelected}
             >
-                <RadioButton.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.never')} value="never"/>
-                <RadioButton.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.5')} value="5"/>
-                <RadioButton.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.10')} value="10"/>
-                <RadioButton.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.20')} value="20"/>
-                <RadioButton.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.30')} value="30"/>
-            </RadioButton.Group>
+                <ToggleButton icon="close" value="never"/>
+                <ToggleButton icon="numeric-2" value="2"/>
+                <ToggleButton icon="numeric-5" value="5"/>
+            </ToggleButton.Row>
         );
     }
 
@@ -129,16 +96,16 @@ export default class SettingsScreen extends React.Component<Props, State> {
      */
     getStartScreenPicker() {
         return (
-            <RadioButton.Group
+            <ToggleButton.Row
                 onValueChange={this.onStartScreenPickerValueChange}
                 value={this.state.startScreenPickerSelected}
             >
-                <RadioButton.Item label={i18n.t('screens.home')} value="Home" style={{color: "#fff"}}/>
-                <RadioButton.Item label={i18n.t('screens.planning')} value="Planning"/>
-                <RadioButton.Item label={i18n.t('screens.proxiwash')} value="Proxiwash"/>
-                <RadioButton.Item label={i18n.t('screens.proximo')} value="Proximo"/>
-                <RadioButton.Item label={'Planex'} value="Planex"/>
-            </RadioButton.Group>
+                <ToggleButton icon="shopping" value="Proximo"/>
+                <ToggleButton icon="calendar-range" value="Planning"/>
+                <ToggleButton icon="triangle" value="Home"/>
+                <ToggleButton icon="washing-machine" value="Proxiwash"/>
+                <ToggleButton icon="timetable" value="Planex"/>
+            </ToggleButton.Row>
         );
     }
 
@@ -180,11 +147,18 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 <Card style={{margin: 5}}>
                     <Card.Title title={i18n.t('settingsScreen.generalCard')}/>
                     <List.Section>
-                        {this.getToggleItem(this.onToggleNightMode, 'theme-light-dark', i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.nightModeSub'))}
+                        {this.getToggleItem(
+                            this.onToggleNightMode,
+                            'theme-light-dark',
+                            i18n.t('settingsScreen.nightMode'),
+                            this.state.nightMode ?
+                                i18n.t('settingsScreen.nightModeSubOn') :
+                                i18n.t('settingsScreen.nightModeSubOff')
+                        )}
                         <List.Accordion
                             title={i18n.t('settingsScreen.startScreen')}
                             description={i18n.t('settingsScreen.startScreenSub')}
-                            left={props => <List.Icon {...props} icon="power" />}
+                            left={props => <List.Icon {...props} icon="power"/>}
                         >
                             {this.getStartScreenPicker()}
                         </List.Accordion>
@@ -192,13 +166,15 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 </Card>
                 <Card style={{margin: 5}}>
                     <Card.Title title="Proxiwash"/>
-                    <List.Accordion
-                        title={i18n.t('settingsScreen.proxiwashNotifReminder')}
-                        description={i18n.t('settingsScreen.proxiwashNotifReminderSub')}
-                        left={props => <List.Icon {...props} icon="washing-machine" />}
-                    >
-                        {this.getProxiwashNotifPicker()}
-                    </List.Accordion>
+                    <List.Section>
+                        <List.Accordion
+                            title={i18n.t('settingsScreen.proxiwashNotifReminder')}
+                            description={i18n.t('settingsScreen.proxiwashNotifReminderSub')}
+                            left={props => <List.Icon {...props} icon="washing-machine"/>}
+                        >
+                            {this.getProxiwashNotifPicker()}
+                        </List.Accordion>
+                    </List.Section>
                 </Card>
 
             </ScrollView>

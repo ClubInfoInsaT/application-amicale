@@ -24,38 +24,10 @@ export default class WebDataManager {
             let response = await fetch(this.FETCH_URL);
             fetchedData = await response.json();
         } catch (error) {
-            // console.log('Could not read FetchedData from server');
-            // console.log(error);
             throw new Error('Could not read FetchedData from server');
         }
         this.lastDataFetched = fetchedData;
         return fetchedData;
-    }
-
-    /**
-     * Detects if the fetched data is not an empty object
-     *
-     * @return
-     */
-    isDataObjectValid(): boolean {
-        return Object.keys(this.lastDataFetched).length > 0;
-    }
-
-    /**
-     * Show a toast message depending on the validity of the fetched data
-     *
-     * @param errorString
-     */
-    showUpdateToast(errorString) {
-        // let isSuccess = this.isDataObjectValid();
-        // if (!isSuccess) {
-        //     Toast.show({
-        //         text: errorString,
-        //         buttonText: 'OK',
-        //         type: isSuccess ? "success" : "danger",
-        //         duration: 2000
-        //     });
-        // }
     }
 
 }

@@ -3,18 +3,17 @@
 import * as React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import i18n from "i18n-js";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import Autolink from 'react-native-autolink';
 import ThemeManager from "../utils/ThemeManager";
 import DashboardItem from "../components/DashboardItem";
 import * as WebBrowser from 'expo-web-browser';
 import WebSectionList from "../components/WebSectionList";
-import PlatformTouchable from "react-native-platform-touchable";
-import {Avatar, Card, Text} from 'react-native-paper';
+import {Avatar, Button, Card, Text} from 'react-native-paper';
+import FeedItem from "../components/FeedItem";
+import SquareDashboardItem from "../components/SquareDashboardItem";
 // import DATA from "../dashboard_data.json";
 
 
-const ICON_AMICALE = require('../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/dashboard/dashboard_data.json";
 
@@ -373,24 +372,24 @@ export default class HomeScreen extends React.Component<Props> {
                 flexDirection: 'row',
                 marginLeft: 10,
                 marginRight: 10,
+                marginBottom: 10,
             }}>
-                <DashboardItem
-                    isSquare={true}
+                <SquareDashboardItem
+                    title={menuTitle}
                     subtitle={menuSubtitle}
                     color={menuColor}
                     icon={menuIcon}
                     clickAction={this.onMenuClick}
-                    title={menuTitle}
                     isAvailable={isMenuAvailable}
-                    isSquareLeft={true}/>
-                <DashboardItem
-                    isSquare={true}
+                    isLeft={true}/>
+                <SquareDashboardItem
+                    title={proximoTitle}
                     subtitle={proximoSubtitle}
                     color={proximoColor}
                     icon={proximoIcon}
                     clickAction={this.onProximoClick}
-                    title={proximoTitle}
-                    isAvailable={isProximoAvailable}/>
+                    isAvailable={isProximoAvailable}
+                    isLeft={false}/>
             </View>
         );
     }
@@ -477,23 +476,22 @@ export default class HomeScreen extends React.Component<Props> {
                 marginLeft: 10,
                 marginRight: 10,
             }}>
-                <DashboardItem
-                    isSquare={true}
+                <SquareDashboardItem
+                    title={proxiwashTitle}
                     subtitle={proxiwashSubtitle}
                     color={proxiwashColor}
                     icon={proxiwashIcon}
                     clickAction={this.onProxiwashClick}
-                    title={proxiwashTitle}
                     isAvailable={proxiwashIsAvailable}
-                    isSquareLeft={true}/>
-                <DashboardItem
-                    isSquare={true}
+                    isLeft={true}/>
+                <SquareDashboardItem
+                    title={tutorinsaTitle}
                     subtitle={tutorinsaSubtitle}
                     color={tutorinsaColor}
                     icon={tutorinsaIcon}
                     clickAction={this.onTutorInsaClick}
-                    title={tutorinsaTitle}
-                    isAvailable={tutorinsaIsAvailable}/>
+                    isAvailable={tutorinsaIsAvailable}
+                    isLeft={false}/>
             </View>
         );
     }
@@ -506,36 +504,14 @@ export default class HomeScreen extends React.Component<Props> {
         const onImagePress = this.openLink.bind(this, item.full_picture);
         const onOutLinkPress = this.openLink.bind(this, item.permalink_url);
         return (
-            <Card style={{margin: 5}}>
-                <Card.Title
-                    title={NAME_AMICALE}
-                    subtitle={HomeScreen.getFormattedDate(item.created_time)}
-                    left={props => <Avatar.Image size={48} source={ICON_AMICALE}
-                                                 style={{backgroundColor: 'transparent'}}/>}
-                />
-                {item.full_picture !== '' && item.full_picture !== undefined ?
-                    <TouchableOpacity onPress={onImagePress}>
-                        <Card.Cover source={{uri: item.full_picture}}/>
-                    </TouchableOpacity> : <View/>}
-                <Card.Content>
-                    {item.message !== undefined ?
-                        <Autolink
-                            text={item.message}
-                            hashtag="facebook"
-                            style={{color: ThemeManager.getCurrentThemeVariables().text}}
-                        /> : <View/>
-                    }
-                    <PlatformTouchable onPress={onOutLinkPress}>
-                        <View style={{flexDirection: 'row', marginTop: 5}}>
-                            <MaterialCommunityIcons
-                                name="facebook"
-                                color="#57aeff"
-                                size={26}/>
-                            <Text style={{color: "#57aeff"}}>En savoir plus</Text>
-                        </View>
-                    </PlatformTouchable>
-                </Card.Content>
-            </Card>
+            <FeedItem
+                title={NAME_AMICALE}
+                subtitle={HomeScreen.getFormattedDate(item.created_time)}
+                full_picture={item.full_picture}
+                message={item.message}
+                onImagePress={onImagePress}
+                onOutLinkPress={onOutLinkPress}
+            />
         );
     }
 

@@ -60,21 +60,12 @@
   "settingsScreen": {
     "generalCard": "General",
     "nightMode": "Night Mode",
-    "nightModeSub": "Switch the app to a dark or light theme",
+    "nightModeSubOn": "Your eyes are at peace",
+    "nightModeSubOff": "Your eyes are burning",
     "startScreen": "Start Screen",
     "startScreenSub": "Select which screen to start the app on",
     "proxiwashNotifReminder": "Machine running reminder",
-    "proxiwashNotifReminderSub": "Choose when to send a notification to remind you a machine is running with your laundry",
-    "proxiwashNotifReminderPicker": {
-      "never": "Never",
-      "1": "1 min",
-      "2": "2 min",
-      "3": "3 min",
-      "5": "5 min",
-      "10": "10 min",
-      "20": "20 min",
-      "30": "30 min"
-    }
+    "proxiwashNotifReminderSub": "How many minutes before",
   },
   "homeScreen": {
     "listUpdated": "List updated!",

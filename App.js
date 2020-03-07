@@ -3,7 +3,6 @@
 import * as React from 'react';
 import {Platform, StatusBar} from 'react-native';
 import LocaleManager from './utils/LocaleManager';
-import * as Font from 'expo-font';
 import AsyncStorageManager from "./utils/AsyncStorageManager";
 import CustomIntroSlider from "./components/CustomIntroSlider";
 import {SplashScreen} from 'expo';
@@ -21,17 +20,6 @@ type State = {
     showIntro: boolean,
     showUpdate: boolean,
     currentTheme: ?Object,
-};
-
-const MyTheme = {
-    dark: false,
-    colors: {
-        primary: 'rgb(255, 45, 85)',
-        background: 'rgb(242, 242, 242)',
-        card: 'rgb(255, 255, 255)',
-        text: 'rgb(28, 28, 30)',
-        border: 'rgb(199, 199, 204)',
-    },
 };
 
 const Stack = createStackNavigator();
@@ -54,7 +42,7 @@ export default class App extends React.Component<Props, State> {
     }
 
     /**
-     * Updates the theme and clears the cache to force reloading the app colors. Need to edit shoutem theme for ti to work
+     * Updates the theme
      */
     updateTheme() {
         this.setState({

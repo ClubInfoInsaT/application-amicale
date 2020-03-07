@@ -27,7 +27,7 @@ export default class PlanningDisplayScreen extends React.Component<Props> {
     render() {
         // console.log("rendering planningDisplayScreen");
         return (
-            <ScrollView style={{padding: 5}}>
+            <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
                 <Title>
                     {this.displayData.title}
                 </Title>

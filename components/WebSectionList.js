@@ -1,12 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import ThemeManager from '../utils/ThemeManager';
 import WebDataManager from "../utils/WebDataManager";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import i18n from "i18n-js";
-import {ActivityIndicator, Snackbar, Subheading} from 'react-native-paper';
+import {Snackbar} from 'react-native-paper';
 import {RefreshControl, SectionList, View} from "react-native";
+import EmptyWebSectionListItem from "./EmptyWebSectionListItem";
 
 type Props = {
     navigation: Object,
@@ -145,35 +144,12 @@ export default class WebSectionList extends React.Component<Props, State> {
 
     getEmptyRenderItem({item}: Object) {
         return (
-            <View>
-                <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                    height: 100,
-                    marginBottom: 20
-                }}>
-                    {this.state.refreshing ?
-                        <ActivityIndicator
-                            animating={true}
-                            size={'large'}
-                            color={ThemeManager.getCurrentThemeVariables().primary}/>
-                        :
-                        <MaterialCommunityIcons
-                            name={item.icon}
-                            size={100}
-                            color={ThemeManager.getCurrentThemeVariables().textDisabled}/>}
-                </View>
-
-                <Subheading style={{
-                    textAlign: 'center',
-                    marginRight: 20,
-                    marginLeft: 20,
-                    color: ThemeManager.getCurrentThemeVariables().textDisabled
-                }}>
-                    {item.text}
-                </Subheading>
-            </View>);
+            <EmptyWebSectionListItem
+                text={item.text}
+                icon={item.icon}
+                refreshing={this.state.refreshing}
+            />
+        );
     }
 
     createEmptyDataset() {

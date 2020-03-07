@@ -14,8 +14,7 @@ import PlanexScreen from '../screens/Websites/PlanexScreen';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ThemeManager from "../utils/ThemeManager";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
-import {View} from "react-native";
-import Touchable from "react-native-platform-touchable";
+import HeaderButton from "../components/HeaderButton";
 
 const TAB_ICONS = {
     Home: 'triangle',
@@ -33,20 +32,7 @@ const defaultScreenOptions = {
 
 function getDrawerButton(navigation: Object) {
     return (
-        <View
-            style={{
-                flexDirection: 'row',
-                marginLeft: 10
-            }}>
-            <Touchable
-                style={{padding: 6}}
-                onPress={navigation.openDrawer}>
-                <MaterialCommunityIcons
-                    name="menu"
-                    size={26}
-                    color={ThemeManager.getCurrentThemeVariables().text}/>
-            </Touchable>
-        </View>
+        <HeaderButton icon={'menu'} onPress={navigation.openDrawer}/>
     );
 }
 

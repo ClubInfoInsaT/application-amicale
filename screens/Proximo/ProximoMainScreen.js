@@ -6,6 +6,7 @@ import i18n from "i18n-js";
 import ThemeManager from "../../utils/ThemeManager";
 import WebSectionList from "../../components/WebSectionList";
 import {IconButton, List} from 'react-native-paper';
+import HeaderButton from "../../components/HeaderButton";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 
@@ -156,18 +157,8 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
                 style={{
                     flexDirection: 'row',
                 }}>
-                <IconButton
-                    icon="magnify"
-                    size={26}
-                    color={ThemeManager.getCurrentThemeVariables().text}
-                    onPress={this.onPressSearchBtn}
-                />
-                <IconButton
-                    icon="information"
-                    size={26}
-                    color={ThemeManager.getCurrentThemeVariables().text}
-                    onPress={this.onPressAboutBtn}
-                />
+                <HeaderButton icon={'magnify'} onPress={this.onPressSearchBtn}/>
+                <HeaderButton icon={'information'} onPress={this.onPressAboutBtn}/>
             </View>
         );
     }

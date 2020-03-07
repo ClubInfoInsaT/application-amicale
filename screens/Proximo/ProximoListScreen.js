@@ -341,7 +341,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     }
 
     render() {
-        // console.log("rendering ProximoListScreen");
+        console.log("rendering ProximoListScreen");
         return (
             <View>
                 <Modalize ref={this.modalRef}
