@@ -107,7 +107,6 @@ export default class App extends React.Component<Props, State> {
      * Renders the app based on loading state
      */
     render() {
-        console.log("render");
         if (this.state.isLoading) {
             return null;
         } else if (this.state.showIntro || this.state.showUpdate) {

@@ -141,7 +141,6 @@ export default class SideBar extends React.Component<Props, State> {
 
 
     getRenderItem({item}: Object) {
-        console.log("rendering SideBar Item");
         const onListItemPress = this.onListItemPress.bind(this, item);
         if (item.icon !== undefined) {
             return (
@@ -160,7 +159,6 @@ export default class SideBar extends React.Component<Props, State> {
     }
 
     render() {
-        console.log("rendering SideBar");
         return (
             <View style={{height: '100%'}}>
                 <Image source={require("../assets/drawer-cover.png")} style={styles.drawerCover}/>

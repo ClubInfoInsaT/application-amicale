@@ -199,7 +199,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     }
 
     getModalSortMenu() {
-        console.log(this.state.currentSortMode);
         return (
             <View style={{
                 flex: 1,
@@ -299,7 +298,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     }
 
     render() {
-        console.log("rendering ProximoListScreen");
         return (
             <View style={{
                 height: '100%'

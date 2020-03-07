@@ -266,7 +266,6 @@ export default class AboutScreen extends React.Component<Props, State> {
      */
     getCardItem({item}: Object) {
         let shouldShow = !item.showOnlyInDebug || (item.showOnlyInDebug && this.state.isDebugUnlocked);
-        console.log(item.text);
         if (shouldShow) {
             if (item.showChevron) {
                 return (

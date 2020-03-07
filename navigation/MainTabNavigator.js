@@ -12,9 +12,9 @@ import ProximoListScreen from "../screens/Proximo/ProximoListScreen";
 import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
-import ThemeManager from "../utils/ThemeManager";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import HeaderButton from "../components/HeaderButton";
+import {withTheme} from 'react-native-paper';
 
 const TAB_ICONS = {
     Home: 'triangle',
@@ -197,16 +197,17 @@ function PlanexStackComponent() {
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default function TabNavigator() {
+function TabNavigator(props) {
+    const {colors} = props.theme;
     return (
         <Tab.Navigator
             initialRouteName={AsyncStorageManager.getInstance().preferences.defaultStartScreen.current}
-            barStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().primary}}
+            barStyle={{backgroundColor: colors.surface}}
             screenOptions={({route}) => ({
                 tabBarIcon: ({focused, color, size}) => {
                     let icon = TAB_ICONS[route.name];
                     // tintColor is ignoring activeColor and inactiveColor for some reason
-                    color = focused ? "#f0edf6" : "#4e1108";
+                    color = focused ? colors.text : colors.textDisabled;
                     return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
                 },
             })}
@@ -234,3 +235,5 @@ export default function TabNavigator() {
         </Tab.Navigator>
     );
 }
+
+export default withTheme(TabNavigator);
