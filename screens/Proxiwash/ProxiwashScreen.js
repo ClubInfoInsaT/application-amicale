@@ -27,7 +27,6 @@ type Props = {
 type State = {
     refreshing: boolean,
     firstLoading: boolean,
-    fetchedData: Object,
     machinesWatched: Array<string>,
     bannerVisible: boolean,
 };
@@ -44,6 +43,8 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
     getRenderSectionHeader: Function;
     createDataset: Function;
     onHideBanner: Function;
+
+    fetchedData: Object;
 
     state = {
         refreshing: false,
@@ -218,6 +219,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     createDataset(fetchedData: Object) {
+        this.fetchedData = fetchedData;
         return [
             {
                 title: i18n.t('proxiwashScreen.dryers'),
@@ -319,18 +321,34 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         );
     }
 
+    getMachineAvailableNumber(isDryer: boolean) {
+        let data;
+        if (isDryer)
+            data = this.fetchedData.dryers;
+        else
+            data = this.fetchedData.washers;
+        let count = 0;
+        for (let i = 0; i < data.length; i++) {
+            if (ProxiwashConstants.machineStates[data[i].state] === ProxiwashConstants.machineStates["DISPONIBLE"])
+                count += 1;
+        }
+        return count;
+    }
+
     getRenderSectionHeader({section}: Object) {
+        const subtitle = this.getMachineAvailableNumber(section.title === i18n.t('proxiwashScreen.dryers')) + ' ' + i18n.t('proxiwashScreen.numAvailable');
         return (
             <Card style={{
-                width: '80%',
+                width: '60%',
                 marginLeft: 'auto',
                 marginRight: 'auto',
                 marginBottom: 10,
                 marginTop: 20,
+                elevation: 4,
             }}>
                 <Card.Title
                     title={section.title}
-                    // subtitle={''} // TODO display num available
+                    subtitle={subtitle}
                     titleStyle={{
                         textAlign: 'center'
                     }}

@@ -161,6 +161,7 @@
     "procedure": "Procedure",
     "tips": "Tips",
     "enableNotificationsTip": "Click on a running machine to enable notifications",
+    "numAvailable": "available",
     "modal": {
       "enableNotifications": "Notify me",
       "disableNotifications": "Stop notifications",
