@@ -3,11 +3,9 @@
 import * as React from 'react';
 import {Dimensions, FlatList, Image, Platform, StyleSheet, View} from 'react-native';
 import i18n from "i18n-js";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
-import ThemeManager from "../utils/ThemeManager";
 import * as WebBrowser from 'expo-web-browser';
 import SidebarDivider from "./SidebarDivider";
-import {DrawerItem} from '@react-navigation/drawer';
+import SidebarItem from "./SidebarItem";
 
 const deviceWidth = Dimensions.get("window").width;
 
@@ -147,18 +145,10 @@ export default class SideBar extends React.Component<Props, State> {
         const onListItemPress = this.onListItemPress.bind(this, item);
         if (item.icon !== undefined) {
             return (
-                <DrawerItem
-                    label={item.name}
-                    focused={false}
-                    icon={({color, size}) =>
-                        <MaterialCommunityIcons color={color} size={size} name={item.icon}/>}
+                <SidebarItem
+                    title={item.name}
+                    icon={item.icon}
                     onPress={onListItemPress}
-                    style={{
-                        marginLeft: 0,
-                        marginRight: 0,
-                        padding: 0,
-                        borderRadius: 0
-                    }}
                 />
             );
         } else {

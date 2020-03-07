@@ -301,7 +301,9 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     render() {
         console.log("rendering ProximoListScreen");
         return (
-            <View>
+            <View style={{
+                height: '100%'
+            }}>
                 <Modalize
                     ref={this.modalRef}
                     adjustToContentHeight
