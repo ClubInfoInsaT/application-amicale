@@ -187,7 +187,7 @@ export default class WebSectionList extends React.Component<Props, State> {
     render() {
         let dataset = this.props.createDataset(this.state.fetchedData);
         const isEmpty = dataset[0].data.length === 0;
-        const shouldRenderHeader = !isEmpty || (this.props.renderSectionHeader !== null);
+        const shouldRenderHeader = !isEmpty && (this.props.renderSectionHeader !== null);
         if (isEmpty)
             dataset = this.createEmptyDataset();
         return (

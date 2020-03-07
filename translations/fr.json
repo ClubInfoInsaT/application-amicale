@@ -160,7 +160,7 @@
     "dryerTips": "La durée conseillée est de 35 minutes pour 14kg de linge. Vous pouvez choisir une durée plus courte si le sèche-linge n'est pas chargé.",
     "procedure": "Procédure",
     "tips": "Conseils",
-
+    "enableNotificationsTip": "Cliquez sur une machine en cours pour activer les notifications",
     "modal": {
       "enableNotifications": "Me Notifier",
       "disableNotifications": "Désactiver les  notifications",
@@ -190,8 +190,9 @@
     }
   },
   "planexScreen": {
-    "rotateToLandscape": "Tournez votre téléphone pour voir la semaine entière",
-    "rotateToPortrait": "Tournez votre téléphone pour voir seulement 2 jours"
+    "enableStartScreen": "Vous venez souvent ici ? Démarrez l'appli sur cette page!",
+    "enableStartOK": "Oui svp!",
+    "enableStartCancel": "Plus tard"
   },
   "availableRoomScreen": {
     "normalRoom": "Travail",

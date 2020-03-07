@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Divider, List, Text, withTheme} from 'react-native-paper';
+import {Card, Avatar, List, Text, withTheme} from 'react-native-paper';
 import {View} from "react-native";
 import ProxiwashConstants from "../constants/ProxiwashConstants";
 
@@ -13,27 +13,48 @@ function ProxiwashListItem(props) {
     stateColors[ProxiwashConstants.machineStates.ERREUR] = colors.proxiwashErrorColor;
     const icon = (
         props.isWatched ?
-            <List.Icon icon={'bell-ring'} color={colors.primary}/> :
-            <List.Icon icon={props.isDryer ? 'tumble-dryer' : 'washing-machine'}/>
+            <Avatar.Icon
+                icon={'bell-ring'}
+                size={45}
+                color={colors.primary}
+                style={{backgroundColor: 'transparent'}}
+            /> :
+            <Avatar.Icon
+                icon={props.isDryer ? 'tumble-dryer' : 'washing-machine'}
+                color={colors.text}
+                size={40}
+                style={{backgroundColor: 'transparent'}}
+            />
     );
     return (
-        <View style={{
-            backgroundColor:
-                ProxiwashConstants.machineStates[props.state] === ProxiwashConstants.machineStates["EN COURS"] ?
-                    colors.proxiwashRunningBgColor :
-                    colors.background
-        }}>
-            <View style={{
+        <Card
+            style={{
+                margin: 5,
+            }}
+            onPress={props.onPress}
+        >
+            {ProxiwashConstants.machineStates[props.state] === ProxiwashConstants.machineStates["EN COURS"] ?
+                <Card style={{
+                    height: '100%',
+                    position: 'absolute',
+                    left: 0,
+                    width: '100%',
+                    backgroundColor: colors.proxiwashRunningBgColor,
+                    elevation: 0
+                }}/> : null
+            }
+
+            <Card style={{
                 height: '100%',
                 position: 'absolute',
                 left: 0,
                 width: props.progress,
-                backgroundColor: stateColors[ProxiwashConstants.machineStates[props.state]]
+                backgroundColor: stateColors[ProxiwashConstants.machineStates[props.state]],
+                elevation: 0
             }}/>
-            <List.Item
+            <Card.Title
                 title={props.title}
-                description={props.description}
-                onPress={props.onPress}
+                subtitle={props.description}
                 style={{
                     backgroundColor: 'transparent',
                     height: 64
@@ -52,14 +73,15 @@ function ProxiwashListItem(props) {
                             </Text>
                         </View>
 
-                        <List.Icon
-                            color={colors.text}
+                        <Avatar.Icon
                             icon={props.statusIcon}
+                            color={colors.text}
+                            size={30}
+                            style={{backgroundColor: 'transparent'}}
                         />
                     </View>)}
             />
-            <Divider/>
-        </View>
+        </Card>
     );
 }
 

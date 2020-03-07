@@ -35,12 +35,12 @@ export default class ThemeManager {
                 agendaDayTextColor: '#636363',
 
                 // PROXIWASH
-                proxiwashFinishedColor: "rgba(54,165,22,0.31)",
+                proxiwashFinishedColor: "#a5dc9d",
                 proxiwashReadyColor: "transparent",
-                proxiwashRunningColor: "rgba(94,104,241,0.3)",
-                proxiwashRunningBgColor: "rgba(99,109,255,0.14)",
-                proxiwashBrokenColor: "rgba(162,162,162,0.31)",
-                proxiwashErrorColor: "rgba(204,7,0,0.31)",
+                proxiwashRunningColor: "#a0ceff",
+                proxiwashRunningBgColor: "#c7e3ff",
+                proxiwashBrokenColor: "#8e8e8e",
+                proxiwashErrorColor: "rgba(204,7,0,0.31)#e35f57",
 
                 // Screens
                 planningColor: '#d9b10a',
@@ -72,12 +72,12 @@ export default class ThemeManager {
                 agendaDayTextColor: '#6d6d6d',
 
                 // PROXIWASH
-                proxiwashFinishedColor: "rgba(17,149,32,0.53)",
+                proxiwashFinishedColor: "#31682c",
                 proxiwashReadyColor: "transparent",
-                proxiwashRunningColor: "rgba(29,59,175,0.65)",
-                proxiwashRunningBgColor: "rgba(99,109,255,0.14)",
-                proxiwashBrokenColor: "#000000",
-                proxiwashErrorColor: "rgba(213,8,0,0.57)",
+                proxiwashRunningColor: "#213c79",
+                proxiwashRunningBgColor: "#1a2033",
+                proxiwashBrokenColor: "#656565",
+                proxiwashErrorColor: "#7e2e2f",
 
                 // Screens
                 planningColor: '#d99e09',

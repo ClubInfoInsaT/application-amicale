@@ -160,6 +160,7 @@
     "dryerTips": "The advised dryer length is 35 minutes for 14 kg of laundry. You can choose a shorter length if the dryer is not fully charged.",
     "procedure": "Procedure",
     "tips": "Tips",
+    "enableNotificationsTip": "Click on a running machine to enable notifications",
     "modal": {
       "enableNotifications": "Notify me",
       "disableNotifications": "Stop notifications",
@@ -188,8 +189,9 @@
     }
   },
   "planexScreen": {
-    "rotateToLandscape": "Turn your screen to see the whole week",
-    "rotateToPortrait": "Turn your screen to see only 2 days"
+    "enableStartScreen": "Come here often? Set it as default screen!",
+    "enableStartOK": "Yes please!",
+    "enableStartCancel": "Later"
   },
   "availableRoomScreen": {
     "normalRoom": "Work",

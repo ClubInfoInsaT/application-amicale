@@ -2,13 +2,12 @@
 
 import * as React from 'react';
 import {Alert, Platform, View} from 'react-native';
-import ThemeManager from '../../utils/ThemeManager';
 import i18n from "i18n-js";
 import WebSectionList from "../../components/WebSectionList";
 import NotificationsManager from "../../utils/NotificationsManager";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
-import {Divider, IconButton, List, Text, Title} from 'react-native-paper';
+import {Card, Banner, Avatar} from 'react-native-paper';
 import HeaderButton from "../../components/HeaderButton";
 import ProxiwashListItem from "../../components/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
@@ -30,6 +29,7 @@ type State = {
     firstLoading: boolean,
     fetchedData: Object,
     machinesWatched: Array<string>,
+    bannerVisible: boolean,
 };
 
 
@@ -43,6 +43,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
     getRenderItem: Function;
     getRenderSectionHeader: Function;
     createDataset: Function;
+    onHideBanner: Function;
 
     state = {
         refreshing: false,
@@ -50,6 +51,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         fetchedData: {},
         // machinesWatched: JSON.parse(dataString),
         machinesWatched: [],
+        bannerVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === '1',
     };
 
     /**
@@ -80,6 +82,15 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         this.getRenderItem = this.getRenderItem.bind(this);
         this.getRenderSectionHeader = this.getRenderSectionHeader.bind(this);
         this.createDataset = this.createDataset.bind(this);
+        this.onHideBanner = this.onHideBanner.bind(this);
+    }
+
+    onHideBanner() {
+        this.setState({bannerVisible: false});
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.key,
+            '0'
+        );
     }
 
     /**
@@ -280,24 +291,57 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         return (
-            <WebSectionList
-                createDataset={this.createDataset}
-                navigation={nav}
-                refreshTime={REFRESH_TIME}
-                fetchUrl={DATA_URL}
-                renderItem={this.getRenderItem}
-                renderSectionHeader={this.getRenderSectionHeader}/>
+            <View>
+                <Banner
+                    visible={this.state.bannerVisible}
+                    actions={[
+                        {
+                            label: 'OK',
+                            onPress: this.onHideBanner,
+                        },
+                    ]}
+                    icon={() => <Avatar.Icon
+                        icon={'information'}
+                        size={40}
+                        />}
+                >
+                    {i18n.t('proxiwashScreen.enableNotificationsTip')}
+                </Banner>
+                <WebSectionList
+                    createDataset={this.createDataset}
+                    navigation={nav}
+                    refreshTime={REFRESH_TIME}
+                    fetchUrl={DATA_URL}
+                    renderItem={this.getRenderItem}
+                    renderSectionHeader={this.getRenderSectionHeader}/>
+            </View>
+
         );
     }
 
     getRenderSectionHeader({section}: Object) {
         return (
-            <Title style={{
-                marginTop: 10,
-                textAlign: 'center'
+            <Card style={{
+                width: '80%',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginBottom: 10,
+                marginTop: 20,
             }}>
-                {section.title}
-            </Title>
+                <Card.Title
+                    title={section.title}
+                    // subtitle={''} // TODO display num available
+                    titleStyle={{
+                        textAlign: 'center'
+                    }}
+                    subtitleStyle={{
+                        textAlign: 'center'
+                    }}
+                    style={{
+                        paddingLeft: 0,
+                    }}
+                />
+            </Card>
         );
     }
 
