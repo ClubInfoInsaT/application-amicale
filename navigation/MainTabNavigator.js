@@ -19,9 +19,9 @@ import {withTheme} from 'react-native-paper';
 const TAB_ICONS = {
     Home: 'triangle',
     Planning: 'calendar-range',
-    Proxiwash: 'washing-machine',
-    Proximo: 'shopping',
-    Planex: 'timetable',
+    Proxiwash: 'tshirt-crew',
+    Proximo: 'cart',
+    Planex: 'clock',
 };
 
 const defaultScreenOptions = {
@@ -207,8 +207,8 @@ function TabNavigator(props) {
                 tabBarIcon: ({focused, color, size}) => {
                     let icon = TAB_ICONS[route.name];
                     // tintColor is ignoring activeColor and inactiveColor for some reason
-                    color = focused ? colors.text : colors.textDisabled;
-                    return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
+                    icon = focused ? icon : icon + ('-outline');
+                    return <MaterialCommunityIcons name={icon} color={colors.text} size={26}/>;
                 },
             })}
         >
