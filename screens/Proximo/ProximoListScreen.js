@@ -213,35 +213,35 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 >
                     <View style={{
                         flexDirection: 'row',
-                        justifyContent: 'center',
+                        justifyContent: 'flex-start',
                         alignItems: 'center'
                     }}>
-                        <Text>{i18n.t('proximoScreen.sortPrice')}</Text>
                         <RadioButton value={1}/>
+                        <Text>{i18n.t('proximoScreen.sortPrice')}</Text>
                     </View>
                     <View style={{
                         flexDirection: 'row',
-                        justifyContent: 'center',
+                        justifyContent: 'flex-start',
                         alignItems: 'center'
                     }}>
-                        <Text>{i18n.t('proximoScreen.sortPriceReverse')}</Text>
                         <RadioButton value={2}/>
+                        <Text>{i18n.t('proximoScreen.sortPriceReverse')}</Text>
                     </View>
                     <View style={{
                         flexDirection: 'row',
-                        justifyContent: 'center',
+                        justifyContent: 'flex-start',
                         alignItems: 'center'
                     }}>
-                        <Text>{i18n.t('proximoScreen.sortName')}</Text>
                         <RadioButton value={3}/>
+                        <Text>{i18n.t('proximoScreen.sortName')}</Text>
                     </View>
                     <View style={{
                         flexDirection: 'row',
-                        justifyContent: 'center',
+                        justifyContent: 'flex-start',
                         alignItems: 'center'
                     }}>
-                        <Text>{i18n.t('proximoScreen.sortNameReverse')}</Text>
                         <RadioButton value={4}/>
+                        <Text>{i18n.t('proximoScreen.sortNameReverse')}</Text>
                     </View>
                 </RadioButton.Group>
             </View>
