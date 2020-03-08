@@ -61,15 +61,29 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         this.originalData = this.props.route.params['data']['data'];
         this.shouldFocusSearchBar = this.props.route.params['shouldFocusSearchBar'];
         this.state = {
-            currentlyDisplayedData: this.originalData,
+            currentlyDisplayedData: this.originalData.sort(sortPrice),
             currentSortMode: 1,
-            modalCurrentDisplayItem: <View/>,
+            modalCurrentDisplayItem: null,
         };
 
         this.onSearchStringChange = this.onSearchStringChange.bind(this);
         this.onSortMenuPress = this.onSortMenuPress.bind(this);
         this.renderItem = this.renderItem.bind(this);
         this.onModalRef = this.onModalRef.bind(this);
+    }
+
+
+    /**
+     * Set the sort mode from state when components are ready
+     */
+    componentDidMount() {
+        const button = this.getSortMenu.bind(this);
+        const title = this.getSearchBar.bind(this);
+        this.props.navigation.setOptions({
+            headerRight: button,
+            headerTitle: title,
+            headerTitleContainerStyle: {marginHorizontal: 0, right: 50, left: 50},
+        });
     }
 
     /**
@@ -99,20 +113,6 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         if (this.modalRef && mode !== this.state.currentSortMode) {
             this.modalRef.close();
         }
-    }
-
-    /**
-     * Set the sort mode from state when components are ready
-     */
-    componentDidMount() {
-        const button = this.getSortMenu.bind(this);
-        const title = this.getSearchBar.bind(this);
-        this.props.navigation.setOptions({
-            headerRight: button,
-            headerTitle: title,
-            headerTitleContainerStyle: {marginHorizontal: 0, right: 50, left: 50},
-        });
-        this.setSortMode(1);
     }
 
     getSearchBar() {
