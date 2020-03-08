@@ -6,6 +6,13 @@ import i18n from "i18n-js";
 
 const ICON_AMICALE = require('../assets/amicale.png');
 
+function getAvatar() {
+    return (
+        <Avatar.Image size={48} source={ICON_AMICALE}
+                      style={{backgroundColor: 'transparent'}}/>
+    );
+}
+
 function FeedItem(props) {
     const {colors} = props.theme;
     return (
@@ -13,8 +20,7 @@ function FeedItem(props) {
             <Card.Title
                 title={props.title}
                 subtitle={props.subtitle}
-                left={props => <Avatar.Image size={48} source={ICON_AMICALE}
-                                             style={{backgroundColor: 'transparent'}}/>}
+                left={getAvatar}
             />
             {props.full_picture !== '' && props.full_picture !== undefined ?
                 <TouchableOpacity onPress={props.onImagePress}>

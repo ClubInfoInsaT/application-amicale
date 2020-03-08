@@ -7,7 +7,7 @@ import ThemeManager from "../utils/ThemeManager";
 import HTML from "react-native-render-html";
 import {LinearGradient} from "expo-linear-gradient";
 import i18n from "i18n-js";
-import {Avatar, Card, Text, Title} from 'react-native-paper';
+import {Avatar, Card, Text} from 'react-native-paper';
 
 type Props = {
     isAvailable: boolean,
@@ -27,6 +27,13 @@ export default class DashboardItem extends React.Component<Props> {
         isSquareLeft: true,
         displayEvent: undefined,
     };
+
+    getIcon: Function;
+
+    constructor() {
+        super();
+        this.getIcon = this.getIcon.bind(this);
+    }
 
     /**
      * Convert the date string given by in the event list json to a date object
@@ -64,18 +71,17 @@ export default class DashboardItem extends React.Component<Props> {
     getEventPreviewContainer() {
         if (this.props.displayEvent !== undefined && this.props.displayEvent !== null) {
             const hasImage = this.props.displayEvent['logo'] !== '' && this.props.displayEvent['logo'] !== null;
+            const getImage = () => <Avatar.Image
+                source={{uri: this.props.displayEvent['logo']}}
+                size={60}
+                style={{backgroundColor: 'transparent'}}/>;
             return (
                 <Card style={{marginBottom: 10}}>
                     {hasImage ?
                         <Card.Title
                             title={this.props.displayEvent['title']}
                             subtitle={this.getFormattedEventTime(this.props.displayEvent)}
-                            left={() =>
-                                <Avatar.Image
-                                    source={{uri: this.props.displayEvent['logo']}}
-                                    size={60}
-                                    style={{backgroundColor: 'transparent'}}/>
-                            }
+                            left={getImage}
                         /> :
                         <Card.Title
                             title={this.props.displayEvent['title']}
@@ -137,57 +143,13 @@ export default class DashboardItem extends React.Component<Props> {
 
     getIcon() {
         return (
-            <MaterialCommunityIcons
-                name={this.props.icon}
-                color={
-                    this.props.isAvailable ?
-                        this.props.color :
-                        ThemeManager.getCurrentThemeVariables().textDisabled
-                }
-                size={this.props.isSquare ? 50 : 40}/>
+            <Avatar.Icon
+                icon={this.props.icon}
+                color={this.props.isAvailable ? this.props.color : ThemeManager.getCurrentThemeVariables().textDisabled}
+                size={60}
+                style={{backgroundColor: 'transparent'}}/>
         );
     }
-
-    getText() {
-        return (
-            <View style={{
-                width: this.props.isSquare ? '100%' : 'auto',
-            }}>
-                <Title style={{
-                    color: this.props.isAvailable ?
-                        ThemeManager.getCurrentThemeVariables().text :
-                        ThemeManager.getCurrentThemeVariables().textDisabled,
-                    textAlign: this.props.isSquare ? 'center' : 'left',
-                    width: this.props.isSquare ? '100%' : 'auto',
-                }}>
-                    {this.props.title}
-                </Title>
-                <Text style={{
-                    color: this.props.isAvailable ?
-                        ThemeManager.getCurrentThemeVariables().text :
-                        ThemeManager.getCurrentThemeVariables().textDisabled,
-                    textAlign: this.props.isSquare ? 'center' : 'left',
-                    width: this.props.isSquare ? '100%' : 'auto',
-                }}>
-                    {this.props.subtitle}
-                </Text>
-            </View>
-        );
-    }
-
-    getContent() {
-        if (this.props.isSquare) {
-            return (
-                <View>
-                    <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                        {this.getIcon()}
-                    </View>
-                    {this.getText()}
-                </View>
-            );
-        }
-    }
-
 
     render() {
         // console.log("rendering DashboardItem " + this.props.title);
@@ -211,28 +173,17 @@ export default class DashboardItem extends React.Component<Props> {
                     overflow: 'hidden',
                 }}
                 onPress={this.props.clickAction}>
-                {this.props.isSquare ?
-                    <Card.Content>
-                        {this.getContent()}
-                    </Card.Content>
-                    :
-                    <View>
-                        <Card.Title
-                            title={this.props.title}
-                            titleStyle={{color: color}}
-                            subtitle={this.props.subtitle}
-                            subtitleStyle={{color: color}}
-                            left={(props) => <Avatar.Icon
-                                {...props}
-                                icon={this.props.icon}
-                                color={this.props.isAvailable ? this.props.color : ThemeManager.getCurrentThemeVariables().textDisabled}
-                                size={60}
-                                style={{backgroundColor: 'transparent'}}/>}
-                        />
-                        <Card.Content>
-                            {this.getEventPreviewContainer()}
-                        </Card.Content>
-                    </View>}
+
+                <Card.Title
+                    title={this.props.title}
+                    titleStyle={{color: color}}
+                    subtitle={this.props.subtitle}
+                    subtitleStyle={{color: color}}
+                    left={this.getIcon}
+                />
+                <Card.Content>
+                    {this.getEventPreviewContainer()}
+                </Card.Content>
             </Card>
         );
     }
