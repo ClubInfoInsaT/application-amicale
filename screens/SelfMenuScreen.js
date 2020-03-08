@@ -5,7 +5,8 @@ import {View} from 'react-native';
 import ThemeManager from "../utils/ThemeManager";
 import i18n from "i18n-js";
 import WebSectionList from "../components/WebSectionList";
-import {Card, Text, Title} from 'react-native-paper';
+import {Card, Text} from 'react-native-paper';
+import AprilFoolsManager from "../utils/AprilFoolsManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
 
@@ -72,6 +73,8 @@ export default class SelfMenuScreen extends React.Component<Props> {
                 }
             ];
         }
+        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled() && fetchedData.length > 0)
+            fetchedData[0].meal[0].foodcategory = AprilFoolsManager.getFakeMenuItem(fetchedData[0].meal[0].foodcategory);
         // fetched data is an array here
         for (let i = 0; i < fetchedData.length; i++) {
             result.push(
@@ -125,18 +128,18 @@ export default class SelfMenuScreen extends React.Component<Props> {
                 flex: 0,
                 margin: 10,
             }}>
-                    <Card.Title
-                        title={item.name}
-                    />
-                    <View style={{
-                        width: '80%',
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                        borderBottomWidth: 1,
-                        borderBottomColor: ThemeManager.getCurrentThemeVariables().primary,
-                        marginTop: 10,
-                        marginBottom: 5,
-                    }}/>
+                <Card.Title
+                    title={item.name}
+                />
+                <View style={{
+                    width: '80%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    borderBottomWidth: 1,
+                    borderBottomColor: ThemeManager.getCurrentThemeVariables().primary,
+                    marginTop: 10,
+                    marginBottom: 5,
+                }}/>
                 <Card.Content>
                     {item.dishes.map((object) =>
                         <View>
