@@ -387,12 +387,12 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     getRenderSectionHeader({section}: Object) {
-        const subtitle = this.getMachineAvailableNumber(section.title === i18n.t('proxiwashScreen.dryers')) + ' ' + i18n.t('proxiwashScreen.numAvailable');
+        const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
+        const subtitle = this.getMachineAvailableNumber(isDryer) + ' ' + i18n.t('proxiwashScreen.numAvailable');
         return (
             <Card style={{
-                width: '60%',
-                marginLeft: 'auto',
-                marginRight: 'auto',
+                marginLeft: 5,
+                marginRight: 5,
                 marginBottom: 10,
                 marginTop: 20,
                 elevation: 4,
@@ -400,15 +400,11 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                 <Card.Title
                     title={section.title}
                     subtitle={subtitle}
-                    titleStyle={{
-                        textAlign: 'center'
-                    }}
-                    subtitleStyle={{
-                        textAlign: 'center'
-                    }}
-                    style={{
-                        paddingLeft: 0,
-                    }}
+                    left={() => <Avatar.Icon
+                        icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
+                        color={ThemeManager.getCurrentThemeVariables().primary}
+                        style={{backgroundColor: 'transparent'}}
+                    />}
                 />
             </Card>
         );
