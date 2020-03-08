@@ -208,7 +208,8 @@ function TabNavigator(props) {
                     let icon = TAB_ICONS[route.name];
                     // tintColor is ignoring activeColor and inactiveColor for some reason
                     icon = focused ? icon : icon + ('-outline');
-                    return <MaterialCommunityIcons name={icon} color={colors.text} size={26}/>;
+                    let iconColor = focused ? colors.tabIconFocused : colors.tabIcon;
+                    return <MaterialCommunityIcons name={icon} color={iconColor} size={26}/>;
                 },
             })}
         >
