@@ -99,11 +99,11 @@ export default class SelfMenuScreen extends React.Component<Props> {
     getRenderSectionHeader({section}: Object) {
         return (
             <Card style={{
-                width: '90%',
+                width: '95%',
                 marginLeft: 'auto',
                 marginRight: 'auto',
-                marginBottom: 10,
-                marginTop: 20,
+                marginTop: 5,
+                marginBottom: 5,
                 elevation: 4,
             }}>
                 <Card.Title
@@ -126,9 +126,11 @@ export default class SelfMenuScreen extends React.Component<Props> {
         return (
             <Card style={{
                 flex: 0,
-                margin: 10,
+                marginHorizontal: 10,
+                marginVertical: 5,
             }}>
                 <Card.Title
+                    style={{marginTop: 5}}
                     title={item.name}
                 />
                 <View style={{
@@ -137,7 +139,7 @@ export default class SelfMenuScreen extends React.Component<Props> {
                     marginRight: 'auto',
                     borderBottomWidth: 1,
                     borderBottomColor: ThemeManager.getCurrentThemeVariables().primary,
-                    marginTop: 10,
+                    marginTop: 5,
                     marginBottom: 5,
                 }}/>
                 <Card.Content>
