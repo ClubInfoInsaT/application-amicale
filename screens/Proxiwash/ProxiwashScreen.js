@@ -7,10 +7,12 @@ import WebSectionList from "../../components/WebSectionList";
 import NotificationsManager from "../../utils/NotificationsManager";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
-import {Card, Banner, Avatar} from 'react-native-paper';
+import {Avatar, Banner, Button, Card, Text} from 'react-native-paper';
 import HeaderButton from "../../components/HeaderButton";
 import ProxiwashListItem from "../../components/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
+import {Modalize} from "react-native-modalize";
+import ThemeManager from "../../utils/ThemeManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -27,6 +29,7 @@ type Props = {
 type State = {
     refreshing: boolean,
     firstLoading: boolean,
+    modalCurrentDisplayItem: React.Node,
     machinesWatched: Array<string>,
     bannerVisible: boolean,
 };
@@ -37,6 +40,8 @@ type State = {
  * dryers, taken from a scrapper reading proxiwash website
  */
 export default class ProxiwashScreen extends React.Component<Props, State> {
+
+    modalRef: { current: null | Modalize };
 
     onAboutPress: Function;
     getRenderItem: Function;
@@ -52,6 +57,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         fetchedData: {},
         // machinesWatched: JSON.parse(dataString),
         machinesWatched: [],
+        modalCurrentDisplayItem: null,
         bannerVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === '1',
     };
 
@@ -60,6 +66,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
      */
     constructor() {
         super();
+        this.modalRef = React.createRef();
         stateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.states.finished');
         stateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
         stateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.states.running');
@@ -238,29 +245,40 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         ];
     }
 
-    /**
-     * Show an alert fo a machine, allowing to enable/disable notifications if running
-     *
-     * @param title
-     * @param item
-     * @param isDryer
-     */
-    showAlert(title: string, item: Object, isDryer: boolean) {
-        let buttons = [{text: i18n.t("proxiwashScreen.modal.ok")}];
+    showModal(title: string, item: Object, isDryer: boolean) {
+        this.setState({
+            modalCurrentDisplayItem: this.getModalContent(title, item, isDryer)
+        });
+        if (this.modalRef.current) {
+            this.modalRef.current.open();
+        }
+    }
+
+    onSetupNotificationsPress(machineId: string) {
+        if (this.modalRef.current) {
+            this.modalRef.current.close();
+        }
+        this.setupNotifications(machineId)
+    }
+
+    getModalContent(title: string, item: Object, isDryer: boolean) {
+        let button = {
+            text: i18n.t("proxiwashScreen.modal.ok"),
+            icon: '',
+            onPress: undefined
+        };
         let message = modalStateStrings[ProxiwashConstants.machineStates[item.state]];
-        const onPress = this.setupNotifications.bind(this, item.number);
+        const onPress = this.onSetupNotificationsPress.bind(this, item.number);
         if (ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"]) {
-            buttons = [
+            button =
                 {
                     text: this.isMachineWatched(item.number) ?
                         i18n.t("proxiwashScreen.modal.disableNotifications") :
                         i18n.t("proxiwashScreen.modal.enableNotifications"),
+                    icon: '',
                     onPress: onPress
-                },
-                {
-                    text: i18n.t("proxiwashScreen.modal.cancel")
                 }
-            ];
+            ;
             message = i18n.t('proxiwashScreen.modal.running',
                 {
                     start: item.startTime,
@@ -273,12 +291,38 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
             else
                 message += '\n' + i18n.t('proxiwashScreen.washersTariff');
         }
-        Alert.alert(
-            title,
-            message,
-            buttons
+        return (
+            <View style={{
+                flex: 1,
+                padding: 20
+            }}>
+                <Card.Title
+                    title={title}
+                    left={() => <Avatar.Icon
+                        icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
+                        color={ThemeManager.getCurrentThemeVariables().text}
+                        style={{backgroundColor: 'transparent'}}/>}
+
+                />
+                <Card.Content>
+                    <Text>{message}</Text>
+                </Card.Content>
+
+                {button.onPress !== undefined ?
+                    <Card.Actions>
+                        <Button
+                            icon={button.icon}
+                            mode="contained"
+                            onPress={button.onPress}
+                            style={{marginLeft: 'auto', marginRight: 'auto'}}
+                        >
+                            {button.text}
+                        </Button>
+                    </Card.Actions> : null}
+            </View>
         );
     }
+
 
     onAboutPress() {
         this.props.navigation.navigate('ProxiwashAboutScreen');
@@ -305,10 +349,18 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                     icon={() => <Avatar.Icon
                         icon={'information'}
                         size={40}
-                        />}
+                    />}
                 >
                     {i18n.t('proxiwashScreen.enableNotificationsTip')}
                 </Banner>
+                <Modalize ref={this.modalRef}
+                          adjustToContentHeight
+                          handlePosition={'inside'}
+                          modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().surface}}
+                          handleStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().text}}
+                >
+                    {this.state.modalCurrentDisplayItem}
+                </Modalize>
                 <WebSectionList
                     createDataset={this.createDataset}
                     navigation={nav}
@@ -374,7 +426,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         const isMachineRunning = ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"];
         const machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
         const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
-        const onPress = this.showAlert.bind(this, machineName, item, isDryer);
+        const onPress = this.showModal.bind(this, machineName, item, isDryer);
         let width = item.donePercent !== '' ? (parseInt(item.donePercent)).toString() + '%' : 0;
         if (ProxiwashConstants.machineStates[item.state] === '0')
             width = '100%';

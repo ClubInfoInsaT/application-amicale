@@ -9,7 +9,7 @@ const ICON_AMICALE = require('../assets/amicale.png');
 function FeedItem(props) {
     const {colors} = props.theme;
     return (
-        <Card style={{margin: 5}}>
+        <Card style={{margin: 10}}>
             <Card.Title
                 title={props.title}
                 subtitle={props.subtitle}

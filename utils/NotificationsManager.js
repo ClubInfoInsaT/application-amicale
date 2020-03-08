@@ -123,7 +123,10 @@ export default class NotificationsManager {
                     'Content-Type': 'application/json',
                 }),
                 body: JSON.stringify(data) // <-- Post parameters
-            });
+            }).then((response) => response.json())
+                .then((responseJson) => {
+                    callback(responseJson);
+                });
         }
     }
 

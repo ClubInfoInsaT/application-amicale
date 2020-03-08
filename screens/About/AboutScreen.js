@@ -7,7 +7,7 @@ import appJson from '../../app';
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import {Modalize} from "react-native-modalize";
 import ThemeManager from "../../utils/ThemeManager";
-import {Avatar, Card, Text, Title, List, Button} from 'react-native-paper';
+import {Avatar, Button, Card, List, Text, Title} from 'react-native-paper';
 
 const links = {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
@@ -271,8 +271,8 @@ export default class AboutScreen extends React.Component<Props, State> {
                 return (
                     <List.Item
                         title={item.text}
-                        left={props => <List.Icon {...props} icon={item.icon} />}
-                        right={props => <List.Icon {...props} icon={'chevron-right'} />}
+                        left={props => <List.Icon {...props} icon={item.icon}/>}
+                        right={props => <List.Icon {...props} icon={'chevron-right'}/>}
                         onPress={item.onPressCallback}
                     />
                 );
@@ -280,7 +280,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                 return (
                     <List.Item
                         title={item.text}
-                        left={props => <List.Icon {...props} icon={item.icon} />}
+                        left={props => <List.Icon {...props} icon={item.icon}/>}
                         onPress={item.onPressCallback}
                     />
                 );
@@ -311,7 +311,10 @@ export default class AboutScreen extends React.Component<Props, State> {
         return (
             <Modalize ref={this.modalRef}
                       adjustToContentHeight
-                      modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().surface}}>
+                      handlePosition={'inside'}
+                      modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().surface}}
+                      handleStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().text}}
+            >
                 <View style={{
                     flex: 1,
                     padding: 20
