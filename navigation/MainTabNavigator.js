@@ -208,10 +208,11 @@ function TabNavigator(props) {
                     let icon = TAB_ICONS[route.name];
                     // tintColor is ignoring activeColor and inactiveColor for some reason
                     icon = focused ? icon : icon + ('-outline');
-                    let iconColor = focused ? colors.tabIconFocused : colors.tabIcon;
-                    return <MaterialCommunityIcons name={icon} color={iconColor} size={26}/>;
+                    return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
                 },
             })}
+            activeColor={colors.primary}
+            inactiveColor={colors.tabIcon}
         >
             <Tab.Screen
                 name="Proximo"
