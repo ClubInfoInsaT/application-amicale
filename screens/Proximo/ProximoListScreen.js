@@ -110,6 +110,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         this.props.navigation.setOptions({
             headerRight: button,
             headerTitle: title,
+            headerTitleContainerStyle: {marginHorizontal: 0, right: 50, left: 50},
         });
         this.setSortMode(1);
     }
