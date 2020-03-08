@@ -1,13 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {BackHandler, Image, View} from 'react-native';
+import {BackHandler, View} from 'react-native';
 import i18n from "i18n-js";
-import ThemeManager from "../utils/ThemeManager";
 import {LocaleConfig} from 'react-native-calendars';
 import WebDataManager from "../utils/WebDataManager";
 import PlanningEventManager from '../utils/PlanningEventManager';
-import {Text, Title, List, Avatar, Divider} from 'react-native-paper';
+import {Avatar, Divider, List} from 'react-native-paper';
 import CustomAgenda from "../components/CustomAgenda";
 
 LocaleConfig.locales['fr'] = {
@@ -31,7 +30,7 @@ type State = {
 
 const FETCH_URL = "https://amicale-insat.fr/event/json/list";
 
-const AGENDA_MONTH_SPAN = 6;
+const AGENDA_MONTH_SPAN = 3;
 
 /**
  * Class defining the app's planning screen
@@ -138,7 +137,10 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     <List.Item
                         title={item.title}
                         description={PlanningEventManager.getFormattedTime(item)}
-                        left={props => <Avatar.Image source={{uri: item.logo}} />}
+                        left={props => <Avatar.Image
+                            source={{uri: item.logo}}
+                            style={{backgroundColor: 'transparent'}}
+                        />}
                         onPress={onPress}
                     />
                 </View>
@@ -164,9 +166,10 @@ export default class PlanningScreen extends React.Component<Props, State> {
     }
 
     rowHasChanged(r1: Object, r2: Object) {
-        if (r1 !== undefined && r2 !== undefined)
-            return r1.title !== r2.title;
-        else return !(r1 === undefined && r2 === undefined);
+        return false;
+        // if (r1 !== undefined && r2 !== undefined)
+        //     return r1.title !== r2.title;
+        // else return !(r1 === undefined && r2 === undefined);
     }
 
     /**
