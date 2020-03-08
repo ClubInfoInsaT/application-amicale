@@ -11,7 +11,7 @@ import {Avatar, Banner, Button, Card, Text} from 'react-native-paper';
 import HeaderButton from "../../components/HeaderButton";
 import ProxiwashListItem from "../../components/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
-import {Modalize} from "react-native-modalize";
+import CustomModal from "../../components/CustomModal";
 import ThemeManager from "../../utils/ThemeManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
@@ -41,13 +41,14 @@ type State = {
  */
 export default class ProxiwashScreen extends React.Component<Props, State> {
 
-    modalRef: { current: null | Modalize };
+    modalRef: Object;
 
     onAboutPress: Function;
     getRenderItem: Function;
     getRenderSectionHeader: Function;
     createDataset: Function;
     onHideBanner: Function;
+    onModalRef: Function;
 
     fetchedData: Object;
 
@@ -66,7 +67,6 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
      */
     constructor() {
         super();
-        this.modalRef = React.createRef();
         stateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.states.finished');
         stateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
         stateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.states.running');
@@ -91,6 +91,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         this.getRenderSectionHeader = this.getRenderSectionHeader.bind(this);
         this.createDataset = this.createDataset.bind(this);
         this.onHideBanner = this.onHideBanner.bind(this);
+        this.onModalRef = this.onModalRef.bind(this);
     }
 
     onHideBanner() {
@@ -249,14 +250,14 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         this.setState({
             modalCurrentDisplayItem: this.getModalContent(title, item, isDryer)
         });
-        if (this.modalRef.current) {
-            this.modalRef.current.open();
+        if (this.modalRef) {
+            this.modalRef.open();
         }
     }
 
     onSetupNotificationsPress(machineId: string) {
-        if (this.modalRef.current) {
-            this.modalRef.current.close();
+        if (this.modalRef) {
+            this.modalRef.close();
         }
         this.setupNotifications(machineId)
     }
@@ -323,7 +324,6 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         );
     }
 
-
     onAboutPress() {
         this.props.navigation.navigate('ProxiwashAboutScreen');
     }
@@ -332,6 +332,10 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         return (
             <HeaderButton icon={'information'} onPress={this.onAboutPress}/>
         );
+    }
+
+    onModalRef(ref: Object) {
+        this.modalRef = ref;
     }
 
     render() {
@@ -353,14 +357,9 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                 >
                     {i18n.t('proxiwashScreen.enableNotificationsTip')}
                 </Banner>
-                <Modalize ref={this.modalRef}
-                          adjustToContentHeight
-                          handlePosition={'inside'}
-                          modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().surface}}
-                          handleStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().text}}
-                >
+                <CustomModal onRef={this.onModalRef}>
                     {this.state.modalCurrentDisplayItem}
-                </Modalize>
+                </CustomModal>
                 <WebSectionList
                     createDataset={this.createDataset}
                     navigation={nav}

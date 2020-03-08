@@ -5,7 +5,7 @@ import ThemeManager from '../utils/ThemeManager';
 import {Alert, Clipboard, ScrollView, View} from "react-native";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import NotificationsManager from "../utils/NotificationsManager";
-import {Modalize} from "react-native-modalize";
+import CustomModal from "../components/CustomModal";
 import {Button, Card, List, Subheading, TextInput, Title} from 'react-native-paper';
 
 type Props = {
@@ -22,16 +22,18 @@ type State = {
  */
 export default class DebugScreen extends React.Component<Props, State> {
 
-    modalRef: { current: null | Modalize };
+    modalRef: Object;
     modalInputValue = '';
     state = {
         modalCurrentDisplayItem: {},
         currentPreferences: JSON.parse(JSON.stringify(AsyncStorageManager.getInstance().preferences))
     };
 
+    onModalRef: Function;
+
     constructor(props: any) {
         super(props);
-        this.modalRef = React.createRef();
+        this.onModalRef = this.onModalRef.bind(this);
     }
 
     static getGeneralItem(onPressCallback: Function, icon: ?string, title: string, subtitle: string) {
@@ -76,8 +78,8 @@ export default class DebugScreen extends React.Component<Props, State> {
         this.setState({
             modalCurrentDisplayItem: item
         });
-        if (this.modalRef.current) {
-            this.modalRef.current.open();
+        if (this.modalRef) {
+            this.modalRef.open();
         }
     }
 
@@ -127,15 +129,16 @@ export default class DebugScreen extends React.Component<Props, State> {
         AsyncStorageManager.getInstance().savePref(key, value);
     }
 
+    onModalRef(ref: Object) {
+        this.modalRef = ref;
+    }
+
     render() {
         return (
             <View>
-                <Modalize
-                    ref={this.modalRef}
-                    adjustToContentHeight
-                    modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().surface}}>
+                <CustomModal onRef={this.onModalRef}>
                     {this.getModalContent()}
-                </Modalize>
+                </CustomModal>
                 <ScrollView style={{padding: 5}}>
                     <Card style={{margin: 5}}>
                         <Card.Title

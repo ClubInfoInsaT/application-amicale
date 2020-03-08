@@ -4,7 +4,7 @@ import * as React from 'react';
 import {FlatList, Image, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
 import ThemeManager from "../../utils/ThemeManager";
-import {Modalize} from 'react-native-modalize';
+import CustomModal from "../../components/CustomModal";
 import {Avatar, IconButton, List, RadioButton, Searchbar, Subheading, Text, Title} from "react-native-paper";
 
 function sortPrice(a, b) {
@@ -47,17 +47,17 @@ type State = {
  */
 export default class ProximoListScreen extends React.Component<Props, State> {
 
-    modalRef: { current: null | Modalize };
+    modalRef: Object;
     originalData: Array<Object>;
     shouldFocusSearchBar: boolean;
 
     onSearchStringChange: Function;
     onSortMenuPress: Function;
     renderItem: Function;
+    onModalRef: Function;
 
     constructor(props: any) {
         super(props);
-        this.modalRef = React.createRef();
         this.originalData = this.props.route.params['data']['data'];
         this.shouldFocusSearchBar = this.props.route.params['shouldFocusSearchBar'];
         this.state = {
@@ -69,6 +69,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         this.onSearchStringChange = this.onSearchStringChange.bind(this);
         this.onSortMenuPress = this.onSortMenuPress.bind(this);
         this.renderItem = this.renderItem.bind(this);
+        this.onModalRef = this.onModalRef.bind(this);
     }
 
     /**
@@ -95,8 +96,8 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 data.sort(sortNameReverse);
                 break;
         }
-        if (this.modalRef.current && mode !== this.state.currentSortMode) {
-            this.modalRef.current.close();
+        if (this.modalRef && mode !== this.state.currentSortMode) {
+            this.modalRef.close();
         }
     }
 
@@ -250,8 +251,8 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         this.setState({
             modalCurrentDisplayItem: this.getModalItemContent(item)
         });
-        if (this.modalRef.current) {
-            this.modalRef.current.open();
+        if (this.modalRef) {
+            this.modalRef.open();
         }
     }
 
@@ -259,8 +260,8 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         this.setState({
             modalCurrentDisplayItem: this.getModalSortMenu()
         });
-        if (this.modalRef.current) {
-            this.modalRef.current.open();
+        if (this.modalRef) {
+            this.modalRef.open();
         }
     }
 
@@ -283,9 +284,9 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 description={item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
                 descriptionStyle={{color: this.getStockColor(parseInt(item.quantity))}}
                 onPress={onPress}
-                left={props => <Avatar.Image style={{backgroundColor: 'transparent'}} size={64}
+                left={() => <Avatar.Image style={{backgroundColor: 'transparent'}} size={64}
                                              source={{uri: item.image}}/>}
-                right={props =>
+                right={() =>
                     <Text style={{fontWeight: "bold"}}>
                         {item.price}€
                     </Text>}
@@ -297,20 +298,18 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         return item.name + item.code;
     }
 
+    onModalRef(ref: Object) {
+        this.modalRef = ref;
+    }
+
     render() {
         return (
             <View style={{
                 height: '100%'
             }}>
-                <Modalize
-                    ref={this.modalRef}
-                    adjustToContentHeight
-                    handlePosition={'inside'}
-                    modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().card}}
-                    handleStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().text}}
-                >
+                <CustomModal onRef={this.onModalRef}>
                     {this.state.modalCurrentDisplayItem}
-                </Modalize>
+                </CustomModal>
                 <FlatList
                     data={this.state.currentlyDisplayedData}
                     extraData={this.state.currentlyDisplayedData}

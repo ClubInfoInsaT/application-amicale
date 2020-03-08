@@ -5,7 +5,7 @@ import {FlatList, Linking, Platform, View} from 'react-native';
 import i18n from "i18n-js";
 import appJson from '../../app';
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
-import {Modalize} from "react-native-modalize";
+import CustomModal from "../../components/CustomModal";
 import ThemeManager from "../../utils/ThemeManager";
 import {Avatar, Button, Card, List, Text, Title} from 'react-native-paper';
 
@@ -62,7 +62,7 @@ function openWebLink(link) {
 export default class AboutScreen extends React.Component<Props, State> {
 
     debugTapCounter = 0;
-    modalRef: { current: null | Modalize };
+    modalRef: Object;
 
     state = {
         isDebugUnlocked: AsyncStorageManager.getInstance().preferences.debugUnlocked.current === '1'
@@ -186,12 +186,13 @@ export default class AboutScreen extends React.Component<Props, State> {
 
     getCardItem: Function;
     getMainCard: Function;
+    onModalRef: Function;
 
     constructor(props: any) {
         super(props);
-        this.modalRef = React.createRef();
         this.getCardItem = this.getCardItem.bind(this);
         this.getMainCard = this.getMainCard.bind(this);
+        this.onModalRef = this.onModalRef.bind(this);
     }
 
     getAppCard() {
@@ -309,54 +310,47 @@ export default class AboutScreen extends React.Component<Props, State> {
         const onPressMail = openWebLink.bind(this, links.bugsMail);
         const onPressGit = openWebLink.bind(this, links.bugsGit);
         return (
-            <Modalize ref={this.modalRef}
-                      adjustToContentHeight
-                      handlePosition={'inside'}
-                      modalStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().surface}}
-                      handleStyle={{backgroundColor: ThemeManager.getCurrentThemeVariables().text}}
-            >
-                <View style={{
-                    flex: 1,
-                    padding: 20
-                }}>
-                    <Title>{i18n.t('aboutScreen.bugs')}</Title>
-                    <Text>
-                        {i18n.t('aboutScreen.bugsDescription')}
-                    </Text>
-                    <Button
-                        icon="email"
-                        mode="contained"
-                        dark={true}
-                        color={ThemeManager.getCurrentThemeVariables().primary}
-                        style={{
-                            marginTop: 20,
-                            marginLeft: 'auto',
-                            marginRight: 'auto',
-                        }}
-                        onPress={onPressMail}>
-                        <Text>{i18n.t('aboutScreen.bugsMail')}</Text>
-                    </Button>
-                    <Button
-                        icon="git"
-                        mode="contained"
-                        dark={true}
-                        color={ThemeManager.getCurrentThemeVariables().primary}
-                        style={{
-                            marginTop: 20,
-                            marginLeft: 'auto',
-                            marginRight: 'auto',
-                        }}
-                        onPress={onPressGit}>
-                        <Text>{i18n.t('aboutScreen.bugsGit')}</Text>
-                    </Button>
-                </View>
-            </Modalize>
+            <View style={{
+                flex: 1,
+                padding: 20
+            }}>
+                <Title>{i18n.t('aboutScreen.bugs')}</Title>
+                <Text>
+                    {i18n.t('aboutScreen.bugsDescription')}
+                </Text>
+                <Button
+                    icon="email"
+                    mode="contained"
+                    dark={true}
+                    color={ThemeManager.getCurrentThemeVariables().primary}
+                    style={{
+                        marginTop: 20,
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                    }}
+                    onPress={onPressMail}>
+                    <Text>{i18n.t('aboutScreen.bugsMail')}</Text>
+                </Button>
+                <Button
+                    icon="git"
+                    mode="contained"
+                    dark={true}
+                    color={ThemeManager.getCurrentThemeVariables().primary}
+                    style={{
+                        marginTop: 20,
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                    }}
+                    onPress={onPressGit}>
+                    <Text>{i18n.t('aboutScreen.bugsGit')}</Text>
+                </Button>
+            </View>
         );
     }
 
     openBugReportModal() {
-        if (this.modalRef.current) {
-            this.modalRef.current.open();
+        if (this.modalRef) {
+            this.modalRef.open();
         }
     }
 
@@ -372,10 +366,16 @@ export default class AboutScreen extends React.Component<Props, State> {
         return <View/>;
     }
 
+    onModalRef(ref: Object) {
+        this.modalRef = ref;
+    }
+
     render() {
         return (
             <View style={{padding: 5}}>
-                {this.getBugReportModal()}
+                <CustomModal onRef={this.onModalRef}>
+                    {this.getBugReportModal()}
+                </CustomModal>
                 <FlatList
                     style={{padding: 5}}
                     data={this.dataOrder}
