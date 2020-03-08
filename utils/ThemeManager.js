@@ -139,7 +139,7 @@ export default class ThemeManager {
         if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
             return ThemeManager.getAprilFoolsTheme();
          else
-            ThemeManager.getBaseTheme()
+            return ThemeManager.getBaseTheme()
     }
 
     static getBaseTheme() {
