@@ -206,7 +206,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 flex: 1,
                 padding: 20
             }}>
-                <Title>Sort Order</Title>
+                <Title style={{marginBottom: 10}}>{i18n.t('proximoScreen.sortOrder')}</Title>
                 <RadioButton.Group
                     onValueChange={value => this.setSortMode(value)}
                     value={this.state.currentSortMode}
