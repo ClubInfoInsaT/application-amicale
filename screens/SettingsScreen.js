@@ -45,15 +45,17 @@ export default class SettingsScreen extends React.Component<Props, State> {
      * @param value The value to store
      */
     onProxiwashNotifPickerValueChange(value: string) {
-        let key = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.key;
-        AsyncStorageManager.getInstance().savePref(key, value);
-        this.setState({
-            proxiwashNotifPickerSelected: value
-        });
-        let intVal = 0;
-        if (value !== 'never')
-            intVal = parseInt(value);
-        NotificationsManager.setMachineReminderNotificationTime(intVal);
+        if (value != null) {
+            let key = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.key;
+            AsyncStorageManager.getInstance().savePref(key, value);
+            this.setState({
+                proxiwashNotifPickerSelected: value
+            });
+            let intVal = 0;
+            if (value !== 'never')
+                intVal = parseInt(value);
+            NotificationsManager.setMachineReminderNotificationTime(intVal);
+        }
     }
 
     /**
