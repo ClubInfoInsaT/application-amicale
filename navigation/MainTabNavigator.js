@@ -15,6 +15,8 @@ import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import HeaderButton from "../components/HeaderButton";
 import {withTheme} from 'react-native-paper';
+import i18n from "i18n-js";
+
 
 const TAB_ICONS = {
     Home: 'triangle',
@@ -154,7 +156,7 @@ function HomeStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'Home',
+                        title: i18n.t('screens.home'),
                         headerLeft: openDrawer
                     };
                 }}
@@ -225,6 +227,7 @@ function TabNavigator(props) {
             <Tab.Screen
                 name="Home"
                 component={HomeStackComponent}
+                options={{title: i18n.t('screens.home')}}
             />
             <Tab.Screen
                 name="Proxiwash"
