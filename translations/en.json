@@ -67,6 +67,7 @@
     "nightMode": "Night Mode",
     "nightModeSubOn": "Your eyes are at peace",
     "nightModeSubOff": "Your eyes are burning",
+    "nightModeAuto": "Follow system dark mode",
     "startScreen": "Start Screen",
     "startScreenSub": "Select which screen to start the app on",
     "proxiwashNotifReminder": "Machine running reminder",

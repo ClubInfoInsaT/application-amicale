@@ -42,6 +42,7 @@ export default class App extends React.Component<Props, State> {
         super();
         LocaleManager.initTranslations();
         this.onIntroDone = this.onIntroDone.bind(this);
+        SplashScreen.preventAutoHide();
     }
 
     /**
@@ -84,13 +85,9 @@ export default class App extends React.Component<Props, State> {
 
     async loadAssetsAsync() {
         // Wait for custom fonts to be loaded before showing the app
-        // console.log("loading Fonts");
-        SplashScreen.preventAutoHide();
-        // console.log("loading preferences");
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
-        // console.log("loading Expo token");
-        await NotificationsManager.initExpoToken();
+        // await NotificationsManager.initExpoToken();
         this.onLoadFinished();
     }
 
@@ -122,7 +119,6 @@ export default class App extends React.Component<Props, State> {
                 isAprilFools={this.state.showAprilFools && !this.state.showIntro}
             />;
         } else {
-
             return (
                 <PaperProvider theme={this.state.currentTheme}>
                     <NavigationContainer theme={this.state.currentTheme}>

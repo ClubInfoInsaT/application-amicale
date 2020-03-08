@@ -65,8 +65,9 @@
   "settingsScreen": {
     "generalCard": "Général",
     "nightMode": "Mode Nuit",
-    "nightModeSubOn": "Vos yeux brulent",
-    "nightModeSubOff": "Vos yeux vous remercient",
+    "nightModeSubOn": "Vos yeux vous remercient",
+    "nightModeSubOff": "Vos yeux brulent",
+    "nightModeAuto": "Mode nuit système",
     "startScreen": "Écran de démarrage",
     "startScreenSub": "Choisissez l'écran utilisé au démarrage",
     "proxiwashNotifReminder": "Rappel de machine en cours",

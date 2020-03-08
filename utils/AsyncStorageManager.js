@@ -44,6 +44,11 @@ export default class AsyncStorageManager {
             default: '[]',
             current: '',
         },
+        nightModeFollowSystem: {
+            key: 'nightModeFollowSystem',
+            default: '1',
+            current: '',
+        },
         nightMode: {
             key: 'nightMode',
             default: '0',

@@ -7,6 +7,7 @@ import i18n from "i18n-js";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import NotificationsManager from "../utils/NotificationsManager";
 import {Card, List, Switch, ToggleButton} from 'react-native-paper';
+import {Appearance} from "react-native-appearance";
 
 type Props = {
     navigation: Object,
@@ -14,6 +15,7 @@ type Props = {
 
 type State = {
     nightMode: boolean,
+    nightModeFollowSystem: boolean,
     proxiwashNotifPickerSelected: string,
     startScreenPickerSelected: string,
 };
@@ -24,6 +26,8 @@ type State = {
 export default class SettingsScreen extends React.Component<Props, State> {
     state = {
         nightMode: ThemeManager.getNightMode(),
+        nightModeFollowSystem: AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current === '1' &&
+        Appearance.getColorScheme() !== 'no-preference',
         proxiwashNotifPickerSelected: AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current,
         startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
     };
@@ -31,12 +35,14 @@ export default class SettingsScreen extends React.Component<Props, State> {
     onProxiwashNotifPickerValueChange: Function;
     onStartScreenPickerValueChange: Function;
     onToggleNightMode: Function;
+    onToggleNightModeFollowSystem: Function;
 
     constructor() {
         super();
         this.onProxiwashNotifPickerValueChange = this.onProxiwashNotifPickerValueChange.bind(this);
         this.onStartScreenPickerValueChange = this.onStartScreenPickerValueChange.bind(this);
         this.onToggleNightMode = this.onToggleNightMode.bind(this);
+        this.onToggleNightModeFollowSystem = this.onToggleNightModeFollowSystem.bind(this);
     }
 
     /**
@@ -119,6 +125,18 @@ export default class SettingsScreen extends React.Component<Props, State> {
         this.setState({nightMode: !this.state.nightMode});
     }
 
+    onToggleNightModeFollowSystem() {
+        const value = !this.state.nightModeFollowSystem;
+        this.setState({nightModeFollowSystem: value});
+        let key = AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.key;
+        AsyncStorageManager.getInstance().savePref(key, value ? '1' : '0');
+        if (value) {
+            const nightMode = Appearance.getColorScheme() === 'dark';
+            ThemeManager.getInstance().setNightMode(nightMode);
+            this.setState({nightMode: nightMode});
+        }
+    }
+
     /**
      * Get a list item using a checkbox control
      *
@@ -128,7 +146,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
      * @param subtitle The text to display as this list item subtitle
      * @returns {React.Node}
      */
-    getToggleItem(onPressCallback: Function, icon: string, title: string, subtitle: string) {
+    getToggleItem(onPressCallback: Function, icon: string, title: string, subtitle: string, state: boolean) {
         return (
             <List.Item
                 title={title}
@@ -136,7 +154,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 left={props => <List.Icon {...props} icon={icon}/>}
                 right={props =>
                     <Switch
-                        value={this.state.nightMode}
+                        value={state}
                         onValueChange={onPressCallback}
                     />}
             />
@@ -149,14 +167,27 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 <Card style={{margin: 5}}>
                     <Card.Title title={i18n.t('settingsScreen.generalCard')}/>
                     <List.Section>
-                        {this.getToggleItem(
-                            this.onToggleNightMode,
+                        {Appearance.getColorScheme() !== 'no-preference' ? this.getToggleItem(
+                            this.onToggleNightModeFollowSystem,
                             'theme-light-dark',
-                            i18n.t('settingsScreen.nightMode'),
+                            i18n.t('settingsScreen.nightModeAuto'),
                             this.state.nightMode ?
                                 i18n.t('settingsScreen.nightModeSubOn') :
-                                i18n.t('settingsScreen.nightModeSubOff')
-                        )}
+                                i18n.t('settingsScreen.nightModeSubOff'),
+                            this.state.nightModeFollowSystem
+                        ) : null}
+                        {
+                            Appearance.getColorScheme() === 'no-preference' || !this.state.nightModeFollowSystem ?
+                            this.getToggleItem(
+                                this.onToggleNightMode,
+                                'theme-light-dark',
+                                i18n.t('settingsScreen.nightMode'),
+                                this.state.nightMode ?
+                                    i18n.t('settingsScreen.nightModeSubOn') :
+                                    i18n.t('settingsScreen.nightModeSubOff'),
+                                this.state.nightMode
+                            ) : null
+                        }
                         <List.Accordion
                             title={i18n.t('settingsScreen.startScreen')}
                             description={i18n.t('settingsScreen.startScreenSub')}
