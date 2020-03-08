@@ -194,7 +194,8 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
             <WebSectionList
                 createDataset={this.createDataset}
                 navigation={nav}
-                refreshTime={0}
+                autoRefreshTime={0}
+                refreshOnFocus={false}
                 fetchUrl={DATA_URL}
                 renderItem={this.getRenderItem}/>
         );

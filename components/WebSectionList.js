@@ -10,7 +10,8 @@ import EmptyWebSectionListItem from "./EmptyWebSectionListItem";
 type Props = {
     navigation: Object,
     fetchUrl: string,
-    refreshTime: number,
+    autoRefreshTime: number,
+    refreshOnFocus: boolean,
     renderItem: React.Node,
     renderSectionHeader: React.Node,
     stickyHeader: boolean,
@@ -24,6 +25,8 @@ type State = {
     snackbarVisible: boolean
 };
 
+
+const MIN_REFRESH_TIME = 5  * 1000;
 /**
  * Custom component defining a material icon using native base
  *
@@ -82,15 +85,19 @@ export default class WebSectionList extends React.Component<Props, State> {
         const onScreenBlur = this.onScreenBlur.bind(this);
         this.props.navigation.addListener('focus', onScreenFocus);
         this.props.navigation.addListener('blur', onScreenBlur);
+        this.onRefresh();
     }
+
+
 
     /**
      * Refresh data when focusing the screen and setup a refresh interval if asked to
      */
     onScreenFocus() {
-        this.onRefresh();
-        if (this.props.refreshTime > 0)
-            this.refreshInterval = setInterval(this.onRefresh, this.props.refreshTime)
+        if (this.props.refreshOnFocus && this.lastRefresh !== undefined)
+            this.onRefresh();
+        if (this.props.autoRefreshTime > 0)
+            this.refreshInterval = setInterval(this.onRefresh, this.props.autoRefreshTime)
     }
 
     /**
@@ -127,7 +134,7 @@ export default class WebSectionList extends React.Component<Props, State> {
     onRefresh() {
         let canRefresh;
         if (this.lastRefresh !== undefined)
-            canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) > this.props.refreshTime;
+            canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) > MIN_REFRESH_TIME;
         else
             canRefresh = true;
         if (canRefresh) {

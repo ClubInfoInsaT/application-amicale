@@ -168,7 +168,8 @@ export default class SelfMenuScreen extends React.Component<Props> {
             <WebSectionList
                 createDataset={this.createDataset}
                 navigation={nav}
-                refreshTime={0}
+                autoRefreshTime={0}
+                refreshOnFocus={false}
                 fetchUrl={DATA_URL}
                 renderItem={this.getRenderItem}
                 renderSectionHeader={this.getRenderSectionHeader}

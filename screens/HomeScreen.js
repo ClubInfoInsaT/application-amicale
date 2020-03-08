@@ -526,7 +526,8 @@ export default class HomeScreen extends React.Component<Props> {
             <WebSectionList
                 createDataset={this.createDataset}
                 navigation={nav}
-                refreshTime={REFRESH_TIME}
+                autoRefreshTime={REFRESH_TIME}
+                refreshOnFocus={true}
                 fetchUrl={DATA_URL}
                 renderItem={this.getRenderItem}/>
         );

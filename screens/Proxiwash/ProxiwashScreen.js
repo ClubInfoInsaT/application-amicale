@@ -363,10 +363,11 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                 <WebSectionList
                     createDataset={this.createDataset}
                     navigation={nav}
-                    refreshTime={REFRESH_TIME}
                     fetchUrl={DATA_URL}
                     renderItem={this.getRenderItem}
-                    renderSectionHeader={this.getRenderSectionHeader}/>
+                    renderSectionHeader={this.getRenderSectionHeader}
+                    autoRefreshTime={REFRESH_TIME}
+                    refreshOnFocus={true}/>
             </View>
 
         );
