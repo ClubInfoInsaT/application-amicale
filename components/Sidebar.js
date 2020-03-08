@@ -41,7 +41,7 @@ export default class SideBar extends React.Component<Props, State> {
         // Dataset used to render the drawer
         this.dataSet = [
             {
-                name: "Home",
+                name: i18n.t('screens.home'),
                 route: "Main",
                 icon: "home",
             },
@@ -60,7 +60,7 @@ export default class SideBar extends React.Component<Props, State> {
                 icon: "calendar-check",
             },
             {
-                name: 'Bib',
+                name: i18n.t('screens.bib'),
                 route: "BibScreen",
                 icon: "book",
             },

@@ -13,6 +13,7 @@ import DebugScreen from '../screens/DebugScreen';
 import Sidebar from "../components/Sidebar";
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
 import HeaderButton from "../components/HeaderButton";
+import i18n from "i18n-js";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -41,7 +42,7 @@ function AboutStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'About',
+                        title: i18n.t('screens.about'),
                         headerLeft: openDrawer
                     };
                 }}
@@ -50,14 +51,14 @@ function AboutStackComponent() {
                 name="AboutDependenciesScreen"
                 component={AboutDependenciesScreen}
                 options={{
-                    title: 'Dependencies'
+                    title: i18n.t('aboutScreen.libs')
                 }}
             />
             <AboutStack.Screen
                 name="DebugScreen"
                 component={DebugScreen}
                 options={{
-                    title: 'Debug'
+                    title: i18n.t('aboutScreen.debug')
                 }}
             />
         </AboutStack.Navigator>
@@ -79,7 +80,7 @@ function SettingsStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'Settings',
+                        title: i18n.t('screens.settings'),
                         headerLeft: openDrawer
                     };
                 }}
@@ -103,7 +104,7 @@ function SelfMenuStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'Menu RU',
+                        title: i18n.t('screens.menuSelf'),
                         headerLeft: openDrawer
                     };
                 }}
@@ -127,7 +128,7 @@ function AvailableRoomStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'Available Rooms',
+                        title: i18n.t('screens.availableRooms'),
                         headerLeft: openDrawer
                     };
                 }}
@@ -151,7 +152,7 @@ function BibStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'Bib',
+                        title: i18n.t('screens.bib'),
                         headerLeft: openDrawer
                     };
                 }}
