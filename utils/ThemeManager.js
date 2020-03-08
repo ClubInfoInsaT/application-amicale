@@ -93,27 +93,6 @@ export default class ThemeManager {
         };
     }
 
-    static getAprilFoolsTheme() {
-        return {
-            ...ThemeManager.getBaseTheme(),
-            colors: {
-                ...ThemeManager.getBaseTheme().colors,
-                primary: '#bebe03',
-                accent: '#bebe03',
-                background: '#5b3e02',
-                tabBackground: "#5b3e02",
-                card: "#5b3e02",
-                surface: "#5b3e02",
-                dividerBackground: '#362201',
-                textDisabled: '#b9b9b9',
-
-                // Calendar/Agenda
-                agendaBackgroundColor: '#5b3e02',
-                agendaDayTextColor: '#6d6d6d',
-            },
-        };
-    }
-
     /**
      * Get this class instance or create one if none is found
      * @returns {ThemeManager}
@@ -137,7 +116,7 @@ export default class ThemeManager {
      */
     static getCurrentTheme(): Object {
         if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
-            return ThemeManager.getAprilFoolsTheme();
+            return AprilFoolsManager.getAprilFoolsTheme(ThemeManager.getBaseTheme());
          else
             return ThemeManager.getBaseTheme()
     }

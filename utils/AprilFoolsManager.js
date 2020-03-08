@@ -49,6 +49,27 @@ export default class AprilFoolsManager {
         return menu;
     }
 
+    static getAprilFoolsTheme(currentTheme : Object) {
+        return {
+            ...currentTheme,
+            colors: {
+                ...currentTheme.colors,
+                primary: '#bebe03',
+                accent: '#bebe03',
+                background: '#5b3e02',
+                tabBackground: "#5b3e02",
+                card: "#5b3e02",
+                surface: "#5b3e02",
+                dividerBackground: '#362201',
+                textDisabled: '#b9b9b9',
+
+                // Calendar/Agenda
+                agendaBackgroundColor: '#5b3e02',
+                agendaDayTextColor: '#6d6d6d',
+            },
+        };
+    }
+
     isAprilFoolsEnabled() {
         return this.aprilFoolsEnabled;
     }
