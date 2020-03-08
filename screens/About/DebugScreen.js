@@ -1,11 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import ThemeManager from '../utils/ThemeManager';
+import ThemeManager from '../../utils/ThemeManager';
 import {Alert, Clipboard, ScrollView, View} from "react-native";
-import AsyncStorageManager from "../utils/AsyncStorageManager";
-import NotificationsManager from "../utils/NotificationsManager";
-import CustomModal from "../components/CustomModal";
+import AsyncStorageManager from "../../utils/AsyncStorageManager";
+import NotificationsManager from "../../utils/NotificationsManager";
+import CustomModal from "../../components/CustomModal";
 import {Button, Card, List, Subheading, TextInput, Title} from 'react-native-paper';
 
 type Props = {

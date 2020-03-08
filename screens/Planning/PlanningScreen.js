@@ -4,11 +4,11 @@ import * as React from 'react';
 import {BackHandler, View} from 'react-native';
 import i18n from "i18n-js";
 import {LocaleConfig} from 'react-native-calendars';
-import WebDataManager from "../utils/WebDataManager";
-import PlanningEventManager from '../utils/PlanningEventManager';
+import WebDataManager from "../../utils/WebDataManager";
+import PlanningEventManager from '../../utils/PlanningEventManager';
 import {Avatar, Divider, List} from 'react-native-paper';
-import CustomAgenda from "../components/CustomAgenda";
-import AprilFoolsManager from "../utils/AprilFoolsManager";
+import CustomAgenda from "../../components/CustomAgenda";
+import AprilFoolsManager from "../../utils/AprilFoolsManager";
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],

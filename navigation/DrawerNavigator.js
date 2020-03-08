@@ -9,7 +9,7 @@ import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 import SelfMenuScreen from '../screens/SelfMenuScreen';
 import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
 import BibScreen from "../screens/Websites/BibScreen";
-import DebugScreen from '../screens/DebugScreen';
+import DebugScreen from '../screens/About/DebugScreen';
 import Sidebar from "../components/Sidebar";
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
 import HeaderButton from "../components/HeaderButton";

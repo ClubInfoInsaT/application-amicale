@@ -3,8 +3,8 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from "@react-navigation/material-bottom-tabs";
 
 import HomeScreen from '../screens/HomeScreen';
-import PlanningScreen from '../screens/PlanningScreen';
-import PlanningDisplayScreen from '../screens/PlanningDisplayScreen';
+import PlanningScreen from '../screens/Planning/PlanningScreen';
+import PlanningDisplayScreen from '../screens/Planning/PlanningDisplayScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
 import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';

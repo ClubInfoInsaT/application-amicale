@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 import {Image, ScrollView, View} from 'react-native';
-import ThemeManager from "../utils/ThemeManager";
+import ThemeManager from "../../utils/ThemeManager";
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
-import PlanningEventManager from '../utils/PlanningEventManager';
+import PlanningEventManager from '../../utils/PlanningEventManager';
 import {Card} from 'react-native-paper';
 
 type Props = {
