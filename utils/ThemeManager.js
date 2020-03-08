@@ -1,8 +1,9 @@
 // @flow
 
 import AsyncStorageManager from "./AsyncStorageManager";
-// import {DarkTheme as NavDarkTheme, DefaultTheme as NavDefaultTheme} from '@react-navigation/native';
 import {DarkTheme, DefaultTheme} from 'react-native-paper';
+import AprilFoolsManager from "./AprilFoolsManager";
+
 /**
  * Singleton class used to manage themes
  */
@@ -114,6 +115,13 @@ export default class ThemeManager {
      * @returns {Object}
      */
     static getCurrentTheme(): Object {
+        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
+            return AprilFoolsManager.getAprilFoolsTheme(ThemeManager.getBaseTheme());
+         else
+            return ThemeManager.getBaseTheme()
+    }
+
+    static getBaseTheme() {
         if (ThemeManager.getNightMode())
             return ThemeManager.getDarkTheme();
         else

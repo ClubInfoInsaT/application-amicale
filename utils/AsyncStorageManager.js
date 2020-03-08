@@ -74,6 +74,11 @@ export default class AsyncStorageManager {
             default: '1',
             current: '',
         },
+        showAprilFoolsStart: {
+            key: 'showAprilFoolsStart',
+            default: '1',
+            current: '',
+        },
     };
 
     /**

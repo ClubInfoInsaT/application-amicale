@@ -39,13 +39,15 @@ const styles = StyleSheet.create({
 
 type Props = {
     onDone: Function,
-    isUpdate: boolean
+    isUpdate: boolean,
+    isAprilFools: boolean,
 };
 
 export default class CustomIntroSlider extends React.Component<Props> {
 
     introSlides: Array<Object>;
     updateSlides: Array<Object>;
+    aprilFoolsSlides: Array<Object>;
 
     constructor() {
         super();
@@ -108,7 +110,16 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 icon: 'email',
                 colors: ['#e01928', '#be1522'],
             },
-        ]
+        ];
+        this.aprilFoolsSlides = [
+            {
+                key: '1',
+                title: i18n.t('intro.aprilFoolsSlide.title'),
+                text: i18n.t('intro.aprilFoolsSlide.text'),
+                icon: 'information',
+                colors: ['#e01928', '#be1522'],
+            },
+        ];
     }
 
 
@@ -144,10 +155,15 @@ export default class CustomIntroSlider extends React.Component<Props> {
     }
 
     render() {
+        let slides = this.introSlides;
+        if (this.props.isUpdate)
+            slides = this.updateSlides;
+        else if (this.props.isAprilFools)
+            slides = this.aprilFoolsSlides;
         return (
             <AppIntroSlider
                 renderItem={CustomIntroSlider.getIntroRenderItem}
-                slides={this.props.isUpdate ? this.updateSlides : this.introSlides}
+                slides={slides}
                 onDone={this.props.onDone}
                 bottomButton
                 showSkipButton
