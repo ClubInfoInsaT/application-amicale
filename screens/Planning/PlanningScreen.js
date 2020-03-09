@@ -8,7 +8,6 @@ import WebDataManager from "../../utils/WebDataManager";
 import PlanningEventManager from '../../utils/PlanningEventManager';
 import {Avatar, Divider, List} from 'react-native-paper';
 import CustomAgenda from "../../components/CustomAgenda";
-import AprilFoolsManager from "../../utils/AprilFoolsManager";
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
@@ -210,8 +209,6 @@ export default class PlanningScreen extends React.Component<Props, State> {
                 this.pushEventInOrder(agendaItems, eventList[i], PlanningEventManager.getEventStartDate(eventList[i]));
             }
         }
-        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
-            agendaItems["2020-04-01"].push(AprilFoolsManager.getFakeEvent());
         this.setState({agendaItems: agendaItems})
     }
 

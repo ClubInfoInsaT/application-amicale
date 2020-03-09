@@ -201,7 +201,11 @@ export default class AboutScreen extends React.Component<Props, State> {
                 <Card.Title
                     title={appJson.expo.name}
                     subtitle={appJson.expo.version}
-                    left={(props) => <Avatar.Image {...props} source={require('../../assets/android.icon.png')}/>}/>
+                    left={(props) => <Avatar.Image
+                        {...props}
+                        source={require('../../assets/android.icon.png')}
+                        style={{backgroundColor: 'transparent'}}
+                    />}/>
                 <Card.Content>
                     <FlatList
                         data={this.appData}

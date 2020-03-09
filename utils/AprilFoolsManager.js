@@ -24,27 +24,13 @@ export default class AprilFoolsManager {
             AprilFoolsManager.instance;
     }
 
-    static getFakeEvent() {
-        return {
-            category_id: 1,
-            club: "Coucou",
-            date_begin: "2020-04-01 20:30:00",
-            date_end: "2020-04-01 23:59:00",
-            description: "Trop génial",
-            id: "-1",
-            logo: null,
-            title: "Super event trop whoaou",
-            url: null
-        };
-    }
-
     static getFakeMenuItem(menu: Object) {
         if (menu[1]["dishes"].length >= 3) {
-            menu[1]["dishes"].splice(0, 0, {name: "Truc à la con"});
-            menu[1]["dishes"].splice(2, 0, {name: "Autre truc à la con"});
+            menu[1]["dishes"].splice(0, 0, {name: "Coq au vin"});
+            menu[1]["dishes"].splice(2, 0, {name: "Pave de loup"});
         } else {
-            menu[1]["dishes"].push({name: "Truc à la con"});
-            menu[1]["dishes"].push({name: "Autre truc à la con"});
+            menu[1]["dishes"].push({name: "Coq au vin"});
+            menu[1]["dishes"].push({name: "Pave de loup"});
         }
         return menu;
     }
@@ -54,13 +40,13 @@ export default class AprilFoolsManager {
             ...currentTheme,
             colors: {
                 ...currentTheme.colors,
-                primary: '#bebe03',
-                accent: '#bebe03',
-                background: '#5b3e02',
-                tabBackground: "#5b3e02",
-                card: "#5b3e02",
-                surface: "#5b3e02",
-                dividerBackground: '#362201',
+                primary: '#00be45',
+                accent: '#00be45',
+                background: '#50005b',
+                tabBackground: "#50005b",
+                card: "#50005b",
+                surface: "#50005b",
+                dividerBackground: '#3e0047',
                 textDisabled: '#b9b9b9',
 
                 // Calendar/Agenda
