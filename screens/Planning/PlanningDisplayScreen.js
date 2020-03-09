@@ -6,7 +6,7 @@ import ThemeManager from "../../utils/ThemeManager";
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
 import PlanningEventManager from '../../utils/PlanningEventManager';
-import {Card} from 'react-native-paper';
+import {Card, withTheme} from 'react-native-paper';
 
 type Props = {
     navigation: Object,
@@ -20,9 +20,16 @@ function openWebLink(event, link) {
 /**
  * Class defining an about screen. This screen shows the user information about the app and it's author.
  */
-export default class PlanningDisplayScreen extends React.Component<Props> {
+class PlanningDisplayScreen extends React.Component<Props> {
 
     displayData = this.props.route.params['data'];
+
+    colors: Object;
+
+    constructor(props) {
+        super(props);
+        this.colors = props.theme.colors;
+    }
 
     render() {
         // console.log("rendering planningDisplayScreen");
@@ -44,8 +51,8 @@ export default class PlanningDisplayScreen extends React.Component<Props> {
                     <Card.Content>
                         <HTML html={"<div>" + this.displayData.description + "</div>"}
                               tagsStyles={{
-                                  p: {color: ThemeManager.getCurrentThemeVariables().text,},
-                                  div: {color: ThemeManager.getCurrentThemeVariables().text}
+                                  p: {color: this.colors.text,},
+                                  div: {color: this.colors.text}
                               }}
                               onLinkPress={openWebLink}/>
                     </Card.Content>
@@ -54,3 +61,5 @@ export default class PlanningDisplayScreen extends React.Component<Props> {
         );
     }
 }
+
+export default withTheme(PlanningDisplayScreen);

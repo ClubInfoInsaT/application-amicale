@@ -1,12 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import ThemeManager from '../../utils/ThemeManager';
 import {Alert, Clipboard, ScrollView, View} from "react-native";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import NotificationsManager from "../../utils/NotificationsManager";
 import CustomModal from "../../components/CustomModal";
-import {Button, Card, List, Subheading, TextInput, Title} from 'react-native-paper';
+import {Button, Card, List, Subheading, TextInput, Title, withTheme} from 'react-native-paper';
 
 type Props = {
     navigation: Object,
@@ -20,7 +19,7 @@ type State = {
 /**
  * Class defining the Debug screen. This screen allows the user to get detailed information on the app/device.
  */
-export default class DebugScreen extends React.Component<Props, State> {
+class DebugScreen extends React.Component<Props, State> {
 
     modalRef: Object;
     modalInputValue = '';
@@ -31,9 +30,12 @@ export default class DebugScreen extends React.Component<Props, State> {
 
     onModalRef: Function;
 
-    constructor(props: any) {
+    colors: Object;
+
+    constructor(props) {
         super(props);
         this.onModalRef = this.onModalRef.bind(this);
+        this.colors = props.theme.colors;
     }
 
     static getGeneralItem(onPressCallback: Function, icon: ?string, title: string, subtitle: string) {
@@ -103,14 +105,14 @@ export default class DebugScreen extends React.Component<Props, State> {
                     <Button
                         mode="contained"
                         dark={true}
-                        color={ThemeManager.getCurrentThemeVariables().success}
+                        color={this.colors.success}
                         onPress={() => this.saveNewPrefs(this.state.modalCurrentDisplayItem.key, this.modalInputValue)}>
                         Save new value
                     </Button>
                     <Button
                         mode="contained"
                         dark={true}
-                        color={ThemeManager.getCurrentThemeVariables().danger}
+                        color={this.colors.danger}
                         onPress={() => this.saveNewPrefs(this.state.modalCurrentDisplayItem.key, this.state.modalCurrentDisplayItem.default)}>
                         Reset to default
                     </Button>
@@ -166,3 +168,5 @@ export default class DebugScreen extends React.Component<Props, State> {
         );
     }
 }
+
+export default withTheme(DebugScreen);

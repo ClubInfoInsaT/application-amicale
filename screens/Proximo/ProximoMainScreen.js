@@ -3,9 +3,8 @@
 import * as React from 'react';
 import {View} from 'react-native'
 import i18n from "i18n-js";
-import ThemeManager from "../../utils/ThemeManager";
 import WebSectionList from "../../components/WebSectionList";
-import {IconButton, List} from 'react-native-paper';
+import {List, withTheme} from 'react-native-paper';
 import HeaderButton from "../../components/HeaderButton";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
@@ -22,7 +21,7 @@ type State = {
  * Class defining the main proximo screen. This screen shows the different categories of articles
  * offered by proximo.
  */
-export default class ProximoMainScreen extends React.Component<Props, State> {
+class ProximoMainScreen extends React.Component<Props, State> {
 
     articles: Object;
 
@@ -31,12 +30,15 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
     getRenderItem: Function;
     createDataset: Function;
 
-    constructor() {
-        super();
+    colors: Object;
+
+    constructor(props) {
+        super(props);
         this.onPressSearchBtn = this.onPressSearchBtn.bind(this);
         this.onPressAboutBtn = this.onPressAboutBtn.bind(this);
         this.getRenderItem = this.getRenderItem.bind(this);
         this.createDataset = this.createDataset.bind(this);
+        this.colors = props.theme.colors;
     }
 
     static sortFinalData(a: Object, b: Object) {
@@ -180,7 +182,7 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
                     left={props => <List.Icon
                         {...props}
                         icon={item.type.icon}
-                        color={ThemeManager.getCurrentThemeVariables().primary}/>}
+                        color={this.colors.primary}/>}
                     right={props => <List.Icon {...props} icon={'chevron-right'}/>}
                 />
             );
@@ -202,3 +204,4 @@ export default class ProximoMainScreen extends React.Component<Props, State> {
     }
 }
 
+export default withTheme(ProximoMainScreen);

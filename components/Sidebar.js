@@ -21,7 +21,7 @@ type State = {
 /**
  * Class used to define a navigation drawer
  */
-export default class SideBar extends React.Component<Props, State> {
+export default class SideBar extends React.PureComponent<Props, State> {
 
     dataSet: Array<Object>;
 
@@ -121,11 +121,6 @@ export default class SideBar extends React.Component<Props, State> {
         ];
         this.getRenderItem = this.getRenderItem.bind(this);
     }
-
-    shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-        return nextState.active !== this.state.active;
-    }
-
 
     onListItemPress(item: Object) {
         if (item.link === undefined)

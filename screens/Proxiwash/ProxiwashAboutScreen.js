@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Image, View, ScrollView} from 'react-native';
+import {Image, ScrollView, View} from 'react-native';
 import i18n from "i18n-js";
 import {Card, List, Paragraph, Text, Title} from 'react-native-paper';
 

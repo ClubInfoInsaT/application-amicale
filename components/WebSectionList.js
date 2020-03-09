@@ -36,7 +36,7 @@ const MIN_REFRESH_TIME = 5  * 1000;
  * @prop fontSize {number} The icon size. Use 26 if unspecified
  * @prop width {number} The icon width. Use 30 if unspecified
  */
-export default class WebSectionList extends React.Component<Props, State> {
+export default class WebSectionList extends React.PureComponent<Props, State> {
 
     static defaultProps = {
         renderSectionHeader: null,

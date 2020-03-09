@@ -1,11 +1,10 @@
 // @flow
 
 import * as React from 'react';
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {View} from "react-native";
 import HTML from "react-native-render-html";
 import i18n from "i18n-js";
-import {Avatar, Card, Text, withTheme, Button} from 'react-native-paper';
+import {Avatar, Button, Card, withTheme} from 'react-native-paper';
 import PlanningEventManager from "../utils/PlanningEventManager";
 
 
@@ -34,28 +33,28 @@ function PreviewEventDashboardItem(props) {
                         title={props.event['title']}
                         subtitle={PlanningEventManager.getFormattedEventTime(props.event)}
                     />}
-                    <Card.Content style={{
-                        height: props.event['description'].length > 70 ? 100 : 50,
-                        overflow: 'hidden',
-                    }}>
-                        <HTML html={"<div>" + props.event['description'] + "</div>"}
-                              tagsStyles={{
-                                  p: {color: colors.text,},
-                                  div: {color: colors.text},
-                              }}/>
+                <Card.Content style={{
+                    height: props.event['description'].length > 70 ? 100 : 50,
+                    overflow: 'hidden',
+                }}>
+                    <HTML html={"<div>" + props.event['description'] + "</div>"}
+                          tagsStyles={{
+                              p: {color: colors.text,},
+                              div: {color: colors.text},
+                          }}/>
 
-                    </Card.Content>
-                    <Card.Actions style={{
-                        marginLeft: 'auto',
-                        marginTop: 'auto',
-                        flexDirection: 'row'
-                    }}>
-                        <Button
+                </Card.Content>
+                <Card.Actions style={{
+                    marginLeft: 'auto',
+                    marginTop: 'auto',
+                    flexDirection: 'row'
+                }}>
+                    <Button
                         icon={'chevron-right'}
-                        >
-                            {i18n.t("homeScreen.dashboard.seeMore")}
-                        </Button>
-                    </Card.Actions>
+                    >
+                        {i18n.t("homeScreen.dashboard.seeMore")}
+                    </Button>
+                </Card.Actions>
             </Card>
         );
     } else

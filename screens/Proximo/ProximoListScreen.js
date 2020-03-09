@@ -3,9 +3,8 @@
 import * as React from 'react';
 import {FlatList, Image, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
-import ThemeManager from "../../utils/ThemeManager";
 import CustomModal from "../../components/CustomModal";
-import {Avatar, IconButton, List, RadioButton, Searchbar, Subheading, Text, Title} from "react-native-paper";
+import {Avatar, IconButton, List, RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -45,7 +44,7 @@ type State = {
 /**
  * Class defining proximo's article list of a certain category.
  */
-export default class ProximoListScreen extends React.Component<Props, State> {
+class ProximoListScreen extends React.Component<Props, State> {
 
     modalRef: Object;
     originalData: Array<Object>;
@@ -56,7 +55,9 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     renderItem: Function;
     onModalRef: Function;
 
-    constructor(props: any) {
+    colors: Object;
+
+    constructor(props) {
         super(props);
         this.originalData = this.props.route.params['data']['data'];
         this.shouldFocusSearchBar = this.props.route.params['shouldFocusSearchBar'];
@@ -70,6 +71,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         this.onSortMenuPress = this.onSortMenuPress.bind(this);
         this.renderItem = this.renderItem.bind(this);
         this.onModalRef = this.onModalRef.bind(this);
+        this.colors = props.theme.colors;
     }
 
 
@@ -133,11 +135,11 @@ export default class ProximoListScreen extends React.Component<Props, State> {
     getStockColor(availableStock: number) {
         let color: string;
         if (availableStock > 3)
-            color = ThemeManager.getCurrentThemeVariables().success;
+            color = this.colors.success;
         else if (availableStock > 0)
-            color = ThemeManager.getCurrentThemeVariables().warning;
+            color = this.colors.warning;
         else
-            color = ThemeManager.getCurrentThemeVariables().danger;
+            color = this.colors.danger;
         return color;
     }
 
@@ -270,7 +272,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         return (
             <IconButton
                 icon="sort"
-                color={ThemeManager.getCurrentThemeVariables().text}
+                color={this.colors.text}
                 size={26}
                 onPress={this.onSortMenuPress}
             />
@@ -286,7 +288,7 @@ export default class ProximoListScreen extends React.Component<Props, State> {
                 descriptionStyle={{color: this.getStockColor(parseInt(item.quantity))}}
                 onPress={onPress}
                 left={() => <Avatar.Image style={{backgroundColor: 'transparent'}} size={64}
-                                             source={{uri: item.image}}/>}
+                                          source={{uri: item.image}}/>}
                 right={() =>
                     <Text style={{fontWeight: "bold"}}>
                         {item.price}€
@@ -322,3 +324,5 @@ export default class ProximoListScreen extends React.Component<Props, State> {
         );
     }
 }
+
+export default withTheme(ProximoListScreen);

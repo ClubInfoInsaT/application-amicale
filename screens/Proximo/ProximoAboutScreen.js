@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Image, ScrollView, View} from 'react-native';
 import i18n from "i18n-js";
-import {Text, Card, List, Paragraph} from 'react-native-paper';
+import {Card, List, Paragraph, Text} from 'react-native-paper';
 
 type Props = {
     navigation: Object,

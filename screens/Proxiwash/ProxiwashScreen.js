@@ -7,12 +7,11 @@ import WebSectionList from "../../components/WebSectionList";
 import NotificationsManager from "../../utils/NotificationsManager";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
-import {Avatar, Banner, Button, Card, Text} from 'react-native-paper';
+import {Avatar, Banner, Button, Card, Text, withTheme} from 'react-native-paper';
 import HeaderButton from "../../components/HeaderButton";
 import ProxiwashListItem from "../../components/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
 import CustomModal from "../../components/CustomModal";
-import ThemeManager from "../../utils/ThemeManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -24,6 +23,7 @@ const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 
 type Props = {
     navigation: Object,
+    theme: Object,
 }
 
 type State = {
@@ -39,7 +39,7 @@ type State = {
  * Class defining the app's proxiwash screen. This screen shows information about washing machines and
  * dryers, taken from a scrapper reading proxiwash website
  */
-export default class ProxiwashScreen extends React.Component<Props, State> {
+class ProxiwashScreen extends React.Component<Props, State> {
 
     modalRef: Object;
 
@@ -51,6 +51,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
     onModalRef: Function;
 
     fetchedData: Object;
+    colors: Object;
 
     state = {
         refreshing: false,
@@ -65,8 +66,8 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
     /**
      * Creates machine state parameters using current theme and translations
      */
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         stateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.states.finished');
         stateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
         stateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.states.running');
@@ -92,6 +93,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         this.createDataset = this.createDataset.bind(this);
         this.onHideBanner = this.onHideBanner.bind(this);
         this.onModalRef = this.onModalRef.bind(this);
+        this.colors = props.theme.colors;
     }
 
     onHideBanner() {
@@ -301,7 +303,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                     title={title}
                     left={() => <Avatar.Icon
                         icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
-                        color={ThemeManager.getCurrentThemeVariables().text}
+                        color={this.colors.text}
                         style={{backgroundColor: 'transparent'}}/>}
 
                 />
@@ -338,41 +340,6 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
         this.modalRef = ref;
     }
 
-    render() {
-        const nav = this.props.navigation;
-        return (
-            <View>
-                <Banner
-                    visible={this.state.bannerVisible}
-                    actions={[
-                        {
-                            label: 'OK',
-                            onPress: this.onHideBanner,
-                        },
-                    ]}
-                    icon={() => <Avatar.Icon
-                        icon={'information'}
-                        size={40}
-                    />}
-                >
-                    {i18n.t('proxiwashScreen.enableNotificationsTip')}
-                </Banner>
-                <CustomModal onRef={this.onModalRef}>
-                    {this.state.modalCurrentDisplayItem}
-                </CustomModal>
-                <WebSectionList
-                    createDataset={this.createDataset}
-                    navigation={nav}
-                    fetchUrl={DATA_URL}
-                    renderItem={this.getRenderItem}
-                    renderSectionHeader={this.getRenderSectionHeader}
-                    autoRefreshTime={REFRESH_TIME}
-                    refreshOnFocus={true}/>
-            </View>
-
-        );
-    }
-
     getMachineAvailableNumber(isDryer: boolean) {
         let data;
         if (isDryer)
@@ -403,7 +370,7 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
                     subtitle={subtitle}
                     left={() => <Avatar.Icon
                         icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
-                        color={ThemeManager.getCurrentThemeVariables().primary}
+                        color={this.colors.primary}
                         style={{backgroundColor: 'transparent'}}
                     />}
                 />
@@ -440,4 +407,41 @@ export default class ProxiwashScreen extends React.Component<Props, State> {
             />
         );
     }
+
+    render() {
+        const nav = this.props.navigation;
+        return (
+            <View>
+                <Banner
+                    visible={this.state.bannerVisible}
+                    actions={[
+                        {
+                            label: 'OK',
+                            onPress: this.onHideBanner,
+                        },
+                    ]}
+                    icon={() => <Avatar.Icon
+                        icon={'information'}
+                        size={40}
+                    />}
+                >
+                    {i18n.t('proxiwashScreen.enableNotificationsTip')}
+                </Banner>
+                <CustomModal onRef={this.onModalRef}>
+                    {this.state.modalCurrentDisplayItem}
+                </CustomModal>
+                <WebSectionList
+                    createDataset={this.createDataset}
+                    navigation={nav}
+                    fetchUrl={DATA_URL}
+                    renderItem={this.getRenderItem}
+                    renderSectionHeader={this.getRenderSectionHeader}
+                    autoRefreshTime={REFRESH_TIME}
+                    refreshOnFocus={true}/>
+            </View>
+
+        );
+    }
 }
+
+export default withTheme(ProxiwashScreen);

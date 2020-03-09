@@ -133,14 +133,6 @@ export default class ThemeManager {
     }
 
     /**
-     * Get the variables contained in the current theme
-     * @returns {Object}
-     */
-    static getCurrentThemeVariables(): Object {
-        return ThemeManager.getCurrentTheme().colors;
-    }
-
-    /**
      * Set the function to be called when the theme is changed (allows for general reload of the app)
      * @param callback Function to call after theme change
      */

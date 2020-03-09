@@ -3,8 +3,7 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import WebView from "react-native-webview";
-import ThemeManager from "../utils/ThemeManager";
-import {ActivityIndicator} from 'react-native-paper';
+import {ActivityIndicator, withTheme} from 'react-native-paper';
 import HeaderButton from "./HeaderButton";
 
 type Props = {
@@ -24,28 +23,31 @@ type Props = {
 /**
  * Class defining a webview screen.
  */
-export default class WebViewScreen extends React.Component<Props> {
+class WebViewScreen extends React.PureComponent<Props> {
 
     static defaultProps = {
         hasBackButton: false,
         hasSideMenu: true,
         hasFooter: true,
     };
-    webviewArray: Array<WebView> = [];
+    webviewRef: Object;
 
     onRefreshClicked: Function;
     onWebviewRef: Function;
     onGoBackWebview: Function;
     onGoForwardWebview: Function;
-    onOpenWebLink: Function;
+    getRenderLoading: Function;
 
-    constructor() {
-        super();
+    colors: Object;
+
+    constructor(props) {
+        super(props);
         this.onRefreshClicked = this.onRefreshClicked.bind(this);
         this.onWebviewRef = this.onWebviewRef.bind(this);
         this.onGoBackWebview = this.onGoBackWebview.bind(this);
         this.onGoForwardWebview = this.onGoForwardWebview.bind(this);
-        this.onOpenWebLink = this.onOpenWebLink.bind(this);
+        this.getRenderLoading = this.getRenderLoading.bind(this);
+        this.colors = props.theme.colors;
     }
 
     componentDidMount() {
@@ -73,38 +75,28 @@ export default class WebViewScreen extends React.Component<Props> {
     };
 
     onRefreshClicked() {
-        for (let view of this.webviewArray) {
-            if (view !== null)
-                view.reload();
-        }
+        if (this.webviewRef !== null)
+            this.webviewRef.reload();
     }
 
     onGoBackWebview() {
-        for (let view of this.webviewArray) {
-            if (view !== null)
-                view.goBack();
-        }
+        if (this.webviewRef !== null)
+            this.webviewRef.goBack();
     }
 
     onGoForwardWebview() {
-        for (let view of this.webviewArray) {
-            if (view !== null)
-                view.goForward();
-        }
+        if (this.webviewRef !== null)
+            this.webviewRef.goForward();
     }
 
-    onOpenWebLink() {
-        this.openWebLink(this.props.data[0]['url'])
-    }
-
-    onWebviewRef(ref: WebView) {
-        this.webviewArray.push(ref)
+    onWebviewRef(ref: Object) {
+        this.webviewRef = ref
     }
 
     getRenderLoading() {
         return (
             <View style={{
-                backgroundColor: ThemeManager.getCurrentThemeVariables().background,
+                backgroundColor: this.colors.background,
                 position: 'absolute',
                 top: 0,
                 right: 0,
@@ -117,34 +109,28 @@ export default class WebViewScreen extends React.Component<Props> {
                 <ActivityIndicator
                     animating={true}
                     size={'large'}
-                    color={ThemeManager.getCurrentThemeVariables().primary}/>
+                    color={this.colors.primary}/>
             </View>
-        );
-    }
-
-    getWebview(obj: Object) {
-        return (
-            <WebView
-                ref={this.onWebviewRef}
-                source={{uri: obj['url']}}
-                style={{
-                    width: '100%',
-                    height: '100%',
-                }}
-                startInLoadingState={true}
-                injectedJavaScript={obj['customJS']}
-                javaScriptEnabled={true}
-                renderLoading={this.getRenderLoading}
-            />
         );
     }
 
     render() {
         // console.log("rendering WebViewScreen");
-        this.webviewArray = [];
         return (
-            this.getWebview(this.props.data[0])
+            <WebView
+                ref={this.onWebviewRef}
+                source={{uri: this.props.data[0]['url']}}
+                style={{
+                    width: '100%',
+                    height: '100%',
+                }}
+                startInLoadingState={true}
+                injectedJavaScript={this.props.data[0]['customJS']}
+                javaScriptEnabled={true}
+                renderLoading={this.getRenderLoading}
+            />
         );
     }
 }
 
+export default withTheme(WebViewScreen);

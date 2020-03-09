@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Card, Avatar, List, Text, withTheme} from 'react-native-paper';
+import {Avatar, Card, Text, withTheme} from 'react-native-paper';
 import {View} from "react-native";
 import ProxiwashConstants from "../constants/ProxiwashConstants";
 

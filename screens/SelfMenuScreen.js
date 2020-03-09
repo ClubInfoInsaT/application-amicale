@@ -2,10 +2,9 @@
 
 import * as React from 'react';
 import {View} from 'react-native';
-import ThemeManager from "../utils/ThemeManager";
 import i18n from "i18n-js";
 import WebSectionList from "../components/WebSectionList";
-import {Card, Text} from 'react-native-paper';
+import {Card, Text, withTheme} from 'react-native-paper';
 import AprilFoolsManager from "../utils/AprilFoolsManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
@@ -18,7 +17,7 @@ type Props = {
  * Class defining the app's menu screen.
  * This screen fetches data from etud to render the RU menu
  */
-export default class SelfMenuScreen extends React.Component<Props> {
+class SelfMenuScreen extends React.Component<Props> {
 
     // Hard code strings as toLocaleDateString does not work on current android JS engine
     daysOfWeek = [];
@@ -27,9 +26,10 @@ export default class SelfMenuScreen extends React.Component<Props> {
     getRenderItem: Function;
     getRenderSectionHeader: Function;
     createDataset: Function;
+    colors: Object;
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.monday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.tuesday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.wednesday"));
@@ -54,6 +54,7 @@ export default class SelfMenuScreen extends React.Component<Props> {
         this.getRenderItem = this.getRenderItem.bind(this);
         this.getRenderSectionHeader = this.getRenderSectionHeader.bind(this);
         this.createDataset = this.createDataset.bind(this);
+        this.colors = props.theme.colors;
     }
 
     getKeyExtractor(item: Object) {
@@ -138,7 +139,7 @@ export default class SelfMenuScreen extends React.Component<Props> {
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     borderBottomWidth: 1,
-                    borderBottomColor: ThemeManager.getCurrentThemeVariables().primary,
+                    borderBottomColor: this.colors.primary,
                     marginTop: 5,
                     marginBottom: 5,
                 }}/>
@@ -178,3 +179,4 @@ export default class SelfMenuScreen extends React.Component<Props> {
     }
 }
 
+export default withTheme(SelfMenuScreen);

@@ -3,11 +3,10 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import i18n from "i18n-js";
-import ThemeManager from "../utils/ThemeManager";
 import DashboardItem from "../components/EventDashboardItem";
 import * as WebBrowser from 'expo-web-browser';
 import WebSectionList from "../components/WebSectionList";
-import {Text} from 'react-native-paper';
+import {Text, withTheme} from 'react-native-paper';
 import FeedItem from "../components/FeedItem";
 import SquareDashboardItem from "../components/SquareDashboardItem";
 import PreviewEventDashboardItem from "../components/PreviewEventDashboardItem";
@@ -26,12 +25,13 @@ const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
 type Props = {
     navigation: Object,
+    theme: Object,
 }
 
 /**
  * Class defining the app's home screen
  */
-export default class HomeScreen extends React.Component<Props> {
+class HomeScreen extends React.Component<Props> {
 
     onProxiwashClick: Function;
     onTutorInsaClick: Function;
@@ -40,14 +40,17 @@ export default class HomeScreen extends React.Component<Props> {
     getRenderItem: Function;
     createDataset: Function;
 
-    constructor() {
-        super();
+    colors : Object;
+
+    constructor(props) {
+        super(props);
         this.onProxiwashClick = this.onProxiwashClick.bind(this);
         this.onTutorInsaClick = this.onTutorInsaClick.bind(this);
         this.onMenuClick = this.onMenuClick.bind(this);
         this.onProximoClick = this.onProximoClick.bind(this);
         this.getRenderItem = this.getRenderItem.bind(this);
         this.createDataset = this.createDataset.bind(this);
+        this.colors = props.theme.colors;
     }
 
     /**
@@ -338,35 +341,35 @@ export default class HomeScreen extends React.Component<Props> {
                 margin: 10,
             }}>
                 <SquareDashboardItem
-                    color={ThemeManager.getCurrentThemeVariables().proxiwashColor}
+                    color={this.colors.proxiwashColor}
                     icon={'washing-machine'}
                     clickAction={this.onProxiwashClick}
                     isAvailable={parseInt(proxiwashData['washers']) > 0}
                     badgeNumber={proxiwashData['washers']}
                 />
                 <SquareDashboardItem
-                    color={ThemeManager.getCurrentThemeVariables().proxiwashColor}
+                    color={this.colors.proxiwashColor}
                     icon={'tumble-dryer'}
                     clickAction={this.onProxiwashClick}
                     isAvailable={parseInt(proxiwashData['dryers']) > 0}
                     badgeNumber={proxiwashData['dryers']}
                 />
                 <SquareDashboardItem
-                    color={ThemeManager.getCurrentThemeVariables().tutorinsaColor}
+                    color={this.colors.tutorinsaColor}
                     icon={'school'}
                     clickAction={this.onTutorInsaClick}
                     isAvailable={tutorinsaData > 0}
                     badgeNumber={tutorinsaData}
                 />
                 <SquareDashboardItem
-                    color={ThemeManager.getCurrentThemeVariables().proximoColor}
+                    color={this.colors.proximoColor}
                     icon={'shopping'}
                     clickAction={this.onProximoClick}
                     isAvailable={parseInt(proximoData) > 0}
                     badgeNumber={parseInt(proximoData)}
                 />
                 <SquareDashboardItem
-                    color={ThemeManager.getCurrentThemeVariables().menuColor}
+                    color={this.colors.menuColor}
                     icon={'silverware-fork-knife'}
                     clickAction={this.onMenuClick}
                     isAvailable={menuData.length > 0}
@@ -413,3 +416,5 @@ export default class HomeScreen extends React.Component<Props> {
         );
     }
 }
+
+export default withTheme(HomeScreen);

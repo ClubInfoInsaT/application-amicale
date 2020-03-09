@@ -6,8 +6,7 @@ import i18n from "i18n-js";
 import appJson from '../../app';
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import CustomModal from "../../components/CustomModal";
-import ThemeManager from "../../utils/ThemeManager";
-import {Avatar, Button, Card, List, Text, Title} from 'react-native-paper';
+import {Avatar, Button, Card, List, Text, Title, withTheme} from 'react-native-paper';
 
 const links = {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
@@ -59,7 +58,7 @@ function openWebLink(link) {
 /**
  * Class defining an about screen. This screen shows the user information about the app and it's author.
  */
-export default class AboutScreen extends React.Component<Props, State> {
+class AboutScreen extends React.Component<Props, State> {
 
     debugTapCounter = 0;
     modalRef: Object;
@@ -188,11 +187,14 @@ export default class AboutScreen extends React.Component<Props, State> {
     getMainCard: Function;
     onModalRef: Function;
 
-    constructor(props: any) {
+    colors: object;
+
+    constructor(props) {
         super(props);
         this.getCardItem = this.getCardItem.bind(this);
         this.getMainCard = this.getMainCard.bind(this);
         this.onModalRef = this.onModalRef.bind(this);
+        this.colors = props.theme.colors;
     }
 
     getAppCard() {
@@ -326,7 +328,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     icon="email"
                     mode="contained"
                     dark={true}
-                    color={ThemeManager.getCurrentThemeVariables().primary}
+                    color={this.colors.primary}
                     style={{
                         marginTop: 20,
                         marginLeft: 'auto',
@@ -339,7 +341,7 @@ export default class AboutScreen extends React.Component<Props, State> {
                     icon="git"
                     mode="contained"
                     dark={true}
-                    color={ThemeManager.getCurrentThemeVariables().primary}
+                    color={this.colors.primary}
                     style={{
                         marginTop: 20,
                         marginLeft: 'auto',
@@ -391,3 +393,5 @@ export default class AboutScreen extends React.Component<Props, State> {
         );
     }
 }
+
+export default withTheme(AboutScreen);
