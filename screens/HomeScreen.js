@@ -1,14 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import i18n from "i18n-js";
-import Autolink from 'react-native-autolink';
 import ThemeManager from "../utils/ThemeManager";
 import DashboardItem from "../components/EventDashboardItem";
 import * as WebBrowser from 'expo-web-browser';
 import WebSectionList from "../components/WebSectionList";
-import {Avatar, Button, Card, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FeedItem from "../components/FeedItem";
 import SquareDashboardItem from "../components/SquareDashboardItem";
 import PreviewEventDashboardItem from "../components/PreviewEventDashboardItem";
@@ -109,36 +108,32 @@ export default class HomeScreen extends React.Component<Props> {
 
     generateDashboardDataset(dashboardData: Object) {
         let dataset = [
+
+            {
+                id: 'middle',
+                content: []
+            },
             {
                 id: 'event',
                 content: undefined
             },
-            {
-                id: 'middle',
-                content: [{}, {}]
-            },
-            {
-                id: 'bottom',
-                content: [{}, {}]
-            },
-
         ];
         for (let [key, value] of Object.entries(dashboardData)) {
             switch (key) {
                 case 'today_events':
-                    dataset[0]['content'] = value;
+                    dataset[1]['content'] = value;
                     break;
                 case 'available_machines':
-                    dataset[1]['content'][0] = {id: key, data: value};
+                    dataset[0]['content'][0] = {id: key, data: value};
                     break;
                 case 'available_tutorials':
-                    dataset[1]['content'][1] = {id: key, data: value};
+                    dataset[0]['content'][1] = {id: key, data: value};
                     break;
                 case 'proximo_articles':
-                    dataset[2]['content'][0] = {id: key, data: value};
+                    dataset[0]['content'][2] = {id: key, data: value};
                     break;
                 case 'today_menu':
-                    dataset[2]['content'][1] = {id: key, data: value};
+                    dataset[0]['content'][3] = {id: key, data: value};
                     break;
 
             }
@@ -152,8 +147,6 @@ export default class HomeScreen extends React.Component<Props> {
             return this.getDashboardEventItem(content);
         else if (item['id'] === 'middle')
             return this.getDashboardMiddleItem(content);
-        else
-            return this.getDashboardBottomItem(content);
     }
 
     /**
@@ -310,7 +303,8 @@ export default class HomeScreen extends React.Component<Props> {
 
         let displayEvent = this.getDisplayEvent(futureEvents);
         const clickContainerAction = () => this.props.navigation.navigate('Planning');
-        const clickPreviewAction = () => this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});;
+        const clickPreviewAction = () => this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});
+
         return (
             <DashboardItem
                 {...this.props}
@@ -330,164 +324,54 @@ export default class HomeScreen extends React.Component<Props> {
     }
 
 
-    getDashboardBottomItem(content: Array<Object>) {
-        let proximoData = content[0]['data'];
-        let menuData = content[1]['data'];
-        let proximoIcon = 'shopping';
-        let proximoColor = ThemeManager.getCurrentThemeVariables().proximoColor;
-        let proximoTitle = i18n.t('homeScreen.dashboard.proximoTitle');
-        let isProximoAvailable = parseInt(proximoData) > 0;
-        let proximoSubtitle;
-        if (isProximoAvailable) {
-            proximoSubtitle =
-                <Text>
-                    <Text style={{fontWeight: "bold"}}>{proximoData}</Text>
-                    <Text>
-                        {
-                            proximoData > 1 ?
-                                i18n.t('homeScreen.dashboard.proximoSubtitlePlural') :
-                                i18n.t('homeScreen.dashboard.proximoSubtitle')
-                        }
-                    </Text>
-                </Text>;
-        } else
-            proximoSubtitle = i18n.t('homeScreen.dashboard.proximoSubtitleNA');
-
-
-        let menuIcon = 'silverware-fork-knife';
-        let menuColor = ThemeManager.getCurrentThemeVariables().menuColor;
-        let menuTitle = i18n.t('homeScreen.dashboard.menuTitle');
-        let isMenuAvailable = menuData.length > 0;
-        let menuSubtitle;
-        if (isMenuAvailable) {
-            menuSubtitle = i18n.t('homeScreen.dashboard.menuSubtitle');
-        } else
-            menuSubtitle = i18n.t('homeScreen.dashboard.menuSubtitleNA');
-        return (
-            <View style={{
-                flexDirection: 'row',
-                marginLeft: 10,
-                marginRight: 10,
-                marginBottom: 10,
-            }}>
-                <SquareDashboardItem
-                    title={menuTitle}
-                    subtitle={menuSubtitle}
-                    color={menuColor}
-                    icon={menuIcon}
-                    clickAction={this.onMenuClick}
-                    isAvailable={isMenuAvailable}
-                    isLeft={true}/>
-                <SquareDashboardItem
-                    title={proximoTitle}
-                    subtitle={proximoSubtitle}
-                    color={proximoColor}
-                    icon={proximoIcon}
-                    clickAction={this.onProximoClick}
-                    isAvailable={isProximoAvailable}
-                    isLeft={false}/>
-            </View>
-        );
-    }
-
-
     getDashboardMiddleItem(content: Array<Object>) {
         let proxiwashData = content[0]['data'];
         let tutorinsaData = content[1]['data'];
-
-        let proxiwashIcon = 'washing-machine';
-        let proxiwashColor = ThemeManager.getCurrentThemeVariables().proxiwashColor;
-        let proxiwashTitle = i18n.t('homeScreen.dashboard.proxiwashTitle');
-        let proxiwashIsAvailable = parseInt(proxiwashData['dryers']) > 0 || parseInt(proxiwashData['washers']) > 0;
-        let proxiwashSubtitle;
-        let dryerColor = parseInt(proxiwashData['dryers']) > 0 ?
-            ThemeManager.getCurrentThemeVariables().text :
-            ThemeManager.getCurrentThemeVariables().textDisabled;
-        let washerColor = parseInt(proxiwashData['washers']) > 0 ?
-            ThemeManager.getCurrentThemeVariables().text :
-            ThemeManager.getCurrentThemeVariables().textDisabled;
-        let availableDryers = proxiwashData['dryers'];
-        let availableWashers = proxiwashData['washers'];
-        if (proxiwashIsAvailable) {
-            proxiwashSubtitle =
-                <Text>
-                    <Text style={{
-                        fontWeight: parseInt(proxiwashData['dryers']) > 0 ?
-                            'bold' :
-                            'normal',
-                        color: dryerColor
-                    }}>
-                        {availableDryers}
-                    </Text>
-                    <Text>
-                        {
-                            availableDryers > 1 ?
-                                i18n.t('homeScreen.dashboard.proxiwashSubtitle1Plural') :
-                                i18n.t('homeScreen.dashboard.proxiwashSubtitle1')
-                        }
-                    </Text>
-                    {"\n"}
-                    <Text style={{
-                        fontWeight: parseInt(proxiwashData['washers']) > 0 ?
-                            'bold' :
-                            'normal',
-                        color: washerColor
-                    }}>
-                        {availableWashers}
-                    </Text>
-                    <Text>
-                        {
-                            availableWashers > 1 ?
-                                i18n.t('homeScreen.dashboard.proxiwashSubtitle2Plural') :
-                                i18n.t('homeScreen.dashboard.proxiwashSubtitle2')
-                        }
-                    </Text>
-                </Text>;
-        } else
-            proxiwashSubtitle = i18n.t('homeScreen.dashboard.proxiwashSubtitleNA');
-
-        let tutorinsaIcon = 'school';
-        let tutorinsaColor = ThemeManager.getCurrentThemeVariables().tutorinsaColor;
-        let tutorinsaTitle = 'Tutor\'INSA';
-        let tutorinsaIsAvailable = tutorinsaData > 0;
-        let tutorinsaSubtitle;
-        if (tutorinsaIsAvailable) {
-            tutorinsaSubtitle =
-                <Text>
-                    <Text style={{fontWeight: "bold"}}>{tutorinsaData}</Text>
-                    <Text>
-                        {
-                            tutorinsaData > 1 ?
-                                i18n.t('homeScreen.dashboard.tutorinsaSubtitlePlural') :
-                                i18n.t('homeScreen.dashboard.tutorinsaSubtitle')
-                        }
-                    </Text>
-                </Text>;
-        } else
-            tutorinsaSubtitle = i18n.t('homeScreen.dashboard.tutorinsaSubtitleNA');
-
+        let proximoData = content[2]['data'];
+        let menuData = content[3]['data'];
         return (
             <View style={{
+                flex: 1,
                 flexDirection: 'row',
-                marginLeft: 10,
-                marginRight: 10,
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                margin: 10,
             }}>
                 <SquareDashboardItem
-                    title={proxiwashTitle}
-                    subtitle={proxiwashSubtitle}
-                    color={proxiwashColor}
-                    icon={proxiwashIcon}
+                    color={ThemeManager.getCurrentThemeVariables().proxiwashColor}
+                    icon={'washing-machine'}
                     clickAction={this.onProxiwashClick}
-                    isAvailable={proxiwashIsAvailable}
-                    isLeft={true}/>
+                    isAvailable={parseInt(proxiwashData['washers']) > 0}
+                    badgeNumber={proxiwashData['washers']}
+                />
                 <SquareDashboardItem
-                    title={tutorinsaTitle}
-                    subtitle={tutorinsaSubtitle}
-                    color={tutorinsaColor}
-                    icon={tutorinsaIcon}
+                    color={ThemeManager.getCurrentThemeVariables().proxiwashColor}
+                    icon={'tumble-dryer'}
+                    clickAction={this.onProxiwashClick}
+                    isAvailable={parseInt(proxiwashData['dryers']) > 0}
+                    badgeNumber={proxiwashData['dryers']}
+                />
+                <SquareDashboardItem
+                    color={ThemeManager.getCurrentThemeVariables().tutorinsaColor}
+                    icon={'school'}
                     clickAction={this.onTutorInsaClick}
-                    isAvailable={tutorinsaIsAvailable}
-                    isLeft={false}/>
+                    isAvailable={tutorinsaData > 0}
+                    badgeNumber={tutorinsaData}
+                />
+                <SquareDashboardItem
+                    color={ThemeManager.getCurrentThemeVariables().proximoColor}
+                    icon={'shopping'}
+                    clickAction={this.onProximoClick}
+                    isAvailable={parseInt(proximoData) > 0}
+                    badgeNumber={parseInt(proximoData)}
+                />
+                <SquareDashboardItem
+                    color={ThemeManager.getCurrentThemeVariables().menuColor}
+                    icon={'silverware-fork-knife'}
+                    clickAction={this.onMenuClick}
+                    isAvailable={menuData.length > 0}
+                    badgeNumber={0}
+                />
             </View>
         );
     }

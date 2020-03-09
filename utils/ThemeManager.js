@@ -120,7 +120,7 @@ export default class ThemeManager {
      */
     static getCurrentTheme(): Object {
         if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
-            return AprilFoolsManager.getAprilFoolsTheme(ThemeManager.getDarkTheme());
+            return AprilFoolsManager.getAprilFoolsTheme(ThemeManager.getWhiteTheme());
          else
             return ThemeManager.getBaseTheme()
     }

@@ -116,7 +116,7 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 key: '1',
                 title: i18n.t('intro.aprilFoolsSlide.title'),
                 text: i18n.t('intro.aprilFoolsSlide.text'),
-                icon: 'information',
+                icon: 'fish',
                 colors: ['#e01928', '#be1522'],
             },
         ];
