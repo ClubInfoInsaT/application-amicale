@@ -5,12 +5,13 @@ import {TouchableOpacity, View} from 'react-native';
 import i18n from "i18n-js";
 import Autolink from 'react-native-autolink';
 import ThemeManager from "../utils/ThemeManager";
-import DashboardItem from "../components/DashboardItem";
+import DashboardItem from "../components/EventDashboardItem";
 import * as WebBrowser from 'expo-web-browser';
 import WebSectionList from "../components/WebSectionList";
 import {Avatar, Button, Card, Text} from 'react-native-paper';
 import FeedItem from "../components/FeedItem";
 import SquareDashboardItem from "../components/SquareDashboardItem";
+import PreviewEventDashboardItem from "../components/PreviewEventDashboardItem";
 // import DATA from "../dashboard_data.json";
 
 
@@ -23,8 +24,6 @@ const SECTIONS_ID = [
 ];
 
 const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
-
-const CARD_BORDER_RADIUS = 10;
 
 type Props = {
     navigation: Object,
@@ -288,17 +287,8 @@ export default class HomeScreen extends React.Component<Props> {
     }
 
 
-    clickAction(isAvailable: boolean, displayEvent: Object) {
-        if (isAvailable)
-            this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});
-        else
-            this.props.navigation.navigate('Planning');
-    };
-
-
     getDashboardEventItem(content: Array<Object>) {
         let icon = 'calendar-range';
-        let color = ThemeManager.getCurrentThemeVariables().planningColor;
         let title = i18n.t('homeScreen.dashboard.todayEventsTitle');
         let subtitle;
         let futureEvents = this.getFutureEvents(content);
@@ -319,17 +309,23 @@ export default class HomeScreen extends React.Component<Props> {
             subtitle = i18n.t('homeScreen.dashboard.todayEventsSubtitleNA');
 
         let displayEvent = this.getDisplayEvent(futureEvents);
-        const clickAction = this.clickAction.bind(this, isAvailable, displayEvent);
+        const clickContainerAction = () => this.props.navigation.navigate('Planning');
+        const clickPreviewAction = () => this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});;
         return (
             <DashboardItem
+                {...this.props}
                 subtitle={subtitle}
-                color={color}
                 icon={icon}
-                clickAction={clickAction}
+                clickAction={clickContainerAction}
                 title={title}
                 isAvailable={isAvailable}
-                displayEvent={displayEvent}
-            />
+            >
+                <PreviewEventDashboardItem
+                    {...this.props}
+                    event={displayEvent}
+                    clickAction={clickPreviewAction}
+                />
+            </DashboardItem>
         );
     }
 
