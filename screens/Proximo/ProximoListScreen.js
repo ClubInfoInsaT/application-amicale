@@ -5,6 +5,7 @@ import {FlatList, Image, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
 import CustomModal from "../../components/CustomModal";
 import {Avatar, IconButton, List, RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
+import PureFlatList from "../../components/PureFlatList";
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -313,11 +314,9 @@ class ProximoListScreen extends React.Component<Props, State> {
                 <CustomModal onRef={this.onModalRef}>
                     {this.state.modalCurrentDisplayItem}
                 </CustomModal>
-                <FlatList
+                <PureFlatList
                     data={this.state.currentlyDisplayedData}
-                    extraData={this.state.currentlyDisplayedData}
                     keyExtractor={this.keyExtractor}
-                    style={{minHeight: 300, width: '100%'}}
                     renderItem={this.renderItem}
                 />
             </View>
