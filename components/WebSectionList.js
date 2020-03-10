@@ -16,6 +16,7 @@ type Props = {
     renderSectionHeader: React.Node,
     stickyHeader: boolean,
     createDataset: Function,
+    updateData: number,
 }
 
 type State = {
@@ -28,19 +29,15 @@ type State = {
 
 const MIN_REFRESH_TIME = 5  * 1000;
 /**
- * Custom component defining a material icon using native base
- *
- * @prop active {boolean} Whether to set the icon color to active
- * @prop icon {string} The icon string to use from MaterialCommunityIcons
- * @prop color {string} The icon color. Use default theme color if unspecified
- * @prop fontSize {number} The icon size. Use 26 if unspecified
- * @prop width {number} The icon width. Use 30 if unspecified
+ * This is a pure component, meaning it will only update if a shallow comparison of state and props is different.
+ * To force the component to update, change the value of updateData.
  */
 export default class WebSectionList extends React.PureComponent<Props, State> {
 
     static defaultProps = {
         renderSectionHeader: null,
         stickyHeader: false,
+        updateData: null,
     };
 
     webDataManager: WebDataManager;
@@ -87,8 +84,6 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         this.props.navigation.addListener('blur', onScreenBlur);
         this.onRefresh();
     }
-
-
 
     /**
      * Refresh data when focusing the screen and setup a refresh interval if asked to

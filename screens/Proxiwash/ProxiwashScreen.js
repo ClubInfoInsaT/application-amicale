@@ -464,7 +464,8 @@ class ProxiwashScreen extends React.Component<Props, State> {
                     renderItem={this.getRenderItem}
                     renderSectionHeader={this.getRenderSectionHeader}
                     autoRefreshTime={REFRESH_TIME}
-                    refreshOnFocus={true}/>
+                    refreshOnFocus={true}
+                    updateData={this.state.machinesWatched.length}/>
             </View>
 
         );
