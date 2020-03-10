@@ -11,23 +11,23 @@ export default class AprilFoolsManager {
 
     static fakeMachineNumber = [
         "",
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-        "k",
-        "l",
+        "cos(ln(1))",
+        "0,5⁻¹",
+        "567/189",
+        "√2×√8",
+        "√50×sin(9π/4)",
+        "⌈π+e⌉",
+        "div(rot(B))+7",
+        "4×sinh(0)+4",
+        "8-(-i)²",
+        "|5√2+5√2i|",
+        "1×10¹+1×10⁰",
+        "Re(√192e^(iπ/6))",
     ];
 
     constructor() {
         let today = new Date();
-        this.aprilFoolsEnabled = (today.getDate() === 1 && today.getMonth() === 3);
+        this.aprilFoolsEnabled = (today.getDate() === 10 && today.getMonth() === 2); // TODO changer date !
     }
 
     /**
