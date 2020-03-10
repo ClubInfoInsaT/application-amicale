@@ -12,6 +12,7 @@ import HeaderButton from "../../components/HeaderButton";
 import ProxiwashListItem from "../../components/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
 import CustomModal from "../../components/CustomModal";
+import AprilFoolsManager from "../../utils/AprilFoolsManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -229,19 +230,26 @@ class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     createDataset(fetchedData: Object) {
+        let data = fetchedData;
+        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled()) {
+            data = JSON.parse(JSON.stringify(fetchedData)); // Deep copy
+            AprilFoolsManager.getNewProxiwashDryerOrderedList(data.dryers);
+            AprilFoolsManager.getNewProxiwashWasherOrderedList(data.washers);
+        }
         this.fetchedData = fetchedData;
+
         return [
             {
                 title: i18n.t('proxiwashScreen.dryers'),
                 icon: 'tumble-dryer',
-                data: fetchedData.dryers === undefined ? [] : fetchedData.dryers,
+                data: data.dryers === undefined ? [] : data.dryers,
                 extraData: this.state,
                 keyExtractor: this.getDryersKeyExtractor
             },
             {
                 title: i18n.t('proxiwashScreen.washers'),
                 icon: 'washing-machine',
-                data: fetchedData.washers === undefined ? [] : fetchedData.washers,
+                data: data.washers === undefined ? [] : data.washers,
                 extraData: this.state,
                 keyExtractor: this.getWashersKeyExtractor
             },
@@ -387,7 +395,12 @@ class ProxiwashScreen extends React.Component<Props, State> {
      */
     getRenderItem({item, section}: Object) {
         const isMachineRunning = ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"];
-        const machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
+        let displayNumber = item.number;
+        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
+            displayNumber = AprilFoolsManager.getProxiwashMachineDisplayNumber(parseInt(item.number));
+        const machineName = (section.title === i18n.t('proxiwashScreen.dryers') ?
+            i18n.t('proxiwashScreen.dryer') :
+            i18n.t('proxiwashScreen.washer')) + ' n°' + displayNumber;
         const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
         const onPress = this.showModal.bind(this, machineName, item, isDryer);
         let width = item.donePercent !== '' ? (parseInt(item.donePercent)).toString() + '%' : 0;

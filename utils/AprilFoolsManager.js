@@ -9,6 +9,22 @@ export default class AprilFoolsManager {
 
     aprilFoolsEnabled: boolean;
 
+    static fakeMachineNumber = [
+        "",
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+    ];
+
     constructor() {
         let today = new Date();
         this.aprilFoolsEnabled = (today.getDate() === 1 && today.getMonth() === 3);
@@ -25,11 +41,38 @@ export default class AprilFoolsManager {
     }
 
     static getFakeMenuItem(menu: Object) {
-        menu[1]["dishes"].splice(2, 0, {name: "Coq au vin"});
+        menu[1]["dishes"].splice(4, 0, {name: "Coq au vin"});
+        menu[1]["dishes"].splice(2, 0, {name: "Bat'Soupe"});
         menu[1]["dishes"].splice(1, 0, {name: "Pave de loup"});
         menu[1]["dishes"].splice(0, 0, {name: "Béranger à point"});
         menu[1]["dishes"].splice(0, 0, {name: "Pieds d'Arnaud"});
         return menu;
+    }
+
+    static getNewProxiwashDryerOrderedList(dryers: Array<Object>) {
+        if (dryers !== undefined) {
+            let second = dryers[1];
+            dryers.splice(1, 1);
+            dryers.push(second);
+        }
+    }
+
+    static getNewProxiwashWasherOrderedList(washers: Array<Object>) {
+        if (washers !== undefined) {
+            let first = washers[0];
+            let second = washers[1];
+            let fifth = washers[4];
+            let ninth = washers[8];
+            washers.splice(8, 1, second);
+            washers.splice(4, 1, ninth);
+            washers.splice(1, 1, first);
+            washers.splice(0, 1, fifth);
+            // washers.push(fifth);
+        }
+    }
+
+    static getProxiwashMachineDisplayNumber(number: number) {
+        return AprilFoolsManager.fakeMachineNumber[number];
     }
 
     static getAprilFoolsTheme(currentTheme: Object) {
