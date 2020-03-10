@@ -37,18 +37,20 @@ export default class App extends React.Component<Props, State> {
     };
 
     onIntroDone: Function;
+    onUpdateTheme: Function;
 
     constructor() {
         super();
         LocaleManager.initTranslations();
         this.onIntroDone = this.onIntroDone.bind(this);
+        this.onUpdateTheme = this.onUpdateTheme.bind(this);
         SplashScreen.preventAutoHide();
     }
 
     /**
      * Updates the theme
      */
-    updateTheme() {
+    onUpdateTheme() {
         this.setState({
             currentTheme: ThemeManager.getCurrentTheme()
         });
@@ -86,7 +88,7 @@ export default class App extends React.Component<Props, State> {
     async loadAssetsAsync() {
         // Wait for custom fonts to be loaded before showing the app
         await AsyncStorageManager.getInstance().loadPreferences();
-        ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
+        ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
         // await NotificationsManager.initExpoToken();
         this.onLoadFinished();
     }

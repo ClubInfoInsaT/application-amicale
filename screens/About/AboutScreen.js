@@ -186,15 +186,33 @@ class AboutScreen extends React.Component<Props, State> {
     getCardItem: Function;
     getMainCard: Function;
     onModalRef: Function;
+    onPressMail: Function;
+    onPressGit: Function;
 
-    colors: object;
+    colors: Object;
 
     constructor(props) {
         super(props);
         this.getCardItem = this.getCardItem.bind(this);
         this.getMainCard = this.getMainCard.bind(this);
         this.onModalRef = this.onModalRef.bind(this);
+        this.onPressMail = openWebLink.bind(this, links.bugsMail);
+        this.onPressGit = openWebLink.bind(this, links.bugsGit);
         this.colors = props.theme.colors;
+    }
+
+    getAppIcon(props) {
+        return (
+            <Avatar.Image
+                {...props}
+                source={require('../../assets/android.icon.png')}
+                style={{backgroundColor: 'transparent'}}
+            />
+        );
+    }
+
+    keyExtractor(item: Object) {
+        return item.icon;
     }
 
     getAppCard() {
@@ -203,16 +221,12 @@ class AboutScreen extends React.Component<Props, State> {
                 <Card.Title
                     title={appJson.expo.name}
                     subtitle={appJson.expo.version}
-                    left={(props) => <Avatar.Image
-                        {...props}
-                        source={require('../../assets/android.icon.png')}
-                        style={{backgroundColor: 'transparent'}}
-                    />}/>
+                    left={this.getAppIcon}/>
                 <Card.Content>
                     <FlatList
                         data={this.appData}
                         extraData={this.state}
-                        keyExtractor={(item) => item.icon}
+                        keyExtractor={this.keyExtractor}
                         listKey={"app"}
                         renderItem={this.getCardItem}
                     />
@@ -232,7 +246,7 @@ class AboutScreen extends React.Component<Props, State> {
                     <FlatList
                         data={this.authorData}
                         extraData={this.state}
-                        keyExtractor={(item) => item.icon}
+                        keyExtractor={this.keyExtractor}
                         listKey={"team1"}
                         renderItem={this.getCardItem}
                     />
@@ -240,7 +254,7 @@ class AboutScreen extends React.Component<Props, State> {
                     <FlatList
                         data={this.additionalDevData}
                         extraData={this.state}
-                        keyExtractor={(item) => item.icon}
+                        keyExtractor={this.keyExtractor}
                         listKey={"team2"}
                         renderItem={this.getCardItem}
                     />
@@ -257,12 +271,24 @@ class AboutScreen extends React.Component<Props, State> {
                     <FlatList
                         data={this.technoData}
                         extraData={this.state}
-                        keyExtractor={(item) => item.icon}
+                        keyExtractor={this.keyExtractor}
                         listKey={"techno"}
                         renderItem={this.getCardItem}
                     />
                 </Card.Content>
             </Card>
+        );
+    }
+
+    getChevronIcon(props: Object) {
+        return (
+            <List.Icon {...props} icon={'chevron-right'}/>
+        );
+    }
+
+    getItemIcon(item: Object, props: Object) {
+        return (
+            <List.Icon {...props} icon={item.icon}/>
         );
     }
 
@@ -273,13 +299,14 @@ class AboutScreen extends React.Component<Props, State> {
      */
     getCardItem({item}: Object) {
         let shouldShow = !item.showOnlyInDebug || (item.showOnlyInDebug && this.state.isDebugUnlocked);
+        const getItemIcon = this.getItemIcon.bind(this, item);
         if (shouldShow) {
             if (item.showChevron) {
                 return (
                     <List.Item
                         title={item.text}
-                        left={props => <List.Icon {...props} icon={item.icon}/>}
-                        right={props => <List.Icon {...props} icon={'chevron-right'}/>}
+                        left={getItemIcon}
+                        right={this.getChevronIcon}
                         onPress={item.onPressCallback}
                     />
                 );
@@ -287,16 +314,13 @@ class AboutScreen extends React.Component<Props, State> {
                 return (
                     <List.Item
                         title={item.text}
-                        left={props => <List.Icon {...props} icon={item.icon}/>}
+                        left={getItemIcon}
                         onPress={item.onPressCallback}
                     />
                 );
             }
-
-        } else {
+        } else
             return null;
-        }
-
     }
 
     tryUnlockDebugMode() {
@@ -313,8 +337,6 @@ class AboutScreen extends React.Component<Props, State> {
     }
 
     getBugReportModal() {
-        const onPressMail = openWebLink.bind(this, links.bugsMail);
-        const onPressGit = openWebLink.bind(this, links.bugsGit);
         return (
             <View style={{
                 flex: 1,
@@ -334,7 +356,7 @@ class AboutScreen extends React.Component<Props, State> {
                         marginLeft: 'auto',
                         marginRight: 'auto',
                     }}
-                    onPress={onPressMail}>
+                    onPress={this.onPressMail}>
                     <Text>{i18n.t('aboutScreen.bugsMail')}</Text>
                 </Button>
                 <Button
@@ -347,7 +369,7 @@ class AboutScreen extends React.Component<Props, State> {
                         marginLeft: 'auto',
                         marginRight: 'auto',
                     }}
-                    onPress={onPressGit}>
+                    onPress={this.onPressGit}>
                     <Text>{i18n.t('aboutScreen.bugsGit')}</Text>
                 </Button>
             </View>

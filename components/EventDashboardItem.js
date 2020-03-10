@@ -3,16 +3,6 @@
 import * as React from 'react';
 import {Avatar, Card, withTheme} from 'react-native-paper';
 
-function getIcon(icon, color) {
-    return (
-        <Avatar.Icon
-            icon={icon}
-            color={color}
-            size={60}
-            style={{backgroundColor: 'transparent'}}/>
-    );
-}
-
 function EventDashBoardItem(props) {
     const {colors} = props.theme;
     const iconColor = props.isAvailable ?
@@ -37,7 +27,12 @@ function EventDashBoardItem(props) {
                 titleStyle={{color: textColor}}
                 subtitle={props.subtitle}
                 subtitleStyle={{color: textColor}}
-                left={() => getIcon(props.icon, iconColor)}
+                left={() =>
+                    <Avatar.Icon
+                        icon={props.icon}
+                        color={iconColor}
+                        size={60}
+                        style={{backgroundColor: 'transparent'}}/>}
             />
             <Card.Content>
                 {props.children}
