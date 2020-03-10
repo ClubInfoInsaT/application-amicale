@@ -318,6 +318,7 @@ class ProximoListScreen extends React.Component<Props, State> {
                     data={this.state.currentlyDisplayedData}
                     keyExtractor={this.keyExtractor}
                     renderItem={this.renderItem}
+                    updateData={this.state.currentSortMode}
                 />
             </View>
         );
