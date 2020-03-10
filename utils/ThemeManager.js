@@ -3,7 +3,7 @@
 import AsyncStorageManager from "./AsyncStorageManager";
 import {DarkTheme, DefaultTheme} from 'react-native-paper';
 import AprilFoolsManager from "./AprilFoolsManager";
-import { Appearance } from 'react-native-appearance';
+import {Appearance} from 'react-native-appearance';
 
 const colorScheme = Appearance.getColorScheme();
 
@@ -112,8 +112,10 @@ export default class ThemeManager {
      * @returns {boolean} Night mode state
      */
     static getNightMode(): boolean {
-        return AsyncStorageManager.getInstance().preferences.nightMode.current === '1' ||
-            AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current === '1' && colorScheme === 'dark';
+        return (AsyncStorageManager.getInstance().preferences.nightMode.current === '1' &&
+            (AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current !== '1' ||
+                colorScheme === 'no-preference')) ||
+            (AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current === '1' && colorScheme === 'dark');
     }
 
     /**
@@ -123,7 +125,7 @@ export default class ThemeManager {
     static getCurrentTheme(): Object {
         if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
             return AprilFoolsManager.getAprilFoolsTheme(ThemeManager.getWhiteTheme());
-         else
+        else
             return ThemeManager.getBaseTheme()
     }
 
