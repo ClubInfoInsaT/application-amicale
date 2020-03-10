@@ -27,7 +27,7 @@ export default class AprilFoolsManager {
 
     constructor() {
         let today = new Date();
-        this.aprilFoolsEnabled = (today.getDate() === 10 && today.getMonth() === 2); // TODO changer date !
+        this.aprilFoolsEnabled = (today.getDate() === 1 && today.getMonth() === 3);
     }
 
     /**
