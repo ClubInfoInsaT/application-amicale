@@ -364,25 +364,39 @@ class ProxiwashScreen extends React.Component<Props, State> {
 
     getRenderSectionHeader({section}: Object) {
         const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
-        const subtitle = this.getMachineAvailableNumber(isDryer) + ' ' + i18n.t('proxiwashScreen.numAvailable');
+        const nbAvailable = this.getMachineAvailableNumber(isDryer);
+        const subtitle = nbAvailable + ' ' + ((nbAvailable <= 1) ? i18n.t('proxiwashScreen.numAvailable')
+            : i18n.t('proxiwashScreen.numAvailablePlural'));
         return (
-            <Card style={{
+            <View style={{
+                flexDirection: 'row',
                 marginLeft: 5,
                 marginRight: 5,
                 marginBottom: 10,
                 marginTop: 20,
-                elevation: 4,
             }}>
-                <Card.Title
-                    title={section.title}
-                    subtitle={subtitle}
-                    left={() => <Avatar.Icon
-                        icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
-                        color={this.colors.primary}
-                        style={{backgroundColor: 'transparent'}}
-                    />}
+                <Avatar.Icon
+                    icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
+                    color={this.colors.primary}
+                    style={{backgroundColor: 'transparent'}}
                 />
-            </Card>
+                <View style={{
+                    justifyContent: 'center',
+                }}>
+                    <Text style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                    }}>
+                        {section.title}
+                    </Text>
+
+                    <Text style={{
+                        color: this.colors.subtitle,
+                    }}>
+                        {subtitle}
+                    </Text>
+                </View>
+            </View>
         );
     }
 

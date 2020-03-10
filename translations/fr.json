@@ -160,7 +160,7 @@
     "washersTariff": "3€ la machine + 0.80€ avec la lessive.",
     "dryersTariff": "0.35€ pour 5min de sèche linge.",
     "paymentMethods": "Moyens de Paiement",
-    "paymentMethodsDescription" : "Toute monnaie jusqu'à 10€.\nCarte bancaire acceptée.",
+    "paymentMethodsDescription": "Toute monnaie jusqu'à 10€.\nCarte bancaire acceptée.",
     "washerProcedure": "Déposer le linge dans le tambour sans le tasser et en respectant les charges.\n\nFermer la porte de l'appareil.\n\nSélectionner un programme avec l'une des quatre touches de programme favori standard.\n\nAprès avoir payé à la centrale de commande, appuyer sur le bouton marqué START du lave-linge.\n\nDès que le programme est terminé, l’afficheur indique 'Programme terminé', appuyer sur le bouton jaune d’ouverture du hublot pour récupérer le linge.",
     "washerTips": "Programme blanc/couleur : 6kg de linge sec (textiles en coton, lin, linge de corps, draps, jeans,serviettes de toilettes).\n\nProgramme nonrepassable : 3,5 kg de linge sec (textiles en fibres synthétiques, cotonet polyester mélangés).\n\nProgramme fin 30°C : 2,5 kg de linge sec (textiles délicats en fibres synthétiques, rayonne).\n\nProgramme laine 30°C : 2,5 kg de linge sec (textiles en laine et lainages lavables).",
     "dryerProcedure": "Déposer le linge dans le tambour sans le tasser et en respectant les charges.\n\nFermer la porte de l'appareil.\n\nSélectionner un programme avec l'une des quatre touches de programme favori standard.\n\nAprès avoir payé à la centrale de commande, appuyer sur le bouton marqué START du lave-linge.",
@@ -168,7 +168,8 @@
     "procedure": "Procédure",
     "tips": "Conseils",
     "enableNotificationsTip": "Cliquez sur une machine en cours pour activer les notifications",
-    "numAvailable": "disponibles",
+    "numAvailable": "disponible",
+    "numAvailablePlural": "disponibles",
     "modal": {
       "enableNotifications": "Me Notifier",
       "disableNotifications": "Désactiver les  notifications",
