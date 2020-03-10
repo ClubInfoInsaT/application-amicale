@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, Image, ScrollView, View} from "react-native";
+import {Platform, Image, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
 import CustomModal from "../../components/CustomModal";
 import {Avatar, IconButton, List, RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
@@ -85,7 +85,10 @@ class ProximoListScreen extends React.Component<Props, State> {
         this.props.navigation.setOptions({
             headerRight: button,
             headerTitle: title,
-            headerTitleContainerStyle: {marginHorizontal: 0, right: 50, left: 50},
+            headerBackTitleVisible: false,
+            headerTitleContainerStyle: Platform.OS === 'ios' ?
+                {marginHorizontal: 0, width: '70%'} :
+                {marginHorizontal: 0, right: 50, left: 50},
         });
     }
 
