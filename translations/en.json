@@ -169,6 +169,7 @@
     "tips": "Tips",
     "enableNotificationsTip": "Click on a running machine to enable notifications",
     "numAvailable": "available",
+    "numAvailablePlural": "available",
     "modal": {
       "enableNotifications": "Notify me",
       "disableNotifications": "Stop notifications",
