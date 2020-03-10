@@ -54,6 +54,7 @@ function ProxiwashListItem(props) {
             }}/>
             <Card.Title
                 title={props.title}
+                titleStyle={{fontSize: 17}}
                 subtitle={props.description}
                 style={{
                     backgroundColor: 'transparent',
