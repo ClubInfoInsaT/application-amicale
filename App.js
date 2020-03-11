@@ -13,6 +13,7 @@ import DrawerNavigator from './navigation/DrawerNavigator';
 import NotificationsManager from "./utils/NotificationsManager";
 import {Provider as PaperProvider} from 'react-native-paper';
 import AprilFoolsManager from "./utils/AprilFoolsManager";
+import Update from "./constants/Update";
 
 type Props = {};
 
@@ -77,7 +78,7 @@ export default class App extends React.Component<Props, State> {
             showAprilFools: false,
         });
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showIntro.key, '0');
-        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showUpdate5.key, '0');
+        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.updateNumber.key, Update.number.toString());
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showAprilFoolsStart.key, '0');
     }
 
@@ -89,7 +90,7 @@ export default class App extends React.Component<Props, State> {
         // Wait for custom fonts to be loaded before showing the app
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
-        // await NotificationsManager.initExpoToken();
+        await NotificationsManager.initExpoToken();
         this.onLoadFinished();
     }
 
@@ -100,7 +101,7 @@ export default class App extends React.Component<Props, State> {
             isLoading: false,
             currentTheme: ThemeManager.getCurrentTheme(),
             showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1',
-            showUpdate: AsyncStorageManager.getInstance().preferences.showUpdate5.current === '1',
+            showUpdate: AsyncStorageManager.getInstance().preferences.updateNumber.current !== Update.number.toString(),
             showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && AsyncStorageManager.getInstance().preferences.showAprilFoolsStart.current === '1',
         });
         // Status bar goes dark if set too fast

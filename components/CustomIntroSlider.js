@@ -7,6 +7,7 @@ import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {Text} from "react-native-paper";
 import i18n from 'i18n-js';
 import AppIntroSlider from "react-native-app-intro-slider";
+import Update from "../constants/Update";
 
 // Content to be used int the intro slides
 
@@ -105,9 +106,9 @@ export default class CustomIntroSlider extends React.Component<Props> {
         this.updateSlides = [
             {
                 key: '1',
-                title: i18n.t('intro.updateSlide.title'),
-                text: i18n.t('intro.updateSlide.text'),
-                icon: 'email',
+                title: Update.getInstance().title,
+                text: Update.getInstance().description,
+                icon: Update.icon,
                 colors: ['#e01928', '#be1522'],
             },
         ];
