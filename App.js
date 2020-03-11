@@ -12,6 +12,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import DrawerNavigator from './navigation/DrawerNavigator';
 import NotificationsManager from "./utils/NotificationsManager";
 import {Provider as PaperProvider} from 'react-native-paper';
+import AprilFoolsManager from "./utils/AprilFoolsManager";
 
 type Props = {};
 
@@ -19,6 +20,7 @@ type State = {
     isLoading: boolean,
     showIntro: boolean,
     showUpdate: boolean,
+    showAprilFools: boolean,
     currentTheme: ?Object,
 };
 
@@ -30,6 +32,7 @@ export default class App extends React.Component<Props, State> {
         isLoading: true,
         showIntro: true,
         showUpdate: true,
+        showAprilFools: false,
         currentTheme: null,
     };
 
@@ -71,9 +74,11 @@ export default class App extends React.Component<Props, State> {
         this.setState({
             showIntro: false,
             showUpdate: false,
+            showAprilFools: false,
         });
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showIntro.key, '0');
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showUpdate5.key, '0');
+        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showAprilFoolsStart.key, '0');
     }
 
     async componentDidMount() {
@@ -84,7 +89,7 @@ export default class App extends React.Component<Props, State> {
         // Wait for custom fonts to be loaded before showing the app
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
-        await NotificationsManager.initExpoToken();
+        // await NotificationsManager.initExpoToken();
         this.onLoadFinished();
     }
 
@@ -96,6 +101,7 @@ export default class App extends React.Component<Props, State> {
             currentTheme: ThemeManager.getCurrentTheme(),
             showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1',
             showUpdate: AsyncStorageManager.getInstance().preferences.showUpdate5.current === '1',
+            showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && AsyncStorageManager.getInstance().preferences.showAprilFoolsStart.current === '1',
         });
         // Status bar goes dark if set too fast
         setTimeout(this.setupStatusBar, 1000);
@@ -108,10 +114,11 @@ export default class App extends React.Component<Props, State> {
     render() {
         if (this.state.isLoading) {
             return null;
-        } else if (this.state.showIntro || this.state.showUpdate) {
+        } else if (this.state.showIntro || this.state.showUpdate || this.state.showAprilFools) {
             return <CustomIntroSlider
                 onDone={this.onIntroDone}
                 isUpdate={this.state.showUpdate && !this.state.showIntro}
+                isAprilFools={this.state.showAprilFools && !this.state.showIntro}
             />;
         } else {
             return (

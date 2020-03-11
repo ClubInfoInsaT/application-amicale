@@ -2,6 +2,7 @@
 
 import AsyncStorageManager from "./AsyncStorageManager";
 import {DarkTheme, DefaultTheme} from 'react-native-paper';
+import AprilFoolsManager from "./AprilFoolsManager";
 import {Appearance} from 'react-native-appearance';
 
 const colorScheme = Appearance.getColorScheme();
@@ -122,6 +123,13 @@ export default class ThemeManager {
      * @returns {Object}
      */
     static getCurrentTheme(): Object {
+        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
+            return AprilFoolsManager.getAprilFoolsTheme(ThemeManager.getWhiteTheme());
+        else
+            return ThemeManager.getBaseTheme()
+    }
+
+    static getBaseTheme() {
         if (ThemeManager.getNightMode())
             return ThemeManager.getDarkTheme();
         else

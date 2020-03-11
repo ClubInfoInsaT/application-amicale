@@ -67,11 +67,33 @@ export default class AprilFoolsManager {
             washers.splice(4, 1, ninth);
             washers.splice(1, 1, first);
             washers.splice(0, 1, fifth);
+            // washers.push(fifth);
         }
     }
 
     static getProxiwashMachineDisplayNumber(number: number) {
         return AprilFoolsManager.fakeMachineNumber[number];
+    }
+
+    static getAprilFoolsTheme(currentTheme: Object) {
+        return {
+            ...currentTheme,
+            colors: {
+                ...currentTheme.colors,
+                primary: '#00be45',
+                accent: '#00be45',
+                background: '#d02eee',
+                tabIcon: "#380d43",
+                card: "#eed639",
+                surface: "#eed639",
+                dividerBackground: '#c72ce4',
+                textDisabled: '#b9b9b9',
+
+                // Calendar/Agenda
+                agendaBackgroundColor: '#c72ce4',
+                agendaDayTextColor: '#6d6d6d',
+            },
+        };
     }
 
     isAprilFoolsEnabled() {
