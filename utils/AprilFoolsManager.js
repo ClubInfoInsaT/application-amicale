@@ -18,7 +18,7 @@ export default class AprilFoolsManager {
         "√50×sin(9π/4)",
         "⌈π+e⌉",
         "div(rot(B))+7",
-        "4×sinh(0)+4",
+        "4×cosh(0)+4",
         "8-(-i)²",
         "|5√2+5√2i|",
         "1×10¹+1×10⁰",
