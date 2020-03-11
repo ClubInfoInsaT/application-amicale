@@ -10,7 +10,7 @@ import PlanningEventManager from "../utils/PlanningEventManager";
 
 function PreviewEventDashboardItem(props) {
     const {colors} = props.theme;
-    const isEmpty = PlanningEventManager.isDescriptionEmpty(props.event['description']);
+    const isEmpty = props.event === undefined ? true : PlanningEventManager.isDescriptionEmpty(props.event['description']);
     if (props.event !== undefined && props.event !== null) {
         const hasImage = props.event['logo'] !== '' && props.event['logo'] !== null;
         const getImage = () => <Avatar.Image
