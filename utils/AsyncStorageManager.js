@@ -78,12 +78,7 @@ export default class AsyncStorageManager {
             key: 'planexShowBanner',
             default: '1',
             current: '',
-        },
-        showAprilFoolsStart: {
-            key: 'showAprilFoolsStart',
-            default: '1',
-            current: '',
-        },
+        }
     };
 
     /**
