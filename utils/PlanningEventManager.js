@@ -73,4 +73,11 @@ export default class PlanningEventManager {
         return formattedStr
     }
 
+    static isDescriptionEmpty (description: string) {
+        return description
+            .replace('<p>', '')
+            .replace('</p>', '')
+            .replace('<br>', '').trim() === '';
+    }
+
 }

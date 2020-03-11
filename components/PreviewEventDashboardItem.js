@@ -10,7 +10,7 @@ import PlanningEventManager from "../utils/PlanningEventManager";
 
 function PreviewEventDashboardItem(props) {
     const {colors} = props.theme;
-
+    const isEmpty = PlanningEventManager.isDescriptionEmpty(props.event['description']);
     if (props.event !== undefined && props.event !== null) {
         const hasImage = props.event['logo'] !== '' && props.event['logo'] !== null;
         const getImage = () => <Avatar.Image
@@ -33,17 +33,19 @@ function PreviewEventDashboardItem(props) {
                         title={props.event['title']}
                         subtitle={PlanningEventManager.getFormattedEventTime(props.event)}
                     />}
-                <Card.Content style={{
-                    height: props.event['description'].length > 70 ? 100 : 50,
-                    overflow: 'hidden',
-                }}>
-                    <HTML html={"<div>" + props.event['description'] + "</div>"}
-                          tagsStyles={{
-                              p: {color: colors.text,},
-                              div: {color: colors.text},
-                          }}/>
+                {!isEmpty ?
+                    <Card.Content style={{
+                        maxHeight: 150,
+                        overflow: 'hidden',
+                    }}>
+                        <HTML html={"<div>" + props.event['description'] + "</div>"}
+                              tagsStyles={{
+                                  p: {color: colors.text,},
+                                  div: {color: colors.text},
+                              }}/>
 
-                </Card.Content>
+                    </Card.Content> : null}
+
                 <Card.Actions style={{
                     marginLeft: 'auto',
                     marginTop: 'auto',
