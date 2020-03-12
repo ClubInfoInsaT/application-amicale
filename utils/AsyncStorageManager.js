@@ -29,9 +29,9 @@ export default class AsyncStorageManager {
             default: '1',
             current: '',
         },
-        showUpdate5: {
-            key: 'showUpdate5',
-            default: '1',
+        updateNumber: {
+            key: 'updateNumber',
+            default: '0',
             current: '',
         },
         proxiwashNotifications: {
@@ -42,6 +42,11 @@ export default class AsyncStorageManager {
         proxiwashWatchedMachines: {
             key: 'proxiwashWatchedMachines',
             default: '[]',
+            current: '',
+        },
+        nightModeFollowSystem: {
+            key: 'nightModeFollowSystem',
+            default: '1',
             current: '',
         },
         nightMode: {
@@ -63,7 +68,22 @@ export default class AsyncStorageManager {
             key: 'defaultStartScreen',
             default: 'Home',
             current: '',
-        }
+        },
+        proxiwashShowBanner: {
+            key: 'proxiwashShowBanner',
+            default: '1',
+            current: '',
+        },
+        planexShowBanner: {
+            key: 'planexShowBanner',
+            default: '1',
+            current: '',
+        },
+        showAprilFoolsStart: {
+            key: 'showAprilFoolsStart',
+            default: '1',
+            current: '',
+        },
     };
 
     /**

@@ -1,127 +1,244 @@
 import * as React from 'react';
-import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
-import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom-tabs";
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createMaterialBottomTabNavigator} from "@react-navigation/material-bottom-tabs";
 
 import HomeScreen from '../screens/HomeScreen';
-import PlanningScreen from '../screens/PlanningScreen';
-import PlanningDisplayScreen from '../screens/PlanningDisplayScreen';
+import PlanningScreen from '../screens/Planning/PlanningScreen';
+import PlanningDisplayScreen from '../screens/Planning/PlanningDisplayScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
 import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
 import ProximoListScreen from "../screens/Proximo/ProximoListScreen";
 import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
-import CustomMaterialIcon from "../components/CustomMaterialIcon";
-import ThemeManager from "../utils/ThemeManager";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
+import AsyncStorageManager from "../utils/AsyncStorageManager";
+import HeaderButton from "../components/HeaderButton";
+import {withTheme} from 'react-native-paper';
+import i18n from "i18n-js";
+
 
 const TAB_ICONS = {
     Home: 'triangle',
     Planning: 'calendar-range',
-    Proxiwash: 'washing-machine',
-    Proximo: 'shopping',
-    Planex: 'timetable',
+    Proxiwash: 'tshirt-crew',
+    Proximo: 'cart',
+    Planex: 'clock',
 };
 
-const ProximoStack = createStackNavigator({
-        ProximoMainScreen: {screen: ProximoMainScreen},
-        ProximoListScreen: {screen: ProximoListScreen},
-        ProximoAboutScreen: {
-            screen: ProximoAboutScreen,
-            navigationOptions: () => ({
-                ...TransitionPresets.ModalSlideFromBottomIOS,
-            }),
-        },
-    },
-    {
-        initialRouteName: "ProximoMainScreen",
-        mode: 'card',
-        headerMode: "none",
-        defaultNavigationOptions: {
-            gestureEnabled: true,
-            cardOverlayEnabled: true,
-            ...TransitionPresets.SlideFromRightIOS,
-        },
-    });
+const defaultScreenOptions = {
+    gestureEnabled: true,
+    cardOverlayEnabled: true,
+    ...TransitionPresets.SlideFromRightIOS,
+};
 
-const ProxiwashStack = createStackNavigator({
-        ProxiwashScreen: {screen: ProxiwashScreen},
-        ProxiwashAboutScreen: {screen: ProxiwashAboutScreen},
-    },
-    {
-        initialRouteName: "ProxiwashScreen",
-        mode: 'card',
-        headerMode: "none",
-        defaultNavigationOptions: {
-            gestureEnabled: true,
-            cardOverlayEnabled: true,
-            ...TransitionPresets.ModalSlideFromBottomIOS,
-        },
-    });
-
-const PlanningStack = createStackNavigator({
-        PlanningScreen: {screen: PlanningScreen},
-        PlanningDisplayScreen: {screen: PlanningDisplayScreen},
-    },
-    {
-        initialRouteName: "PlanningScreen",
-        mode: 'card',
-        headerMode: "none",
-        defaultNavigationOptions: {
-            gestureEnabled: true,
-            cardOverlayEnabled: true,
-            ...TransitionPresets.ModalSlideFromBottomIOS,
-        },
-    });
-
-const HomeStack = createStackNavigator({
-        HomeScreen: {screen: HomeScreen},
-        PlanningDisplayScreen: {screen: PlanningDisplayScreen},
-    },
-    {
-        initialRouteName: "HomeScreen",
-        mode: 'card',
-        headerMode: "none",
-        defaultNavigationOptions: {
-            gestureEnabled: true,
-            cardOverlayEnabled: true,
-            ...TransitionPresets.ModalSlideFromBottomIOS,
-        },
-    });
-
-function createMaterialBottomTabNavigatorWithInitialRoute(initialRoute: string) {
-    return createMaterialBottomTabNavigator({
-        Home: HomeStack,
-        Planning: PlanningStack,
-        Proxiwash: ProxiwashStack,
-        Proximo: ProximoStack,
-        Planex: {
-            screen: PlanexScreen,
-            navigationOptions: ({navigation}) => {
-                const showTabBar = navigation.state && navigation.state.params ? navigation.state.params.showTabBar : true;
-                return {
-                    tabBarVisible: showTabBar,
-                };
-            },
-        },
-    }, {
-        defaultNavigationOptions: ({navigation}) => ({
-            tabBarIcon: ({focused, tintColor}) => {
-                let icon = TAB_ICONS[navigation.state.routeName];
-                // tintColor is ignoring activeColor et inactiveColor for some reason
-                let color = focused ? "#f0edf6" : "#4e1108";
-                return <CustomMaterialIcon icon={icon} color={color}/>;
-            },
-            tabBarVisible: true,
-        }),
-        order: ['Proximo', 'Planning', 'Home', 'Proxiwash', 'Planex'],
-        initialRouteName: initialRoute,
-        activeColor: '#f0edf6',
-        inactiveColor: '#4e1108',
-        backBehavior: 'initialRoute',
-        barStyle: {backgroundColor: ThemeManager.getCurrentThemeVariables().brandPrimary},
-    });
+function getDrawerButton(navigation: Object) {
+    return (
+        <HeaderButton icon={'menu'} onPress={navigation.openDrawer}/>
+    );
 }
 
+const ProximoStack = createStackNavigator();
 
-export {createMaterialBottomTabNavigatorWithInitialRoute};
+function ProximoStackComponent() {
+    return (
+        <ProximoStack.Navigator
+            initialRouteName="ProximoMainScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <ProximoStack.Screen
+                name="ProximoMainScreen"
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Proximo',
+                        headerLeft: openDrawer
+                    };
+                }}
+                component={ProximoMainScreen}
+            />
+            <ProximoStack.Screen
+                name="ProximoListScreen"
+                options={{
+                    title: 'Articles'
+                }}
+                component={ProximoListScreen}
+            />
+            <ProximoStack.Screen
+                name="ProximoAboutScreen"
+                component={ProximoAboutScreen}
+                options={{
+                    title: 'Proximo',
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                }}
+            />
+        </ProximoStack.Navigator>
+    );
+}
 
+const ProxiwashStack = createStackNavigator();
+
+function ProxiwashStackComponent() {
+    return (
+        <ProxiwashStack.Navigator
+            initialRouteName="ProxiwashScreen"
+            headerMode='float'
+            screenOptions={defaultScreenOptions}
+        >
+            <ProxiwashStack.Screen
+                name="ProxiwashScreen"
+                component={ProxiwashScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Proxiwash',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+            <ProxiwashStack.Screen
+                name="ProxiwashAboutScreen"
+                component={ProxiwashAboutScreen}
+                options={{
+                    title: 'Proxiwash',
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                }}
+            />
+        </ProxiwashStack.Navigator>
+    );
+}
+
+const PlanningStack = createStackNavigator();
+
+function PlanningStackComponent() {
+    return (
+        <PlanningStack.Navigator
+            initialRouteName="PlanningScreen"
+            headerMode='float'
+            screenOptions={defaultScreenOptions}
+        >
+            <PlanningStack.Screen
+                name="PlanningScreen"
+                component={PlanningScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Planning',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+            <PlanningStack.Screen
+                name="PlanningDisplayScreen"
+                component={PlanningDisplayScreen}
+                options={{
+                    title: 'Details',
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                }}
+            />
+        </PlanningStack.Navigator>
+    );
+}
+
+const HomeStack = createStackNavigator();
+
+function HomeStackComponent() {
+    return (
+        <HomeStack.Navigator
+            initialRouteName="HomeScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <HomeStack.Screen
+                name="HomeScreen"
+                component={HomeScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: i18n.t('screens.home'),
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+            <HomeStack.Screen
+                name="PlanningDisplayScreen"
+                component={PlanningDisplayScreen}
+                options={{
+                    title: 'Details',
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                }}
+            />
+        </HomeStack.Navigator>
+    );
+}
+
+const PlanexStack = createStackNavigator();
+
+function PlanexStackComponent() {
+    return (
+        <PlanexStack.Navigator
+            initialRouteName="HomeScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <PlanexStack.Screen
+                name="PlanexScreen"
+                component={PlanexScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Planex',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </PlanexStack.Navigator>
+    );
+}
+
+const Tab = createMaterialBottomTabNavigator();
+
+function TabNavigator(props) {
+    const {colors} = props.theme;
+    return (
+        <Tab.Navigator
+            initialRouteName={AsyncStorageManager.getInstance().preferences.defaultStartScreen.current}
+            barStyle={{backgroundColor: colors.surface}}
+            screenOptions={({route}) => ({
+                tabBarIcon: ({focused, color, size}) => {
+                    let icon = TAB_ICONS[route.name];
+                    // tintColor is ignoring activeColor and inactiveColor for some reason
+                    icon = focused ? icon : icon + ('-outline');
+                    return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
+                },
+            })}
+            activeColor={colors.primary}
+            inactiveColor={colors.tabIcon}
+        >
+            <Tab.Screen
+                name="Proximo"
+                component={ProximoStackComponent}
+            />
+            <Tab.Screen
+                name="Planning"
+                component={PlanningStackComponent}
+            />
+            <Tab.Screen
+                name="Home"
+                component={HomeStackComponent}
+                options={{title: i18n.t('screens.home')}}
+            />
+            <Tab.Screen
+                name="Proxiwash"
+                component={ProxiwashStackComponent}
+            />
+            <Tab.Screen
+                name="Planex"
+                component={PlanexStackComponent}
+            />
+        </Tab.Navigator>
+    );
+}
+
+export default withTheme(TabNavigator);

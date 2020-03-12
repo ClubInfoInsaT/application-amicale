@@ -2,25 +2,34 @@
 
 import * as React from 'react';
 import {View} from 'react-native';
-import {Card, CardItem, H2, H3, Text} from 'native-base';
-import ThemeManager from "../utils/ThemeManager";
 import i18n from "i18n-js";
-import FetchedDataSectionList from "../components/FetchedDataSectionList";
+import WebSectionList from "../components/WebSectionList";
+import {Card, Text, withTheme} from 'react-native-paper';
+import AprilFoolsManager from "../utils/AprilFoolsManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
+
+type Props = {
+    navigation: Object,
+}
 
 /**
  * Class defining the app's menu screen.
  * This screen fetches data from etud to render the RU menu
  */
-export default class SelfMenuScreen extends FetchedDataSectionList {
+class SelfMenuScreen extends React.Component<Props> {
 
     // Hard code strings as toLocaleDateString does not work on current android JS engine
     daysOfWeek = [];
     monthsOfYear = [];
 
-    constructor() {
-        super(DATA_URL, 0);
+    getRenderItem: Function;
+    getRenderSectionHeader: Function;
+    createDataset: Function;
+    colors: Object;
+
+    constructor(props) {
+        super(props);
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.monday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.tuesday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.wednesday"));
@@ -41,30 +50,15 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         this.monthsOfYear.push(i18n.t("date.monthsOfYear.october"));
         this.monthsOfYear.push(i18n.t("date.monthsOfYear.november"));
         this.monthsOfYear.push(i18n.t("date.monthsOfYear.december"));
-    }
 
-    getHeaderTranslation() {
-        return i18n.t("screens.menuSelf");
-    }
-
-    getUpdateToastTranslations() {
-        return [i18n.t("homeScreen.listUpdated"), i18n.t("homeScreen.listUpdateFail")];
+        this.getRenderItem = this.getRenderItem.bind(this);
+        this.getRenderSectionHeader = this.getRenderSectionHeader.bind(this);
+        this.createDataset = this.createDataset.bind(this);
+        this.colors = props.theme.colors;
     }
 
     getKeyExtractor(item: Object) {
         return item !== undefined ? item['name'] : undefined;
-    }
-
-    hasBackButton() {
-        return true;
-    }
-
-    hasStickyHeader(): boolean {
-        return true;
-    }
-
-    hasSideMenu(): boolean {
-        return false;
     }
 
     createDataset(fetchedData: Object) {
@@ -80,6 +74,8 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
                 }
             ];
         }
+        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled() && fetchedData.length > 0)
+            fetchedData[0].meal[0].foodcategory = AprilFoolsManager.getFakeMenuItem(fetchedData[0].meal[0].foodcategory);
         // fetched data is an array here
         for (let i = 0; i < fetchedData.length; i++) {
             result.push(
@@ -101,64 +97,64 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         return this.daysOfWeek[date.getDay() - 1] + " " + date.getDate() + " " + this.monthsOfYear[date.getMonth()] + " " + date.getFullYear();
     }
 
-    getRenderSectionHeader(title: string) {
+    getRenderSectionHeader({section}: Object) {
         return (
             <Card style={{
-                marginLeft: 10,
-                marginRight: 10,
-                marginTop: 10,
-                marginBottom: 10,
-                borderRadius: 50
+                width: '95%',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: 5,
+                marginBottom: 5,
+                elevation: 4,
             }}>
-                <H2 style={{
-                    textAlign: 'center',
-                    marginTop: 10,
-                    marginBottom: 10
-                }}>{title}</H2>
+                <Card.Title
+                    title={section.title}
+                    titleStyle={{
+                        textAlign: 'center'
+                    }}
+                    subtitleStyle={{
+                        textAlign: 'center'
+                    }}
+                    style={{
+                        paddingLeft: 0,
+                    }}
+                />
             </Card>
         );
     }
 
-    getRenderItem(item: Object, section: Object) {
+    getRenderItem({item}: Object) {
         return (
             <Card style={{
                 flex: 0,
-                marginLeft: 20,
-                marginRight: 20
+                marginHorizontal: 10,
+                marginVertical: 5,
             }}>
-                <CardItem style={{
-                    paddingBottom: 0,
-                    flexDirection: 'column'
-                }}>
-                    <H3 style={{
-                        marginTop: 10,
-                        marginBottom: 0,
-                        color: ThemeManager.getCurrentThemeVariables().listNoteColor
-                    }}>{item.name}</H3>
-                    <View style={{
-                        width: '80%',
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                        borderBottomWidth: 1,
-                        borderBottomColor: ThemeManager.getCurrentThemeVariables().listBorderColor,
-                        marginTop: 10,
-                        marginBottom: 5,
-                    }}/>
-                </CardItem>
-                <CardItem style={{
-                    flexDirection: 'column',
-                    paddingTop: 0,
-                }}>
+                <Card.Title
+                    style={{marginTop: 5}}
+                    title={item.name}
+                />
+                <View style={{
+                    width: '80%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    borderBottomWidth: 1,
+                    borderBottomColor: this.colors.primary,
+                    marginTop: 5,
+                    marginBottom: 5,
+                }}/>
+                <Card.Content>
                     {item.dishes.map((object) =>
                         <View>
                             {object.name !== "" ?
                                 <Text style={{
                                     marginTop: 5,
-                                    marginBottom: 5
+                                    marginBottom: 5,
+                                    textAlign: 'center'
                                 }}>{this.formatName(object.name)}</Text>
                                 : <View/>}
                         </View>)}
-                </CardItem>
+                </Card.Content>
             </Card>
         );
     }
@@ -167,5 +163,20 @@ export default class SelfMenuScreen extends FetchedDataSectionList {
         return name.charAt(0) + name.substr(1).toLowerCase();
     }
 
+    render() {
+        const nav = this.props.navigation;
+        return (
+            <WebSectionList
+                createDataset={this.createDataset}
+                navigation={nav}
+                autoRefreshTime={0}
+                refreshOnFocus={false}
+                fetchUrl={DATA_URL}
+                renderItem={this.getRenderItem}
+                renderSectionHeader={this.getRenderSectionHeader}
+                stickyHeader={true}/>
+        );
+    }
 }
 
+export default withTheme(SelfMenuScreen);

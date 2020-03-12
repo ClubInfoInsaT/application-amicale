@@ -2,16 +2,18 @@
 
 import * as React from 'react';
 import {Platform, StatusBar} from 'react-native';
-import {Root, StyleProvider} from 'native-base';
-import {createAppContainerWithInitialRoute} from './navigation/AppNavigator';
 import LocaleManager from './utils/LocaleManager';
-import * as Font from 'expo-font';
-import {clearThemeCache} from 'native-base-shoutem-theme';
 import AsyncStorageManager from "./utils/AsyncStorageManager";
 import CustomIntroSlider from "./components/CustomIntroSlider";
-import {AppLoading} from 'expo';
-import NotificationsManager from "./utils/NotificationsManager";
+import {SplashScreen} from 'expo';
 import ThemeManager from './utils/ThemeManager';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import DrawerNavigator from './navigation/DrawerNavigator';
+import NotificationsManager from "./utils/NotificationsManager";
+import {Provider as PaperProvider} from 'react-native-paper';
+import AprilFoolsManager from "./utils/AprilFoolsManager";
+import Update from "./constants/Update";
 
 type Props = {};
 
@@ -19,8 +21,11 @@ type State = {
     isLoading: boolean,
     showIntro: boolean,
     showUpdate: boolean,
+    showAprilFools: boolean,
     currentTheme: ?Object,
 };
+
+const Stack = createStackNavigator();
 
 export default class App extends React.Component<Props, State> {
 
@@ -28,30 +33,29 @@ export default class App extends React.Component<Props, State> {
         isLoading: true,
         showIntro: true,
         showUpdate: true,
+        showAprilFools: false,
         currentTheme: null,
     };
 
     onIntroDone: Function;
-    loadAssetsAsync: Function;
-    onLoadFinished: Function;
+    onUpdateTheme: Function;
 
-    constructor(props: Object) {
-        super(props);
+    constructor() {
+        super();
         LocaleManager.initTranslations();
         this.onIntroDone = this.onIntroDone.bind(this);
-        this.loadAssetsAsync = this.loadAssetsAsync.bind(this);
-        this.onLoadFinished = this.onLoadFinished.bind(this);
+        this.onUpdateTheme = this.onUpdateTheme.bind(this);
+        SplashScreen.preventAutoHide();
     }
 
     /**
-     * Updates the theme and clears the cache to force reloading the app colors. Need to edit shoutem theme for ti to work
+     * Updates the theme
      */
-    updateTheme() {
+    onUpdateTheme() {
         this.setState({
             currentTheme: ThemeManager.getCurrentTheme()
         });
         this.setupStatusBar();
-        clearThemeCache();
     }
 
     setupStatusBar() {
@@ -71,35 +75,38 @@ export default class App extends React.Component<Props, State> {
         this.setState({
             showIntro: false,
             showUpdate: false,
+            showAprilFools: false,
         });
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showIntro.key, '0');
-        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showUpdate5.key, '0');
+        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.updateNumber.key, Update.number.toString());
+        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showAprilFoolsStart.key, '0');
+    }
+
+    async componentDidMount() {
+        await this.loadAssetsAsync();
     }
 
     async loadAssetsAsync() {
         // Wait for custom fonts to be loaded before showing the app
-        await Font.loadAsync({
-            'Roboto': require('native-base/Fonts/Roboto.ttf'),
-            'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-            'material-community': require('native-base/Fonts/MaterialCommunityIcons.ttf'),
-        });
         await AsyncStorageManager.getInstance().loadPreferences();
-        ThemeManager.getInstance().setUpdateThemeCallback(() => this.updateTheme());
+        ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
         await NotificationsManager.initExpoToken();
+        this.onLoadFinished();
     }
 
     onLoadFinished() {
+        // console.log("finished");
         // Only show intro if this is the first time starting the app
         this.setState({
             isLoading: false,
             currentTheme: ThemeManager.getCurrentTheme(),
             showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1',
-            showUpdate: AsyncStorageManager.getInstance().preferences.showUpdate5.current === '1'
+            showUpdate: AsyncStorageManager.getInstance().preferences.updateNumber.current !== Update.number.toString(),
+            showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && AsyncStorageManager.getInstance().preferences.showAprilFoolsStart.current === '1',
         });
         // Status bar goes dark if set too fast
-        setTimeout(this.setupStatusBar,
-            1000
-        )
+        setTimeout(this.setupStatusBar, 1000);
+        SplashScreen.hide();
     }
 
     /**
@@ -107,25 +114,22 @@ export default class App extends React.Component<Props, State> {
      */
     render() {
         if (this.state.isLoading) {
-            return (
-                <AppLoading
-                    startAsync={this.loadAssetsAsync}
-                    onFinish={this.onLoadFinished}
-                    onError={console.warn}
-                />
-            );
-        }
-        if (this.state.showIntro || this.state.showUpdate) {
-            return <CustomIntroSlider onDone={this.onIntroDone}
-                                      isUpdate={this.state.showUpdate && !this.state.showIntro}/>;
+            return null;
+        } else if (this.state.showIntro || this.state.showUpdate || this.state.showAprilFools) {
+            return <CustomIntroSlider
+                onDone={this.onIntroDone}
+                isUpdate={this.state.showUpdate && !this.state.showIntro}
+                isAprilFools={this.state.showAprilFools && !this.state.showIntro}
+            />;
         } else {
-            const AppNavigator = createAppContainerWithInitialRoute(AsyncStorageManager.getInstance().preferences.defaultStartScreen.current);
             return (
-                <Root>
-                    <StyleProvider style={this.state.currentTheme}>
-                        <AppNavigator/>
-                    </StyleProvider>
-                </Root>
+                <PaperProvider theme={this.state.currentTheme}>
+                    <NavigationContainer theme={this.state.currentTheme}>
+                        <Stack.Navigator headerMode="none">
+                            <Stack.Screen name="Root" component={DrawerNavigator}/>
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                </PaperProvider>
             );
         }
     }

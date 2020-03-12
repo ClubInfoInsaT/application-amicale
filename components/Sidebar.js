@@ -1,18 +1,17 @@
 // @flow
 
 import * as React from 'react';
-import {Dimensions, FlatList, Image, Linking, Platform, StyleSheet} from 'react-native';
-import {Badge, Container, Left, ListItem, Right, Text} from "native-base";
+import {Dimensions, FlatList, Image, Platform, StyleSheet, View} from 'react-native';
 import i18n from "i18n-js";
-import CustomMaterialIcon from '../components/CustomMaterialIcon';
-import ThemeManager from "../utils/ThemeManager";
+import * as WebBrowser from 'expo-web-browser';
+import SidebarDivider from "./SidebarDivider";
+import SidebarItem from "./SidebarItem";
 
 const deviceWidth = Dimensions.get("window").width;
 
-const drawerCover = require("../assets/drawer-cover.png");
-
 type Props = {
     navigation: Object,
+    state: Object,
 };
 
 type State = {
@@ -22,7 +21,7 @@ type State = {
 /**
  * Class used to define a navigation drawer
  */
-export default class SideBar extends React.Component<Props, State> {
+export default class SideBar extends React.PureComponent<Props, State> {
 
     dataSet: Array<Object>;
 
@@ -42,42 +41,18 @@ export default class SideBar extends React.Component<Props, State> {
         // Dataset used to render the drawer
         this.dataSet = [
             {
-                name: i18n.t('sidenav.divider1'),
-                route: "Divider1"
-            },
-            {
-                name: "Amicale",
-                route: "AmicaleScreen",
-                icon: "alpha-a-box",
-            },
-            {
-                name: "Élus Étudiants",
-                route: "ElusEtudScreen",
-                icon: "alpha-e-box",
-            },
-            {
-                name: "Wiketud",
-                route: "WiketudScreen",
-                icon: "wikipedia",
-            },
-            {
-                name: "Tutor'INSA",
-                route: "TutorInsaScreen",
-                icon: "school",
+                name: i18n.t('screens.home'),
+                route: "Main",
+                icon: "home",
             },
             {
                 name: i18n.t('sidenav.divider2'),
                 route: "Divider2"
             },
             {
-                name: i18n.t('screens.bluemind'),
-                route: "BlueMindScreen",
-                icon: "email",
-            },
-            {
-                name: i18n.t('screens.ent'),
-                route: "EntScreen",
-                icon: "notebook",
+                name: i18n.t('screens.menuSelf'),
+                route: "SelfMenuScreen",
+                icon: "silverware-fork-knife",
             },
             {
                 name: i18n.t('screens.availableRooms'),
@@ -85,9 +60,49 @@ export default class SideBar extends React.Component<Props, State> {
                 icon: "calendar-check",
             },
             {
-                name: i18n.t('screens.menuSelf'),
-                route: "SelfMenuScreen",
-                icon: "silverware-fork-knife",
+                name: i18n.t('screens.bib'),
+                route: "BibScreen",
+                icon: "book",
+            },
+            {
+                name: i18n.t('screens.bluemind'),
+                route: "BlueMindScreen",
+                link: "https://etud-mel.insa-toulouse.fr/webmail/",
+                icon: "email",
+            },
+            {
+                name: i18n.t('screens.ent'),
+                route: "EntScreen",
+                link: "https://ent.insa-toulouse.fr/",
+                icon: "notebook",
+            },
+            {
+                name: i18n.t('sidenav.divider1'),
+                route: "Divider1"
+            },
+            {
+                name: "Amicale",
+                route: "AmicaleScreen",
+                link: "https://amicale-insat.fr/",
+                icon: "alpha-a-box",
+            },
+            {
+                name: "Élus Étudiants",
+                route: "ElusEtudScreen",
+                link: "https://etud.insa-toulouse.fr/~eeinsat/",
+                icon: "alpha-e-box",
+            },
+            {
+                name: "Wiketud",
+                route: "WiketudScreen",
+                link: "https://wiki.etud.insa-toulouse.fr",
+                icon: "wikipedia",
+            },
+            {
+                name: "Tutor'INSA",
+                route: "TutorInsaScreen",
+                link: "https://www.etud.insa-toulouse.fr/~tutorinsa/",
+                icon: "school",
             },
             {
                 name: i18n.t('sidenav.divider3'),
@@ -107,13 +122,11 @@ export default class SideBar extends React.Component<Props, State> {
         this.getRenderItem = this.getRenderItem.bind(this);
     }
 
-    shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-        return nextState.active !== this.state.active;
-    }
-
-
-    onListItemPress(route: string) {
-        this.props.navigation.navigate(route);
+    onListItemPress(item: Object) {
+        if (item.link === undefined)
+            this.props.navigation.navigate(item.route);
+        else
+            WebBrowser.openBrowserAsync(item.link);
     }
 
 
@@ -123,66 +136,34 @@ export default class SideBar extends React.Component<Props, State> {
 
 
     getRenderItem({item}: Object) {
-        const onListItemPress = this.onListItemPress.bind(this, item.route);
-
+        const onListItemPress = this.onListItemPress.bind(this, item);
         if (item.icon !== undefined) {
             return (
-                <ListItem
-                    button
-                    noBorder
-                    selected={this.state.active === item.route}
+                <SidebarItem
+                    title={item.name}
+                    icon={item.icon}
                     onPress={onListItemPress}
-                >
-                    <Left>
-                        <CustomMaterialIcon
-                            icon={item.icon}
-                            active={this.state.active === item.route}
-                        />
-                        <Text style={styles.text}>
-                            {item.name}
-                        </Text>
-                    </Left>
-                    {item.types &&
-                    <Right style={{flex: 1}}>
-                        <Badge
-                            style={{
-                                borderRadius: 3,
-                                height: 25,
-                                width: 72,
-                                backgroundColor: item.bg
-                            }}
-                        >
-                            <Text
-                                style={styles.badgeText}
-                            >{`${item.types} Types`}</Text>
-                        </Badge>
-                    </Right>}
-                </ListItem>
+                />
             );
         } else {
             return (
-                <ListItem itemDivider>
-                    <Text>{item.name}</Text>
-                </ListItem>
+                <SidebarDivider title={item.name}/>
             );
         }
 
     }
 
     render() {
-        // console.log("rendering SideBar");
         return (
-            <Container style={{
-                backgroundColor: ThemeManager.getCurrentThemeVariables().sideMenuBgColor,
-            }}>
-                <Image source={drawerCover} style={styles.drawerCover}/>
+            <View style={{height: '100%'}}>
+                <Image source={require("../assets/drawer-cover.png")} style={styles.drawerCover}/>
                 <FlatList
                     data={this.dataSet}
                     extraData={this.state}
                     keyExtractor={this.listKeyExtractor}
                     renderItem={this.getRenderItem}
                 />
-            </Container>
+            </View>
         );
     }
 }

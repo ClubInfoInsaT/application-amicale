@@ -1,30 +1,44 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, View} from 'react-native'
-import {Body, Left, ListItem, Right, Text} from 'native-base';
+import {View} from 'react-native'
 import i18n from "i18n-js";
-import CustomMaterialIcon from "../../components/CustomMaterialIcon";
-import FetchedDataSectionList from "../../components/FetchedDataSectionList";
-import ThemeManager from "../../utils/ThemeManager";
-import Touchable from "react-native-platform-touchable";
+import WebSectionList from "../../components/WebSectionList";
+import {List, withTheme} from 'react-native-paper';
+import HeaderButton from "../../components/HeaderButton";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 
+type Props = {
+    navigation: Object,
+}
+
+type State = {
+    fetchedData: Object,
+}
 
 /**
  * Class defining the main proximo screen. This screen shows the different categories of articles
  * offered by proximo.
  */
-export default class ProximoMainScreen extends FetchedDataSectionList {
+class ProximoMainScreen extends React.Component<Props, State> {
+
+    articles: Object;
 
     onPressSearchBtn: Function;
     onPressAboutBtn: Function;
+    getRenderItem: Function;
+    createDataset: Function;
 
-    constructor() {
-        super(DATA_URL, 0);
+    colors: Object;
+
+    constructor(props) {
+        super(props);
         this.onPressSearchBtn = this.onPressSearchBtn.bind(this);
         this.onPressAboutBtn = this.onPressAboutBtn.bind(this);
+        this.getRenderItem = this.getRenderItem.bind(this);
+        this.createDataset = this.createDataset.bind(this);
+        this.colors = props.theme.colors;
     }
 
     static sortFinalData(a: Object, b: Object) {
@@ -45,12 +59,11 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         return 0;
     }
 
-    getHeaderTranslation() {
-        return i18n.t("screens.proximo");
-    }
-
-    getUpdateToastTranslations() {
-        return [i18n.t("proximoScreen.listUpdated"), i18n.t("proximoScreen.listUpdateFail")];
+    componentDidMount() {
+        const rightButton = this.getRightButton.bind(this);
+        this.props.navigation.setOptions({
+            headerRight: rightButton,
+        });
     }
 
     getKeyExtractor(item: Object) {
@@ -62,7 +75,7 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
             {
                 title: '',
                 data: this.generateData(fetchedData),
-                extraData: super.state,
+                extraData: this.state,
                 keyExtractor: this.getKeyExtractor
             }
         ];
@@ -77,21 +90,22 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
      */
     generateData(fetchedData: Object) {
         let finalData = [];
+        this.articles = undefined;
         if (fetchedData.types !== undefined && fetchedData.articles !== undefined) {
             let types = fetchedData.types;
-            let articles = fetchedData.articles;
+            this.articles = fetchedData.articles;
             finalData.push({
                 type: {
                     id: -1,
                     name: i18n.t('proximoScreen.all'),
                     icon: 'star'
                 },
-                data: this.getAvailableArticles(articles, undefined)
+                data: this.getAvailableArticles(this.articles, undefined)
             });
             for (let i = 0; i < types.length; i++) {
                 finalData.push({
                     type: types[i],
-                    data: this.getAvailableArticles(articles, types[i])
+                    data: this.getAvailableArticles(this.articles, types[i])
                 });
 
             }
@@ -128,8 +142,8 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
                     name: i18n.t('proximoScreen.all'),
                     icon: 'star'
                 },
-                data: this.state.fetchedData.articles !== undefined ?
-                    this.getAvailableArticles(this.state.fetchedData.articles, undefined) : []
+                data: this.articles !== undefined ?
+                    this.getAvailableArticles(this.articles, undefined) : []
             },
         };
         this.props.navigation.navigate('ProximoListScreen', searchScreenData);
@@ -143,63 +157,51 @@ export default class ProximoMainScreen extends FetchedDataSectionList {
         return (
             <View
                 style={{
-                    flexDirection: 'row'
+                    flexDirection: 'row',
                 }}>
-                <Touchable
-                    style={{padding: 6}}
-                    onPress={this.onPressSearchBtn}>
-                    <CustomMaterialIcon
-                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon="magnify"/>
-                </Touchable>
-                <Touchable
-                    style={{padding: 6}}
-                    onPress={this.onPressAboutBtn}>
-                    <CustomMaterialIcon
-                        color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                        icon="information"/>
-                </Touchable>
+                <HeaderButton icon={'magnify'} onPress={this.onPressSearchBtn}/>
+                <HeaderButton icon={'information'} onPress={this.onPressAboutBtn}/>
             </View>
         );
     }
 
-    getRenderItem(item: Object, section: Object) {
+
+    getRenderItem({item}: Object) {
         let dataToSend = {
             shouldFocusSearchBar: false,
             data: item,
         };
+        const subtitle = item.data.length + " " + (item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article'));
         const onPress = this.props.navigation.navigate.bind(this, 'ProximoListScreen', dataToSend);
         if (item.data.length > 0) {
             return (
-                <ListItem
-                    button
-                    thumbnail
+                <List.Item
+                    title={item.type.name}
+                    description={subtitle}
                     onPress={onPress}
-                >
-                    <Left>
-                        <CustomMaterialIcon
-                            icon={item.type.icon}
-                            fontSize={30}
-                            color={ThemeManager.getCurrentThemeVariables().brandPrimary}
-                        />
-                    </Left>
-                    <Body>
-                        <Text>
-                            {item.type.name}
-                        </Text>
-                        <Text note>
-                            {item.data.length} {item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article')}
-                        </Text>
-                    </Body>
-                    <Right>
-                        <CustomMaterialIcon icon="chevron-right"/>
-                    </Right>
-                </ListItem>
+                    left={props => <List.Icon
+                        {...props}
+                        icon={item.type.icon}
+                        color={this.colors.primary}/>}
+                    right={props => <List.Icon {...props} icon={'chevron-right'}/>}
+                />
             );
-        } else {
+        } else
             return <View/>;
-        }
+    }
 
+    render() {
+        const nav = this.props.navigation;
+        return (
+            <WebSectionList
+                createDataset={this.createDataset}
+                navigation={nav}
+                autoRefreshTime={0}
+                refreshOnFocus={false}
+                fetchUrl={DATA_URL}
+                renderItem={this.getRenderItem}/>
+        );
     }
 }
 
+export default withTheme(ProximoMainScreen);

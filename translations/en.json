@@ -8,6 +8,7 @@
     "menuSelf": "RU Menu",
     "settings": "Settings",
     "availableRooms": "Available rooms",
+    "bib": "Bib'Box",
     "bluemind": "INSA Mails",
     "ent": "INSA ENT",
     "about": "About",
@@ -49,7 +50,11 @@
     },
     "updateSlide": {
       "title": "New in this update!",
-      "text": "Never miss an email anymore! Acces your INSA webmail from the app using the left menu.\nPlanex has also seen some improvements!\n\nSome of your remarks where taken into account for this update, more to come.\nThanks for your feedback on the survey! "
+      "text": "The app got a new UI ! Faster, prettier and more modern, we hope you'll love it!"
+    },
+    "aprilFoolsSlide": {
+      "title": "New in this update!",
+      "text": "We heard you, you don't like the new design and colors, so we changed them!\nLove."
     },
     "buttons": {
       "next": "Next",
@@ -60,21 +65,13 @@
   "settingsScreen": {
     "generalCard": "General",
     "nightMode": "Night Mode",
-    "nightModeSub": "Switch the app to a dark or light theme",
+    "nightModeSubOn": "Your eyes are at peace",
+    "nightModeSubOff": "Your eyes are burning",
+    "nightModeAuto": "Follow system dark mode",
     "startScreen": "Start Screen",
     "startScreenSub": "Select which screen to start the app on",
     "proxiwashNotifReminder": "Machine running reminder",
-    "proxiwashNotifReminderSub": "Choose when to send a notification to remind you a machine is running with your laundry",
-    "proxiwashNotifReminderPicker": {
-      "never": "Never",
-      "1": "1 min",
-      "2": "2 min",
-      "3": "3 min",
-      "5": "5 min",
-      "10": "10 min",
-      "20": "20 min",
-      "30": "30 min"
-    }
+    "proxiwashNotifReminderSub": "How many minutes before"
   },
   "homeScreen": {
     "listUpdated": "List updated!",
@@ -130,8 +127,11 @@
     "emptyList": "Empty List",
     "article": "Article",
     "articles": "Articles",
-    "sortName": "Sort by name",
-    "sortPrice": "Sort by price",
+    "sortOrder": "Sort by",
+    "sortName": "Name",
+    "sortNameReverse": "Name (reverse)",
+    "sortPrice": "Price",
+    "sortPriceReverse": "Price (reverse)",
     "listUpdated": "Article list updated!",
     "listUpdateFail": "Error while updating article list",
     "loading": "Loading...",
@@ -167,6 +167,9 @@
     "dryerTips": "The advised dryer length is 35 minutes for 14 kg of laundry. You can choose a shorter length if the dryer is not fully charged.",
     "procedure": "Procedure",
     "tips": "Tips",
+    "enableNotificationsTip": "Click on a running machine to enable notifications",
+    "numAvailable": "available",
+    "numAvailablePlural": "available",
     "modal": {
       "enableNotifications": "Notify me",
       "disableNotifications": "Stop notifications",
@@ -195,8 +198,9 @@
     }
   },
   "planexScreen": {
-    "rotateToLandscape": "Turn your screen to see the whole week",
-    "rotateToPortrait": "Turn your screen to see only 2 days"
+    "enableStartScreen": "Come here often? Set it as default screen!",
+    "enableStartOK": "Yes please!",
+    "enableStartCancel": "Later"
   },
   "availableRoomScreen": {
     "normalRoom": "Work",

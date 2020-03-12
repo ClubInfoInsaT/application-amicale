@@ -8,6 +8,7 @@
     "menuSelf": "Menu du RU",
     "settings": "Paramètres",
     "availableRooms": "Salles dispo",
+    "bib": "Bib'Box",
     "bluemind": "Mails INSA",
     "ent": "ENT INSA",
     "about": "À Propos",
@@ -49,7 +50,11 @@
     },
     "updateSlide": {
       "title": "Nouveau dans cette mise à jour !",
-      "text": "Ne ratez plus jamais un email ! Accédez à vos mails INSA depuis le menu à gauche.\nPlanex a aussi été un peu amélioré !\n\nUne partie de vos remarques ont été prises en compte pour cette mise à jour, d'autres sont à venir.\nMerci pour votre retour lors du sondage !"
+      "text": "L'appli fait peau neuve ! Avec une interface plus rapide, plus jolie et moderne, nous espérons que vous allez l'apprécier !"
+    },
+    "aprilFoolsSlide": {
+      "title": "Nouveau dans cette mise à jour !",
+      "text": "Nous vous avons entendu, vous n'aimez pas le nouveau design et couleurs, alors on les as changés !\nLa bise."
     },
     "buttons": {
       "next": "Suivant",
@@ -60,21 +65,13 @@
   "settingsScreen": {
     "generalCard": "Général",
     "nightMode": "Mode Nuit",
-    "nightModeSub": "Passer l'application dans un thème sombre ou clair",
+    "nightModeSubOn": "Vos yeux vous remercient",
+    "nightModeSubOff": "Vos yeux brulent",
+    "nightModeAuto": "Mode nuit système",
     "startScreen": "Écran de démarrage",
     "startScreenSub": "Choisissez l'écran utilisé au démarrage",
     "proxiwashNotifReminder": "Rappel de machine en cours",
-    "proxiwashNotifReminderSub": "Choississez quand envoyer une notification pour vous rappeler qu'une machine avec votre linge est en cours",
-    "proxiwashNotifReminderPicker": {
-      "never": "Jamais",
-      "1": "1 min",
-      "2": "2 min",
-      "3": "3 min",
-      "5": "5 min",
-      "10": "10 min",
-      "20": "20 min",
-      "30": "30 min"
-    }
+    "proxiwashNotifReminderSub": "Combien de minutes avant"
   },
   "homeScreen": {
     "listUpdated": "List mise à jour!",
@@ -130,16 +127,19 @@
     "emptyList": "Liste Vide",
     "article": "Article",
     "articles": "Articles",
-    "sortName": "Trier par nom",
-    "sortPrice": "Trier par prix",
+    "sortOrder": "Trier par :",
+    "sortName": "Nom",
+    "sortNameReverse": "Nom (inversé)",
+    "sortPrice": "Prix",
+    "sortPriceReverse": "Prix (inversé)",
     "listUpdated": "Liste d'articles mise à jour !",
     "listUpdateFail": "Erreur lors de la mise à jour de la list d'articles",
     "loading": "Chargement...",
     "inStock": "en stock",
     "description": "Le Proximo c’est ta petite épicerie étudiante tenue par les étudiants directement sur le campus. Ouverte tous les jours de 18h30 à 19h30, nous t’accueillons et te sauvons quand tu n’as plus de pâtes ou de diluant ! Différents produits pour différentes galères, le tout à prix coûtant. Tu peux payer par Lydia ou par espèce.",
     "openingHours": "Horaires d'ouverture",
-    "paymentMethods" : "Moyens de Paiement",
-    "paymentMethodsDescription" : "Espèce ou Lydia",
+    "paymentMethods": "Moyens de Paiement",
+    "paymentMethodsDescription": "Espèce ou Lydia",
     "search": "Rechercher",
     "all": "Tout"
   },
@@ -160,14 +160,16 @@
     "washersTariff": "3€ la machine + 0.80€ avec la lessive.",
     "dryersTariff": "0.35€ pour 5min de sèche linge.",
     "paymentMethods": "Moyens de Paiement",
-    "paymentMethodsDescription" : "Toute monnaie jusqu'à 10€.\nCarte bancaire acceptée.",
+    "paymentMethodsDescription": "Toute monnaie jusqu'à 10€.\nCarte bancaire acceptée.",
     "washerProcedure": "Déposer le linge dans le tambour sans le tasser et en respectant les charges.\n\nFermer la porte de l'appareil.\n\nSélectionner un programme avec l'une des quatre touches de programme favori standard.\n\nAprès avoir payé à la centrale de commande, appuyer sur le bouton marqué START du lave-linge.\n\nDès que le programme est terminé, l’afficheur indique 'Programme terminé', appuyer sur le bouton jaune d’ouverture du hublot pour récupérer le linge.",
     "washerTips": "Programme blanc/couleur : 6kg de linge sec (textiles en coton, lin, linge de corps, draps, jeans,serviettes de toilettes).\n\nProgramme nonrepassable : 3,5 kg de linge sec (textiles en fibres synthétiques, cotonet polyester mélangés).\n\nProgramme fin 30°C : 2,5 kg de linge sec (textiles délicats en fibres synthétiques, rayonne).\n\nProgramme laine 30°C : 2,5 kg de linge sec (textiles en laine et lainages lavables).",
     "dryerProcedure": "Déposer le linge dans le tambour sans le tasser et en respectant les charges.\n\nFermer la porte de l'appareil.\n\nSélectionner un programme avec l'une des quatre touches de programme favori standard.\n\nAprès avoir payé à la centrale de commande, appuyer sur le bouton marqué START du lave-linge.",
     "dryerTips": "La durée conseillée est de 35 minutes pour 14kg de linge. Vous pouvez choisir une durée plus courte si le sèche-linge n'est pas chargé.",
     "procedure": "Procédure",
     "tips": "Conseils",
-
+    "enableNotificationsTip": "Cliquez sur une machine en cours pour activer les notifications",
+    "numAvailable": "disponible",
+    "numAvailablePlural": "disponibles",
     "modal": {
       "enableNotifications": "Me Notifier",
       "disableNotifications": "Désactiver les  notifications",
@@ -197,8 +199,9 @@
     }
   },
   "planexScreen": {
-    "rotateToLandscape": "Tournez votre téléphone pour voir la semaine entière",
-    "rotateToPortrait": "Tournez votre téléphone pour voir seulement 2 jours"
+    "enableStartScreen": "Vous venez souvent ici ? Démarrez l'appli sur cette page!",
+    "enableStartOK": "Oui svp!",
+    "enableStartCancel": "Plus tard"
   },
   "availableRoomScreen": {
     "normalRoom": "Travail",

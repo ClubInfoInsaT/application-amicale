@@ -1,13 +1,10 @@
 // @flow
 
 import * as React from 'react';
-import {Linking, Platform, View} from 'react-native';
-import {Body, Footer, Left, Right, Spinner, Tab, TabHeading, Tabs, Text} from 'native-base';
+import {View} from 'react-native';
 import WebView from "react-native-webview";
-import Touchable from "react-native-platform-touchable";
-import CustomMaterialIcon from "../components/CustomMaterialIcon";
-import ThemeManager from "../utils/ThemeManager";
-import BaseContainer from "../components/BaseContainer";
+import {ActivityIndicator, withTheme} from 'react-native-paper';
+import HeaderButton from "./HeaderButton";
 
 type Props = {
     navigation: Object,
@@ -26,87 +23,80 @@ type Props = {
 /**
  * Class defining a webview screen.
  */
-export default class WebViewScreen extends React.Component<Props> {
+class WebViewScreen extends React.PureComponent<Props> {
 
     static defaultProps = {
         hasBackButton: false,
         hasSideMenu: true,
         hasFooter: true,
     };
-    webviewArray: Array<WebView> = [];
+    webviewRef: Object;
 
     onRefreshClicked: Function;
     onWebviewRef: Function;
     onGoBackWebview: Function;
     onGoForwardWebview: Function;
-    onOpenWebLink: Function;
+    getRenderLoading: Function;
 
-    constructor() {
-        super();
+    colors: Object;
+
+    constructor(props) {
+        super(props);
         this.onRefreshClicked = this.onRefreshClicked.bind(this);
         this.onWebviewRef = this.onWebviewRef.bind(this);
         this.onGoBackWebview = this.onGoBackWebview.bind(this);
         this.onGoForwardWebview = this.onGoForwardWebview.bind(this);
-        this.onOpenWebLink = this.onOpenWebLink.bind(this);
+        this.getRenderLoading = this.getRenderLoading.bind(this);
+        this.colors = props.theme.colors;
     }
 
-    openWebLink(url: string) {
-        Linking.openURL(url).catch((err) => console.error('Error opening link', err));
+    componentDidMount() {
+        const rightButton = this.getRefreshButton.bind(this);
+        this.props.navigation.setOptions({
+            headerRight: rightButton,
+        });
     }
 
     getHeaderButton(clickAction: Function, icon: string) {
         return (
-            <Touchable
-                style={{padding: 6}}
-                onPress={clickAction}>
-                <CustomMaterialIcon
-                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                    icon={icon}/>
-            </Touchable>
+            <HeaderButton icon={icon} onPress={clickAction}/>
         );
     }
 
     getRefreshButton() {
         return (
-            <View style={{flexDirection: 'row'}}>
+            <View style={{
+                flexDirection: 'row',
+                marginRight: 10
+            }}>
                 {this.getHeaderButton(this.onRefreshClicked, 'refresh')}
             </View>
         );
     };
 
     onRefreshClicked() {
-        for (let view of this.webviewArray) {
-            if (view !== null)
-                view.reload();
-        }
+        if (this.webviewRef !== null)
+            this.webviewRef.reload();
     }
 
     onGoBackWebview() {
-        for (let view of this.webviewArray) {
-            if (view !== null)
-                view.goBack();
-        }
+        if (this.webviewRef !== null)
+            this.webviewRef.goBack();
     }
 
     onGoForwardWebview() {
-        for (let view of this.webviewArray) {
-            if (view !== null)
-                view.goForward();
-        }
+        if (this.webviewRef !== null)
+            this.webviewRef.goForward();
     }
 
-    onOpenWebLink() {
-        this.openWebLink(this.props.data[0]['url'])
-    }
-
-    onWebviewRef(ref: WebView) {
-        this.webviewArray.push(ref)
+    onWebviewRef(ref: Object) {
+        this.webviewRef = ref
     }
 
     getRenderLoading() {
         return (
             <View style={{
-                backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor,
+                backgroundColor: this.colors.background,
                 position: 'absolute',
                 top: 0,
                 right: 0,
@@ -116,104 +106,31 @@ export default class WebViewScreen extends React.Component<Props> {
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
-                <Spinner/>
+                <ActivityIndicator
+                    animating={true}
+                    size={'large'}
+                    color={this.colors.primary}/>
             </View>
         );
     }
 
-    getWebview(obj: Object) {
+    render() {
+        // console.log("rendering WebViewScreen");
         return (
             <WebView
                 ref={this.onWebviewRef}
-                source={{uri: obj['url']}}
+                source={{uri: this.props.data[0]['url']}}
                 style={{
                     width: '100%',
                     height: '100%',
                 }}
                 startInLoadingState={true}
-                injectedJavaScript={obj['customJS']}
+                injectedJavaScript={this.props.data[0]['customJS']}
                 javaScriptEnabled={true}
                 renderLoading={this.getRenderLoading}
             />
         );
     }
-
-    getTabbedWebview() {
-        let tabbedView = [];
-        for (let i = 0; i < this.props.data.length; i++) {
-            tabbedView.push(
-                <Tab heading={
-                    <TabHeading>
-                        <CustomMaterialIcon
-                            icon={this.props.data[i]['icon']}
-                            color={ThemeManager.getCurrentThemeVariables().tabIconColor}
-                            fontSize={20}
-                        />
-                        <Text>{this.props.data[i]['name']}</Text>
-                    </TabHeading>}
-                     key={this.props.data[i]['url']}
-                     style={{backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor}}>
-                    {this.getWebview(this.props.data[i])}
-                </Tab>);
-        }
-        return tabbedView;
-    }
-
-    render() {
-        // console.log("rendering WebViewScreen");
-        const nav = this.props.navigation;
-        this.webviewArray = [];
-        return (
-            <BaseContainer
-                navigation={nav}
-                headerTitle={this.props.headerTitle}
-                headerRightButton={this.getRefreshButton()}
-                hasBackButton={this.props.hasHeaderBackButton}
-                hasSideMenu={this.props.hasSideMenu}
-                enableRotation={true}
-                hideHeaderOnLandscape={true}
-                hasTabs={this.props.data.length > 1}>
-                {this.props.data.length === 1 ?
-                    this.getWebview(this.props.data[0]) :
-                    <Tabs
-                        tabContainerStyle={{
-                            elevation: 0, // Fix for android shadow
-                        }}
-                        locked={true}
-                        style={{
-                            backgroundColor: Platform.OS === 'ios' ?
-                                ThemeManager.getCurrentThemeVariables().tabDefaultBg :
-                                ThemeManager.getCurrentThemeVariables().brandPrimary
-                        }}
-
-                    >
-                        {this.getTabbedWebview()}
-                    </Tabs>}
-                {this.props.hasFooter && this.props.data.length === 1 ?
-                    <Footer>
-                        <Left style={{
-                            paddingLeft: 6,
-                        }}>
-                            {this.getHeaderButton(this.onOpenWebLink, 'open-in-new')}
-                        </Left>
-                        <Body/>
-                        <Right style={{
-                            flexDirection: 'row',
-                            alignItems: 'flex-end',
-                            paddingRight: 6
-                        }}>
-                            <View style={{
-                                flexDirection: 'row',
-                                marginRight: 0,
-                                marginLeft: 'auto'
-                            }}>
-                                {this.getHeaderButton(this.onGoBackWebview, 'chevron-left')}
-                                {this.getHeaderButton(this.onGoForwardWebview, 'chevron-right')}
-                            </View>
-                        </Right>
-                    </Footer> : <View/>}
-            </BaseContainer>
-        );
-    }
 }
 
+export default withTheme(WebViewScreen);

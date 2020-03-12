@@ -2,90 +2,117 @@
 
 import * as React from 'react';
 import {Alert, Platform, View} from 'react-native';
-import {Body, Card, CardItem, Left, Right, Text} from 'native-base';
-import ThemeManager from '../../utils/ThemeManager';
 import i18n from "i18n-js";
-import CustomMaterialIcon from "../../components/CustomMaterialIcon";
-import FetchedDataSectionList from "../../components/FetchedDataSectionList";
+import WebSectionList from "../../components/WebSectionList";
 import NotificationsManager from "../../utils/NotificationsManager";
-import PlatformTouchable from "react-native-platform-touchable";
-import Touchable from "react-native-platform-touchable";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
 import * as Expo from "expo";
+import {Avatar, Banner, Button, Card, Text, withTheme} from 'react-native-paper';
+import HeaderButton from "../../components/HeaderButton";
+import ProxiwashListItem from "../../components/ProxiwashListItem";
+import ProxiwashConstants from "../../constants/ProxiwashConstants";
+import CustomModal from "../../components/CustomModal";
+import AprilFoolsManager from "../../utils/AprilFoolsManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
-
-const MACHINE_STATES = {
-    "TERMINE": "0",
-    "DISPONIBLE": "1",
-    "EN COURS": "2",
-    "HS": "3",
-    "ERREUR": "4"
-};
 
 let stateStrings = {};
 let modalStateStrings = {};
 let stateIcons = {};
-let stateColors = {};
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
+
+type Props = {
+    navigation: Object,
+    theme: Object,
+}
+
+type State = {
+    refreshing: boolean,
+    firstLoading: boolean,
+    modalCurrentDisplayItem: React.Node,
+    machinesWatched: Array<string>,
+    bannerVisible: boolean,
+};
+
 
 /**
  * Class defining the app's proxiwash screen. This screen shows information about washing machines and
  * dryers, taken from a scrapper reading proxiwash website
  */
-export default class ProxiwashScreen extends FetchedDataSectionList {
+class ProxiwashScreen extends React.Component<Props, State> {
+
+    modalRef: Object;
 
     onAboutPress: Function;
+    getRenderItem: Function;
+    getRenderSectionHeader: Function;
+    createDataset: Function;
+    onHideBanner: Function;
+    onModalRef: Function;
+
+    fetchedData: Object;
+    colors: Object;
+
+    state = {
+        refreshing: false,
+        firstLoading: true,
+        fetchedData: {},
+        // machinesWatched: JSON.parse(dataString),
+        machinesWatched: [],
+        modalCurrentDisplayItem: null,
+        bannerVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === '1',
+    };
 
     /**
      * Creates machine state parameters using current theme and translations
      */
-    constructor() {
-        super(DATA_URL, REFRESH_TIME);
-        let colors = ThemeManager.getCurrentThemeVariables();
-        stateColors[MACHINE_STATES.TERMINE] = colors.proxiwashFinishedColor;
-        stateColors[MACHINE_STATES.DISPONIBLE] = colors.proxiwashReadyColor;
-        stateColors[MACHINE_STATES["EN COURS"]] = colors.proxiwashRunningColor;
-        stateColors[MACHINE_STATES.HS] = colors.proxiwashBrokenColor;
-        stateColors[MACHINE_STATES.ERREUR] = colors.proxiwashErrorColor;
+    constructor(props) {
+        super(props);
+        stateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.states.finished');
+        stateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
+        stateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.states.running');
+        stateStrings[ProxiwashConstants.machineStates.HS] = i18n.t('proxiwashScreen.states.broken');
+        stateStrings[ProxiwashConstants.machineStates.ERREUR] = i18n.t('proxiwashScreen.states.error');
 
-        stateStrings[MACHINE_STATES.TERMINE] = i18n.t('proxiwashScreen.states.finished');
-        stateStrings[MACHINE_STATES.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
-        stateStrings[MACHINE_STATES["EN COURS"]] = i18n.t('proxiwashScreen.states.running');
-        stateStrings[MACHINE_STATES.HS] = i18n.t('proxiwashScreen.states.broken');
-        stateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.states.error');
+        modalStateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.modal.finished');
+        modalStateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.modal.ready');
+        modalStateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.modal.running');
+        modalStateStrings[ProxiwashConstants.machineStates.HS] = i18n.t('proxiwashScreen.modal.broken');
+        modalStateStrings[ProxiwashConstants.machineStates.ERREUR] = i18n.t('proxiwashScreen.modal.error');
 
-        modalStateStrings[MACHINE_STATES.TERMINE] = i18n.t('proxiwashScreen.modal.finished');
-        modalStateStrings[MACHINE_STATES.DISPONIBLE] = i18n.t('proxiwashScreen.modal.ready');
-        modalStateStrings[MACHINE_STATES["EN COURS"]] = i18n.t('proxiwashScreen.modal.running');
-        modalStateStrings[MACHINE_STATES.HS] = i18n.t('proxiwashScreen.modal.broken');
-        modalStateStrings[MACHINE_STATES.ERREUR] = i18n.t('proxiwashScreen.modal.error');
-
-        stateIcons[MACHINE_STATES.TERMINE] = 'check-circle';
-        stateIcons[MACHINE_STATES.DISPONIBLE] = 'radiobox-blank';
-        stateIcons[MACHINE_STATES["EN COURS"]] = 'progress-check';
-        stateIcons[MACHINE_STATES.HS] = 'alert-octagram-outline';
-        stateIcons[MACHINE_STATES.ERREUR] = 'alert';
+        stateIcons[ProxiwashConstants.machineStates.TERMINE] = 'check-circle';
+        stateIcons[ProxiwashConstants.machineStates.DISPONIBLE] = 'radiobox-blank';
+        stateIcons[ProxiwashConstants.machineStates["EN COURS"]] = 'progress-check';
+        stateIcons[ProxiwashConstants.machineStates.HS] = 'alert-octagram-outline';
+        stateIcons[ProxiwashConstants.machineStates.ERREUR] = 'alert';
 
         // let dataString = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current;
-        this.state = {
-            refreshing: false,
-            firstLoading: true,
-            fetchedData: {},
-            // machinesWatched: JSON.parse(dataString),
-            machinesWatched: [],
-        };
-        this.setMinTimeRefresh(30);
-
         this.onAboutPress = this.onAboutPress.bind(this);
+        this.getRenderItem = this.getRenderItem.bind(this);
+        this.getRenderSectionHeader = this.getRenderSectionHeader.bind(this);
+        this.createDataset = this.createDataset.bind(this);
+        this.onHideBanner = this.onHideBanner.bind(this);
+        this.onModalRef = this.onModalRef.bind(this);
+        this.colors = props.theme.colors;
+    }
+
+    onHideBanner() {
+        this.setState({bannerVisible: false});
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.key,
+            '0'
+        );
     }
 
     /**
      * Setup notification channel for android and add listeners to detect notifications fired
      */
     componentDidMount() {
-        super.componentDidMount();
+        const rightButton = this.getRightButton.bind(this);
+        this.props.navigation.setOptions({
+            headerRight: rightButton,
+        });
         if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
             // Get latest watchlist from server
             NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
@@ -105,14 +132,6 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
                 });
             }
         }
-    }
-
-    getHeaderTranslation() {
-        return i18n.t("screens.proxiwash");
-    }
-
-    getUpdateToastTranslations() {
-        return [i18n.t("proxiwashScreen.listUpdated"), i18n.t("proxiwashScreen.listUpdateFail")];
     }
 
     getDryersKeyExtractor(item: Object) {
@@ -211,68 +230,107 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
     }
 
     createDataset(fetchedData: Object) {
+        let data = fetchedData;
+        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled()) {
+            data = JSON.parse(JSON.stringify(fetchedData)); // Deep copy
+            AprilFoolsManager.getNewProxiwashDryerOrderedList(data.dryers);
+            AprilFoolsManager.getNewProxiwashWasherOrderedList(data.washers);
+        }
+        this.fetchedData = fetchedData;
+
         return [
-            {
-                title: i18n.t('proxiwashScreen.washers'),
-                icon: 'washing-machine',
-                data: fetchedData.washers === undefined ? [] : fetchedData.washers,
-                extraData: super.state,
-                keyExtractor: this.getWashersKeyExtractor
-            },
             {
                 title: i18n.t('proxiwashScreen.dryers'),
                 icon: 'tumble-dryer',
-                data: fetchedData.dryers === undefined ? [] : fetchedData.dryers,
-                extraData: super.state,
+                data: data.dryers === undefined ? [] : data.dryers,
+                extraData: this.state,
                 keyExtractor: this.getDryersKeyExtractor
             },
-
+            {
+                title: i18n.t('proxiwashScreen.washers'),
+                icon: 'washing-machine',
+                data: data.washers === undefined ? [] : data.washers,
+                extraData: this.state,
+                keyExtractor: this.getWashersKeyExtractor
+            },
         ];
     }
 
-    hasTabs(): boolean {
-        return true;
+    showModal(title: string, item: Object, isDryer: boolean) {
+        this.setState({
+            modalCurrentDisplayItem: this.getModalContent(title, item, isDryer)
+        });
+        if (this.modalRef) {
+            this.modalRef.open();
+        }
     }
 
-    /**
-     * Show an alert fo a machine, allowing to enable/disable notifications if running
-     *
-     * @param title
-     * @param item
-     * @param isDryer
-     */
-    showAlert(title: string, item: Object, isDryer: boolean) {
-        let buttons = [{text: i18n.t("proxiwashScreen.modal.ok")}];
-        let message = modalStateStrings[MACHINE_STATES[item.state]];
-        const onPress = this.setupNotifications.bind(this, item.number);
-        if (MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"]) {
-            buttons = [
+    onSetupNotificationsPress(machineId: string) {
+        if (this.modalRef) {
+            this.modalRef.close();
+        }
+        this.setupNotifications(machineId)
+    }
+
+    getModalContent(title: string, item: Object, isDryer: boolean) {
+        let button = {
+            text: i18n.t("proxiwashScreen.modal.ok"),
+            icon: '',
+            onPress: undefined
+        };
+        let message = modalStateStrings[ProxiwashConstants.machineStates[item.state]];
+        const onPress = this.onSetupNotificationsPress.bind(this, item.number);
+        if (ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"]) {
+            button =
                 {
                     text: this.isMachineWatched(item.number) ?
                         i18n.t("proxiwashScreen.modal.disableNotifications") :
                         i18n.t("proxiwashScreen.modal.enableNotifications"),
+                    icon: '',
                     onPress: onPress
-                },
-                {
-                    text: i18n.t("proxiwashScreen.modal.cancel")
                 }
-            ];
+            ;
             message = i18n.t('proxiwashScreen.modal.running',
                 {
                     start: item.startTime,
                     end: item.endTime,
                     remaining: item.remainingTime
                 });
-        } else if (MACHINE_STATES[item.state] === MACHINE_STATES.DISPONIBLE) {
+        } else if (ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates.DISPONIBLE) {
             if (isDryer)
                 message += '\n' + i18n.t('proxiwashScreen.dryersTariff');
             else
                 message += '\n' + i18n.t('proxiwashScreen.washersTariff');
         }
-        Alert.alert(
-            title,
-            message,
-            buttons
+        return (
+            <View style={{
+                flex: 1,
+                padding: 20
+            }}>
+                <Card.Title
+                    title={title}
+                    left={() => <Avatar.Icon
+                        icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
+                        color={this.colors.text}
+                        style={{backgroundColor: 'transparent'}}/>}
+
+                />
+                <Card.Content>
+                    <Text>{message}</Text>
+                </Card.Content>
+
+                {button.onPress !== undefined ?
+                    <Card.Actions>
+                        <Button
+                            icon={button.icon}
+                            mode="contained"
+                            onPress={button.onPress}
+                            style={{marginLeft: 'auto', marginRight: 'auto'}}
+                        >
+                            {button.text}
+                        </Button>
+                    </Card.Actions> : null}
+            </View>
         );
     }
 
@@ -280,15 +338,65 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
         this.props.navigation.navigate('ProxiwashAboutScreen');
     }
 
-    getRightButton(): * {
+    getRightButton() {
         return (
-            <Touchable
-                style={{padding: 6}}
-                onPress={this.onAboutPress}>
-                <CustomMaterialIcon
-                    color={Platform.OS === 'ios' ? ThemeManager.getCurrentThemeVariables().brandPrimary : "#fff"}
-                    icon="information"/>
-            </Touchable>
+            <HeaderButton icon={'information'} onPress={this.onAboutPress}/>
+        );
+    }
+
+    onModalRef(ref: Object) {
+        this.modalRef = ref;
+    }
+
+    getMachineAvailableNumber(isDryer: boolean) {
+        let data;
+        if (isDryer)
+            data = this.fetchedData.dryers;
+        else
+            data = this.fetchedData.washers;
+        let count = 0;
+        for (let i = 0; i < data.length; i++) {
+            if (ProxiwashConstants.machineStates[data[i].state] === ProxiwashConstants.machineStates["DISPONIBLE"])
+                count += 1;
+        }
+        return count;
+    }
+
+    getRenderSectionHeader({section}: Object) {
+        const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
+        const nbAvailable = this.getMachineAvailableNumber(isDryer);
+        const subtitle = nbAvailable + ' ' + ((nbAvailable <= 1) ? i18n.t('proxiwashScreen.numAvailable')
+            : i18n.t('proxiwashScreen.numAvailablePlural'));
+        return (
+            <View style={{
+                flexDirection: 'row',
+                marginLeft: 5,
+                marginRight: 5,
+                marginBottom: 10,
+                marginTop: 20,
+            }}>
+                <Avatar.Icon
+                    icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
+                    color={this.colors.primary}
+                    style={{backgroundColor: 'transparent'}}
+                />
+                <View style={{
+                    justifyContent: 'center',
+                }}>
+                    <Text style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                    }}>
+                        {section.title}
+                    </Text>
+
+                    <Text style={{
+                        color: this.colors.subtitle,
+                    }}>
+                        {subtitle}
+                    </Text>
+                </View>
+            </View>
         );
     }
 
@@ -299,77 +407,69 @@ export default class ProxiwashScreen extends FetchedDataSectionList {
      * @param section The object describing the current SectionList section
      * @returns {React.Node}
      */
-    getRenderItem(item: Object, section: Object) {
-        let isMachineRunning = MACHINE_STATES[item.state] === MACHINE_STATES["EN COURS"];
-        let machineName = (section.title === i18n.t('proxiwashScreen.dryers') ? i18n.t('proxiwashScreen.dryer') : i18n.t('proxiwashScreen.washer')) + ' n°' + item.number;
-        let isDryer = section.title === i18n.t('proxiwashScreen.dryers');
-        const onPress = this.showAlert.bind(this, machineName, item, isDryer);
+    getRenderItem({item, section}: Object) {
+        const isMachineRunning = ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"];
+        let displayNumber = item.number;
+        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
+            displayNumber = AprilFoolsManager.getProxiwashMachineDisplayNumber(parseInt(item.number));
+        const machineName = (section.title === i18n.t('proxiwashScreen.dryers') ?
+            i18n.t('proxiwashScreen.dryer') :
+            i18n.t('proxiwashScreen.washer')) + ' n°' + displayNumber;
+        const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
+        const onPress = this.showModal.bind(this, machineName, item, isDryer);
+        let width = item.donePercent !== '' ? (parseInt(item.donePercent)).toString() + '%' : 0;
+        if (ProxiwashConstants.machineStates[item.state] === '0')
+            width = '100%';
         return (
-            <Card style={{
-                flex: 0,
-                height: 64,
-                marginLeft: 10,
-                marginRight: 10
-            }}>
+            <ProxiwashListItem
+                title={machineName}
+                description={isMachineRunning ? item.startTime + '/' + item.endTime : ''}
+                onPress={onPress}
+                progress={width}
+                state={item.state}
+                isWatched={this.isMachineWatched(item.number)}
+                isDryer={isDryer}
+                statusText={stateStrings[ProxiwashConstants.machineStates[item.state]]}
+                statusIcon={stateIcons[ProxiwashConstants.machineStates[item.state]]}
+            />
+        );
+    }
 
-                <CardItem
-                    style={{
-                        backgroundColor: stateColors[MACHINE_STATES[item.state]],
-                        paddingRight: 0,
-                        paddingLeft: 0,
-                        height: '100%',
-                    }}
+    render() {
+        const nav = this.props.navigation;
+        return (
+            <View>
+                <Banner
+                    visible={this.state.bannerVisible}
+                    actions={[
+                        {
+                            label: 'OK',
+                            onPress: this.onHideBanner,
+                        },
+                    ]}
+                    icon={() => <Avatar.Icon
+                        icon={'information'}
+                        size={40}
+                    />}
                 >
-                    <View style={{
-                        height: 64,
-                        position: 'absolute',
-                        right: 0,
-                        width: item.donePercent !== '' ? (100 - parseInt(item.donePercent)).toString() + '%' : 0,
-                        backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor
-                    }}/>
-                    <PlatformTouchable
-                        onPress={onPress}
-                        style={{
-                            height: 64,
-                            position: 'absolute',
-                            zIndex: 10, // Make sure the button is above the text
-                            right: 0,
-                            width: '100%'
-                        }}
-                    >
-                        <View/>
-                    </PlatformTouchable>
-                    <Left style={{marginLeft: 10}}>
-                        <CustomMaterialIcon
-                            icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
-                            fontSize={30}
-                        />
-                        <Body>
-                            <Text>
-                                {machineName + ' '}
-                                {this.isMachineWatched(item.number) ?
-                                    <CustomMaterialIcon
-                                        icon='bell-ring'
-                                        color={ThemeManager.getCurrentThemeVariables().brandPrimary}
-                                        fontSize={20}
-                                    /> : ''}
-                            </Text>
-                            <Text note>
-                                {isMachineRunning ? item.startTime + '/' + item.endTime : ''}
-                            </Text>
-                        </Body>
-                    </Left>
-                    <Right style={{marginRight: 10}}>
-                        <Text style={MACHINE_STATES[item.state] === MACHINE_STATES.TERMINE ?
-                            {fontWeight: 'bold'} : {}}
-                        >
-                            {stateStrings[MACHINE_STATES[item.state]]}
-                        </Text>
-                        <CustomMaterialIcon icon={stateIcons[MACHINE_STATES[item.state]]}
-                                            fontSize={25}
-                        />
-                    </Right>
-                </CardItem>
-            </Card>);
+                    {i18n.t('proxiwashScreen.enableNotificationsTip')}
+                </Banner>
+                <CustomModal onRef={this.onModalRef}>
+                    {this.state.modalCurrentDisplayItem}
+                </CustomModal>
+                <WebSectionList
+                    createDataset={this.createDataset}
+                    navigation={nav}
+                    fetchUrl={DATA_URL}
+                    renderItem={this.getRenderItem}
+                    renderSectionHeader={this.getRenderSectionHeader}
+                    autoRefreshTime={REFRESH_TIME}
+                    refreshOnFocus={true}
+                    updateData={this.state.machinesWatched.length}/>
+            </View>
+
+        );
     }
 }
+
+export default withTheme(ProxiwashScreen);

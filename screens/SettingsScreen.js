@@ -1,27 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {
-    Body,
-    Card,
-    CardItem,
-    CheckBox,
-    Container,
-    Content,
-    Left,
-    List,
-    ListItem,
-    Picker,
-    Right,
-    Text,
-} from "native-base";
-import CustomHeader from "../components/CustomHeader";
+import {ScrollView} from "react-native";
 import ThemeManager from '../utils/ThemeManager';
 import i18n from "i18n-js";
-import {NavigationActions, StackActions} from "react-navigation";
-import CustomMaterialIcon from "../components/CustomMaterialIcon";
 import AsyncStorageManager from "../utils/AsyncStorageManager";
 import NotificationsManager from "../utils/NotificationsManager";
+import {Card, List, Switch, ToggleButton} from 'react-native-paper';
+import {Appearance} from "react-native-appearance";
 
 type Props = {
     navigation: Object,
@@ -29,6 +15,7 @@ type Props = {
 
 type State = {
     nightMode: boolean,
+    nightModeFollowSystem: boolean,
     proxiwashNotifPickerSelected: string,
     startScreenPickerSelected: string,
 };
@@ -39,6 +26,8 @@ type State = {
 export default class SettingsScreen extends React.Component<Props, State> {
     state = {
         nightMode: ThemeManager.getNightMode(),
+        nightModeFollowSystem: AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current === '1' &&
+        Appearance.getColorScheme() !== 'no-preference',
         proxiwashNotifPickerSelected: AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current,
         startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
     };
@@ -46,45 +35,14 @@ export default class SettingsScreen extends React.Component<Props, State> {
     onProxiwashNotifPickerValueChange: Function;
     onStartScreenPickerValueChange: Function;
     onToggleNightMode: Function;
+    onToggleNightModeFollowSystem: Function;
 
     constructor() {
         super();
         this.onProxiwashNotifPickerValueChange = this.onProxiwashNotifPickerValueChange.bind(this);
         this.onStartScreenPickerValueChange = this.onStartScreenPickerValueChange.bind(this);
         this.onToggleNightMode = this.onToggleNightMode.bind(this);
-    }
-
-    /**
-     * Get a list item using the specified control
-     *
-     * @param control The custom control to use
-     * @param icon The icon name to display on the list item
-     * @param title The text to display as this list item title
-     * @param subtitle The text to display as this list item subtitle
-     * @returns {React.Node}
-     */
-    static getGeneralItem(control: React.Node, icon: string, title: string, subtitle: string) {
-        return (
-            <ListItem
-                thumbnail
-            >
-                <Left>
-                    <CustomMaterialIcon icon={icon}/>
-                </Left>
-                <Body>
-                    <Text>
-                        {title}
-                    </Text>
-                    <Text note>
-                        {subtitle}
-                    </Text>
-                </Body>
-
-                <Right>
-                    {control}
-                </Right>
-            </ListItem>
-        );
+        this.onToggleNightModeFollowSystem = this.onToggleNightModeFollowSystem.bind(this);
     }
 
     /**
@@ -93,15 +51,17 @@ export default class SettingsScreen extends React.Component<Props, State> {
      * @param value The value to store
      */
     onProxiwashNotifPickerValueChange(value: string) {
-        let key = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.key;
-        AsyncStorageManager.getInstance().savePref(key, value);
-        this.setState({
-            proxiwashNotifPickerSelected: value
-        });
-        let intVal = 0;
-        if (value !== 'never')
-            intVal = parseInt(value);
-        NotificationsManager.setMachineReminderNotificationTime(intVal);
+        if (value != null) {
+            let key = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.key;
+            AsyncStorageManager.getInstance().savePref(key, value);
+            this.setState({
+                proxiwashNotifPickerSelected: value
+            });
+            let intVal = 0;
+            if (value !== 'never')
+                intVal = parseInt(value);
+            NotificationsManager.setMachineReminderNotificationTime(intVal);
+        }
     }
 
     /**
@@ -110,11 +70,13 @@ export default class SettingsScreen extends React.Component<Props, State> {
      * @param value The value to store
      */
     onStartScreenPickerValueChange(value: string) {
-        let key = AsyncStorageManager.getInstance().preferences.defaultStartScreen.key;
-        AsyncStorageManager.getInstance().savePref(key, value);
-        this.setState({
-            startScreenPickerSelected: value
-        });
+        if (value != null) {
+            let key = AsyncStorageManager.getInstance().preferences.defaultStartScreen.key;
+            AsyncStorageManager.getInstance().savePref(key, value);
+            this.setState({
+                startScreenPickerSelected: value
+            });
+        }
     }
 
     /**
@@ -124,19 +86,14 @@ export default class SettingsScreen extends React.Component<Props, State> {
      */
     getProxiwashNotifPicker() {
         return (
-            <Picker
-                note
-                mode="dropdown"
-                style={{width: 120}}
-                selectedValue={this.state.proxiwashNotifPickerSelected}
+            <ToggleButton.Row
                 onValueChange={this.onProxiwashNotifPickerValueChange}
+                value={this.state.proxiwashNotifPickerSelected}
             >
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.never')} value="never"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.5')} value="5"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.10')} value="10"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.20')} value="20"/>
-                <Picker.Item label={i18n.t('settingsScreen.proxiwashNotifReminderPicker.30')} value="30"/>
-            </Picker>
+                <ToggleButton icon="close" value="never"/>
+                <ToggleButton icon="numeric-2" value="2"/>
+                <ToggleButton icon="numeric-5" value="5"/>
+            </ToggleButton.Row>
         );
     }
 
@@ -147,19 +104,16 @@ export default class SettingsScreen extends React.Component<Props, State> {
      */
     getStartScreenPicker() {
         return (
-            <Picker
-                note
-                mode="dropdown"
-                style={{width: 120}}
-                selectedValue={this.state.startScreenPickerSelected}
+            <ToggleButton.Row
                 onValueChange={this.onStartScreenPickerValueChange}
+                value={this.state.startScreenPickerSelected}
             >
-                <Picker.Item label={i18n.t('screens.home')} value="Home"/>
-                <Picker.Item label={i18n.t('screens.planning')} value="Planning"/>
-                <Picker.Item label={i18n.t('screens.proxiwash')} value="Proxiwash"/>
-                <Picker.Item label={i18n.t('screens.proximo')} value="Proximo"/>
-                <Picker.Item label={'Planex'} value="Planex"/>
-            </Picker>
+                <ToggleButton icon="shopping" value="Proximo"/>
+                <ToggleButton icon="calendar-range" value="Planning"/>
+                <ToggleButton icon="triangle" value="Home"/>
+                <ToggleButton icon="washing-machine" value="Proxiwash"/>
+                <ToggleButton icon="timetable" value="Planex"/>
+            </ToggleButton.Row>
         );
     }
 
@@ -169,19 +123,18 @@ export default class SettingsScreen extends React.Component<Props, State> {
     onToggleNightMode() {
         ThemeManager.getInstance().setNightMode(!this.state.nightMode);
         this.setState({nightMode: !this.state.nightMode});
-        this.resetStack();
     }
 
-    /**
-     * Reset react navigation stack to allow for a theme reset
-     */
-    resetStack() {
-        const resetAction = StackActions.reset({
-            index: 0,
-            key: null,
-            actions: [NavigationActions.navigate({routeName: 'Main'})],
-        });
-        this.props.navigation.dispatch(resetAction);
+    onToggleNightModeFollowSystem() {
+        const value = !this.state.nightModeFollowSystem;
+        this.setState({nightModeFollowSystem: value});
+        let key = AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.key;
+        AsyncStorageManager.getInstance().savePref(key, value ? '1' : '0');
+        if (value) {
+            const nightMode = Appearance.getColorScheme() === 'dark';
+            ThemeManager.getInstance().setNightMode(nightMode);
+            this.setState({nightMode: nightMode});
+        }
     }
 
     /**
@@ -193,60 +146,71 @@ export default class SettingsScreen extends React.Component<Props, State> {
      * @param subtitle The text to display as this list item subtitle
      * @returns {React.Node}
      */
-    getToggleItem(onPressCallback: Function, icon: string, title: string, subtitle: string) {
+    getToggleItem(onPressCallback: Function, icon: string, title: string, subtitle: string, state: boolean) {
         return (
-            <ListItem
-                button
-                thumbnail
-                onPress={onPressCallback}
-            >
-                <Left>
-                    <CustomMaterialIcon icon={icon}/>
-                </Left>
-                <Body>
-                    <Text>
-                        {title}
-                    </Text>
-                    <Text note>
-                        {subtitle}
-                    </Text>
-                </Body>
-                <Right>
-                    <CheckBox
-                        checked={this.state.nightMode}
-                        onPress={onPressCallback}
-                        style={{marginRight: 20}}/>
-                </Right>
-            </ListItem>
+            <List.Item
+                title={title}
+                description={subtitle}
+                left={props => <List.Icon {...props} icon={icon}/>}
+                right={props =>
+                    <Switch
+                        value={state}
+                        onValueChange={onPressCallback}
+                    />}
+            />
         );
     }
 
     render() {
-        const nav = this.props.navigation;
         return (
-            <Container>
-                <CustomHeader navigation={nav} title={i18n.t('screens.settings')} hasBackButton={true}/>
-                <Content padder>
-                    <Card>
-                        <CardItem header>
-                            <Text>{i18n.t('settingsScreen.generalCard')}</Text>
-                        </CardItem>
-                        <List>
-                            {this.getToggleItem(this.onToggleNightMode, 'theme-light-dark', i18n.t('settingsScreen.nightMode'), i18n.t('settingsScreen.nightModeSub'))}
-                            {SettingsScreen.getGeneralItem(this.getStartScreenPicker(), 'power', i18n.t('settingsScreen.startScreen'), i18n.t('settingsScreen.startScreenSub'))}
-                        </List>
-                    </Card>
-                    <Card>
-                        <CardItem header>
-                            <Text>Proxiwash</Text>
-                        </CardItem>
-                        <List>
-                            {SettingsScreen.getGeneralItem(this.getProxiwashNotifPicker(), 'washing-machine', i18n.t('settingsScreen.proxiwashNotifReminder'), i18n.t('settingsScreen.proxiwashNotifReminderSub'))}
-                        </List>
-                    </Card>
-                </Content>
-            </Container>
+            <ScrollView>
+                <Card style={{margin: 5}}>
+                    <Card.Title title={i18n.t('settingsScreen.generalCard')}/>
+                    <List.Section>
+                        {Appearance.getColorScheme() !== 'no-preference' ? this.getToggleItem(
+                            this.onToggleNightModeFollowSystem,
+                            'theme-light-dark',
+                            i18n.t('settingsScreen.nightModeAuto'),
+                            this.state.nightMode ?
+                                i18n.t('settingsScreen.nightModeSubOn') :
+                                i18n.t('settingsScreen.nightModeSubOff'),
+                            this.state.nightModeFollowSystem
+                        ) : null}
+                        {
+                            Appearance.getColorScheme() === 'no-preference' || !this.state.nightModeFollowSystem ?
+                            this.getToggleItem(
+                                this.onToggleNightMode,
+                                'theme-light-dark',
+                                i18n.t('settingsScreen.nightMode'),
+                                this.state.nightMode ?
+                                    i18n.t('settingsScreen.nightModeSubOn') :
+                                    i18n.t('settingsScreen.nightModeSubOff'),
+                                this.state.nightMode
+                            ) : null
+                        }
+                        <List.Accordion
+                            title={i18n.t('settingsScreen.startScreen')}
+                            description={i18n.t('settingsScreen.startScreenSub')}
+                            left={props => <List.Icon {...props} icon="power"/>}
+                        >
+                            {this.getStartScreenPicker()}
+                        </List.Accordion>
+                    </List.Section>
+                </Card>
+                <Card style={{margin: 5}}>
+                    <Card.Title title="Proxiwash"/>
+                    <List.Section>
+                        <List.Accordion
+                            title={i18n.t('settingsScreen.proxiwashNotifReminder')}
+                            description={i18n.t('settingsScreen.proxiwashNotifReminderSub')}
+                            left={props => <List.Icon {...props} icon="washing-machine"/>}
+                        >
+                            {this.getProxiwashNotifPicker()}
+                        </List.Accordion>
+                    </List.Section>
+                </Card>
 
+            </ScrollView>
         );
     }
 }

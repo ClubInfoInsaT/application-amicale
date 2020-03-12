@@ -3,9 +3,17 @@
 import * as React from 'react';
 import ThemeManager from "../../utils/ThemeManager";
 import WebViewScreen from "../../components/WebViewScreen";
+import {Avatar, Banner} from "react-native-paper";
+import i18n from "i18n-js";
+import {View} from "react-native";
+import AsyncStorageManager from "../../utils/AsyncStorageManager";
 
 type Props = {
     navigation: Object,
+}
+
+type State = {
+    bannerVisible: boolean,
 }
 
 
@@ -75,9 +83,11 @@ const OBSERVE_MUTATIONS_INJECTED =
  * Class defining the app's planex screen.
  * This screen uses a webview to render the planex page
  */
-export default class PlanexScreen extends React.Component<Props> {
+export default class PlanexScreen extends React.Component<Props, State> {
 
     customInjectedJS: string;
+    onHideBanner: Function;
+    onGoToSettings: Function;
 
     constructor() {
         super();
@@ -93,26 +103,70 @@ export default class PlanexScreen extends React.Component<Props> {
         this.customInjectedJS +=
             'removeAlpha();' +
             '});true;'; // Prevent crash on ios
+        this.onHideBanner = this.onHideBanner.bind(this);
+        this.onGoToSettings = this.onGoToSettings.bind(this);
+    }
 
+    state = {
+        bannerVisible:
+            AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
+            AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex',
+    };
+
+    onHideBanner() {
+        this.setState({bannerVisible: false});
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.planexShowBanner.key,
+            '0'
+        );
+    }
+
+    onGoToSettings() {
+        this.onHideBanner();
+        this.props.navigation.navigate('SettingsScreen');
     }
 
     render() {
         const nav = this.props.navigation;
         return (
-            <WebViewScreen
-                navigation={nav}
-                data={[
-                    {
-                        url: PLANEX_URL,
-                        icon: '',
-                        name: '',
-                        customJS: this.customInjectedJS
-                    },
-                ]}
-                customInjectedJS={this.customInjectedJS}
-                headerTitle={'Planex'}
-                hasHeaderBackButton={false}
-                hasFooter={false}/>
+            <View style={{
+                height: '100%'
+            }}>
+                <Banner
+                    visible={this.state.bannerVisible}
+                    actions={[
+                        {
+                            label: i18n.t('planexScreen.enableStartOK'),
+                            onPress: this.onGoToSettings,
+                        },
+                        {
+                            label: i18n.t('planexScreen.enableStartCancel'),
+                            onPress: this.onHideBanner,
+                        },
+
+                    ]}
+                    icon={() => <Avatar.Icon
+                        icon={'information'}
+                        size={40}
+                    />}
+                >
+                    {i18n.t('planexScreen.enableStartScreen')}
+                </Banner>
+                <WebViewScreen
+                    navigation={nav}
+                    data={[
+                        {
+                            url: PLANEX_URL,
+                            icon: '',
+                            name: '',
+                            customJS: this.customInjectedJS
+                        },
+                    ]}
+                    customInjectedJS={this.customInjectedJS}
+                    headerTitle={'Planex'}
+                    hasHeaderBackButton={false}
+                    hasFooter={false}/>
+            </View>
         );
     }
 }

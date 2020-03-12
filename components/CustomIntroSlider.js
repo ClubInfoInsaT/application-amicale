@@ -3,10 +3,11 @@
 import * as React from 'react';
 import {LinearGradient} from "expo-linear-gradient";
 import {Image, StyleSheet, View} from "react-native";
-import CustomMaterialIcon from "./CustomMaterialIcon";
-import {Text} from "native-base";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {Text} from "react-native-paper";
 import i18n from 'i18n-js';
 import AppIntroSlider from "react-native-app-intro-slider";
+import Update from "../constants/Update";
 
 // Content to be used int the intro slides
 
@@ -39,13 +40,15 @@ const styles = StyleSheet.create({
 
 type Props = {
     onDone: Function,
-    isUpdate: boolean
+    isUpdate: boolean,
+    isAprilFools: boolean,
 };
 
 export default class CustomIntroSlider extends React.Component<Props> {
 
     introSlides: Array<Object>;
     updateSlides: Array<Object>;
+    aprilFoolsSlides: Array<Object>;
 
     constructor() {
         super();
@@ -103,12 +106,21 @@ export default class CustomIntroSlider extends React.Component<Props> {
         this.updateSlides = [
             {
                 key: '1',
-                title: i18n.t('intro.updateSlide.title'),
-                text: i18n.t('intro.updateSlide.text'),
-                icon: 'email',
+                title: Update.getInstance().title,
+                text: Update.getInstance().description,
+                icon: Update.icon,
                 colors: ['#e01928', '#be1522'],
             },
-        ]
+        ];
+        this.aprilFoolsSlides = [
+            {
+                key: '1',
+                title: i18n.t('intro.aprilFoolsSlide.title'),
+                text: i18n.t('intro.aprilFoolsSlide.text'),
+                icon: 'fish',
+                colors: ['#e01928', '#be1522'],
+            },
+        ];
     }
 
 
@@ -131,7 +143,10 @@ export default class CustomIntroSlider extends React.Component<Props> {
             >
                 {item.image !== undefined ?
                     <Image source={item.image} style={styles.image}/>
-                    : <CustomMaterialIcon icon={item.icon} color={'#fff'} fontSize={200} width={200}/>}
+                    : <MaterialCommunityIcons
+                        name={item.icon}
+                        color={'#fff'}
+                        size={200}/>}
                 <View style={{marginTop: 20}}>
                     <Text style={styles.title}>{item.title}</Text>
                     <Text style={styles.text}>{item.text}</Text>
@@ -141,10 +156,15 @@ export default class CustomIntroSlider extends React.Component<Props> {
     }
 
     render() {
+        let slides = this.introSlides;
+        if (this.props.isUpdate)
+            slides = this.updateSlides;
+        else if (this.props.isAprilFools)
+            slides = this.aprilFoolsSlides;
         return (
             <AppIntroSlider
                 renderItem={CustomIntroSlider.getIntroRenderItem}
-                slides={this.props.isUpdate ? this.updateSlides : this.introSlides}
+                slides={slides}
                 onDone={this.props.onDone}
                 bottomButton
                 showSkipButton

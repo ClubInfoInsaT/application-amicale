@@ -1,18 +1,18 @@
 // @flow
 
 import * as React from 'react';
-import {Image, Linking, TouchableOpacity, View} from 'react-native';
-import {Body, Button, Card, CardItem, H1, Left, Text, Thumbnail} from 'native-base';
+import {View} from 'react-native';
 import i18n from "i18n-js";
-import CustomMaterialIcon from '../components/CustomMaterialIcon';
-import FetchedDataSectionList from "../components/FetchedDataSectionList";
-import Autolink from 'react-native-autolink';
-import ThemeManager from "../utils/ThemeManager";
-import DashboardItem from "../components/DashboardItem";
+import DashboardItem from "../components/EventDashboardItem";
+import * as WebBrowser from 'expo-web-browser';
+import WebSectionList from "../components/WebSectionList";
+import {Text, withTheme} from 'react-native-paper';
+import FeedItem from "../components/FeedItem";
+import SquareDashboardItem from "../components/SquareDashboardItem";
+import PreviewEventDashboardItem from "../components/PreviewEventDashboardItem";
 // import DATA from "../dashboard_data.json";
 
 
-const ICON_AMICALE = require('../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/dashboard/dashboard_data.json";
 
@@ -23,48 +23,34 @@ const SECTIONS_ID = [
 
 const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
-const CARD_BORDER_RADIUS = 10;
-
-/**
- * Opens a link in the device's browser
- * @param link The link to open
- */
-function openWebLink(link) {
-    Linking.openURL(link).catch((err) => console.error('Error opening link', err));
+type Props = {
+    navigation: Object,
+    theme: Object,
 }
 
 /**
  * Class defining the app's home screen
  */
-export default class HomeScreen extends FetchedDataSectionList {
+class HomeScreen extends React.Component<Props> {
 
     onProxiwashClick: Function;
     onTutorInsaClick: Function;
     onMenuClick: Function;
     onProximoClick: Function;
+    getRenderItem: Function;
+    createDataset: Function;
 
-    constructor() {
-        super(DATA_URL, REFRESH_TIME);
+    colors : Object;
+
+    constructor(props) {
+        super(props);
         this.onProxiwashClick = this.onProxiwashClick.bind(this);
         this.onTutorInsaClick = this.onTutorInsaClick.bind(this);
         this.onMenuClick = this.onMenuClick.bind(this);
         this.onProximoClick = this.onProximoClick.bind(this);
-    }
-
-    onProxiwashClick() {
-        this.props.navigation.navigate('Proxiwash');
-    }
-
-    onTutorInsaClick() {
-        this.props.navigation.navigate('TutorInsaScreen');
-    }
-
-    onProximoClick() {
-        this.props.navigation.navigate('Proximo');
-    }
-
-    onMenuClick() {
-        this.props.navigation.navigate('SelfMenuScreen');
+        this.getRenderItem = this.getRenderItem.bind(this);
+        this.createDataset = this.createDataset.bind(this);
+        this.colors = props.theme.colors;
     }
 
     /**
@@ -77,12 +63,20 @@ export default class HomeScreen extends FetchedDataSectionList {
         return date.toLocaleString();
     }
 
-    getHeaderTranslation() {
-        return i18n.t("screens.home");
+    onProxiwashClick() {
+        this.props.navigation.navigate('Proxiwash');
     }
 
-    getUpdateToastTranslations() {
-        return [i18n.t("homeScreen.listUpdated"), i18n.t("homeScreen.listUpdateFail")];
+    onTutorInsaClick() {
+        WebBrowser.openBrowserAsync("https://www.etud.insa-toulouse.fr/~tutorinsa/");
+    }
+
+    onProximoClick() {
+        this.props.navigation.navigate('Proximo');
+    }
+
+    onMenuClick() {
+        this.props.navigation.navigate('SelfMenuScreen');
     }
 
     getKeyExtractor(item: Object) {
@@ -117,60 +111,37 @@ export default class HomeScreen extends FetchedDataSectionList {
 
     generateDashboardDataset(dashboardData: Object) {
         let dataset = [
+
+            {
+                id: 'middle',
+                content: []
+            },
             {
                 id: 'event',
                 content: undefined
             },
-            {
-                id: 'middle',
-                content: [{}, {}]
-            },
-            {
-                id: 'bottom',
-                content: [{}, {}]
-            },
-
         ];
         for (let [key, value] of Object.entries(dashboardData)) {
             switch (key) {
                 case 'today_events':
-                    dataset[0]['content'] = value;
+                    dataset[1]['content'] = value;
                     break;
                 case 'available_machines':
-                    dataset[1]['content'][0] = {id: key, data: value};
+                    dataset[0]['content'][0] = {id: key, data: value};
                     break;
                 case 'available_tutorials':
-                    dataset[1]['content'][1] = {id: key, data: value};
+                    dataset[0]['content'][1] = {id: key, data: value};
                     break;
                 case 'proximo_articles':
-                    dataset[2]['content'][0] = {id: key, data: value};
+                    dataset[0]['content'][2] = {id: key, data: value};
                     break;
                 case 'today_menu':
-                    dataset[2]['content'][1] = {id: key, data: value};
+                    dataset[0]['content'][3] = {id: key, data: value};
                     break;
 
             }
         }
         return dataset
-    }
-
-    getRenderSectionHeader(title: string) {
-        if (title === '') {
-            return <View/>;
-        } else {
-            return (
-                <View style={{
-                    backgroundColor: ThemeManager.getCurrentThemeVariables().containerBgColor
-                }}>
-                    <H1 style={{
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                        marginTop: 10,
-                        marginBottom: 10
-                    }}>{title}</H1>
-                </View>
-            );
-        }
     }
 
     getDashboardItem(item: Object) {
@@ -179,8 +150,6 @@ export default class HomeScreen extends FetchedDataSectionList {
             return this.getDashboardEventItem(content);
         else if (item['id'] === 'middle')
             return this.getDashboardMiddleItem(content);
-        else
-            return this.getDashboardBottomItem(content);
     }
 
     /**
@@ -314,17 +283,8 @@ export default class HomeScreen extends FetchedDataSectionList {
     }
 
 
-    clickAction(isAvailable: boolean, displayEvent: Object) {
-        if (isAvailable)
-            this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});
-        else
-            this.props.navigation.navigate('PlanningScreen');
-    };
-
-
     getDashboardEventItem(content: Array<Object>) {
         let icon = 'calendar-range';
-        let color = ThemeManager.getCurrentThemeVariables().planningColor;
         let title = i18n.t('homeScreen.dashboard.todayEventsTitle');
         let subtitle;
         let futureEvents = this.getFutureEvents(content);
@@ -345,78 +305,24 @@ export default class HomeScreen extends FetchedDataSectionList {
             subtitle = i18n.t('homeScreen.dashboard.todayEventsSubtitleNA');
 
         let displayEvent = this.getDisplayEvent(futureEvents);
+        const clickContainerAction = () => this.props.navigation.navigate('Planning');
+        const clickPreviewAction = () => this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});
 
         return (
             <DashboardItem
+                {...this.props}
                 subtitle={subtitle}
-                color={color}
                 icon={icon}
-                clickAction={this.clickAction.bind(this, isAvailable, displayEvent)}
+                clickAction={clickContainerAction}
                 title={title}
                 isAvailable={isAvailable}
-                displayEvent={displayEvent}
-            />
-        );
-    }
-
-
-    getDashboardBottomItem(content: Array<Object>) {
-        let proximoData = content[0]['data'];
-        let menuData = content[1]['data'];
-        let proximoIcon = 'shopping';
-        let proximoColor = ThemeManager.getCurrentThemeVariables().proximoColor;
-        let proximoTitle = i18n.t('homeScreen.dashboard.proximoTitle');
-        let isProximoAvailable = parseInt(proximoData) > 0;
-        let proximoSubtitle;
-        if (isProximoAvailable) {
-            proximoSubtitle =
-                <Text>
-                    <Text style={{fontWeight: "bold"}}>{proximoData}</Text>
-                    <Text>
-                        {
-                            proximoData > 1 ?
-                                i18n.t('homeScreen.dashboard.proximoSubtitlePlural') :
-                                i18n.t('homeScreen.dashboard.proximoSubtitle')
-                        }
-                    </Text>
-                </Text>;
-        } else
-            proximoSubtitle = i18n.t('homeScreen.dashboard.proximoSubtitleNA');
-
-
-        let menuIcon = 'silverware-fork-knife';
-        let menuColor = ThemeManager.getCurrentThemeVariables().menuColor;
-        let menuTitle = i18n.t('homeScreen.dashboard.menuTitle');
-        let isMenuAvailable = menuData.length > 0;
-        let menuSubtitle;
-        if (isMenuAvailable) {
-            menuSubtitle = i18n.t('homeScreen.dashboard.menuSubtitle');
-        } else
-            menuSubtitle = i18n.t('homeScreen.dashboard.menuSubtitleNA');
-        return (
-            <View style={{
-                flexDirection: 'row',
-                marginLeft: 10,
-                marginRight: 10,
-            }}>
-                <DashboardItem
-                    isSquare={true}
-                    subtitle={menuSubtitle}
-                    color={menuColor}
-                    icon={menuIcon}
-                    clickAction={this.onMenuClick}
-                    title={menuTitle}
-                    isAvailable={isMenuAvailable}
-                    isSquareLeft={true}/>
-                <DashboardItem
-                    isSquare={true}
-                    subtitle={proximoSubtitle}
-                    color={proximoColor}
-                    icon={proximoIcon}
-                    clickAction={this.onProximoClick}
-                    title={proximoTitle}
-                    isAvailable={isProximoAvailable}/>
-            </View>
+            >
+                <PreviewEventDashboardItem
+                    {...this.props}
+                    event={displayEvent}
+                    clickAction={clickPreviewAction}
+                />
+            </DashboardItem>
         );
     }
 
@@ -424,163 +330,91 @@ export default class HomeScreen extends FetchedDataSectionList {
     getDashboardMiddleItem(content: Array<Object>) {
         let proxiwashData = content[0]['data'];
         let tutorinsaData = content[1]['data'];
-
-        let proxiwashIcon = 'washing-machine';
-        let proxiwashColor = ThemeManager.getCurrentThemeVariables().proxiwashColor;
-        let proxiwashTitle = i18n.t('homeScreen.dashboard.proxiwashTitle');
-        let proxiwashIsAvailable = parseInt(proxiwashData['dryers']) > 0 || parseInt(proxiwashData['washers']) > 0;
-        let proxiwashSubtitle;
-        let dryerColor = parseInt(proxiwashData['dryers']) > 0 ?
-            ThemeManager.getCurrentThemeVariables().textColor :
-            ThemeManager.getCurrentThemeVariables().listNoteColor;
-        let washerColor = parseInt(proxiwashData['washers']) > 0 ?
-            ThemeManager.getCurrentThemeVariables().textColor :
-            ThemeManager.getCurrentThemeVariables().listNoteColor;
-        let availableDryers = proxiwashData['dryers'];
-        let availableWashers = proxiwashData['washers'];
-        if (proxiwashIsAvailable) {
-            proxiwashSubtitle =
-                <Text>
-                    <Text style={{
-                        fontWeight: parseInt(proxiwashData['dryers']) > 0 ?
-                            'bold' :
-                            'normal',
-                        color: dryerColor
-                    }}>
-                        {availableDryers}
-                    </Text>
-                    <Text>
-                        {
-                            availableDryers > 1 ?
-                                i18n.t('homeScreen.dashboard.proxiwashSubtitle1Plural') :
-                                i18n.t('homeScreen.dashboard.proxiwashSubtitle1')
-                        }
-                    </Text>
-                    {"\n"}
-                    <Text style={{
-                        fontWeight: parseInt(proxiwashData['washers']) > 0 ?
-                            'bold' :
-                            'normal',
-                        color: washerColor
-                    }}>
-                        {availableWashers}
-                    </Text>
-                    <Text>
-                        {
-                            availableWashers > 1 ?
-                                i18n.t('homeScreen.dashboard.proxiwashSubtitle2Plural') :
-                                i18n.t('homeScreen.dashboard.proxiwashSubtitle2')
-                        }
-                    </Text>
-                </Text>;
-        } else
-            proxiwashSubtitle = i18n.t('homeScreen.dashboard.proxiwashSubtitleNA');
-
-        let tutorinsaIcon = 'school';
-        let tutorinsaColor = ThemeManager.getCurrentThemeVariables().tutorinsaColor;
-        let tutorinsaTitle = 'Tutor\'INSA';
-        let tutorinsaIsAvailable = tutorinsaData > 0;
-        let tutorinsaSubtitle;
-        if (tutorinsaIsAvailable) {
-            tutorinsaSubtitle =
-                <Text>
-                    <Text style={{fontWeight: "bold"}}>{tutorinsaData}</Text>
-                    <Text>
-                        {
-                            tutorinsaData > 1 ?
-                                i18n.t('homeScreen.dashboard.tutorinsaSubtitlePlural') :
-                                i18n.t('homeScreen.dashboard.tutorinsaSubtitle')
-                        }
-                    </Text>
-                </Text>;
-        } else
-            tutorinsaSubtitle = i18n.t('homeScreen.dashboard.tutorinsaSubtitleNA');
-
+        let proximoData = content[2]['data'];
+        let menuData = content[3]['data'];
         return (
             <View style={{
+                flex: 1,
                 flexDirection: 'row',
-                marginLeft: 10,
-                marginRight: 10,
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                margin: 10,
             }}>
-                <DashboardItem
-                    isSquare={true}
-                    subtitle={proxiwashSubtitle}
-                    color={proxiwashColor}
-                    icon={proxiwashIcon}
+                <SquareDashboardItem
+                    color={this.colors.proxiwashColor}
+                    icon={'washing-machine'}
                     clickAction={this.onProxiwashClick}
-                    title={proxiwashTitle}
-                    isAvailable={proxiwashIsAvailable}
-                    isSquareLeft={true}/>
-                <DashboardItem
-                    isSquare={true}
-                    subtitle={tutorinsaSubtitle}
-                    color={tutorinsaColor}
-                    icon={tutorinsaIcon}
+                    isAvailable={parseInt(proxiwashData['washers']) > 0}
+                    badgeNumber={proxiwashData['washers']}
+                />
+                <SquareDashboardItem
+                    color={this.colors.proxiwashColor}
+                    icon={'tumble-dryer'}
+                    clickAction={this.onProxiwashClick}
+                    isAvailable={parseInt(proxiwashData['dryers']) > 0}
+                    badgeNumber={proxiwashData['dryers']}
+                />
+                <SquareDashboardItem
+                    color={this.colors.tutorinsaColor}
+                    icon={'school'}
                     clickAction={this.onTutorInsaClick}
-                    title={tutorinsaTitle}
-                    isAvailable={tutorinsaIsAvailable}/>
+                    isAvailable={tutorinsaData > 0}
+                    badgeNumber={tutorinsaData}
+                />
+                <SquareDashboardItem
+                    color={this.colors.proximoColor}
+                    icon={'shopping'}
+                    clickAction={this.onProximoClick}
+                    isAvailable={parseInt(proximoData) > 0}
+                    badgeNumber={parseInt(proximoData)}
+                />
+                <SquareDashboardItem
+                    color={this.colors.menuColor}
+                    icon={'silverware-fork-knife'}
+                    clickAction={this.onMenuClick}
+                    isAvailable={menuData.length > 0}
+                    badgeNumber={0}
+                />
             </View>
         );
     }
 
+    openLink(link: string) {
+        WebBrowser.openBrowserAsync(link);
+    }
 
-    getRenderItem(item: Object, section: Object) {
+    getFeedItem(item: Object) {
+        const onImagePress = this.openLink.bind(this, item.full_picture);
+        const onOutLinkPress = this.openLink.bind(this, item.permalink_url);
         return (
-            section['id'] === SECTIONS_ID[0] ? this.getDashboardItem(item) :
-                <Card style={{
-                    flex: 0,
-                    marginLeft: 10,
-                    marginRight: 10,
-                    borderRadius: CARD_BORDER_RADIUS,
-                }}>
-                    <CardItem style={{
-                        backgroundColor: 'transparent'
-                    }}>
-                        <Left>
-                            <Thumbnail source={ICON_AMICALE} square/>
-                            <Body>
-                                <Text>{NAME_AMICALE}</Text>
-                                <Text note>{HomeScreen.getFormattedDate(item.created_time)}</Text>
-                            </Body>
-                        </Left>
-                    </CardItem>
-                    <CardItem style={{
-                        backgroundColor: 'transparent'
-                    }}>
-                        <Body>
-                            {item.full_picture !== '' && item.full_picture !== undefined ?
-                                <TouchableOpacity onPress={openWebLink.bind(null, item.full_picture)}
-                                                  style={{width: '100%', height: 250, marginBottom: 5}}>
-                                    <Image source={{uri: item.full_picture}}
-                                           style={{flex: 1, resizeMode: "contain"}}
-                                           resizeMode="contain"
-                                    />
-                                </TouchableOpacity>
-                                : <View/>}
-                            {item.message !== undefined ?
-                                <Autolink
-                                    text={item.message}
-                                    hashtag="facebook"
-                                    style={{color: ThemeManager.getCurrentThemeVariables().textColor}}
-                                /> : <View/>
-                            }
-                        </Body>
-                    </CardItem>
-                    <CardItem style={{
-                        backgroundColor: 'transparent'
-                    }}>
-                        <Left>
-                            <Button transparent
-                                    onPress={openWebLink.bind(null, item.permalink_url)}>
-                                <CustomMaterialIcon
-                                    icon="facebook"
-                                    color="#57aeff"
-                                    width={20}/>
-                                <Text>En savoir plus</Text>
-                            </Button>
-                        </Left>
-                    </CardItem>
-                </Card>
+            <FeedItem
+                title={NAME_AMICALE}
+                subtitle={HomeScreen.getFormattedDate(item.created_time)}
+                full_picture={item.full_picture}
+                message={item.message}
+                onImagePress={onImagePress}
+                onOutLinkPress={onOutLinkPress}
+            />
+        );
+    }
+
+    getRenderItem({item, section}: Object) {
+        return (section['id'] === SECTIONS_ID[0] ?
+            this.getDashboardItem(item) : this.getFeedItem(item));
+    }
+
+    render() {
+        const nav = this.props.navigation;
+        return (
+            <WebSectionList
+                createDataset={this.createDataset}
+                navigation={nav}
+                autoRefreshTime={REFRESH_TIME}
+                refreshOnFocus={true}
+                fetchUrl={DATA_URL}
+                renderItem={this.getRenderItem}/>
         );
     }
 }
+
+export default withTheme(HomeScreen);
