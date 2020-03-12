@@ -94,10 +94,14 @@ export default class NotificationsManager {
     static async initExpoToken() {
         let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
         if (token === '') {
-            await NotificationsManager.askPermissions();
-            let expoToken = await Notifications.getExpoPushTokenAsync();
-            // Save token for instant use later on
-            AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.expoToken.key, expoToken);
+            try {
+                await NotificationsManager.askPermissions();
+                let expoToken = await Notifications.getExpoPushTokenAsync();
+                // Save token for instant use later on
+                AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.expoToken.key, expoToken);
+            } catch(e) {
+                console.log(e);
+            }
         }
     }
 
