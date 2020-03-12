@@ -63,8 +63,8 @@ class ProximoListScreen extends React.Component<Props, State> {
         this.originalData = this.props.route.params['data']['data'];
         this.shouldFocusSearchBar = this.props.route.params['shouldFocusSearchBar'];
         this.state = {
-            currentlyDisplayedData: this.originalData.sort(sortPrice),
-            currentSortMode: 1,
+            currentlyDisplayedData: this.originalData.sort(sortName),
+            currentSortMode: 3,
             modalCurrentDisplayItem: null,
         };
 

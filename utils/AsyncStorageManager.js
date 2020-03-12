@@ -31,7 +31,7 @@ export default class AsyncStorageManager {
         },
         updateNumber: {
             key: 'updateNumber',
-            default: '1',
+            default: '0',
             current: '',
         },
         proxiwashNotifications: {
