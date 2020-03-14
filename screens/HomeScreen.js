@@ -40,7 +40,7 @@ class HomeScreen extends React.Component<Props> {
     getRenderItem: Function;
     createDataset: Function;
 
-    colors : Object;
+    colors: Object;
 
     constructor(props) {
         super(props);
