@@ -21,11 +21,14 @@ export default class GameLogic {
     onTick: Function;
     endCallback: Function;
 
-    constructor(height: number, width: number) {
+    colors: Object;
+
+    constructor(height: number, width: number, colors: Object) {
         this.height = height;
         this.width = width;
         this.gameRunning = false;
         this.gameTick = 1000;
+        this.colors = colors;
     }
 
     getHeight(): number {
@@ -46,7 +49,7 @@ export default class GameLogic {
             grid.push([]);
             for (let col = 0; col < this.getWidth(); col++) {
                 grid[row].push({
-                    color: '#fff',
+                    color: this.colors.tetrisBackground,
                     isEmpty: true,
                 });
             }
@@ -145,7 +148,7 @@ export default class GameLogic {
 
     createTetromino() {
         let shape = Math.floor(Math.random() * 7);
-        this.currentObject = new Tetromino(shape);
+        this.currentObject = new Tetromino(shape, this.colors);
         if (!this.isTetrominoPositionValid())
             this.endGame();
     }

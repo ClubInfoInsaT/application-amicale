@@ -45,27 +45,29 @@ export default class Tetromino {
         ],
     };
 
-    static colors = {
-        0: '#00f8ff',
-        1: '#ffe200',
-        2: '#b817ff',
-        3: '#0cff34',
-        4: '#ff000b',
-        5: '#1000ff',
-        6: '#ff9400',
-    };
-
+    static colors: Object;
 
     currentType: Object;
     currentShape: Object;
     currentRotation: number;
     position: Object;
+    colors: Object;
 
-    constructor(type: Tetromino.types) {
+    constructor(type: Tetromino.types, colors: Object) {
         this.currentType = type;
         this.currentShape = Tetromino.shapes[type];
         this.currentRotation = 0;
         this.position = {x: 0, y: 0};
+        this.colors = colors;
+        Tetromino.colors = {
+            0: colors.tetrisI,
+            1: colors.tetrisO,
+            2: colors.tetrisT,
+            3: colors.tetrisS,
+            4: colors.tetrisZ,
+            5: colors.tetrisJ,
+            6: colors.tetrisL,
+        };
     }
 
     getColor() {

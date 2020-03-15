@@ -25,7 +25,7 @@ class Cell extends React.PureComponent<Props> {
                 style={{
                     flex: 1,
                     backgroundColor: this.props.color,
-                    borderColor: this.props.isEmpty ? this.props.color : "#393939",
+                    borderColor: this.props.isEmpty ? this.props.color : this.colors.tetrisBorder,
                     borderStyle: 'solid',
                     borderWidth: 1,
                     aspectRatio: 1,

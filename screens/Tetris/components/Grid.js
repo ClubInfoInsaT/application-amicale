@@ -31,7 +31,7 @@ class Grid extends React.Component<Props>{
         return(
             <View style={{
                 flexDirection: 'row',
-                backgroundColor: '#fff'
+                backgroundColor: this.colors.tetrisBackground
             }}>
                 {cells}
             </View>

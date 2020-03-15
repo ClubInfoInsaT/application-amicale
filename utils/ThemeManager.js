@@ -54,6 +54,17 @@ export default class ThemeManager {
                 proxiwashColor: '#1fa5ee',
                 menuColor: '#e91314',
                 tutorinsaColor: '#f93943',
+
+                // Tetris
+                tetrisBackground:'#d1d1d1',
+                tetrisBorder:'#afafaf',
+                tetrisI : '#42f1ff',
+                tetrisO : '#ffdd00',
+                tetrisT : '#ba19ff',
+                tetrisS : '#0bff34',
+                tetrisZ : '#ff0009',
+                tetrisJ : '#134cff',
+                tetrisL : '#ff8834',
             },
         };
     }
@@ -94,6 +105,17 @@ export default class ThemeManager {
                 proxiwashColor: '#1fa5ee',
                 menuColor: '#b81213',
                 tutorinsaColor: '#f93943',
+
+                // Tetris
+                tetrisBackground:'#2c2c2c',
+                tetrisBorder:'#1b1b1b',
+                tetrisI : '#30b3be',
+                tetrisO : '#c1a700',
+                tetrisT : '#9114c7',
+                tetrisS : '#08a121',
+                tetrisZ : '#b50008',
+                tetrisJ : '#0f37b9',
+                tetrisL : '#b96226',
             },
         };
     }

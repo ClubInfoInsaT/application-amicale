@@ -28,7 +28,7 @@ class TetrisScreen extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
-        this.logic = new GameLogic(20, 10);
+        this.logic = new GameLogic(20, 10, this.colors);
         this.state = {
             grid: this.logic.getEmptyGrid(),
             gameTime: 0,
