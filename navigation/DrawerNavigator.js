@@ -9,6 +9,7 @@ import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 import SelfMenuScreen from '../screens/SelfMenuScreen';
 import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
 import BibScreen from "../screens/Websites/BibScreen";
+import TetrisScreen from "../screens/Tetris/TetrisScreen";
 import DebugScreen from '../screens/About/DebugScreen';
 import Sidebar from "../components/Sidebar";
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
@@ -161,6 +162,30 @@ function BibStackComponent() {
     );
 }
 
+const TetrisStack = createStackNavigator();
+
+function TetrisStackComponent() {
+    return (
+        <TetrisStack.Navigator
+            initialRouteName="TetrisScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <TetrisStack.Screen
+                name="TetrisScreen"
+                component={TetrisScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'Tetris',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </TetrisStack.Navigator>
+    );
+}
+
 const Drawer = createDrawerNavigator();
 
 function getDrawerContent(props) {
@@ -201,6 +226,10 @@ export default function DrawerNavigator() {
             <Drawer.Screen
                 name="BibScreen"
                 component={BibStackComponent}
+            />
+            <Drawer.Screen
+                name="TetrisScreen"
+                component={TetrisStackComponent}
             />
         </Drawer.Navigator>
     );

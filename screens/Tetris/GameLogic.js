@@ -1,0 +1,158 @@
+// @flow
+
+import Tetromino from "./Tetromino";
+
+export default class GameLogic {
+
+    currentGrid: Array<Array<Object>>;
+
+    height: number;
+    width: number;
+
+    gameRunning: boolean;
+    gameTime: number;
+    score: number;
+
+    currentObject: Tetromino;
+
+    gameTick: number;
+    gameTickInterval: IntervalID;
+
+    onTick: Function;
+
+    constructor(height: number, width: number) {
+        this.height = height;
+        this.width = width;
+        this.gameRunning = false;
+        this.gameTick = 250;
+    }
+
+    getHeight(): number {
+        return this.height;
+    }
+
+    getWidth(): number {
+        return this.width;
+    }
+
+    isGameRunning(): boolean {
+        return this.gameRunning;
+    }
+
+    getEmptyGrid() {
+        let grid = [];
+        for (let row = 0; row < this.getHeight(); row++) {
+            grid.push([]);
+            for (let col = 0; col < this.getWidth(); col++) {
+                grid[row].push({
+                    color: '#fff',
+                    isEmpty: true,
+                });
+            }
+        }
+        return grid;
+    }
+
+    getGridCopy() {
+        return JSON.parse(JSON.stringify(this.currentGrid));
+    }
+
+    getFinalGrid() {
+        let coord = this.currentObject.getCellsCoordinates();
+        let finalGrid = this.getGridCopy();
+        for (let i = 0; i < coord.length; i++) {
+            finalGrid[coord[i].y][coord[i].x] = {
+                color: this.currentObject.getColor(),
+                isEmpty: false,
+            };
+        }
+        return finalGrid;
+    }
+
+    freezeTetromino() {
+        let coord = this.currentObject.getCellsCoordinates();
+        for (let i = 0; i < coord.length; i++) {
+            this.currentGrid[coord[i].y][coord[i].x] = {
+                color: this.currentObject.getColor(),
+                isEmpty: false,
+            };
+        }
+    }
+
+    isTetrominoPositionValid() {
+        let isValid = true;
+        let coord = this.currentObject.getCellsCoordinates();
+        for (let i = 0; i < coord.length; i++) {
+            if (coord[i].x >= this.getWidth()
+                || coord[i].x < 0
+                || coord[i].y >= this.getHeight()
+                || coord[i].y < 0
+                || !this.currentGrid[coord[i].y][coord[i].x].isEmpty) {
+                isValid = false;
+                break;
+            }
+        }
+        return isValid;
+    }
+
+    tryMoveTetromino(x: number, y: number) {
+        if (x > 1) x = 1; // Prevent moving from more than one tile
+        if (x < -1) x = -1;
+        if (y > 1) y = 1;
+        if (y < -1) y = -1;
+        if (x !== 0 && y !== 0) y = 0; // Prevent diagonal movement
+
+        this.currentObject.move(x, y);
+        let isValid = this.isTetrominoPositionValid();
+
+        if (!isValid && x !== 0)
+            this.currentObject.move(-x, 0);
+        else if (!isValid && y !== 0) {
+            this.currentObject.move(0, -y);
+            this.freezeTetromino();
+            this.createTetromino();
+        }
+    }
+
+    onTick(callback: Function) {
+        this.gameTime++;
+        this.score++;
+        this.tryMoveTetromino(0, 1);
+        callback(this.gameTime, this.score, this.getFinalGrid());
+    }
+
+    rightPressed(callback: Function) {
+        this.tryMoveTetromino(1, 0);
+        callback(this.getFinalGrid());
+    }
+
+    leftPressed(callback: Function) {
+        this.tryMoveTetromino(-1, 0);
+        callback(this.getFinalGrid());
+    }
+
+    createTetromino() {
+        let shape = Math.floor(Math.random() * 7);
+        this.currentObject = new Tetromino(shape);
+        if (!this.isTetrominoPositionValid())
+            this.endGame();
+    }
+
+    endGame() {
+        console.log('Game Over!');
+        clearInterval(this.gameTickInterval);
+    }
+
+    startGame(callback: Function) {
+        if (this.gameRunning)
+            return;
+        this.gameRunning = true;
+        this.gameTime = 0;
+        this.score = 0;
+        this.currentGrid = this.getEmptyGrid();
+        this.createTetromino();
+        this.onTick = this.onTick.bind(this, callback);
+        this.gameTickInterval = setInterval(this.onTick, this.gameTick);
+    }
+
+}

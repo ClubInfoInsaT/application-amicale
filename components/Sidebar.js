@@ -6,6 +6,7 @@ import i18n from "i18n-js";
 import * as WebBrowser from 'expo-web-browser';
 import SidebarDivider from "./SidebarDivider";
 import SidebarItem from "./SidebarItem";
+import {TouchableRipple} from "react-native-paper";
 
 const deviceWidth = Dimensions.get("window").width;
 
@@ -154,9 +155,17 @@ export default class SideBar extends React.PureComponent<Props, State> {
     }
 
     render() {
+        const onPress = this.onListItemPress.bind(this, {route: 'TetrisScreen'});
         return (
             <View style={{height: '100%'}}>
-                <Image source={require("../assets/drawer-cover.png")} style={styles.drawerCover}/>
+                <TouchableRipple
+                    onPress={onPress}
+                >
+                    <Image
+                        source={require("../assets/drawer-cover.png")}
+                        style={styles.drawerCover}
+                    />
+                </TouchableRipple>
                 <FlatList
                     data={this.dataSet}
                     extraData={this.state}
