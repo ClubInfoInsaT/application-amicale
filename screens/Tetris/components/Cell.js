@@ -4,18 +4,37 @@ import * as React from 'react';
 import {View} from 'react-native';
 import {withTheme} from 'react-native-paper';
 
-function Cell(props) {
-    const colors = props.theme.colors;
-    return (
-        <View style={{
-            flex: 1,
-            backgroundColor: props.color,
-            borderColor: props.isEmpty ? props.color : "#393939",
-            borderStyle: 'solid',
-            borderWidth: 1,
-            aspectRatio: 1,
-        }}/>
-    );
+type Props = {
+    color: string,
+    isEmpty: boolean,
+    id: string,
+}
+
+class Cell extends React.PureComponent<Props> {
+
+    colors: Object;
+
+    constructor(props) {
+        super(props);
+        this.colors = props.theme.colors;
+    }
+
+    render() {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    backgroundColor: this.props.color,
+                    borderColor: this.props.isEmpty ? this.props.color : "#393939",
+                    borderStyle: 'solid',
+                    borderWidth: 1,
+                    aspectRatio: 1,
+                }}
+            />
+        );
+    }
+
+
 }
 
 export default withTheme(Cell);

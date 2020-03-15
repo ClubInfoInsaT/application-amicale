@@ -25,7 +25,7 @@ export default class GameLogic {
         this.height = height;
         this.width = width;
         this.gameRunning = false;
-        this.gameTick = 250;
+        this.gameTick = 1000;
     }
 
     getHeight(): number {

@@ -25,7 +25,8 @@ class Grid extends React.Component<Props>{
         let cells = [];
         for (let i = 0; i < this.props.width; i++) {
             let cell = this.props.grid[rowNumber][i];
-            cells.push(<Cell color={cell.color} isEmpty={cell.isEmpty}/>);
+            let key = rowNumber + ':' + i;
+            cells.push(<Cell color={cell.color} isEmpty={cell.isEmpty} id={key}/>);
         }
         return(
             <View style={{
