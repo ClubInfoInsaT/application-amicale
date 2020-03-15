@@ -22,6 +22,11 @@ export default class Tetromino {
             [0, 1, 0],
             [1, 1, 1],
         ],
+        20: [
+            [1, 0],
+            [1, 1],
+            [1, 0],
+        ],
         3: [
             [0, 1, 1],
             [1, 1, 0],
@@ -48,14 +53,18 @@ export default class Tetromino {
         4: '#ff000b',
         5: '#1000ff',
         6: '#ff9400',
-    }
+    };
 
 
-    currentType: Tetromino.types;
+    currentType: Object;
+    currentShape: Object;
+    currentRotation: number;
     position: Object;
 
     constructor(type: Tetromino.types) {
         this.currentType = type;
+        this.currentShape = Tetromino.shapes[type];
+        this.currentRotation = 0;
         this.position = {x: 0, y: 0};
     }
 
@@ -65,13 +74,35 @@ export default class Tetromino {
 
     getCellsCoordinates() {
         let coordinates = [];
-        for (let row = 0; row < Tetromino.shapes[this.currentType].length; row++) {
-            for (let col = 0; col < Tetromino.shapes[this.currentType][row].length; col++) {
-                if (Tetromino.shapes[this.currentType][row][col] === 1)
+        for (let row = 0; row < this.currentShape.length; row++) {
+            for (let col = 0; col < this.currentShape[row].length; col++) {
+                if (this.currentShape[row][col] === 1)
                     coordinates.push({x: this.position.x + col, y: this.position.y + row});
             }
         }
         return coordinates;
+    }
+
+    rotate(isForward) {
+        this.currentRotation++;
+        if (this.currentRotation > 3)
+            this.currentRotation = 0;
+
+        if (this.currentRotation === 0) {
+            this.currentShape = Tetromino.shapes[this.currentType];
+        } else {
+            let result = [];
+            for(let i = 0; i < this.currentShape[0].length; i++) {
+                let row = this.currentShape.map(e => e[i]);
+
+                if (isForward)
+                    result.push(row.reverse());
+                else
+                    result.push(row);
+            }
+            this.currentShape = result;
+        }
+
     }
 
     move(x: number, y: number) {

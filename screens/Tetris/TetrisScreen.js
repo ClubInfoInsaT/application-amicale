@@ -22,6 +22,7 @@ class TetrisScreen extends React.Component<Props, State> {
 
     logic: GameLogic;
     onTick: Function;
+    onGameEnd: Function;
     updateGrid: Function;
 
     constructor(props) {
@@ -34,6 +35,7 @@ class TetrisScreen extends React.Component<Props, State> {
             gameScore: 0,
         };
         this.onTick = this.onTick.bind(this);
+        this.onGameEnd = this.onGameEnd.bind(this);
         this.updateGrid = this.updateGrid.bind(this);
         const onScreenBlur = this.onScreenBlur.bind(this);
         this.props.navigation.addListener('blur', onScreenBlur);
@@ -63,8 +65,15 @@ class TetrisScreen extends React.Component<Props, State> {
 
     startGame() {
         if (!this.logic.isGameRunning()) {
-            this.logic.startGame(this.onTick);
+            this.logic.startGame(this.onTick, this.onGameEnd);
         }
+    }
+
+    onGameEnd(time: number, score: number) {
+        this.setState({
+            gameTime: time,
+            gameScore: score,
+        })
     }
 
     render() {
@@ -104,8 +113,13 @@ class TetrisScreen extends React.Component<Props, State> {
                     <IconButton
                         icon="format-rotate-90"
                         size={40}
-                        onPress={() => this.startGame()}
+                        onPress={() => this.logic.rotatePressed(this.updateGrid)}
                     />
+                    <IconButton
+                    icon="power"
+                    size={40}
+                    onPress={() => this.startGame()}
+                />
                 </View>
             </View>
         );

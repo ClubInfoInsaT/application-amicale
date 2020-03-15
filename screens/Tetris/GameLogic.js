@@ -19,6 +19,7 @@ export default class GameLogic {
     gameTickInterval: IntervalID;
 
     onTick: Function;
+    endCallback: Function;
 
     constructor(height: number, width: number) {
         this.height = height;
@@ -114,6 +115,12 @@ export default class GameLogic {
         }
     }
 
+    tryRotateTetromino() {
+        this.currentObject.rotate(true);
+        if (!this.isTetrominoPositionValid())
+            this.currentObject.rotate(false);
+    }
+
     onTick(callback: Function) {
         this.gameTime++;
         this.score++;
@@ -131,6 +138,11 @@ export default class GameLogic {
         callback(this.getFinalGrid());
     }
 
+    rotatePressed(callback: Function) {
+        this.tryRotateTetromino();
+        callback(this.getFinalGrid());
+    }
+
     createTetromino() {
         let shape = Math.floor(Math.random() * 7);
         this.currentObject = new Tetromino(shape);
@@ -140,10 +152,12 @@ export default class GameLogic {
 
     endGame() {
         console.log('Game Over!');
+        this.gameRunning = false;
         clearInterval(this.gameTickInterval);
+        this.endCallback(this.gameTime, this.score);
     }
 
-    startGame(callback: Function) {
+    startGame(tickCallback: Function, endCallback: Function) {
         if (this.gameRunning)
             return;
         this.gameRunning = true;
@@ -151,8 +165,10 @@ export default class GameLogic {
         this.score = 0;
         this.currentGrid = this.getEmptyGrid();
         this.createTetromino();
-        this.onTick = this.onTick.bind(this, callback);
+        tickCallback(this.gameTime, this.score, this.getFinalGrid());
+        this.onTick = this.onTick.bind(this, tickCallback);
         this.gameTickInterval = setInterval(this.onTick, this.gameTick);
+        this.endCallback = endCallback;
     }
 
 }
