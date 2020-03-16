@@ -100,6 +100,7 @@ export default class GameLogic {
         for (let i = 0; i < lines.length; i++) {
             this.currentGrid.splice(lines[i], 1);
             this.currentGrid.unshift(this.getEmptyLine());
+            this.score += 100;
         }
     }
 
@@ -151,7 +152,9 @@ export default class GameLogic {
             this.currentObject.move(0, -y);
             this.freezeTetromino();
             this.createTetromino();
-        }
+        } else
+            return true;
+        return false;
     }
 
     tryRotateTetromino() {
@@ -162,7 +165,6 @@ export default class GameLogic {
 
     onTick(callback: Function) {
         this.gameTime++;
-        this.score++;
         this.tryMoveTetromino(0, 1);
         callback(this.gameTime, this.score, this.getFinalGrid());
     }
@@ -175,24 +177,34 @@ export default class GameLogic {
         if (!this.canUseInput())
             return;
 
-        this.tryMoveTetromino(1, 0);
-        callback(this.getFinalGrid());
+        if (this.tryMoveTetromino(1, 0))
+            callback(this.getFinalGrid());
     }
 
     leftPressed(callback: Function) {
         if (!this.canUseInput())
             return;
 
-        this.tryMoveTetromino(-1, 0);
-        callback(this.getFinalGrid());
+        if (this.tryMoveTetromino(-1, 0))
+            callback(this.getFinalGrid());
+    }
+
+    downPressed(callback: Function) {
+        if (!this.canUseInput())
+            return;
+
+        if (this.tryMoveTetromino(0, 1)){
+            this.score++;
+            callback(this.getFinalGrid(), this.score);
+        }
     }
 
     rotatePressed(callback: Function) {
         if (!this.canUseInput())
             return;
 
-        this.tryRotateTetromino();
-        callback(this.getFinalGrid());
+        if (this.tryRotateTetromino())
+            callback(this.getFinalGrid());
     }
 
     createTetromino() {
