@@ -85,6 +85,22 @@ class TetrisScreen extends React.Component<Props, State> {
             this.showPausePopup();
     }
 
+    getFormattedTime(seconds: number) {
+        let date = new Date();
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(seconds);
+        let format;
+        console.log(date);
+        if (date.getHours())
+            format  = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        else if (date.getMinutes())
+            format = date.getMinutes() + ':' + date.getSeconds();
+        else
+            format = date.getSeconds();
+        return format;
+    }
+
     onTick(score: number, level: number, newGrid: Array<Array<Object>>) {
         this.setState({
             gameScore: score,
@@ -145,7 +161,7 @@ class TetrisScreen extends React.Component<Props, State> {
     showGameOverConfirm() {
         let message = 'SCORE: ' + this.state.gameScore + '\n';
         message += 'LEVEL: ' + this.state.gameLevel + '\n';
-        message += 'TIME: ' + this.state.gameTime + '\n';
+        message += 'TIME: ' + this.getFormattedTime(this.state.gameTime) + '\n';
         Alert.alert(
             'GAME OVER',
             message,
@@ -193,7 +209,7 @@ class TetrisScreen extends React.Component<Props, State> {
                     <Text style={{
                         marginLeft: 5,
                         color: this.colors.subtitle
-                    }}>{this.state.gameTime}</Text>
+                    }}>{this.getFormattedTime(this.state.gameTime)}</Text>
                 </View>
                 <View style={{
                     flexDirection: 'row',
