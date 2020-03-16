@@ -43,16 +43,21 @@ export default class GameLogic {
         return this.gameRunning;
     }
 
+    getEmptyLine() {
+        let line = [];
+        for (let col = 0; col < this.getWidth(); col++) {
+            line.push({
+                color: this.colors.tetrisBackground,
+                isEmpty: true,
+            });
+        }
+        return line;
+    }
+
     getEmptyGrid() {
         let grid = [];
         for (let row = 0; row < this.getHeight(); row++) {
-            grid.push([]);
-            for (let col = 0; col < this.getWidth(); col++) {
-                grid[row].push({
-                    color: this.colors.tetrisBackground,
-                    isEmpty: true,
-                });
-            }
+            grid.push(this.getEmptyLine());
         }
         return grid;
     }
@@ -81,6 +86,31 @@ export default class GameLogic {
                 isEmpty: false,
             };
         }
+        this.clearLines(this.getLinesToClear(coord));
+    }
+
+    clearLines(lines: Array<number>) {
+        lines.sort();
+        for (let i = 0; i < lines.length; i++) {
+            this.currentGrid.splice(lines[i], 1);
+            this.currentGrid.unshift(this.getEmptyLine());
+        }
+    }
+
+    getLinesToClear(coord: Object) {
+        let rows = [];
+        for (let i = 0; i < coord.length; i++) {
+            let isLineFull = true;
+            for (let col = 0; col < this.getWidth(); col++) {
+                if (this.currentGrid[coord[i].y][col].isEmpty) {
+                    isLineFull = false;
+                    break;
+                }
+            }
+            if (isLineFull && rows.indexOf(coord[i].y) === -1)
+                rows.push(coord[i].y);
+        }
+        return rows;
     }
 
     isTetrominoPositionValid() {
