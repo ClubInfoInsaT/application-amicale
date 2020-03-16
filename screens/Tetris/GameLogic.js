@@ -47,6 +47,12 @@ export default class GameLogic {
     gameTickInterval: IntervalID;
     gameTimeInterval: IntervalID;
 
+    pressInInterval: TimeoutID;
+    isPressedIn: boolean;
+    autoRepeatActivationDelay: number;
+    autoRepeatDelay: number;
+
+
     onTick: Function;
     onClock: Function;
     endCallback: Function;
@@ -59,6 +65,8 @@ export default class GameLogic {
         this.gameRunning = false;
         this.gamePaused = false;
         this.colors = colors;
+        this.autoRepeatActivationDelay = 300;
+        this.autoRepeatDelay = 100;
     }
 
     getHeight(): number {
@@ -187,7 +195,7 @@ export default class GameLogic {
 
     tryRotateTetromino() {
         this.currentObject.rotate(true);
-        if (!this.isTetrominoPositionValid()){
+        if (!this.isTetrominoPositionValid()) {
             this.currentObject.rotate(false);
             return false;
         }
@@ -221,29 +229,37 @@ export default class GameLogic {
     }
 
     rightPressed(callback: Function) {
-        if (!this.canUseInput())
-            return;
-
-        if (this.tryMoveTetromino(1, 0))
-            callback(this.getFinalGrid());
+        this.isPressedIn = true;
+        this.movePressedRepeat(true, callback, 1, 0);
     }
 
-    leftPressed(callback: Function) {
-        if (!this.canUseInput())
-            return;
-
-        if (this.tryMoveTetromino(-1, 0))
-            callback(this.getFinalGrid());
+    leftPressedIn(callback: Function) {
+        this.isPressedIn = true;
+        this.movePressedRepeat(true, callback, -1, 0);
     }
 
-    downPressed(callback: Function) {
-        if (!this.canUseInput())
+    downPressedIn(callback: Function) {
+        this.isPressedIn = true;
+        this.movePressedRepeat(true, callback, 0, 1);
+    }
+
+    movePressedRepeat(isInitial: boolean, callback: Function, x: number, y: number) {
+        if (!this.canUseInput() || !this.isPressedIn)
             return;
 
-        if (this.tryMoveTetromino(0, 1)){
-            this.score++;
-            callback(this.getFinalGrid(), this.score);
+        if (this.tryMoveTetromino(x, y)) {
+            if (y === 1) {
+                this.score++;
+                callback(this.getFinalGrid(), this.score);
+            } else
+                callback(this.getFinalGrid());
         }
+        this.pressInInterval = setTimeout(() => this.movePressedRepeat(false, callback, x, y), isInitial ? this.autoRepeatActivationDelay : this.autoRepeatDelay);
+    }
+
+    pressedOut() {
+        this.isPressedIn = false;
+        clearTimeout(this.pressInInterval);
     }
 
     rotatePressed(callback: Function) {
@@ -255,6 +271,7 @@ export default class GameLogic {
     }
 
     createTetromino() {
+        this.pressedOut();
         let shape = Math.floor(Math.random() * 7);
         this.currentObject = new Tetromino(shape, this.colors);
         if (!this.isTetrominoPositionValid())

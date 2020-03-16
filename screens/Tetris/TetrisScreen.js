@@ -259,18 +259,22 @@ class TetrisScreen extends React.Component<Props, State> {
                         <IconButton
                             icon="arrow-left"
                             size={40}
-                            onPress={() => this.logic.leftPressed(this.updateGrid)}
+                            onPress={() => this.logic.pressedOut()}
+                            onPressIn={() => this.logic.leftPressedIn(this.updateGrid)}
+
                         />
                         <IconButton
                             icon="arrow-right"
                             size={40}
-                            onPress={() => this.logic.rightPressed(this.updateGrid)}
+                            onPress={() => this.logic.pressedOut()}
+                            onPressIn={() => this.logic.rightPressed(this.updateGrid)}
                         />
                     </View>
                     <IconButton
                         icon="arrow-down"
                         size={40}
-                        onPress={() => this.logic.downPressed(this.updateGridScore)}
+                        onPressIn={() => this.logic.downPressedIn(this.updateGridScore)}
+                        onPress={() => this.logic.pressedOut()}
                         style={{marginLeft: 'auto'}}
                     />
                 </View>
