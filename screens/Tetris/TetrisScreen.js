@@ -1,10 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {IconButton, Text, withTheme} from 'react-native-paper';
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import GameLogic from "./GameLogic";
 import Grid from "./components/Grid";
+import HeaderButton from "../../components/HeaderButton";
 
 type Props = {
     navigation: Object,
@@ -12,6 +14,7 @@ type Props = {
 
 type State = {
     grid: Array<Array<Object>>,
+    gameRunning: boolean,
     gameTime: number,
     gameScore: number
 }
@@ -31,22 +34,49 @@ class TetrisScreen extends React.Component<Props, State> {
         this.logic = new GameLogic(20, 10, this.colors);
         this.state = {
             grid: this.logic.getEmptyGrid(),
+            gameRunning: false,
             gameTime: 0,
             gameScore: 0,
         };
         this.onTick = this.onTick.bind(this);
         this.onGameEnd = this.onGameEnd.bind(this);
         this.updateGrid = this.updateGrid.bind(this);
-        const onScreenBlur = this.onScreenBlur.bind(this);
-        this.props.navigation.addListener('blur', onScreenBlur);
+        this.props.navigation.addListener('blur', this.onScreenBlur.bind(this));
+        this.props.navigation.addListener('focus', this.onScreenFocus.bind(this));
     }
 
+    componentDidMount() {
+        const rightButton = this.getRightButton.bind(this);
+        this.props.navigation.setOptions({
+            headerRight: rightButton,
+        });
+        this.startGame();
+    }
+
+    getRightButton() {
+        return (
+            <View
+                style={{
+                    flexDirection: 'row',
+                }}>
+                <HeaderButton icon={'pause'} onPress={() => this.togglePause()}/>
+            </View>
+        );
+    }
 
     /**
      * Remove any interval on un-focus
      */
     onScreenBlur() {
-        this.logic.endGame();
+        if (!this.logic.isGamePaused())
+            this.logic.togglePause();
+    }
+
+    onScreenFocus() {
+        if (!this.logic.isGameRunning())
+            this.startGame();
+        else if (this.logic.isGamePaused())
+            this.showPausePopup();
     }
 
     onTick(time: number, score: number, newGrid: Array<Array<Object>>) {
@@ -63,17 +93,63 @@ class TetrisScreen extends React.Component<Props, State> {
         });
     }
 
-    startGame() {
-        if (!this.logic.isGameRunning()) {
-            this.logic.startGame(this.onTick, this.onGameEnd);
-        }
+    togglePause() {
+        this.logic.togglePause();
+        if (this.logic.isGamePaused())
+            this.showPausePopup();
     }
 
-    onGameEnd(time: number, score: number) {
+    showPausePopup() {
+        Alert.alert(
+            'PAUSE',
+            'GAME PAUSED',
+            [
+                {text: 'RESTART', onPress: () => this.showRestartConfirm()},
+                {text: 'RESUME', onPress: () => this.togglePause()},
+            ],
+            {cancelable: false},
+        );
+    }
+
+    showRestartConfirm() {
+        Alert.alert(
+            'RESTART?',
+            'WHOA THERE',
+            [
+                {text: 'NO', onPress: () => this.showPausePopup()},
+                {text: 'YES', onPress: () => this.startGame()},
+            ],
+            {cancelable: false},
+        );
+    }
+
+    showGameOverConfirm() {
+        Alert.alert(
+            'GAME OVER',
+            'NOOB',
+            [
+                {text: 'LEAVE', onPress: () => this.props.navigation.goBack()},
+                {text: 'RESTART', onPress: () => this.startGame()},
+            ],
+            {cancelable: false},
+        );
+    }
+
+    startGame() {
+        this.logic.startGame(this.onTick, this.onGameEnd);
+        this.setState({
+            gameRunning: true,
+        });
+    }
+
+    onGameEnd(time: number, score: number, isRestart: boolean) {
         this.setState({
             gameTime: time,
             gameScore: score,
-        })
+            gameRunning: false,
+        });
+        if (!isRestart)
+            this.showGameOverConfirm();
     }
 
     render() {
@@ -82,28 +158,49 @@ class TetrisScreen extends React.Component<Props, State> {
                 width: '100%',
                 height: '100%',
             }}>
-                <Text style={{
-                    textAlign: 'center',
+                <View style={{
+                    flexDirection: 'row',
+                    position: 'absolute',
+                    top: 10,
+                    left: 10,
                 }}>
-                    Score: {this.state.gameScore}
-                </Text>
-                <Text style={{
-                    textAlign: 'center',
+                    <MaterialCommunityIcons
+                        name={'timer'}
+                        color={this.colors.subtitle}
+                        size={20}/>
+                    <Text style={{
+                        marginLeft: 5,
+                        color: this.colors.subtitle
+                    }}>{this.state.gameTime}</Text>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    marginRight: 'auto',
+                    marginLeft: 'auto',
                 }}>
-                    time: {this.state.gameTime}
-                </Text>
+                    <MaterialCommunityIcons
+                        name={'star'}
+                        color={this.colors.tetrisScore}
+                        size={30}/>
+                    <Text style={{
+                        marginLeft: 5,
+                        fontSize: 22,
+                    }}>{this.state.gameScore}</Text>
+                </View>
                 <Grid
                     width={this.logic.getWidth()}
                     height={this.logic.getHeight()}
                     grid={this.state.grid}
                 />
                 <View style={{
-                    flexDirection: 'row-reverse',
+                    flexDirection: 'row',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
                 }}>
                     <IconButton
-                        icon="arrow-right"
+                        icon="format-rotate-90"
                         size={40}
-                        onPress={() => this.logic.rightPressed(this.updateGrid)}
+                        onPress={() => this.logic.rotatePressed(this.updateGrid)}
                     />
                     <IconButton
                         icon="arrow-left"
@@ -111,15 +208,15 @@ class TetrisScreen extends React.Component<Props, State> {
                         onPress={() => this.logic.leftPressed(this.updateGrid)}
                     />
                     <IconButton
-                        icon="format-rotate-90"
+                        icon="arrow-right"
                         size={40}
-                        onPress={() => this.logic.rotatePressed(this.updateGrid)}
+                        onPress={() => this.logic.rightPressed(this.updateGrid)}
                     />
                     <IconButton
-                    icon="power"
-                    size={40}
-                    onPress={() => this.startGame()}
-                />
+                        icon="arrow-down"
+                        size={40}
+                        onPress={() => this.logic.rightPressed(this.updateGrid)}
+                    />
                 </View>
             </View>
         );

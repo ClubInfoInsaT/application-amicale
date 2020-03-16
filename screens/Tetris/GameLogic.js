@@ -10,6 +10,7 @@ export default class GameLogic {
     width: number;
 
     gameRunning: boolean;
+    gamePaused: boolean;
     gameTime: number;
     score: number;
 
@@ -27,6 +28,7 @@ export default class GameLogic {
         this.height = height;
         this.width = width;
         this.gameRunning = false;
+        this.gamePaused = false;
         this.gameTick = 250;
         this.colors = colors;
     }
@@ -41,6 +43,10 @@ export default class GameLogic {
 
     isGameRunning(): boolean {
         return this.gameRunning;
+    }
+
+    isGamePaused(): boolean {
+        return this.gamePaused;
     }
 
     getEmptyLine() {
@@ -161,17 +167,30 @@ export default class GameLogic {
         callback(this.gameTime, this.score, this.getFinalGrid());
     }
 
+    canUseInput() {
+        return this.gameRunning && !this.gamePaused
+    }
+
     rightPressed(callback: Function) {
+        if (!this.canUseInput())
+            return;
+
         this.tryMoveTetromino(1, 0);
         callback(this.getFinalGrid());
     }
 
     leftPressed(callback: Function) {
+        if (!this.canUseInput())
+            return;
+
         this.tryMoveTetromino(-1, 0);
         callback(this.getFinalGrid());
     }
 
     rotatePressed(callback: Function) {
+        if (!this.canUseInput())
+            return;
+
         this.tryRotateTetromino();
         callback(this.getFinalGrid());
     }
@@ -180,20 +199,32 @@ export default class GameLogic {
         let shape = Math.floor(Math.random() * 7);
         this.currentObject = new Tetromino(shape, this.colors);
         if (!this.isTetrominoPositionValid())
-            this.endGame();
+            this.endGame(false);
     }
 
-    endGame() {
-        console.log('Game Over!');
+    togglePause() {
+        if (!this.gameRunning)
+            return;
+        this.gamePaused = !this.gamePaused;
+        if (this.gamePaused) {
+            clearInterval(this.gameTickInterval);
+        } else {
+            this.gameTickInterval = setInterval(this.onTick, this.gameTick);
+        }
+    }
+
+    endGame(isRestart: boolean) {
         this.gameRunning = false;
+        this.gamePaused = false;
         clearInterval(this.gameTickInterval);
-        this.endCallback(this.gameTime, this.score);
+        this.endCallback(this.gameTime, this.score, isRestart);
     }
 
     startGame(tickCallback: Function, endCallback: Function) {
         if (this.gameRunning)
-            return;
+            this.endGame(true);
         this.gameRunning = true;
+        this.gamePaused = false;
         this.gameTime = 0;
         this.score = 0;
         this.currentGrid = this.getEmptyGrid();

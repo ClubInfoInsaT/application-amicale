@@ -58,6 +58,7 @@ export default class ThemeManager {
                 // Tetris
                 tetrisBackground:'#d1d1d1',
                 tetrisBorder:'#afafaf',
+                tetrisScore:'#fff307',
                 tetrisI : '#42f1ff',
                 tetrisO : '#ffdd00',
                 tetrisT : '#ba19ff',
@@ -109,6 +110,7 @@ export default class ThemeManager {
                 // Tetris
                 tetrisBackground:'#2c2c2c',
                 tetrisBorder:'#1b1b1b',
+                tetrisScore:'#e2d707',
                 tetrisI : '#30b3be',
                 tetrisO : '#c1a700',
                 tetrisT : '#9114c7',
