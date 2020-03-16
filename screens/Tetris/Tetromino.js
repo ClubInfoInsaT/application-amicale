@@ -22,11 +22,6 @@ export default class Tetromino {
             [0, 1, 0],
             [1, 1, 1],
         ],
-        20: [
-            [1, 0],
-            [1, 1],
-            [1, 0],
-        ],
         3: [
             [0, 1, 1],
             [1, 1, 0],
@@ -58,6 +53,10 @@ export default class Tetromino {
         this.currentShape = Tetromino.shapes[type];
         this.currentRotation = 0;
         this.position = {x: 0, y: 0};
+        if (this.currentType === Tetromino.types.O)
+            this.position.x = 4;
+        else
+            this.position.x = 3;
         this.colors = colors;
         Tetromino.colors = {
             0: colors.tetrisI,

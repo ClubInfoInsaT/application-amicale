@@ -27,7 +27,7 @@ export default class GameLogic {
         this.height = height;
         this.width = width;
         this.gameRunning = false;
-        this.gameTick = 1000;
+        this.gameTick = 250;
         this.colors = colors;
     }
 
