@@ -56,16 +56,16 @@ export default class ThemeManager {
                 tutorinsaColor: '#f93943',
 
                 // Tetris
-                tetrisBackground:'#d1d1d1',
-                tetrisBorder:'#afafaf',
-                tetrisScore:'#fff307',
-                tetrisI : '#42f1ff',
+                tetrisBackground:'#e6e6e6',
+                tetrisBorder:'#2f2f2f',
+                tetrisScore:'#e2bd33',
+                tetrisI : '#3cd9e6',
                 tetrisO : '#ffdd00',
-                tetrisT : '#ba19ff',
-                tetrisS : '#0bff34',
+                tetrisT : '#a716e5',
+                tetrisS : '#09c528',
                 tetrisZ : '#ff0009',
-                tetrisJ : '#134cff',
-                tetrisL : '#ff8834',
+                tetrisJ : '#2a67e3',
+                tetrisL : '#da742d',
             },
         };
     }

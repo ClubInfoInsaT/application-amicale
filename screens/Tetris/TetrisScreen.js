@@ -140,9 +140,11 @@ class TetrisScreen extends React.Component<Props, State> {
     }
 
     showGameOverConfirm() {
+        let message = 'SCORE: ' + this.state.gameScore + '\n';
+        message += 'TIME: ' + this.state.gameTime + '\n';
         Alert.alert(
             'GAME OVER',
-            'NOOB',
+            message,
             [
                 {text: 'LEAVE', onPress: () => this.props.navigation.goBack()},
                 {text: 'RESTART', onPress: () => this.startGame()},
