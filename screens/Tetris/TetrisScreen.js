@@ -16,7 +16,8 @@ type State = {
     grid: Array<Array<Object>>,
     gameRunning: boolean,
     gameTime: number,
-    gameScore: number
+    gameScore: number,
+    gameLevel: number,
 }
 
 class TetrisScreen extends React.Component<Props, State> {
@@ -39,6 +40,7 @@ class TetrisScreen extends React.Component<Props, State> {
             gameRunning: false,
             gameTime: 0,
             gameScore: 0,
+            gameLevel: 0,
         };
         this.onTick = this.onTick.bind(this);
         this.onClock = this.onClock.bind(this);
@@ -83,9 +85,10 @@ class TetrisScreen extends React.Component<Props, State> {
             this.showPausePopup();
     }
 
-    onTick(score: number, newGrid: Array<Array<Object>>) {
+    onTick(score: number, level: number, newGrid: Array<Array<Object>>) {
         this.setState({
             gameScore: score,
+            gameLevel: level,
             grid: newGrid,
         });
     }
@@ -141,6 +144,7 @@ class TetrisScreen extends React.Component<Props, State> {
 
     showGameOverConfirm() {
         let message = 'SCORE: ' + this.state.gameScore + '\n';
+        message += 'LEVEL: ' + this.state.gameLevel + '\n';
         message += 'TIME: ' + this.state.gameTime + '\n';
         Alert.alert(
             'GAME OVER',
@@ -190,6 +194,20 @@ class TetrisScreen extends React.Component<Props, State> {
                         marginLeft: 5,
                         color: this.colors.subtitle
                     }}>{this.state.gameTime}</Text>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    position: 'absolute',
+                    top: 50,
+                    left: 10,
+                }}>
+                    <MaterialCommunityIcons
+                        name={'gamepad'}
+                        color={this.colors.text}
+                        size={20}/>
+                    <Text style={{
+                        marginLeft: 5
+                    }}>{this.state.gameLevel}</Text>
                 </View>
                 <View style={{
                     flexDirection: 'row',

@@ -4,6 +4,32 @@ import Tetromino from "./Tetromino";
 
 export default class GameLogic {
 
+    static levelTicks = {
+        '1': 1000,
+        '2': 900,
+        '3': 800,
+        '4': 700,
+        '5': 600,
+        '6': 500,
+        '7': 400,
+        '8': 300,
+        '9': 200,
+        '10': 150,
+    };
+
+    static levelThresholds = {
+        '1': 100,
+        '2': 300,
+        '3': 500,
+        '4': 700,
+        '5': 1000,
+        '7': 1500,
+        '8': 2000,
+        '9': 3000,
+        '10': 4000,
+        '11': 5000,
+    };
+
     currentGrid: Array<Array<Object>>;
 
     height: number;
@@ -13,6 +39,7 @@ export default class GameLogic {
     gamePaused: boolean;
     gameTime: number;
     score: number;
+    level: number;
 
     currentObject: Tetromino;
 
@@ -31,7 +58,6 @@ export default class GameLogic {
         this.width = width;
         this.gameRunning = false;
         this.gamePaused = false;
-        this.gameTick = 250;
         this.colors = colors;
     }
 
@@ -165,9 +191,21 @@ export default class GameLogic {
             this.currentObject.rotate(false);
     }
 
+    setNewGameTick(level: number) {
+        if (level > 10)
+            return;
+        this.gameTick = GameLogic.levelTicks[level];
+        clearInterval(this.gameTickInterval);
+        this.gameTickInterval = setInterval(this.onTick, this.gameTick);
+    }
+
     onTick(callback: Function) {
         this.tryMoveTetromino(0, 1);
-        callback(this.score, this.getFinalGrid());
+        callback(this.score, this.level, this.getFinalGrid());
+        if (this.level <= 10 && this.score > GameLogic.levelThresholds[this.level]) {
+            this.level++;
+            this.setNewGameTick(this.level);
+        }
     }
 
     onClock(callback: Function) {
@@ -248,9 +286,11 @@ export default class GameLogic {
         this.gamePaused = false;
         this.gameTime = 0;
         this.score = 0;
+        this.level = 1;
+        this.gameTick = GameLogic.levelTicks[this.level];
         this.currentGrid = this.getEmptyGrid();
         this.createTetromino();
-        tickCallback(this.score, this.getFinalGrid());
+        tickCallback(this.score, this.level, this.getFinalGrid());
         clockCallback(this.gameTime);
         this.onTick = this.onTick.bind(this, tickCallback);
         this.onClock = this.onClock.bind(this, clockCallback);
