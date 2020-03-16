@@ -10,35 +10,156 @@ export default class Tetromino {
         'L': 6,
     };
 
-    static shapes = {
-        0: [
-            [1, 1, 1, 1]
+    static shapes = [
+        [
+            [
+                [0, 0, 0, 0],
+                [1, 1, 1, 1],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            [
+                [1, 1],
+                [1, 1],
+            ],
+            [
+                [0, 1, 0],
+                [1, 1, 1],
+                [0, 0, 0],
+            ],
+            [
+                [0, 1, 1],
+                [1, 1, 0],
+                [0, 0, 0],
+            ],
+            [
+                [1, 1, 0],
+                [0, 1, 1],
+                [0, 0, 0],
+            ],
+            [
+                [1, 0, 0],
+                [1, 1, 1],
+                [0, 0, 0],
+            ],
+            [
+                [0, 0, 1],
+                [1, 1, 1],
+                [0, 0, 0],
+            ],
         ],
-        1: [
-            [1, 1],
-            [1, 1]
+        [
+            [
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+            ],
+            [
+                [1, 1],
+                [1, 1],
+            ],
+            [
+                [0, 1, 0],
+                [0, 1, 1],
+                [0, 1, 0],
+            ],
+            [
+                [0, 1, 0],
+                [0, 1, 1],
+                [0, 0, 1],
+            ],
+            [
+                [0, 0, 1],
+                [0, 1, 1],
+                [0, 1, 0],
+            ],
+            [
+                [0, 1, 1],
+                [0, 1, 0],
+                [0, 1, 0],
+            ],
+            [
+                [0, 1, 0],
+                [0, 1, 0],
+                [0, 1, 1],
+            ],
         ],
-        2: [
-            [0, 1, 0],
-            [1, 1, 1],
+        [
+            [
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [1, 1, 1, 1],
+                [0, 0, 0, 0],
+            ],
+            [
+                [1, 1],
+                [1, 1],
+            ],
+            [
+                [0, 0, 0],
+                [1, 1, 1],
+                [0, 1, 0],
+            ],
+            [
+                [0, 0, 0],
+                [0, 1, 1],
+                [1, 1, 0],
+            ],
+            [
+                [0, 0, 0],
+                [1, 1, 0],
+                [0, 1, 1],
+            ],
+            [
+                [0, 0, 0],
+                [1, 1, 1],
+                [0, 0, 1],
+            ],
+            [
+                [0, 0, 0],
+                [1, 1, 1],
+                [1, 0, 0],
+            ],
         ],
-        3: [
-            [0, 1, 1],
-            [1, 1, 0],
+        [
+            [
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+            ],
+            [
+                [1, 1],
+                [1, 1],
+            ],
+            [
+                [0, 1, 0],
+                [1, 1, 0],
+                [0, 1, 0],
+            ],
+            [
+                [1, 0, 0],
+                [1, 1, 0],
+                [0, 1, 0],
+            ],
+            [
+                [0, 1, 0],
+                [1, 1, 0],
+                [1, 0, 0],
+            ],
+            [
+                [0, 1, 0],
+                [0, 1, 0],
+                [1, 1, 0],
+            ],
+            [
+                [1, 1, 0],
+                [0, 1, 0],
+                [0, 1, 0],
+            ],
         ],
-        4: [
-            [1, 1, 0],
-            [0, 1, 1],
-        ],
-        5: [
-            [1, 0, 0],
-            [1, 1, 1],
-        ],
-        6: [
-            [0, 0, 1],
-            [1, 1, 1],
-        ],
-    };
+    ];
 
     static colors: Object;
 
@@ -50,8 +171,8 @@ export default class Tetromino {
 
     constructor(type: Tetromino.types, colors: Object) {
         this.currentType = type;
-        this.currentShape = Tetromino.shapes[type];
         this.currentRotation = 0;
+        this.currentShape = Tetromino.shapes[this.currentRotation][type];
         this.position = {x: 0, y: 0};
         if (this.currentType === Tetromino.types.O)
             this.position.x = 4;
@@ -85,25 +206,15 @@ export default class Tetromino {
     }
 
     rotate(isForward) {
-        this.currentRotation++;
+        if (isForward)
+            this.currentRotation++;
+        else
+            this.currentRotation--;
         if (this.currentRotation > 3)
             this.currentRotation = 0;
-
-        if (this.currentRotation === 0) {
-            this.currentShape = Tetromino.shapes[this.currentType];
-        } else {
-            let result = [];
-            for(let i = 0; i < this.currentShape[0].length; i++) {
-                let row = this.currentShape.map(e => e[i]);
-
-                if (isForward)
-                    result.push(row.reverse());
-                else
-                    result.push(row);
-            }
-            this.currentShape = result;
-        }
-
+        else if (this.currentRotation < 0)
+            this.currentRotation = 3;
+        this.currentShape = Tetromino.shapes[this.currentRotation][this.currentType];
     }
 
     move(x: number, y: number) {

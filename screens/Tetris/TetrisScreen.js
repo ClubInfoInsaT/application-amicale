@@ -91,7 +91,6 @@ class TetrisScreen extends React.Component<Props, State> {
         date.setMinutes(0);
         date.setSeconds(seconds);
         let format;
-        console.log(date);
         if (date.getHours())
             format  = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
         else if (date.getMinutes())

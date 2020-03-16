@@ -187,8 +187,11 @@ export default class GameLogic {
 
     tryRotateTetromino() {
         this.currentObject.rotate(true);
-        if (!this.isTetrominoPositionValid())
+        if (!this.isTetrominoPositionValid()){
             this.currentObject.rotate(false);
+            return false;
+        }
+        return true;
     }
 
     setNewGameTick(level: number) {
