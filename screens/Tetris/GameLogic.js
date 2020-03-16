@@ -18,8 +18,10 @@ export default class GameLogic {
 
     gameTick: number;
     gameTickInterval: IntervalID;
+    gameTimeInterval: IntervalID;
 
     onTick: Function;
+    onClock: Function;
     endCallback: Function;
 
     colors: Object;
@@ -164,9 +166,13 @@ export default class GameLogic {
     }
 
     onTick(callback: Function) {
-        this.gameTime++;
         this.tryMoveTetromino(0, 1);
-        callback(this.gameTime, this.score, this.getFinalGrid());
+        callback(this.score, this.getFinalGrid());
+    }
+
+    onClock(callback: Function) {
+        this.gameTime++;
+        callback(this.gameTime);
     }
 
     canUseInput() {
@@ -220,8 +226,10 @@ export default class GameLogic {
         this.gamePaused = !this.gamePaused;
         if (this.gamePaused) {
             clearInterval(this.gameTickInterval);
+            clearInterval(this.gameTimeInterval);
         } else {
             this.gameTickInterval = setInterval(this.onTick, this.gameTick);
+            this.gameTimeInterval = setInterval(this.onClock, 1000);
         }
     }
 
@@ -229,10 +237,11 @@ export default class GameLogic {
         this.gameRunning = false;
         this.gamePaused = false;
         clearInterval(this.gameTickInterval);
+        clearInterval(this.gameTimeInterval);
         this.endCallback(this.gameTime, this.score, isRestart);
     }
 
-    startGame(tickCallback: Function, endCallback: Function) {
+    startGame(tickCallback: Function, clockCallback: Function, endCallback: Function) {
         if (this.gameRunning)
             this.endGame(true);
         this.gameRunning = true;
@@ -241,9 +250,12 @@ export default class GameLogic {
         this.score = 0;
         this.currentGrid = this.getEmptyGrid();
         this.createTetromino();
-        tickCallback(this.gameTime, this.score, this.getFinalGrid());
+        tickCallback(this.score, this.getFinalGrid());
+        clockCallback(this.gameTime);
         this.onTick = this.onTick.bind(this, tickCallback);
+        this.onClock = this.onClock.bind(this, clockCallback);
         this.gameTickInterval = setInterval(this.onTick, this.gameTick);
+        this.gameTimeInterval = setInterval(this.onClock, 1000);
         this.endCallback = endCallback;
     }
 

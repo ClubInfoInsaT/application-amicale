@@ -25,6 +25,7 @@ class TetrisScreen extends React.Component<Props, State> {
 
     logic: GameLogic;
     onTick: Function;
+    onClock: Function;
     onGameEnd: Function;
     updateGrid: Function;
     updateGridScore: Function;
@@ -40,6 +41,7 @@ class TetrisScreen extends React.Component<Props, State> {
             gameScore: 0,
         };
         this.onTick = this.onTick.bind(this);
+        this.onClock = this.onClock.bind(this);
         this.onGameEnd = this.onGameEnd.bind(this);
         this.updateGrid = this.updateGrid.bind(this);
         this.updateGridScore = this.updateGridScore.bind(this);
@@ -81,11 +83,16 @@ class TetrisScreen extends React.Component<Props, State> {
             this.showPausePopup();
     }
 
-    onTick(time: number, score: number, newGrid: Array<Array<Object>>) {
+    onTick(score: number, newGrid: Array<Array<Object>>) {
         this.setState({
-            gameTime: time,
             gameScore: score,
             grid: newGrid,
+        });
+    }
+
+    onClock(time: number) {
+        this.setState({
+            gameTime: time,
         });
     }
 
@@ -145,7 +152,7 @@ class TetrisScreen extends React.Component<Props, State> {
     }
 
     startGame() {
-        this.logic.startGame(this.onTick, this.onGameEnd);
+        this.logic.startGame(this.onTick, this.onClock, this.onGameEnd);
         this.setState({
             gameRunning: true,
         });
