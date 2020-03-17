@@ -194,12 +194,15 @@ export default class Tetromino {
         return Tetromino.colors[this.currentType];
     }
 
-    getCellsCoordinates() {
+    getCellsCoordinates(isAbsolute: boolean) {
         let coordinates = [];
         for (let row = 0; row < this.currentShape.length; row++) {
             for (let col = 0; col < this.currentShape[row].length; col++) {
                 if (this.currentShape[row][col] === 1)
-                    coordinates.push({x: this.position.x + col, y: this.position.y + row});
+                    if (isAbsolute)
+                        coordinates.push({x: this.position.x + col, y: this.position.y + row});
+                    else
+                        coordinates.push({x: col, y: row});
             }
         }
         return coordinates;

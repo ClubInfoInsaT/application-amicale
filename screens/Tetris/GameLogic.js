@@ -39,6 +39,8 @@ export default class GameLogic {
     autoRepeatActivationDelay: number;
     autoRepeatDelay: number;
 
+    nextPieces: Array<Tetromino>;
+    nextPiecesCount: number;
 
     onTick: Function;
     onClock: Function;
@@ -56,6 +58,19 @@ export default class GameLogic {
         this.colors = colors;
         this.autoRepeatActivationDelay = 300;
         this.autoRepeatDelay = 50;
+        this.nextPieces = [];
+        this.nextPiecesCount = 3;
+    }
+
+    getNextPieces() {
+        let finalArray = [];
+        for (let i = 0; i < this.nextPieces.length; i++) {
+            finalArray.push(this.getEmptyGrid(4, 4));
+            let coord = this.nextPieces[i].getCellsCoordinates(false);
+            this.tetrominoToGrid(this.nextPieces[i], coord, finalArray[i]);
+        }
+
+        return finalArray;
     }
 
     getHeight(): number {
@@ -74,9 +89,9 @@ export default class GameLogic {
         return this.gamePaused;
     }
 
-    getEmptyLine() {
+    getEmptyLine(width: number) {
         let line = [];
-        for (let col = 0; col < this.getWidth(); col++) {
+        for (let col = 0; col < width; col++) {
             line.push({
                 color: this.colors.tetrisBackground,
                 isEmpty: true,
@@ -85,10 +100,10 @@ export default class GameLogic {
         return line;
     }
 
-    getEmptyGrid() {
+    getEmptyGrid(height: number, width: number) {
         let grid = [];
-        for (let row = 0; row < this.getHeight(); row++) {
-            grid.push(this.getEmptyLine());
+        for (let row = 0; row < height; row++) {
+            grid.push(this.getEmptyLine(width));
         }
         return grid;
     }
@@ -98,7 +113,7 @@ export default class GameLogic {
     }
 
     getFinalGrid() {
-        let coord = this.currentObject.getCellsCoordinates();
+        let coord = this.currentObject.getCellsCoordinates(true);
         let finalGrid = this.getGridCopy();
         for (let i = 0; i < coord.length; i++) {
             finalGrid[coord[i].y][coord[i].x] = {
@@ -122,14 +137,18 @@ export default class GameLogic {
         return canLevel;
     }
 
-    freezeTetromino() {
-        let coord = this.currentObject.getCellsCoordinates();
+    tetrominoToGrid(object: Object, coord : Array<Object>, grid: Array<Array<Object>>) {
         for (let i = 0; i < coord.length; i++) {
-            this.currentGrid[coord[i].y][coord[i].x] = {
-                color: this.currentObject.getColor(),
+            grid[coord[i].y][coord[i].x] = {
+                color: object.getColor(),
                 isEmpty: false,
             };
         }
+    }
+
+    freezeTetromino() {
+        let coord = this.currentObject.getCellsCoordinates(true);
+        this.tetrominoToGrid(this.currentObject, coord, this.currentGrid);
         this.clearLines(this.getLinesToClear(coord));
     }
 
@@ -137,7 +156,7 @@ export default class GameLogic {
         lines.sort();
         for (let i = 0; i < lines.length; i++) {
             this.currentGrid.splice(lines[i], 1);
-            this.currentGrid.unshift(this.getEmptyLine());
+            this.currentGrid.unshift(this.getEmptyLine(this.getWidth()));
         }
         switch (lines.length) {
             case 1:
@@ -174,7 +193,7 @@ export default class GameLogic {
 
     isTetrominoPositionValid() {
         let isValid = true;
-        let coord = this.currentObject.getCellsCoordinates();
+        let coord = this.currentObject.getCellsCoordinates(true);
         for (let i = 0; i < coord.length; i++) {
             if (coord[i].x >= this.getWidth()
                 || coord[i].x < 0
@@ -286,10 +305,21 @@ export default class GameLogic {
             callback(this.getFinalGrid());
     }
 
+    recoverNextPiece() {
+        this.currentObject = this.nextPieces.shift();
+        this.generateNextPieces();
+    }
+
+    generateNextPieces() {
+        while (this.nextPieces.length < this.nextPiecesCount) {
+            let shape = Math.floor(Math.random() * 7);
+            this.nextPieces.push(new Tetromino(shape, this.colors));
+        }
+    }
+
     createTetromino() {
         this.pressedOut();
-        let shape = Math.floor(Math.random() * 7);
-        this.currentObject = new Tetromino(shape, this.colors);
+        this.recoverNextPiece();
         if (!this.isTetrominoPositionValid())
             this.endGame(false);
     }
@@ -325,7 +355,9 @@ export default class GameLogic {
         this.level = 0;
         this.levelProgression = 0;
         this.gameTick = GameLogic.levelTicks[this.level];
-        this.currentGrid = this.getEmptyGrid();
+        this.currentGrid = this.getEmptyGrid(this.getHeight(), this.getWidth());
+        this.nextPieces = [];
+        this.generateNextPieces();
         this.createTetromino();
         tickCallback(this.score, this.level, this.getFinalGrid());
         clockCallback(this.gameTime);
@@ -335,5 +367,4 @@ export default class GameLogic {
         this.gameTimeInterval = setInterval(this.onClock, 1000);
         this.endCallback = endCallback;
     }
-
 }

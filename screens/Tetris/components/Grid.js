@@ -8,8 +8,10 @@ import Cell from "./Cell";
 type Props = {
     navigation: Object,
     grid: Array<Array<Object>>,
+    backgroundColor: string,
     height: number,
     width: number,
+    containerHeight: number|string,
 }
 
 class Grid extends React.Component<Props>{
@@ -31,7 +33,6 @@ class Grid extends React.Component<Props>{
         return(
             <View style={{
                 flexDirection: 'row',
-                backgroundColor: this.colors.tetrisBackground
             }}>
                 {cells}
             </View>
@@ -50,10 +51,11 @@ class Grid extends React.Component<Props>{
         return (
             <View style={{
                 flexDirection: 'column',
-                height: '80%',
+                height: this.props.containerHeight,
                 aspectRatio: this.props.width/this.props.height,
                 marginLeft: 'auto',
                 marginRight: 'auto',
+                backgroundColor: this.props.backgroundColor,
             }}>
                 {this.getGrid()}
             </View>

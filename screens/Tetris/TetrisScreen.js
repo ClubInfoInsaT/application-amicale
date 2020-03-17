@@ -7,6 +7,7 @@ import {MaterialCommunityIcons} from "@expo/vector-icons";
 import GameLogic from "./GameLogic";
 import Grid from "./components/Grid";
 import HeaderButton from "../../components/HeaderButton";
+import Preview from "./components/Preview";
 
 type Props = {
     navigation: Object,
@@ -36,7 +37,7 @@ class TetrisScreen extends React.Component<Props, State> {
         this.colors = props.theme.colors;
         this.logic = new GameLogic(20, 10, this.colors);
         this.state = {
-            grid: this.logic.getEmptyGrid(),
+            grid: this.logic.getEmptyGrid(this.logic.getHeight(), this.logic.getWidth()),
             gameRunning: false,
             gameTime: 0,
             gameScore: 0,
@@ -92,7 +93,7 @@ class TetrisScreen extends React.Component<Props, State> {
         date.setSeconds(seconds);
         let format;
         if (date.getHours())
-            format  = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+            format = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
         else if (date.getMinutes())
             format = date.getMinutes() + ':' + date.getSeconds();
         else
@@ -241,8 +242,19 @@ class TetrisScreen extends React.Component<Props, State> {
                 <Grid
                     width={this.logic.getWidth()}
                     height={this.logic.getHeight()}
+                    containerHeight={'80%'}
                     grid={this.state.grid}
+                    backgroundColor={this.colors.tetrisBackground}
                 />
+                <View style={{
+                    position: 'absolute',
+                    top: 50,
+                    right: 5,
+                }}>
+                    <Preview
+                        next={this.logic.getNextPieces()}
+                    />
+                </View>
                 <View style={{
                     flexDirection: 'row',
                     width: '100%',
