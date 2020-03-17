@@ -55,7 +55,7 @@ export default class GameLogic {
         this.gamePaused = false;
         this.colors = colors;
         this.autoRepeatActivationDelay = 300;
-        this.autoRepeatDelay = 100;
+        this.autoRepeatDelay = 50;
     }
 
     getHeight(): number {
@@ -116,7 +116,10 @@ export default class GameLogic {
     }
 
     canLevelUp() {
-        return this.levelProgression > this.level * 5;
+        let canLevel = this.levelProgression > this.level * 5;
+        if (canLevel)
+            this.levelProgression -= this.level * 5;
+        return canLevel;
     }
 
     freezeTetromino() {
