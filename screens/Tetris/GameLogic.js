@@ -4,31 +4,18 @@ import Tetromino from "./Tetromino";
 
 export default class GameLogic {
 
-    static levelTicks = {
-        '1': 1000,
-        '2': 900,
-        '3': 800,
-        '4': 700,
-        '5': 600,
-        '6': 500,
-        '7': 400,
-        '8': 300,
-        '9': 200,
-        '10': 150,
-    };
+    static levelTicks = [
+        1000,
+        800,
+        600,
+        400,
+        300,
+        200,
+        150,
+        100,
+    ];
 
-    static levelThresholds = {
-        '1': 100,
-        '2': 300,
-        '3': 500,
-        '4': 700,
-        '5': 1000,
-        '6': 1500,
-        '7': 2000,
-        '8': 3000,
-        '9': 4000,
-        '10': 5000,
-    };
+    static scoreLinesModifier = [40, 100, 300, 1200];
 
     currentGrid: Array<Array<Object>>;
 
@@ -58,6 +45,8 @@ export default class GameLogic {
     endCallback: Function;
 
     colors: Object;
+
+    levelProgression: number;
 
     constructor(height: number, width: number, colors: Object) {
         this.height = height;
@@ -120,6 +109,16 @@ export default class GameLogic {
         return finalGrid;
     }
 
+    getLinesRemovedPoints(numberRemoved: number) {
+        if (numberRemoved < 1 || numberRemoved > 4)
+            return 0;
+        return GameLogic.scoreLinesModifier[numberRemoved-1] * (this.level + 1);
+    }
+
+    canLevelUp() {
+        return this.levelProgression > this.level * 5;
+    }
+
     freezeTetromino() {
         let coord = this.currentObject.getCellsCoordinates();
         for (let i = 0; i < coord.length; i++) {
@@ -136,8 +135,22 @@ export default class GameLogic {
         for (let i = 0; i < lines.length; i++) {
             this.currentGrid.splice(lines[i], 1);
             this.currentGrid.unshift(this.getEmptyLine());
-            this.score += 100;
         }
+        switch (lines.length) {
+            case 1:
+                this.levelProgression += 1;
+                break;
+            case 2:
+                this.levelProgression += 3;
+                break;
+            case 3:
+                this.levelProgression += 5;
+                break;
+            case 4: // Did a tetris !
+                this.levelProgression += 8;
+                break;
+        }
+        this.score += this.getLinesRemovedPoints(lines.length);
     }
 
     getLinesToClear(coord: Object) {
@@ -203,7 +216,7 @@ export default class GameLogic {
     }
 
     setNewGameTick(level: number) {
-        if (level > 10)
+        if (level >= GameLogic.levelTicks.length)
             return;
         this.gameTick = GameLogic.levelTicks[level];
         clearInterval(this.gameTickInterval);
@@ -213,7 +226,7 @@ export default class GameLogic {
     onTick(callback: Function) {
         this.tryMoveTetromino(0, 1);
         callback(this.score, this.level, this.getFinalGrid());
-        if (this.level <= 10 && this.score > GameLogic.levelThresholds[this.level]) {
+        if (this.canLevelUp()) {
             this.level++;
             this.setNewGameTick(this.level);
         }
@@ -306,7 +319,8 @@ export default class GameLogic {
         this.gamePaused = false;
         this.gameTime = 0;
         this.score = 0;
-        this.level = 1;
+        this.level = 0;
+        this.levelProgression = 0;
         this.gameTick = GameLogic.levelTicks[this.level];
         this.currentGrid = this.getEmptyGrid();
         this.createTetromino();
