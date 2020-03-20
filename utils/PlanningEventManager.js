@@ -74,10 +74,12 @@ export default class PlanningEventManager {
     }
 
     static isDescriptionEmpty (description: string) {
-        return description
-            .replace('<p>', '')
-            .replace('</p>', '')
-            .replace('<br>', '').trim() === '';
+        if (description !== undefined && description !== null) {
+            return description
+                .replace('<p>', '')
+                .replace('</p>', '')
+                .replace('<br>', '').trim() === '';
+        } else
+            return true;
     }
-
 }
