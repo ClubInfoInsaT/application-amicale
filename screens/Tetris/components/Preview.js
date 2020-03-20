@@ -26,7 +26,8 @@ class Preview extends React.PureComponent<Props> {
                     width={this.props.next[i][0].length}
                     height={this.props.next[i].length}
                     grid={this.props.next[i]}
-                    containerHeight={50}
+                    containerMaxHeight={50}
+                    containerMaxWidth={50}
                     backgroundColor={'transparent'}
                 />
             );

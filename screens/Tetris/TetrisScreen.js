@@ -199,7 +199,7 @@ class TetrisScreen extends React.Component<Props, State> {
                 <View style={{
                     flexDirection: 'row',
                     position: 'absolute',
-                    top: 10,
+                    top: 5,
                     left: 10,
                 }}>
                     <MaterialCommunityIcons
@@ -242,7 +242,8 @@ class TetrisScreen extends React.Component<Props, State> {
                 <Grid
                     width={this.logic.getWidth()}
                     height={this.logic.getHeight()}
-                    containerHeight={'80%'}
+                    containerMaxHeight={'80%'}
+                    containerMaxWidth={'60%'}
                     grid={this.state.grid}
                     backgroundColor={this.colors.tetrisBackground}
                 />
@@ -256,6 +257,8 @@ class TetrisScreen extends React.Component<Props, State> {
                     />
                 </View>
                 <View style={{
+                    position: 'absolute',
+                    bottom: 0,
                     flexDirection: 'row',
                     width: '100%',
                 }}>
@@ -288,6 +291,7 @@ class TetrisScreen extends React.Component<Props, State> {
                         onPressIn={() => this.logic.downPressedIn(this.updateGridScore)}
                         onPress={() => this.logic.pressedOut()}
                         style={{marginLeft: 'auto'}}
+                        color={this.colors.tetrisScore}
                     />
                 </View>
             </View>

@@ -11,7 +11,8 @@ type Props = {
     backgroundColor: string,
     height: number,
     width: number,
-    containerHeight: number|string,
+    containerMaxHeight: number|string,
+    containerMaxWidth: number|string,
 }
 
 class Grid extends React.Component<Props>{
@@ -33,6 +34,7 @@ class Grid extends React.Component<Props>{
         return(
             <View style={{
                 flexDirection: 'row',
+                backgroundColor: this.props.backgroundColor,
             }}>
                 {cells}
             </View>
@@ -51,11 +53,11 @@ class Grid extends React.Component<Props>{
         return (
             <View style={{
                 flexDirection: 'column',
-                height: this.props.containerHeight,
+                maxWidth: this.props.containerMaxWidth,
+                maxHeight: this.props.containerMaxHeight,
                 aspectRatio: this.props.width/this.props.height,
                 marginLeft: 'auto',
                 marginRight: 'auto',
-                backgroundColor: this.props.backgroundColor,
             }}>
                 {this.getGrid()}
             </View>
