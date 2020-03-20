@@ -5,7 +5,13 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest",
+    "testw": "jest --watch",
+    "testc": "jest --coverage"
+  },
+  "jest": {
+    "preset": "react-native"
   },
   "dependencies": {
     "@expo/vector-icons": "~10.0.0",
@@ -38,7 +44,9 @@
     "expo-linear-gradient": "~8.0.0"
   },
   "devDependencies": {
-    "babel-preset-expo": "^8.0.0"
+    "babel-preset-expo": "^8.0.0",
+    "jest": "^25.1.0",
+    "react-test-renderer": "^16.13.1"
   },
   "private": true
 }
