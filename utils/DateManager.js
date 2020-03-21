@@ -8,13 +8,13 @@ export default class DateManager {
     monthsOfYear = [];
 
     constructor() {
+        this.daysOfWeek.push(i18n.t("date.daysOfWeek.sunday")); // 0 represents sunday
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.monday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.tuesday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.wednesday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.thursday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.friday"));
         this.daysOfWeek.push(i18n.t("date.daysOfWeek.saturday"));
-        this.daysOfWeek.push(i18n.t("date.daysOfWeek.sunday"));
 
         this.monthsOfYear.push(i18n.t("date.monthsOfYear.january"));
         this.monthsOfYear.push(i18n.t("date.monthsOfYear.february"));
@@ -44,7 +44,7 @@ export default class DateManager {
         let dateArray = dateString.split('-');
         let date = new Date();
         date.setFullYear(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]));
-        return this.daysOfWeek[date.getDay() - 1] + " " + date.getDate() + " " + this.monthsOfYear[date.getMonth()] + " " + date.getFullYear();
+        return this.daysOfWeek[date.getDay()] + " " + date.getDate() + " " + this.monthsOfYear[date.getMonth()] + " " + date.getFullYear();
     }
 
 }

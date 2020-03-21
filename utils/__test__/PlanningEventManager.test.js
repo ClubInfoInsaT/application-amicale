@@ -17,16 +17,6 @@ test('isDescriptionEmpty', () => {
     expect(PlanningEventManager.isDescriptionEmpty("<p>coucou</p>")).toBeFalse();
 });
 
-test('toPaddedString', () => {
-    expect(PlanningEventManager.toPaddedString(-1)).toBe("-1");
-    expect(PlanningEventManager.toPaddedString(0)).toBe("00");
-    expect(PlanningEventManager.toPaddedString(1)).toBe("01");
-    expect(PlanningEventManager.toPaddedString(2)).toBe("02");
-    expect(PlanningEventManager.toPaddedString(10)).toBe("10");
-    expect(PlanningEventManager.toPaddedString(53)).toBe("53");
-    expect(PlanningEventManager.toPaddedString(100)).toBe("100");
-});
-
 test('isEventDateStringFormatValid', () => {
     expect(PlanningEventManager.isEventDateStringFormatValid("2020-03-21 09:00:00")).toBeTrue();
     expect(PlanningEventManager.isEventDateStringFormatValid("3214-64-12 01:16:65")).toBeTrue();
@@ -77,7 +67,7 @@ test('getFormattedEventTime', () => {
     expect(PlanningEventManager.getFormattedEventTime("2020-03-21 09:00:00", "2020-03-21 09:00:00"))
         .toBe('09:00');
     expect(PlanningEventManager.getFormattedEventTime("2020-03-21 09:00:00", "2020-03-22 17:00:00"))
-        .toBe('09:00 - 00:00');
+        .toBe('09:00 - 23:59');
     expect(PlanningEventManager.getFormattedEventTime("2020-03-30 20:30:00", "2020-03-30 23:00:00"))
         .toBe('20:30 - 23:00');
 });
@@ -127,10 +117,21 @@ test('isEventBefore', () => {
 test('dateToString', () => {
     let testDate = new Date();
     testDate.setFullYear(2020, 2, 21);
-    expect(PlanningEventManager.dateToString(testDate)).toBe("2020-03-21");
+    testDate.setHours(9, 0, 0, 0);
+    expect(PlanningEventManager.dateToString(testDate)).toBe("2020-03-21 09:00:00");
     testDate.setFullYear(2021, 0, 12);
-    expect(PlanningEventManager.dateToString(testDate)).toBe("2021-01-12");
+    testDate.setHours(9, 10, 0, 0);
+    expect(PlanningEventManager.dateToString(testDate)).toBe("2021-01-12 09:10:00");
     testDate.setFullYear(2022, 11, 31);
-    expect(PlanningEventManager.dateToString(testDate)).toBe("2022-12-31");
+    testDate.setHours(9, 10, 15, 0);
+    expect(PlanningEventManager.dateToString(testDate)).toBe("2022-12-31 09:10:15");
 });
 
+test('getEventDaysNumber', () => {
+    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:00:00', '2020-03-22 17:00:00')).toBe(2);
+    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:00:00', '2020-03-21 17:00:00')).toBe(1);
+    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:00:00', '2020-03-21 09:00:00')).toBe(1);
+    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:gg:00', '2020-03-21 17:00:00')).toBe(0);
+    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:00:00', undefined)).toBe(1);
+    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:00:00', '2020-04-05 20:00:00')).toBe(16);
+});

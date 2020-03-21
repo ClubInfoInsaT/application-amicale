@@ -9,8 +9,31 @@ export default class PlanningEventManager {
      *
      * @return {string} The string representation
      */
-    static getCurrentDateString() {
+    static getCurrentDateString(): string {
         return PlanningEventManager.dateToString(new Date());
+    }
+
+    /**
+     * Gets how many days the event lasts. If no end date is specified, defaults to 1.
+     *
+     *
+     * @param start The start date string in format YYYY-MM-DD HH:MM:SS
+     * @param end The end date string in format YYYY-MM-DD HH:MM:SS
+     * @return {number} The number of days, 0 on error
+     */
+    static getEventDaysNumber(start: string, end: string): number {
+        let startDate = PlanningEventManager.stringToDate(start);
+        let endDate = PlanningEventManager.stringToDate(end);
+        if (startDate !== undefined && endDate !== undefined) {
+            if (startDate.getTime() !== endDate.getTime()) {
+                const diffTime = endDate - startDate;
+                return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            } else
+                return 1;
+        } else if (startDate !== undefined)
+            return 1;
+        else
+            return 0;
     }
 
 
@@ -89,26 +112,19 @@ export default class PlanningEventManager {
 
     /**
      * Converts a date object to a string in the format
-     * YYYY-MM-DD
+     * YYYY-MM-DD HH-MM-SS
      *
      * @param date The date object to convert
      * @return {string} The converted string
      */
     static dateToString(date: Date) {
-        let dd = String(date.getDate()).padStart(2, '0');
-        let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-        let yyyy = date.getFullYear();
-        return yyyy + '-' + mm + '-' + dd;
-    }
-
-    /**
-     * Returns a padded string for the given number if it is lower than 10
-     *
-     * @param i The string to be converted
-     * @return {string}
-     */
-    static toPaddedString(i: number): string {
-        return (i < 10 && i >= 0) ? "0" + i.toString(10) : i.toString(10);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
     }
 
     /**
@@ -118,7 +134,7 @@ export default class PlanningEventManager {
      *
      * If the end date is not specified or is equal to start time, only start time will be shown.
      *
-     * If the end date is not on the same day, 00:00 will be shown as end time
+     * If the end date is not on the same day, 23:59 will be shown as end time
      *
      * @param start Start time in YYYY-MM-DD HH:MM:SS format
      * @param end End time in YYYY-MM-DD HH:MM:SS format
@@ -130,19 +146,19 @@ export default class PlanningEventManager {
         let endDate = PlanningEventManager.stringToDate(end);
 
         if (startDate !== undefined && endDate !== undefined && startDate.getTime() !== endDate.getTime()) {
-            formattedStr = PlanningEventManager.toPaddedString(startDate.getHours()) + ':'
-                + PlanningEventManager.toPaddedString(startDate.getMinutes()) + ' - ';
+            formattedStr = String(startDate.getHours()).padStart(2, '0') + ':'
+                + String(startDate.getMinutes()).padStart(2, '0') + ' - ';
             if (endDate.getFullYear() > startDate.getFullYear()
                 || endDate.getMonth() > startDate.getMonth()
                 || endDate.getDate() > startDate.getDate())
-                formattedStr += '00:00';
+                formattedStr += '23:59';
             else
-                formattedStr += PlanningEventManager.toPaddedString(endDate.getHours()) + ':'
-                    + PlanningEventManager.toPaddedString(endDate.getMinutes());
+                formattedStr += String(endDate.getHours()).padStart(2, '0') + ':'
+                    + String(endDate.getMinutes()).padStart(2, '0');
         } else if (startDate !== undefined)
             formattedStr =
-                PlanningEventManager.toPaddedString(startDate.getHours()) + ':'
-                + PlanningEventManager.toPaddedString(startDate.getMinutes());
+                String(startDate.getHours()).padStart(2, '0') + ':'
+                + String(startDate.getMinutes()).padStart(2, '0');
 
         return formattedStr
     }

@@ -59,7 +59,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     onAgendaRef: Function;
     onCalendarToggled: Function;
     onBackButtonPressAndroid: Function;
-    currentDate = PlanningEventManager.getCurrentDateString();
+    currentDate = PlanningEventManager.getDateOnlyString(PlanningEventManager.getCurrentDateString());
 
     constructor(props: any) {
         super(props);
@@ -108,12 +108,14 @@ export default class PlanningScreen extends React.Component<Props, State> {
     };
 
 
-
     generateEmptyCalendar() {
         let end = new Date(new Date().setMonth(new Date().getMonth() + AGENDA_MONTH_SPAN + 1));
         let daysOfYear = {};
         for (let d = new Date(); d <= end; d.setDate(d.getDate() + 1)) {
-            daysOfYear[PlanningEventManager.dateToString(new Date(d))] = []
+            daysOfYear[
+                PlanningEventManager.getDateOnlyString(
+                    PlanningEventManager.dateToString(new Date(d))
+                )] = []
         }
         return daysOfYear;
     }
@@ -192,14 +194,51 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
     };
 
+    getClonedEventArray(event: Object, times: number) {
+        let cloneArray = [];
+        if (times > 1) {
+            for (let i = 0; i < times; i++) {
+                let clone = JSON.parse(JSON.stringify(event));
+                let startDate = PlanningEventManager.stringToDate(clone["date_begin"]);
+                let endDate = new Date();
+                if (i !== 0) {
+                    startDate.setHours(0, 0, 0);
+                    startDate.setDate(startDate.getDate() + i);
+                    clone["date_begin"] = PlanningEventManager.dateToString(startDate);
+                }
+                if (i !== (times - 1)) {
+                    endDate = PlanningEventManager.stringToDate(clone["date_end"]);
+                    endDate.setHours(23, 59, 0);
+                    endDate.setFullYear(startDate.getFullYear(),
+                        startDate.getMonth(),
+                        startDate.getDate() + i);
+                    clone["date_end"] = PlanningEventManager.dateToString(endDate);
+                }
+                cloneArray.push(clone)
+            }
+        } else
+            cloneArray = [event];
+        return cloneArray;
+    }
+
     generateEventAgenda(eventList: Array<Object>) {
         let agendaItems = this.generateEmptyCalendar();
         for (let i = 0; i < eventList.length; i++) {
             if (PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]) !== undefined) {
-                this.pushEventInOrder(agendaItems, eventList[i], PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]));
+                const clonedEventArray = this.getClonedEventArray(
+                    eventList[i],
+                    PlanningEventManager.getEventDaysNumber(eventList[i]["date_begin"], eventList[i]["date_end"])
+                );
+                this.pushEvents(agendaItems, clonedEventArray);
             }
         }
         this.setState({agendaItems: agendaItems})
+    }
+
+    pushEvents(agendaItems: Object, eventList: Array<Object>) {
+        for (let i = 0; i < eventList.length; i++) {
+            this.pushEventInOrder(agendaItems, eventList[i], PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]));
+        }
     }
 
     pushEventInOrder(agendaItems: Object, event: Object, startDate: string) {
