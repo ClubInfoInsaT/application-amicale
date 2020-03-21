@@ -10,6 +10,7 @@ import {Text, withTheme} from 'react-native-paper';
 import FeedItem from "../components/FeedItem";
 import SquareDashboardItem from "../components/SquareDashboardItem";
 import PreviewEventDashboardItem from "../components/PreviewEventDashboardItem";
+import PlanningEventManager from "../utils/PlanningEventManager";
 // import DATA from "../dashboard_data.json";
 
 
@@ -153,23 +154,6 @@ class HomeScreen extends React.Component<Props> {
     }
 
     /**
-     * Convert the date string given by in the event list json to a date object
-     * @param dateString
-     * @return {Date}
-     */
-    stringToDate(dateString: ?string): ?Date {
-        let date = new Date();
-        if (dateString === undefined || dateString === null)
-            date = undefined;
-        else if (dateString.split(' ').length > 1) {
-            let timeStr = dateString.split(' ')[1];
-            date.setHours(parseInt(timeStr.split(':')[0]), parseInt(timeStr.split(':')[1]), 0);
-        } else
-            date = undefined;
-        return date;
-    }
-
-    /**
      * Get the time limit depending on the current day:
      * 17:30 for every day of the week except for thursday 11:30
      * 00:00 on weekends
@@ -191,8 +175,8 @@ class HomeScreen extends React.Component<Props> {
      * @return {number} The number of milliseconds
      */
     getEventDuration(event: Object): number {
-        let start = this.stringToDate(event['date_begin']);
-        let end = this.stringToDate(event['date_end']);
+        let start = PlanningEventManager.stringToDate(event['date_begin']);
+        let end = PlanningEventManager.stringToDate(event['date_end']);
         let duration = 0;
         if (start !== undefined && start !== null && end !== undefined && end !== null)
             duration = end - start;
@@ -209,7 +193,7 @@ class HomeScreen extends React.Component<Props> {
     getEventsAfterLimit(events: Object, limit: Date): Array<Object> {
         let validEvents = [];
         for (let event of events) {
-            let startDate = this.stringToDate(event['date_begin']);
+            let startDate = PlanningEventManager.stringToDate(event['date_begin']);
             if (startDate !== undefined && startDate !== null && startDate >= limit) {
                 validEvents.push(event);
             }
@@ -244,8 +228,8 @@ class HomeScreen extends React.Component<Props> {
         let validEvents = [];
         let now = new Date();
         for (let event of events) {
-            let startDate = this.stringToDate(event['date_begin']);
-            let endDate = this.stringToDate(event['date_end']);
+            let startDate = PlanningEventManager.stringToDate(event['date_begin']);
+            let endDate = PlanningEventManager.stringToDate(event['date_end']);
             if (startDate !== undefined && startDate !== null) {
                 if (startDate > now)
                     validEvents.push(event);

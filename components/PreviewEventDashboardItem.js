@@ -26,12 +26,12 @@ function PreviewEventDashboardItem(props) {
                 {hasImage ?
                     <Card.Title
                         title={props.event['title']}
-                        subtitle={PlanningEventManager.getFormattedEventTime(props.event)}
+                        subtitle={PlanningEventManager.getFormattedEventTime(props.event['date_begin'], props.event['date_end'])}
                         left={getImage}
                     /> :
                     <Card.Title
                         title={props.event['title']}
-                        subtitle={PlanningEventManager.getFormattedEventTime(props.event)}
+                        subtitle={PlanningEventManager.getFormattedEventTime(props.event['date_begin'], props.event['date_end'])}
                     />}
                 {!isEmpty ?
                     <Card.Content style={{
