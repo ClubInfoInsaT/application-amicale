@@ -4,6 +4,17 @@ export default class PlanningEventManager {
     static dateRegExp = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
 
     /**
+     * Gets the current day string representation in the format
+     * YYYY-MM-DD
+     *
+     * @return {string} The string representation
+     */
+    static getCurrentDateString() {
+        return PlanningEventManager.dateToString(new Date());
+    }
+
+
+    /**
      * Checks if the given date is before the other.
      *
      * @param event1Date Event 1 date in format YYYY-MM-DD HH:MM:SS
@@ -27,7 +38,7 @@ export default class PlanningEventManager {
      * @return {string|undefined} Date in format YYYY:MM:DD or undefined if given string is invalid
      */
     static getDateOnlyString(dateString: ?string) {
-        if (PlanningEventManager.isDateStringFormatValid(dateString))
+        if (PlanningEventManager.isEventDateStringFormatValid(dateString))
             return dateString.split(" ")[0];
         else
             return undefined;
@@ -40,7 +51,7 @@ export default class PlanningEventManager {
      * @param dateString The string to check
      * @return {boolean}
      */
-    static isDateStringFormatValid(dateString: ?string) {
+    static isEventDateStringFormatValid(dateString: ?string) {
         return dateString !== undefined
             && dateString !== null
             && PlanningEventManager.dateRegExp.test(dateString);
@@ -55,7 +66,7 @@ export default class PlanningEventManager {
      */
     static stringToDate(dateString: ?string): Date | undefined {
         let date = new Date();
-        if (PlanningEventManager.isDateStringFormatValid(dateString)) {
+        if (PlanningEventManager.isEventDateStringFormatValid(dateString)) {
             let stringArray = dateString.split(' ');
             let dateArray = stringArray[0].split('-');
             let timeArray = stringArray[1].split(':');
@@ -74,6 +85,20 @@ export default class PlanningEventManager {
             date = undefined;
 
         return date;
+    }
+
+    /**
+     * Converts a date object to a string in the format
+     * YYYY-MM-DD
+     *
+     * @param date The date object to convert
+     * @return {string} The converted string
+     */
+    static dateToString(date: Date) {
+        let dd = String(date.getDate()).padStart(2, '0');
+        let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = date.getFullYear();
+        return yyyy + '-' + mm + '-' + dd;
     }
 
     /**

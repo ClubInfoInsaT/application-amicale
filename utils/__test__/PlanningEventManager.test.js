@@ -27,20 +27,20 @@ test('toPaddedString', () => {
     expect(PlanningEventManager.toPaddedString(100)).toBe("100");
 });
 
-test('isDateStringFormatValid', () => {
-    expect(PlanningEventManager.isDateStringFormatValid("2020-03-21 09:00:00")).toBeTrue();
-    expect(PlanningEventManager.isDateStringFormatValid("3214-64-12 01:16:65")).toBeTrue();
+test('isEventDateStringFormatValid', () => {
+    expect(PlanningEventManager.isEventDateStringFormatValid("2020-03-21 09:00:00")).toBeTrue();
+    expect(PlanningEventManager.isEventDateStringFormatValid("3214-64-12 01:16:65")).toBeTrue();
 
-    expect(PlanningEventManager.isDateStringFormatValid("3214-64-12 1:16:65")).toBeFalse();
-    expect(PlanningEventManager.isDateStringFormatValid("3214-f4-12 01:16:65")).toBeFalse();
-    expect(PlanningEventManager.isDateStringFormatValid("sqdd 09:00:00")).toBeFalse();
-    expect(PlanningEventManager.isDateStringFormatValid("2020-03-21")).toBeFalse();
-    expect(PlanningEventManager.isDateStringFormatValid("2020-03-21 truc")).toBeFalse();
-    expect(PlanningEventManager.isDateStringFormatValid("3214-64-12 1:16:65")).toBeFalse();
-    expect(PlanningEventManager.isDateStringFormatValid("garbage")).toBeFalse();
-    expect(PlanningEventManager.isDateStringFormatValid("")).toBeFalse();
-    expect(PlanningEventManager.isDateStringFormatValid(undefined)).toBeFalse();
-    expect(PlanningEventManager.isDateStringFormatValid(null)).toBeFalse();
+    expect(PlanningEventManager.isEventDateStringFormatValid("3214-64-12 1:16:65")).toBeFalse();
+    expect(PlanningEventManager.isEventDateStringFormatValid("3214-f4-12 01:16:65")).toBeFalse();
+    expect(PlanningEventManager.isEventDateStringFormatValid("sqdd 09:00:00")).toBeFalse();
+    expect(PlanningEventManager.isEventDateStringFormatValid("2020-03-21")).toBeFalse();
+    expect(PlanningEventManager.isEventDateStringFormatValid("2020-03-21 truc")).toBeFalse();
+    expect(PlanningEventManager.isEventDateStringFormatValid("3214-64-12 1:16:65")).toBeFalse();
+    expect(PlanningEventManager.isEventDateStringFormatValid("garbage")).toBeFalse();
+    expect(PlanningEventManager.isEventDateStringFormatValid("")).toBeFalse();
+    expect(PlanningEventManager.isEventDateStringFormatValid(undefined)).toBeFalse();
+    expect(PlanningEventManager.isEventDateStringFormatValid(null)).toBeFalse();
 });
 
 test('stringToDate', () => {
@@ -122,5 +122,15 @@ test('isEventBefore', () => {
         "garbage", "2020-03-21 10:15:05")).toBeFalse();
     expect(PlanningEventManager.isEventBefore(
         undefined, undefined)).toBeFalse();
+});
+
+test('dateToString', () => {
+    let testDate = new Date();
+    testDate.setFullYear(2020, 2, 21);
+    expect(PlanningEventManager.dateToString(testDate)).toBe("2020-03-21");
+    testDate.setFullYear(2021, 0, 12);
+    expect(PlanningEventManager.dateToString(testDate)).toBe("2021-01-12");
+    testDate.setFullYear(2022, 11, 31);
+    expect(PlanningEventManager.dateToString(testDate)).toBe("2022-12-31");
 });
 

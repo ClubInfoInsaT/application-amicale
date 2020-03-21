@@ -59,7 +59,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     onAgendaRef: Function;
     onCalendarToggled: Function;
     onBackButtonPressAndroid: Function;
-    currentDate = this.getCurrentDate();
+    currentDate = PlanningEventManager.getCurrentDateString();
 
     constructor(props: any) {
         super(props);
@@ -107,23 +107,13 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
     };
 
-    getCurrentDate() {
-        let today = new Date();
-        return this.getFormattedDate(today);
-    }
 
-    getFormattedDate(date: Date) {
-        let dd = String(date.getDate()).padStart(2, '0');
-        let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-        let yyyy = date.getFullYear();
-        return yyyy + '-' + mm + '-' + dd;
-    }
 
     generateEmptyCalendar() {
         let end = new Date(new Date().setMonth(new Date().getMonth() + AGENDA_MONTH_SPAN + 1));
         let daysOfYear = {};
         for (let d = new Date(); d <= end; d.setDate(d.getDate() + 1)) {
-            daysOfYear[this.getFormattedDate(new Date(d))] = []
+            daysOfYear[PlanningEventManager.dateToString(new Date(d))] = []
         }
         return daysOfYear;
     }
