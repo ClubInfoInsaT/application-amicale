@@ -127,11 +127,3 @@ test('dateToString', () => {
     expect(PlanningEventManager.dateToString(testDate)).toBe("2022-12-31 09:10:15");
 });
 
-test('getEventDaysNumber', () => {
-    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:00:00', '2020-03-22 17:00:00')).toBe(2);
-    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:00:00', '2020-03-21 17:00:00')).toBe(1);
-    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:00:00', '2020-03-21 09:00:00')).toBe(1);
-    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:gg:00', '2020-03-21 17:00:00')).toBe(0);
-    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:00:00', undefined)).toBe(1);
-    expect(PlanningEventManager.getEventDaysNumber('2020-03-21 09:00:00', '2020-04-05 20:00:00')).toBe(16);
-});

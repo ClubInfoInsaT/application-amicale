@@ -13,31 +13,7 @@ export default class PlanningEventManager {
         return PlanningEventManager.dateToString(new Date());
     }
 
-    /**
-     * Gets how many days the event lasts. If no end date is specified, defaults to 1.
-     *
-     *
-     * @param start The start date string in format YYYY-MM-DD HH:MM:SS
-     * @param end The end date string in format YYYY-MM-DD HH:MM:SS
-     * @return {number} The number of days, 0 on error
-     */
-    static getEventDaysNumber(start: string, end: string): number {
-        let startDate = PlanningEventManager.stringToDate(start);
-        let endDate = PlanningEventManager.stringToDate(end);
-        if (startDate !== undefined && endDate !== undefined) {
-            if (startDate.getTime() !== endDate.getTime()) {
-                const diffTime = endDate - startDate;
-                return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            } else
-                return 1;
-        } else if (startDate !== undefined)
-            return 1;
-        else
-            return 0;
-    }
-
-
-    /**
+     /**
      * Checks if the given date is before the other.
      *
      * @param event1Date Event 1 date in format YYYY-MM-DD HH:MM:SS
