@@ -37,7 +37,7 @@ const AGENDA_MONTH_SPAN = 3;
  */
 export default class PlanningScreen extends React.Component<Props, State> {
 
-    agendaRef: Agenda;
+    agendaRef: Object;
     webDataManager: WebDataManager;
 
     lastRefresh: Date;
@@ -122,7 +122,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     generateEmptyCalendar() {
         let end = new Date(new Date().setMonth(new Date().getMonth() + AGENDA_MONTH_SPAN + 1));
         let daysOfYear = {};
-        for (let d = new Date(2019, 8, 1); d <= end; d.setDate(d.getDate() + 1)) {
+        for (let d = new Date(); d <= end; d.setDate(d.getDate() + 1)) {
             daysOfYear[this.getFormattedDate(new Date(d))] = []
         }
         return daysOfYear;
@@ -136,8 +136,8 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     <Divider/>
                     <List.Item
                         title={item.title}
-                        description={PlanningEventManager.getFormattedTime(item)}
-                        left={props => <Avatar.Image
+                        description={PlanningEventManager.getFormattedEventTime(item["date_begin"], item["date_end"])}
+                        left={() => <Avatar.Image
                             source={{uri: item.logo}}
                             style={{backgroundColor: 'transparent'}}
                         />}
@@ -151,7 +151,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     <Divider/>
                     <List.Item
                         title={item.title}
-                        description={PlanningEventManager.getFormattedTime(item)}
+                        description={PlanningEventManager.getFormattedEventTime(item["date_begin"], item["date_end"])}
                         onPress={onPress}
                     />
                 </View>
@@ -205,8 +205,8 @@ export default class PlanningScreen extends React.Component<Props, State> {
     generateEventAgenda(eventList: Array<Object>) {
         let agendaItems = this.generateEmptyCalendar();
         for (let i = 0; i < eventList.length; i++) {
-            if (agendaItems[PlanningEventManager.getEventStartDate(eventList[i])] !== undefined) {
-                this.pushEventInOrder(agendaItems, eventList[i], PlanningEventManager.getEventStartDate(eventList[i]));
+            if (PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]) !== undefined) {
+                this.pushEventInOrder(agendaItems, eventList[i], PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]));
             }
         }
         this.setState({agendaItems: agendaItems})
@@ -217,7 +217,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
             agendaItems[startDate].push(event);
         else {
             for (let i = 0; i < agendaItems[startDate].length; i++) {
-                if (PlanningEventManager.isEventBefore(event, agendaItems[startDate][i])) {
+                if (PlanningEventManager.isEventBefore(event["date_begin"], agendaItems[startDate][i]["date_begin"])) {
                     agendaItems[startDate].splice(i, 0, event);
                     break;
                 } else if (i === agendaItems[startDate].length - 1) {
@@ -228,7 +228,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
     }
 
-    onAgendaRef(ref: Agenda) {
+    onAgendaRef(ref: Object) {
         this.agendaRef = ref;
     }
 

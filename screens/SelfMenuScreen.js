@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {View} from 'react-native';
-import i18n from "i18n-js";
+import DateManager from "../utils/DateManager";
 import WebSectionList from "../components/WebSectionList";
 import {Card, Text, withTheme} from 'react-native-paper';
 import AprilFoolsManager from "../utils/AprilFoolsManager";
@@ -19,10 +19,6 @@ type Props = {
  */
 class SelfMenuScreen extends React.Component<Props> {
 
-    // Hard code strings as toLocaleDateString does not work on current android JS engine
-    daysOfWeek = [];
-    monthsOfYear = [];
-
     getRenderItem: Function;
     getRenderSectionHeader: Function;
     createDataset: Function;
@@ -30,26 +26,6 @@ class SelfMenuScreen extends React.Component<Props> {
 
     constructor(props) {
         super(props);
-        this.daysOfWeek.push(i18n.t("date.daysOfWeek.monday"));
-        this.daysOfWeek.push(i18n.t("date.daysOfWeek.tuesday"));
-        this.daysOfWeek.push(i18n.t("date.daysOfWeek.wednesday"));
-        this.daysOfWeek.push(i18n.t("date.daysOfWeek.thursday"));
-        this.daysOfWeek.push(i18n.t("date.daysOfWeek.friday"));
-        this.daysOfWeek.push(i18n.t("date.daysOfWeek.saturday"));
-        this.daysOfWeek.push(i18n.t("date.daysOfWeek.sunday"));
-
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.january"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.february"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.march"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.april"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.may"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.june"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.july"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.august"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.september"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.october"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.november"));
-        this.monthsOfYear.push(i18n.t("date.monthsOfYear.december"));
 
         this.getRenderItem = this.getRenderItem.bind(this);
         this.getRenderSectionHeader = this.getRenderSectionHeader.bind(this);
@@ -80,7 +56,7 @@ class SelfMenuScreen extends React.Component<Props> {
         for (let i = 0; i < fetchedData.length; i++) {
             result.push(
                 {
-                    title: this.getFormattedDate(fetchedData[i].date),
+                    title: DateManager.getInstance().getTranslatedDate(fetchedData[i].date),
                     data: fetchedData[i].meal[0].foodcategory,
                     extraData: super.state,
                     keyExtractor: this.getKeyExtractor,
@@ -88,13 +64,6 @@ class SelfMenuScreen extends React.Component<Props> {
             );
         }
         return result
-    }
-
-    getFormattedDate(dateString: string) {
-        let dateArray = dateString.split('-');
-        let date = new Date();
-        date.setFullYear(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]));
-        return this.daysOfWeek[date.getDay() - 1] + " " + date.getDate() + " " + this.monthsOfYear[date.getMonth()] + " " + date.getFullYear();
     }
 
     getRenderSectionHeader({section}: Object) {

@@ -3,44 +3,34 @@ export default class PlanningEventManager {
     // Regex used to check date string validity
     static dateRegExp = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
 
-    static isEventBefore(event1: Object, event2: Object) {
-        let date1 = new Date();
-        let date2 = new Date();
-        let timeArray = PlanningEventManager.getEventStartTime(event1).split(":");
-        date1.setHours(parseInt(timeArray[0]), parseInt(timeArray[1]));
-        timeArray = PlanningEventManager.getEventStartTime(event2).split(":");
-        date2.setHours(parseInt(timeArray[0]), parseInt(timeArray[1]));
-        return date1 < date2;
-    }
-
-    static getEventStartDate(event: Object) {
-        return event.date_begin.split(" ")[0];
-    }
-
-    static getEventStartTime(event: Object) {
-        if (event !== undefined && Object.keys(event).length > 0 && event.date_begin !== null)
-            return PlanningEventManager.formatTime(event.date_begin.split(" ")[1]);
+    /**
+     * Checks if the given date is before the other.
+     *
+     * @param event1Date Event 1 date in format YYYY-MM-DD HH:MM:SS
+     * @param event2Date Event 2 date in format YYYY-MM-DD HH:MM:SS
+     * @return {boolean}
+     */
+    static isEventBefore(event1Date: ?string, event2Date: ?string) {
+        let date1 = PlanningEventManager.stringToDate(event1Date);
+        let date2 = PlanningEventManager.stringToDate(event2Date);
+        if (date1 !== undefined && date2 !== undefined)
+            return date1 < date2;
         else
-            return "";
+            return false;
     }
 
-    static getEventEndTime(event: Object) {
-        if (event !== undefined && Object.keys(event).length > 0 && event.date_end !== null)
-            return PlanningEventManager.formatTime(event.date_end.split(" ")[1]);
+    /**
+     * Gets only the date part of the given event date string in the format
+     * YYYY-MM-DD HH:MM:SS
+     *
+     * @param dateString The string to get the date from
+     * @return {string|undefined} Date in format YYYY:MM:DD or undefined if given string is invalid
+     */
+    static getDateOnlyString(dateString: ?string) {
+        if (PlanningEventManager.isDateStringFormatValid(dateString))
+            return dateString.split(" ")[0];
         else
-            return "";
-    }
-
-    static getFormattedTime(event: Object) {
-        if (PlanningEventManager.getEventEndTime(event) !== "")
-            return PlanningEventManager.getEventStartTime(event) + " - " + PlanningEventManager.getEventEndTime(event);
-        else
-            return PlanningEventManager.getEventStartTime(event);
-    }
-
-    static formatTime(time: string) {
-        let array = time.split(':');
-        return array[0] + ':' + array[1];
+            return undefined;
     }
 
     /**
@@ -61,7 +51,7 @@ export default class PlanningEventManager {
      * Accepted format: YYYY-MM-DD HH:MM:SS
      *
      * @param dateString The string to convert
-     * @return {Date} The date object or undefined if the given string is invalid
+     * @return {Date|undefined} The date object or undefined if the given string is invalid
      */
     static stringToDate(dateString: ?string): Date | undefined {
         let date = new Date();

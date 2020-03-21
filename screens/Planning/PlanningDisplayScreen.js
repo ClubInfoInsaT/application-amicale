@@ -2,11 +2,11 @@
 
 import * as React from 'react';
 import {Image, ScrollView, View} from 'react-native';
-import ThemeManager from "../../utils/ThemeManager";
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
 import PlanningEventManager from '../../utils/PlanningEventManager';
 import {Card, withTheme} from 'react-native-paper';
+import DateManager from "../../utils/DateManager";
 
 type Props = {
     navigation: Object,
@@ -37,7 +37,10 @@ class PlanningDisplayScreen extends React.Component<Props> {
             <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
                 <Card.Title
                     title={this.displayData.title}
-                    subtitle={PlanningEventManager.getFormattedTime(this.displayData) + ' | ' + PlanningEventManager.getEventStartDate(this.displayData)}
+                    subtitle={
+                        PlanningEventManager.getFormattedEventTime(this.displayData["date_begin"], this.displayData["date_end"])
+                        + ' | '
+                        + DateManager.getInstance().getTranslatedDate(PlanningEventManager.getDateOnlyString(this.displayData["date_begin"]))}
                 />
                 {this.displayData.logo !== null ?
                     <View style={{width: '100%', height: 300}}>

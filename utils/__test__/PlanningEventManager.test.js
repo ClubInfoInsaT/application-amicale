@@ -4,6 +4,7 @@ import PlanningEventManager from "../PlanningEventManager";
 test('isDescriptionEmpty', () => {
     expect(PlanningEventManager.isDescriptionEmpty("")).toBeTrue();
     expect(PlanningEventManager.isDescriptionEmpty("   ")).toBeTrue();
+    // noinspection CheckTagEmptyBody
     expect(PlanningEventManager.isDescriptionEmpty("<p></p>")).toBeTrue();
     expect(PlanningEventManager.isDescriptionEmpty("<p>   </p>")).toBeTrue();
     expect(PlanningEventManager.isDescriptionEmpty("<p><br></p>")).toBeTrue();
@@ -79,5 +80,47 @@ test('getFormattedEventTime', () => {
         .toBe('09:00 - 00:00');
     expect(PlanningEventManager.getFormattedEventTime("2020-03-30 20:30:00", "2020-03-30 23:00:00"))
         .toBe('20:30 - 23:00');
+});
+
+test('getDateOnlyString', () => {
+    expect(PlanningEventManager.getDateOnlyString("2020-03-21 09:00:00")).toBe("2020-03-21");
+    expect(PlanningEventManager.getDateOnlyString("2021-12-15 09:00:00")).toBe("2021-12-15");
+    expect(PlanningEventManager.getDateOnlyString("2021-12-o5 09:00:00")).toBeUndefined();
+    expect(PlanningEventManager.getDateOnlyString("2021-12-15 09:")).toBeUndefined();
+    expect(PlanningEventManager.getDateOnlyString("2021-12-15")).toBeUndefined();
+    expect(PlanningEventManager.getDateOnlyString("garbage")).toBeUndefined();
+});
+
+test('isEventBefore', () => {
+    expect(PlanningEventManager.isEventBefore(
+        "2020-03-21 09:00:00", "2020-03-21 10:00:00")).toBeTrue();
+    expect(PlanningEventManager.isEventBefore(
+        "2020-03-21 10:00:00", "2020-03-21 10:15:00")).toBeTrue();
+    expect(PlanningEventManager.isEventBefore(
+        "2020-03-21 10:15:05", "2020-03-21 10:15:54")).toBeTrue();
+    expect(PlanningEventManager.isEventBefore(
+        "2020-03-21 10:15:05", "2021-03-21 10:15:05")).toBeTrue();
+    expect(PlanningEventManager.isEventBefore(
+        "2020-03-21 10:15:05", "2020-05-21 10:15:05")).toBeTrue();
+    expect(PlanningEventManager.isEventBefore(
+        "2020-03-21 10:15:05", "2020-03-30 10:15:05")).toBeTrue();
+
+    expect(PlanningEventManager.isEventBefore(
+        "2020-03-21 10:00:00", "2020-03-21 09:00:00")).toBeFalse();
+    expect(PlanningEventManager.isEventBefore(
+        "2020-03-21 10:15:00", "2020-03-21 10:00:00")).toBeFalse();
+    expect(PlanningEventManager.isEventBefore(
+        "2020-03-21 10:15:54", "2020-03-21 10:15:05")).toBeFalse();
+    expect(PlanningEventManager.isEventBefore(
+        "2021-03-21 10:15:05", "2020-03-21 10:15:05")).toBeFalse();
+    expect(PlanningEventManager.isEventBefore(
+        "2020-05-21 10:15:05", "2020-03-21 10:15:05")).toBeFalse();
+    expect(PlanningEventManager.isEventBefore(
+        "2020-03-30 10:15:05", "2020-03-21 10:15:05")).toBeFalse();
+
+    expect(PlanningEventManager.isEventBefore(
+        "garbage", "2020-03-21 10:15:05")).toBeFalse();
+    expect(PlanningEventManager.isEventBefore(
+        undefined, undefined)).toBeFalse();
 });
 
