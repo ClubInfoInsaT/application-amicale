@@ -73,12 +73,12 @@ export default class PlanningEventManager {
         return formattedStr
     }
 
-    static isDescriptionEmpty (description: string) {
+    static isDescriptionEmpty (description: ?string) {
         if (description !== undefined && description !== null) {
             return description
-                .replace('<p>', '')
-                .replace('</p>', '')
-                .replace('<br>', '').trim() === '';
+                .split('<p>').join('') // Equivalent to a replace all
+                .split('</p>').join('')
+                .split('<br>').join('').trim() === '';
         } else
             return true;
     }
