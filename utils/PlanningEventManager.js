@@ -157,4 +157,45 @@ export default class PlanningEventManager {
         } else
             return true;
     }
+
+
+    static generateEmptyCalendar(numberOfMonths: number) {
+        let end = new Date(new Date().setMonth(new Date().getMonth() + numberOfMonths + 1));
+        let daysOfYear = {};
+        for (let d = new Date(); d <= end; d.setDate(d.getDate() + 1)) {
+            daysOfYear[
+                PlanningEventManager.getDateOnlyString(
+                    PlanningEventManager.dateToString(new Date(d))
+                )] = []
+        }
+        return daysOfYear;
+    }
+
+    static generateEventAgenda(eventList: Array<Object>, numberOfMonths: number) {
+        let agendaItems = PlanningEventManager.generateEmptyCalendar(numberOfMonths);
+        for (let i = 0; i < eventList.length; i++) {
+            console.log(PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]));
+            console.log(eventList[i]["date_begin"]);
+            if (PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]) !== undefined) {
+                this.pushEventInOrder(agendaItems, eventList[i], PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]));
+            }
+        }
+        return agendaItems;
+    }
+
+    static pushEventInOrder(agendaItems: Object, event: Object, startDate: string) {
+        if (agendaItems[startDate].length === 0)
+            agendaItems[startDate].push(event);
+        else {
+            for (let i = 0; i < agendaItems[startDate].length; i++) {
+                if (PlanningEventManager.isEventBefore(event["date_begin"], agendaItems[startDate][i]["date_begin"])) {
+                    agendaItems[startDate].splice(i, 0, event);
+                    break;
+                } else if (i === agendaItems[startDate].length - 1) {
+                    agendaItems[startDate].push(event);
+                    break;
+                }
+            }
+        }
+    }
 }

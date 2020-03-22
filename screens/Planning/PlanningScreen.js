@@ -29,7 +29,6 @@ type State = {
 };
 
 const FETCH_URL = "https://www.amicale-insat.fr/api/event/list";
-
 const AGENDA_MONTH_SPAN = 3;
 
 /**
@@ -107,17 +106,48 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
     };
 
+    rowHasChanged(r1: Object, r2: Object) {
+        return false;
+        // if (r1 !== undefined && r2 !== undefined)
+        //     return r1.title !== r2.title;
+        // else return !(r1 === undefined && r2 === undefined);
+    }
 
-    generateEmptyCalendar() {
-        let end = new Date(new Date().setMonth(new Date().getMonth() + AGENDA_MONTH_SPAN + 1));
-        let daysOfYear = {};
-        for (let d = new Date(); d <= end; d.setDate(d.getDate() + 1)) {
-            daysOfYear[
-                PlanningEventManager.getDateOnlyString(
-                    PlanningEventManager.dateToString(new Date(d))
-                )] = []
+    /**
+     * Refresh data and show a toast if any error occurred
+     * @private
+     */
+    onRefresh = () => {
+        let canRefresh;
+        if (this.lastRefresh !== undefined)
+            canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) / 1000 > this.minTimeBetweenRefresh;
+        else
+            canRefresh = true;
+
+        if (canRefresh) {
+            this.setState({refreshing: true});
+            this.webDataManager.readData()
+                .then((fetchedData) => {
+                    this.setState({
+                        refreshing: false,
+                        agendaItems: PlanningEventManager.generateEventAgenda(fetchedData, AGENDA_MONTH_SPAN)
+                    });
+                    this.lastRefresh = new Date();
+                })
+                .catch(() => {
+                    this.setState({
+                        refreshing: false,
+                    });
+                });
         }
-        return daysOfYear;
+    };
+
+    onAgendaRef(ref: Object) {
+        this.agendaRef = ref;
+    }
+
+    onCalendarToggled(isCalendarOpened: boolean) {
+        this.setState({calendarShowing: isCalendarOpened});
     }
 
     getRenderItem(item: Object) {
@@ -155,77 +185,6 @@ export default class PlanningScreen extends React.Component<Props, State> {
         return (
             <Divider/>
         );
-    }
-
-    rowHasChanged(r1: Object, r2: Object) {
-        return false;
-        // if (r1 !== undefined && r2 !== undefined)
-        //     return r1.title !== r2.title;
-        // else return !(r1 === undefined && r2 === undefined);
-    }
-
-    /**
-     * Refresh data and show a toast if any error occurred
-     * @private
-     */
-    onRefresh = () => {
-        let canRefresh;
-        if (this.lastRefresh !== undefined)
-            canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) / 1000 > this.minTimeBetweenRefresh;
-        else
-            canRefresh = true;
-
-        if (canRefresh) {
-            this.setState({refreshing: true});
-            this.webDataManager.readData()
-                .then((fetchedData) => {
-                    this.setState({
-                        refreshing: false,
-                    });
-                    this.generateEventAgenda(fetchedData);
-                    this.lastRefresh = new Date();
-                })
-                .catch((err) => {
-                    this.setState({
-                        refreshing: false,
-                    });
-                    // console.log(err);
-                });
-        }
-    };
-
-    generateEventAgenda(eventList: Array<Object>) {
-        let agendaItems = this.generateEmptyCalendar();
-        for (let i = 0; i < eventList.length; i++) {
-            if (PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]) !== undefined) {
-                this.pushEventInOrder(agendaItems, eventList[i], PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]));
-            }
-        }
-        this.setState({agendaItems: agendaItems})
-    }
-
-    pushEventInOrder(agendaItems: Object, event: Object, startDate: string) {
-        if (agendaItems[startDate].length === 0)
-            agendaItems[startDate].push(event);
-        else {
-            for (let i = 0; i < agendaItems[startDate].length; i++) {
-                if (PlanningEventManager.isEventBefore(event["date_begin"], agendaItems[startDate][i]["date_begin"])) {
-                    agendaItems[startDate].splice(i, 0, event);
-                    break;
-                } else if (i === agendaItems[startDate].length - 1) {
-                    agendaItems[startDate].push(event);
-                    break;
-                }
-            }
-        }
-    }
-
-    onAgendaRef(ref: Object) {
-        this.agendaRef = ref;
-    }
-
-    onCalendarToggled(isCalendarOpened: boolean) {
-        this.setState({calendarShowing: isCalendarOpened});
     }
 
     render() {
