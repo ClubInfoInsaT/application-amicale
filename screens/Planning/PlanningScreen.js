@@ -28,7 +28,7 @@ type State = {
     calendarShowing: boolean,
 };
 
-const FETCH_URL = "https://amicale-insat.fr/event/json/list";
+const FETCH_URL = "https://www.amicale-insat.fr/api/event/list";
 
 const AGENDA_MONTH_SPAN = 3;
 
