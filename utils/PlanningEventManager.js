@@ -27,14 +27,14 @@ export default class PlanningEventManager {
         return PlanningEventManager.dateToString(new Date());
     }
 
-     /**
+    /**
      * Checks if the given date is before the other.
      *
      * @param event1Date Event 1 date in format YYYY-MM-DD HH:MM
      * @param event2Date Event 2 date in format YYYY-MM-DD HH:MM
      * @return {boolean}
      */
-    static isEventBefore(event1Date: string, event2Date: string) {
+    static isEventBefore(event1Date: string, event2Date: string): boolean {
         let date1 = PlanningEventManager.stringToDate(event1Date);
         let date2 = PlanningEventManager.stringToDate(event2Date);
         if (date1 !== null && date2 !== null)
@@ -50,7 +50,7 @@ export default class PlanningEventManager {
      * @param dateString The string to get the date from
      * @return {string|null} Date in format YYYY:MM:DD or null if given string is invalid
      */
-    static getDateOnlyString(dateString: string) {
+    static getDateOnlyString(dateString: string): string | null {
         if (PlanningEventManager.isEventDateStringFormatValid(dateString))
             return dateString.split(" ")[0];
         else
@@ -64,7 +64,7 @@ export default class PlanningEventManager {
      * @param dateString The string to check
      * @return {boolean}
      */
-    static isEventDateStringFormatValid(dateString: ?string) {
+    static isEventDateStringFormatValid(dateString: ?string): boolean {
         return dateString !== undefined
             && dateString !== null
             && PlanningEventManager.dateRegExp.test(dateString);
@@ -107,7 +107,7 @@ export default class PlanningEventManager {
      * @param date The date object to convert
      * @return {string} The converted string
      */
-    static dateToString(date: Date) {
+    static dateToString(date: Date): string {
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
         const year = date.getFullYear();
@@ -171,7 +171,15 @@ export default class PlanningEventManager {
             return true;
     }
 
-    static generateEmptyCalendar(numberOfMonths: number) {
+    /**
+     * Generates an object with an empty array for each key.
+     * Each key is a date string in the format
+     * YYYY-MM-DD
+     *
+     * @param numberOfMonths The number of months to create, starting from the current date
+     * @return {Object}
+     */
+    static generateEmptyCalendar(numberOfMonths: number): Object {
         const end = new Date(new Date().setMonth(new Date().getMonth() + numberOfMonths + 1));
         let daysOfYear = {};
         for (let d = new Date(); d <= end; d.setDate(d.getDate() + 1)) {
@@ -183,33 +191,52 @@ export default class PlanningEventManager {
         return daysOfYear;
     }
 
-    static generateEventAgenda(eventList: Array<eventObject>, numberOfMonths: number) {
+    /**
+     * Generates an object with an array of eventObject at each key.
+     * Each key is a date string in the format
+     * YYYY-MM-DD.
+     *
+     * If no event is available at the given key, the array will be empty
+     *
+     * @param eventList The list of events to map to the agenda
+     * @param numberOfMonths The number of months to create the agenda for
+     * @return {Object}
+     */
+    static generateEventAgenda(eventList: Array<eventObject>, numberOfMonths: number): Object {
         let agendaItems = PlanningEventManager.generateEmptyCalendar(numberOfMonths);
         for (let i = 0; i < eventList.length; i++) {
             const dateString = PlanningEventManager.getDateOnlyString(eventList[i].date_begin);
-            console.log(dateString);
-            if (dateString !== null)
-                this.pushEventInOrder(agendaItems, eventList[i], dateString);
+            if (dateString !== null) {
+                const eventArray = agendaItems[dateString];
+                if (eventArray !== undefined)
+                    this.pushEventInOrder(eventArray, eventList[i]);
+            }
+
         }
         return agendaItems;
     }
 
-    static pushEventInOrder(agendaItems: Object, event: eventObject, startDate: string) {
-        if (agendaItems[startDate] !== undefined) {
-            if (agendaItems[startDate].length === 0)
-                agendaItems[startDate].push(event);
-            else {
-                for (let i = 0; i < agendaItems[startDate].length; i++) {
-                    if (PlanningEventManager.isEventBefore(event.date_begin, agendaItems[startDate][i].date_end)) {
-                        agendaItems[startDate].splice(i, 0, event);
-                        break;
-                    } else if (i === agendaItems[startDate].length - 1) {
-                        agendaItems[startDate].push(event);
-                        break;
-                    }
+    /**
+     * Adds events to the given array depending on their starting date.
+     *
+     * Events starting before are added at the front.
+     *
+     * @param eventArray The array to hold sorted events
+     * @param event The event to add to the array
+     */
+    static pushEventInOrder(eventArray: Array<eventObject>, event: eventObject): Object {
+        if (eventArray.length === 0)
+            eventArray.push(event);
+        else {
+            for (let i = 0; i < eventArray.length; i++) {
+                if (PlanningEventManager.isEventBefore(event.date_begin, eventArray[i].date_end)) {
+                    eventArray.splice(i, 0, event);
+                    break;
+                } else if (i === eventArray.length - 1) {
+                    eventArray.push(event);
+                    break;
                 }
             }
         }
-
     }
 }
