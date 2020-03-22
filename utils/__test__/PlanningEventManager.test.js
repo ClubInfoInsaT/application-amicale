@@ -35,13 +35,13 @@ test('isEventDateStringFormatValid', () => {
 
 test('stringToDate', () => {
     let testDate = new Date();
-    expect(PlanningEventManager.stringToDate(undefined)).toBeUndefined();
-    expect(PlanningEventManager.stringToDate("")).toBeUndefined();
-    expect(PlanningEventManager.stringToDate("garbage")).toBeUndefined();
-    expect(PlanningEventManager.stringToDate("2020-03-21")).toBeUndefined();
-    expect(PlanningEventManager.stringToDate("09:00:00")).toBeUndefined();
-    expect(PlanningEventManager.stringToDate("2020-03-21 09:g0:00")).toBeUndefined();
-    expect(PlanningEventManager.stringToDate("2020-03-21 09:g0:")).toBeUndefined();
+    expect(PlanningEventManager.stringToDate(undefined)).toBeNull();
+    expect(PlanningEventManager.stringToDate("")).toBeNull();
+    expect(PlanningEventManager.stringToDate("garbage")).toBeNull();
+    expect(PlanningEventManager.stringToDate("2020-03-21")).toBeNull();
+    expect(PlanningEventManager.stringToDate("09:00:00")).toBeNull();
+    expect(PlanningEventManager.stringToDate("2020-03-21 09:g0:00")).toBeNull();
+    expect(PlanningEventManager.stringToDate("2020-03-21 09:g0:")).toBeNull();
     testDate.setFullYear(2020, 2, 21);
     testDate.setHours(9, 0, 0, 0);
     expect(PlanningEventManager.stringToDate("2020-03-21 09:00:00")).toEqual(testDate);
@@ -75,10 +75,10 @@ test('getFormattedEventTime', () => {
 test('getDateOnlyString', () => {
     expect(PlanningEventManager.getDateOnlyString("2020-03-21 09:00:00")).toBe("2020-03-21");
     expect(PlanningEventManager.getDateOnlyString("2021-12-15 09:00:00")).toBe("2021-12-15");
-    expect(PlanningEventManager.getDateOnlyString("2021-12-o5 09:00:00")).toBeUndefined();
-    expect(PlanningEventManager.getDateOnlyString("2021-12-15 09:")).toBeUndefined();
-    expect(PlanningEventManager.getDateOnlyString("2021-12-15")).toBeUndefined();
-    expect(PlanningEventManager.getDateOnlyString("garbage")).toBeUndefined();
+    expect(PlanningEventManager.getDateOnlyString("2021-12-o5 09:00:00")).toBeNull();
+    expect(PlanningEventManager.getDateOnlyString("2021-12-15 09:")).toBeNull();
+    expect(PlanningEventManager.getDateOnlyString("2021-12-15")).toBeNull();
+    expect(PlanningEventManager.getDateOnlyString("garbage")).toBeNull();
 });
 
 test('isEventBefore', () => {

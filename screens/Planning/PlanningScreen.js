@@ -5,6 +5,7 @@ import {BackHandler, View} from 'react-native';
 import i18n from "i18n-js";
 import {LocaleConfig} from 'react-native-calendars';
 import WebDataManager from "../../utils/WebDataManager";
+import type {eventObject} from "../../utils/PlanningEventManager";
 import PlanningEventManager from '../../utils/PlanningEventManager';
 import {Avatar, Divider, List} from 'react-native-paper';
 import CustomAgenda from "../../components/CustomAgenda";
@@ -150,7 +151,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
         this.setState({calendarShowing: isCalendarOpened});
     }
 
-    getRenderItem(item: Object) {
+    getRenderItem(item: eventObject) {
         const onPress = this.props.navigation.navigate.bind(this, 'PlanningDisplayScreen', {data: item});
         if (item.logo !== null) {
             return (

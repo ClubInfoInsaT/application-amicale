@@ -1,3 +1,4 @@
+// @flow
 
 /**
  * Class used to get json data from the web
@@ -8,7 +9,7 @@ export default class WebDataManager {
     lastDataFetched: Object = {};
 
 
-    constructor(url) {
+    constructor(url: string) {
         this.FETCH_URL = url;
     }
 

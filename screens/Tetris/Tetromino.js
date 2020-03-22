@@ -1,3 +1,5 @@
+// @flow
+
 export default class Tetromino {
 
     static types = {

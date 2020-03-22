@@ -1,3 +1,17 @@
+// @flow
+
+export type eventObject = {
+    id: number,
+    title: string,
+    logo: string,
+    date_begin: string,
+    date_end: string,
+    description: string,
+    club: string,
+    category_id: number,
+    url: string,
+};
+
 export default class PlanningEventManager {
 
     // Regex used to check date string validity
@@ -20,10 +34,10 @@ export default class PlanningEventManager {
      * @param event2Date Event 2 date in format YYYY-MM-DD HH:MM:SS
      * @return {boolean}
      */
-    static isEventBefore(event1Date: ?string, event2Date: ?string) {
+    static isEventBefore(event1Date: string, event2Date: string) {
         let date1 = PlanningEventManager.stringToDate(event1Date);
         let date2 = PlanningEventManager.stringToDate(event2Date);
-        if (date1 !== undefined && date2 !== undefined)
+        if (date1 !== null && date2 !== null)
             return date1 < date2;
         else
             return false;
@@ -34,13 +48,13 @@ export default class PlanningEventManager {
      * YYYY-MM-DD HH:MM:SS
      *
      * @param dateString The string to get the date from
-     * @return {string|undefined} Date in format YYYY:MM:DD or undefined if given string is invalid
+     * @return {string|null} Date in format YYYY:MM:DD or null if given string is invalid
      */
-    static getDateOnlyString(dateString: ?string) {
+    static getDateOnlyString(dateString: string) {
         if (PlanningEventManager.isEventDateStringFormatValid(dateString))
             return dateString.split(" ")[0];
         else
-            return undefined;
+            return null;
     }
 
     /**
@@ -61,9 +75,9 @@ export default class PlanningEventManager {
      * Accepted format: YYYY-MM-DD HH:MM:SS
      *
      * @param dateString The string to convert
-     * @return {Date|undefined} The date object or undefined if the given string is invalid
+     * @return {Date|null} The date object or null if the given string is invalid
      */
-    static stringToDate(dateString: ?string): Date | undefined {
+    static stringToDate(dateString: string): Date | null {
         let date = new Date();
         if (PlanningEventManager.isEventDateStringFormatValid(dateString)) {
             let stringArray = dateString.split(' ');
@@ -81,7 +95,7 @@ export default class PlanningEventManager {
                 0,
             );
         } else
-            date = undefined;
+            date = null;
 
         return date;
     }
@@ -116,12 +130,12 @@ export default class PlanningEventManager {
      * @param end End time in YYYY-MM-DD HH:MM:SS format
      * @return {string} Formatted string or "/ - /" on error
      */
-    static getFormattedEventTime(start: ?string, end: ?string): string {
+    static getFormattedEventTime(start: string, end: string): string {
         let formattedStr = '/ - /';
         let startDate = PlanningEventManager.stringToDate(start);
         let endDate = PlanningEventManager.stringToDate(end);
 
-        if (startDate !== undefined && endDate !== undefined && startDate.getTime() !== endDate.getTime()) {
+        if (startDate !== null && endDate !== null && startDate.getTime() !== endDate.getTime()) {
             formattedStr = String(startDate.getHours()).padStart(2, '0') + ':'
                 + String(startDate.getMinutes()).padStart(2, '0') + ' - ';
             if (endDate.getFullYear() > startDate.getFullYear()
@@ -131,7 +145,7 @@ export default class PlanningEventManager {
             else
                 formattedStr += String(endDate.getHours()).padStart(2, '0') + ':'
                     + String(endDate.getMinutes()).padStart(2, '0');
-        } else if (startDate !== undefined)
+        } else if (startDate !== null)
             formattedStr =
                 String(startDate.getHours()).padStart(2, '0') + ':'
                 + String(startDate.getMinutes()).padStart(2, '0');
@@ -163,32 +177,30 @@ export default class PlanningEventManager {
         let end = new Date(new Date().setMonth(new Date().getMonth() + numberOfMonths + 1));
         let daysOfYear = {};
         for (let d = new Date(); d <= end; d.setDate(d.getDate() + 1)) {
-            daysOfYear[
-                PlanningEventManager.getDateOnlyString(
-                    PlanningEventManager.dateToString(new Date(d))
-                )] = []
+            const dateString = PlanningEventManager.getDateOnlyString(
+                PlanningEventManager.dateToString(new Date(d)));
+            if (dateString !== null)
+                daysOfYear[dateString] = []
         }
         return daysOfYear;
     }
 
-    static generateEventAgenda(eventList: Array<Object>, numberOfMonths: number) {
+    static generateEventAgenda(eventList: Array<eventObject>, numberOfMonths: number) {
         let agendaItems = PlanningEventManager.generateEmptyCalendar(numberOfMonths);
         for (let i = 0; i < eventList.length; i++) {
-            console.log(PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]));
-            console.log(eventList[i]["date_begin"]);
-            if (PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]) !== undefined) {
-                this.pushEventInOrder(agendaItems, eventList[i], PlanningEventManager.getDateOnlyString(eventList[i]["date_begin"]));
-            }
+            const dateString = PlanningEventManager.getDateOnlyString(eventList[i].date_begin);
+            if (dateString !== null)
+                this.pushEventInOrder(agendaItems, eventList[i], dateString);
         }
         return agendaItems;
     }
 
-    static pushEventInOrder(agendaItems: Object, event: Object, startDate: string) {
+    static pushEventInOrder(agendaItems: Object, event: eventObject, startDate: string) {
         if (agendaItems[startDate].length === 0)
             agendaItems[startDate].push(event);
         else {
             for (let i = 0; i < agendaItems[startDate].length; i++) {
-                if (PlanningEventManager.isEventBefore(event["date_begin"], agendaItems[startDate][i]["date_begin"])) {
+                if (PlanningEventManager.isEventBefore(event.date_begin, agendaItems[startDate][i].date_end)) {
                     agendaItems[startDate].splice(i, 0, event);
                     break;
                 } else if (i === agendaItems[startDate].length - 1) {

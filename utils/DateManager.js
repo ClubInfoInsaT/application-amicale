@@ -1,3 +1,5 @@
+// @flow
+
 import i18n from 'i18n-js';
 
 export default class DateManager {
