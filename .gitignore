@@ -9,7 +9,6 @@ npm-debug.*
 web-build/
 web-report/
 /.expo-shared/
-/coverage/
 /package-lock.json
 /passwords.json
 
