@@ -33,14 +33,16 @@ class PlanningDisplayScreen extends React.Component<Props> {
 
     render() {
         // console.log("rendering planningDisplayScreen");
+        let subtitle = PlanningEventManager.getFormattedEventTime(
+            this.displayData["date_begin"], this.displayData["date_end"]);
+        let dateString = PlanningEventManager.getDateOnlyString(this.displayData["date_begin"]);
+        if (dateString !== null)
+            subtitle += ' | ' + DateManager.getInstance().getTranslatedDate(dateString);
         return (
             <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
                 <Card.Title
                     title={this.displayData.title}
-                    subtitle={
-                        PlanningEventManager.getFormattedEventTime(this.displayData["date_begin"], this.displayData["date_end"])
-                        + ' | '
-                        + DateManager.getInstance().getTranslatedDate(PlanningEventManager.getDateOnlyString(this.displayData["date_begin"]))}
+                    subtitle={subtitle}
                 />
                 {this.displayData.logo !== null ?
                     <View style={{width: '100%', height: 300}}>

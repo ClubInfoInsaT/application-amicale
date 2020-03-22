@@ -131,7 +131,12 @@ class DebugScreen extends React.Component<Props, State> {
                         <Card.Content>
                             {Object.values(this.state.currentPreferences).map((object) =>
                                 <View>
-                                    {DebugScreen.getGeneralItem(() => this.showEditModal(object), undefined, object.key, 'Click to edit')}
+                                    {DebugScreen.getGeneralItem(
+                                        () => this.showEditModal(object),
+                                        undefined,
+                                        //$FlowFixMe
+                                        object.key,
+                                        'Click to edit')}
                                 </View>
                             )}
                         </Card.Content>

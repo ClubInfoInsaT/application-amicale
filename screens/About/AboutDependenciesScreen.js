@@ -5,13 +5,19 @@ import {FlatList} from "react-native";
 import packageJson from '../../package';
 import {List} from 'react-native-paper';
 
-function generateListFromObject(object) {
+type listItem = {
+    name: string,
+    version: string
+};
+
+function generateListFromObject(object: { [string]: string }): Array<listItem> {
     let list = [];
     let keys = Object.keys(object);
     let values = Object.values(object);
     for (let i = 0; i < keys.length; i++) {
         list.push({name: keys[i], version: values[i]});
     }
+    //$FlowFixMe
     return list;
 }
 

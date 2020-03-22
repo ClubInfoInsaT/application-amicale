@@ -37,7 +37,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
     static defaultProps = {
         renderSectionHeader: null,
         stickyHeader: false,
-        updateData: null,
+        updateData: 0,
     };
 
     webDataManager: WebDataManager;
@@ -213,7 +213,9 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                             onRefresh={this.onRefresh}
                         />
                     }
+                    //$FlowFixMe
                     renderSectionHeader={shouldRenderHeader ? this.props.renderSectionHeader : this.getEmptySectionHeader}
+                    //$FlowFixMe
                     renderItem={isEmpty ? this.getEmptyRenderItem : this.props.renderItem}
                     style={{minHeight: 300, width: '100%'}}
                     stickySectionHeadersEnabled={this.props.stickyHeader}

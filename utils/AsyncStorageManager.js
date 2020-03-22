@@ -96,6 +96,7 @@ export default class AsyncStorageManager {
         let prefKeys = [];
         // Get all available keys
         for (let [key, value] of Object.entries(this.preferences)) {
+            //$FlowFixMe
             prefKeys.push(value.key);
         }
         // Get corresponding values

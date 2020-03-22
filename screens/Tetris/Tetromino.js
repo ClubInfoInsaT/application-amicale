@@ -165,13 +165,13 @@ export default class Tetromino {
 
     static colors: Object;
 
-    currentType: Object;
+    currentType: number;
     currentShape: Object;
     currentRotation: number;
     position: Object;
     colors: Object;
 
-    constructor(type: Tetromino.types, colors: Object) {
+    constructor(type: number, colors: Object) {
         this.currentType = type;
         this.currentRotation = 0;
         this.currentShape = Tetromino.shapes[this.currentRotation][type];
@@ -181,15 +181,15 @@ export default class Tetromino {
         else
             this.position.x = 3;
         this.colors = colors;
-        Tetromino.colors = {
-            0: colors.tetrisI,
-            1: colors.tetrisO,
-            2: colors.tetrisT,
-            3: colors.tetrisS,
-            4: colors.tetrisZ,
-            5: colors.tetrisJ,
-            6: colors.tetrisL,
-        };
+        Tetromino.colors = [
+            colors.tetrisI,
+            colors.tetrisO,
+            colors.tetrisT,
+            colors.tetrisS,
+            colors.tetrisZ,
+            colors.tetrisJ,
+            colors.tetrisL,
+        ];
     }
 
     getColor() {
@@ -210,7 +210,7 @@ export default class Tetromino {
         return coordinates;
     }
 
-    rotate(isForward) {
+    rotate(isForward: boolean) {
         if (isForward)
             this.currentRotation++;
         else
