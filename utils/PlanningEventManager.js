@@ -15,7 +15,7 @@ export type eventObject = {
 export default class PlanningEventManager {
 
     // Regex used to check date string validity
-    static dateRegExp = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+    static dateRegExp = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
 
     /**
      * Gets the current day string representation in the format
@@ -30,8 +30,8 @@ export default class PlanningEventManager {
      /**
      * Checks if the given date is before the other.
      *
-     * @param event1Date Event 1 date in format YYYY-MM-DD HH:MM:SS
-     * @param event2Date Event 2 date in format YYYY-MM-DD HH:MM:SS
+     * @param event1Date Event 1 date in format YYYY-MM-DD HH:MM
+     * @param event2Date Event 2 date in format YYYY-MM-DD HH:MM
      * @return {boolean}
      */
     static isEventBefore(event1Date: string, event2Date: string) {
@@ -45,7 +45,7 @@ export default class PlanningEventManager {
 
     /**
      * Gets only the date part of the given event date string in the format
-     * YYYY-MM-DD HH:MM:SS
+     * YYYY-MM-DD HH:MM
      *
      * @param dateString The string to get the date from
      * @return {string|null} Date in format YYYY:MM:DD or null if given string is invalid
@@ -59,7 +59,7 @@ export default class PlanningEventManager {
 
     /**
      * Checks if the given date string is in the format
-     * YYYY-MM-DD HH:MM:SS
+     * YYYY-MM-DD HH:MM
      *
      * @param dateString The string to check
      * @return {boolean}
@@ -72,7 +72,7 @@ export default class PlanningEventManager {
 
     /**
      * Converts the given date string to a date object.<br>
-     * Accepted format: YYYY-MM-DD HH:MM:SS
+     * Accepted format: YYYY-MM-DD HH:MM
      *
      * @param dateString The string to convert
      * @return {Date|null} The date object or null if the given string is invalid
@@ -91,7 +91,7 @@ export default class PlanningEventManager {
             date.setHours(
                 parseInt(timeArray[0]),
                 parseInt(timeArray[1]),
-                parseInt(timeArray[2]),
+                0,
                 0,
             );
         } else
@@ -113,8 +113,7 @@ export default class PlanningEventManager {
         const year = date.getFullYear();
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-        return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+        return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
     }
 
     /**
@@ -172,9 +171,8 @@ export default class PlanningEventManager {
             return true;
     }
 
-
     static generateEmptyCalendar(numberOfMonths: number) {
-        let end = new Date(new Date().setMonth(new Date().getMonth() + numberOfMonths + 1));
+        const end = new Date(new Date().setMonth(new Date().getMonth() + numberOfMonths + 1));
         let daysOfYear = {};
         for (let d = new Date(); d <= end; d.setDate(d.getDate() + 1)) {
             const dateString = PlanningEventManager.getDateOnlyString(
@@ -189,6 +187,7 @@ export default class PlanningEventManager {
         let agendaItems = PlanningEventManager.generateEmptyCalendar(numberOfMonths);
         for (let i = 0; i < eventList.length; i++) {
             const dateString = PlanningEventManager.getDateOnlyString(eventList[i].date_begin);
+            console.log(dateString);
             if (dateString !== null)
                 this.pushEventInOrder(agendaItems, eventList[i], dateString);
         }
@@ -196,18 +195,21 @@ export default class PlanningEventManager {
     }
 
     static pushEventInOrder(agendaItems: Object, event: eventObject, startDate: string) {
-        if (agendaItems[startDate].length === 0)
-            agendaItems[startDate].push(event);
-        else {
-            for (let i = 0; i < agendaItems[startDate].length; i++) {
-                if (PlanningEventManager.isEventBefore(event.date_begin, agendaItems[startDate][i].date_end)) {
-                    agendaItems[startDate].splice(i, 0, event);
-                    break;
-                } else if (i === agendaItems[startDate].length - 1) {
-                    agendaItems[startDate].push(event);
-                    break;
+        if (agendaItems[startDate] !== undefined) {
+            if (agendaItems[startDate].length === 0)
+                agendaItems[startDate].push(event);
+            else {
+                for (let i = 0; i < agendaItems[startDate].length; i++) {
+                    if (PlanningEventManager.isEventBefore(event.date_begin, agendaItems[startDate][i].date_end)) {
+                        agendaItems[startDate].splice(i, 0, event);
+                        break;
+                    } else if (i === agendaItems[startDate].length - 1) {
+                        agendaItems[startDate].push(event);
+                        break;
+                    }
                 }
             }
         }
+
     }
 }
