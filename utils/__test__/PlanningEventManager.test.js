@@ -95,6 +95,8 @@ test('isEventBefore', () => {
         "2020-03-21 10:15", "2020-03-30 10:15")).toBeTrue();
 
     expect(PlanningEventManager.isEventBefore(
+        "2020-03-21 10:00", "2020-03-21 10:00")).toBeFalse();
+    expect(PlanningEventManager.isEventBefore(
         "2020-03-21 10:00", "2020-03-21 09:00")).toBeFalse();
     expect(PlanningEventManager.isEventBefore(
         "2020-03-21 10:15", "2020-03-21 10:00")).toBeFalse();
@@ -125,6 +127,84 @@ test('dateToString', () => {
 });
 
 test('generateEmptyCalendar', () => {
-
+    jest.spyOn(Date, 'now')
+        .mockImplementation(() =>
+            new Date('2020-01-14T00:00:00.000Z').getTime()
+        );
+    let calendar = PlanningEventManager.generateEmptyCalendar(1);
+    expect(calendar).toHaveProperty("2020-01-14");
+    expect(calendar).toHaveProperty("2020-01-20");
+    expect(calendar).toHaveProperty("2020-02-10");
+    expect(Object.keys(calendar).length).toBe(32);
+    calendar = PlanningEventManager.generateEmptyCalendar(3);
+    expect(calendar).toHaveProperty("2020-01-14");
+    expect(calendar).toHaveProperty("2020-01-20");
+    expect(calendar).toHaveProperty("2020-02-10");
+    expect(calendar).toHaveProperty("2020-02-14");
+    expect(calendar).toHaveProperty("2020-03-20");
+    expect(calendar).toHaveProperty("2020-04-12");
+    expect(Object.keys(calendar).length).toBe(92);
 });
 
+test('pushEventInOrder', () => {
+    let eventArray = [];
+    let event1 = {date_begin: "2020-01-14 09:15"};
+    PlanningEventManager.pushEventInOrder(eventArray, event1);
+    expect(eventArray.length).toBe(1);
+    expect(eventArray[0]).toBe(event1);
+
+    let event2 = {date_begin: "2020-01-14 10:15"};
+    PlanningEventManager.pushEventInOrder(eventArray, event2);
+    expect(eventArray.length).toBe(2);
+    expect(eventArray[0]).toBe(event1);
+    expect(eventArray[1]).toBe(event2);
+
+    let event3 = {date_begin: "2020-01-14 10:15", title: "garbage"};
+    PlanningEventManager.pushEventInOrder(eventArray, event3);
+    expect(eventArray.length).toBe(3);
+    expect(eventArray[0]).toBe(event1);
+    expect(eventArray[1]).toBe(event2);
+    expect(eventArray[2]).toBe(event3);
+
+    let event4 = {date_begin: "2020-01-13 09:00"};
+    PlanningEventManager.pushEventInOrder(eventArray, event4);
+    expect(eventArray.length).toBe(4);
+    expect(eventArray[0]).toBe(event4);
+    expect(eventArray[1]).toBe(event1);
+    expect(eventArray[2]).toBe(event2);
+    expect(eventArray[3]).toBe(event3);
+});
+
+test('generateEventAgenda', () => {
+    jest.spyOn(Date, 'now')
+        .mockImplementation(() =>
+            new Date('2020-01-14T00:00:00.000Z').getTime()
+        );
+    let eventList = [
+        {date_begin: "2020-01-14 09:15"},
+        {date_begin: "2020-02-01 09:15"},
+        {date_begin: "2020-01-15 09:15"},
+        {date_begin: "2020-02-01 09:30"},
+        {date_begin: "2020-02-01 08:30"},
+    ];
+    const calendar = PlanningEventManager.generateEventAgenda(eventList, 2);
+    expect(calendar["2020-01-14"].length).toBe(1);
+    expect(calendar["2020-01-14"][0]).toBe(eventList[0]);
+    expect(calendar["2020-01-15"].length).toBe(1);
+    expect(calendar["2020-01-15"][0]).toBe(eventList[2]);
+    expect(calendar["2020-02-01"].length).toBe(3);
+    expect(calendar["2020-02-01"][0]).toBe(eventList[4]);
+    expect(calendar["2020-02-01"][1]).toBe(eventList[1]);
+    expect(calendar["2020-02-01"][2]).toBe(eventList[3]);
+});
+
+test('getCurrentDateString', () => {
+    jest.spyOn(Date, 'now')
+        .mockImplementation(() => {
+            let date = new Date();
+            date.setFullYear(2020, 0, 14);
+            date.setHours(15, 30, 54, 65);
+            return date.getTime();
+        });
+    expect(PlanningEventManager.getCurrentDateString()).toBe('2020-01-14 15:30');
+});

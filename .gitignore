@@ -10,6 +10,9 @@ web-build/
 web-report/
 /.expo-shared/
 /coverage/
-/.idea/
 /package-lock.json
 /passwords.json
+
+!/.idea/
+/.idea/*
+!/.idea/runConfigurations

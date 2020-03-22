@@ -24,7 +24,7 @@ export default class PlanningEventManager {
      * @return {string} The string representation
      */
     static getCurrentDateString(): string {
-        return PlanningEventManager.dateToString(new Date());
+        return PlanningEventManager.dateToString(new Date(Date.now()));
     }
 
     /**
@@ -180,9 +180,10 @@ export default class PlanningEventManager {
      * @return {Object}
      */
     static generateEmptyCalendar(numberOfMonths: number): Object {
-        const end = new Date(new Date().setMonth(new Date().getMonth() + numberOfMonths + 1));
+        let end = new Date(Date.now());
+        end.setMonth(end.getMonth() + numberOfMonths);
         let daysOfYear = {};
-        for (let d = new Date(); d <= end; d.setDate(d.getDate() + 1)) {
+        for (let d = new Date(Date.now()); d <= end; d.setDate(d.getDate() + 1)) {
             const dateString = PlanningEventManager.getDateOnlyString(
                 PlanningEventManager.dateToString(new Date(d)));
             if (dateString !== null)
@@ -229,7 +230,7 @@ export default class PlanningEventManager {
             eventArray.push(event);
         else {
             for (let i = 0; i < eventArray.length; i++) {
-                if (PlanningEventManager.isEventBefore(event.date_begin, eventArray[i].date_end)) {
+                if (PlanningEventManager.isEventBefore(event.date_begin, eventArray[i].date_begin)) {
                     eventArray.splice(i, 0, event);
                     break;
                 } else if (i === eventArray.length - 1) {
