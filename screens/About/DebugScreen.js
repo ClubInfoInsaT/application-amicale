@@ -1,9 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Alert, Clipboard, ScrollView, View} from "react-native";
+import {ScrollView, View} from "react-native";
 import AsyncStorageManager from "../../utils/AsyncStorageManager";
-import NotificationsManager from "../../utils/NotificationsManager";
 import CustomModal from "../../components/CustomModal";
 import {Button, Card, List, Subheading, TextInput, Title, withTheme} from 'react-native-paper';
 
@@ -57,23 +56,6 @@ class DebugScreen extends React.Component<Props, State> {
                 />
             );
         }
-    }
-
-    alertCurrentExpoToken() {
-        let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-        Alert.alert(
-            'Expo Token',
-            token,
-            [
-                {text: 'Copy', onPress: () => Clipboard.setString(token)},
-                {text: 'OK'}
-            ]
-        );
-    }
-
-    async forceExpoTokenUpdate() {
-        await NotificationsManager.forceExpoTokenUpdate();
-        this.alertCurrentExpoToken();
     }
 
     showEditModal(item: Object) {
@@ -142,15 +124,6 @@ class DebugScreen extends React.Component<Props, State> {
                     {this.getModalContent()}
                 </CustomModal>
                 <ScrollView style={{padding: 5}}>
-                    <Card style={{margin: 5}}>
-                        <Card.Title
-                            title={'Notifications'}
-                        />
-                        <Card.Content>
-                            {DebugScreen.getGeneralItem(() => this.alertCurrentExpoToken(), 'bell', 'Get current Expo Token', '')}
-                            {DebugScreen.getGeneralItem(() => this.forceExpoTokenUpdate(), 'bell-ring', 'Force Expo token update', '')}
-                        </Card.Content>
-                    </Card>
                     <Card style={{margin: 5}}>
                         <Card.Title
                             title={'Preferences'}

@@ -29,62 +29,6 @@ export default class NotificationsManager {
     }
 
     /**
-     * Async function sending a notification without delay to the user
-     *
-     * @param title {String} Notification title
-     * @param body {String} Notification body text
-     * @returns {Promise<import("react").ReactText>} Notification Id
-     */
-    static async sendNotificationImmediately(title: string, body: string) {
-        await NotificationsManager.askPermissions();
-        return await Notifications.presentLocalNotificationAsync({
-            title: title,
-            body: body,
-        });
-    };
-
-    /**
-     * Async function sending notification at the specified time
-     *
-     * @param title Notification title
-     * @param body Notification body text
-     * @param time Time at which we should send the notification
-     * @param data Data to send with the notification, used for listeners
-     * @param androidChannelID
-     * @returns {Promise<import("react").ReactText>} Notification Id
-     */
-    static async scheduleNotification(title: string, body: string, time: number, data: Object, androidChannelID: string): Promise<string> {
-        await NotificationsManager.askPermissions();
-        let date = new Date();
-        date.setTime(time);
-        return Notifications.scheduleLocalNotificationAsync(
-            {
-                title: title,
-                body: body,
-                data: data,
-                ios: { // configuration for iOS.
-                    sound: true
-                },
-                android: { // configuration for Android.
-                    channelId: androidChannelID,
-                }
-            },
-            {
-                time: time,
-            },
-        );
-    };
-
-    /**
-     * Async function used to cancel the notification of a specific ID
-     * @param notificationID {Number} The notification ID
-     * @returns {Promise}
-     */
-    static async cancelScheduledNotification(notificationID: number) {
-        await Notifications.cancelScheduledNotificationAsync(notificationID);
-    }
-
-    /**
      * Save expo token to allow sending notifications to this device.
      * This token is unique for each device and won't change.
      * It only needs to be fetched once, then it will be saved in storage.
@@ -103,13 +47,6 @@ export default class NotificationsManager {
                 console.log(e);
             }
         }
-    }
-
-    static async forceExpoTokenUpdate() {
-        await NotificationsManager.askPermissions();
-        let expoToken = await Notifications.getExpoPushTokenAsync();
-        // Save token for instant use later on
-        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.expoToken.key, expoToken);
     }
 
     static getMachineNotificationWatchlist(callback: Function) {
