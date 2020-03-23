@@ -253,7 +253,7 @@ class TetrisScreen extends React.Component<Props, State> {
                     right: 5,
                 }}>
                     <Preview
-                        next={this.logic.getNextPieces()}
+                        next={this.logic.getNextPiecesPreviews()}
                     />
                 </View>
                 <View style={{

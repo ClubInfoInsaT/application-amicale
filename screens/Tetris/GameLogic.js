@@ -1,6 +1,6 @@
 // @flow
 
-import Tetromino from "./Tetromino";
+import Piece from "./Piece";
 
 export default class GameLogic {
 
@@ -28,7 +28,7 @@ export default class GameLogic {
     score: number;
     level: number;
 
-    currentObject: Tetromino;
+    currentObject: Piece;
 
     gameTick: number;
     gameTickInterval: IntervalID;
@@ -39,7 +39,7 @@ export default class GameLogic {
     autoRepeatActivationDelay: number;
     autoRepeatDelay: number;
 
-    nextPieces: Array<Tetromino>;
+    nextPieces: Array<Piece>;
     nextPiecesCount: number;
 
     onTick: Function;
@@ -62,12 +62,11 @@ export default class GameLogic {
         this.nextPiecesCount = 3;
     }
 
-    getNextPieces() {
+    getNextPiecesPreviews() {
         let finalArray = [];
         for (let i = 0; i < this.nextPieces.length; i++) {
             finalArray.push(this.getEmptyGrid(4, 4));
-            let coord = this.nextPieces[i].getCellsCoordinates(false);
-            this.tetrominoToGrid(this.nextPieces[i], coord, finalArray[i]);
+            this.nextPieces[i].toGrid(finalArray[i], true);
         }
 
         return finalArray;
@@ -113,14 +112,8 @@ export default class GameLogic {
     }
 
     getFinalGrid() {
-        let coord = this.currentObject.getCellsCoordinates(true);
         let finalGrid = this.getGridCopy();
-        for (let i = 0; i < coord.length; i++) {
-            finalGrid[coord[i].y][coord[i].x] = {
-                color: this.currentObject.getColor(),
-                isEmpty: false,
-            };
-        }
+        this.currentObject.toGrid(finalGrid, false);
         return finalGrid;
     }
 
@@ -137,19 +130,9 @@ export default class GameLogic {
         return canLevel;
     }
 
-    tetrominoToGrid(object: Object, coord : Array<Object>, grid: Array<Array<Object>>) {
-        for (let i = 0; i < coord.length; i++) {
-            grid[coord[i].y][coord[i].x] = {
-                color: object.getColor(),
-                isEmpty: false,
-            };
-        }
-    }
-
     freezeTetromino() {
-        let coord = this.currentObject.getCellsCoordinates(true);
-        this.tetrominoToGrid(this.currentObject, coord, this.currentGrid);
-        this.clearLines(this.getLinesToClear(coord));
+        this.currentObject.toGrid(this.currentGrid, false);
+        this.clearLines(this.getLinesToClear(this.currentObject.getCoordinates()));
     }
 
     clearLines(lines: Array<number>) {
@@ -191,52 +174,6 @@ export default class GameLogic {
         return rows;
     }
 
-    isTetrominoPositionValid() {
-        let isValid = true;
-        let coord = this.currentObject.getCellsCoordinates(true);
-        for (let i = 0; i < coord.length; i++) {
-            if (coord[i].x >= this.getWidth()
-                || coord[i].x < 0
-                || coord[i].y >= this.getHeight()
-                || coord[i].y < 0
-                || !this.currentGrid[coord[i].y][coord[i].x].isEmpty) {
-                isValid = false;
-                break;
-            }
-        }
-        return isValid;
-    }
-
-    tryMoveTetromino(x: number, y: number) {
-        if (x > 1) x = 1; // Prevent moving from more than one tile
-        if (x < -1) x = -1;
-        if (y > 1) y = 1;
-        if (y < -1) y = -1;
-        if (x !== 0 && y !== 0) y = 0; // Prevent diagonal movement
-
-        this.currentObject.move(x, y);
-        let isValid = this.isTetrominoPositionValid();
-
-        if (!isValid && x !== 0)
-            this.currentObject.move(-x, 0);
-        else if (!isValid && y !== 0) {
-            this.currentObject.move(0, -y);
-            this.freezeTetromino();
-            this.createTetromino();
-        } else
-            return true;
-        return false;
-    }
-
-    tryRotateTetromino() {
-        this.currentObject.rotate(true);
-        if (!this.isTetrominoPositionValid()) {
-            this.currentObject.rotate(false);
-            return false;
-        }
-        return true;
-    }
-
     setNewGameTick(level: number) {
         if (level >= GameLogic.levelTicks.length)
             return;
@@ -245,8 +182,15 @@ export default class GameLogic {
         this.gameTickInterval = setInterval(this.onTick, this.gameTick);
     }
 
+    onFreeze() {
+        this.freezeTetromino();
+        this.createTetromino();
+    }
+
     onTick(callback: Function) {
-        this.tryMoveTetromino(0, 1);
+        this.currentObject.tryMove(0, 1,
+            this.currentGrid, this.getWidth(), this.getHeight(),
+            () => this.onFreeze());
         callback(this.score, this.level, this.getFinalGrid());
         if (this.canLevelUp()) {
             this.level++;
@@ -281,8 +225,10 @@ export default class GameLogic {
     movePressedRepeat(isInitial: boolean, callback: Function, x: number, y: number) {
         if (!this.canUseInput() || !this.isPressedIn)
             return;
-
-        if (this.tryMoveTetromino(x, y)) {
+        const moved = this.currentObject.tryMove(x, y,
+            this.currentGrid, this.getWidth(), this.getHeight(),
+            () => this.onFreeze());
+        if (moved) {
             if (y === 1) {
                 this.score++;
                 callback(this.getFinalGrid(), this.score);
@@ -301,7 +247,7 @@ export default class GameLogic {
         if (!this.canUseInput())
             return;
 
-        if (this.tryRotateTetromino())
+        if (this.currentObject.tryRotate(this.currentGrid, this.getWidth(), this.getHeight()))
             callback(this.getFinalGrid());
     }
 
@@ -312,15 +258,14 @@ export default class GameLogic {
 
     generateNextPieces() {
         while (this.nextPieces.length < this.nextPiecesCount) {
-            let shape = Math.floor(Math.random() * 7);
-            this.nextPieces.push(new Tetromino(shape, this.colors));
+            this.nextPieces.push(new Piece(this.colors));
         }
     }
 
     createTetromino() {
         this.pressedOut();
         this.recoverNextPiece();
-        if (!this.isTetrominoPositionValid())
+        if (!this.currentObject.isPositionValid(this.currentGrid, this.getWidth(), this.getHeight()))
             this.endGame(false);
     }
 
