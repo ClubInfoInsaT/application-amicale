@@ -1,6 +1,8 @@
 // @flow
 
 import Piece from "./Piece";
+import ScoreManager from "./ScoreManager";
+import GridManager from "./GridManager";
 
 export default class GameLogic {
 
@@ -15,9 +17,8 @@ export default class GameLogic {
         100,
     ];
 
-    static scoreLinesModifier = [40, 100, 300, 1200];
-
-    currentGrid: Array<Array<Object>>;
+    scoreManager: ScoreManager;
+    gridManager: GridManager;
 
     height: number;
     width: number;
@@ -25,8 +26,6 @@ export default class GameLogic {
     gameRunning: boolean;
     gamePaused: boolean;
     gameTime: number;
-    score: number;
-    level: number;
 
     currentObject: Piece;
 
@@ -48,8 +47,6 @@ export default class GameLogic {
 
     colors: Object;
 
-    levelProgression: number;
-
     constructor(height: number, width: number, colors: Object) {
         this.height = height;
         this.width = width;
@@ -60,16 +57,8 @@ export default class GameLogic {
         this.autoRepeatDelay = 50;
         this.nextPieces = [];
         this.nextPiecesCount = 3;
-    }
-
-    getNextPiecesPreviews() {
-        let finalArray = [];
-        for (let i = 0; i < this.nextPieces.length; i++) {
-            finalArray.push(this.getEmptyGrid(4, 4));
-            this.nextPieces[i].toGrid(finalArray[i], true);
-        }
-
-        return finalArray;
+        this.scoreManager = new ScoreManager();
+        this.gridManager = new GridManager(this.getWidth(), this.getHeight(), this.colors);
     }
 
     getHeight(): number {
@@ -80,6 +69,10 @@ export default class GameLogic {
         return this.width;
     }
 
+    getCurrentGrid() {
+        return this.gridManager.getCurrentGrid();
+    }
+
     isGameRunning(): boolean {
         return this.gameRunning;
     }
@@ -88,90 +81,9 @@ export default class GameLogic {
         return this.gamePaused;
     }
 
-    getEmptyLine(width: number) {
-        let line = [];
-        for (let col = 0; col < width; col++) {
-            line.push({
-                color: this.colors.tetrisBackground,
-                isEmpty: true,
-            });
-        }
-        return line;
-    }
-
-    getEmptyGrid(height: number, width: number) {
-        let grid = [];
-        for (let row = 0; row < height; row++) {
-            grid.push(this.getEmptyLine(width));
-        }
-        return grid;
-    }
-
-    getGridCopy() {
-        return JSON.parse(JSON.stringify(this.currentGrid));
-    }
-
-    getFinalGrid() {
-        let finalGrid = this.getGridCopy();
-        this.currentObject.toGrid(finalGrid, false);
-        return finalGrid;
-    }
-
-    getLinesRemovedPoints(numberRemoved: number) {
-        if (numberRemoved < 1 || numberRemoved > 4)
-            return 0;
-        return GameLogic.scoreLinesModifier[numberRemoved-1] * (this.level + 1);
-    }
-
-    canLevelUp() {
-        let canLevel = this.levelProgression > this.level * 5;
-        if (canLevel)
-            this.levelProgression -= this.level * 5;
-        return canLevel;
-    }
-
-    freezeTetromino() {
-        this.currentObject.toGrid(this.currentGrid, false);
-        this.clearLines(this.getLinesToClear(this.currentObject.getCoordinates()));
-    }
-
-    clearLines(lines: Array<number>) {
-        lines.sort();
-        for (let i = 0; i < lines.length; i++) {
-            this.currentGrid.splice(lines[i], 1);
-            this.currentGrid.unshift(this.getEmptyLine(this.getWidth()));
-        }
-        switch (lines.length) {
-            case 1:
-                this.levelProgression += 1;
-                break;
-            case 2:
-                this.levelProgression += 3;
-                break;
-            case 3:
-                this.levelProgression += 5;
-                break;
-            case 4: // Did a tetris !
-                this.levelProgression += 8;
-                break;
-        }
-        this.score += this.getLinesRemovedPoints(lines.length);
-    }
-
-    getLinesToClear(coord: Object) {
-        let rows = [];
-        for (let i = 0; i < coord.length; i++) {
-            let isLineFull = true;
-            for (let col = 0; col < this.getWidth(); col++) {
-                if (this.currentGrid[coord[i].y][col].isEmpty) {
-                    isLineFull = false;
-                    break;
-                }
-            }
-            if (isLineFull && rows.indexOf(coord[i].y) === -1)
-                rows.push(coord[i].y);
-        }
-        return rows;
+    onFreeze() {
+        this.gridManager.freezeTetromino(this.currentObject, this.scoreManager);
+        this.createTetromino();
     }
 
     setNewGameTick(level: number) {
@@ -182,20 +94,16 @@ export default class GameLogic {
         this.gameTickInterval = setInterval(this.onTick, this.gameTick);
     }
 
-    onFreeze() {
-        this.freezeTetromino();
-        this.createTetromino();
-    }
-
     onTick(callback: Function) {
         this.currentObject.tryMove(0, 1,
-            this.currentGrid, this.getWidth(), this.getHeight(),
+            this.gridManager.getCurrentGrid(), this.getWidth(), this.getHeight(),
             () => this.onFreeze());
-        callback(this.score, this.level, this.getFinalGrid());
-        if (this.canLevelUp()) {
-            this.level++;
-            this.setNewGameTick(this.level);
-        }
+        callback(
+            this.scoreManager.getScore(),
+            this.scoreManager.getLevel(),
+            this.gridManager.getFinalGrid(this.currentObject));
+        if (this.scoreManager.canLevelUp())
+            this.setNewGameTick(this.scoreManager.getLevel());
     }
 
     onClock(callback: Function) {
@@ -226,14 +134,14 @@ export default class GameLogic {
         if (!this.canUseInput() || !this.isPressedIn)
             return;
         const moved = this.currentObject.tryMove(x, y,
-            this.currentGrid, this.getWidth(), this.getHeight(),
+            this.gridManager.getCurrentGrid(), this.getWidth(), this.getHeight(),
             () => this.onFreeze());
         if (moved) {
             if (y === 1) {
-                this.score++;
-                callback(this.getFinalGrid(), this.score);
+                this.scoreManager.incrementScore();
+                callback(this.gridManager.getFinalGrid(this.currentObject), this.scoreManager.getScore());
             } else
-                callback(this.getFinalGrid());
+                callback(this.gridManager.getFinalGrid(this.currentObject));
         }
         this.pressInInterval = setTimeout(() => this.movePressedRepeat(false, callback, x, y), isInitial ? this.autoRepeatActivationDelay : this.autoRepeatDelay);
     }
@@ -247,8 +155,18 @@ export default class GameLogic {
         if (!this.canUseInput())
             return;
 
-        if (this.currentObject.tryRotate(this.currentGrid, this.getWidth(), this.getHeight()))
-            callback(this.getFinalGrid());
+        if (this.currentObject.tryRotate(this.gridManager.getCurrentGrid(), this.getWidth(), this.getHeight()))
+            callback(this.gridManager.getFinalGrid(this.currentObject));
+    }
+
+    getNextPiecesPreviews() {
+        let finalArray = [];
+        for (let i = 0; i < this.nextPieces.length; i++) {
+            finalArray.push(this.gridManager.getEmptyGrid(4, 4));
+            this.nextPieces[i].toGrid(finalArray[i], true);
+        }
+
+        return finalArray;
     }
 
     recoverNextPiece() {
@@ -265,7 +183,7 @@ export default class GameLogic {
     createTetromino() {
         this.pressedOut();
         this.recoverNextPiece();
-        if (!this.currentObject.isPositionValid(this.currentGrid, this.getWidth(), this.getHeight()))
+        if (!this.currentObject.isPositionValid(this.gridManager.getCurrentGrid(), this.getWidth(), this.getHeight()))
             this.endGame(false);
     }
 
@@ -287,7 +205,7 @@ export default class GameLogic {
         this.gamePaused = false;
         clearInterval(this.gameTickInterval);
         clearInterval(this.gameTimeInterval);
-        this.endCallback(this.gameTime, this.score, isRestart);
+        this.endCallback(this.gameTime, this.scoreManager.getScore(), isRestart);
     }
 
     startGame(tickCallback: Function, clockCallback: Function, endCallback: Function) {
@@ -296,15 +214,16 @@ export default class GameLogic {
         this.gameRunning = true;
         this.gamePaused = false;
         this.gameTime = 0;
-        this.score = 0;
-        this.level = 0;
-        this.levelProgression = 0;
-        this.gameTick = GameLogic.levelTicks[this.level];
-        this.currentGrid = this.getEmptyGrid(this.getHeight(), this.getWidth());
+        this.scoreManager = new ScoreManager();
+        this.gameTick = GameLogic.levelTicks[this.scoreManager.getLevel()];
+        this.gridManager = new GridManager(this.getWidth(), this.getHeight(), this.colors);
         this.nextPieces = [];
         this.generateNextPieces();
         this.createTetromino();
-        tickCallback(this.score, this.level, this.getFinalGrid());
+        tickCallback(
+            this.scoreManager.getScore(),
+            this.scoreManager.getLevel(),
+            this.gridManager.getFinalGrid(this.currentObject));
         clockCallback(this.gameTime);
         this.onTick = this.onTick.bind(this, tickCallback);
         this.onClock = this.onClock.bind(this, clockCallback);
