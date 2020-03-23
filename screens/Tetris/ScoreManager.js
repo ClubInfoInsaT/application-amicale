@@ -22,6 +22,10 @@ export default class ScoreManager {
         return this.#level;
     }
 
+    getLevelProgression(): number {
+        return this.#levelProgression;
+    }
+
     incrementScore() {
         this.#score++;
     }
