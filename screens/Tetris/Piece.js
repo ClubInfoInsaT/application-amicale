@@ -21,7 +21,11 @@ export default class Piece {
     #currentShape: Object;
 
     constructor(colors: Object) {
-        this.#currentShape = new this.#shapes[Math.floor(Math.random() * 7)](colors);
+        this.#currentShape = this.getRandomShape(colors);
+    }
+
+    getRandomShape(colors: Object) {
+        return new this.#shapes[Math.floor(Math.random() * 7)](colors);
     }
 
     toGrid(grid: Array<Array<Object>>, isPreview: boolean) {
