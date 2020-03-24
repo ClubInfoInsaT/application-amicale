@@ -53,8 +53,12 @@ test('tryMove', () => {
     let p = new Piece(colors);
     const callbackMock = jest.fn();
     let isValid = true;
-    let spy = jest.spyOn(Piece.prototype, 'isPositionValid')
+    let spy1 = jest.spyOn(Piece.prototype, 'isPositionValid')
         .mockImplementation(() => {return isValid;});
+    let spy2 = jest.spyOn(Piece.prototype, 'removeFromGrid')
+        .mockImplementation(() => {});
+    let spy3 = jest.spyOn(Piece.prototype, 'toGrid')
+        .mockImplementation(() => {});
 
     expect(p.tryMove(-1, 0, null, null, null, callbackMock)).toBeTrue();
     isValid = false;
@@ -67,20 +71,34 @@ test('tryMove', () => {
     expect(p.tryMove(0, 1, null, null, null, callbackMock)).toBeFalse();
     expect(callbackMock).toBeCalledTimes(1);
 
-    spy.mockRestore();
+    expect(spy2).toBeCalledTimes(4);
+    expect(spy3).toBeCalledTimes(4);
+
+    spy1.mockRestore();
+    spy2.mockRestore();
+    spy3.mockRestore();
 });
 
 test('tryRotate', () => {
     let p = new Piece(colors);
     let isValid = true;
-    let spy = jest.spyOn(Piece.prototype, 'isPositionValid')
+    let spy1 = jest.spyOn(Piece.prototype, 'isPositionValid')
         .mockImplementation(() => {return isValid;});
+    let spy2 = jest.spyOn(Piece.prototype, 'removeFromGrid')
+        .mockImplementation(() => {});
+    let spy3 = jest.spyOn(Piece.prototype, 'toGrid')
+        .mockImplementation(() => {});
 
     expect(p.tryRotate( null, null, null)).toBeTrue();
     isValid = false;
     expect(p.tryRotate( null, null, null)).toBeFalse();
 
-    spy.mockRestore();
+    expect(spy2).toBeCalledTimes(2);
+    expect(spy3).toBeCalledTimes(2);
+
+    spy1.mockRestore();
+    spy2.mockRestore();
+    spy3.mockRestore();
 });
 
 
@@ -103,6 +121,34 @@ test('toGrid', () => {
     let p = new Piece(colors);
     p.toGrid(grid, true);
     expect(grid).toStrictEqual(expectedGrid);
+
+    spy1.mockRestore();
+    spy2.mockRestore();
+});
+
+test('removeFromGrid', () => {
+    let gridOld = [
+        [
+            {color: colors.tetrisI, isEmpty: false},
+            {color: colors.tetrisI, isEmpty: false},
+            {color: colors.tetrisBackground, isEmpty: true},
+        ],
+    ];
+    let gridNew = [
+        [
+            {color: colors.tetrisBackground, isEmpty: true},
+            {color: colors.tetrisBackground, isEmpty: true},
+            {color: colors.tetrisBackground, isEmpty: true},
+        ],
+    ];
+    let oldCoord = [{x: 0, y: 0}, {x: 1, y: 0}];
+    let spy1 = jest.spyOn(ShapeI.prototype, 'getCellsCoordinates')
+        .mockImplementation(() => {return oldCoord;});
+    let spy2 = jest.spyOn(ShapeI.prototype, 'getColor')
+        .mockImplementation(() => {return colors.tetrisI;});
+    let p = new Piece(colors);
+    p.removeFromGrid(gridOld);
+    expect(gridOld).toStrictEqual(gridNew);
 
     spy1.mockRestore();
     spy2.mockRestore();

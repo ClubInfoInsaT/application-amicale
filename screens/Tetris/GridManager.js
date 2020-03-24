@@ -3,9 +3,11 @@
 import Piece from "./Piece";
 import ScoreManager from "./ScoreManager";
 
+export type grid = Array<Array<{color: string, isEmpty: boolean}>>;
+
 export default class GridManager {
 
-    #currentGrid: Array<Array<Object>>;
+    #currentGrid: grid;
     #colors: Object;
 
     constructor(width: number, height: number, colors: Object) {
@@ -36,16 +38,6 @@ export default class GridManager {
         return grid;
     }
 
-    getGridCopy() {
-        return JSON.parse(JSON.stringify(this.#currentGrid));
-    }
-
-    getFinalGrid(currentObject: Piece) {
-        let finalGrid = this.getGridCopy();
-        currentObject.toGrid(finalGrid, false);
-        return finalGrid;
-    }
-
     clearLines(lines: Array<number>, scoreManager: ScoreManager) {
         lines.sort();
         for (let i = 0; i < lines.length; i++) {
@@ -72,7 +64,6 @@ export default class GridManager {
     }
 
     freezeTetromino(currentObject: Piece, scoreManager: ScoreManager) {
-        currentObject.toGrid(this.#currentGrid, false);
         this.clearLines(this.getLinesToClear(currentObject.getCoordinates()), scoreManager);
     }
 }

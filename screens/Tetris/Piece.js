@@ -17,15 +17,26 @@ export default class Piece {
         ShapeT,
         ShapeZ,
     ];
-
     #currentShape: Object;
+    #colors: Object;
 
     constructor(colors: Object) {
         this.#currentShape = this.getRandomShape(colors);
+        this.#colors = colors;
     }
 
     getRandomShape(colors: Object) {
         return new this.#shapes[Math.floor(Math.random() * 7)](colors);
+    }
+
+    removeFromGrid(grid) {
+        const coord = this.#currentShape.getCellsCoordinates(true);
+        for (let i = 0; i < coord.length; i++) {
+            grid[coord[i].y][coord[i].x] = {
+                color: this.#colors.tetrisBackground,
+                isEmpty: true,
+            };
+        }
     }
 
     toGrid(grid: Array<Array<Object>>, isPreview: boolean) {
@@ -61,25 +72,30 @@ export default class Piece {
         if (y < -1) y = -1;
         if (x !== 0 && y !== 0) y = 0; // Prevent diagonal movement
 
+        this.removeFromGrid(grid);
         this.#currentShape.move(x, y);
         let isValid = this.isPositionValid(grid, width, height);
+        let shouldFreeze = false;
 
-        if (!isValid && x !== 0)
-            this.#currentShape.move(-x, 0);
-        else if (!isValid && y !== 0) {
-            this.#currentShape.move(0, -y);
+        if (!isValid)
+            this.#currentShape.move(-x, -y);
+
+        shouldFreeze = !isValid && y !== 0;
+        this.toGrid(grid, false);
+        if (shouldFreeze)
             freezeCallback();
-        } else
-            return true;
-        return false;
+        return isValid;
     }
 
     tryRotate(grid, width, height) {
+        this.removeFromGrid(grid);
         this.#currentShape.rotate(true);
         if (!this.isPositionValid(grid, width, height)) {
             this.#currentShape.rotate(false);
+            this.toGrid(grid, false);
             return false;
         }
+        this.toGrid(grid, false);
         return true;
     }
 

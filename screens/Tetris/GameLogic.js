@@ -101,7 +101,7 @@ export default class GameLogic {
         callback(
             this.scoreManager.getScore(),
             this.scoreManager.getLevel(),
-            this.gridManager.getFinalGrid(this.currentObject));
+            this.gridManager.getCurrentGrid());
         if (this.scoreManager.canLevelUp())
             this.setNewGameTick(this.scoreManager.getLevel());
     }
@@ -139,9 +139,9 @@ export default class GameLogic {
         if (moved) {
             if (y === 1) {
                 this.scoreManager.incrementScore();
-                callback(this.gridManager.getFinalGrid(this.currentObject), this.scoreManager.getScore());
+                callback(this.gridManager.getCurrentGrid(), this.scoreManager.getScore());
             } else
-                callback(this.gridManager.getFinalGrid(this.currentObject));
+                callback(this.gridManager.getCurrentGrid());
         }
         this.pressInInterval = setTimeout(() => this.movePressedRepeat(false, callback, x, y), isInitial ? this.autoRepeatActivationDelay : this.autoRepeatDelay);
     }
@@ -156,7 +156,7 @@ export default class GameLogic {
             return;
 
         if (this.currentObject.tryRotate(this.gridManager.getCurrentGrid(), this.getWidth(), this.getHeight()))
-            callback(this.gridManager.getFinalGrid(this.currentObject));
+            callback(this.gridManager.getCurrentGrid());
     }
 
     getNextPiecesPreviews() {
@@ -223,7 +223,7 @@ export default class GameLogic {
         tickCallback(
             this.scoreManager.getScore(),
             this.scoreManager.getLevel(),
-            this.gridManager.getFinalGrid(this.currentObject));
+            this.gridManager.getCurrentGrid());
         clockCallback(this.gameTime);
         this.onTick = this.onTick.bind(this, tickCallback);
         this.onClock = this.onClock.bind(this, clockCallback);
