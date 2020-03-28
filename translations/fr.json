@@ -236,5 +236,25 @@
       "november": "Novembre",
       "december": "Décembre"
     }
+  },
+  "game": {
+    "title": "Jeu",
+    "pause": "Pause",
+    "pauseMessage": "Le jeu est en pause",
+    "resume": "Continuer",
+    "restart": {
+      "text": "Redémarrer",
+      "confirm": "Êtes vous sûr de vouloir redémarrer ?",
+      "confirmMessage": "Tout votre progrès sera perdu, continuer ?",
+      "confirmYes": "Oui",
+      "confirmNo": "Non"
+    },
+    "gameOver": {
+      "text": "Game Over",
+      "score": "Score: ",
+      "level": "Niveau: ",
+      "time": "Temps: ",
+      "exit": "Quitter"
+    }
   }
 }

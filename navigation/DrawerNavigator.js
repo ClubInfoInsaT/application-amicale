@@ -177,7 +177,7 @@ function TetrisStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'Tetris',
+                        title: i18n.t("game.title"),
                         headerLeft: openDrawer
                     };
                 }}
