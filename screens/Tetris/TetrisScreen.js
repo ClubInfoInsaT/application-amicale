@@ -264,7 +264,7 @@ class TetrisScreen extends React.Component<Props, State> {
                     width: '100%',
                 }}>
                     <IconButton
-                        icon="format-rotate-90"
+                        icon="rotate-right-variant"
                         size={40}
                         onPress={() => this.logic.rotatePressed(this.updateGrid)}
                         style={{marginRight: 'auto'}}
