@@ -1,5 +1,10 @@
 // @flow
 
+export type coordinates = {
+    x: number,
+    y: number,
+}
+
 /**
  * Abstract class used to represent a BaseShape.
  * Abstract classes do not exist by default in Javascript: we force it by throwing errors in the constructor
@@ -9,8 +14,11 @@ export default class BaseShape {
 
     #currentShape: Array<Array<number>>;
     #rotation: number;
-    position: Object;
+    position: coordinates;
 
+    /**
+     * Prevent instantiation if classname is BaseShape to force class to be abstract
+     */
     constructor() {
         if (this.constructor === BaseShape)
             throw new Error("Abstract class can't be instantiated");
@@ -19,19 +27,41 @@ export default class BaseShape {
         this.#currentShape = this.getShapes()[this.#rotation];
     }
 
+    /**
+     * Gets this shape's color.
+     * Must be implemented by child class
+     */
     getColor(): string {
         throw new Error("Method 'getColor()' must be implemented");
     }
 
+    /**
+     * Gets this object's all possible shapes as an array.
+     * Must be implemented by child class.
+     *
+     * Used by tests to read private fields
+     */
     getShapes(): Array<Array<Array<number>>> {
         throw new Error("Method 'getShapes()' must be implemented");
     }
 
-    getCurrentShape() {
+    /**
+     * Gets this object's current shape.
+     *
+     * Used by tests to read private fields
+     */
+    getCurrentShape(): Array<Array<number>> {
         return this.#currentShape;
     }
 
-    getCellsCoordinates(isAbsolute: boolean) {
+    /**
+     * Gets this object's coordinates.
+     * This will return an array of coordinates representing the positions of the cells used by this object.
+     *
+     * @param isAbsolute Should we take into account the current position of the object?
+     * @return {Array<coordinates>} This object cells coordinates
+     */
+    getCellsCoordinates(isAbsolute: boolean): Array<coordinates> {
         let coordinates = [];
         for (let row = 0; row < this.#currentShape.length; row++) {
             for (let col = 0; col < this.#currentShape[row].length; col++) {
@@ -45,6 +75,11 @@ export default class BaseShape {
         return coordinates;
     }
 
+    /**
+     * Rotate this object
+     *
+     * @param isForward Should we rotate clockwise?
+     */
     rotate(isForward: boolean) {
         if (isForward)
             this.#rotation++;
@@ -57,6 +92,12 @@ export default class BaseShape {
         this.#currentShape = this.getShapes()[this.#rotation];
     }
 
+    /**
+     * Move this object
+     *
+     * @param x Position X offset to add
+     * @param y Position Y offset to add
+     */
     move(x: number, y: number) {
         this.position.x += x;
         this.position.y += y;
