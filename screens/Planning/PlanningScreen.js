@@ -78,6 +78,9 @@ export default class PlanningScreen extends React.Component<Props, State> {
         this.onBackButtonPressAndroid = this.onBackButtonPressAndroid.bind(this);
     }
 
+    /**
+     * Captures focus and blur events to hook on android back button
+     */
     componentDidMount() {
         this.onRefresh();
         this.didFocusSubscription = this.props.navigation.addListener(
@@ -98,6 +101,11 @@ export default class PlanningScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Overrides default android back button behaviour to close the calendar if it was open.
+     *
+     * @return {boolean}
+     */
     onBackButtonPressAndroid() {
         if (this.state.calendarShowing) {
             this.agendaRef.chooseDay(this.agendaRef.state.selectedDay);
@@ -107,6 +115,13 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
     };
 
+    /**
+     * Function used to check if a row has changed
+     *
+     * @param r1
+     * @param r2
+     * @return {boolean}
+     */
     rowHasChanged(r1: Object, r2: Object) {
         return false;
         // if (r1 !== undefined && r2 !== undefined)
@@ -115,8 +130,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Refresh data and show a toast if any error occurred
-     * @private
+     * Refreshes data and shows an animation while doing it
      */
     onRefresh = () => {
         let canRefresh;
@@ -143,14 +157,30 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
     };
 
+    /**
+     * Callback used when receiving the agenda ref
+     *
+     * @param ref
+     */
     onAgendaRef(ref: Object) {
         this.agendaRef = ref;
     }
 
+    /**
+     * Callback used when a button is pressed to toggle the calendar
+     *
+     * @param isCalendarOpened True is the calendar is already open, false otherwise
+     */
     onCalendarToggled(isCalendarOpened: boolean) {
         this.setState({calendarShowing: isCalendarOpened});
     }
 
+    /**
+     * Gets an event render item
+     *
+     * @param item The current event to render
+     * @return {*}
+     */
     getRenderItem(item: eventObject) {
         const onPress = this.props.navigation.navigate.bind(this, 'PlanningDisplayScreen', {data: item});
         if (item.logo !== null) {
@@ -182,6 +212,11 @@ export default class PlanningScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Gets an empty render item for an empty date
+     *
+     * @return {*}
+     */
     getRenderEmptyDate() {
         return (
             <Divider/>

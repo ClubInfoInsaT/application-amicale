@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- * Class defining an about screen. This screen shows the user information about the app and it's author.
+ * Class defining the proxiwash about screen.
  */
 export default class ProxiwashAboutScreen extends React.Component<Props> {
 

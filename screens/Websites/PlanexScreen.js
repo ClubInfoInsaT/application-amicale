@@ -80,15 +80,23 @@ const OBSERVE_MUTATIONS_INJECTED =
     '    removeAlpha($(this));\n' +
     '});';
 /**
- * Class defining the app's planex screen.
- * This screen uses a webview to render the planex page
+ * Class defining the app's Planex screen.
+ * This screen uses a webview to render the page
  */
 export default class PlanexScreen extends React.Component<Props, State> {
 
     customInjectedJS: string;
     onHideBanner: Function;
     onGoToSettings: Function;
+    state = {
+        bannerVisible:
+            AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
+            AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex',
+    };
 
+    /**
+     * Defines custom injected JavaScript to improve the page display on mobile
+     */
     constructor() {
         super();
         this.customInjectedJS =
@@ -102,17 +110,15 @@ export default class PlanexScreen extends React.Component<Props, State> {
 
         this.customInjectedJS +=
             'removeAlpha();' +
-            '});true;'; // Prevent crash on ios
+            '});true;'; // Prevents crash on ios
         this.onHideBanner = this.onHideBanner.bind(this);
         this.onGoToSettings = this.onGoToSettings.bind(this);
     }
 
-    state = {
-        bannerVisible:
-            AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
-            AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex',
-    };
-
+    /**
+     * Callback used when closing the banner.
+     * This hides the banner and saves to preferences to prevent it from reopening
+     */
     onHideBanner() {
         this.setState({bannerVisible: false});
         AsyncStorageManager.getInstance().savePref(
@@ -121,6 +127,11 @@ export default class PlanexScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Callback used when the used click on the navigate to settings button.
+     * This will hide the banner and open the SettingsScreen
+     *
+     */
     onGoToSettings() {
         this.onHideBanner();
         this.props.navigation.navigate('SettingsScreen');

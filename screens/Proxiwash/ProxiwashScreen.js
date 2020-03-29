@@ -58,7 +58,6 @@ class ProxiwashScreen extends React.Component<Props, State> {
         refreshing: false,
         firstLoading: true,
         fetchedData: {},
-        // machinesWatched: JSON.parse(dataString),
         machinesWatched: [],
         modalCurrentDisplayItem: null,
         bannerVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === '1',
@@ -97,6 +96,10 @@ class ProxiwashScreen extends React.Component<Props, State> {
         this.colors = props.theme.colors;
     }
 
+    /**
+     * Callback used when closing the banner.
+     * This hides the banner and saves to preferences to prevent it from reopening
+     */
     onHideBanner() {
         this.setState({bannerVisible: false});
         AsyncStorageManager.getInstance().savePref(
@@ -109,7 +112,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * Setup notification channel for android and add listeners to detect notifications fired
      */
     componentDidMount() {
-        const rightButton = this.getRightButton.bind(this);
+        const rightButton = this.getAboutButton.bind(this);
         this.props.navigation.setOptions({
             headerRight: rightButton,
         });
@@ -134,16 +137,35 @@ class ProxiwashScreen extends React.Component<Props, State> {
         }
     }
 
-    getDryersKeyExtractor(item: Object) {
-        return item !== undefined ? "dryer" + item.number : undefined;
-    }
-
-    getWashersKeyExtractor(item: Object) {
-        return item !== undefined ? "washer" + item.number : undefined;
+    /**
+     * Callback used when pressing the about button.
+     * This will open the ProxiwashAboutScreen.
+     */
+    onAboutPress() {
+        this.props.navigation.navigate('ProxiwashAboutScreen');
     }
 
     /**
-     * Setup notifications for the machine with the given ID.
+     * Gets the about header button
+     *
+     * @return {*}
+     */
+    getAboutButton() {
+        return <HeaderButton icon={'information'} onPress={this.onAboutPress}/>;
+    }
+
+    /**
+     * Extracts the key for the given item
+     *
+     * @param item The item to extract the key from
+     * @return {*} The extracted key
+     */
+    getKeyExtractor(item: Object) {
+        return item !== undefined ? item.number : undefined;
+    }
+
+    /**
+     * Setups notifications for the machine with the given ID.
      * One notification will be sent at the end of the program.
      * Another will be send a few minutes before the end, based on the value of reminderNotifTime
      *
@@ -162,6 +184,9 @@ class ProxiwashScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Shows a warning telling the user notifications are disabled for the app
+     */
     showNotificationsDisabledWarning() {
         Alert.alert(
             i18n.t("proxiwashScreen.modal.notificationErrorTitle"),
@@ -170,7 +195,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Stop scheduled notifications for the machine of the given ID.
+     * Stops scheduled notifications for the machine of the given ID.
      * This will also remove the notification if it was already shown.
      *
      * @param machineId The machine's ID
@@ -187,7 +212,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Add the given notifications associated to a machine ID to the watchlist, and save the array to the preferences
+     * Adds the given notifications associated to a machine ID to the watchlist, and saves the array to the preferences
      *
      * @param machineId
      */
@@ -198,7 +223,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     /**
-     * remove the given index from the watchlist array and save it to preferences
+     * Removes the given index from the watchlist array and saves it to preferences
      *
      * @param index
      */
@@ -209,14 +234,12 @@ class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Set the given data as the watchlist and save it to preferences
+     * Sets the given data as the watchlist
      *
      * @param data
      */
     updateNotificationState(data: Array<Object>) {
         this.setState({machinesWatched: data});
-        // let prefKey = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.key;
-        // AsyncStorageManager.getInstance().savePref(prefKey, JSON.stringify(data));
     }
 
     /**
@@ -229,6 +252,12 @@ class ProxiwashScreen extends React.Component<Props, State> {
         return this.state.machinesWatched.indexOf(machineID) !== -1;
     }
 
+    /**
+     * Creates the dataset to be used by the flatlist
+     *
+     * @param fetchedData
+     * @return {*}
+     */
     createDataset(fetchedData: Object) {
         let data = fetchedData;
         if (AprilFoolsManager.getInstance().isAprilFoolsEnabled()) {
@@ -244,18 +273,25 @@ class ProxiwashScreen extends React.Component<Props, State> {
                 icon: 'tumble-dryer',
                 data: data.dryers === undefined ? [] : data.dryers,
                 extraData: this.state,
-                keyExtractor: this.getDryersKeyExtractor
+                keyExtractor: this.getKeyExtractor
             },
             {
                 title: i18n.t('proxiwashScreen.washers'),
                 icon: 'washing-machine',
                 data: data.washers === undefined ? [] : data.washers,
                 extraData: this.state,
-                keyExtractor: this.getWashersKeyExtractor
+                keyExtractor: this.getKeyExtractor
             },
         ];
     }
 
+    /**
+     * Shows a modal for the given item
+     *
+     * @param title The title to use
+     * @param item The item to display information for in the modal
+     * @param isDryer True if the given item is a dryer
+     */
     showModal(title: string, item: Object, isDryer: boolean) {
         this.setState({
             modalCurrentDisplayItem: this.getModalContent(title, item, isDryer)
@@ -265,6 +301,11 @@ class ProxiwashScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Callback used when the user clicks on enable notifications for a machine
+     *
+     * @param machineId The machine's id to set notifications for
+     */
     onSetupNotificationsPress(machineId: string) {
         if (this.modalRef) {
             this.modalRef.close();
@@ -272,6 +313,15 @@ class ProxiwashScreen extends React.Component<Props, State> {
         this.setupNotifications(machineId)
     }
 
+    /**
+     * Generates the modal content.
+     * This shows information for the given machine.
+     *
+     * @param title The title to use
+     * @param item The item to display information for in the modal
+     * @param isDryer True if the given item is a dryer
+     * @return {*}
+     */
     getModalContent(title: string, item: Object, isDryer: boolean) {
         let button = {
             text: i18n.t("proxiwashScreen.modal.ok"),
@@ -334,20 +384,21 @@ class ProxiwashScreen extends React.Component<Props, State> {
         );
     }
 
-    onAboutPress() {
-        this.props.navigation.navigate('ProxiwashAboutScreen');
-    }
-
-    getRightButton() {
-        return (
-            <HeaderButton icon={'information'} onPress={this.onAboutPress}/>
-        );
-    }
-
+    /**
+     * Callback used when receiving modal ref
+     *
+     * @param ref
+     */
     onModalRef(ref: Object) {
         this.modalRef = ref;
     }
 
+    /**
+     * Gets the number of machines available
+     *
+     * @param isDryer True if we are only checking for dryer, false for washers
+     * @return {number} The number of machines available
+     */
     getMachineAvailableNumber(isDryer: boolean) {
         let data;
         if (isDryer)
@@ -362,6 +413,12 @@ class ProxiwashScreen extends React.Component<Props, State> {
         return count;
     }
 
+    /**
+     * Gets the section render item
+     *
+     * @param section The section to render
+     * @return {*}
+     */
     getRenderSectionHeader({section}: Object) {
         const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
         const nbAvailable = this.getMachineAvailableNumber(isDryer);
@@ -401,7 +458,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Get list item to be rendered
+     * Gets the list item to be rendered
      *
      * @param item The object containing the item's FetchedData
      * @param section The object describing the current SectionList section
@@ -467,7 +524,6 @@ class ProxiwashScreen extends React.Component<Props, State> {
                     refreshOnFocus={true}
                     updateData={this.state.machinesWatched.length}/>
             </View>
-
         );
     }
 }

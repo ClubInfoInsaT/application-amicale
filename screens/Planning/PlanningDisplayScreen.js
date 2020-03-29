@@ -18,7 +18,7 @@ function openWebLink(event, link) {
 }
 
 /**
- * Class defining an about screen. This screen shows the user information about the app and it's author.
+ * Class defining a planning event information page.
  */
 class PlanningDisplayScreen extends React.Component<Props> {
 

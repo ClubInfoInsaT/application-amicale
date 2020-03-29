@@ -56,6 +56,7 @@ class HomeScreen extends React.Component<Props> {
 
     /**
      * Converts a dateString using Unix Timestamp to a formatted date
+     *
      * @param dateString {string} The Unix Timestamp representation of a date
      * @return {string} The formatted output date
      */
@@ -80,10 +81,22 @@ class HomeScreen extends React.Component<Props> {
         this.props.navigation.navigate('SelfMenuScreen');
     }
 
+    /**
+     * Extract a key for the given item
+     *
+     * @param item The item to extract the key from
+     * @return {*} The extracted key
+     */
     getKeyExtractor(item: Object) {
         return item !== undefined ? item.id : undefined;
     }
 
+    /**
+     * Creates the dataset to be used in the FlatList
+     *
+     * @param fetchedData
+     * @return {*}
+     */
     createDataset(fetchedData: Object) {
         // fetchedData = DATA;
         let newsData = [];
@@ -110,6 +123,12 @@ class HomeScreen extends React.Component<Props> {
         ];
     }
 
+    /**
+     * Generates the dataset associated to the dashboard to be displayed in the FlatList as a section
+     *
+     * @param dashboardData
+     * @return {*}
+     */
     generateDashboardDataset(dashboardData: Object) {
         let dataset = [
 
@@ -145,6 +164,12 @@ class HomeScreen extends React.Component<Props> {
         return dataset
     }
 
+    /**
+     * Gets a dashboard item
+     *
+     * @param item The item to display
+     * @return {*}
+     */
     getDashboardItem(item: Object) {
         let content = item['content'];
         if (item['id'] === 'event')
@@ -154,7 +179,7 @@ class HomeScreen extends React.Component<Props> {
     }
 
     /**
-     * Get the time limit depending on the current day:
+     * Gets the time limit depending on the current day:
      * 17:30 for every day of the week except for thursday 11:30
      * 00:00 on weekends
      */
@@ -170,7 +195,8 @@ class HomeScreen extends React.Component<Props> {
     }
 
     /**
-     * Get the duration (in milliseconds) of an event
+     * Gets the duration (in milliseconds) of an event
+     *
      * @param event {Object}
      * @return {number} The number of milliseconds
      */
@@ -184,7 +210,7 @@ class HomeScreen extends React.Component<Props> {
     }
 
     /**
-     * Get events starting after the limit
+     * Gets events starting after the limit
      *
      * @param events
      * @param limit
@@ -202,8 +228,9 @@ class HomeScreen extends React.Component<Props> {
     }
 
     /**
-     * Get the event with the longest duration in the given array.
+     * Gets the event with the longest duration in the given array.
      * If all events have the same duration, return the first in the array.
+     *
      * @param events
      */
     getLongestEvent(events: Array<Object>): Object {
@@ -220,7 +247,7 @@ class HomeScreen extends React.Component<Props> {
     }
 
     /**
-     * Get events that have not yet ended/started
+     * Gets events that have not yet ended/started
      *
      * @param events
      */
@@ -243,7 +270,7 @@ class HomeScreen extends React.Component<Props> {
     }
 
     /**
-     *
+     * Gets the event to display in the preview
      *
      * @param events
      * @return {Object}
@@ -266,7 +293,13 @@ class HomeScreen extends React.Component<Props> {
         return displayEvent;
     }
 
-
+    /**
+     * Gets the event render item.
+     * If a preview is available, it will be rendered inside
+     *
+     * @param content
+     * @return {*}
+     */
     getDashboardEventItem(content: Array<Object>) {
         let icon = 'calendar-range';
         let title = i18n.t('homeScreen.dashboard.todayEventsTitle');
@@ -310,7 +343,12 @@ class HomeScreen extends React.Component<Props> {
         );
     }
 
-
+    /**
+     * Gets a classic dashboard item.
+     *
+     * @param content
+     * @return {*}
+     */
     getDashboardMiddleItem(content: Array<Object>) {
         let proxiwashData = content[0]['data'];
         let tutorinsaData = content[1]['data'];
@@ -367,6 +405,12 @@ class HomeScreen extends React.Component<Props> {
         WebBrowser.openBrowserAsync(link);
     }
 
+    /**
+     * Gets a render item for the given feed object
+     *
+     * @param item The feed item to display
+     * @return {*}
+     */
     getFeedItem(item: Object) {
         const onImagePress = this.openLink.bind(this, item.full_picture);
         const onOutLinkPress = this.openLink.bind(this, item.permalink_url);
@@ -382,6 +426,13 @@ class HomeScreen extends React.Component<Props> {
         );
     }
 
+    /**
+     * Gets a FlatList render item
+     *
+     * @param item The item to display
+     * @param section The current section
+     * @return {*}
+     */
     getRenderItem({item, section}: Object) {
         return (section['id'] === SECTIONS_ID[0] ?
             this.getDashboardItem(item) : this.getFeedItem(item));

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, Image, ScrollView, View} from "react-native";
+import {Image, Platform, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
 import CustomModal from "../../components/CustomModal";
 import {Avatar, IconButton, List, RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
@@ -77,10 +77,10 @@ class ProximoListScreen extends React.Component<Props, State> {
 
 
     /**
-     * Set the sort mode from state when components are ready
+     * Creates the header content
      */
     componentDidMount() {
-        const button = this.getSortMenu.bind(this);
+        const button = this.getSortMenuButton.bind(this);
         const title = this.getSearchBar.bind(this);
         this.props.navigation.setOptions({
             headerRight: button,
@@ -93,7 +93,50 @@ class ProximoListScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Set the current sort mode.
+     * Gets the header search bar
+     *
+     * @return {*}
+     */
+    getSearchBar() {
+        return (
+            <Searchbar
+                placeholder={i18n.t('proximoScreen.search')}
+                onChangeText={this.onSearchStringChange}
+            />
+        );
+    }
+
+    /**
+     * Gets the sort menu header button
+     *
+     * @return {*}
+     */
+    getSortMenuButton() {
+        return (
+            <IconButton
+                icon="sort"
+                color={this.colors.text}
+                size={26}
+                onPress={this.onSortMenuPress}
+            />
+        );
+    }
+
+    /**
+     * Callback used when clicking on the sort menu button.
+     * It will open the modal to show a sort selection
+     */
+    onSortMenuPress() {
+        this.setState({
+            modalCurrentDisplayItem: this.getModalSortMenu()
+        });
+        if (this.modalRef) {
+            this.modalRef.open();
+        }
+    }
+
+    /**
+     * Sets the current sort mode.
      *
      * @param mode The number representing the mode
      */
@@ -121,19 +164,10 @@ class ProximoListScreen extends React.Component<Props, State> {
         }
     }
 
-    getSearchBar() {
-        return (
-            <Searchbar
-                placeholder={i18n.t('proximoScreen.search')}
-                onChangeText={this.onSearchStringChange}
-            />
-        );
-    }
-
     /**
-     * get color depending on quantity available
+     * Gets a color depending on the quantity available
      *
-     * @param availableStock
+     * @param availableStock The quantity available
      * @return
      */
     getStockColor(availableStock: number) {
@@ -147,13 +181,21 @@ class ProximoListScreen extends React.Component<Props, State> {
         return color;
     }
 
-    sanitizeString(str: string) {
+    /**
+     * Sanitizes the given string to improve search performance
+     *
+     * @param str The string to sanitize
+     * @return {string} The sanitized string
+     */
+    sanitizeString(str: string): string {
         return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
     /**
-     * Returns only the articles whose name contains str. Case and accents insensitive.
-     * @param str
+     * Returns only articles whose name contains the given string.
+     * Case and accents insensitive.
+     *
+     * @param str The string used to filter article names
      * @returns {[]}
      */
     filterData(str: string) {
@@ -169,12 +211,23 @@ class ProximoListScreen extends React.Component<Props, State> {
         return filteredData;
     }
 
+    /**
+     * Callback used when the search changes
+     *
+     * @param str The new search string
+     */
     onSearchStringChange(str: string) {
         this.setState({
             currentlyDisplayedData: this.filterData(str)
         })
     }
 
+    /**
+     * Gets the modal content depending on the given article
+     *
+     * @param item The article to display
+     * @return {*}
+     */
     getModalItemContent(item: Object) {
         return (
             <View style={{
@@ -206,6 +259,11 @@ class ProximoListScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Gets the modal content to display a sort menu
+     *
+     * @return {*}
+     */
     getModalSortMenu() {
         return (
             <View style={{
@@ -254,6 +312,12 @@ class ProximoListScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Callback used when clicking an article in the list.
+     * It opens the modal to show detailed information about the article
+     *
+     * @param item The article pressed
+     */
     onListItemPress(item: Object) {
         this.setState({
             modalCurrentDisplayItem: this.getModalItemContent(item)
@@ -263,26 +327,12 @@ class ProximoListScreen extends React.Component<Props, State> {
         }
     }
 
-    onSortMenuPress() {
-        this.setState({
-            modalCurrentDisplayItem: this.getModalSortMenu()
-        });
-        if (this.modalRef) {
-            this.modalRef.open();
-        }
-    }
-
-    getSortMenu() {
-        return (
-            <IconButton
-                icon="sort"
-                color={this.colors.text}
-                size={26}
-                onPress={this.onSortMenuPress}
-            />
-        );
-    }
-
+    /**
+     * Gets a render item for the given article
+     *
+     * @param item The article to render
+     * @return {*}
+     */
     renderItem({item}: Object) {
         const onPress = this.onListItemPress.bind(this, item);
         return (
@@ -301,10 +351,21 @@ class ProximoListScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Extracts a key for the given article
+     *
+     * @param item The article to extract the key from
+     * @return {*} The extracted key
+     */
     keyExtractor(item: Object) {
         return item.name + item.code;
     }
 
+    /**
+     * Callback used when receiving the modal ref
+     *
+     * @param ref
+     */
     onModalRef(ref: Object) {
         this.modalRef = ref;
     }

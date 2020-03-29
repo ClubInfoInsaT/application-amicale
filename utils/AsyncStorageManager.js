@@ -39,11 +39,6 @@ export default class AsyncStorageManager {
             default: '5',
             current: '',
         },
-        proxiwashWatchedMachines: {
-            key: 'proxiwashWatchedMachines',
-            default: '[]',
-            current: '',
-        },
         nightModeFollowSystem: {
             key: 'nightModeFollowSystem',
             default: '1',

@@ -27,7 +27,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
     state = {
         nightMode: ThemeManager.getNightMode(),
         nightModeFollowSystem: AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current === '1' &&
-        Appearance.getColorScheme() !== 'no-preference',
+            Appearance.getColorScheme() !== 'no-preference',
         proxiwashNotifPickerSelected: AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current,
         startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
     };
@@ -46,7 +46,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Save the value for the proxiwash reminder notification time
+     * Saves the value for the proxiwash reminder notification time
      *
      * @param value The value to store
      */
@@ -65,7 +65,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Save the value for the proxiwash reminder notification time
+     * Saves the value for the proxiwash reminder notification time
      *
      * @param value The value to store
      */
@@ -118,7 +118,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Toggle night mode and save it to preferences
+     * Toggles night mode and saves it to preferences
      */
     onToggleNightMode() {
         ThemeManager.getInstance().setNightMode(!this.state.nightMode);
@@ -138,7 +138,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Get a list item using a checkbox control
+     * Gets a list item using a checkbox control
      *
      * @param onPressCallback The callback when the checkbox state changes
      * @param icon The icon name to display on the list item
@@ -178,15 +178,15 @@ export default class SettingsScreen extends React.Component<Props, State> {
                         ) : null}
                         {
                             Appearance.getColorScheme() === 'no-preference' || !this.state.nightModeFollowSystem ?
-                            this.getToggleItem(
-                                this.onToggleNightMode,
-                                'theme-light-dark',
-                                i18n.t('settingsScreen.nightMode'),
-                                this.state.nightMode ?
-                                    i18n.t('settingsScreen.nightModeSubOn') :
-                                    i18n.t('settingsScreen.nightModeSubOff'),
-                                this.state.nightMode
-                            ) : null
+                                this.getToggleItem(
+                                    this.onToggleNightMode,
+                                    'theme-light-dark',
+                                    i18n.t('settingsScreen.nightMode'),
+                                    this.state.nightMode ?
+                                        i18n.t('settingsScreen.nightModeSubOn') :
+                                        i18n.t('settingsScreen.nightModeSubOff'),
+                                    this.state.nightMode
+                                ) : null
                         }
                         <List.Accordion
                             title={i18n.t('settingsScreen.startScreen')}
@@ -209,7 +209,6 @@ export default class SettingsScreen extends React.Component<Props, State> {
                         </List.Accordion>
                     </List.Section>
                 </Card>
-
             </ScrollView>
         );
     }

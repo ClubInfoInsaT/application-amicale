@@ -18,8 +18,8 @@ type State = {
 }
 
 /**
- * Class defining the main proximo screen. This screen shows the different categories of articles
- * offered by proximo.
+ * Class defining the main proximo screen.
+ * This screen shows the different categories of articles offered by proximo.
  */
 class ProximoMainScreen extends React.Component<Props, State> {
 
@@ -41,6 +41,14 @@ class ProximoMainScreen extends React.Component<Props, State> {
         this.colors = props.theme.colors;
     }
 
+    /**
+     * Function used to sort items in the list.
+     * Makes the All category stick to the top and sorts the others by name ascending
+     *
+     * @param a
+     * @param b
+     * @return {number}
+     */
     static sortFinalData(a: Object, b: Object) {
         let str1 = a.type.name.toLowerCase();
         let str2 = b.type.name.toLowerCase();
@@ -59,17 +67,76 @@ class ProximoMainScreen extends React.Component<Props, State> {
         return 0;
     }
 
+    /**
+     * Creates header button
+     */
     componentDidMount() {
-        const rightButton = this.getRightButton.bind(this);
+        const rightButton = this.getHeaderButtons.bind(this);
         this.props.navigation.setOptions({
             headerRight: rightButton,
         });
     }
 
+    /**
+     * Callback used when the search button is pressed.
+     * This will open a new ProximoListScreen with all items displayed
+     */
+    onPressSearchBtn() {
+        let searchScreenData = {
+            shouldFocusSearchBar: true,
+            data: {
+                type: {
+                    id: "0",
+                    name: i18n.t('proximoScreen.all'),
+                    icon: 'star'
+                },
+                data: this.articles !== undefined ?
+                    this.getAvailableArticles(this.articles, undefined) : []
+            },
+        };
+        this.props.navigation.navigate('ProximoListScreen', searchScreenData);
+    }
+
+    /**
+     * Callback used when the about button is pressed.
+     * This will open the ProximoAboutScreen
+     */
+    onPressAboutBtn() {
+        this.props.navigation.navigate('ProximoAboutScreen');
+    }
+
+    /**
+     * Gets the header buttons
+     * @return {*}
+     */
+    getHeaderButtons() {
+        return (
+            <View
+                style={{
+                    flexDirection: 'row',
+                }}>
+                <HeaderButton icon={'magnify'} onPress={this.onPressSearchBtn}/>
+                <HeaderButton icon={'information'} onPress={this.onPressAboutBtn}/>
+            </View>
+        );
+    }
+
+    /**
+     * Extracts a key for the given category
+     *
+     * @param item The category to extract the key from
+     * @return {*} The extracted key
+     */
     getKeyExtractor(item: Object) {
         return item !== undefined ? item.type['id'] : undefined;
     }
 
+    /**
+     * Creates the dataset to be used in the FlatList
+     *
+     * @param fetchedData
+     * @return {*}
+     * */
     createDataset(fetchedData: Object) {
         return [
             {
@@ -133,39 +200,12 @@ class ProximoMainScreen extends React.Component<Props, State> {
         return availableArticles;
     }
 
-    onPressSearchBtn() {
-        let searchScreenData = {
-            shouldFocusSearchBar: true,
-            data: {
-                type: {
-                    id: "0",
-                    name: i18n.t('proximoScreen.all'),
-                    icon: 'star'
-                },
-                data: this.articles !== undefined ?
-                    this.getAvailableArticles(this.articles, undefined) : []
-            },
-        };
-        this.props.navigation.navigate('ProximoListScreen', searchScreenData);
-    }
-
-    onPressAboutBtn() {
-        this.props.navigation.navigate('ProximoAboutScreen');
-    }
-
-    getRightButton() {
-        return (
-            <View
-                style={{
-                    flexDirection: 'row',
-                }}>
-                <HeaderButton icon={'magnify'} onPress={this.onPressSearchBtn}/>
-                <HeaderButton icon={'information'} onPress={this.onPressAboutBtn}/>
-            </View>
-        );
-    }
-
-
+    /**
+     * Gets the given category render item
+     *
+     * @param item The category to render
+     * @return {*}
+     */
     getRenderItem({item}: Object) {
         let dataToSend = {
             shouldFocusSearchBar: false,

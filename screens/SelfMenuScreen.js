@@ -15,7 +15,6 @@ type Props = {
 
 /**
  * Class defining the app's menu screen.
- * This screen fetches data from etud to render the RU menu
  */
 class SelfMenuScreen extends React.Component<Props> {
 
@@ -33,10 +32,22 @@ class SelfMenuScreen extends React.Component<Props> {
         this.colors = props.theme.colors;
     }
 
+    /**
+     * Extract a key for the given item
+     *
+     * @param item The item to extract the key from
+     * @return {*} The extracted key
+     */
     getKeyExtractor(item: Object) {
         return item !== undefined ? item['name'] : undefined;
     }
 
+    /**
+     * Creates the dataset to be used in the FlatList
+     *
+     * @param fetchedData
+     * @return {[]}
+     */
     createDataset(fetchedData: Object) {
         let result = [];
         // Prevent crash by giving a default value when fetchedData is empty (not yet available)
@@ -66,6 +77,12 @@ class SelfMenuScreen extends React.Component<Props> {
         return result
     }
 
+    /**
+     * Gets the render section header
+     *
+     * @param section The section to render the header from
+     * @return {*}
+     */
     getRenderSectionHeader({section}: Object) {
         return (
             <Card style={{
@@ -92,6 +109,12 @@ class SelfMenuScreen extends React.Component<Props> {
         );
     }
 
+    /**
+     * Gets a FlatList render item
+     *
+     * @param item The item to render
+     * @return {*}
+     */
     getRenderItem({item}: Object) {
         return (
             <Card style={{
@@ -128,6 +151,12 @@ class SelfMenuScreen extends React.Component<Props> {
         );
     }
 
+    /**
+     * Formats the given string to make sure it starts with a capital letter
+     *
+     * @param name The string to format
+     * @return {string} The formatted string
+     */
     formatName(name: String) {
         return name.charAt(0) + name.substr(1).toLowerCase();
     }
