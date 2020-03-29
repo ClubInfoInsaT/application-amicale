@@ -2,10 +2,13 @@
 
 import i18n from 'i18n-js';
 
+/**
+ * Singleton used to manage date translations.
+ * Translations are hardcoded as toLocaleDateString does not work on current android JS engine
+ */
 export default class DateManager {
     static instance: DateManager | null = null;
 
-    // Hard code strings as toLocaleDateString does not work on current android JS engine
     daysOfWeek = [];
     monthsOfYear = [];
 
@@ -42,6 +45,12 @@ export default class DateManager {
             DateManager.instance;
     }
 
+    /**
+     * Gets a translated string representing the given date.
+     *
+     * @param dateString The date with the format YYYY-MM-DD
+     * @return {string} The translated string
+     */
     getTranslatedDate(dateString: string) {
         let dateArray = dateString.split('-');
         let date = new Date();

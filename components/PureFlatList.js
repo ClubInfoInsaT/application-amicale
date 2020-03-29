@@ -9,10 +9,12 @@ type Props = {
 }
 
 /**
+ * FlatList implementing PureComponent for increased performance.
+ *
  * This is a pure component, meaning it will only update if a shallow comparison of state and props is different.
  * To force the component to update, change the value of updateData.
  */
-export default class PureFlatList extends React.PureComponent<Props>{
+export default class PureFlatList extends React.PureComponent<Props> {
 
     static defaultProps = {
         updateData: null,

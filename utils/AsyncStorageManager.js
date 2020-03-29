@@ -3,7 +3,7 @@
 import {AsyncStorage} from "react-native";
 
 /**
- * Static class used to manage preferences.
+ * Singleton used to manage preferences.
  * Preferences are fetched at the start of the app and saved in an instance object.
  * This allows for a synchronous access to saved data.
  */
@@ -14,7 +14,7 @@ export default class AsyncStorageManager {
 
     /**
      * Get this class instance or create one if none is found
-     * @returns {ThemeManager}
+     * @returns {AsyncStorageManager}
      */
     static getInstance(): AsyncStorageManager {
         return AsyncStorageManager.instance === null ?
@@ -113,7 +113,7 @@ export default class AsyncStorageManager {
 
     /**
      * Save the value associated to the given key to preferences.
-     * This updates the preferences object and saves it to AsynStorage.
+     * This updates the preferences object and saves it to AsyncStorage.
      *
      * @param key
      * @param val

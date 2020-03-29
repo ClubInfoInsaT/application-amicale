@@ -6,6 +6,11 @@ import i18n from "i18n-js";
 
 const ICON_AMICALE = require('../assets/amicale.png');
 
+/**
+ * Gets the amicale INSAT logo
+ *
+ * @return {*}
+ */
 function getAvatar() {
     return (
         <Avatar.Image size={48} source={ICON_AMICALE}
@@ -13,6 +18,12 @@ function getAvatar() {
     );
 }
 
+/**
+ * Component used to display a feed item
+ *
+ * @param props Props to pass to the component
+ * @return {*}
+ */
 function FeedItem(props) {
     const {colors} = props.theme;
     return (
@@ -39,7 +50,9 @@ function FeedItem(props) {
                 <Button
                     color={'#57aeff'}
                     onPress={props.onOutLinkPress}
-                    icon={'facebook'}>{i18n.t('homeScreen.dashboard.seeMore')}</Button>
+                    icon={'facebook'}>
+                    {i18n.t('homeScreen.dashboard.seeMore')}
+                </Button>
             </Card.Actions>
         </Card>
     );

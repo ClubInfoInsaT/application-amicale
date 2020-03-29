@@ -3,6 +3,12 @@ import {withTheme} from 'react-native-paper';
 import {DrawerItem} from "@react-navigation/drawer";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 
+/**
+ * Component used to render a drawer menu item
+ *
+ * @param props Props to pass to the component
+ * @return {*}
+ */
 function SidebarItem(props) {
     const {colors} = props.theme;
     return (

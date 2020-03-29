@@ -1,9 +1,15 @@
 import * as React from 'react';
-import { withTheme } from 'react-native-paper';
+import {withTheme} from 'react-native-paper';
 import {DrawerItem} from "@react-navigation/drawer";
 
+/**
+ * Component used to render a drawer menu item divider
+ *
+ * @param props Props to pass to the component
+ * @return {*}
+ */
 function SidebarDivider(props) {
-    const { colors } = props.theme;
+    const {colors} = props.theme;
     return (
         <DrawerItem
             label={props.title}

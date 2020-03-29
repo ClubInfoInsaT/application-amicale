@@ -34,8 +34,6 @@ class WebViewScreen extends React.PureComponent<Props> {
 
     onRefreshClicked: Function;
     onWebviewRef: Function;
-    onGoBackWebview: Function;
-    onGoForwardWebview: Function;
     getRenderLoading: Function;
 
     colors: Object;
@@ -44,12 +42,13 @@ class WebViewScreen extends React.PureComponent<Props> {
         super(props);
         this.onRefreshClicked = this.onRefreshClicked.bind(this);
         this.onWebviewRef = this.onWebviewRef.bind(this);
-        this.onGoBackWebview = this.onGoBackWebview.bind(this);
-        this.onGoForwardWebview = this.onGoForwardWebview.bind(this);
         this.getRenderLoading = this.getRenderLoading.bind(this);
         this.colors = props.theme.colors;
     }
 
+    /**
+     * Creates refresh button after mounting
+     */
     componentDidMount() {
         const rightButton = this.getRefreshButton.bind(this);
         this.props.navigation.setOptions({
@@ -57,42 +56,37 @@ class WebViewScreen extends React.PureComponent<Props> {
         });
     }
 
-    getHeaderButton(clickAction: Function, icon: string) {
-        return (
-            <HeaderButton icon={icon} onPress={clickAction}/>
-        );
-    }
-
+    /**
+     * Gets a header refresh button
+     *
+     * @return {*}
+     */
     getRefreshButton() {
-        return (
-            <View style={{
-                flexDirection: 'row',
-                marginRight: 10
-            }}>
-                {this.getHeaderButton(this.onRefreshClicked, 'refresh')}
-            </View>
-        );
+        return <HeaderButton icon={'refresh'} onPress={this.onRefreshClicked}/>
     };
 
+    /**
+     * Callback to use when refresh button is clicked. Reloads the webview.
+     */
     onRefreshClicked() {
         if (this.webviewRef !== null)
             this.webviewRef.reload();
     }
 
-    onGoBackWebview() {
-        if (this.webviewRef !== null)
-            this.webviewRef.goBack();
-    }
-
-    onGoForwardWebview() {
-        if (this.webviewRef !== null)
-            this.webviewRef.goForward();
-    }
-
+    /**
+     * Callback used when receiving the webview ref. Stores the ref for later use
+     *
+     * @param ref
+     */
     onWebviewRef(ref: Object) {
         this.webviewRef = ref
     }
 
+    /**
+     * Gets the loading indicator
+     *
+     * @return {*}
+     */
     getRenderLoading() {
         return (
             <View style={{
@@ -115,7 +109,6 @@ class WebViewScreen extends React.PureComponent<Props> {
     }
 
     render() {
-        // console.log("rendering WebViewScreen");
         return (
             <WebView
                 ref={this.onWebviewRef}

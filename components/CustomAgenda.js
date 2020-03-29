@@ -2,8 +2,14 @@ import * as React from 'react';
 import {withTheme} from 'react-native-paper';
 import {Agenda} from "react-native-calendars";
 
+/**
+ * Abstraction layer for Agenda component, using custom configuration
+ *
+ * @param props Props to pass to the element. Must specify an onRef prop to get an Agenda ref.
+ * @return {*}
+ */
 function CustomAgenda(props) {
-    const { colors } = props.theme;
+    const {colors} = props.theme;
     return (
         <Agenda
             {...props}

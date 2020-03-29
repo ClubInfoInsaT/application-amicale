@@ -19,7 +19,12 @@ export default class ThemeManager {
         this.updateThemeCallback = null;
     }
 
-    static getWhiteTheme() {
+    /**
+     * Gets the light theme
+     *
+     * @return {Object} Object containing theme variables
+     * */
+    static getWhiteTheme(): Object {
         return {
             ...DefaultTheme,
             colors: {
@@ -70,7 +75,12 @@ export default class ThemeManager {
         };
     }
 
-    static getDarkTheme() {
+    /**
+     * Gets the dark theme
+     *
+     * @return {Object} Object containing theme variables
+     * */
+    static getDarkTheme(): Object {
         return {
             ...DarkTheme,
             colors: {
@@ -124,6 +134,7 @@ export default class ThemeManager {
 
     /**
      * Get this class instance or create one if none is found
+     *
      * @returns {ThemeManager}
      */
     static getInstance(): ThemeManager {
@@ -133,6 +144,10 @@ export default class ThemeManager {
     }
 
     /**
+     * Gets night mode status.
+     * If Follow System Preferences is enabled, will first use system theme.
+     * If disabled or not available, will use value stored din preferences
+     *
      * @returns {boolean} Night mode state
      */
     static getNightMode(): boolean {
@@ -143,8 +158,9 @@ export default class ThemeManager {
     }
 
     /**
-     * Get the current theme based on night mode
-     * @returns {Object}
+     * Get the current theme based on night mode and events
+     *
+     * @returns {Object} The current theme
      */
     static getCurrentTheme(): Object {
         if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
@@ -153,6 +169,11 @@ export default class ThemeManager {
             return ThemeManager.getBaseTheme()
     }
 
+    /**
+     * Get the theme based on night mode
+     *
+     * @return {Object} The theme
+     */
     static getBaseTheme() {
         if (ThemeManager.getNightMode())
             return ThemeManager.getDarkTheme();
@@ -161,7 +182,8 @@ export default class ThemeManager {
     }
 
     /**
-     * Set the function to be called when the theme is changed (allows for general reload of the app)
+     * Sets the function to be called when the theme is changed (allows for general reload of the app)
+     *
      * @param callback Function to call after theme change
      */
     setUpdateThemeCallback(callback: ?Function) {
@@ -171,7 +193,7 @@ export default class ThemeManager {
     /**
      * Set night mode and save it to preferences
      *
-     * @param isNightMode Whether to enable night mode
+     * @param isNightMode True to enable night mode, false to disable
      */
     setNightMode(isNightMode: boolean) {
         let nightModeKey = AsyncStorageManager.getInstance().preferences.nightMode.key;

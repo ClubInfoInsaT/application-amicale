@@ -1,8 +1,14 @@
 import * as React from 'react';
 import {IconButton, withTheme} from 'react-native-paper';
 
+/**
+ * Component used to display a header button
+ *
+ * @param props Props to pass to the component
+ * @return {*}
+ */
 function HeaderButton(props) {
-    const { colors } = props.theme;
+    const {colors} = props.theme;
     return (
         <IconButton
             icon={props.icon}

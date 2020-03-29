@@ -27,8 +27,10 @@ type State = {
 };
 
 
-const MIN_REFRESH_TIME = 5  * 1000;
+const MIN_REFRESH_TIME = 5 * 1000;
 /**
+ * Component used to render a SectionList with data fetched from the web
+ *
  * This is a pure component, meaning it will only update if a shallow comparison of state and props is different.
  * To force the component to update, change the value of updateData.
  */
@@ -73,7 +75,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Register react navigation events on first screen load.
+     * Registers react navigation events on first screen load.
      * Allows to detect when the screen is focused
      */
     componentDidMount() {
@@ -86,7 +88,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Refresh data when focusing the screen and setup a refresh interval if asked to
+     * Refreshes data when focusing the screen and setup a refresh interval if asked to
      */
     onScreenFocus() {
         if (this.props.refreshOnFocus && this.lastRefresh !== undefined)
@@ -96,13 +98,19 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Remove any interval on un-focus
+     * Removes any interval on un-focus
      */
     onScreenBlur() {
         clearInterval(this.refreshInterval);
     }
 
 
+    /**
+     * Callback used when fetch is successful.
+     * It will update the displayed data and stop the refresh animation
+     *
+     * @param fetchedData The newly fetched data
+     */
     onFetchSuccess(fetchedData: Object) {
         this.setState({
             fetchedData: fetchedData,
@@ -112,6 +120,10 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         this.lastRefresh = new Date();
     }
 
+    /**
+     * Callback used when fetch encountered an error.
+     * It will reset the displayed data and show an error.
+     */
     onFetchError() {
         this.setState({
             fetchedData: {},
@@ -119,12 +131,10 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
             firstLoading: false
         });
         this.showSnackBar();
-        // this.webDataManager.showUpdateToast(this.props.updateErrorText);
     }
 
     /**
-     * Refresh data and show a toast if any error occurred
-     * @private
+     * Refreshes data and shows an animations while doing it
      */
     onRefresh() {
         let canRefresh;
@@ -140,10 +150,22 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         }
     }
 
+    /**
+     * Gets an empty section header
+     *
+     * @param section The current section
+     * @return {*}
+     */
     getEmptySectionHeader({section}: Object) {
         return <View/>;
     }
 
+    /**
+     * Gets an empty render item
+     *
+     * @param item The data to display
+     * @return {*}
+     */
     getEmptyRenderItem({item}: Object) {
         return (
             <EmptyWebSectionListItem
@@ -154,6 +176,11 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         );
     }
 
+    /**
+     * Creates an empty dataset
+     *
+     * @return {*}
+     */
     createEmptyDataset() {
         return [
             {
@@ -174,14 +201,26 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         ];
     }
 
-    datasetKeyExtractor(item: Object) {
+    /**
+     * Extracts a key from the given item
+     *
+     * @param item The item to extract the key from
+     * @return {string} The extracted key
+     */
+    datasetKeyExtractor(item: Object): string {
         return item.text
     }
 
+    /**
+     * Shows the error popup
+     */
     showSnackBar() {
         this.setState({snackbarVisible: true})
     }
 
+    /**
+     * Hides the error popup
+     */
     hideSnackBar() {
         this.setState({snackbarVisible: false})
     }

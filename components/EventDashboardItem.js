@@ -2,7 +2,14 @@
 
 import * as React from 'react';
 import {Avatar, Card, withTheme} from 'react-native-paper';
+import {StyleSheet} from "react-native";
 
+/**
+ * Component used to display a dashboard item containing a preview event
+ *
+ * @param props Props to pass to the component
+ * @return {*}
+ */
 function EventDashBoardItem(props) {
     const {colors} = props.theme;
     const iconColor = props.isAvailable ?
@@ -13,13 +20,7 @@ function EventDashBoardItem(props) {
         colors.textDisabled;
     return (
         <Card
-            style={{
-                width: 'auto',
-                marginLeft: 10,
-                marginRight: 10,
-                marginTop: 10,
-                overflow: 'hidden',
-            }}
+            style={styles.card}
             onPress={props.clickAction}>
 
             <Card.Title
@@ -32,7 +33,7 @@ function EventDashBoardItem(props) {
                         icon={props.icon}
                         color={iconColor}
                         size={60}
-                        style={{backgroundColor: 'transparent'}}/>}
+                        style={styles.avatar}/>}
             />
             <Card.Content>
                 {props.children}
@@ -40,5 +41,18 @@ function EventDashBoardItem(props) {
         </Card>
     );
 }
+
+const styles = StyleSheet.create({
+    card: {
+        width: 'auto',
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10,
+        overflow: 'hidden',
+    },
+    avatar: {
+        backgroundColor: 'transparent'
+    }
+});
 
 export default withTheme(EventDashBoardItem);

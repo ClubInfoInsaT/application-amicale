@@ -49,6 +49,11 @@ export default class NotificationsManager {
         }
     }
 
+    /**
+     * Gets the machines watched from the server
+     *
+     * @param callback Function to execute with the fetched data
+     */
     static getMachineNotificationWatchlist(callback: Function) {
         let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
         if (token !== '') {
@@ -72,10 +77,10 @@ export default class NotificationsManager {
     }
 
     /**
-     * Ask the server to enable/disable notifications for the specified machine
+     * Asks the server to enable/disable notifications for the specified machine
      *
-     * @param machineID
-     * @param isEnabled
+     * @param machineID The machine ID
+     * @param isEnabled True to enable notifications, false to disable
      */
     static setupMachineNotification(machineID: string, isEnabled: boolean) {
         let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
@@ -100,8 +105,9 @@ export default class NotificationsManager {
     }
 
     /**
-     * Send the selected reminder time for notifications to the server
-     * @param time
+     * Sends the selected reminder time for notifications to the server
+     *
+     * @param time The reminder time to use
      */
     static setMachineReminderNotificationTime(time: number) {
         let token = AsyncStorageManager.getInstance().preferences.expoToken.current;

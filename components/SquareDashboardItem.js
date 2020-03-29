@@ -2,6 +2,12 @@ import * as React from 'react';
 import {Badge, IconButton, withTheme} from 'react-native-paper';
 import {View} from "react-native";
 
+/**
+ * Component used to render a small dashboard item
+ *
+ * @param props Props to pass to the component
+ * @return {*}
+ */
 function SquareDashboardItem(props) {
     const {colors} = props.theme;
     return (
@@ -9,9 +15,9 @@ function SquareDashboardItem(props) {
             <IconButton
                 icon={props.icon}
                 color={
-                    props.isAvailable ?
-                        props.color :
-                        colors.textDisabled
+                    props.isAvailable
+                        ? props.color
+                        : colors.textDisabled
                 }
                 size={35}
                 onPress={props.clickAction}
@@ -23,9 +29,10 @@ function SquareDashboardItem(props) {
                             position: 'absolute',
                             top: 5,
                             right: 5
-                        }}>{props.badgeNumber}</Badge> : null
+                        }}>
+                        {props.badgeNumber}
+                    </Badge> : null
             }
-
         </View>
     );
 }

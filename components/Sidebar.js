@@ -20,7 +20,7 @@ type State = {
 };
 
 /**
- * Class used to define a navigation drawer
+ * Component used to render the drawer menu content
  */
 export default class SideBar extends React.PureComponent<Props, State> {
 
@@ -33,7 +33,7 @@ export default class SideBar extends React.PureComponent<Props, State> {
     getRenderItem: Function;
 
     /**
-     * Generate the datasets
+     * Generate the dataset
      *
      * @param props
      */
@@ -123,6 +123,12 @@ export default class SideBar extends React.PureComponent<Props, State> {
         this.getRenderItem = this.getRenderItem.bind(this);
     }
 
+    /**
+     * Callback when a drawer item is pressed.
+     * It will either navigate to the associated screen, or open the browser to the associated link
+     *
+     * @param item The item pressed
+     */
     onListItemPress(item: Object) {
         if (item.link === undefined)
             this.props.navigation.navigate(item.route);
@@ -130,12 +136,22 @@ export default class SideBar extends React.PureComponent<Props, State> {
             WebBrowser.openBrowserAsync(item.link);
     }
 
-
-    listKeyExtractor(item: Object) {
+    /**
+     * Key extractor for list items
+     *
+     * @param item The item to extract the key from
+     * @return {string} The extracted key
+     */
+    listKeyExtractor(item: Object): string {
         return item.route;
     }
 
-
+    /**
+     * Gets the render item for the given list item
+     *
+     * @param item The item to render
+     * @return {*}
+     */
     getRenderItem({item}: Object) {
         const onListItemPress = this.onListItemPress.bind(this, item);
         if (item.icon !== undefined) {

@@ -1,25 +1,33 @@
 // @flow
 
 import * as React from 'react';
-import {View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import HTML from "react-native-render-html";
 import i18n from "i18n-js";
 import {Avatar, Button, Card, withTheme} from 'react-native-paper';
 import PlanningEventManager from "../utils/PlanningEventManager";
 
-
+/**
+ * Component used to display an event preview if an event is available
+ *
+ * @param props Props to pass to the component
+ * @return {*}
+ */
 function PreviewEventDashboardItem(props) {
     const {colors} = props.theme;
-    const isEmpty = props.event === undefined ? true : PlanningEventManager.isDescriptionEmpty(props.event['description']);
+    const isEmpty = props.event === undefined
+        ? true
+        : PlanningEventManager.isDescriptionEmpty(props.event['description']);
+
     if (props.event !== undefined && props.event !== null) {
         const hasImage = props.event['logo'] !== '' && props.event['logo'] !== null;
         const getImage = () => <Avatar.Image
             source={{uri: props.event['logo']}}
             size={50}
-            style={{backgroundColor: 'transparent'}}/>;
+            style={styles.avatar}/>;
         return (
             <Card
-                style={{marginBottom: 10}}
+                style={styles.card}
                 onPress={props.clickAction}
                 elevation={3}
             >
@@ -34,10 +42,7 @@ function PreviewEventDashboardItem(props) {
                         subtitle={PlanningEventManager.getFormattedEventTime(props.event['date_begin'], props.event['date_end'])}
                     />}
                 {!isEmpty ?
-                    <Card.Content style={{
-                        maxHeight: 150,
-                        overflow: 'hidden',
-                    }}>
+                    <Card.Content style={styles.content}>
                         <HTML html={"<div>" + props.event['description'] + "</div>"}
                               tagsStyles={{
                                   p: {color: colors.text,},
@@ -46,11 +51,7 @@ function PreviewEventDashboardItem(props) {
 
                     </Card.Content> : null}
 
-                <Card.Actions style={{
-                    marginLeft: 'auto',
-                    marginTop: 'auto',
-                    flexDirection: 'row'
-                }}>
+                <Card.Actions style={styles.actions}>
                     <Button
                         icon={'chevron-right'}
                     >
@@ -62,5 +63,23 @@ function PreviewEventDashboardItem(props) {
     } else
         return <View/>
 }
+
+const styles = StyleSheet.create({
+    card: {
+        marginBottom: 10
+    },
+    content: {
+        maxHeight: 150,
+        overflow: 'hidden',
+    },
+    actions: {
+        marginLeft: 'auto',
+        marginTop: 'auto',
+        flexDirection: 'row'
+    },
+    avatar: {
+        backgroundColor: 'transparent'
+    }
+});
 
 export default withTheme(PreviewEventDashboardItem);

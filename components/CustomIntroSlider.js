@@ -9,47 +9,24 @@ import i18n from 'i18n-js';
 import AppIntroSlider from "react-native-app-intro-slider";
 import Update from "../constants/Update";
 
-// Content to be used int the intro slides
-
-const styles = StyleSheet.create({
-    mainContent: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingBottom: 100
-    },
-    image: {
-        width: 300,
-        height: 300,
-        marginBottom: -50,
-    },
-    text: {
-        color: 'rgba(255, 255, 255, 0.8)',
-        backgroundColor: 'transparent',
-        textAlign: 'center',
-        paddingHorizontal: 16,
-    },
-    title: {
-        fontSize: 22,
-        color: 'white',
-        backgroundColor: 'transparent',
-        textAlign: 'center',
-        marginBottom: 16,
-    },
-});
-
 type Props = {
     onDone: Function,
     isUpdate: boolean,
     isAprilFools: boolean,
 };
 
+/**
+ * Class used to create intro slides
+ */
 export default class CustomIntroSlider extends React.Component<Props> {
 
     introSlides: Array<Object>;
     updateSlides: Array<Object>;
     aprilFoolsSlides: Array<Object>;
 
+    /**
+     * Generates intro slides
+     */
     constructor() {
         super();
         this.introSlides = [
@@ -126,8 +103,9 @@ export default class CustomIntroSlider extends React.Component<Props> {
 
     /**
      * Render item to be used for the intro introSlides
-     * @param item
-     * @param dimensions
+     *
+     * @param item The item to be displayed
+     * @param dimensions Dimensions of the item
      */
     static getIntroRenderItem({item, dimensions}: Object) {
 
@@ -178,3 +156,29 @@ export default class CustomIntroSlider extends React.Component<Props> {
 }
 
 
+const styles = StyleSheet.create({
+    mainContent: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: 100
+    },
+    image: {
+        width: 300,
+        height: 300,
+        marginBottom: -50,
+    },
+    text: {
+        color: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: 'transparent',
+        textAlign: 'center',
+        paddingHorizontal: 16,
+    },
+    title: {
+        fontSize: 22,
+        color: 'white',
+        backgroundColor: 'transparent',
+        textAlign: 'center',
+        marginBottom: 16,
+    },
+});
