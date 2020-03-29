@@ -105,7 +105,7 @@ class AboutScreen extends React.Component<Props, State> {
             icon: 'bug-check',
             text: i18n.t('aboutScreen.debug'),
             showChevron: true,
-            showOnlyDebug: true
+            showOnlyInDebug: true
         },
     ];
     /**
@@ -171,6 +171,9 @@ class AboutScreen extends React.Component<Props, State> {
             showChevron: true
         },
     ];
+    /**
+     * Order of information cards
+     */
     dataOrder: Array<Object> = [
         {
             id: 'app',
@@ -201,6 +204,11 @@ class AboutScreen extends React.Component<Props, State> {
         this.colors = props.theme.colors;
     }
 
+    /**
+     * Gets the app icon
+     * @param props
+     * @return {*}
+     */
     getAppIcon(props) {
         return (
             <Avatar.Image
@@ -211,10 +219,21 @@ class AboutScreen extends React.Component<Props, State> {
         );
     }
 
-    keyExtractor(item: Object) {
+    /**
+     * Extracts a key from the given item
+     *
+     * @param item The item to extract the key from
+     * @return {string} The extracted key
+     */
+    keyExtractor(item: Object): string {
         return item.icon;
     }
 
+    /**
+     * Gets the app card showing information and links about the app.
+     *
+     * @return {*}
+     */
     getAppCard() {
         return (
             <Card style={{marginBottom: 10}}>
@@ -235,6 +254,11 @@ class AboutScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Gets the team card showing information and links about the team
+     *
+     * @return {*}
+     */
     getTeamCard() {
         return (
             <Card style={{marginBottom: 10}}>
@@ -263,6 +287,11 @@ class AboutScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Gets the techno card showing information and links about the technologies used in the app
+     *
+     * @return {*}
+     */
     getTechnoCard() {
         return (
             <Card style={{marginBottom: 10}}>
@@ -280,12 +309,25 @@ class AboutScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Gets a chevron icon
+     *
+     * @param props
+     * @return {*}
+     */
     getChevronIcon(props: Object) {
         return (
             <List.Icon {...props} icon={'chevron-right'}/>
         );
     }
 
+    /**
+     * Gets a custom list item icon
+     *
+     * @param item The item to show the icon for
+     * @param props
+     * @return {*}
+     */
     getItemIcon(item: Object, props: Object) {
         return (
             <List.Icon {...props} icon={item.icon}/>
@@ -295,10 +337,12 @@ class AboutScreen extends React.Component<Props, State> {
     /**
      * Get a clickable card item to be rendered inside a card.
      *
-     * @returns {React.Node}
+     * @returns {*}
      */
     getCardItem({item}: Object) {
-        let shouldShow = !item.showOnlyInDebug || (item.showOnlyInDebug && this.state.isDebugUnlocked);
+        let shouldShow = item === undefined
+            || !item.showOnlyInDebug
+            || (item.showOnlyInDebug && this.state.isDebugUnlocked);
         const getItemIcon = this.getItemIcon.bind(this, item);
         if (shouldShow) {
             if (item.showChevron) {
@@ -323,6 +367,9 @@ class AboutScreen extends React.Component<Props, State> {
             return null;
     }
 
+    /**
+     * Tries to unlock debug mode
+     */
     tryUnlockDebugMode() {
         this.debugTapCounter = this.debugTapCounter + 1;
         if (this.debugTapCounter >= 4) {
@@ -330,12 +377,20 @@ class AboutScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Unlocks debug mode
+     */
     unlockDebugMode() {
         this.setState({isDebugUnlocked: true});
         let key = AsyncStorageManager.getInstance().preferences.debugUnlocked.key;
         AsyncStorageManager.getInstance().savePref(key, '1');
     }
 
+    /**
+     * Gets the bug report modal's content
+     *
+     * @return {*}
+     */
     getBugReportModal() {
         return (
             <View style={{
@@ -376,12 +431,21 @@ class AboutScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * opens the bug report modal
+     */
     openBugReportModal() {
         if (this.modalRef) {
             this.modalRef.open();
         }
     }
 
+    /**
+     * Gets a card, depending on the given item's id
+     *
+     * @param item The item to show
+     * @return {*}
+     */
     getMainCard({item}: Object) {
         switch (item.id) {
             case 'app':
@@ -394,6 +458,11 @@ class AboutScreen extends React.Component<Props, State> {
         return <View/>;
     }
 
+    /**
+     * Callback used when receiving the modal ref
+     *
+     * @param ref
+     */
     onModalRef(ref: Object) {
         this.modalRef = ref;
     }

@@ -10,6 +10,12 @@ type listItem = {
     version: string
 };
 
+/**
+ * Generates the dependencies list from the raw json
+ *
+ * @param object The raw json
+ * @return {Array<listItem>}
+ */
 function generateListFromObject(object: { [string]: string }): Array<listItem> {
     let list = [];
     let keys = Object.keys(object);

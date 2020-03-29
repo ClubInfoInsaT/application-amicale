@@ -16,7 +16,8 @@ type State = {
 }
 
 /**
- * Class defining the Debug screen. This screen allows the user to get detailed information on the app/device.
+ * Class defining the Debug screen.
+ * This screen allows the user to get and modify information on the app/device.
  */
 class DebugScreen extends React.Component<Props, State> {
 
@@ -37,6 +38,15 @@ class DebugScreen extends React.Component<Props, State> {
         this.colors = props.theme.colors;
     }
 
+    /**
+     * Gets a clickable list item
+     *
+     * @param onPressCallback The function to call when clicking on the item
+     * @param icon The item's icon
+     * @param title The item's title
+     * @param subtitle The item's subtitle
+     * @return {*}
+     */
     static getGeneralItem(onPressCallback: Function, icon: ?string, title: string, subtitle: string) {
         if (icon !== undefined) {
             return (
@@ -58,6 +68,10 @@ class DebugScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Show the
+     * @param item
+     */
     showEditModal(item: Object) {
         this.setState({
             modalCurrentDisplayItem: item
@@ -67,6 +81,11 @@ class DebugScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Gets the edit modal content
+     *
+     * @return {*}
+     */
     getModalContent() {
         return (
             <View style={{
@@ -104,6 +123,12 @@ class DebugScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Saves the new value of the given preference
+     *
+     * @param key The pref key
+     * @param value The pref value
+     */
     saveNewPrefs(key: string, value: string) {
         this.setState((prevState) => {
             let currentPreferences = {...prevState.currentPreferences};
@@ -113,6 +138,11 @@ class DebugScreen extends React.Component<Props, State> {
         AsyncStorageManager.getInstance().savePref(key, value);
     }
 
+    /**
+     * Callback used when receiving the modal ref
+     *
+     * @param ref
+     */
     onModalRef(ref: Object) {
         this.modalRef = ref;
     }
