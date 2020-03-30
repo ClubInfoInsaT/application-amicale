@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Keyboard, KeyboardAvoidingView, StyleSheet, TouchableWithoutFeedback, View} from "react-native";
 import {Button, Text, TextInput, Title} from 'react-native-paper';
-import ConnectionManager from "../../utils/ConnectionManager";
+import ConnectionManager from "../../managers/ConnectionManager";
 
 type Props = {
     navigation: Object,

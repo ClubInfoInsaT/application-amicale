@@ -1,5 +1,5 @@
 import React from 'react';
-import ConnectionManager, {ERROR_TYPE} from "../ConnectionManager";
+import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
 
 const fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS but in react-native
 const c = ConnectionManager.getInstance();
