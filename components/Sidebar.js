@@ -47,6 +47,11 @@ export default class SideBar extends React.PureComponent<Props, State> {
                 icon: "home",
             },
             {
+                name: 'LOGIN',
+                route: "LoginScreen",
+                icon: "login",
+            },
+            {
                 name: i18n.t('sidenav.divider2'),
                 route: "Divider2"
             },

@@ -15,6 +15,7 @@ import Sidebar from "../components/Sidebar";
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
 import HeaderButton from "../components/HeaderButton";
 import i18n from "i18n-js";
+import LoginScreen from "../screens/Amicale/LoginScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -186,6 +187,30 @@ function TetrisStackComponent() {
     );
 }
 
+const LoginStack = createStackNavigator();
+
+function LoginStackComponent() {
+    return (
+        <LoginStack.Navigator
+            initialRouteName="LoginScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <LoginStack.Screen
+                name="LoginScreen"
+                component={LoginScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'LOGIN',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </LoginStack.Navigator>
+    );
+}
+
 const Drawer = createDrawerNavigator();
 
 function getDrawerContent(props) {
@@ -230,6 +255,10 @@ export default function DrawerNavigator() {
             <Drawer.Screen
                 name="TetrisScreen"
                 component={TetrisStackComponent}
+            />
+            <Drawer.Screen
+                name="LoginScreen"
+                component={LoginStackComponent}
             />
         </Drawer.Navigator>
     );
