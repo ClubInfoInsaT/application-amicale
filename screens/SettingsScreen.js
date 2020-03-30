@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 import {ScrollView} from "react-native";
-import ThemeManager from '../utils/ThemeManager';
+import ThemeManager from '../managers/ThemeManager';
 import i18n from "i18n-js";
-import AsyncStorageManager from "../utils/AsyncStorageManager";
-import NotificationsManager from "../utils/NotificationsManager";
+import AsyncStorageManager from "../managers/AsyncStorageManager";
+import {setMachineReminderNotificationTime} from "../utils/Notifications";
 import {Card, List, Switch, ToggleButton} from 'react-native-paper';
 import {Appearance} from "react-native-appearance";
 
@@ -60,7 +60,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
             let intVal = 0;
             if (value !== 'never')
                 intVal = parseInt(value);
-            NotificationsManager.setMachineReminderNotificationTime(intVal);
+            setMachineReminderNotificationTime(intVal);
         }
     }
 

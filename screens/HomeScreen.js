@@ -10,7 +10,7 @@ import {Text, withTheme} from 'react-native-paper';
 import FeedItem from "../components/FeedItem";
 import SquareDashboardItem from "../components/SquareDashboardItem";
 import PreviewEventDashboardItem from "../components/PreviewEventDashboardItem";
-import PlanningEventManager from "../utils/PlanningEventManager";
+import {stringToDate} from "../utils/Planning";
 // import DATA from "../dashboard_data.json";
 
 
@@ -201,8 +201,8 @@ class HomeScreen extends React.Component<Props> {
      * @return {number} The number of milliseconds
      */
     getEventDuration(event: Object): number {
-        let start = PlanningEventManager.stringToDate(event['date_begin']);
-        let end = PlanningEventManager.stringToDate(event['date_end']);
+        let start = stringToDate(event['date_begin']);
+        let end = stringToDate(event['date_end']);
         let duration = 0;
         if (start !== undefined && start !== null && end !== undefined && end !== null)
             duration = end - start;
@@ -219,7 +219,7 @@ class HomeScreen extends React.Component<Props> {
     getEventsAfterLimit(events: Object, limit: Date): Array<Object> {
         let validEvents = [];
         for (let event of events) {
-            let startDate = PlanningEventManager.stringToDate(event['date_begin']);
+            let startDate = stringToDate(event['date_begin']);
             if (startDate !== undefined && startDate !== null && startDate >= limit) {
                 validEvents.push(event);
             }
@@ -255,8 +255,8 @@ class HomeScreen extends React.Component<Props> {
         let validEvents = [];
         let now = new Date();
         for (let event of events) {
-            let startDate = PlanningEventManager.stringToDate(event['date_begin']);
-            let endDate = PlanningEventManager.stringToDate(event['date_end']);
+            let startDate = stringToDate(event['date_begin']);
+            let endDate = stringToDate(event['date_end']);
             if (startDate !== undefined && startDate !== null) {
                 if (startDate > now)
                     validEvents.push(event);

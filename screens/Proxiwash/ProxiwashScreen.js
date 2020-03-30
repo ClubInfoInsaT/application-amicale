@@ -4,15 +4,15 @@ import * as React from 'react';
 import {Alert, Platform, View} from 'react-native';
 import i18n from "i18n-js";
 import WebSectionList from "../../components/WebSectionList";
-import NotificationsManager from "../../utils/NotificationsManager";
-import AsyncStorageManager from "../../utils/AsyncStorageManager";
+import * as Notifications from "../../utils/Notifications";
+import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import * as Expo from "expo";
 import {Avatar, Banner, Button, Card, Text, withTheme} from 'react-native-paper';
 import HeaderButton from "../../components/HeaderButton";
 import ProxiwashListItem from "../../components/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
 import CustomModal from "../../components/CustomModal";
-import AprilFoolsManager from "../../utils/AprilFoolsManager";
+import AprilFoolsManager from "../../managers/AprilFoolsManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -118,12 +118,12 @@ class ProxiwashScreen extends React.Component<Props, State> {
         });
         if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
             // Get latest watchlist from server
-            NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
+            Notifications.getMachineNotificationWatchlist((fetchedList) => {
                 this.setState({machinesWatched: fetchedList})
             });
             // Get updated watchlist after received notification
             Expo.Notifications.addListener(() => {
-                NotificationsManager.getMachineNotificationWatchlist((fetchedList) => {
+                Notifications.getMachineNotificationWatchlist((fetchedList) => {
                     this.setState({machinesWatched: fetchedList})
                 });
             });
@@ -175,7 +175,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
     setupNotifications(machineId: string) {
         if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
             if (!this.isMachineWatched(machineId)) {
-                NotificationsManager.setupMachineNotification(machineId, true);
+                Notifications.setupMachineNotification(machineId, true);
                 this.saveNotificationToState(machineId);
             } else
                 this.disableNotification(machineId);
@@ -205,7 +205,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
         if (data.length > 0) {
             let arrayIndex = data.indexOf(machineId);
             if (arrayIndex !== -1) {
-                NotificationsManager.setupMachineNotification(machineId, false);
+                Notifications.setupMachineNotification(machineId, false);
                 this.removeNotificationFroState(arrayIndex);
             }
         }

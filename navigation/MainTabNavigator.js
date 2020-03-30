@@ -12,7 +12,7 @@ import ProximoListScreen from "../screens/Proximo/ProximoListScreen";
 import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
-import AsyncStorageManager from "../utils/AsyncStorageManager";
+import AsyncStorageManager from "../managers/AsyncStorageManager";
 import HeaderButton from "../components/HeaderButton";
 import {withTheme} from 'react-native-paper';
 import i18n from "i18n-js";

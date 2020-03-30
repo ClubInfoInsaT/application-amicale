@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {ScrollView, View} from "react-native";
-import AsyncStorageManager from "../../utils/AsyncStorageManager";
+import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import CustomModal from "../../components/CustomModal";
 import {Button, Card, List, Subheading, TextInput, Title, withTheme} from 'react-native-paper';
 

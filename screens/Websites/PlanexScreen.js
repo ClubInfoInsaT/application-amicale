@@ -1,12 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import ThemeManager from "../../utils/ThemeManager";
+import ThemeManager from "../../managers/ThemeManager";
 import WebViewScreen from "../../components/WebViewScreen";
 import {Avatar, Banner} from "react-native-paper";
 import i18n from "i18n-js";
 import {View} from "react-native";
-import AsyncStorageManager from "../../utils/AsyncStorageManager";
+import AsyncStorageManager from "../../managers/AsyncStorageManager";
 
 type Props = {
     navigation: Object,

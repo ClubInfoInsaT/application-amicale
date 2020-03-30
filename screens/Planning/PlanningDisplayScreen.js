@@ -4,9 +4,9 @@ import * as React from 'react';
 import {Image, ScrollView, View} from 'react-native';
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
-import PlanningEventManager from '../../utils/PlanningEventManager';
+import {getDateOnlyString, getFormattedEventTime} from '../../utils/Planning';
 import {Card, withTheme} from 'react-native-paper';
-import DateManager from "../../utils/DateManager";
+import DateManager from "../../managers/DateManager";
 
 type Props = {
     navigation: Object,
@@ -33,9 +33,9 @@ class PlanningDisplayScreen extends React.Component<Props> {
 
     render() {
         // console.log("rendering planningDisplayScreen");
-        let subtitle = PlanningEventManager.getFormattedEventTime(
+        let subtitle = getFormattedEventTime(
             this.displayData["date_begin"], this.displayData["date_end"]);
-        let dateString = PlanningEventManager.getDateOnlyString(this.displayData["date_begin"]);
+        let dateString = getDateOnlyString(this.displayData["date_begin"]);
         if (dateString !== null)
             subtitle += ' | ' + DateManager.getInstance().getTranslatedDate(dateString);
         return (

@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 import {View} from 'react-native';
-import DateManager from "../utils/DateManager";
+import DateManager from "../managers/DateManager";
 import WebSectionList from "../components/WebSectionList";
 import {Card, Text, withTheme} from 'react-native-paper';
-import AprilFoolsManager from "../utils/AprilFoolsManager";
+import AprilFoolsManager from "../managers/AprilFoolsManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
 

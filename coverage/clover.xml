@@ -2,7 +2,7 @@
 <coverage generated="1584889501493" clover="3.2.0">
   <project timestamp="1584889501493" name="All files">
     <metrics statements="65" coveredstatements="65" conditionals="39" coveredconditionals="36" methods="11" coveredmethods="11" elements="115" coveredelements="112" complexity="0" loc="65" ncloc="65" packages="1" files="1" classes="1"/>
-    <file name="PlanningEventManager.js" path="/home/keplyx/expo-projects/application-amicale/utils/PlanningEventManager.js">
+    <file name="Planning.js" path="/home/keplyx/expo-projects/application-amicale/utils/Planning.js">
       <metrics statements="65" coveredstatements="65" conditionals="39" coveredconditionals="36" methods="11" coveredmethods="11"/>
       <line num="18" count="1" type="stmt"/>
       <line num="27" count="1" type="stmt"/>

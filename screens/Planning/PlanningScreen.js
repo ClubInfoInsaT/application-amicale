@@ -4,9 +4,14 @@ import * as React from 'react';
 import {BackHandler, View} from 'react-native';
 import i18n from "i18n-js";
 import {LocaleConfig} from 'react-native-calendars';
-import WebDataManager from "../../utils/WebDataManager";
-import type {eventObject} from "../../utils/PlanningEventManager";
-import PlanningEventManager from '../../utils/PlanningEventManager';
+import {readData} from "../../utils/WebData";
+import type {eventObject} from "../../utils/Planning";
+import {
+    generateEventAgenda,
+    getCurrentDateString,
+    getDateOnlyString,
+    getFormattedEventTime,
+} from '../../utils/Planning';
 import {Avatar, Divider, List} from 'react-native-paper';
 import CustomAgenda from "../../components/CustomAgenda";
 
@@ -38,7 +43,6 @@ const AGENDA_MONTH_SPAN = 3;
 export default class PlanningScreen extends React.Component<Props, State> {
 
     agendaRef: Object;
-    webDataManager: WebDataManager;
 
     lastRefresh: Date;
     minTimeBetweenRefresh = 60;
@@ -59,11 +63,10 @@ export default class PlanningScreen extends React.Component<Props, State> {
     onAgendaRef: Function;
     onCalendarToggled: Function;
     onBackButtonPressAndroid: Function;
-    currentDate = PlanningEventManager.getDateOnlyString(PlanningEventManager.getCurrentDateString());
+    currentDate = getDateOnlyString(getCurrentDateString());
 
     constructor(props: any) {
         super(props);
-        this.webDataManager = new WebDataManager(FETCH_URL);
         if (i18n.currentLocale().startsWith("fr")) {
             LocaleConfig.defaultLocale = 'fr';
         }
@@ -141,11 +144,11 @@ export default class PlanningScreen extends React.Component<Props, State> {
 
         if (canRefresh) {
             this.setState({refreshing: true});
-            this.webDataManager.readData()
+            readData(FETCH_URL)
                 .then((fetchedData) => {
                     this.setState({
                         refreshing: false,
-                        agendaItems: PlanningEventManager.generateEventAgenda(fetchedData, AGENDA_MONTH_SPAN)
+                        agendaItems: generateEventAgenda(fetchedData, AGENDA_MONTH_SPAN)
                     });
                     this.lastRefresh = new Date();
                 })
@@ -189,7 +192,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     <Divider/>
                     <List.Item
                         title={item.title}
-                        description={PlanningEventManager.getFormattedEventTime(item["date_begin"], item["date_end"])}
+                        description={getFormattedEventTime(item["date_begin"], item["date_end"])}
                         left={() => <Avatar.Image
                             source={{uri: item.logo}}
                             style={{backgroundColor: 'transparent'}}
@@ -204,7 +207,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
                     <Divider/>
                     <List.Item
                         title={item.title}
-                        description={PlanningEventManager.getFormattedEventTime(item["date_begin"], item["date_end"])}
+                        description={getFormattedEventTime(item["date_begin"], item["date_end"])}
                         onPress={onPress}
                     />
                 </View>

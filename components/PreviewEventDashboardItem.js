@@ -5,7 +5,7 @@ import {StyleSheet, View} from "react-native";
 import HTML from "react-native-render-html";
 import i18n from "i18n-js";
 import {Avatar, Button, Card, withTheme} from 'react-native-paper';
-import PlanningEventManager from "../utils/PlanningEventManager";
+import {getFormattedEventTime, isDescriptionEmpty} from "../utils/Planning";
 
 /**
  * Component used to display an event preview if an event is available
@@ -17,7 +17,7 @@ function PreviewEventDashboardItem(props) {
     const {colors} = props.theme;
     const isEmpty = props.event === undefined
         ? true
-        : PlanningEventManager.isDescriptionEmpty(props.event['description']);
+        : isDescriptionEmpty(props.event['description']);
 
     if (props.event !== undefined && props.event !== null) {
         const hasImage = props.event['logo'] !== '' && props.event['logo'] !== null;
@@ -34,12 +34,12 @@ function PreviewEventDashboardItem(props) {
                 {hasImage ?
                     <Card.Title
                         title={props.event['title']}
-                        subtitle={PlanningEventManager.getFormattedEventTime(props.event['date_begin'], props.event['date_end'])}
+                        subtitle={getFormattedEventTime(props.event['date_begin'], props.event['date_end'])}
                         left={getImage}
                     /> :
                     <Card.Title
                         title={props.event['title']}
-                        subtitle={PlanningEventManager.getFormattedEventTime(props.event['date_begin'], props.event['date_end'])}
+                        subtitle={getFormattedEventTime(props.event['date_begin'], props.event['date_end'])}
                     />}
                 {!isEmpty ?
                     <Card.Content style={styles.content}>

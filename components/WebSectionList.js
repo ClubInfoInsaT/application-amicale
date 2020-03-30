@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import WebDataManager from "../utils/WebDataManager";
+import {readData} from "../utils/WebData";
 import i18n from "i18n-js";
 import {Snackbar} from 'react-native-paper';
 import {RefreshControl, SectionList, View} from "react-native";
@@ -42,8 +42,6 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         updateData: 0,
     };
 
-    webDataManager: WebDataManager;
-
     refreshInterval: IntervalID;
     lastRefresh: Date;
 
@@ -79,7 +77,6 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
      * Allows to detect when the screen is focused
      */
     componentDidMount() {
-        this.webDataManager = new WebDataManager(this.props.fetchUrl);
         const onScreenFocus = this.onScreenFocus.bind(this);
         const onScreenBlur = this.onScreenBlur.bind(this);
         this.props.navigation.addListener('focus', onScreenFocus);
@@ -144,7 +141,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
             canRefresh = true;
         if (canRefresh) {
             this.setState({refreshing: true});
-            this.webDataManager.readData()
+            readData(this.props.fetchUrl)
                 .then(this.onFetchSuccess)
                 .catch(this.onFetchError);
         }

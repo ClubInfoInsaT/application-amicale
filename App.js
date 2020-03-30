@@ -2,17 +2,17 @@
 
 import * as React from 'react';
 import {Platform, StatusBar} from 'react-native';
-import LocaleManager from './utils/LocaleManager';
-import AsyncStorageManager from "./utils/AsyncStorageManager";
+import LocaleManager from './managers/LocaleManager';
+import AsyncStorageManager from "./managers/AsyncStorageManager";
 import CustomIntroSlider from "./components/CustomIntroSlider";
 import {SplashScreen} from 'expo';
-import ThemeManager from './utils/ThemeManager';
+import ThemeManager from './managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import DrawerNavigator from './navigation/DrawerNavigator';
-import NotificationsManager from "./utils/NotificationsManager";
+import {initExpoToken} from "./utils/Notifications";
 import {Provider as PaperProvider} from 'react-native-paper';
-import AprilFoolsManager from "./utils/AprilFoolsManager";
+import AprilFoolsManager from "./managers/AprilFoolsManager";
 import Update from "./constants/Update";
 
 type Props = {};
@@ -90,7 +90,7 @@ export default class App extends React.Component<Props, State> {
         // Wait for custom fonts to be loaded before showing the app
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
-        await NotificationsManager.initExpoToken();
+        await initExpoToken();
         this.onLoadFinished();
     }
 
