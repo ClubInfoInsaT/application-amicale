@@ -208,7 +208,7 @@ export function generateEventAgenda(eventList: Array<eventObject>, numberOfMonth
         if (dateString !== null) {
             const eventArray = agendaItems[dateString];
             if (eventArray !== undefined)
-                this.pushEventInOrder(eventArray, eventList[i]);
+                pushEventInOrder(eventArray, eventList[i]);
         }
 
     }
