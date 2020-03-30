@@ -8,12 +8,14 @@
  * @return {Promise<Object>}
  */
 export async function readData(url: string) {
-    let fetchedData: Object = {};
-    try {
-        let response = await fetch(url);
-        fetchedData = await response.json();
-    } catch (error) {
-        throw new Error('Could not read FetchedData from server');
-    }
-    return fetchedData;
+    return new Promise((resolve, reject) => {
+        fetch(url)
+            .then(async (response) => response.json())
+            .then((data) => {
+                resolve(data);
+            })
+            .catch(() => {
+                reject();
+            });
+    });
 }
