@@ -1,7 +1,15 @@
 // @flow
 
 import * as React from 'react';
-import {Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableWithoutFeedback, View} from "react-native";
+import {
+    Alert,
+    Keyboard,
+    KeyboardAvoidingView,
+    ScrollView,
+    StyleSheet,
+    TouchableWithoutFeedback,
+    View
+} from "react-native";
 import {Avatar, Button, Card, HelperText, Text, TextInput, withTheme} from 'react-native-paper';
 import ConnectionManager from "../../managers/ConnectionManager";
 import {openBrowser} from "../../utils/WebBrowser";
@@ -15,11 +23,14 @@ type State = {
     password: string,
     isEmailValidated: boolean,
     isPasswordValidated: boolean,
+    loading: boolean,
 }
 
 const ICON_AMICALE = require('../../assets/amicale.png');
 
 const RESET_PASSWORD_LINK = "https://www.amicale-insat.fr/password/reset";
+
+const emailRegex = /^.+@.+\..+$/;
 
 class LoginScreen extends React.Component<Props, State> {
 
@@ -28,6 +39,7 @@ class LoginScreen extends React.Component<Props, State> {
         password: '',
         isEmailValidated: false,
         isPasswordValidated: false,
+        loading: false,
     };
 
     colors: Object;
@@ -63,7 +75,7 @@ class LoginScreen extends React.Component<Props, State> {
     }
 
     isEmailValid() {
-        return false;
+        return emailRegex.test(this.state.email);
     }
 
     shouldShowEmailError() {
@@ -106,12 +118,18 @@ class LoginScreen extends React.Component<Props, State> {
 
     onSubmit() {
         if (this.shouldEnableLogin()) {
+            this.setState({loading: true});
             ConnectionManager.getInstance().connect(this.state.email, this.state.password)
                 .then((data) => {
                     console.log(data);
+                    Alert.alert('COOL', 'ÇA MARCHE');
                 })
                 .catch((error) => {
                     console.log(error);
+                    Alert.alert('ERREUR', 'MDP OU MAIL INVALIDE');
+                })
+                .finally(() => {
+                    this.setState({loading: false});
                 });
         }
     }
@@ -188,6 +206,7 @@ class LoginScreen extends React.Component<Props, State> {
                             icon="send"
                             mode="contained"
                             disabled={!this.shouldEnableLogin()}
+                            loading={this.state.loading}
                             onPress={this.onSubmit}
                             style={{marginLeft: 'auto'}}>
                             LOGIN
