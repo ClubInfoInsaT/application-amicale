@@ -4,13 +4,13 @@ import * as React from 'react';
 import {View} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../components/EventDashboardItem";
-import * as WebBrowser from 'expo-web-browser';
 import WebSectionList from "../components/WebSectionList";
 import {Text, withTheme} from 'react-native-paper';
 import FeedItem from "../components/FeedItem";
 import SquareDashboardItem from "../components/SquareDashboardItem";
 import PreviewEventDashboardItem from "../components/PreviewEventDashboardItem";
 import {stringToDate} from "../utils/Planning";
+import {openBrowser} from "../utils/WebBrowser";
 // import DATA from "../dashboard_data.json";
 
 
@@ -70,7 +70,7 @@ class HomeScreen extends React.Component<Props> {
     }
 
     onTutorInsaClick() {
-        WebBrowser.openBrowserAsync("https://www.etud.insa-toulouse.fr/~tutorinsa/");
+        openBrowser("https://www.etud.insa-toulouse.fr/~tutorinsa/", this.colors.primary);
     }
 
     onProximoClick() {
@@ -402,7 +402,7 @@ class HomeScreen extends React.Component<Props> {
     }
 
     openLink(link: string) {
-        WebBrowser.openBrowserAsync(link);
+        openBrowser(link, this.colors.primary);
     }
 
     /**

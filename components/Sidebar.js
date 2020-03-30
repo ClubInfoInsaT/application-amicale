@@ -3,16 +3,17 @@
 import * as React from 'react';
 import {Dimensions, FlatList, Image, Platform, StyleSheet, View} from 'react-native';
 import i18n from "i18n-js";
-import * as WebBrowser from 'expo-web-browser';
+import {openBrowser} from "../utils/WebBrowser";
 import SidebarDivider from "./SidebarDivider";
 import SidebarItem from "./SidebarItem";
-import {TouchableRipple} from "react-native-paper";
+import {TouchableRipple, withTheme} from "react-native-paper";
 
 const deviceWidth = Dimensions.get("window").width;
 
 type Props = {
     navigation: Object,
     state: Object,
+    theme: Object,
 };
 
 type State = {
@@ -22,7 +23,7 @@ type State = {
 /**
  * Component used to render the drawer menu content
  */
-export default class SideBar extends React.PureComponent<Props, State> {
+class SideBar extends React.PureComponent<Props, State> {
 
     dataSet: Array<Object>;
 
@@ -31,6 +32,7 @@ export default class SideBar extends React.PureComponent<Props, State> {
     };
 
     getRenderItem: Function;
+    colors: Object;
 
     /**
      * Generate the dataset
@@ -126,6 +128,7 @@ export default class SideBar extends React.PureComponent<Props, State> {
             },
         ];
         this.getRenderItem = this.getRenderItem.bind(this);
+        this.colors = props.theme.colors;
     }
 
     /**
@@ -138,7 +141,7 @@ export default class SideBar extends React.PureComponent<Props, State> {
         if (item.link === undefined)
             this.props.navigation.navigate(item.route);
         else
-            WebBrowser.openBrowserAsync(item.link);
+            openBrowser(item.link, this.colors.primary);
     }
 
     /**
@@ -218,3 +221,5 @@ const styles = StyleSheet.create({
         marginTop: Platform.OS === "android" ? -3 : undefined
     }
 });
+
+export default withTheme(SideBar);
