@@ -1,8 +1,11 @@
 // @flow
 
+import * as SecureStore from 'expo-secure-store';
+
 export const ERROR_TYPE = {
     BAD_CREDENTIALS: 0,
-    CONNECTION_ERROR: 1
+    CONNECTION_ERROR: 1,
+    SAVE_TOKEN: 2,
 };
 
 const AUTH_URL = "https://www.amicale-insat.fr/api/password";
@@ -27,6 +30,20 @@ export default class ConnectionManager {
             ConnectionManager.instance;
     }
 
+    async saveLogin(email: string, token: string) {
+        this.#token = token;
+        this.#email = email;
+        return new Promise((resolve, reject) => {
+            SecureStore.setItemAsync('token', token)
+                .then(() => {
+                    resolve(true);
+                })
+                .catch(error => {
+                    reject(false);
+                });
+        });
+    }
+
     async connect(email: string, password: string) {
         let data = {
             email: email,
@@ -42,24 +59,31 @@ export default class ConnectionManager {
                 body: JSON.stringify(data)
             }).then(async (response) => response.json())
                 .then((data) => {
-                    console.log(data);
-                    if (this.isResponseValid(data))
-                        resolve({success: data.success, token: data.token});
-                    else
-                        reject(ERROR_TYPE.BAD_CREDENTIALS);
+                    if (this.isResponseValid(data)) {
+                        if (data.state) {
+                            this.saveLogin(email, data.token)
+                                .then(() => {
+                                    resolve(true);
+                                })
+                                .catch(() => {
+                                    reject(ERROR_TYPE.SAVE_TOKEN);
+                                });
+                        } else
+                            reject(ERROR_TYPE.BAD_CREDENTIALS);
+                    } else
+                        reject(ERROR_TYPE.CONNECTION_ERROR);
                 })
                 .catch((error) => {
-                    console.log(error);
                     reject(ERROR_TYPE.CONNECTION_ERROR);
                 });
         });
     }
 
     isResponseValid(response: Object) {
-        return response !== undefined
-            && response.success !== undefined
-            && response.success
-            && response.token !== undefined;
+        let valid = response !== undefined && response.state !== undefined;
+        if (valid && response.state)
+            valid = valid && response.token !== undefined && response.token !== '';
+        return valid;
     }
 
 }
