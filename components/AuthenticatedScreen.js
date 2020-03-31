@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {View} from "react-native";
-import {ActivityIndicator, Text, withTheme} from 'react-native-paper';
-import ConnectionManager from "../managers/ConnectionManager";
+import {StyleSheet, View} from "react-native";
+import {ActivityIndicator, Subheading, withTheme} from 'react-native-paper';
+import ConnectionManager, {ERROR_TYPE} from "../managers/ConnectionManager";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 
 type Props = {
     navigation: Object,
@@ -22,6 +23,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
 
     currentUserToken: string;
     connectionManager: ConnectionManager;
+    errorCode: number;
     data: Object;
     colors: Object;
 
@@ -49,19 +51,20 @@ class AuthenticatedScreen extends React.Component<Props, State> {
                         this.onFinishedLoading(data);
                     })
                     .catch((error) => {
-                        this.onFinishedLoading(undefined);
+                        this.onFinishedLoading(undefined, error);
                     });
             })
-            .catch(() => {
-                this.onFinishedLoading(undefined);
+            .catch((error) => {
+                this.onFinishedLoading(undefined, ERROR_TYPE.BAD_CREDENTIALS);
             });
     }
 
-    onFinishedLoading(data: Object) {
+    onFinishedLoading(data: Object, error: number) {
         this.data = data;
         this.currentUserToken = data !== undefined
             ? this.connectionManager.getToken()
             : '';
+        this.errorCode = error;
         this.setState({loading: false});
     }
 
@@ -92,7 +95,41 @@ class AuthenticatedScreen extends React.Component<Props, State> {
     }
 
     getErrorRender() {
-        return <Text>ERROR</Text>;
+        let message;
+        let icon;
+        switch (this.errorCode) {
+            case ERROR_TYPE.BAD_CREDENTIALS:
+                message = "BAD_CREDENTIALS";
+                icon = "account-alert-outline";
+                break;
+            case ERROR_TYPE.CONNECTION_ERROR:
+                message = "CONNECTION_ERROR";
+                icon = "access-point-network-off";
+                break;
+            default:
+                message = "UNKNOWN";
+                icon = "alert-circle-outline";
+                break;
+        }
+
+        return (
+            <View style={styles.outer}>
+                <View style={styles.inner}>
+                    <View style={styles.iconContainer}>
+                        <MaterialCommunityIcons
+                            name={icon}
+                            size={150}
+                            color={this.colors.textDisabled}/>
+                    </View>
+                    <Subheading style={{
+                        ...styles.subheading,
+                        color: this.colors.textDisabled
+                    }}>
+                        {message}
+                    </Subheading>
+                </View>
+            </View>
+        );
     }
 
     render() {
@@ -104,7 +141,24 @@ class AuthenticatedScreen extends React.Component<Props, State> {
                 : this.getErrorRender())
         );
     }
-
 }
+
+const styles = StyleSheet.create({
+    outer: {
+        flex: 1,
+    },
+    inner: {
+        marginTop: 'auto',
+        marginBottom: 'auto',
+    },
+    iconContainer: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginBottom: 20
+    },
+    subheading: {
+        textAlign: 'center',
+    }
+});
 
 export default withTheme(AuthenticatedScreen);

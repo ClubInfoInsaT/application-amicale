@@ -59,7 +59,7 @@ class SideBar extends React.PureComponent<Props, State> {
             {
                 name: 'PROFILE',
                 route: "ProfileScreen",
-                icon: "circle",
+                icon: "account",
                 onlyWhenLoggedIn: true,
             },
             {
