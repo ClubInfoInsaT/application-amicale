@@ -117,7 +117,6 @@ export default class ConnectionManager {
                 body: JSON.stringify(data)
             }).then(async (response) => response.json())
                 .then((data) => {
-                    console.log(data);
                     if (this.isConnectionResponseValid(data)) {
                         if (data.state) {
                             this.saveLogin(email, data.token)
