@@ -11,7 +11,7 @@ import {
     View
 } from "react-native";
 import {Avatar, Button, Card, HelperText, Text, TextInput, withTheme} from 'react-native-paper';
-import ConnectionManager from "../../managers/ConnectionManager";
+import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
 import {openBrowser} from "../../utils/WebBrowser";
 
 type Props = {
@@ -125,12 +125,29 @@ class LoginScreen extends React.Component<Props, State> {
                     Alert.alert('COOL', 'ÇA MARCHE');
                 })
                 .catch((error) => {
-                    console.log(error);
-                    Alert.alert('ERREUR', 'MDP OU MAIL INVALIDE');
+                    this.handleErrors(error);
                 })
                 .finally(() => {
                     this.setState({loading: false});
                 });
+        }
+    }
+
+    handleErrors(error: number) {
+        switch (error) {
+            case ERROR_TYPE.CONNECTION_ERROR:
+                Alert.alert('ERREUR', 'PB DE CONNEXION');
+                break;
+            case ERROR_TYPE.BAD_CREDENTIALS:
+                Alert.alert('ERREUR', 'MDP OU MAIL INVALIDE');
+                break;
+            case ERROR_TYPE.SAVE_TOKEN:
+                Alert.alert('ERREUR', 'IMPOSSIBLE DE SAUVEGARDER INFOS CONNEXION');
+                break;
+            default:
+                Alert.alert('ERREUR', 'ERREUR INCONNUE. CONTACTER ARNAUD');
+                break;
+
         }
     }
 
