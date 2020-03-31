@@ -203,7 +203,7 @@ function LoginStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'LOGIN',
+                        title: i18n.t('screens.login'),
                         headerLeft: openDrawer
                     };
                 }}
@@ -227,7 +227,7 @@ function ProfileStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'PROFILE',
+                        title: i18n.t('screens.profile'),
                         headerLeft: openDrawer
                     };
                 }}

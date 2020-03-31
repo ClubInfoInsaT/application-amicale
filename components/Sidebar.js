@@ -51,19 +51,19 @@ class SideBar extends React.PureComponent<Props, State> {
                 route: "Divider4"
             },
             {
-                name: 'LOGIN',
+                name: i18n.t('screens.login'),
                 route: "LoginScreen",
                 icon: "login",
                 onlyWhenLoggedOut: true,
             },
             {
-                name: 'PROFILE',
+                name: i18n.t('screens.profile'),
                 route: "ProfileScreen",
                 icon: "account",
                 onlyWhenLoggedIn: true,
             },
             {
-                name: 'DISCONNECT',
+                name: i18n.t('screens.logout'),
                 route: 'disconnect',
                 action: () => this.onClickDisconnect(),
                 icon: "logout",

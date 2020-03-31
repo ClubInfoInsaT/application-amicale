@@ -12,7 +12,10 @@
     "bluemind": "INSA Mails",
     "ent": "INSA ENT",
     "about": "About",
-    "debug": "Debug"
+    "debug": "Debug",
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile"
   },
   "sidenav": {
     "divider1": "Student websites",
@@ -206,6 +209,26 @@
     "normalRoom": "Work",
     "computerRoom": "Computer",
     "bibRoom": "Bib'Box"
+  },
+  "loginScreen": {
+    "title": "Amicale account",
+    "subtitle": "Please enter your credentials",
+    "email": "Email",
+    "emailError": "Please enter a valid email",
+    "password": "Password",
+    "passwordError": "Please enter a password",
+    "login": "Login",
+    "forgotPassword": "Forgot your password? Click on the button below to get a new one.",
+    "resetPassword": "Reset Password",
+    "noAccount": "No Account? Go to the Amicale's building during open hours to create one.",
+    "errors": {
+      "title": "Error!",
+      "connection": "Network error. Please check your internet connection.",
+      "credentials": "Email or password invalid.",
+      "saveToken": "Failed to save connection information, please contact support.",
+      "consent": "You did not give your consent for data processing to the Amicale.",
+      "unknown": "Unknown error, please contact support."
+    }
   },
   "general": {
     "loading": "Loading...",

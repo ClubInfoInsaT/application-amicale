@@ -12,7 +12,10 @@
     "bluemind": "Mails INSA",
     "ent": "ENT INSA",
     "about": "À Propos",
-    "debug": "Debug"
+    "debug": "Debug",
+    "login": "Se connecter",
+    "logout": "Se déconnecter",
+    "profile": "Profile"
   },
   "sidenav": {
     "divider1": "Sites étudiants",
@@ -207,6 +210,26 @@
     "normalRoom": "Travail",
     "computerRoom": "Ordi",
     "bibRoom": "Bib'Box"
+  },
+  "loginScreen": {
+    "title": "Compte Amicale",
+    "subtitle": "Entrez vos identifiants",
+    "email": "Email",
+    "emailError": "Merci d'entrer un email valide",
+    "password": "Mot de passe",
+    "passwordError": "Merci d'entrer un mot de passe",
+    "login": "Se Connecter",
+    "forgotPassword": "Mot de passe oublié ? Cliquez sur le bouton ci-dessous pour en créer un nouveau.",
+    "resetPassword": "Réinitialiser mot de passe",
+    "noAccount": "Pas de compte ? Passez à l'Amicale pendant une perm pour en créer un.",
+    "errors": {
+      "title": "Erreur !",
+      "connection": "Erreur de réseau. Merci de vérifier votre connexion Internet.",
+      "credentials": "Email ou mot de passe invalide.",
+      "saveToken": "Erreur de sauvegarde des informations de connexion, merci de contacter le support.",
+      "consent": "Vous n'avez pas donné votre consentement pour l'utilisation de vos données personnelles.",
+      "unknown": "Erreur inconnue, merci de contacter le support."
+    }
   },
   "general": {
     "loading": "Chargement...",

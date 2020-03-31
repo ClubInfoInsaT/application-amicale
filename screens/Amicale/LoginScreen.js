@@ -13,6 +13,7 @@ import {
 import {Avatar, Button, Card, HelperText, Text, TextInput, withTheme} from 'react-native-paper';
 import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
 import {openBrowser} from "../../utils/WebBrowser";
+import i18n from 'i18n-js';
 
 type Props = {
     navigation: Object,
@@ -137,31 +138,33 @@ class LoginScreen extends React.Component<Props, State> {
     }
 
     handleErrors(error: number) {
+        const title = i18n.t("loginScreen.errors.title");
+        let message;
         switch (error) {
             case ERROR_TYPE.CONNECTION_ERROR:
-                Alert.alert('ERREUR', 'PB DE CONNEXION');
+                message = i18n.t("loginScreen.errors.connection");
                 break;
             case ERROR_TYPE.BAD_CREDENTIALS:
-                Alert.alert('ERREUR', 'MDP OU MAIL INVALIDE');
+                message = i18n.t("loginScreen.errors.credentials");
                 break;
             case ERROR_TYPE.SAVE_TOKEN:
-                Alert.alert('ERREUR', 'IMPOSSIBLE DE SAUVEGARDER INFOS CONNEXION');
+                message = i18n.t("loginScreen.errors.saveToken");
                 break;
             case ERROR_TYPE.NO_CONSENT:
-                Alert.alert('ERREUR', 'VOUS N\'AVEZ PAS DONNÉ VOTRE CONSENTEMENT POUR LES DONNÉES');
+                message = i18n.t("loginScreen.errors.consent");
                 break;
             default:
-                Alert.alert('ERREUR', 'ERREUR INCONNUE. CONTACTER ARNAUD');
+                message = i18n.t("loginScreen.errors.unknown");
                 break;
-
         }
+        Alert.alert(title, message);
     }
 
     getFormInput() {
         return (
             <View>
                 <TextInput
-                    label='Email'
+                    label={i18n.t("loginScreen.email")}
                     mode='outlined'
                     value={this.state.email}
                     onChangeText={this.onEmailChange}
@@ -180,13 +183,13 @@ class LoginScreen extends React.Component<Props, State> {
                     type="error"
                     visible={this.shouldShowEmailError()}
                 >
-                    EMAIL INVALID
+                    {i18n.t("loginScreen.emailError")}
                 </HelperText>
                 <TextInput
                     ref={(ref) => {
                         this.passwordInputRef = ref;
                     }}
-                    label='Password'
+                    label={i18n.t("loginScreen.password")}
                     mode='outlined'
                     value={this.state.password}
                     onChangeText={this.onPasswordChange}
@@ -205,7 +208,7 @@ class LoginScreen extends React.Component<Props, State> {
                     type="error"
                     visible={this.shouldShowPasswordError()}
                 >
-                    PLS ENTER PASSWORD
+                    {i18n.t("loginScreen.passwordError")}
                 </HelperText>
             </View>
         );
@@ -215,8 +218,8 @@ class LoginScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title="COUCOU"
-                    subtitle="ENTREZ VOS IDENTIFIANTS"
+                    title={i18n.t("loginScreen.title")}
+                    subtitle={i18n.t("loginScreen.subtitle")}
                     left={(props) => <Avatar.Image
                         {...props}
                         source={ICON_AMICALE}
@@ -232,7 +235,7 @@ class LoginScreen extends React.Component<Props, State> {
                             loading={this.state.loading}
                             onPress={this.onSubmit}
                             style={{marginLeft: 'auto'}}>
-                            LOGIN
+                            {i18n.t("loginScreen.login")}
                         </Button>
                     </Card.Actions>
                 </Card.Content>
@@ -244,17 +247,17 @@ class LoginScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Content>
-                    <Text>MDP OUBLIÉ ? t'es pas doué</Text>
+                    <Text>{i18n.t("loginScreen.forgotPassword")}</Text>
                     <View style={styles.btnContainer}>
                         <Button
                             icon="reload"
                             mode="contained"
                             onPress={this.onResetPasswordClick}
                             style={{marginLeft: 'auto'}}>
-                            RESET MDP
+                            {i18n.t("loginScreen.resetPassword")}
                         </Button>
                     </View>
-                    <Text>PAS DE COMPTE ? DOMMAGE PASSE À L'AMICALE</Text>
+                    <Text>{i18n.t("loginScreen.noAccount")}</Text>
                 </Card.Content>
             </Card>
         );
