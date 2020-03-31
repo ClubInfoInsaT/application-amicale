@@ -13,9 +13,9 @@
     "ent": "ENT INSA",
     "about": "À Propos",
     "debug": "Debug",
-    "login": "Se connecter",
-    "logout": "Se déconnecter",
-    "profile": "Profile"
+    "login": "Se Connecter",
+    "logout": "Se Déconnecter",
+    "profile": "Profil"
   },
   "sidenav": {
     "divider1": "Sites étudiants",
@@ -210,6 +210,17 @@
     "normalRoom": "Travail",
     "computerRoom": "Ordi",
     "bibRoom": "Bib'Box"
+  },
+  "profileScreen": {
+    "personalInformation": "Informations Personnelles",
+    "noData": "Pas de données",
+    "editInformation": "Modifier les informations",
+    "clubs": "Clubs",
+    "clubsSubtitle": "Liste de vos clubs",
+    "membership": "Cotisation",
+    "membershipSubtitle": "Permet de participer à diverses activités",
+    "membershipPayed": "Payée",
+    "membershipNotPayed": "Non payée"
   },
   "loginScreen": {
     "title": "Compte Amicale",

@@ -210,6 +210,17 @@
     "computerRoom": "Computer",
     "bibRoom": "Bib'Box"
   },
+  "profileScreen": {
+    "personalInformation": "Personal information",
+    "noData": "No data",
+    "editInformation": "Edit Information",
+    "clubs": "Clubs",
+    "clubsSubtitle": "Clubs you are part of",
+    "membership": "Membership Fee",
+    "membershipSubtitle": "Allows you to take part in various activities",
+    "membershipPayed": "Payed",
+    "membershipNotPayed": "not Payed"
+  },
   "loginScreen": {
     "title": "Amicale account",
     "subtitle": "Please enter your credentials",

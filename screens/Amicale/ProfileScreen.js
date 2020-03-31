@@ -5,6 +5,7 @@ import AuthenticatedScreen from "../../components/AuthenticatedScreen";
 import {openBrowser} from "../../utils/WebBrowser";
 import ConnectionManager from "../../managers/ConnectionManager";
 import HeaderButton from "../../components/HeaderButton";
+import i18n from 'i18n-js';
 
 type Props = {
     navigation: Object,
@@ -94,7 +95,7 @@ class ProfileScreen extends React.Component<Props, State> {
                 <Card.Content>
                     <Divider/>
                     <List.Section>
-                        <List.Subheader>INFORMATIONS PERSONNELLES</List.Subheader>
+                        <List.Subheader>{i18n.t("profileScreen.personalInformation")}</List.Subheader>
                         <List.Item
                             title={this.getFieldValue(this.data.birthday)}
                             left={props => <List.Icon {...props} icon="cake-variant"/>}
@@ -119,7 +120,7 @@ class ProfileScreen extends React.Component<Props, State> {
                             mode="contained"
                             onPress={() => openBrowser(this.data.link, this.colors.primary)}
                             style={styles.editButton}>
-                            EDITER INFOS
+                            {i18n.t("profileScreen.editInformation")}
                         </Button>
                     </Card.Actions>
                 </Card.Content>
@@ -131,8 +132,8 @@ class ProfileScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title="CLUBS"
-                    subtitle="LISTE DE VOS CLUBS"
+                    title={i18n.t("profileScreen.clubs")}
+                    subtitle={i18n.t("profileScreen.clubsSubtitle")}
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon="account-group"
@@ -152,8 +153,8 @@ class ProfileScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title="ÉTAT COTISATION"
-                    subtitle="CA PERMET D'ETRE COOL"
+                    title={i18n.t("profileScreen.membership")}
+                    subtitle={i18n.t("profileScreen.membershipSubtitle")}
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon="credit-card"
@@ -192,7 +193,7 @@ class ProfileScreen extends React.Component<Props, State> {
     getMembershipItem(state: boolean) {
         return (
             <List.Item
-                title={state ? 'PAYÉ' : 'NON PAYÉ'}
+                title={state ? i18n.t("profileScreen.membershipPayed") : i18n.t("profileScreen.membershipNotPayed")}
                 left={props => <List.Icon
                     {...props}
                     color={state ? this.colors.success : this.colors.danger}
@@ -205,7 +206,7 @@ class ProfileScreen extends React.Component<Props, State> {
     getFieldValue(field: ?string) {
         return field !== null
             ? field
-            : 'NON RENSEIGNÉ';
+            : i18n.t("profileScreen.noData");
     }
 
     render() {
