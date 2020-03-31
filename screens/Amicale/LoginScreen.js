@@ -147,6 +147,9 @@ class LoginScreen extends React.Component<Props, State> {
             case ERROR_TYPE.SAVE_TOKEN:
                 Alert.alert('ERREUR', 'IMPOSSIBLE DE SAUVEGARDER INFOS CONNEXION');
                 break;
+            case ERROR_TYPE.NO_CONSENT:
+                Alert.alert('ERREUR', 'VOUS N\'AVEZ PAS DONNÉ VOTRE CONSENTEMENT POUR LES DONNÉES');
+                break;
             default:
                 Alert.alert('ERREUR', 'ERREUR INCONNUE. CONTACTER ARNAUD');
                 break;

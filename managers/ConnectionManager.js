@@ -7,6 +7,7 @@ export const ERROR_TYPE = {
     CONNECTION_ERROR: 1,
     SAVE_TOKEN: 2,
     NO_TOKEN: 3,
+    NO_CONSENT: 4,
 };
 
 const AUTH_URL = "https://www.amicale-insat.fr/api/password";
@@ -116,6 +117,7 @@ export default class ConnectionManager {
                 body: JSON.stringify(data)
             }).then(async (response) => response.json())
                 .then((data) => {
+                    console.log(data);
                     if (this.isConnectionResponseValid(data)) {
                         if (data.state) {
                             this.saveLogin(email, data.token)
@@ -125,7 +127,9 @@ export default class ConnectionManager {
                                 .catch(() => {
                                     reject(ERROR_TYPE.SAVE_TOKEN);
                                 });
-                        } else
+                        } else if (data.data.consent !== undefined && !data.data.consent)
+                            reject(ERROR_TYPE.NO_CONSENT);
+                        else
                             reject(ERROR_TYPE.BAD_CREDENTIALS);
                     } else
                         reject(ERROR_TYPE.CONNECTION_ERROR);
