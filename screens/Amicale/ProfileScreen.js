@@ -24,9 +24,10 @@ class ProfileScreen extends React.Component<Props, State> {
     }
 
     getScreen(data: Object) {
+
         return (
             <View>
-                <Text>PAGE</Text>
+                <Text>{data.first_name} {Math.random()}</Text>
             </View>
         )
     }
@@ -36,7 +37,7 @@ class ProfileScreen extends React.Component<Props, State> {
             <AuthenticatedScreen
                 {...this.props}
                 link={'https://www.amicale-insat.fr/api/user/profile'}
-                renderFunction={() => this.getScreen()}
+                renderFunction={(data) => this.getScreen(data)}
             />
         );
     }

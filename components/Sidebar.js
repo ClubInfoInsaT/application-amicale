@@ -29,11 +29,6 @@ class SideBar extends React.PureComponent<Props, State> {
 
     dataSet: Array<Object>;
 
-    state = {
-        active: 'Home',
-        isLoggedIn: false,
-    };
-
     getRenderItem: Function;
     colors: Object;
 
@@ -62,15 +57,16 @@ class SideBar extends React.PureComponent<Props, State> {
                 onlyWhenLoggedOut: true,
             },
             {
-                name: 'DISCONNECT',
-                action: () => this.onClickDisconnect(),
-                icon: "logout",
-                onlyWhenLoggedIn: true,
-            },
-            {
                 name: 'PROFILE',
                 route: "ProfileScreen",
                 icon: "circle",
+                onlyWhenLoggedIn: true,
+            },
+            {
+                name: 'DISCONNECT',
+                route: 'disconnect',
+                action: () => this.onClickDisconnect(),
+                icon: "logout",
                 onlyWhenLoggedIn: true,
             },
             {
@@ -150,15 +146,29 @@ class SideBar extends React.PureComponent<Props, State> {
         this.getRenderItem = this.getRenderItem.bind(this);
         this.colors = props.theme.colors;
         ConnectionManager.getInstance().setLoginCallback((value) => this.onLoginStateChange(value));
+        this.state = {
+            active: 'Home',
+            isLoggedIn: false,
+        };
+        ConnectionManager.getInstance().isLoggedIn()
     }
 
     onClickDisconnect() {
-        console.log('coucou');
         Alert.alert(
             'DISCONNECT',
             'DISCONNECT?',
             [
-                {text: 'YES', onPress: () => ConnectionManager.getInstance().disconnect()},
+                {
+                    text: 'YES', onPress: () => {
+                        ConnectionManager.getInstance().disconnect()
+                            .then(() => {
+                                this.props.navigation.reset({
+                                    index: 0,
+                                    routes: [{name: 'Main'}],
+                                });
+                            });
+                    }
+                },
                 {text: 'NO', undefined},
             ],
             {cancelable: false},
@@ -176,7 +186,6 @@ class SideBar extends React.PureComponent<Props, State> {
      * @param item The item pressed
      */
     onListItemPress(item: Object) {
-        console.log(item.action);
         if (item.link !== undefined)
             openBrowser(item.link, this.colors.primary);
         else if (item.action !== undefined)

@@ -29,6 +29,10 @@ export default class ConnectionManager {
             ConnectionManager.instance;
     }
 
+    getToken() {
+        return this.#token;
+    }
+
     onLoginStateChange(newState: boolean) {
         this.loginCallback(newState);
     }
@@ -44,8 +48,11 @@ export default class ConnectionManager {
             else {
                 SecureStore.getItemAsync('token')
                     .then((token) => {
-                        this.onLoginStateChange(true);
-                        resolve(token);
+                        if (token !== null) {
+                            this.onLoginStateChange(true);
+                            resolve(token);
+                        } else
+                            reject(false);
                     })
                     .catch(error => {
                         reject(false);
@@ -82,8 +89,16 @@ export default class ConnectionManager {
     }
 
     async disconnect() {
-        SecureStore.deleteItemAsync('token'); // TODO use promise
-        this.onLoginStateChange(false);
+        return new Promise((resolve, reject) => {
+            SecureStore.deleteItemAsync('token')
+                .then(() => {
+                    this.onLoginStateChange(false);
+                    resolve(true);
+                })
+                .catch((error) => {
+                    reject(false);
+                });
+        });
     }
 
     async connect(email: string, password: string) {
