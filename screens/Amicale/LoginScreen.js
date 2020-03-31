@@ -121,8 +121,7 @@ class LoginScreen extends React.Component<Props, State> {
             this.setState({loading: true});
             ConnectionManager.getInstance().connect(this.state.email, this.state.password)
                 .then((data) => {
-                    console.log(data);
-                    Alert.alert('COOL', 'ÇA MARCHE');
+                    this.handleSuccess();
                 })
                 .catch((error) => {
                     this.handleErrors(error);
@@ -131,6 +130,10 @@ class LoginScreen extends React.Component<Props, State> {
                     this.setState({loading: false});
                 });
         }
+    }
+
+    handleSuccess() {
+        this.props.navigation.navigate('ProfileScreen');
     }
 
     handleErrors(error: number) {

@@ -1,12 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {Dimensions, FlatList, Image, Platform, StyleSheet, View} from 'react-native';
+import {Alert, Dimensions, FlatList, Image, Platform, StyleSheet, View} from 'react-native';
 import i18n from "i18n-js";
 import {openBrowser} from "../utils/WebBrowser";
 import SidebarDivider from "./SidebarDivider";
 import SidebarItem from "./SidebarItem";
 import {TouchableRipple, withTheme} from "react-native-paper";
+import ConnectionManager from "../managers/ConnectionManager";
 
 const deviceWidth = Dimensions.get("window").width;
 
@@ -18,6 +19,7 @@ type Props = {
 
 type State = {
     active: string,
+    isLoggedIn: boolean,
 };
 
 /**
@@ -29,6 +31,7 @@ class SideBar extends React.PureComponent<Props, State> {
 
     state = {
         active: 'Home',
+        isLoggedIn: false,
     };
 
     getRenderItem: Function;
@@ -49,9 +52,26 @@ class SideBar extends React.PureComponent<Props, State> {
                 icon: "home",
             },
             {
+                name: "AMICALE",
+                route: "Divider4"
+            },
+            {
                 name: 'LOGIN',
                 route: "LoginScreen",
                 icon: "login",
+                onlyWhenLoggedOut: true,
+            },
+            {
+                name: 'DISCONNECT',
+                action: () => this.onClickDisconnect(),
+                icon: "logout",
+                onlyWhenLoggedIn: true,
+            },
+            {
+                name: 'PROFILE',
+                route: "ProfileScreen",
+                icon: "circle",
+                onlyWhenLoggedIn: true,
             },
             {
                 name: i18n.t('sidenav.divider2'),
@@ -129,6 +149,24 @@ class SideBar extends React.PureComponent<Props, State> {
         ];
         this.getRenderItem = this.getRenderItem.bind(this);
         this.colors = props.theme.colors;
+        ConnectionManager.getInstance().setLoginCallback((value) => this.onLoginStateChange(value));
+    }
+
+    onClickDisconnect() {
+        console.log('coucou');
+        Alert.alert(
+            'DISCONNECT',
+            'DISCONNECT?',
+            [
+                {text: 'YES', onPress: () => ConnectionManager.getInstance().disconnect()},
+                {text: 'NO', undefined},
+            ],
+            {cancelable: false},
+        );
+    }
+
+    onLoginStateChange(isLoggedIn: boolean) {
+        this.setState({isLoggedIn: isLoggedIn});
     }
 
     /**
@@ -138,10 +176,13 @@ class SideBar extends React.PureComponent<Props, State> {
      * @param item The item pressed
      */
     onListItemPress(item: Object) {
-        if (item.link === undefined)
-            this.props.navigation.navigate(item.route);
-        else
+        console.log(item.action);
+        if (item.link !== undefined)
             openBrowser(item.link, this.colors.primary);
+        else if (item.action !== undefined)
+            item.action();
+        else
+            this.props.navigation.navigate(item.route);
     }
 
     /**
@@ -162,7 +203,11 @@ class SideBar extends React.PureComponent<Props, State> {
      */
     getRenderItem({item}: Object) {
         const onListItemPress = this.onListItemPress.bind(this, item);
-        if (item.icon !== undefined) {
+        const onlyWhenLoggedOut = item.onlyWhenLoggedOut !== undefined && item.onlyWhenLoggedOut === true;
+        const onlyWhenLoggedIn = item.onlyWhenLoggedIn !== undefined && item.onlyWhenLoggedIn === true;
+        if (onlyWhenLoggedIn && !this.state.isLoggedIn || onlyWhenLoggedOut && this.state.isLoggedIn)
+            return null;
+        else if (item.icon !== undefined) {
             return (
                 <SidebarItem
                     title={item.name}

@@ -17,6 +17,8 @@ export default class ConnectionManager {
     #email: string;
     #token: string;
 
+    loginCallback: Function;
+
     /**
      * Get this class instance or create one if none is found
      * @returns {ConnectionManager}
@@ -27,15 +29,22 @@ export default class ConnectionManager {
             ConnectionManager.instance;
     }
 
+    onLoginStateChange(newState: boolean) {
+        this.loginCallback(newState);
+    }
+
+    setLoginCallback(callback: Function) {
+        this.loginCallback = callback;
+    }
+
     async recoverLogin() {
         return new Promise((resolve, reject) => {
-            console.log(this.#token);
             if (this.#token !== undefined)
                 resolve(this.#token);
             else {
                 SecureStore.getItemAsync('token')
                     .then((token) => {
-                        console.log(token);
+                        this.onLoginStateChange(true);
                         resolve(token);
                     })
                     .catch(error => {
@@ -45,19 +54,36 @@ export default class ConnectionManager {
         });
     }
 
+    async isLoggedIn() {
+        return new Promise((resolve, reject) => {
+            this.recoverLogin()
+                .then(() => {
+                    resolve(true);
+                })
+                .catch(() => {
+                    reject(false);
+                })
+        });
+    }
+
     async saveLogin(email: string, token: string) {
-        console.log(token);
         return new Promise((resolve, reject) => {
             SecureStore.setItemAsync('token', token)
                 .then(() => {
                     this.#token = token;
                     this.#email = email;
+                    this.onLoginStateChange(true);
                     resolve(true);
                 })
                 .catch(error => {
                     reject(false);
                 });
         });
+    }
+
+    async disconnect() {
+        SecureStore.deleteItemAsync('token'); // TODO use promise
+        this.onLoginStateChange(false);
     }
 
     async connect(email: string, password: string) {
@@ -133,7 +159,6 @@ export default class ConnectionManager {
                         body: JSON.stringify({token: token})
                     }).then(async (response) => response.json())
                         .then((data) => {
-                            console.log(data);
                             if (this.isRequestResponseValid(data)) {
                                 if (data.state)
                                     resolve(data.data);

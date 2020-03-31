@@ -10,6 +10,21 @@ afterEach(() => {
     jest.restoreAllMocks();
 });
 
+test('isLoggedIn yes', () => {
+    jest.spyOn(ConnectionManager.prototype, 'recoverLogin').mockImplementationOnce(() => {
+        return Promise.resolve(true);
+    });
+    return expect(c.isLoggedIn()).resolves.toBe(true);
+});
+
+test('isLoggedIn no', () => {
+    jest.spyOn(ConnectionManager.prototype, 'recoverLogin').mockImplementationOnce(() => {
+        return Promise.reject(false);
+    });
+    return expect(c.isLoggedIn()).rejects.toBe(false);
+});
+
+
 test('recoverLogin error crypto', () => {
     jest.spyOn(SecureStore, 'getItemAsync').mockImplementationOnce(() => {
         return Promise.reject();
@@ -157,7 +172,7 @@ test("connect good credentials", () => {
             },
         })
     });
-    c.saveLogin = jest.fn(() => {
+    jest.spyOn(ConnectionManager.prototype, 'saveLogin').mockImplementationOnce(() => {
         return Promise.resolve(true);
     });
     return expect(c.connect('email', 'password')).resolves.toBeTruthy();
@@ -175,7 +190,7 @@ test("connect good credentials, fail save token", () => {
             },
         })
     });
-    c.saveLogin = jest.fn(() => {
+    jest.spyOn(ConnectionManager.prototype, 'saveLogin').mockImplementationOnce(() => {
         return Promise.reject(false);
     });
     return expect(c.connect('email', 'password')).rejects.toBe(ERROR_TYPE.SAVE_TOKEN);
@@ -206,7 +221,7 @@ test("connect bogus response 1", () => {
 
 
 test("authenticatedRequest success", () => {
-    c.recoverLogin = jest.fn(() => {
+    jest.spyOn(ConnectionManager.prototype, 'recoverLogin').mockImplementationOnce(() => {
         return Promise.resolve('token');
     });
     jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
@@ -221,7 +236,7 @@ test("authenticatedRequest success", () => {
 });
 
 test("authenticatedRequest error wrong token", () => {
-    c.recoverLogin = jest.fn(() => {
+    jest.spyOn(ConnectionManager.prototype, 'recoverLogin').mockImplementationOnce(() => {
         return Promise.resolve('token');
     });
     jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
@@ -236,7 +251,7 @@ test("authenticatedRequest error wrong token", () => {
 });
 
 test("authenticatedRequest error bogus response", () => {
-    c.recoverLogin = jest.fn(() => {
+    jest.spyOn(ConnectionManager.prototype, 'recoverLogin').mockImplementationOnce(() => {
         return Promise.resolve('token');
     });
     jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
@@ -251,7 +266,7 @@ test("authenticatedRequest error bogus response", () => {
 });
 
 test("authenticatedRequest connection error", () => {
-    c.recoverLogin = jest.fn(() => {
+    jest.spyOn(ConnectionManager.prototype, 'recoverLogin').mockImplementationOnce(() => {
         return Promise.resolve('token');
     });
     jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
@@ -262,7 +277,7 @@ test("authenticatedRequest connection error", () => {
 });
 
 test("authenticatedRequest error no token", () => {
-    c.recoverLogin = jest.fn(() => {
+    jest.spyOn(ConnectionManager.prototype, 'recoverLogin').mockImplementationOnce(() => {
         return Promise.reject(false);
     });
     jest.spyOn(global, 'fetch').mockImplementationOnce(() => {

@@ -16,6 +16,7 @@ import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
 import HeaderButton from "../components/HeaderButton";
 import i18n from "i18n-js";
 import LoginScreen from "../screens/Amicale/LoginScreen";
+import ProfileScreen from "../screens/Amicale/ProfileScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -211,6 +212,30 @@ function LoginStackComponent() {
     );
 }
 
+const ProfileStack = createStackNavigator();
+
+function ProfileStackComponent() {
+    return (
+        <ProfileStack.Navigator
+            initialRouteName="ProfileScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <ProfileStack.Screen
+                name="ProfileScreen"
+                component={ProfileScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: 'PROFILE',
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </ProfileStack.Navigator>
+    );
+}
+
 const Drawer = createDrawerNavigator();
 
 function getDrawerContent(props) {
@@ -259,6 +284,10 @@ export default function DrawerNavigator() {
             <Drawer.Screen
                 name="LoginScreen"
                 component={LoginStackComponent}
+            />
+            <Drawer.Screen
+                name="ProfileScreen"
+                component={ProfileStackComponent}
             />
         </Drawer.Navigator>
     );
