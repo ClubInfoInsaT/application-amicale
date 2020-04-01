@@ -1,22 +1,26 @@
 import * as React from 'react';
-import {FlatList, StyleSheet} from "react-native";
+import {FlatList, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/AuthenticatedScreen";
 import {openBrowser} from "../../utils/WebBrowser";
-import ConnectionManager from "../../managers/ConnectionManager";
 import HeaderButton from "../../components/HeaderButton";
 import i18n from 'i18n-js';
+import LogoutDialog from "../../components/LogoutDialog";
 
 type Props = {
     navigation: Object,
     theme: Object,
 }
 
-type State = {}
+type State = {
+    dialogVisible: boolean,
+}
 
 class ProfileScreen extends React.Component<Props, State> {
 
-    state = {};
+    state = {
+        dialogVisible: false,
+    };
 
     colors: Object;
 
@@ -27,11 +31,10 @@ class ProfileScreen extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
-        this.onClickDisconnect = this.onClickDisconnect.bind(this);
         this.flatListData = [
-            {id: 0},
-            {id: 1},
-            {id: 2},
+            {id: '0'},
+            {id: '1'},
+            {id: '2'},
         ]
     }
 
@@ -42,38 +45,40 @@ class ProfileScreen extends React.Component<Props, State> {
         });
     }
 
-    getHeaderButtons() {
-        return <HeaderButton icon={'logout'} onPress={this.onClickDisconnect}/>;
-    }
+    showDisconnectDialog = () => this.setState({ dialogVisible: true });
 
-    onClickDisconnect() {
-        ConnectionManager.getInstance().disconnect()
-            .then(() => {
-                this.props.navigation.reset({
-                    index: 0,
-                    routes: [{name: 'Main'}],
-                });
-            });
+    hideDisconnectDialog = () => this.setState({ dialogVisible: false });
+
+    getHeaderButtons() {
+        return <HeaderButton icon={'logout'} onPress={this.showDisconnectDialog}/>;
     }
 
     getScreen(data: Object) {
         this.data = data;
         return (
-            <FlatList
-                renderItem={item => this.getRenderItem(item)}
-                keyExtractor={item => item.id}
-                data={this.flatListData}
-            />
+            <View>
+                <FlatList
+                    renderItem={item => this.getRenderItem(item)}
+                    keyExtractor={item => item.id}
+                    data={this.flatListData}
+                />
+                <LogoutDialog
+                    {...this.props}
+                    visible={this.state.dialogVisible}
+                    onDismiss={this.hideDisconnectDialog}
+                />
+            </View>
+
         )
     }
 
     getRenderItem({item}: Object) {
         switch (item.id) {
-            case 0:
+            case '0':
                 return this.getPersonalCard();
-            case 1:
+            case '1':
                 return this.getClubCard();
-            case 2:
+            case '2':
                 return this.getMembershipCar();
         }
     }

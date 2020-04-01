@@ -1,13 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import {Alert, Dimensions, FlatList, Image, Platform, StyleSheet, View} from 'react-native';
+import {Dimensions, FlatList, Image, Platform, StyleSheet, View,} from 'react-native';
 import i18n from "i18n-js";
 import {openBrowser} from "../utils/WebBrowser";
 import SidebarDivider from "./SidebarDivider";
 import SidebarItem from "./SidebarItem";
 import {TouchableRipple, withTheme} from "react-native-paper";
 import ConnectionManager from "../managers/ConnectionManager";
+import LogoutDialog from "./LogoutDialog";
 
 const deviceWidth = Dimensions.get("window").width;
 
@@ -20,6 +21,7 @@ type Props = {
 type State = {
     active: string,
     isLoggedIn: boolean,
+    dialogVisible: boolean,
 };
 
 /**
@@ -65,7 +67,7 @@ class SideBar extends React.PureComponent<Props, State> {
             {
                 name: i18n.t('screens.logout'),
                 route: 'disconnect',
-                action: () => this.onClickDisconnect(),
+                action: this.showDisconnectDialog,
                 icon: "logout",
                 onlyWhenLoggedIn: true,
             },
@@ -149,31 +151,15 @@ class SideBar extends React.PureComponent<Props, State> {
         this.state = {
             active: 'Home',
             isLoggedIn: false,
+            dialogVisible: false,
         };
-        ConnectionManager.getInstance().isLoggedIn()
+        ConnectionManager.getInstance().isLoggedIn().then(data => undefined).catch(error => undefined);
     }
 
-    onClickDisconnect() {
-        Alert.alert(
-            'DISCONNECT',
-            'DISCONNECT?',
-            [
-                {
-                    text: 'YES', onPress: () => {
-                        ConnectionManager.getInstance().disconnect()
-                            .then(() => {
-                                this.props.navigation.reset({
-                                    index: 0,
-                                    routes: [{name: 'Main'}],
-                                });
-                            });
-                    }
-                },
-                {text: 'NO', undefined},
-            ],
-            {cancelable: false},
-        );
-    }
+    showDisconnectDialog = () => this.setState({ dialogVisible: true });
+
+    hideDisconnectDialog = () => this.setState({ dialogVisible: false });
+
 
     onLoginStateChange(isLoggedIn: boolean) {
         this.setState({isLoggedIn: isLoggedIn});
@@ -249,6 +235,11 @@ class SideBar extends React.PureComponent<Props, State> {
                     extraData={this.state}
                     keyExtractor={this.listKeyExtractor}
                     renderItem={this.getRenderItem}
+                />
+                <LogoutDialog
+                    {...this.props}
+                    visible={this.state.dialogVisible}
+                    onDismiss={this.hideDisconnectDialog}
                 />
             </View>
         );
