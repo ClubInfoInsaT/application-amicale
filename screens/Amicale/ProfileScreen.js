@@ -101,22 +101,10 @@ class ProfileScreen extends React.Component<Props, State> {
                     <Divider/>
                     <List.Section>
                         <List.Subheader>{i18n.t("profileScreen.personalInformation")}</List.Subheader>
-                        <List.Item
-                            title={this.getFieldValue(this.data.birthday)}
-                            left={props => <List.Icon {...props} icon="cake-variant"/>}
-                        />
-                        <List.Item
-                            title={this.getFieldValue(this.data.phone)}
-                            left={props => <List.Icon {...props} icon="phone"/>}
-                        />
-                        <List.Item
-                            title={this.getFieldValue(this.data.email)}
-                            left={props => <List.Icon {...props} icon="email"/>}
-                        />
-                        <List.Item
-                            title={this.getFieldValue(this.data.branch)}
-                            left={props => <List.Icon {...props} icon="school"/>}
-                        />
+                        {this.getPersonalListItem(this.data.birthday, "cake-variant")}
+                        {this.getPersonalListItem(this.data.phone, "phone")}
+                        {this.getPersonalListItem(this.data.email, "email")}
+                        {this.getPersonalListItem(this.data.branch, "school")}
                     </List.Section>
                     <Divider/>
                     <Card.Actions>
@@ -208,10 +196,34 @@ class ProfileScreen extends React.Component<Props, State> {
         );
     }
 
+    isFieldAvailable(field: ?string) {
+        return field !== null;
+    }
+
     getFieldValue(field: ?string) {
-        return field !== null
+        return this.isFieldAvailable(field)
             ? field
             : i18n.t("profileScreen.noData");
+    }
+
+    getFieldColor(field: ?string) {
+        return this.isFieldAvailable(field)
+            ? this.colors.text
+            : this.colors.textDisabled;
+    }
+
+    getPersonalListItem(field: ?string, icon: string) {
+        return (
+            <List.Item
+                title={this.getFieldValue(field)}
+                left={props => <List.Icon
+                    {...props}
+                    icon={icon}
+                    color={this.getFieldColor(field)}
+                />}
+                titleStyle={{color: this.getFieldColor(field)}}
+            />
+        );
     }
 
     render() {

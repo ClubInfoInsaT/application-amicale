@@ -49,7 +49,7 @@ class SideBar extends React.PureComponent<Props, State> {
                 icon: "home",
             },
             {
-                name: "AMICALE",
+                name: i18n.t('sidenav.divider4'),
                 route: "Divider4"
             },
             {
