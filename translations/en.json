@@ -241,6 +241,16 @@
       "unknown": "Unknown error, please contact support."
     }
   },
+  "dialog": {
+    "ok": "OK",
+    "yes": "Yes",
+    "cancel": "Cancel",
+    "disconnect": {
+      "title": "Disconnect",
+      "titleLoading": "Disconnecting...",
+      "message": "Are you sure you want to disconnect from your Amicale account?"
+    }
+  },
   "general": {
     "loading": "Loading...",
     "networkError": "Unable to contact servers. Make sure you are connected to Internet."

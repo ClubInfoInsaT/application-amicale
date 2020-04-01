@@ -242,6 +242,16 @@
       "unknown": "Erreur inconnue, merci de contacter le support."
     }
   },
+  "dialog": {
+    "ok": "OK",
+    "yes": "Oui",
+    "cancel": "Annuler",
+    "disconnect": {
+      "title": "Déconnexion",
+      "titleLoading": "Déconnexion...",
+      "message": "Voulez vous vraiment vous déconnecter de votre compte Amicale ??"
+    }
+  },
   "general": {
     "loading": "Chargement...",
     "networkError": "Impossible de contacter les serveurs. Assurez-vous d'être connecté à internet."

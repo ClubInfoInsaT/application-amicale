@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {ActivityIndicator, Button, Dialog, Paragraph, Portal, withTheme} from 'react-native-paper';
 import ConnectionManager from "../managers/ConnectionManager";
+import i18n from 'i18n-js';
 
 type Props = {
     navigation: Object,
@@ -49,21 +50,25 @@ class LogoutDialog extends React.PureComponent<Props, State> {
                 <Dialog
                     visible={this.props.visible}
                     onDismiss={this.onDismiss}>
-                    <Dialog.Title>DISCONNECT</Dialog.Title>
+                    <Dialog.Title>
+                        {this.state.loading
+                            ? i18n.t("dialog.disconnect.titleLoading")
+                            : i18n.t("dialog.disconnect.title")}
+                    </Dialog.Title>
                     <Dialog.Content>
                         {this.state.loading
                             ? <ActivityIndicator
                                 animating={true}
                                 size={'large'}
                                 color={this.colors.primary}/>
-                            : <Paragraph>DISCONNECT?</Paragraph>
+                            : <Paragraph>{i18n.t("dialog.disconnect.message")}</Paragraph>
                         }
                     </Dialog.Content>
                     {this.state.loading
                         ? null
                         : <Dialog.Actions>
-                            <Button onPress={this.onClickAccept}>YES</Button>
-                            <Button onPress={this.onDismiss}>NO</Button>
+                            <Button onPress={this.onDismiss} style={{marginRight: 10}}>{i18n.t("dialog.cancel")}</Button>
+                            <Button onPress={this.onClickAccept}>{i18n.t("dialog.yes")}</Button>
                         </Dialog.Actions>
                     }
 
