@@ -104,7 +104,7 @@ class LoginScreen extends React.Component<Props, State> {
     }
 
     shouldEnableLogin() {
-        return this.isEmailValid() && this.isPasswordValid();
+        return this.isEmailValid() && this.isPasswordValid() && !this.state.loading;
     }
 
     onInputChange(isEmail: boolean, value: string) {
