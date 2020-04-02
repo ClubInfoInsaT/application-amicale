@@ -243,6 +243,11 @@
       "unknown": "Erreur inconnue, merci de contacter le support."
     }
   },
+  "clubs": {
+    "clubList": "Liste des clubs",
+    "managers": "Responsables",
+    "managersSubtitle": "Ces personnes font vivre le club"
+  },
   "dialog": {
     "ok": "OK",
     "yes": "Oui",

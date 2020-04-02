@@ -253,7 +253,7 @@ function ClubStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: "CLUBS LIST",
+                        title: i18n.t('clubs.clubList'),
                         headerLeft: openDrawer
                     };
                 }}
@@ -264,7 +264,7 @@ function ClubStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: "CLUBS DISPLAY",
+                        title: "",
                         headerLeft: openDrawer,
                         ...TransitionPresets.ModalSlideFromBottomIOS,
                     };

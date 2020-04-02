@@ -65,7 +65,7 @@ class SideBar extends React.PureComponent<Props, State> {
                 onlyWhenLoggedIn: true,
             },
             {
-                name: "CLUBS",
+                name: i18n.t('clubs.clubList'),
                 route: "ClubListScreen",
                 icon: "account-group",
                 onlyWhenLoggedIn: true,

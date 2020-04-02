@@ -6,6 +6,7 @@ import HTML from "react-native-render-html";
 import {Linking} from "expo";
 import {Avatar, Card, Chip, Paragraph, withTheme} from 'react-native-paper';
 import ImageModal from 'react-native-image-modal';
+import i18n from "i18n-js";
 
 type Props = {
     navigation: Object,
@@ -68,8 +69,8 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         return (
             <Card style={{marginTop: 10, marginBottom: 10}}>
                 <Card.Title
-                    title={"RESPO"}
-                    subtitle={"CONTACTS"}
+                    title={i18n.t('clubs.managers')}
+                    subtitle={i18n.t('clubs.managersSubtitle')}
                     left={(props) => <Avatar.Icon
                         style={{backgroundColor: 'transparent'}}
                         {...props}
