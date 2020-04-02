@@ -1,13 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {Image, ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
 import {getDateOnlyString, getFormattedEventTime} from '../../utils/Planning';
-import {Card, Portal, withTheme} from 'react-native-paper';
+import {Card, withTheme} from 'react-native-paper';
 import DateManager from "../../managers/DateManager";
-import ImageView from "react-native-image-viewing";
+import ImageModal from 'react-native-image-modal';
 
 type Props = {
     navigation: Object,
@@ -62,10 +62,18 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
                     subtitle={subtitle}
                 />
                 {this.displayData.logo !== null ?
-                    <TouchableOpacity onPress={this.showImageModal} style={{width: '100%', height: 300}}>
-                        <Image style={{flex: 1, resizeMode: "contain"}}
-                               source={{uri: this.displayData.logo}}/>
-                    </TouchableOpacity>
+                    <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                        <ImageModal
+                            resizeMode="contain"
+                            imageBackgroundColor={this.colors.background}
+                            style={{
+                                width: 300,
+                                height: 300,
+                            }}
+                            source={{
+                                uri: this.displayData.logo,
+                            }}
+                        /></View>
                     : <View/>}
 
                 {this.displayData.description !== null ?
@@ -79,15 +87,6 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
                               onLinkPress={openWebLink}/>
                     </Card.Content>
                     : <View/>}
-                <Portal>
-                    <ImageView
-                        images={[{uri: this.displayData.logo}]}
-                        imageIndex={0}
-                        presentationStyle={"fullScreen"}
-                        visible={this.state.imageModalVisible}
-                        onRequestClose={this.hideImageModal}
-                    />
-                </Portal>
             </ScrollView>
         );
     }

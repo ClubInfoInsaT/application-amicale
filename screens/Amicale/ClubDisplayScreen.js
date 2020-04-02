@@ -1,11 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {Image, ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
-import {Avatar, Card, Paragraph, Portal, withTheme} from 'react-native-paper';
-import ImageView from "react-native-image-viewing";
+import {Avatar, Card, Paragraph, withTheme} from 'react-native-paper';
+import ImageModal from 'react-native-image-modal';
 
 type Props = {
     navigation: Object,
@@ -42,14 +42,6 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         this.props.navigation.setOptions({title: this.displayData.name})
     }
 
-    showImageModal = () => {
-        this.setState({imageModalVisible: true});
-    };
-
-    hideImageModal = () => {
-        this.setState({imageModalVisible: false});
-    };
-
     getResponsiblesRender(resp: Array<string>) {
         let final = [];
         for (let i = 0; i < resp.length; i++) {
@@ -63,7 +55,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                     left={(props) => <Avatar.Icon
                         style={{backgroundColor: 'transparent'}}
                         {...props}
-                        icon="account-tie" />}
+                        icon="account-tie"/>}
                 />
                 <Card.Content>
                     {final}
@@ -76,12 +68,18 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         return (
             <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
                 {this.displayData.logo !== null ?
-                    <TouchableOpacity
-                        onPress={this.showImageModal}
-                        style={{width: '100%', height: 300, marginBottom: 10}}>
-                        <Image style={{flex: 1, resizeMode: "contain"}}
-                               source={{uri: this.displayData.logo}}/>
-                    </TouchableOpacity>
+                    <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                        <ImageModal
+                            resizeMode="contain"
+                            imageBackgroundColor={this.colors.background}
+                            style={{
+                                width: 300,
+                                height: 300,
+                            }}
+                            source={{
+                                uri: this.displayData.logo,
+                            }}
+                        /></View>
                     : <View/>}
 
                 {this.displayData.description !== null ?
@@ -96,15 +94,6 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                     </Card.Content>
                     : <View/>}
                 {this.getResponsiblesRender(this.displayData.responsibles)}
-                <Portal>
-                    <ImageView
-                        images={[{uri: this.displayData.logo}]}
-                        imageIndex={0}
-                        presentationStyle={"fullScreen"}
-                        visible={this.state.imageModalVisible}
-                        onRequestClose={this.hideImageModal}
-                    />
-                </Portal>
             </ScrollView>
         );
     }

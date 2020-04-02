@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {Avatar, Button, Card, withTheme} from 'react-native-paper';
-import {TouchableOpacity, View} from "react-native";
+import {View} from "react-native";
 import Autolink from "react-native-autolink";
 import i18n from "i18n-js";
-
+import ImageModal from 'react-native-image-modal';
 
 const ICON_AMICALE = require('../../assets/amicale.png');
 
@@ -35,9 +35,18 @@ function FeedItem(props) {
                 left={getAvatar}
             />
             {props.full_picture !== '' && props.full_picture !== undefined ?
-                <TouchableOpacity onPress={props.onImagePress}>
-                    <Card.Cover source={{uri: props.full_picture}}/>
-                </TouchableOpacity> : <View/>}
+                <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                    <ImageModal
+                        resizeMode="contain"
+                        imageBackgroundColor={colors.background}
+                        style={{
+                            width: 250,
+                            height: 250,
+                        }}
+                        source={{
+                            uri: props.full_picture,
+                        }}
+                    /></View> : <View/>}
             <Card.Content>
                 {props.message !== undefined ?
                     <Autolink

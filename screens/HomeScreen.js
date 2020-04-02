@@ -436,12 +436,6 @@ class HomeScreen extends React.Component<Props, State> {
      */
     getFeedItem(item: Object) {
         const onOutLinkPress = this.openLink.bind(this, item.permalink_url);
-        const imageList = [
-            {
-                uri: item.full_picture,
-            }
-        ];
-        const onPress = this.showImageModal.bind(this, imageList);
         return (
             <FeedItem
                 title={NAME_AMICALE}
@@ -449,7 +443,6 @@ class HomeScreen extends React.Component<Props, State> {
                 full_picture={item.full_picture}
                 message={item.message}
                 onOutLinkPress={onOutLinkPress}
-                onImagePress={onPress}
             />
         );
     }
