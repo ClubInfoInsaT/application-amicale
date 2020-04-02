@@ -4,7 +4,7 @@ import * as React from 'react';
 import {ScrollView, View} from 'react-native';
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
-import {Avatar, Card, Paragraph, withTheme} from 'react-native-paper';
+import {Avatar, Card, Chip, Paragraph, withTheme} from 'react-native-paper';
 import ImageModal from 'react-native-image-modal';
 
 type Props = {
@@ -26,6 +26,7 @@ function openWebLink(event, link) {
 class ClubDisplayScreen extends React.Component<Props, State> {
 
     displayData = this.props.route.params['data'];
+    categories = this.props.route.params['categories'];
 
     colors: Object;
 
@@ -40,6 +41,23 @@ class ClubDisplayScreen extends React.Component<Props, State> {
 
     componentDidMount(): * {
         this.props.navigation.setOptions({title: this.displayData.name})
+    }
+
+    getCategoryName(id: number) {
+        for (let i = 0; i < this.categories.length; i++) {
+            if (id === this.categories[i].id)
+                return this.categories[i].name;
+        }
+        return "";
+    }
+
+    getCategoriesRender(categories: Array<number|null>) {
+        let final = [];
+        for (let i = 0; i < categories.length; i++) {
+            if (categories[i] !== null)
+                final.push(<Chip style={{marginRight: 5}}>{this.getCategoryName(categories[i])}</Chip>);
+        }
+        return <View style={{flexDirection: 'row', marginTop: 5}}>{final}</View>;
     }
 
     getResponsiblesRender(resp: Array<string>) {
@@ -67,8 +85,14 @@ class ClubDisplayScreen extends React.Component<Props, State> {
     render() {
         return (
             <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
+                {this.getCategoriesRender(this.displayData.category)}
                 {this.displayData.logo !== null ?
-                    <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                    <View style={{
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        marginTop: 10,
+                        marginBottom: 10,
+                    }}>
                         <ImageModal
                             resizeMode="contain"
                             imageBackgroundColor={this.colors.background}

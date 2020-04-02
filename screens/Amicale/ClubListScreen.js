@@ -85,7 +85,7 @@ class ClubListScreen extends React.Component<Props, State> {
      * @param item The article pressed
      */
     onListItemPress(item: Object) {
-        this.props.navigation.navigate("ClubDisplayScreen", {data: item});
+        this.props.navigation.navigate("ClubDisplayScreen", {data: item, categories: this.categories});
     }
 
     render() {
