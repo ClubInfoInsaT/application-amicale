@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {ActivityIndicator, Button, Dialog, Paragraph, Portal, withTheme} from 'react-native-paper';
-import ConnectionManager from "../managers/ConnectionManager";
+import ConnectionManager from "../../managers/ConnectionManager";
 import i18n from 'i18n-js';
 
 type Props = {

@@ -5,7 +5,7 @@ import {FlatList, Linking, Platform, View} from 'react-native';
 import i18n from "i18n-js";
 import appJson from '../../app';
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import CustomModal from "../../components/CustomModal";
+import CustomModal from "../../components/Custom/CustomModal";
 import {Avatar, Button, Card, List, Text, Title, withTheme} from 'react-native-paper';
 
 const links = {

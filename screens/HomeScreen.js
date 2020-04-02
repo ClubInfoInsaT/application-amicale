@@ -3,12 +3,12 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import i18n from "i18n-js";
-import DashboardItem from "../components/EventDashboardItem";
-import WebSectionList from "../components/WebSectionList";
+import DashboardItem from "../components/Home/EventDashboardItem";
+import WebSectionList from "../components/Lists/WebSectionList";
 import {Text, withTheme} from 'react-native-paper';
-import FeedItem from "../components/FeedItem";
-import SquareDashboardItem from "../components/SquareDashboardItem";
-import PreviewEventDashboardItem from "../components/PreviewEventDashboardItem";
+import FeedItem from "../components/Home/FeedItem";
+import SquareDashboardItem from "../components/Home/SquareDashboardItem";
+import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardItem";
 import {stringToDate} from "../utils/Planning";
 import {openBrowser} from "../utils/WebBrowser";
 // import DATA from "../dashboard_data.json";

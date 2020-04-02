@@ -5,7 +5,7 @@ import {StyleSheet, View} from "react-native";
 import HTML from "react-native-render-html";
 import i18n from "i18n-js";
 import {Avatar, Button, Card, withTheme} from 'react-native-paper';
-import {getFormattedEventTime, isDescriptionEmpty} from "../utils/Planning";
+import {getFormattedEventTime, isDescriptionEmpty} from "../../utils/Planning";
 
 /**
  * Component used to display an event preview if an event is available

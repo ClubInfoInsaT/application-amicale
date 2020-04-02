@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import DateManager from "../managers/DateManager";
-import WebSectionList from "../components/WebSectionList";
+import WebSectionList from "../components/Lists/WebSectionList";
 import {Card, Text, withTheme} from 'react-native-paper';
 import AprilFoolsManager from "../managers/AprilFoolsManager";
 

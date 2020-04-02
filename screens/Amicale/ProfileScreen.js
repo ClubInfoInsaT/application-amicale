@@ -3,11 +3,11 @@
 import * as React from 'react';
 import {FlatList, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, withTheme} from 'react-native-paper';
-import AuthenticatedScreen from "../../components/AuthenticatedScreen";
+import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {openBrowser} from "../../utils/WebBrowser";
-import HeaderButton from "../../components/HeaderButton";
+import HeaderButton from "../../components/Custom/HeaderButton";
 import i18n from 'i18n-js';
-import LogoutDialog from "../../components/LogoutDialog";
+import LogoutDialog from "../../components/Amicale/LogoutDialog";
 
 type Props = {
     navigation: Object,

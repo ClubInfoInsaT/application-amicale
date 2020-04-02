@@ -4,7 +4,7 @@ import {TouchableOpacity, View} from "react-native";
 import Autolink from "react-native-autolink";
 import i18n from "i18n-js";
 
-const ICON_AMICALE = require('../assets/amicale.png');
+const ICON_AMICALE = require('../../assets/amicale.png');
 
 /**
  * Gets the amicale INSAT logo

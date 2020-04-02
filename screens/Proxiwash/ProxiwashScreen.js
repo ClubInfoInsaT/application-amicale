@@ -3,15 +3,15 @@
 import * as React from 'react';
 import {Alert, Platform, View} from 'react-native';
 import i18n from "i18n-js";
-import WebSectionList from "../../components/WebSectionList";
+import WebSectionList from "../../components/Lists/WebSectionList";
 import * as Notifications from "../../utils/Notifications";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import * as Expo from "expo";
 import {Avatar, Banner, Button, Card, Text, withTheme} from 'react-native-paper';
-import HeaderButton from "../../components/HeaderButton";
-import ProxiwashListItem from "../../components/ProxiwashListItem";
+import HeaderButton from "../../components/Custom/HeaderButton";
+import ProxiwashListItem from "../../components/Lists/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
-import CustomModal from "../../components/CustomModal";
+import CustomModal from "../../components/Custom/CustomModal";
 import AprilFoolsManager from "../../managers/AprilFoolsManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";

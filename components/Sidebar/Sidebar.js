@@ -3,12 +3,12 @@
 import * as React from 'react';
 import {Dimensions, FlatList, Image, Platform, StyleSheet, View,} from 'react-native';
 import i18n from "i18n-js";
-import {openBrowser} from "../utils/WebBrowser";
+import {openBrowser} from "../../utils/WebBrowser";
 import SidebarDivider from "./SidebarDivider";
 import SidebarItem from "./SidebarItem";
 import {TouchableRipple, withTheme} from "react-native-paper";
-import ConnectionManager from "../managers/ConnectionManager";
-import LogoutDialog from "./LogoutDialog";
+import ConnectionManager from "../../managers/ConnectionManager";
+import LogoutDialog from "../Amicale/LogoutDialog";
 
 const deviceWidth = Dimensions.get("window").width;
 
@@ -226,7 +226,7 @@ class SideBar extends React.PureComponent<Props, State> {
                     onPress={onPress}
                 >
                     <Image
-                        source={require("../assets/drawer-cover.png")}
+                        source={require("../../assets/drawer-cover.png")}
                         style={styles.drawerCover}
                     />
                 </TouchableRipple>

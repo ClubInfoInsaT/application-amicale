@@ -3,8 +3,8 @@
 import * as React from 'react';
 import {View} from "react-native";
 import {ActivityIndicator, withTheme} from 'react-native-paper';
-import ConnectionManager, {ERROR_TYPE} from "../managers/ConnectionManager";
-import NetworkErrorComponent from "./NetworkErrorComponent";
+import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
+import NetworkErrorComponent from "../Custom/NetworkErrorComponent";
 import i18n from 'i18n-js';
 
 type Props = {

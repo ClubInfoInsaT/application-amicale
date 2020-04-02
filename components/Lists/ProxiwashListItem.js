@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Avatar, Card, Text, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
-import ProxiwashConstants from "../constants/ProxiwashConstants";
+import ProxiwashConstants from "../../constants/ProxiwashConstants";
 
 /**
  * Component used to display a proxiwash item, showing machine progression and state

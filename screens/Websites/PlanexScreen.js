@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import ThemeManager from "../../managers/ThemeManager";
-import WebViewScreen from "../../components/WebViewScreen";
+import WebViewScreen from "../../components/Screens/WebViewScreen";
 import {Avatar, Banner} from "react-native-paper";
 import i18n from "i18n-js";
 import {View} from "react-native";

@@ -3,9 +3,9 @@
 import * as React from 'react';
 import {Image, Platform, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
-import CustomModal from "../../components/CustomModal";
+import CustomModal from "../../components/Custom/CustomModal";
 import {Avatar, IconButton, List, RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
-import PureFlatList from "../../components/PureFlatList";
+import PureFlatList from "../../components/Lists/PureFlatList";
 
 function sortPrice(a, b) {
     return a.price - b.price;

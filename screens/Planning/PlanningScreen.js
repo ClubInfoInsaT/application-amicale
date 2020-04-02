@@ -13,7 +13,7 @@ import {
     getFormattedEventTime,
 } from '../../utils/Planning';
 import {Avatar, Divider, List} from 'react-native-paper';
-import CustomAgenda from "../../components/CustomAgenda";
+import CustomAgenda from "../../components/Custom/CustomAgenda";
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],

@@ -6,7 +6,7 @@ import {IconButton, Text, withTheme} from 'react-native-paper';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import GameLogic from "./GameLogic";
 import Grid from "./components/Grid";
-import HeaderButton from "../../components/HeaderButton";
+import HeaderButton from "../../components/Custom/HeaderButton";
 import Preview from "./components/Preview";
 import i18n from "i18n-js";
 

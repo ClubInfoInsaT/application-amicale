@@ -6,7 +6,7 @@ import {Avatar, Button, Card, HelperText, Text, TextInput, withTheme} from 'reac
 import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
 import {openBrowser} from "../../utils/WebBrowser";
 import i18n from 'i18n-js';
-import AlertDialog from "../../components/AlertDialog";
+import AlertDialog from "../../components/Custom/AlertDialog";
 
 type Props = {
     navigation: Object,

@@ -4,7 +4,7 @@ import * as React from 'react';
 import {View} from 'react-native';
 import WebView from "react-native-webview";
 import {ActivityIndicator, withTheme} from 'react-native-paper';
-import HeaderButton from "./HeaderButton";
+import HeaderButton from "../Custom/HeaderButton";
 
 type Props = {
     navigation: Object,
