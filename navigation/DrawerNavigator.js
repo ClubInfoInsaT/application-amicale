@@ -17,6 +17,8 @@ import HeaderButton from "../components/Custom/HeaderButton";
 import i18n from "i18n-js";
 import LoginScreen from "../screens/Amicale/LoginScreen";
 import ProfileScreen from "../screens/Amicale/ProfileScreen";
+import ClubListScreen from "../screens/Amicale/ClubListScreen";
+import ClubDisplayScreen from "../screens/Amicale/ClubDisplayScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -236,6 +238,43 @@ function ProfileStackComponent() {
     );
 }
 
+const ClubStack = createStackNavigator();
+
+function ClubStackComponent() {
+    return (
+        <ClubStack.Navigator
+            initialRouteName="ClubListScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <ClubStack.Screen
+                name="ClubListScreen"
+                component={ClubListScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: "CLUBS LIST",
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+            <ClubStack.Screen
+                name="ClubDisplayScreen"
+                component={ClubDisplayScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: "CLUBS DISPLAY",
+                        headerLeft: openDrawer,
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                    };
+                }}
+            />
+        </ClubStack.Navigator>
+    );
+}
+
+
 const Drawer = createDrawerNavigator();
 
 function getDrawerContent(props) {
@@ -288,6 +327,10 @@ export default function DrawerNavigator() {
             <Drawer.Screen
                 name="ProfileScreen"
                 component={ProfileStackComponent}
+            />
+            <Drawer.Screen
+                name="ClubListScreen"
+                component={ClubStackComponent}
             />
         </Drawer.Navigator>
     );

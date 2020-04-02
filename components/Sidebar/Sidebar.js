@@ -65,6 +65,12 @@ class SideBar extends React.PureComponent<Props, State> {
                 onlyWhenLoggedIn: true,
             },
             {
+                name: "CLUBS",
+                route: "ClubListScreen",
+                icon: "account-group",
+                onlyWhenLoggedIn: true,
+            },
+            {
                 name: i18n.t('screens.logout'),
                 route: 'disconnect',
                 action: this.showDisconnectDialog,
