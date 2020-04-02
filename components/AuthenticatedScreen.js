@@ -1,8 +1,10 @@
+// @flow
+
 import * as React from 'react';
-import {StyleSheet, View} from "react-native";
-import {ActivityIndicator, Subheading, withTheme} from 'react-native-paper';
+import {View} from "react-native";
+import {ActivityIndicator, withTheme} from 'react-native-paper';
 import ConnectionManager, {ERROR_TYPE} from "../managers/ConnectionManager";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import NetworkErrorComponent from "./NetworkErrorComponent";
 
 type Props = {
     navigation: Object,
@@ -41,14 +43,14 @@ class AuthenticatedScreen extends React.Component<Props, State> {
             this.fetchData();
     }
 
-    fetchData() {
+    fetchData = () => {
         if (!this.state.loading)
             this.setState({loading: true});
         this.connectionManager.isLoggedIn()
             .then(() => {
                 this.connectionManager.authenticatedRequest(this.props.link)
                     .then((data) => {
-                        this.onFinishedLoading(data);
+                        this.onFinishedLoading(data, -1);
                     })
                     .catch((error) => {
                         this.onFinishedLoading(undefined, error);
@@ -57,7 +59,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
             .catch((error) => {
                 this.onFinishedLoading(undefined, ERROR_TYPE.BAD_CREDENTIALS);
             });
-    }
+    };
 
     onFinishedLoading(data: Object, error: number) {
         this.data = data;
@@ -113,22 +115,12 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         }
 
         return (
-            <View style={styles.outer}>
-                <View style={styles.inner}>
-                    <View style={styles.iconContainer}>
-                        <MaterialCommunityIcons
-                            name={icon}
-                            size={150}
-                            color={this.colors.textDisabled}/>
-                    </View>
-                    <Subheading style={{
-                        ...styles.subheading,
-                        color: this.colors.textDisabled
-                    }}>
-                        {message}
-                    </Subheading>
-                </View>
-            </View>
+            <NetworkErrorComponent
+                {...this.props}
+                icon={icon}
+                message={message}
+                onRefresh={this.fetchData}
+            />
         );
     }
 
@@ -142,23 +134,5 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    outer: {
-        flex: 1,
-    },
-    inner: {
-        marginTop: 'auto',
-        marginBottom: 'auto',
-    },
-    iconContainer: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        marginBottom: 20
-    },
-    subheading: {
-        textAlign: 'center',
-    }
-});
 
 export default withTheme(AuthenticatedScreen);

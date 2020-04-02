@@ -255,6 +255,7 @@
   },
   "general": {
     "loading": "Chargement...",
+    "retry": "Réessayer",
     "networkError": "Impossible de contacter les serveurs. Assurez-vous d'être connecté à internet."
   },
   "date": {

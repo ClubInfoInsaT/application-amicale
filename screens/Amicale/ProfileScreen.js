@@ -1,3 +1,5 @@
+// @flow
+
 import * as React from 'react';
 import {FlatList, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, withTheme} from 'react-native-paper';
@@ -72,7 +74,7 @@ class ProfileScreen extends React.Component<Props, State> {
         )
     }
 
-    getRenderItem({item}: Object) {
+    getRenderItem({item}: Object): any {
         switch (item.id) {
             case '0':
                 return this.getPersonalCard();

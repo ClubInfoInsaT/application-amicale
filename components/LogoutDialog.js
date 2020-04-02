@@ -1,3 +1,5 @@
+// @flow
+
 import * as React from 'react';
 import {ActivityIndicator, Button, Dialog, Paragraph, Portal, withTheme} from 'react-native-paper';
 import ConnectionManager from "../managers/ConnectionManager";
