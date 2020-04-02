@@ -5,6 +5,8 @@ import WebView from "react-native-webview";
 import {withTheme} from 'react-native-paper';
 import HeaderButton from "../Custom/HeaderButton";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
+import NetworkErrorComponent from "../Custom/NetworkErrorComponent";
+import i18n from "i18n-js";
 
 type Props = {
     navigation: Object,
@@ -104,6 +106,12 @@ class WebViewScreen extends React.PureComponent<Props> {
                 injectedJavaScript={this.props.data[0]['customJS']}
                 javaScriptEnabled={true}
                 renderLoading={this.getRenderLoading}
+                renderError={() => <NetworkErrorComponent
+                    {...this.props}
+                    onRefresh={this.onRefreshClicked}
+                    message={i18n.t("loginScreen.errors.connection")}
+                    icon={'access-point-network-off'}
+                />}
             />
         );
     }

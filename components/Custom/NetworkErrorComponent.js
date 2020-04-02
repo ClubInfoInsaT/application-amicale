@@ -32,7 +32,10 @@ class NetworkErrorComponent extends React.PureComponent<Props, State> {
 
     render() {
         return (
-            <View style={styles.outer}>
+            <View style={{
+                ...styles.outer,
+                backgroundColor: this.colors.background
+            }}>
                 <View style={styles.inner}>
                     <View style={styles.iconContainer}>
                         <MaterialCommunityIcons
@@ -62,7 +65,7 @@ class NetworkErrorComponent extends React.PureComponent<Props, State> {
 
 const styles = StyleSheet.create({
     outer: {
-        flex: 1,
+        height: '100%',
     },
     inner: {
         marginTop: 'auto',
