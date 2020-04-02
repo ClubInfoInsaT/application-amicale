@@ -1,10 +1,10 @@
 // @flow
 
 import * as React from 'react';
-import {View} from 'react-native';
 import WebView from "react-native-webview";
-import {ActivityIndicator, withTheme} from 'react-native-paper';
+import {withTheme} from 'react-native-paper';
 import HeaderButton from "../Custom/HeaderButton";
+import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 
 type Props = {
     navigation: Object,
@@ -88,24 +88,7 @@ class WebViewScreen extends React.PureComponent<Props> {
      * @return {*}
      */
     getRenderLoading() {
-        return (
-            <View style={{
-                backgroundColor: this.colors.background,
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                width: '100%',
-                height: '100%',
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <ActivityIndicator
-                    animating={true}
-                    size={'large'}
-                    color={this.colors.primary}/>
-            </View>
-        );
+        return <BasicLoadingScreen/>;
     }
 
     render() {

@@ -1,11 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {View} from "react-native";
-import {ActivityIndicator, withTheme} from 'react-native-paper';
+import {withTheme} from 'react-native-paper';
 import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
 import NetworkErrorComponent from "../Custom/NetworkErrorComponent";
 import i18n from 'i18n-js';
+import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 
 type Props = {
     navigation: Object,
@@ -71,32 +71,6 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         this.setState({loading: false});
     }
 
-    /**
-     * Gets the loading indicator
-     *
-     * @return {*}
-     */
-    getRenderLoading() {
-        return (
-            <View style={{
-                backgroundColor: this.colors.background,
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                width: '100%',
-                height: '100%',
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <ActivityIndicator
-                    animating={true}
-                    size={'large'}
-                    color={this.colors.primary}/>
-            </View>
-        );
-    }
-
     getErrorRender() {
         let message;
         let icon;
@@ -128,7 +102,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
     render() {
         return (
             this.state.loading
-                ? this.getRenderLoading()
+                ? <BasicLoadingScreen/>
                 : (this.data !== undefined
                 ? this.props.renderFunction(this.data)
                 : this.getErrorRender())
