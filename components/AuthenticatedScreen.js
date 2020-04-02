@@ -5,6 +5,7 @@ import {View} from "react-native";
 import {ActivityIndicator, withTheme} from 'react-native-paper';
 import ConnectionManager, {ERROR_TYPE} from "../managers/ConnectionManager";
 import NetworkErrorComponent from "./NetworkErrorComponent";
+import i18n from 'i18n-js';
 
 type Props = {
     navigation: Object,
@@ -101,15 +102,15 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         let icon;
         switch (this.errorCode) {
             case ERROR_TYPE.BAD_CREDENTIALS:
-                message = "BAD_CREDENTIALS";
+                message = i18n.t("loginScreen.errors.credentials");
                 icon = "account-alert-outline";
                 break;
             case ERROR_TYPE.CONNECTION_ERROR:
-                message = "CONNECTION_ERROR";
+                message = i18n.t("loginScreen.errors.connection");
                 icon = "access-point-network-off";
                 break;
             default:
-                message = "UNKNOWN";
+                message = i18n.t("loginScreen.errors.unknown");
                 icon = "alert-circle-outline";
                 break;
         }
