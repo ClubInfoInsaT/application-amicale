@@ -5,12 +5,13 @@ import {View} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../components/Home/EventDashboardItem";
 import WebSectionList from "../components/Lists/WebSectionList";
-import {Text, withTheme} from 'react-native-paper';
+import {Portal, Text, withTheme} from 'react-native-paper';
 import FeedItem from "../components/Home/FeedItem";
 import SquareDashboardItem from "../components/Home/SquareDashboardItem";
 import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardItem";
 import {stringToDate} from "../utils/Planning";
 import {openBrowser} from "../utils/WebBrowser";
+import ImageView from "react-native-image-viewing";
 // import DATA from "../dashboard_data.json";
 
 
@@ -29,10 +30,15 @@ type Props = {
     theme: Object,
 }
 
+type State = {
+    imageModalVisible: boolean,
+    imageList: Array<Object>,
+}
+
 /**
  * Class defining the app's home screen
  */
-class HomeScreen extends React.Component<Props> {
+class HomeScreen extends React.Component<Props, State> {
 
     onProxiwashClick: Function;
     onTutorInsaClick: Function;
@@ -42,6 +48,11 @@ class HomeScreen extends React.Component<Props> {
     createDataset: Function;
 
     colors: Object;
+
+    state = {
+        imageModalVisible: false,
+        imageList: [],
+    };
 
     constructor(props) {
         super(props);
@@ -405,6 +416,18 @@ class HomeScreen extends React.Component<Props> {
         openBrowser(link, this.colors.primary);
     }
 
+    showImageModal(imageList) {
+        this.setState({
+            imageModalVisible: true,
+            imageList: imageList,
+        });
+    };
+
+    hideImageModal = () => {
+        this.setState({imageModalVisible: false});
+    };
+
+
     /**
      * Gets a render item for the given feed object
      *
@@ -412,16 +435,21 @@ class HomeScreen extends React.Component<Props> {
      * @return {*}
      */
     getFeedItem(item: Object) {
-        const onImagePress = this.openLink.bind(this, item.full_picture);
         const onOutLinkPress = this.openLink.bind(this, item.permalink_url);
+        const imageList = [
+            {
+                uri: item.full_picture,
+            }
+        ];
+        const onPress = this.showImageModal.bind(this, imageList);
         return (
             <FeedItem
                 title={NAME_AMICALE}
                 subtitle={HomeScreen.getFormattedDate(item.created_time)}
                 full_picture={item.full_picture}
                 message={item.message}
-                onImagePress={onImagePress}
                 onOutLinkPress={onOutLinkPress}
+                onImagePress={onPress}
             />
         );
     }
@@ -441,13 +469,25 @@ class HomeScreen extends React.Component<Props> {
     render() {
         const nav = this.props.navigation;
         return (
-            <WebSectionList
-                createDataset={this.createDataset}
-                navigation={nav}
-                autoRefreshTime={REFRESH_TIME}
-                refreshOnFocus={true}
-                fetchUrl={DATA_URL}
-                renderItem={this.getRenderItem}/>
+            <View>
+                <WebSectionList
+                    createDataset={this.createDataset}
+                    navigation={nav}
+                    autoRefreshTime={REFRESH_TIME}
+                    refreshOnFocus={true}
+                    fetchUrl={DATA_URL}
+                    renderItem={this.getRenderItem}/>
+                <Portal>
+                    <ImageView
+                        images={this.state.imageList}
+                        imageIndex={0}
+                        presentationStyle={"fullScreen"}
+                        visible={this.state.imageModalVisible}
+                        onRequestClose={this.hideImageModal}
+                    />
+                </Portal>
+            </View>
+
         );
     }
 }

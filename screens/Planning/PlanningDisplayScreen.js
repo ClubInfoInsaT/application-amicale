@@ -1,16 +1,21 @@
 // @flow
 
 import * as React from 'react';
-import {Image, ScrollView, View} from 'react-native';
+import {Image, ScrollView, TouchableOpacity, View} from 'react-native';
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
 import {getDateOnlyString, getFormattedEventTime} from '../../utils/Planning';
-import {Card, withTheme} from 'react-native-paper';
+import {Card, Portal, withTheme} from 'react-native-paper';
 import DateManager from "../../managers/DateManager";
+import ImageView from "react-native-image-viewing";
 
 type Props = {
     navigation: Object,
     route: Object
+};
+
+type State = {
+    imageModalVisible: boolean,
 };
 
 function openWebLink(event, link) {
@@ -20,16 +25,28 @@ function openWebLink(event, link) {
 /**
  * Class defining a planning event information page.
  */
-class PlanningDisplayScreen extends React.Component<Props> {
+class PlanningDisplayScreen extends React.Component<Props, State> {
 
     displayData = this.props.route.params['data'];
 
     colors: Object;
 
+    state = {
+        imageModalVisible: false,
+    };
+
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
     }
+
+    showImageModal = () => {
+        this.setState({imageModalVisible: true});
+    };
+
+    hideImageModal = () => {
+        this.setState({imageModalVisible: false});
+    };
 
     render() {
         // console.log("rendering planningDisplayScreen");
@@ -45,10 +62,10 @@ class PlanningDisplayScreen extends React.Component<Props> {
                     subtitle={subtitle}
                 />
                 {this.displayData.logo !== null ?
-                    <View style={{width: '100%', height: 300}}>
+                    <TouchableOpacity onPress={this.showImageModal} style={{width: '100%', height: 300}}>
                         <Image style={{flex: 1, resizeMode: "contain"}}
                                source={{uri: this.displayData.logo}}/>
-                    </View>
+                    </TouchableOpacity>
                     : <View/>}
 
                 {this.displayData.description !== null ?
@@ -62,6 +79,15 @@ class PlanningDisplayScreen extends React.Component<Props> {
                               onLinkPress={openWebLink}/>
                     </Card.Content>
                     : <View/>}
+                <Portal>
+                    <ImageView
+                        images={[{uri: this.displayData.logo}]}
+                        imageIndex={0}
+                        presentationStyle={"fullScreen"}
+                        visible={this.state.imageModalVisible}
+                        onRequestClose={this.hideImageModal}
+                    />
+                </Portal>
             </ScrollView>
         );
     }
