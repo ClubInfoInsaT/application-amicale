@@ -5,13 +5,12 @@ import {View} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../components/Home/EventDashboardItem";
 import WebSectionList from "../components/Lists/WebSectionList";
-import {Portal, Text, withTheme} from 'react-native-paper';
+import {Text, withTheme} from 'react-native-paper';
 import FeedItem from "../components/Home/FeedItem";
 import SquareDashboardItem from "../components/Home/SquareDashboardItem";
 import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardItem";
 import {stringToDate} from "../utils/Planning";
 import {openBrowser} from "../utils/WebBrowser";
-import ImageView from "react-native-image-viewing";
 // import DATA from "../dashboard_data.json";
 
 
@@ -470,15 +469,6 @@ class HomeScreen extends React.Component<Props, State> {
                     refreshOnFocus={true}
                     fetchUrl={DATA_URL}
                     renderItem={this.getRenderItem}/>
-                <Portal>
-                    <ImageView
-                        images={this.state.imageList}
-                        imageIndex={0}
-                        presentationStyle={"fullScreen"}
-                        visible={this.state.imageModalVisible}
-                        onRequestClose={this.hideImageModal}
-                    />
-                </Portal>
             </View>
 
         );
