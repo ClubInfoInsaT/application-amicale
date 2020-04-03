@@ -246,7 +246,8 @@
   "clubs": {
     "clubList": "Liste des clubs",
     "managers": "Responsables",
-    "managersSubtitle": "Ces personnes font vivre le club"
+    "managersSubtitle": "Ces personnes font vivre le club",
+    "managersUnavailable": "Ce club est tout seul :("
   },
   "dialog": {
     "ok": "OK",

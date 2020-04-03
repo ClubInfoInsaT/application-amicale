@@ -66,14 +66,16 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         for (let i = 0; i < resp.length; i++) {
             final.push(<Paragraph>{resp[i]}</Paragraph>)
         }
+        const hasManagers = resp.length > 0;
         return (
             <Card style={{marginTop: 10, marginBottom: 10}}>
                 <Card.Title
                     title={i18n.t('clubs.managers')}
-                    subtitle={i18n.t('clubs.managersSubtitle')}
+                    subtitle={hasManagers ? i18n.t('clubs.managersSubtitle') : i18n.t('clubs.managersUnavailable')}
                     left={(props) => <Avatar.Icon
-                        style={{backgroundColor: 'transparent'}}
                         {...props}
+                        style={{backgroundColor: 'transparent'}}
+                        color={hasManagers ? this.colors.success : this.colors.primary}
                         icon="account-tie"/>}
                 />
                 <Card.Content>

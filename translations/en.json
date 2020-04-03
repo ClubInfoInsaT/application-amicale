@@ -245,7 +245,8 @@
   "clubs": {
     "clubList": "Club list",
     "managers": "Managers",
-    "managersSubtitle": "These people make the club live"
+    "managersSubtitle": "These people make the club live",
+    "managersUnavailable": "This club has no one :("
   },
   "dialog": {
     "ok": "OK",

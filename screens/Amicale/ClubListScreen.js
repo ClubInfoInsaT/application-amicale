@@ -64,6 +64,7 @@ class ClubListScreen extends React.Component<Props, State> {
     getRenderItem = ({item}: Object) => {
         const onPress = this.onListItemPress.bind(this, item);
         const categoriesRender = this.getCategoriesRender.bind(this, item.category);
+        const hasManagers = item.responsibles.length > 0;
         return (
             <List.Item
                 title={item.name}
@@ -74,6 +75,17 @@ class ClubListScreen extends React.Component<Props, State> {
                     style={{backgroundColor: 'transparent'}}
                     size={64}
                     source={{uri: item.logo}}/>}
+                right={(props) => <Avatar.Icon
+                    {...props}
+                    style={{
+                        marginTop: 'auto',
+                        marginBottom: 'auto',
+                        backgroundColor: 'transparent',
+                    }}
+                    size={48}
+                    icon={hasManagers ? "check-circle-outline" : "alert-circle-outline"}
+                    color={hasManagers ? this.colors.success : this.colors.primary}
+                />}
             />
         );
     };
