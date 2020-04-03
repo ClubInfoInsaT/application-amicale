@@ -3,7 +3,7 @@
 **Vous allez devoir installer git, node et npm sur votre machine, puis cloner ce dépot.**
 
 ## Table des matières
-* [Installation de Git](#git)
+* [Installation de Git](#installation-de-git)
 * Installation de node
 * Installation de expo-cli
     * Configuration de NPM
@@ -18,7 +18,6 @@
     * Appareil Physique
 * Compilation
 
-<a name="git"></a>
 ## Installation de Git
 
 Entrez la commande suivante pour l'installer :
