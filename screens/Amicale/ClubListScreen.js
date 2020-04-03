@@ -1,31 +1,85 @@
 // @flow
 
 import * as React from 'react';
-import {View} from "react-native";
-import {Avatar, Chip, List, withTheme} from 'react-native-paper';
+import {FlatList, Platform, View} from "react-native";
+import {Chip, Searchbar, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
-import PureFlatList from "../../components/Lists/PureFlatList";
+import i18n from "i18n-js";
+import ClubListItem from "../../components/Lists/ClubListItem";
 
 type Props = {
     navigation: Object,
     theme: Object,
 }
 
-type State = {}
+type State = {
+    currentlySelectedCategories: Array<string>,
+    currentSearchString: string,
+}
 
 class ClubListScreen extends React.Component<Props, State> {
 
-    state = {};
+    state = {
+        currentlySelectedCategories: [],
+        currentSearchString: '',
+    };
 
     colors: Object;
 
     getRenderItem: Function;
-
+    originalData: Array<Object>;
     categories: Array<Object>;
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
+    }
+
+    /**
+     * Creates the header content
+     */
+    componentDidMount() {
+        const title = this.getSearchBar.bind(this);
+        this.props.navigation.setOptions({
+            headerTitle: title,
+            headerBackTitleVisible: false,
+            headerTitleContainerStyle: Platform.OS === 'ios' ?
+                {marginHorizontal: 0, width: '70%'} :
+                {marginHorizontal: 0, right: 50, left: 50},
+        });
+    }
+
+    /**
+     * Gets the header search bar
+     *
+     * @return {*}
+     */
+    getSearchBar() {
+        return (
+            <Searchbar
+                placeholder={i18n.t('proximoScreen.search')}
+                onChangeText={this.onSearchStringChange}
+            />
+        );
+    }
+
+    /**
+     * Callback used when the search changes
+     *
+     * @param str The new search string
+     */
+    onSearchStringChange = (str: string) => {
+        this.updateFilteredData(this.sanitizeString(str), null);
+    };
+
+    /**
+     * Sanitizes the given string to improve search performance
+     *
+     * @param str The string to sanitize
+     * @return {string} The sanitized string
+     */
+    sanitizeString(str: string): string {
+        return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
     keyExtractor = (item: Object) => {
@@ -35,59 +89,99 @@ class ClubListScreen extends React.Component<Props, State> {
     getScreen = (data: Object) => {
         this.categories = data.categories;
         return (
-            <PureFlatList
+            <FlatList
                 data={data.clubs}
                 keyExtractor={this.keyExtractor}
                 renderItem={this.getRenderItem}
-                updateData={0}
+                ListHeaderComponent={this.getListHeader()}
             />
         )
     };
 
-    getCategoryName(id: number) {
-        for (let i = 0; i < this.categories.length; i++) {
-            if (id === this.categories[i].id)
-                return this.categories[i].name;
-        }
-        return "";
+    onChipSelect(id: string) {
+        this.updateFilteredData(null, id);
     }
 
-    getCategoriesRender(categories: Array<number|null>) {
-        let final = [];
-        for (let i = 0; i < categories.length; i++) {
-            if (categories[i] !== null)
-                final.push(<Chip style={{marginRight: 5}}>{this.getCategoryName(categories[i])}</Chip>);
+    updateFilteredData(filterStr: string | null, categoryId: string | null) {
+        let newCategoriesState = [...this.state.currentlySelectedCategories];
+        let newStrState = this.state.currentSearchString;
+        if (filterStr !== null)
+            newStrState = filterStr;
+        if (categoryId !== null) {
+            let index = newCategoriesState.indexOf(categoryId);
+            if (index === -1)
+                newCategoriesState.push(categoryId);
+            else
+                newCategoriesState.splice(index);
         }
-        return <View style={{flexDirection: 'row'}}>{final}</View>;
+        if (filterStr !== null || categoryId !== null)
+            this.setState({
+                currentSearchString: newStrState,
+                currentlySelectedCategories: newCategoriesState,
+            })
+    }
+
+    isItemInCategoryFilter(categories: Array<string>) {
+        for (const category of categories) {
+            if (this.state.currentlySelectedCategories.indexOf(category) !== -1)
+                return true;
+        }
+        return false;
+    }
+
+    getChipRender = (category: Object) => {
+        const onPress = this.onChipSelect.bind(this, category.id);
+        return <Chip
+            selected={this.isItemInCategoryFilter([category.id])}
+            mode={'outlined'}
+            onPress={onPress}
+            style={{marginRight: 5, marginBottom: 5}}
+        >
+            {category.name}
+        </Chip>;
+    };
+
+    getListHeader() {
+        let final = [];
+        for (let i = 0; i < this.categories.length; i++) {
+            final.push(this.getChipRender(this.categories[i]));
+        }
+        return <View style={{
+            justifyContent: 'space-around',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            margin: 10,
+        }}>{final}</View>;
+    }
+
+    getCategoryOfId = (id: number) => {
+        for (let i = 0; i < this.categories.length; i++) {
+            if (id === this.categories[i].id)
+                return this.categories[i];
+        }
+    };
+
+    shouldRenderItem(item) {
+        let shouldRender = this.state.currentlySelectedCategories.length === 0
+            || this.isItemInCategoryFilter(item.category);
+        if (shouldRender)
+            shouldRender = this.sanitizeString(item.name).includes(this.state.currentSearchString);
+        return shouldRender;
     }
 
     getRenderItem = ({item}: Object) => {
         const onPress = this.onListItemPress.bind(this, item);
-        const categoriesRender = this.getCategoriesRender.bind(this, item.category);
-        const hasManagers = item.responsibles.length > 0;
-        return (
-            <List.Item
-                title={item.name}
-                description={categoriesRender}
-                onPress={onPress}
-                left={(props) => <Avatar.Image
-                    {...props}
-                    style={{backgroundColor: 'transparent'}}
-                    size={64}
-                    source={{uri: item.logo}}/>}
-                right={(props) => <Avatar.Icon
-                    {...props}
-                    style={{
-                        marginTop: 'auto',
-                        marginBottom: 'auto',
-                        backgroundColor: 'transparent',
-                    }}
-                    size={48}
-                    icon={hasManagers ? "check-circle-outline" : "alert-circle-outline"}
-                    color={hasManagers ? this.colors.success : this.colors.primary}
-                />}
-            />
-        );
+        if (this.shouldRenderItem(item)) {
+            return (
+                <ClubListItem
+                    categoryTranslator={this.getCategoryOfId}
+                    chipRender={this.getChipRender}
+                    item={item}
+                    onPress={onPress}
+                />
+            );
+        } else
+            return null;
     };
 
     /**
