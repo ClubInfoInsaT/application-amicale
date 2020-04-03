@@ -5,7 +5,8 @@ import {readData} from "../../utils/WebData";
 import i18n from "i18n-js";
 import {Snackbar} from 'react-native-paper';
 import {RefreshControl, SectionList, View} from "react-native";
-import EmptyWebSectionListItem from "./EmptyWebSectionListItem";
+import NetworkErrorComponent from "../Custom/NetworkErrorComponent";
+import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 
 type Props = {
     navigation: Object,
@@ -22,7 +23,7 @@ type Props = {
 type State = {
     refreshing: boolean,
     firstLoading: boolean,
-    fetchedData: Object,
+    fetchedData: ?Object,
     snackbarVisible: boolean
 };
 
@@ -48,14 +49,13 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
     state = {
         refreshing: false,
         firstLoading: true,
-        fetchedData: {},
+        fetchedData: undefined,
         snackbarVisible: false
     };
 
     onRefresh: Function;
     onFetchSuccess: Function;
     onFetchError: Function;
-    getEmptyRenderItem: Function;
     getEmptySectionHeader: Function;
     showSnackBar: Function;
     hideSnackBar: Function;
@@ -66,7 +66,6 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         this.onRefresh = this.onRefresh.bind(this);
         this.onFetchSuccess = this.onFetchSuccess.bind(this);
         this.onFetchError = this.onFetchError.bind(this);
-        this.getEmptyRenderItem = this.getEmptyRenderItem.bind(this);
         this.getEmptySectionHeader = this.getEmptySectionHeader.bind(this);
         this.showSnackBar = this.showSnackBar.bind(this);
         this.hideSnackBar = this.hideSnackBar.bind(this);
@@ -123,7 +122,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
      */
     onFetchError() {
         this.setState({
-            fetchedData: {},
+            fetchedData: undefined,
             refreshing: false,
             firstLoading: false
         });
@@ -158,57 +157,6 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Gets an empty render item
-     *
-     * @param item The data to display
-     * @return {*}
-     */
-    getEmptyRenderItem({item}: Object) {
-        return (
-            <EmptyWebSectionListItem
-                text={item.text}
-                icon={item.icon}
-                refreshing={this.state.refreshing}
-            />
-        );
-    }
-
-    /**
-     * Creates an empty dataset
-     *
-     * @return {*}
-     */
-    createEmptyDataset() {
-        return [
-            {
-                title: '',
-                data: [
-                    {
-                        text: this.state.refreshing ?
-                            i18n.t('general.loading') :
-                            i18n.t('general.networkError'),
-                        isSpinner: this.state.refreshing,
-                        icon: this.state.refreshing ?
-                            'refresh' :
-                            'access-point-network-off'
-                    }
-                ],
-                keyExtractor: this.datasetKeyExtractor,
-            }
-        ];
-    }
-
-    /**
-     * Extracts a key from the given item
-     *
-     * @param item The item to extract the key from
-     * @return {string} The extracted key
-     */
-    datasetKeyExtractor(item: Object): string {
-        return item.text
-    }
-
-    /**
      * Shows the error popup
      */
     showSnackBar() {
@@ -223,11 +171,10 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
     }
 
     render() {
-        let dataset = this.props.createDataset(this.state.fetchedData);
-        const isEmpty = dataset[0].data.length === 0;
-        const shouldRenderHeader = !isEmpty && (this.props.renderSectionHeader !== null);
-        if (isEmpty)
-            dataset = this.createEmptyDataset();
+        let dataset = [];
+        if (this.state.fetchedData !== undefined)
+            dataset = this.props.createDataset(this.state.fetchedData);
+        const shouldRenderHeader = this.props.renderSectionHeader !== null;
         return (
             <View>
                 <Snackbar
@@ -241,6 +188,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                 >
                     {i18n.t("homeScreen.listUpdateFail")}
                 </Snackbar>
+                {/*$FlowFixMe*/}
                 <SectionList
                     sections={dataset}
                     refreshControl={
@@ -252,12 +200,16 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                     //$FlowFixMe
                     renderSectionHeader={shouldRenderHeader ? this.props.renderSectionHeader : this.getEmptySectionHeader}
                     //$FlowFixMe
-                    renderItem={isEmpty ? this.getEmptyRenderItem : this.props.renderItem}
-                    style={{minHeight: 300, width: '100%'}}
+                    renderItem={this.props.renderItem}
                     stickySectionHeadersEnabled={this.props.stickyHeader}
-                    contentContainerStyle={
-                        isEmpty ?
-                            {flexGrow: 1, justifyContent: 'center', alignItems: 'center'} : {}
+                    contentContainerStyle={{minHeight: '100%'}}
+                    style={{minHeight: '100%'}}
+                    ListEmptyComponent={this.state.refreshing
+                        ? <BasicLoadingScreen/>
+                        : <NetworkErrorComponent
+                            message={i18n.t('general.networkError')}
+                            icon={"access-point-network-off"}
+                            onRefresh={this.onRefresh}/>
                     }
                 />
             </View>

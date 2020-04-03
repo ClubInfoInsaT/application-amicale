@@ -7,7 +7,6 @@ import {MaterialCommunityIcons} from "@expo/vector-icons";
 import i18n from 'i18n-js';
 
 type Props = {
-    navigation: Object,
     message: string,
     icon: string,
     onRefresh: Function,
