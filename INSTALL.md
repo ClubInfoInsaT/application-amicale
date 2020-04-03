@@ -4,19 +4,19 @@
 
 ## Table des matières
 * [Installation de Git](#installation-de-git)
-* Installation de node
-* Installation de expo-cli
-    * Configuration de NPM
-    * Installation
-* Téléchargement du dépot
-* Téléchargement des dépendances
-* Lancement de l'appli
-    * En console
-    * Directement avec PHPStorm
-* Tester sur un appareil
-    * Émulateur android
-    * Appareil Physique
-* Compilation
+* [Installation de node](#installation-de-node)
+* [Installation de expo-cli](#installation-de-expo-cli)
+    * [Configuration de NPM](#configuration-de-npm)
+    * [Installation](#installation)
+* [Téléchargement du dépot](#tlchargement-du-dpot)
+* [Téléchargement des dépendances](#tlchargement-des-dpendances)
+* [Lancement de l'appli](#lancement-de-lappli)
+    * [En console](#en-console)
+    * [Directement avec PHPStorm](#directement-avec-phpstorm)
+* [Tester sur un appareil](#tester-sur-un-appareil)
+    * [Émulateur android](#mulateur-android)
+    * [Appareil Physique](#appareil-physique)
+* [Compilation](#compilation)
 
 ## Installation de Git
 
