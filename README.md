@@ -27,3 +27,10 @@ Cette combinaison permet de n'avoir qu'un seul code JavaScript à écrire pour A
 
 ## [Installer l'application depuis ce dépot](INSTALL.md)
 
+## Liens utiles
+* [Documentation React Native](https://reactnative.dev/docs/getting-started)
+* [Documentation Expo](https://docs.expo.io/versions/latest/)
+* [Documentation React Native Paper](https://callstack.github.io/react-native-paper/)
+* [Documentation React navigation](https://reactnavigation.org/docs/getting-started)
+* [Documentation Jest](https://jestjs.io/docs/en/getting-started)
+* [Documentation Flow](https://flow.org/en/docs/react/)
