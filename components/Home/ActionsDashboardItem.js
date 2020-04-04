@@ -20,6 +20,8 @@ class ActionsDashBoardItem extends React.PureComponent<Props> {
 
     openDrawer = () => this.props.navigation.openDrawer();
 
+    gotToSettings = () => this.props.navigation.navigate("SettingsScreen");
+
     render() {
         return (
             <Card style={{
@@ -31,10 +33,17 @@ class ActionsDashBoardItem extends React.PureComponent<Props> {
                         icon="information"
                         mode="contained"
                         onPress={this.openDrawer}
-                        style={styles.button}
+                        style={styles.servicesButton}
                     >
                         PLUS DE SERVICES
                     </Button>
+                    <Button
+                        icon="settings"
+                        mode="contained"
+                        onPress={this.gotToSettings}
+                        style={styles.settingsButton}
+                        compact
+                    />
                 </Card.Content>
             </Card>
         );
@@ -58,8 +67,12 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
     },
-    button: {
+    servicesButton: {
         marginLeft: 'auto',
+        marginRight: 5,
+    },
+    settingsButton: {
+        marginLeft: 5,
         marginRight: 'auto',
     }
 });
