@@ -13,7 +13,7 @@ function HeaderButton(props) {
         <IconButton
             icon={props.icon}
             size={26}
-            color={colors.text}
+            color={props.color !== undefined ? props.color : colors.text}
             onPress={props.onPress}
         />
     );

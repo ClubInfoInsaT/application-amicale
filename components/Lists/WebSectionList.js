@@ -57,8 +57,6 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
     onFetchSuccess: Function;
     onFetchError: Function;
     getEmptySectionHeader: Function;
-    showSnackBar: Function;
-    hideSnackBar: Function;
 
     constructor() {
         super();
@@ -67,8 +65,6 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         this.onFetchSuccess = this.onFetchSuccess.bind(this);
         this.onFetchError = this.onFetchError.bind(this);
         this.getEmptySectionHeader = this.getEmptySectionHeader.bind(this);
-        this.showSnackBar = this.showSnackBar.bind(this);
-        this.hideSnackBar = this.hideSnackBar.bind(this);
     }
 
     /**
@@ -159,16 +155,12 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
     /**
      * Shows the error popup
      */
-    showSnackBar() {
-        this.setState({snackbarVisible: true})
-    }
+    showSnackBar = () => this.setState({snackbarVisible: true});
 
     /**
      * Hides the error popup
      */
-    hideSnackBar() {
-        this.setState({snackbarVisible: false})
-    }
+    hideSnackBar = () => this.setState({snackbarVisible: false});
 
     render() {
         let dataset = [];
@@ -177,17 +169,6 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         const shouldRenderHeader = this.props.renderSectionHeader !== null;
         return (
             <View>
-                <Snackbar
-                    visible={this.state.snackbarVisible}
-                    onDismiss={this.hideSnackBar}
-                    action={{
-                        label: 'OK',
-                        onPress: this.hideSnackBar,
-                    }}
-                    duration={4000}
-                >
-                    {i18n.t("homeScreen.listUpdateFail")}
-                </Snackbar>
                 {/*$FlowFixMe*/}
                 <SectionList
                     sections={dataset}
@@ -212,6 +193,17 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                             onRefresh={this.onRefresh}/>
                     }
                 />
+                <Snackbar
+                    visible={this.state.snackbarVisible}
+                    onDismiss={this.hideSnackBar}
+                    action={{
+                        label: 'OK',
+                        onPress: () => {},
+                    }}
+                    duration={4000}
+                >
+                    {i18n.t("homeScreen.listUpdateFail")}
+                </Snackbar>
             </View>
         );
     }

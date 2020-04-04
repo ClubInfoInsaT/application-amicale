@@ -32,16 +32,10 @@ type Props = {
     theme: Object,
 }
 
-type State = {
-    imageModalVisible: boolean,
-    imageList: Array<Object>,
-    isLoggedIn: boolean,
-}
-
 /**
  * Class defining the app's home screen
  */
-class HomeScreen extends React.Component<Props, State> {
+class HomeScreen extends React.Component<Props> {
 
     onProxiwashClick: Function;
     onTutorInsaClick: Function;
@@ -52,15 +46,10 @@ class HomeScreen extends React.Component<Props, State> {
 
     colors: Object;
 
-    state = {
-        imageModalVisible: false,
-        imageList: [],
-        isLoggedIn: ConnectionManager.getInstance().isLoggedIn(),
-    };
+    isLoggedIn: boolean | null;
 
     constructor(props) {
         super(props);
-        ConnectionManager.getInstance().addLoginStateListener((value) => this.setState({isLoggedIn: value}));
         this.onProxiwashClick = this.onProxiwashClick.bind(this);
         this.onTutorInsaClick = this.onTutorInsaClick.bind(this);
         this.onMenuClick = this.onMenuClick.bind(this);
@@ -68,6 +57,8 @@ class HomeScreen extends React.Component<Props, State> {
         this.getRenderItem = this.getRenderItem.bind(this);
         this.createDataset = this.createDataset.bind(this);
         this.colors = props.theme.colors;
+
+        this.isLoggedIn = null;
     }
 
     /**
@@ -82,20 +73,32 @@ class HomeScreen extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        this.props.navigation.setOptions({
-            headerRight: this.getHeaderButton,
-        });
+        this.props.navigation.addListener('focus', this.onScreenFocus);
     }
 
+    onScreenFocus = () => {
+        if (this.isLoggedIn !== ConnectionManager.getInstance().isLoggedIn()) {
+            this.isLoggedIn = ConnectionManager.getInstance().isLoggedIn();
+            this.props.navigation.setOptions({
+                headerRight: this.getHeaderButton,
+            });
+        }
+
+    };
+
     getHeaderButton = () => {
-        const screen = this.state.isLoggedIn
+        const screen = this.isLoggedIn
             ? "ProfileScreen"
             : "LoginScreen";
-        const icon = this.state.isLoggedIn
+        const icon = this.isLoggedIn
             ? "account"
             : "login";
         const onPress = () => this.props.navigation.navigate(screen);
-        return <HeaderButton icon={icon} onPress={onPress}/>;
+        return <HeaderButton
+            icon={icon}
+            onPress={onPress}
+            color={this.isLoggedIn ? undefined : this.colors.primary}
+        />;
     };
 
     onProxiwashClick() {
@@ -448,18 +451,6 @@ class HomeScreen extends React.Component<Props, State> {
         openBrowser(link, this.colors.primary);
     }
 
-    showImageModal(imageList) {
-        this.setState({
-            imageModalVisible: true,
-            imageList: imageList,
-        });
-    };
-
-    hideImageModal = () => {
-        this.setState({imageModalVisible: false});
-    };
-
-
     /**
      * Gets a render item for the given feed object
      *
@@ -494,16 +485,13 @@ class HomeScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         return (
-            <View>
-                <WebSectionList
-                    createDataset={this.createDataset}
-                    navigation={nav}
-                    autoRefreshTime={REFRESH_TIME}
-                    refreshOnFocus={true}
-                    fetchUrl={DATA_URL}
-                    renderItem={this.getRenderItem}/>
-            </View>
-
+            <WebSectionList
+                createDataset={this.createDataset}
+                navigation={nav}
+                autoRefreshTime={REFRESH_TIME}
+                refreshOnFocus={true}
+                fetchUrl={DATA_URL}
+                renderItem={this.getRenderItem}/>
         );
     }
 }
