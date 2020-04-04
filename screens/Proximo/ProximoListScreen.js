@@ -1,11 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Image, Platform, ScrollView, View} from "react-native";
+import {FlatList, Image, Platform, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
 import CustomModal from "../../components/Custom/CustomModal";
-import {Avatar, IconButton, List, RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
-import PureFlatList from "../../components/Lists/PureFlatList";
+import {IconButton, RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
+import {stringMatchQuery} from "../../utils/Search";
+import ProximoListItem from "../../components/Lists/ProximoListItem";
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -39,7 +40,7 @@ type Props = {
 type State = {
     currentSortMode: number,
     modalCurrentDisplayItem: React.Node,
-    currentlyDisplayedData: Array<Object>,
+    currentSearchString: string,
 };
 
 /**
@@ -48,30 +49,21 @@ type State = {
 class ProximoListScreen extends React.Component<Props, State> {
 
     modalRef: Object;
-    originalData: Array<Object>;
+    listData: Array<Object>;
     shouldFocusSearchBar: boolean;
-
-    onSearchStringChange: Function;
-    onSortMenuPress: Function;
-    renderItem: Function;
-    onModalRef: Function;
 
     colors: Object;
 
     constructor(props) {
         super(props);
-        this.originalData = this.props.route.params['data']['data'];
+        this.listData = this.props.route.params['data']['data'];
         this.shouldFocusSearchBar = this.props.route.params['shouldFocusSearchBar'];
         this.state = {
-            currentlyDisplayedData: this.originalData.sort(sortName),
+            currentSearchString: '',
             currentSortMode: 3,
             modalCurrentDisplayItem: null,
         };
 
-        this.onSearchStringChange = this.onSearchStringChange.bind(this);
-        this.onSortMenuPress = this.onSortMenuPress.bind(this);
-        this.renderItem = this.renderItem.bind(this);
-        this.onModalRef = this.onModalRef.bind(this);
         this.colors = props.theme.colors;
     }
 
@@ -80,11 +72,9 @@ class ProximoListScreen extends React.Component<Props, State> {
      * Creates the header content
      */
     componentDidMount() {
-        const button = this.getSortMenuButton.bind(this);
-        const title = this.getSearchBar.bind(this);
         this.props.navigation.setOptions({
-            headerRight: button,
-            headerTitle: title,
+            headerRight: this.getSortMenuButton,
+            headerTitle: this.getSearchBar,
             headerBackTitleVisible: false,
             headerTitleContainerStyle: Platform.OS === 'ios' ?
                 {marginHorizontal: 0, width: '70%'} :
@@ -97,21 +87,21 @@ class ProximoListScreen extends React.Component<Props, State> {
      *
      * @return {*}
      */
-    getSearchBar() {
+    getSearchBar = () => {
         return (
             <Searchbar
                 placeholder={i18n.t('proximoScreen.search')}
                 onChangeText={this.onSearchStringChange}
             />
         );
-    }
+    };
 
     /**
      * Gets the sort menu header button
      *
      * @return {*}
      */
-    getSortMenuButton() {
+    getSortMenuButton = () => {
         return (
             <IconButton
                 icon="sort"
@@ -120,20 +110,20 @@ class ProximoListScreen extends React.Component<Props, State> {
                 onPress={this.onSortMenuPress}
             />
         );
-    }
+    };
 
     /**
      * Callback used when clicking on the sort menu button.
      * It will open the modal to show a sort selection
      */
-    onSortMenuPress() {
+    onSortMenuPress = () => {
         this.setState({
             modalCurrentDisplayItem: this.getModalSortMenu()
         });
         if (this.modalRef) {
             this.modalRef.open();
         }
-    }
+    };
 
     /**
      * Sets the current sort mode.
@@ -144,19 +134,18 @@ class ProximoListScreen extends React.Component<Props, State> {
         this.setState({
             currentSortMode: mode,
         });
-        let data = this.state.currentlyDisplayedData;
         switch (mode) {
             case 1:
-                data.sort(sortPrice);
+                this.listData.sort(sortPrice);
                 break;
             case 2:
-                data.sort(sortPriceReverse);
+                this.listData.sort(sortPriceReverse);
                 break;
             case 3:
-                data.sort(sortName);
+                this.listData.sort(sortName);
                 break;
             case 4:
-                data.sort(sortNameReverse);
+                this.listData.sort(sortNameReverse);
                 break;
         }
         if (this.modalRef && mode !== this.state.currentSortMode) {
@@ -182,45 +171,13 @@ class ProximoListScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Sanitizes the given string to improve search performance
-     *
-     * @param str The string to sanitize
-     * @return {string} The sanitized string
-     */
-    sanitizeString(str: string): string {
-        return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    }
-
-    /**
-     * Returns only articles whose name contains the given string.
-     * Case and accents insensitive.
-     *
-     * @param str The string used to filter article names
-     * @returns {[]}
-     */
-    filterData(str: string) {
-        let filteredData = [];
-        const testStr = this.sanitizeString(str);
-        const articles = this.originalData;
-        for (const article of articles) {
-            const name = this.sanitizeString(article.name);
-            if (name.includes(testStr)) {
-                filteredData.push(article)
-            }
-        }
-        return filteredData;
-    }
-
-    /**
      * Callback used when the search changes
      *
      * @param str The new search string
      */
-    onSearchStringChange(str: string) {
-        this.setState({
-            currentlyDisplayedData: this.filterData(str)
-        })
-    }
+    onSearchStringChange = (str: string) => {
+        this.setState({currentSearchString: str})
+    };
 
     /**
      * Gets the modal content depending on the given article
@@ -333,23 +290,20 @@ class ProximoListScreen extends React.Component<Props, State> {
      * @param item The article to render
      * @return {*}
      */
-    renderItem({item}: Object) {
-        const onPress = this.onListItemPress.bind(this, item);
-        return (
-            <List.Item
-                title={item.name}
-                description={item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
-                descriptionStyle={{color: this.getStockColor(parseInt(item.quantity))}}
-                onPress={onPress}
-                left={() => <Avatar.Image style={{backgroundColor: 'transparent'}} size={64}
-                                          source={{uri: item.image}}/>}
-                right={() =>
-                    <Text style={{fontWeight: "bold"}}>
-                        {item.price}€
-                    </Text>}
-            />
-        );
-    }
+    renderItem = ({item}: Object) => {
+        if (stringMatchQuery(item.name, this.state.currentSearchString)) {
+            const onPress = this.onListItemPress.bind(this, item);
+            const color = this.getStockColor(parseInt(item.quantity));
+            return (
+                <ProximoListItem
+                    item={item}
+                    onPress={onPress}
+                    color={color}
+                />
+            );
+        } else
+            return null;
+    };
 
     /**
      * Extracts a key for the given article
@@ -366,9 +320,9 @@ class ProximoListScreen extends React.Component<Props, State> {
      *
      * @param ref
      */
-    onModalRef(ref: Object) {
+    onModalRef = (ref: Object) => {
         this.modalRef = ref;
-    }
+    };
 
     render() {
         return (
@@ -378,11 +332,12 @@ class ProximoListScreen extends React.Component<Props, State> {
                 <CustomModal onRef={this.onModalRef}>
                     {this.state.modalCurrentDisplayItem}
                 </CustomModal>
-                <PureFlatList
-                    data={this.state.currentlyDisplayedData}
+                {/*$FlowFixMe*/}
+                <FlatList
+                    data={this.listData}
+                    extraData={this.state.currentSearchString + this.state.currentSortMode}
                     keyExtractor={this.keyExtractor}
                     renderItem={this.renderItem}
-                    updateData={this.state.currentSortMode}
                 />
             </View>
         );
