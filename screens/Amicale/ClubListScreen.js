@@ -6,6 +6,7 @@ import {Chip, Searchbar, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import i18n from "i18n-js";
 import ClubListItem from "../../components/Lists/ClubListItem";
+import {isItemInCategoryFilter, stringMatchQuery} from "../../utils/Search";
 
 type Props = {
     navigation: Object,
@@ -27,7 +28,6 @@ class ClubListScreen extends React.Component<Props, State> {
     colors: Object;
 
     getRenderItem: Function;
-    originalData: Array<Object>;
     categories: Array<Object>;
 
     constructor(props) {
@@ -69,26 +69,17 @@ class ClubListScreen extends React.Component<Props, State> {
      * @param str The new search string
      */
     onSearchStringChange = (str: string) => {
-        this.updateFilteredData(this.sanitizeString(str), null);
+        this.updateFilteredData(str, null);
     };
 
-    /**
-     * Sanitizes the given string to improve search performance
-     *
-     * @param str The string to sanitize
-     * @return {string} The sanitized string
-     */
-    sanitizeString(str: string): string {
-        return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    }
-
     keyExtractor = (item: Object) => {
-        return item.name + item.logo;
+        return item.id.toString();
     };
 
     getScreen = (data: Object) => {
         this.categories = data.categories;
         return (
+            //$FlowFixMe
             <FlatList
                 data={data.clubs}
                 keyExtractor={this.keyExtractor}
@@ -112,7 +103,7 @@ class ClubListScreen extends React.Component<Props, State> {
             if (index === -1)
                 newCategoriesState.push(categoryId);
             else
-                newCategoriesState.splice(index);
+                newCategoriesState.splice(index,1);
         }
         if (filterStr !== null || categoryId !== null)
             this.setState({
@@ -121,21 +112,14 @@ class ClubListScreen extends React.Component<Props, State> {
             })
     }
 
-    isItemInCategoryFilter(categories: Array<string>) {
-        for (const category of categories) {
-            if (this.state.currentlySelectedCategories.indexOf(category) !== -1)
-                return true;
-        }
-        return false;
-    }
-
-    getChipRender = (category: Object) => {
+    getChipRender = (category: Object, key: string) => {
         const onPress = this.onChipSelect.bind(this, category.id);
         return <Chip
-            selected={this.isItemInCategoryFilter([category.id])}
+            selected={isItemInCategoryFilter(this.state.currentlySelectedCategories, [category.id])}
             mode={'outlined'}
             onPress={onPress}
             style={{marginRight: 5, marginBottom: 5}}
+            key={key}
         >
             {category.name}
         </Chip>;
@@ -144,7 +128,7 @@ class ClubListScreen extends React.Component<Props, State> {
     getListHeader() {
         let final = [];
         for (let i = 0; i < this.categories.length; i++) {
-            final.push(this.getChipRender(this.categories[i]));
+            final.push(this.getChipRender(this.categories[i], this.categories[i].id));
         }
         return <View style={{
             justifyContent: 'space-around',
@@ -163,9 +147,9 @@ class ClubListScreen extends React.Component<Props, State> {
 
     shouldRenderItem(item) {
         let shouldRender = this.state.currentlySelectedCategories.length === 0
-            || this.isItemInCategoryFilter(item.category);
+            || isItemInCategoryFilter(this.state.currentlySelectedCategories, item.category);
         if (shouldRender)
-            shouldRender = this.sanitizeString(item.name).includes(this.state.currentSearchString);
+            shouldRender = stringMatchQuery(item.name, this.state.currentSearchString);
         return shouldRender;
     }
 

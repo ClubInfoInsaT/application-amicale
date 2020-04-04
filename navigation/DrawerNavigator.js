@@ -262,10 +262,8 @@ function ClubStackComponent() {
                 name="ClubDisplayScreen"
                 component={ClubDisplayScreen}
                 options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
                         title: "",
-                        headerLeft: openDrawer,
                         ...TransitionPresets.ModalSlideFromBottomIOS,
                     };
                 }}

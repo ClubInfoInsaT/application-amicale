@@ -52,19 +52,26 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         return "";
     }
 
-    getCategoriesRender(categories: Array<number|null>) {
+    getCategoriesRender(categories: Array<number | null>) {
         let final = [];
         for (let i = 0; i < categories.length; i++) {
-            if (categories[i] !== null)
-                final.push(<Chip style={{marginRight: 5}}>{this.getCategoryName(categories[i])}</Chip>);
+            if (categories[i] !== null) {
+                final.push(
+                    <Chip
+                        style={{marginRight: 5}}
+                        key={i.toString()}>
+                        {this.getCategoryName(categories[i])}
+                    </Chip>
+                );
+            }
         }
         return <View style={{flexDirection: 'row', marginTop: 5}}>{final}</View>;
     }
 
-    getResponsiblesRender(resp: Array<string>) {
+    getManagersRender(resp: Array<string>) {
         let final = [];
         for (let i = 0; i < resp.length; i++) {
-            final.push(<Paragraph>{resp[i]}</Paragraph>)
+            final.push(<Paragraph key={i.toString()}>{resp[i]}</Paragraph>)
         }
         const hasManagers = resp.length > 0;
         return (
@@ -120,7 +127,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                               onLinkPress={openWebLink}/>
                     </Card.Content>
                     : <View/>}
-                {this.getResponsiblesRender(this.displayData.responsibles)}
+                {this.getManagersRender(this.displayData.responsibles)}
             </ScrollView>
         );
     }

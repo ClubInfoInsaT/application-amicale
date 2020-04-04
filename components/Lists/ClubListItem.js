@@ -25,8 +25,10 @@ class ClubListItem extends React.PureComponent<Props> {
     getCategoriesRender(categories: Array<number | null>) {
         let final = [];
         for (let i = 0; i < categories.length; i++) {
-            if (categories[i] !== null)
-                final.push(this.props.chipRender(this.props.categoryTranslator(categories[i])));
+            if (categories[i] !== null){
+                const category = this.props.categoryTranslator(categories[i]);
+                final.push(this.props.chipRender(category, this.props.item.id + ':' + category.id));
+            }
         }
         return <View style={{flexDirection: 'row'}}>{final}</View>;
     }
