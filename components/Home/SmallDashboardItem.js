@@ -8,7 +8,7 @@ import {View} from "react-native";
  * @param props Props to pass to the component
  * @return {*}
  */
-function SquareDashboardItem(props) {
+function SmallDashboardItem(props) {
     const {colors} = props.theme;
     return (
         <View>
@@ -37,4 +37,4 @@ function SquareDashboardItem(props) {
     );
 }
 
-export default withTheme(SquareDashboardItem);
+export default withTheme(SmallDashboardItem);

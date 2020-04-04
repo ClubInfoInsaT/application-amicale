@@ -7,10 +7,11 @@ import DashboardItem from "../components/Home/EventDashboardItem";
 import WebSectionList from "../components/Lists/WebSectionList";
 import {Text, withTheme} from 'react-native-paper';
 import FeedItem from "../components/Home/FeedItem";
-import SquareDashboardItem from "../components/Home/SquareDashboardItem";
+import SquareDashboardItem from "../components/Home/SmallDashboardItem";
 import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardItem";
 import {stringToDate} from "../utils/Planning";
 import {openBrowser} from "../utils/WebBrowser";
+import ActionsDashBoardItem from "../components/Home/ActionsDashboardItem";
 // import DATA from "../dashboard_data.json";
 
 
@@ -143,8 +144,12 @@ class HomeScreen extends React.Component<Props, State> {
         let dataset = [
 
             {
-                id: 'middle',
+                id: 'top',
                 content: []
+            },
+            {
+                id: 'actions',
+                content: undefined
             },
             {
                 id: 'event',
@@ -154,7 +159,7 @@ class HomeScreen extends React.Component<Props, State> {
         for (let [key, value] of Object.entries(dashboardData)) {
             switch (key) {
                 case 'today_events':
-                    dataset[1]['content'] = value;
+                    dataset[2]['content'] = value;
                     break;
                 case 'available_machines':
                     dataset[0]['content'][0] = {id: key, data: value};
@@ -184,8 +189,14 @@ class HomeScreen extends React.Component<Props, State> {
         let content = item['content'];
         if (item['id'] === 'event')
             return this.getDashboardEventItem(content);
-        else if (item['id'] === 'middle')
-            return this.getDashboardMiddleItem(content);
+        else if (item['id'] === 'top')
+            return this.getDashboardTopItem(content);
+        else if (item['id'] === 'actions')
+            return this.getActionsDashboardItem();
+    }
+
+    getActionsDashboardItem() {
+        return <ActionsDashBoardItem {...this.props}/>;
     }
 
     /**
@@ -359,7 +370,7 @@ class HomeScreen extends React.Component<Props, State> {
      * @param content
      * @return {*}
      */
-    getDashboardMiddleItem(content: Array<Object>) {
+    getDashboardTopItem(content: Array<Object>) {
         let proxiwashData = content[0]['data'];
         let tutorinsaData = content[1]['data'];
         let proximoData = content[2]['data'];

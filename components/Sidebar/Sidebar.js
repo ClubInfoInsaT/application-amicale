@@ -57,6 +57,7 @@ class SideBar extends React.PureComponent<Props, State> {
                 route: "LoginScreen",
                 icon: "login",
                 onlyWhenLoggedOut: true,
+                shouldEmphasis: true,
             },
             {
                 name: i18n.t('screens.profile'),
@@ -206,6 +207,7 @@ class SideBar extends React.PureComponent<Props, State> {
         const onListItemPress = this.onListItemPress.bind(this, item);
         const onlyWhenLoggedOut = item.onlyWhenLoggedOut !== undefined && item.onlyWhenLoggedOut === true;
         const onlyWhenLoggedIn = item.onlyWhenLoggedIn !== undefined && item.onlyWhenLoggedIn === true;
+        const shouldEmphasis = item.shouldEmphasis !== undefined && item.shouldEmphasis === true;
         if (onlyWhenLoggedIn && !this.state.isLoggedIn || onlyWhenLoggedOut && this.state.isLoggedIn)
             return null;
         else if (item.icon !== undefined) {
@@ -214,6 +216,7 @@ class SideBar extends React.PureComponent<Props, State> {
                     title={item.name}
                     icon={item.icon}
                     onPress={onListItemPress}
+                    shouldEmphasis={shouldEmphasis}
                 />
             );
         } else {

@@ -17,7 +17,7 @@ function SidebarItem(props) {
             focused={false}
             onPress={props.onPress}
             icon={({color, size}) =>
-                <MaterialCommunityIcons color={color} size={size} name={props.icon}/>}
+                <MaterialCommunityIcons color={props.shouldEmphasis ? colors.primary : color} size={size} name={props.icon}/>}
             style={{
                 marginLeft: 0,
                 marginRight: 0,
