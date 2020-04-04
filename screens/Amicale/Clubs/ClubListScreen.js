@@ -3,11 +3,12 @@
 import * as React from 'react';
 import {FlatList, Platform} from "react-native";
 import {Chip, Searchbar, withTheme} from 'react-native-paper';
-import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
+import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import i18n from "i18n-js";
-import ClubListItem from "../../components/Lists/ClubListItem";
-import {isItemInCategoryFilter, stringMatchQuery} from "../../utils/Search";
-import ClubListHeader from "../../components/Lists/ClubListHeader";
+import ClubListItem from "../../../components/Lists/ClubListItem";
+import {isItemInCategoryFilter, stringMatchQuery} from "../../../utils/Search";
+import ClubListHeader from "../../../components/Lists/ClubListHeader";
+import HeaderButton from "../../../components/Custom/HeaderButton";
 
 type Props = {
     navigation: Object,
@@ -40,9 +41,9 @@ class ClubListScreen extends React.Component<Props, State> {
      * Creates the header content
      */
     componentDidMount() {
-        const title = this.getSearchBar.bind(this);
         this.props.navigation.setOptions({
-            headerTitle: title,
+            headerTitle: this.getSearchBar,
+            headerRight: this.getHeaderButtons,
             headerBackTitleVisible: false,
             headerTitleContainerStyle: Platform.OS === 'ios' ?
                 {marginHorizontal: 0, width: '70%'} :
@@ -55,14 +56,23 @@ class ClubListScreen extends React.Component<Props, State> {
      *
      * @return {*}
      */
-    getSearchBar() {
+    getSearchBar = () => {
         return (
             <Searchbar
                 placeholder={i18n.t('proximoScreen.search')}
                 onChangeText={this.onSearchStringChange}
             />
         );
-    }
+    };
+
+    /**
+     * Gets the header button
+     * @return {*}
+     */
+    getHeaderButtons = () => {
+        const onPress = this.props.navigation.navigate.bind(this, "ClubAboutScreen");
+        return <HeaderButton icon={'information'} onPress={onPress}/>;
+    };
 
     /**
      * Callback used when the search changes

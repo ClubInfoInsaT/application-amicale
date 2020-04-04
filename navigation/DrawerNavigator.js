@@ -17,8 +17,9 @@ import HeaderButton from "../components/Custom/HeaderButton";
 import i18n from "i18n-js";
 import LoginScreen from "../screens/Amicale/LoginScreen";
 import ProfileScreen from "../screens/Amicale/ProfileScreen";
-import ClubListScreen from "../screens/Amicale/ClubListScreen";
-import ClubDisplayScreen from "../screens/Amicale/ClubDisplayScreen";
+import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
+import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
+import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -264,6 +265,16 @@ function ClubStackComponent() {
                 options={({navigation}) => {
                     return {
                         title: "",
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                    };
+                }}
+            />
+            <ClubStack.Screen
+                name="ClubAboutScreen"
+                component={ClubAboutScreen}
+                options={({navigation}) => {
+                    return {
+                        title: "ABOUT",
                         ...TransitionPresets.ModalSlideFromBottomIOS,
                     };
                 }}
