@@ -80,6 +80,7 @@
   "homeScreen": {
     "listUpdated": "List updated!",
     "listUpdateFail": "Error while updating list",
+    "servicesButton": "More services",
     "newsFeed": "Campus News",
     "dashboard": {
       "seeMore": "Click to see more",

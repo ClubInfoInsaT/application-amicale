@@ -3,6 +3,7 @@
 import * as React from 'react';
 import {Button, Card, withTheme} from 'react-native-paper';
 import {StyleSheet} from "react-native";
+import i18n from 'i18n-js';
 
 type Props = {
     navigation: Object,
@@ -35,7 +36,7 @@ class ActionsDashBoardItem extends React.PureComponent<Props> {
                         onPress={this.openDrawer}
                         style={styles.servicesButton}
                     >
-                        PLUS DE SERVICES
+                        {i18n.t("homeScreen.servicesButton")}
                     </Button>
                     <Button
                         icon="settings"
