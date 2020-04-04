@@ -1,12 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, Platform, View} from "react-native";
+import {FlatList, Platform} from "react-native";
 import {Chip, Searchbar, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import i18n from "i18n-js";
 import ClubListItem from "../../components/Lists/ClubListItem";
 import {isItemInCategoryFilter, stringMatchQuery} from "../../utils/Search";
+import ClubListHeader from "../../components/Lists/ClubListHeader";
 
 type Props = {
     navigation: Object,
@@ -103,7 +104,7 @@ class ClubListScreen extends React.Component<Props, State> {
             if (index === -1)
                 newCategoriesState.push(categoryId);
             else
-                newCategoriesState.splice(index,1);
+                newCategoriesState.splice(index, 1);
         }
         if (filterStr !== null || categoryId !== null)
             this.setState({
@@ -126,16 +127,10 @@ class ClubListScreen extends React.Component<Props, State> {
     };
 
     getListHeader() {
-        let final = [];
-        for (let i = 0; i < this.categories.length; i++) {
-            final.push(this.getChipRender(this.categories[i], this.categories[i].id));
-        }
-        return <View style={{
-            justifyContent: 'space-around',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            margin: 10,
-        }}>{final}</View>;
+        return <ClubListHeader
+            categories={this.categories}
+            categoryRender={this.getChipRender}
+        />;
     }
 
     getCategoryOfId = (id: number) => {

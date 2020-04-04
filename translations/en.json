@@ -246,7 +246,9 @@
     "clubList": "Club list",
     "managers": "Managers",
     "managersSubtitle": "These people make the club live",
-    "managersUnavailable": "This club has no one :("
+    "managersUnavailable": "This club has no one :(",
+    "categories": "Categories",
+    "categoriesFilterMessage": "Click on a categories to filter the list"
   },
   "dialog": {
     "ok": "OK",

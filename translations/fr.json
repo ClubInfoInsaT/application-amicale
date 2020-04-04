@@ -247,7 +247,9 @@
     "clubList": "Liste des clubs",
     "managers": "Responsables",
     "managersSubtitle": "Ces personnes font vivre le club",
-    "managersUnavailable": "Ce club est tout seul :("
+    "managersUnavailable": "Ce club est tout seul :(",
+    "categories": "Catégories",
+    "categoriesFilterMessage": "Cliquez sur une catégorie pour filtrer la list"
   },
   "dialog": {
     "ok": "OK",
