@@ -244,9 +244,7 @@ class AboutScreen extends React.Component<Props, State> {
                 <Card.Content>
                     <FlatList
                         data={this.appData}
-                        extraData={this.state}
                         keyExtractor={this.keyExtractor}
-                        listKey={"app"}
                         renderItem={this.getCardItem}
                     />
                 </Card.Content>
@@ -269,17 +267,15 @@ class AboutScreen extends React.Component<Props, State> {
                     <Title>{i18n.t('aboutScreen.author')}</Title>
                     <FlatList
                         data={this.authorData}
-                        extraData={this.state}
                         keyExtractor={this.keyExtractor}
-                        listKey={"team1"}
+                        listKey={"1"}
                         renderItem={this.getCardItem}
                     />
                     <Title>{i18n.t('aboutScreen.additionalDev')}</Title>
                     <FlatList
                         data={this.additionalDevData}
-                        extraData={this.state}
                         keyExtractor={this.keyExtractor}
-                        listKey={"team2"}
+                        listKey={"2"}
                         renderItem={this.getCardItem}
                     />
                 </Card.Content>
@@ -299,9 +295,7 @@ class AboutScreen extends React.Component<Props, State> {
                     <Title>{i18n.t('aboutScreen.technologies')}</Title>
                     <FlatList
                         data={this.technoData}
-                        extraData={this.state}
                         keyExtractor={this.keyExtractor}
-                        listKey={"techno"}
                         renderItem={this.getCardItem}
                     />
                 </Card.Content>
@@ -404,28 +398,24 @@ class AboutScreen extends React.Component<Props, State> {
                 <Button
                     icon="email"
                     mode="contained"
-                    dark={true}
-                    color={this.colors.primary}
                     style={{
                         marginTop: 20,
                         marginLeft: 'auto',
                         marginRight: 'auto',
                     }}
                     onPress={this.onPressMail}>
-                    <Text>{i18n.t('aboutScreen.bugsMail')}</Text>
+                    {i18n.t('aboutScreen.bugsMail')}
                 </Button>
                 <Button
                     icon="git"
                     mode="contained"
-                    dark={true}
-                    color={this.colors.primary}
                     style={{
                         marginTop: 20,
                         marginLeft: 'auto',
                         marginRight: 'auto',
                     }}
                     onPress={this.onPressGit}>
-                    <Text>{i18n.t('aboutScreen.bugsGit')}</Text>
+                    {i18n.t('aboutScreen.bugsGit')}
                 </Button>
             </View>
         );
@@ -476,8 +466,6 @@ class AboutScreen extends React.Component<Props, State> {
                 <FlatList
                     style={{padding: 5}}
                     data={this.dataOrder}
-                    extraData={this.state}
-                    keyExtractor={(item) => item.id}
                     renderItem={this.getMainCard}
                 />
             </View>

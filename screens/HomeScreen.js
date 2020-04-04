@@ -118,16 +118,6 @@ class HomeScreen extends React.Component<Props> {
     }
 
     /**
-     * Extract a key for the given item
-     *
-     * @param item The item to extract the key from
-     * @return {*} The extracted key
-     */
-    getKeyExtractor(item: Object) {
-        return item !== undefined ? item.id : undefined;
-    }
-
-    /**
      * Creates the dataset to be used in the FlatList
      *
      * @param fetchedData
@@ -145,15 +135,11 @@ class HomeScreen extends React.Component<Props> {
             {
                 title: '',
                 data: dashboardData,
-                extraData: super.state,
-                keyExtractor: this.getKeyExtractor,
                 id: SECTIONS_ID[0]
             },
             {
                 title: i18n.t('homeScreen.newsFeed'),
                 data: newsData,
-                extraData: super.state,
-                keyExtractor: this.getKeyExtractor,
                 id: SECTIONS_ID[1]
             }
         ];

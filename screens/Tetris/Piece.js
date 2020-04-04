@@ -57,6 +57,7 @@ export default class Piece {
             grid[coord[i].y][coord[i].x] = {
                 color: this.#colors.tetrisBackground,
                 isEmpty: true,
+                key: grid[coord[i].y][coord[i].x].key
             };
         }
     }
@@ -73,6 +74,7 @@ export default class Piece {
             grid[coord[i].y][coord[i].x] = {
                 color: this.#currentShape.getColor(),
                 isEmpty: false,
+                key: grid[coord[i].y][coord[i].x].key
             };
         }
     }

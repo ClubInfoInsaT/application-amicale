@@ -5,7 +5,7 @@ import ScoreManager from "./ScoreManager";
 import type {coordinates} from './Shapes/BaseShape';
 
 
-export type cell = {color: string, isEmpty: boolean};
+export type cell = {color: string, isEmpty: boolean, key: string};
 export type grid = Array<Array<cell>>;
 
 /**
@@ -50,6 +50,7 @@ export default class GridManager {
             line.push({
                 color: this.#colors.tetrisBackground,
                 isEmpty: true,
+                key: col.toString(),
             });
         }
         return line;

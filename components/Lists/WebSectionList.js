@@ -172,6 +172,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                 {/*$FlowFixMe*/}
                 <SectionList
                     sections={dataset}
+                    extraData={this.props.updateData}
                     refreshControl={
                         <RefreshControl
                             refreshing={this.state.refreshing}

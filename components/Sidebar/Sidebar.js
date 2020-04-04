@@ -19,7 +19,6 @@ type Props = {
 };
 
 type State = {
-    active: string,
     isLoggedIn: boolean,
     dialogVisible: boolean,
 };
@@ -156,15 +155,14 @@ class SideBar extends React.PureComponent<Props, State> {
         this.colors = props.theme.colors;
         ConnectionManager.getInstance().addLoginStateListener((value) => this.onLoginStateChange(value));
         this.state = {
-            active: 'Home',
             isLoggedIn: ConnectionManager.getInstance().isLoggedIn(),
             dialogVisible: false,
         };
     }
 
-    showDisconnectDialog = () => this.setState({ dialogVisible: true });
+    showDisconnectDialog = () => this.setState({dialogVisible: true});
 
-    hideDisconnectDialog = () => this.setState({ dialogVisible: false });
+    hideDisconnectDialog = () => this.setState({dialogVisible: false});
 
 
     onLoginStateChange(isLoggedIn: boolean) {
@@ -238,9 +236,10 @@ class SideBar extends React.PureComponent<Props, State> {
                         style={styles.drawerCover}
                     />
                 </TouchableRipple>
+                {/*$FlowFixMe*/}
                 <FlatList
                     data={this.dataSet}
-                    extraData={this.state}
+                    extraData={this.state.isLoggedIn}
                     keyExtractor={this.listKeyExtractor}
                     renderItem={this.getRenderItem}
                 />

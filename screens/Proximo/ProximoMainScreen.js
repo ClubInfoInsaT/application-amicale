@@ -142,7 +142,6 @@ class ProximoMainScreen extends React.Component<Props, State> {
             {
                 title: '',
                 data: this.generateData(fetchedData),
-                extraData: this.state,
                 keyExtractor: this.getKeyExtractor
             }
         ];

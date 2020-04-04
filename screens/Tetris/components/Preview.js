@@ -22,18 +22,23 @@ class Preview extends React.PureComponent<Props> {
         let grids = [];
         for (let i = 0; i < this.props.next.length; i++) {
             grids.push(
-                <Grid
-                    width={this.props.next[i][0].length}
-                    height={this.props.next[i].length}
-                    grid={this.props.next[i]}
-                    containerMaxHeight={50}
-                    containerMaxWidth={50}
-                    backgroundColor={'transparent'}
-                />
+                this.getGridRender(this.props.next[i], i)
             );
         }
         return grids;
     }
+
+    getGridRender(item: Object, index: number) {
+        return <Grid
+            width={item[0].length}
+            height={item.length}
+            grid={item}
+            containerMaxHeight={50}
+            containerMaxWidth={50}
+            backgroundColor={'transparent'}
+            key={index.toString()}
+        />;
+    };
 
     render() {
         if (this.props.next.length > 0) {

@@ -11,11 +11,11 @@ type Props = {
     backgroundColor: string,
     height: number,
     width: number,
-    containerMaxHeight: number|string,
-    containerMaxWidth: number|string,
+    containerMaxHeight: number | string,
+    containerMaxWidth: number | string,
 }
 
-class Grid extends React.Component<Props>{
+class Grid extends React.Component<Props> {
 
     colors: Object;
 
@@ -25,21 +25,23 @@ class Grid extends React.Component<Props>{
     }
 
     getRow(rowNumber: number) {
-        let cells = [];
-        for (let i = 0; i < this.props.width; i++) {
-            let cell = this.props.grid[rowNumber][i];
-            let key = rowNumber + ':' + i;
-            cells.push(<Cell color={cell.color} isEmpty={cell.isEmpty} id={key}/>);
-        }
-        return(
-            <View style={{
-                flexDirection: 'row',
-                backgroundColor: this.props.backgroundColor,
-            }}>
+        let cells = this.props.grid[rowNumber].map(this.getCellRender);
+        return (
+            <View
+                style={{
+                    flexDirection: 'row',
+                    backgroundColor: this.props.backgroundColor,
+                }}
+                key={rowNumber.toString()}
+            >
                 {cells}
             </View>
         );
     }
+
+    getCellRender = (item: Object) => {
+        return <Cell item={item} key={item.key}/>;
+    };
 
     getGrid() {
         let rows = [];
@@ -55,7 +57,7 @@ class Grid extends React.Component<Props>{
                 flexDirection: 'column',
                 maxWidth: this.props.containerMaxWidth,
                 maxHeight: this.props.containerMaxHeight,
-                aspectRatio: this.props.width/this.props.height,
+                aspectRatio: this.props.width / this.props.height,
                 marginLeft: 'auto',
                 marginRight: 'auto',
             }}>

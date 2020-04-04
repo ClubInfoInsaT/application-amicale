@@ -56,7 +56,6 @@ class SelfMenuScreen extends React.Component<Props> {
                 {
                     title: '',
                     data: [],
-                    extraData: super.state,
                     keyExtractor: this.getKeyExtractor
                 }
             ];
@@ -69,7 +68,6 @@ class SelfMenuScreen extends React.Component<Props> {
                 {
                     title: DateManager.getInstance().getTranslatedDate(fetchedData[i].date),
                     data: fetchedData[i].meal[0].foodcategory,
-                    extraData: super.state,
                     keyExtractor: this.getKeyExtractor,
                 }
             );

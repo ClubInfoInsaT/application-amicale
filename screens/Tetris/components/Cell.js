@@ -5,9 +5,7 @@ import {View} from 'react-native';
 import {withTheme} from 'react-native-paper';
 
 type Props = {
-    color: string,
-    isEmpty: boolean,
-    id: string,
+    item: Object
 }
 
 class Cell extends React.PureComponent<Props> {
@@ -20,17 +18,19 @@ class Cell extends React.PureComponent<Props> {
     }
 
     render() {
+        const item = this.props.item;
         return (
             <View
                 style={{
                     flex: 1,
-                    backgroundColor: this.props.isEmpty ? 'transparent' : this.props.color,
-                    borderColor: this.props.isEmpty ? 'transparent' : this.colors.tetrisBorder,
+                    backgroundColor: item.isEmpty ? 'transparent' : item.color,
+                    borderColor: item.isEmpty ? 'transparent' : this.colors.tetrisBorder,
                     borderStyle: 'solid',
                     borderRadius: 2,
                     borderWidth: 1,
                     aspectRatio: 1,
                 }}
+                key={item.key}
             />
         );
     }

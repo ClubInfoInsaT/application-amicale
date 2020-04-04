@@ -272,14 +272,12 @@ class ProxiwashScreen extends React.Component<Props, State> {
                 title: i18n.t('proxiwashScreen.dryers'),
                 icon: 'tumble-dryer',
                 data: data.dryers === undefined ? [] : data.dryers,
-                extraData: this.state,
                 keyExtractor: this.getKeyExtractor
             },
             {
                 title: i18n.t('proxiwashScreen.washers'),
                 icon: 'washing-machine',
                 data: data.washers === undefined ? [] : data.washers,
-                extraData: this.state,
                 keyExtractor: this.getKeyExtractor
             },
         ];
