@@ -154,13 +154,12 @@ class SideBar extends React.PureComponent<Props, State> {
         ];
         this.getRenderItem = this.getRenderItem.bind(this);
         this.colors = props.theme.colors;
-        ConnectionManager.getInstance().setLoginCallback((value) => this.onLoginStateChange(value));
+        ConnectionManager.getInstance().addLoginStateListener((value) => this.onLoginStateChange(value));
         this.state = {
             active: 'Home',
-            isLoggedIn: false,
+            isLoggedIn: ConnectionManager.getInstance().isLoggedIn(),
             dialogVisible: false,
         };
-        ConnectionManager.getInstance().isLoggedIn().then(data => undefined).catch(error => undefined);
     }
 
     showDisconnectDialog = () => this.setState({ dialogVisible: true });

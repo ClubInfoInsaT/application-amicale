@@ -14,6 +14,7 @@ import {initExpoToken} from "./utils/Notifications";
 import {Provider as PaperProvider} from 'react-native-paper';
 import AprilFoolsManager from "./managers/AprilFoolsManager";
 import Update from "./constants/Update";
+import ConnectionManager from "./managers/ConnectionManager";
 
 type Props = {};
 
@@ -91,6 +92,10 @@ export default class App extends React.Component<Props, State> {
         await AsyncStorageManager.getInstance().loadPreferences();
         ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
         await initExpoToken();
+        try {
+            await ConnectionManager.getInstance().recoverLogin();
+        } catch (e) {}
+
         this.onLoadFinished();
     }
 

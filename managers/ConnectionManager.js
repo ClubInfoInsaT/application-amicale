@@ -16,9 +16,16 @@ export default class ConnectionManager {
     static instance: ConnectionManager | null = null;
 
     #email: string;
-    #token: string;
+    #token: string | null;
 
     loginCallback: Function;
+
+    listeners: Array<Function>;
+
+    constructor() {
+        this.#token = null;
+        this.listeners = [];
+    }
 
     /**
      * Get this class instance or create one if none is found
@@ -35,20 +42,24 @@ export default class ConnectionManager {
     }
 
     onLoginStateChange(newState: boolean) {
-        this.loginCallback(newState);
+        for (let i = 0; i < this.listeners.length; i++) {
+            if (this.listeners[i] !== undefined)
+                this.listeners[i](newState);
+        }
     }
 
-    setLoginCallback(callback: Function) {
-        this.loginCallback = callback;
+    addLoginStateListener(listener: Function) {
+        this.listeners.push(listener);
     }
 
     async recoverLogin() {
         return new Promise((resolve, reject) => {
-            if (this.#token !== undefined)
+            if (this.#token !== null)
                 resolve(this.#token);
             else {
                 SecureStore.getItemAsync('token')
                     .then((token) => {
+                        this.#token = token;
                         if (token !== null) {
                             this.onLoginStateChange(true);
                             resolve(token);
@@ -62,16 +73,8 @@ export default class ConnectionManager {
         });
     }
 
-    async isLoggedIn() {
-        return new Promise((resolve, reject) => {
-            this.recoverLogin()
-                .then(() => {
-                    resolve(true);
-                })
-                .catch(() => {
-                    reject(false);
-                })
-        });
+    isLoggedIn() {
+        return this.#token !== null;
     }
 
     async saveLogin(email: string, token: string) {
@@ -93,6 +96,7 @@ export default class ConnectionManager {
         return new Promise((resolve, reject) => {
             SecureStore.deleteItemAsync('token')
                 .then(() => {
+                    this.#token = null;
                     this.onLoginStateChange(false);
                     resolve(true);
                 })
@@ -166,32 +170,29 @@ export default class ConnectionManager {
 
     async authenticatedRequest(url: string) {
         return new Promise((resolve, reject) => {
-            this.recoverLogin()
-                .then(token => {
-                    fetch(url, {
-                        method: 'POST',
-                        headers: new Headers({
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                        }),
-                        body: JSON.stringify({token: token})
-                    }).then(async (response) => response.json())
-                        .then((data) => {
-                            if (this.isRequestResponseValid(data)) {
-                                if (data.state)
-                                    resolve(data.data);
-                                else
-                                    reject(ERROR_TYPE.BAD_CREDENTIALS);
-                            } else
-                                reject(ERROR_TYPE.CONNECTION_ERROR);
-                        })
-                        .catch(() => {
+            if (this.#token !== null) {
+                fetch(url, {
+                    method: 'POST',
+                    headers: new Headers({
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    }),
+                    body: JSON.stringify({token: this.#token})
+                }).then(async (response) => response.json())
+                    .then((data) => {
+                        if (this.isRequestResponseValid(data)) {
+                            if (data.state)
+                                resolve(data.data);
+                            else
+                                reject(ERROR_TYPE.BAD_CREDENTIALS);
+                        } else
                             reject(ERROR_TYPE.CONNECTION_ERROR);
-                        });
-                })
-                .catch(() => {
-                    reject(ERROR_TYPE.NO_TOKEN);
-                });
+                    })
+                    .catch(() => {
+                        reject(ERROR_TYPE.CONNECTION_ERROR);
+                    });
+            } else
+                reject(ERROR_TYPE.NO_TOKEN);
         });
     }
 }

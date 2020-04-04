@@ -12,6 +12,8 @@ import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardI
 import {stringToDate} from "../utils/Planning";
 import {openBrowser} from "../utils/WebBrowser";
 import ActionsDashBoardItem from "../components/Home/ActionsDashboardItem";
+import HeaderButton from "../components/Custom/HeaderButton";
+import ConnectionManager from "../managers/ConnectionManager";
 // import DATA from "../dashboard_data.json";
 
 
@@ -33,6 +35,7 @@ type Props = {
 type State = {
     imageModalVisible: boolean,
     imageList: Array<Object>,
+    isLoggedIn: boolean,
 }
 
 /**
@@ -52,10 +55,12 @@ class HomeScreen extends React.Component<Props, State> {
     state = {
         imageModalVisible: false,
         imageList: [],
+        isLoggedIn: ConnectionManager.getInstance().isLoggedIn(),
     };
 
     constructor(props) {
         super(props);
+        ConnectionManager.getInstance().addLoginStateListener((value) => this.setState({isLoggedIn: value}));
         this.onProxiwashClick = this.onProxiwashClick.bind(this);
         this.onTutorInsaClick = this.onTutorInsaClick.bind(this);
         this.onMenuClick = this.onMenuClick.bind(this);
@@ -75,6 +80,23 @@ class HomeScreen extends React.Component<Props, State> {
         let date = new Date(Number.parseInt(dateString) * 1000);
         return date.toLocaleString();
     }
+
+    componentDidMount() {
+        this.props.navigation.setOptions({
+            headerRight: this.getHeaderButton,
+        });
+    }
+
+    getHeaderButton = () => {
+        const screen = this.state.isLoggedIn
+            ? "ProfileScreen"
+            : "LoginScreen";
+        const icon = this.state.isLoggedIn
+            ? "account"
+            : "login";
+        const onPress = () => this.props.navigation.navigate(screen);
+        return <HeaderButton icon={icon} onPress={onPress}/>;
+    };
 
     onProxiwashClick() {
         this.props.navigation.navigate('Proxiwash');

@@ -24,7 +24,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         loading: true,
     };
 
-    currentUserToken: string;
+    currentUserToken: string | null;
     connectionManager: ConnectionManager;
     errorCode: number;
     data: Object;
@@ -35,8 +35,6 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         this.colors = props.theme.colors;
         this.connectionManager = ConnectionManager.getInstance();
         this.props.navigation.addListener('focus', this.onScreenFocus.bind(this));
-
-        this.fetchData();
     }
 
     onScreenFocus() {
@@ -47,26 +45,24 @@ class AuthenticatedScreen extends React.Component<Props, State> {
     fetchData = () => {
         if (!this.state.loading)
             this.setState({loading: true});
-        this.connectionManager.isLoggedIn()
-            .then(() => {
-                this.connectionManager.authenticatedRequest(this.props.link)
-                    .then((data) => {
-                        this.onFinishedLoading(data, -1);
-                    })
-                    .catch((error) => {
-                        this.onFinishedLoading(undefined, error);
-                    });
-            })
-            .catch((error) => {
-                this.onFinishedLoading(undefined, ERROR_TYPE.BAD_CREDENTIALS);
-            });
+        if (this.connectionManager.isLoggedIn()) {
+            this.connectionManager.authenticatedRequest(this.props.link)
+                .then((data) => {
+                    this.onFinishedLoading(data, -1);
+                })
+                .catch((error) => {
+                    this.onFinishedLoading(undefined, error);
+                });
+        } else {
+            this.onFinishedLoading(undefined, ERROR_TYPE.BAD_CREDENTIALS);
+        }
     };
 
     onFinishedLoading(data: Object, error: number) {
         this.data = data;
         this.currentUserToken = data !== undefined
             ? this.connectionManager.getToken()
-            : '';
+            : null;
         this.errorCode = error;
         this.setState({loading: false});
     }
