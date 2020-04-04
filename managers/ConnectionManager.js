@@ -18,8 +18,6 @@ export default class ConnectionManager {
     #email: string;
     #token: string | null;
 
-    loginCallback: Function;
-
     listeners: Array<Function>;
 
     constructor() {
@@ -54,8 +52,8 @@ export default class ConnectionManager {
 
     async recoverLogin() {
         return new Promise((resolve, reject) => {
-            if (this.#token !== null)
-                resolve(this.#token);
+            if (this.getToken() !== null)
+                resolve(this.getToken());
             else {
                 SecureStore.getItemAsync('token')
                     .then((token) => {
@@ -74,7 +72,7 @@ export default class ConnectionManager {
     }
 
     isLoggedIn() {
-        return this.#token !== null;
+        return this.getToken() !== null;
     }
 
     async saveLogin(email: string, token: string) {
@@ -130,7 +128,9 @@ export default class ConnectionManager {
                                 .catch(() => {
                                     reject(ERROR_TYPE.SAVE_TOKEN);
                                 });
-                        } else if (data.data.consent !== undefined && !data.data.consent)
+                        } else if (data.data !== undefined
+                            && data.data.consent !== undefined
+                            && !data.data.consent)
                             reject(ERROR_TYPE.NO_CONSENT);
                         else
                             reject(ERROR_TYPE.BAD_CREDENTIALS);
@@ -170,14 +170,14 @@ export default class ConnectionManager {
 
     async authenticatedRequest(url: string) {
         return new Promise((resolve, reject) => {
-            if (this.#token !== null) {
+            if (this.getToken() !== null) {
                 fetch(url, {
                     method: 'POST',
                     headers: new Headers({
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
                     }),
-                    body: JSON.stringify({token: this.#token})
+                    body: JSON.stringify({token: this.getToken()})
                 }).then(async (response) => response.json())
                     .then((data) => {
                         if (this.isRequestResponseValid(data)) {
