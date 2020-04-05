@@ -37,10 +37,6 @@ type Props = {
  */
 class HomeScreen extends React.Component<Props> {
 
-    onProxiwashClick: Function;
-    onTutorInsaClick: Function;
-    onMenuClick: Function;
-    onProximoClick: Function;
     getRenderItem: Function;
     createDataset: Function;
 
@@ -50,10 +46,6 @@ class HomeScreen extends React.Component<Props> {
 
     constructor(props) {
         super(props);
-        this.onProxiwashClick = this.onProxiwashClick.bind(this);
-        this.onTutorInsaClick = this.onTutorInsaClick.bind(this);
-        this.onMenuClick = this.onMenuClick.bind(this);
-        this.onProximoClick = this.onProximoClick.bind(this);
         this.getRenderItem = this.getRenderItem.bind(this);
         this.createDataset = this.createDataset.bind(this);
         this.colors = props.theme.colors;
@@ -101,21 +93,13 @@ class HomeScreen extends React.Component<Props> {
         />;
     };
 
-    onProxiwashClick() {
-        this.props.navigation.navigate('Proxiwash');
-    }
+    onProxiwashClick = () => this.props.navigation.navigate('Proxiwash');
 
-    onTutorInsaClick() {
-        openBrowser("https://www.etud.insa-toulouse.fr/~tutorinsa/", this.colors.primary);
-    }
+    onTutorInsaClick = () => openBrowser("https://www.etud.insa-toulouse.fr/~tutorinsa/", this.colors.primary);
 
-    onProximoClick() {
-        this.props.navigation.navigate('Proximo');
-    }
+    onProximoClick = () => this.props.navigation.navigate('Proximo');
 
-    onMenuClick() {
-        this.props.navigation.navigate('SelfMenuScreen');
-    }
+    onMenuClick = () => this.props.navigation.navigate('SelfMenuScreen');
 
     /**
      * Creates the dataset to be used in the FlatList

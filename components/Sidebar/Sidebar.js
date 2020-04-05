@@ -151,7 +151,8 @@ class SideBar extends React.Component<Props, State> {
             },
         ];
         this.colors = props.theme.colors;
-        ConnectionManager.getInstance().addLoginStateListener((value) => this.onLoginStateChange(value));
+        ConnectionManager.getInstance().addLoginStateListener(this.onLoginStateChange);
+        this.props.navigation.addListener('state', this.onRouteChange);
         this.state = {
             isLoggedIn: ConnectionManager.getInstance().isLoggedIn(),
             dialogVisible: false,
@@ -159,14 +160,27 @@ class SideBar extends React.Component<Props, State> {
         };
     }
 
+    onRouteChange = (event) => {
+        if (event.data.state.routes !== undefined) {
+            const route = event.data.state.routes[0]; // get the current route (ROOT)
+            if (route.state !== undefined) {
+                const state = route.state; // Get the Drawer's state if it exists
+                // Get the current route name. This will only show Drawer routes.
+                // Tab routes will be shown as 'Main'
+                const routeName = state.routeNames[state.index];
+                if (this.state.activeRoute !== routeName)
+                    this.setState({activeRoute: routeName});
+            }
+
+        }
+    };
+
     showDisconnectDialog = () => this.setState({dialogVisible: true});
 
     hideDisconnectDialog = () => this.setState({dialogVisible: false});
 
 
-    onLoginStateChange(isLoggedIn: boolean) {
-        this.setState({isLoggedIn: isLoggedIn});
-    }
+    onLoginStateChange = (isLoggedIn: boolean) => this.setState({isLoggedIn: isLoggedIn});
 
     /**
      * Callback when a drawer item is pressed.
@@ -179,10 +193,8 @@ class SideBar extends React.Component<Props, State> {
             openBrowser(item.link, this.colors.primary);
         else if (item.action !== undefined)
             item.action();
-        else {
+        else
             this.props.navigation.navigate(item.route);
-            this.setState({activeRoute: item.route});
-        }
     }
 
     /**
