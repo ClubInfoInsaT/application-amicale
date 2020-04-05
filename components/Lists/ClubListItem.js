@@ -1,17 +1,17 @@
 // @flow
 
 import * as React from 'react';
-import {Avatar, List, withTheme} from 'react-native-paper';
+import {Avatar, Chip, List, withTheme} from 'react-native-paper';
 import {View} from "react-native";
 
 type Props = {
     onPress: Function,
     categoryTranslator: Function,
-    chipRender: Function,
     item: Object,
+    height: number,
 }
 
-class ClubListItem extends React.PureComponent<Props> {
+class ClubListItem extends React.Component<Props> {
 
     colors: Object;
     hasManagers: boolean;
@@ -22,12 +22,23 @@ class ClubListItem extends React.PureComponent<Props> {
         this.hasManagers = props.item.responsibles.length > 0;
     }
 
+    shouldComponentUpdate() {
+        return false;
+    }
+
     getCategoriesRender(categories: Array<number | null>) {
         let final = [];
         for (let i = 0; i < categories.length; i++) {
             if (categories[i] !== null){
                 const category = this.props.categoryTranslator(categories[i]);
-                final.push(this.props.chipRender(category, this.props.item.id + ':' + category.id));
+                final.push(
+                    <Chip
+                        style={{marginRight: 5, marginBottom: 5}}
+                        key={this.props.item.id + ':' + category.id}
+                    >
+                        {category.name}
+                    </Chip>
+                );
             }
         }
         return <View style={{flexDirection: 'row'}}>{final}</View>;
@@ -56,6 +67,10 @@ class ClubListItem extends React.PureComponent<Props> {
                     icon={this.hasManagers ? "check-circle-outline" : "alert-circle-outline"}
                     color={this.hasManagers ? this.colors.success : this.colors.primary}
                 />}
+                style={{
+                    height: this.props.height,
+                    justifyContent: 'center',
+                }}
             />
         );
     }

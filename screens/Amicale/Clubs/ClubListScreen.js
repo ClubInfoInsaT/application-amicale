@@ -20,6 +20,8 @@ type State = {
     currentSearchString: string,
 }
 
+const LIST_ITEM_HEIGHT = 96;
+
 class ClubListScreen extends React.Component<Props, State> {
 
     state = {
@@ -86,6 +88,8 @@ class ClubListScreen extends React.Component<Props, State> {
         return item.id.toString();
     };
 
+    itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
+
     getScreen = (data: Object) => {
         this.categories = data.categories;
         return (
@@ -95,6 +99,9 @@ class ClubListScreen extends React.Component<Props, State> {
                 keyExtractor={this.keyExtractor}
                 renderItem={this.getRenderItem}
                 ListHeaderComponent={this.getListHeader()}
+                // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+                removeClippedSubviews={true}
+                getItemLayout={this.itemLayout}
             />
         )
     };
@@ -163,9 +170,9 @@ class ClubListScreen extends React.Component<Props, State> {
             return (
                 <ClubListItem
                     categoryTranslator={this.getCategoryOfId}
-                    chipRender={this.getChipRender}
                     item={item}
                     onPress={onPress}
+                    height={LIST_ITEM_HEIGHT}
                 />
             );
         } else
