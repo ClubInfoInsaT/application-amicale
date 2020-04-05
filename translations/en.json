@@ -231,8 +231,11 @@
     "password": "Password",
     "passwordError": "Please enter a password",
     "login": "Login",
-    "forgotPassword": "Forgot your password? Click on the button below to get a new one.",
-    "resetPassword": "Reset Password",
+    "resetPassword": "Forgot Password",
+    "whyAccountTitle": "Why have an account?",
+    "whyAccountSub": "What can you do wth an account",
+    "whyAccountParagraph": "An Amicale account allows you to take part in several activities around campus. You can join a club, or even create your own!",
+    "whyAccountParagraph2": "Logging into your Amicale account on the app will allow you to see all available clubs on the campus, vote for the upcoming elections, and more to come!",
     "noAccount": "No Account? Go to the Amicale's building during open hours to create one.",
     "errors": {
       "title": "Error!",

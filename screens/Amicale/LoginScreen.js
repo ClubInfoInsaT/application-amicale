@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableWithoutFeedback, View} from "react-native";
-import {Avatar, Button, Card, HelperText, Text, TextInput, withTheme} from 'react-native-paper';
+import {Avatar, Button, Card, HelperText, Paragraph, TextInput, withTheme} from 'react-native-paper';
 import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
 import {openBrowser} from "../../utils/WebBrowser";
 import i18n from 'i18n-js';
@@ -73,7 +73,7 @@ class LoginScreen extends React.Component<Props, State> {
             dialogVisible: true
         });
 
-    hideErrorDialog = () => this.setState({ dialogVisible: false });
+    hideErrorDialog = () => this.setState({dialogVisible: false});
 
     onResetPasswordClick() {
         openBrowser(RESET_PASSWORD_LINK, this.colors.primary);
@@ -237,6 +237,13 @@ class LoginScreen extends React.Component<Props, State> {
                     {this.getFormInput()}
                     <Card.Actions>
                         <Button
+                            icon="help-circle"
+                            mode="contained"
+                            onPress={this.onResetPasswordClick}
+                            style={{marginLeft: 'auto'}}>
+                            {i18n.t("loginScreen.resetPassword")}
+                        </Button>
+                        <Button
                             icon="send"
                             mode="contained"
                             disabled={!this.shouldEnableLogin()}
@@ -254,18 +261,19 @@ class LoginScreen extends React.Component<Props, State> {
     getSecondaryCard() {
         return (
             <Card style={styles.card}>
+                <Card.Title
+                    title={i18n.t("loginScreen.whyAccountTitle")}
+                    subtitle={i18n.t("loginScreen.whyAccountSub")}
+                    left={(props) => <Avatar.Icon
+                        {...props}
+                        icon={"help"}
+                        color={this.colors.primary}
+                        style={{backgroundColor: 'transparent'}}/>}
+                />
                 <Card.Content>
-                    <Text>{i18n.t("loginScreen.forgotPassword")}</Text>
-                    <View style={styles.btnContainer}>
-                        <Button
-                            icon="reload"
-                            mode="contained"
-                            onPress={this.onResetPasswordClick}
-                            style={{marginLeft: 'auto'}}>
-                            {i18n.t("loginScreen.resetPassword")}
-                        </Button>
-                    </View>
-                    <Text>{i18n.t("loginScreen.noAccount")}</Text>
+                    <Paragraph>{i18n.t("loginScreen.whyAccountParagraph")}</Paragraph>
+                    <Paragraph>{i18n.t("loginScreen.whyAccountParagraph2")}</Paragraph>
+                    <Paragraph>{i18n.t("loginScreen.noAccount")}</Paragraph>
                 </Card.Content>
             </Card>
         );
