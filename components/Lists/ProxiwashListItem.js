@@ -36,6 +36,8 @@ function ProxiwashListItem(props) {
         <Card
             style={{
                 margin: 5,
+                height: props.height,
+                justifyContent: 'center',
             }}
             onPress={props.onPress}
         >
@@ -99,7 +101,6 @@ const styles = StyleSheet.create({
     },
     title: {
         backgroundColor: 'transparent',
-        height: 64
     }
 });
 

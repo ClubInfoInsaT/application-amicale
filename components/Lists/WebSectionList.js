@@ -18,6 +18,7 @@ type Props = {
     stickyHeader: boolean,
     createDataset: Function,
     updateData: number,
+    itemHeight: number,
 }
 
 type State = {
@@ -41,6 +42,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         renderSectionHeader: null,
         stickyHeader: false,
         updateData: 0,
+        itemHeight: undefined,
     };
 
     refreshInterval: IntervalID;
@@ -162,6 +164,8 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
      */
     hideSnackBar = () => this.setState({snackbarVisible: false});
 
+    itemLayout = (data, index) => ({length: this.props.itemHeight, offset: this.props.itemHeight * index, index});
+
     render() {
         let dataset = [];
         if (this.state.fetchedData !== undefined)
@@ -193,6 +197,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                             icon={"access-point-network-off"}
                             onRefresh={this.onRefresh}/>
                     }
+                    getItemLayout={this.props.itemHeight !== undefined ? this.itemLayout : undefined}
                 />
                 <Snackbar
                     visible={this.state.snackbarVisible}

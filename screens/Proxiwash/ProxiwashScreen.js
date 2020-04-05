@@ -21,6 +21,7 @@ let modalStateStrings = {};
 let stateIcons = {};
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
+const LIST_ITEM_HEIGHT = 64;
 
 type Props = {
     navigation: Object,
@@ -486,6 +487,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
                 isDryer={isDryer}
                 statusText={stateStrings[ProxiwashConstants.machineStates[item.state]]}
                 statusIcon={stateIcons[ProxiwashConstants.machineStates[item.state]]}
+                height={LIST_ITEM_HEIGHT}
             />
         );
     }

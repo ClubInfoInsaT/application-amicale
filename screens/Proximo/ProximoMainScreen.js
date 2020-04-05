@@ -8,6 +8,7 @@ import {List, withTheme} from 'react-native-paper';
 import HeaderButton from "../../components/Custom/HeaderButton";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
+const LIST_ITEM_HEIGHT = 84;
 
 type Props = {
     navigation: Object,
@@ -223,6 +224,10 @@ class ProximoMainScreen extends React.Component<Props, State> {
                         icon={item.type.icon}
                         color={this.colors.primary}/>}
                     right={props => <List.Icon {...props} icon={'chevron-right'}/>}
+                    style={{
+                        height: LIST_ITEM_HEIGHT,
+                        justifyContent: 'center',
+                    }}
                 />
             );
         } else
