@@ -8,7 +8,10 @@
  * @return {string} The sanitized string
  */
 export function sanitizeString(str: string): string {
-    return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return str.toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(" ", "");
 }
 
 export function stringMatchQuery(str: string, query: string) {

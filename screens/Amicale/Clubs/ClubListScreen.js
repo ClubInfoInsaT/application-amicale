@@ -29,7 +29,6 @@ class ClubListScreen extends React.Component<Props, State> {
 
     colors: Object;
 
-    getRenderItem: Function;
     categories: Array<Object>;
 
     constructor(props) {
@@ -70,7 +69,7 @@ class ClubListScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getHeaderButtons = () => {
-        const onPress = this.props.navigation.navigate.bind(this, "ClubAboutScreen");
+        const onPress = () => this.props.navigation.navigate( "ClubAboutScreen");
         return <HeaderButton icon={'information'} onPress={onPress}/>;
     };
 
