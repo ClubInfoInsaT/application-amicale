@@ -1,5 +1,5 @@
 import React from 'react';
-import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
+import ConnectionManager, {ERROR_TYPE} from "../../src/managers/ConnectionManager";
 import * as SecureStore from 'expo-secure-store';
 
 let fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS but in react-native

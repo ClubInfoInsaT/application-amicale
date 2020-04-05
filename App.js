@@ -2,19 +2,19 @@
 
 import * as React from 'react';
 import {Platform, StatusBar} from 'react-native';
-import LocaleManager from './managers/LocaleManager';
-import AsyncStorageManager from "./managers/AsyncStorageManager";
-import CustomIntroSlider from "./components/Custom/CustomIntroSlider";
+import LocaleManager from './src/managers/LocaleManager';
+import AsyncStorageManager from "./src/managers/AsyncStorageManager";
+import CustomIntroSlider from "./src/components/Custom/CustomIntroSlider";
 import {SplashScreen} from 'expo';
-import ThemeManager from './managers/ThemeManager';
+import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import DrawerNavigator from './navigation/DrawerNavigator';
-import {initExpoToken} from "./utils/Notifications";
+import DrawerNavigator from './src/navigation/DrawerNavigator';
+import {initExpoToken} from "./src/utils/Notifications";
 import {Provider as PaperProvider} from 'react-native-paper';
-import AprilFoolsManager from "./managers/AprilFoolsManager";
-import Update from "./constants/Update";
-import ConnectionManager from "./managers/ConnectionManager";
+import AprilFoolsManager from "./src/managers/AprilFoolsManager";
+import Update from "./src/constants/Update";
+import ConnectionManager from "./src/managers/ConnectionManager";
 
 type Props = {};
 

@@ -5,7 +5,7 @@ import Autolink from "react-native-autolink";
 import i18n from "i18n-js";
 import ImageModal from 'react-native-image-modal';
 
-const ICON_AMICALE = require('../../assets/amicale.png');
+const ICON_AMICALE = require('../../../assets/amicale.png');
 
 /**
  * Component used to display a feed item

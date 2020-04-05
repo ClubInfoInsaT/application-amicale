@@ -23,7 +23,7 @@ type State = {
     dialogMessage: string,
 }
 
-const ICON_AMICALE = require('../../assets/amicale.png');
+const ICON_AMICALE = require('../../../assets/amicale.png');
 
 const RESET_PASSWORD_LINK = "https://www.amicale-insat.fr/password/reset";
 

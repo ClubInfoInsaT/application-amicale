@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Planning from "../../utils/Planning";
+import * as Planning from "../../src/utils/Planning";
 
 test('isDescriptionEmpty', () => {
     expect(Planning.isDescriptionEmpty("")).toBeTrue();

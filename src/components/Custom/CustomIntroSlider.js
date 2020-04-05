@@ -34,7 +34,7 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 key: '1',
                 title: i18n.t('intro.slide1.title'),
                 text: i18n.t('intro.slide1.text'),
-                image: require('../../assets/splash.png'),
+                image: require('../../../assets/splash.png'),
                 colors: ['#e01928', '#be1522'],
             },
             {

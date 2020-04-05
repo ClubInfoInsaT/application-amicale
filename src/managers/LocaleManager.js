@@ -3,8 +3,8 @@
 import i18n from 'i18n-js';
 import * as Localization from 'expo-localization';
 
-import en from '../translations/en';
-import fr from '../translations/fr';
+import en from '../../translations/en';
+import fr from '../../translations/fr';
 
 /**
  * Static class used to manage locales

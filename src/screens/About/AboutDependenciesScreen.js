@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {FlatList} from "react-native";
-import packageJson from '../../package';
+import packageJson from '../../../package';
 import {List} from 'react-native-paper';
 
 type listItem = {

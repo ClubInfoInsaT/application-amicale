@@ -4,7 +4,7 @@ import * as Permissions from 'expo-permissions';
 import {Notifications} from 'expo';
 import AsyncStorageManager from "../managers/AsyncStorageManager";
 import LocaleManager from "../managers/LocaleManager";
-import passwords from "../passwords";
+import passwords from "../../passwords";
 
 const EXPO_TOKEN_SERVER = 'https://etud.insa-toulouse.fr/~amicale_app/expo_notifications/save_token.php';
 

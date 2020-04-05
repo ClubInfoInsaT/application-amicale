@@ -26,7 +26,7 @@ export default class ProximoAboutScreen extends React.Component<Props> {
                     alignItems: 'center'
                 }}>
                     <Image
-                        source={require('../../assets/proximo-logo.png')}
+                        source={require('../../../assets/proximo-logo.png')}
                         style={{flex: 1, resizeMode: "contain"}}
                         resizeMode="contain"/>
                 </View>

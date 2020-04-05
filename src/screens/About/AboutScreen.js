@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {FlatList, Linking, Platform, View} from 'react-native';
 import i18n from "i18n-js";
-import appJson from '../../app';
+import appJson from '../../../app';
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import CustomModal from "../../components/Custom/CustomModal";
 import {Avatar, Button, Card, List, Text, Title, withTheme} from 'react-native-paper';
@@ -213,7 +213,7 @@ class AboutScreen extends React.Component<Props, State> {
         return (
             <Avatar.Image
                 {...props}
-                source={require('../../assets/android.icon.png')}
+                source={require('../../../assets/android.icon.png')}
                 style={{backgroundColor: 'transparent'}}
             />
         );

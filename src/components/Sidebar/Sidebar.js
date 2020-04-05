@@ -256,7 +256,7 @@ class SideBar extends React.Component<Props, State> {
                     onPress={onPress}
                 >
                     <Image
-                        source={require("../../assets/drawer-cover.png")}
+                        source={require("../../../assets/drawer-cover.png")}
                         style={styles.drawerCover}
                     />
                 </TouchableRipple>

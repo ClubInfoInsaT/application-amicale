@@ -26,7 +26,7 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                     alignItems: 'center'
                 }}>
                     <Image
-                        source={require('../../assets/proxiwash-logo.png')}
+                        source={require('../../../assets/proxiwash-logo.png')}
                         style={{flex: 1, resizeMode: "contain"}}
                         resizeMode="contain"/>
                 </View>
