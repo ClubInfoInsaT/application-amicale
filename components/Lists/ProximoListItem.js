@@ -8,15 +8,20 @@ type Props = {
     onPress: Function,
     color: string,
     item: Object,
+    height: number,
 }
 
-class ProximoListItem extends React.PureComponent<Props> {
+class ProximoListItem extends React.Component<Props> {
 
     colors: Object;
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
+    }
+
+    shouldComponentUpdate() {
+        return false;
     }
 
     render() {
@@ -32,6 +37,10 @@ class ProximoListItem extends React.PureComponent<Props> {
                     <Text style={{fontWeight: "bold"}}>
                         {this.props.item.price}€
                     </Text>}
+                style={{
+                    height: this.props.height,
+                    justifyContent: 'center',
+                }}
             />
         );
     }

@@ -32,6 +32,8 @@ function sortNameReverse(a, b) {
     return 0;
 }
 
+const LIST_ITEM_HEIGHT = 84;
+
 type Props = {
     navigation: Object,
     route: Object,
@@ -299,6 +301,7 @@ class ProximoListScreen extends React.Component<Props, State> {
                     item={item}
                     onPress={onPress}
                     color={color}
+                    height={LIST_ITEM_HEIGHT}
                 />
             );
         } else
@@ -324,6 +327,8 @@ class ProximoListScreen extends React.Component<Props, State> {
         this.modalRef = ref;
     };
 
+    itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
+
     render() {
         return (
             <View style={{
@@ -338,6 +343,10 @@ class ProximoListScreen extends React.Component<Props, State> {
                     extraData={this.state.currentSearchString + this.state.currentSortMode}
                     keyExtractor={this.keyExtractor}
                     renderItem={this.renderItem}
+                    // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+                    removeClippedSubviews={true}
+                    getItemLayout={this.itemLayout}
+                    initialNumToRender={10}
                 />
             </View>
         );

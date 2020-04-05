@@ -4,13 +4,12 @@ import * as React from 'react';
 import {Dimensions, FlatList, Image, Platform, StyleSheet, View,} from 'react-native';
 import i18n from "i18n-js";
 import {openBrowser} from "../../utils/WebBrowser";
-import SidebarDivider from "./SidebarDivider";
-import SidebarItem from "./SidebarItem";
-import {TouchableRipple, withTheme} from "react-native-paper";
+import {Drawer, TouchableRipple, withTheme} from "react-native-paper";
 import ConnectionManager from "../../managers/ConnectionManager";
 import LogoutDialog from "../Amicale/LogoutDialog";
 
 const deviceWidth = Dimensions.get("window").width;
+const LIST_ITEM_HEIGHT = 48;
 
 type Props = {
     navigation: Object,
@@ -21,16 +20,16 @@ type Props = {
 type State = {
     isLoggedIn: boolean,
     dialogVisible: boolean,
+    activeRoute: string;
 };
 
 /**
  * Component used to render the drawer menu content
  */
-class SideBar extends React.PureComponent<Props, State> {
+class SideBar extends React.Component<Props, State> {
 
     dataSet: Array<Object>;
 
-    getRenderItem: Function;
     colors: Object;
 
     /**
@@ -151,12 +150,12 @@ class SideBar extends React.PureComponent<Props, State> {
                 icon: "information",
             },
         ];
-        this.getRenderItem = this.getRenderItem.bind(this);
         this.colors = props.theme.colors;
         ConnectionManager.getInstance().addLoginStateListener((value) => this.onLoginStateChange(value));
         this.state = {
             isLoggedIn: ConnectionManager.getInstance().isLoggedIn(),
             dialogVisible: false,
+            activeRoute: 'Main',
         };
     }
 
@@ -180,8 +179,10 @@ class SideBar extends React.PureComponent<Props, State> {
             openBrowser(item.link, this.colors.primary);
         else if (item.action !== undefined)
             item.action();
-        else
+        else {
             this.props.navigation.navigate(item.route);
+            this.setState({activeRoute: item.route});
+        }
     }
 
     /**
@@ -200,7 +201,7 @@ class SideBar extends React.PureComponent<Props, State> {
      * @param item The item to render
      * @return {*}
      */
-    getRenderItem({item}: Object) {
+    getRenderItem = ({item}: Object) => {
         const onListItemPress = this.onListItemPress.bind(this, item);
         const onlyWhenLoggedOut = item.onlyWhenLoggedOut !== undefined && item.onlyWhenLoggedOut === true;
         const onlyWhenLoggedIn = item.onlyWhenLoggedIn !== undefined && item.onlyWhenLoggedIn === true;
@@ -209,20 +210,31 @@ class SideBar extends React.PureComponent<Props, State> {
             return null;
         else if (item.icon !== undefined) {
             return (
-                <SidebarItem
-                    title={item.name}
+                <Drawer.Item
+                    label={item.name}
+                    active={this.state.activeRoute === item.route}
                     icon={item.icon}
                     onPress={onListItemPress}
-                    shouldEmphasis={shouldEmphasis}
+                    style={{
+                        height: LIST_ITEM_HEIGHT,
+                        justifyContent: 'center',
+                    }}
                 />
             );
         } else {
             return (
-                <SidebarDivider title={item.name}/>
+                <Drawer.Item
+                    label={item.name}
+                    style={{
+                        height: LIST_ITEM_HEIGHT,
+                        justifyContent: 'center',
+                    }}
+                />
             );
         }
+    };
 
-    }
+    itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
 
     render() {
         const onPress = this.onListItemPress.bind(this, {route: 'TetrisScreen'});
@@ -239,9 +251,11 @@ class SideBar extends React.PureComponent<Props, State> {
                 {/*$FlowFixMe*/}
                 <FlatList
                     data={this.dataSet}
-                    extraData={this.state.isLoggedIn}
+                    extraData={this.state.isLoggedIn.toString() + this.state.activeRoute}
                     keyExtractor={this.listKeyExtractor}
                     renderItem={this.getRenderItem}
+                    // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+                    getItemLayout={this.itemLayout}
                 />
                 <LogoutDialog
                     {...this.props}
