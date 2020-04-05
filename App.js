@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {StatusBar} from 'react-native';
+import {Platform, StatusBar} from 'react-native';
 import LocaleManager from './managers/LocaleManager';
 import AsyncStorageManager from "./managers/AsyncStorageManager";
 import CustomIntroSlider from "./components/Custom/CustomIntroSlider";
