@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, StatusBar} from 'react-native';
+import {StatusBar} from 'react-native';
 import LocaleManager from './managers/LocaleManager';
 import AsyncStorageManager from "./managers/AsyncStorageManager";
 import CustomIntroSlider from "./components/Custom/CustomIntroSlider";
@@ -60,12 +60,10 @@ export default class App extends React.Component<Props, State> {
     }
 
     setupStatusBar() {
-        if (Platform.OS === 'ios') {
-            if (ThemeManager.getNightMode()) {
-                StatusBar.setBarStyle('light-content', true);
-            } else {
-                StatusBar.setBarStyle('dark-content', true);
-            }
+        if (ThemeManager.getNightMode()) {
+            StatusBar.setBarStyle('light-content', true);
+        } else {
+            StatusBar.setBarStyle('dark-content', true);
         }
     }
 
@@ -109,8 +107,11 @@ export default class App extends React.Component<Props, State> {
             showUpdate: AsyncStorageManager.getInstance().preferences.updateNumber.current !== Update.number.toString(),
             showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && AsyncStorageManager.getInstance().preferences.showAprilFoolsStart.current === '1',
         });
-        // Status bar goes dark if set too fast
-        setTimeout(this.setupStatusBar, 1000);
+        // Status bar goes dark if set too fast on ios
+        if (Platform.OS === 'ios')
+            setTimeout(this.setupStatusBar, 1000);
+        else
+            this.setupStatusBar();
         SplashScreen.hide();
     }
 

@@ -142,7 +142,7 @@ export default class CustomIntroSlider extends React.Component<Props> {
         return (
             <AppIntroSlider
                 renderItem={CustomIntroSlider.getIntroRenderItem}
-                slides={slides}
+                data={slides}
                 onDone={this.props.onDone}
                 bottomButton
                 showSkipButton
