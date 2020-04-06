@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, StyleSheet, View} from "react-native";
+import {FlatList, ScrollView, StyleSheet} from "react-native";
 import {Avatar, Button, Card, Divider, List, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {openBrowser} from "../../utils/WebBrowser";
@@ -28,16 +28,9 @@ class ProfileScreen extends React.Component<Props, State> {
 
     data: Object;
 
-    flatListData: Array<Object>;
-
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
-        this.flatListData = [
-            {id: '0'},
-            {id: '1'},
-            {id: '2'},
-        ]
     }
 
     componentDidMount() {
@@ -47,44 +40,29 @@ class ProfileScreen extends React.Component<Props, State> {
         });
     }
 
-    showDisconnectDialog = () => this.setState({ dialogVisible: true });
+    showDisconnectDialog = () => this.setState({dialogVisible: true});
 
-    hideDisconnectDialog = () => this.setState({ dialogVisible: false });
+    hideDisconnectDialog = () => this.setState({dialogVisible: false});
 
     getHeaderButtons() {
         return <HeaderButton icon={'logout'} onPress={this.showDisconnectDialog}/>;
     }
 
-    getScreen(data: Object) {
-        this.data = data;
+    getScreen = (data: Object) => {
+        this.data = data[0];
         return (
-            <View>
-                <FlatList
-                    renderItem={item => this.getRenderItem(item)}
-                    keyExtractor={item => item.id}
-                    data={this.flatListData}
-                />
+            <ScrollView>
+                {this.getPersonalCard()}
+                {this.getClubCard()}
+                {this.getMembershipCar()}
                 <LogoutDialog
                     {...this.props}
                     visible={this.state.dialogVisible}
                     onDismiss={this.hideDisconnectDialog}
                 />
-            </View>
-
+            </ScrollView>
         )
-    }
-
-    getRenderItem({item}: Object): any {
-        switch (item.id) {
-            case '0':
-                return this.getPersonalCard();
-            case '1':
-                return this.getClubCard();
-            case '2':
-                return this.getMembershipCar();
-        }
-    }
-
+    };
 
     getPersonalCard() {
         return (
@@ -232,8 +210,13 @@ class ProfileScreen extends React.Component<Props, State> {
         return (
             <AuthenticatedScreen
                 {...this.props}
-                link={'https://www.amicale-insat.fr/api/user/profile'}
-                renderFunction={(data) => this.getScreen(data)}
+                links={[
+                    {
+                        link: 'user/profile',
+                        mandatory: true,
+                    }
+                ]}
+                renderFunction={this.getScreen}
             />
         );
     }

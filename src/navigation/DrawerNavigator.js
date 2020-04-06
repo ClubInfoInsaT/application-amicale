@@ -20,6 +20,7 @@ import ProfileScreen from "../screens/Amicale/ProfileScreen";
 import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
+import VoteScreen from "../screens/Amicale/VoteScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -239,6 +240,31 @@ function ProfileStackComponent() {
     );
 }
 
+
+const VoteStack = createStackNavigator();
+
+function VoteStackComponent() {
+    return (
+        <VoteStack.Navigator
+            initialRouteName="VoteScreen"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <VoteStack.Screen
+                name="VoteScreen"
+                component={VoteScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: "VoteScreen",
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </VoteStack.Navigator>
+    );
+}
+
 const ClubStack = createStackNavigator();
 
 function ClubStackComponent() {
@@ -340,6 +366,10 @@ export default function DrawerNavigator() {
             <Drawer.Screen
                 name="ClubListScreen"
                 component={ClubStackComponent}
+            />
+            <Drawer.Screen
+                name="VoteScreen"
+                component={VoteStackComponent}
             />
         </Drawer.Navigator>
     );

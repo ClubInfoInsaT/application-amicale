@@ -70,6 +70,12 @@ class SideBar extends React.Component<Props, State> {
                 onlyWhenLoggedIn: true,
             },
             {
+                name: "VOTE",
+                route: "VoteScreen",
+                icon: "vote",
+                onlyWhenLoggedIn: true,
+            },
+            {
                 name: i18n.t('screens.logout'),
                 route: 'disconnect',
                 action: this.showDisconnectDialog,

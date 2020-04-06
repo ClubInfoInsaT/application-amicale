@@ -71,7 +71,7 @@ class ClubListScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getHeaderButtons = () => {
-        const onPress = () => this.props.navigation.navigate( "ClubAboutScreen");
+        const onPress = () => this.props.navigation.navigate("ClubAboutScreen");
         return <HeaderButton icon={'information'} onPress={onPress}/>;
     };
 
@@ -91,11 +91,11 @@ class ClubListScreen extends React.Component<Props, State> {
     itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
 
     getScreen = (data: Object) => {
-        this.categories = data.categories;
+        this.categories = data[0].categories;
         return (
             //$FlowFixMe
             <FlatList
-                data={data.clubs}
+                data={data[0].clubs}
                 keyExtractor={this.keyExtractor}
                 renderItem={this.getRenderItem}
                 ListHeaderComponent={this.getListHeader()}
@@ -193,7 +193,12 @@ class ClubListScreen extends React.Component<Props, State> {
         return (
             <AuthenticatedScreen
                 {...this.props}
-                link={'https://www.amicale-insat.fr/api/clubs/list'}
+                links={[
+                    {
+                        link: 'clubs/list',
+                        mandatory: true,
+                    }
+                ]}
                 renderFunction={this.getScreen}
             />
         );

@@ -149,17 +149,17 @@ class LoginScreen extends React.Component<Props, State> {
         const title = i18n.t("loginScreen.errors.title");
         let message;
         switch (error) {
-            case ERROR_TYPE.CONNECTION_ERROR:
-                message = i18n.t("loginScreen.errors.connection");
-                break;
             case ERROR_TYPE.BAD_CREDENTIALS:
                 message = i18n.t("loginScreen.errors.credentials");
                 break;
-            case ERROR_TYPE.SAVE_TOKEN:
-                message = i18n.t("loginScreen.errors.saveToken");
-                break;
             case ERROR_TYPE.NO_CONSENT:
                 message = i18n.t("loginScreen.errors.consent");
+                break;
+            case ERROR_TYPE.CONNECTION_ERROR:
+                message = i18n.t("loginScreen.errors.connection");
+                break;
+            case ERROR_TYPE.SERVER_ERROR:
+                message = "SERVER ERROR"; // TODO translate
                 break;
             default:
                 message = i18n.t("loginScreen.errors.unknown");

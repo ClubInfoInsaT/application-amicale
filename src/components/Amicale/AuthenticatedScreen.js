@@ -10,7 +10,7 @@ import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 type Props = {
     navigation: Object,
     theme: Object,
-    link: string,
+    links: Array<{link: string, mandatory: boolean}>,
     renderFunction: Function,
 }
 
@@ -27,7 +27,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
     currentUserToken: string | null;
     connectionManager: ConnectionManager;
     errorCode: number;
-    data: Object;
+    data: Array<Object>;
     colors: Object;
 
     constructor(props) {
@@ -35,6 +35,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         this.colors = props.theme.colors;
         this.connectionManager = ConnectionManager.getInstance();
         this.props.navigation.addListener('focus', this.onScreenFocus.bind(this));
+        this.data = new Array(this.props.links.length);
     }
 
     onScreenFocus() {
@@ -46,25 +47,53 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         if (!this.state.loading)
             this.setState({loading: true});
         if (this.connectionManager.isLoggedIn()) {
-            this.connectionManager.authenticatedRequest(this.props.link)
-                .then((data) => {
-                    this.onFinishedLoading(data, -1);
-                })
-                .catch((error) => {
-                    this.onFinishedLoading(undefined, error);
-                });
+            for (let i = 0; i < this.props.links.length; i++) {
+                this.connectionManager.authenticatedRequest(this.props.links[i].link)
+                    .then((data) => {
+                        this.onFinishedLoading(data, i, -1);
+                    })
+                    .catch((error) => {
+                        this.onFinishedLoading(null, i, error);
+                    });
+            }
+
         } else {
-            this.onFinishedLoading(undefined, ERROR_TYPE.BAD_CREDENTIALS);
+            this.onFinishedLoading(null, -1, ERROR_TYPE.BAD_CREDENTIALS);
         }
     };
 
-    onFinishedLoading(data: Object, error: number) {
-        this.data = data;
+    onFinishedLoading(data: Object, index: number, error: number) {
+        if (index >= 0 && index < this.props.links.length)
+            this.data[index] = data;
         this.currentUserToken = data !== undefined
             ? this.connectionManager.getToken()
             : null;
         this.errorCode = error;
-        this.setState({loading: false});
+
+        if (this.allRequestsFinished())
+            this.setState({loading: false});
+    }
+
+    allRequestsFinished() {
+        let finished = true;
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i] === undefined) {
+                finished = false;
+                break;
+            }
+        }
+        return finished;
+    }
+
+    allRequestsValid() {
+        let valid = true;
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i] === null && this.props.links[i].mandatory) {
+                valid = false;
+                break;
+            }
+        }
+        return valid;
     }
 
     getErrorRender() {
@@ -74,6 +103,10 @@ class AuthenticatedScreen extends React.Component<Props, State> {
             case ERROR_TYPE.BAD_CREDENTIALS:
                 message = i18n.t("loginScreen.errors.credentials");
                 icon = "account-alert-outline";
+                break;
+            case ERROR_TYPE.BAD_TOKEN:
+                message = "BAD TOKEN"; // TODO translate
+                icon = "access-point-network-off";
                 break;
             case ERROR_TYPE.CONNECTION_ERROR:
                 message = i18n.t("loginScreen.errors.connection");
@@ -99,7 +132,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         return (
             this.state.loading
                 ? <BasicLoadingScreen/>
-                : (this.data !== undefined
+                : (this.allRequestsValid()
                 ? this.props.renderFunction(this.data)
                 : this.getErrorRender())
         );

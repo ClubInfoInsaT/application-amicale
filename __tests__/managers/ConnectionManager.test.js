@@ -65,84 +65,64 @@ test('recoverLogin success saved', () => {
 
 test('isRequestResponseValid', () => {
     let json = {
-        state: true,
+        error: 0,
         data: {}
     };
-    expect(c.isRequestResponseValid(json)).toBeTrue();
+    expect(c.isResponseValid(json)).toBeTrue();
     json = {
-        state: false,
+        error: 1,
         data: {}
     };
-    expect(c.isRequestResponseValid(json)).toBeTrue();
+    expect(c.isResponseValid(json)).toBeTrue();
     json = {
-        state: false,
-        message: 'coucou',
+        error: 50,
+        data: {}
+    };
+    expect(c.isResponseValid(json)).toBeTrue();
+    json = {
+        error: 50,
         data: {truc: 'machin'}
     };
-    expect(c.isRequestResponseValid(json)).toBeTrue();
+    expect(c.isResponseValid(json)).toBeTrue();
     json = {
         message: 'coucou'
     };
-    expect(c.isRequestResponseValid(json)).toBeFalse();
+    expect(c.isResponseValid(json)).toBeFalse();
     json = {
-        state: 'coucou'
+        error: 'coucou',
+        data: {truc: 'machin'}
     };
-    expect(c.isRequestResponseValid(json)).toBeFalse();
+    expect(c.isResponseValid(json)).toBeFalse();
     json = {
-        state: true,
+        error: 0,
+        data: 'coucou'
     };
-    expect(c.isRequestResponseValid(json)).toBeFalse();
+    expect(c.isResponseValid(json)).toBeFalse();
+    json = {
+        error: 0,
+    };
+    expect(c.isResponseValid(json)).toBeFalse();
 });
 
 test("isConnectionResponseValid", () => {
     let json = {
-        state: true,
-        message: 'Connexion confirmée',
-        token: 'token'
+        error: 0,
+        data: {token: 'token'}
     };
     expect(c.isConnectionResponseValid(json)).toBeTrue();
     json = {
-        state: true,
-        token: 'token'
+        error: 2,
+        data: {}
     };
     expect(c.isConnectionResponseValid(json)).toBeTrue();
     json = {
-        state: false,
-    };
-    expect(c.isConnectionResponseValid(json)).toBeTrue();
-    json = {
-        state: false,
-        message: 'Adresse mail ou mot de passe incorrect',
-        token: ''
-    };
-    expect(c.isConnectionResponseValid(json)).toBeTrue();
-    json = {
-        state: true,
-        message: 'Connexion confirmée',
-        token: ''
+        error: 0,
+        data: {token: ''}
     };
     expect(c.isConnectionResponseValid(json)).toBeFalse();
     json = {
-        state: true,
-        message: 'Connexion confirmée',
-    };
-    expect(c.isConnectionResponseValid(json)).toBeFalse();
-    json = {
-        state: 'coucou',
-        message: 'Connexion confirmée',
-        token: 'token'
-    };
-    expect(c.isConnectionResponseValid(json)).toBeFalse();
-    json = {
-        state: true,
-        message: 'Connexion confirmée',
-        token: 2
-    };
-    expect(c.isConnectionResponseValid(json)).toBeFalse();
-    json = {
-        coucou: 'coucou',
-        message: 'Connexion confirmée',
-        token: 'token'
+        error: 'prout',
+        data: {token: ''}
     };
     expect(c.isConnectionResponseValid(json)).toBeFalse();
 });
@@ -152,10 +132,9 @@ test("connect bad credentials", () => {
         return Promise.resolve({
             json: () => {
                 return {
-                    state: false,
-                    message: 'Adresse mail ou mot de passe incorrect',
-                    token: ''
-                }
+                    error: ERROR_TYPE.BAD_CREDENTIALS,
+                    data: {}
+                };
             },
         })
     });
@@ -168,10 +147,9 @@ test("connect good credentials", () => {
         return Promise.resolve({
             json: () => {
                 return {
-                    state: true,
-                    message: 'Connexion confirmée',
-                    token: 'token'
-                }
+                    error: ERROR_TYPE.SUCCESS,
+                    data: {token: 'token'}
+                };
             },
         })
     });
@@ -186,13 +164,9 @@ test("connect good credentials no consent", () => {
         return Promise.resolve({
             json: () => {
                 return {
-                    state: false,
-                    message: 'pas de consent',
-                    token: '',
-                    data: {
-                        consent: false,
-                    }
-                }
+                    error: ERROR_TYPE.NO_CONSENT,
+                    data: {}
+                };
             },
         })
     });
@@ -205,17 +179,16 @@ test("connect good credentials, fail save token", () => {
         return Promise.resolve({
             json: () => {
                 return {
-                    state: true,
-                    message: 'Connexion confirmée',
-                    token: 'token'
-                }
+                    error: ERROR_TYPE.SUCCESS,
+                    data: {token: 'token'}
+                };
             },
         })
     });
     jest.spyOn(ConnectionManager.prototype, 'saveLogin').mockImplementationOnce(() => {
         return Promise.reject(false);
     });
-    return expect(c.connect('email', 'password')).rejects.toBe(ERROR_TYPE.SAVE_TOKEN);
+    return expect(c.connect('email', 'password')).rejects.toBe(ERROR_TYPE.UNKNOWN);
 });
 
 test("connect connection error", () => {
@@ -249,7 +222,10 @@ test("authenticatedRequest success", () => {
     jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
         return Promise.resolve({
             json: () => {
-                return {state: true, message: 'Connexion vérifiée', data: {coucou: 'toi'}}
+                return {
+                    error: ERROR_TYPE.SUCCESS,
+                    data: {coucou: 'toi'}
+                };
             },
         })
     });
@@ -264,12 +240,15 @@ test("authenticatedRequest error wrong token", () => {
     jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
         return Promise.resolve({
             json: () => {
-                return {state: false, message: 'Le champ token sélectionné est invalide.'}
+                return {
+                    error: ERROR_TYPE.BAD_TOKEN,
+                    data: {}
+                };
             },
         })
     });
     return expect(c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'))
-        .rejects.toBe(ERROR_TYPE.BAD_CREDENTIALS);
+        .rejects.toBe(ERROR_TYPE.BAD_TOKEN);
 });
 
 test("authenticatedRequest error bogus response", () => {
@@ -279,7 +258,9 @@ test("authenticatedRequest error bogus response", () => {
     jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
         return Promise.resolve({
             json: () => {
-                return {state: true, message: 'Connexion vérifiée'}
+                return {
+                    error: ERROR_TYPE.SUCCESS,
+                };
             },
         })
     });
@@ -302,13 +283,6 @@ test("authenticatedRequest error no token", () => {
     jest.spyOn(ConnectionManager.prototype, 'getToken').mockImplementationOnce(() => {
         return null;
     });
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.resolve({
-            json: () => {
-                return {state: false, message: 'Le champ token sélectionné est invalide.'}
-            },
-        })
-    });
     return expect(c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'))
-        .rejects.toBe(ERROR_TYPE.NO_TOKEN);
+        .rejects.toBe(ERROR_TYPE.UNKNOWN);
 });

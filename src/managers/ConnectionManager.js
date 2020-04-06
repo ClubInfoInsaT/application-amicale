@@ -3,14 +3,35 @@
 import * as SecureStore from 'expo-secure-store';
 
 export const ERROR_TYPE = {
-    BAD_CREDENTIALS: 0,
-    CONNECTION_ERROR: 1,
-    SAVE_TOKEN: 2,
-    NO_TOKEN: 3,
-    NO_CONSENT: 4,
+    SUCCESS: 0,
+    BAD_CREDENTIALS: 1,
+    BAD_TOKEN: 2,
+    NO_CONSENT: 3,
+    BAD_INPUT: 400,
+    FORBIDDEN: 403,
+    CONNECTION_ERROR: 404,
+    SERVER_ERROR: 500,
+    UNKNOWN: 999,
 };
 
-const AUTH_URL = "https://www.amicale-insat.fr/api/password";
+type response_format = {
+    error: number,
+    data: Object,
+}
+
+/**
+ * champ: error
+ *
+ * 0 : SUCCESS -> pas d'erreurs
+ * 1 : BAD_CREDENTIALS -> email ou mdp invalide
+ * 2 : BAD_TOKEN -> session expirée
+ * 3 : NO_CONSENT
+ * 403 : FORBIDDEN -> accès a la ressource interdit
+ * 500 : SERVER_ERROR -> pb coté serveur
+ */
+
+const API_ENDPOINT = "https://www.amicale-insat.fr/api/";
+const AUTH_PATH = "password";
 
 export default class ConnectionManager {
     static instance: ConnectionManager | null = null;
@@ -110,7 +131,7 @@ export default class ConnectionManager {
             password: password,
         };
         return new Promise((resolve, reject) => {
-            fetch(AUTH_URL, {
+            fetch(API_ENDPOINT + AUTH_PATH, {
                 method: 'POST',
                 headers: new Headers({
                     'Accept': 'application/json',
@@ -118,22 +139,18 @@ export default class ConnectionManager {
                 }),
                 body: JSON.stringify(data)
             }).then(async (response) => response.json())
-                .then((data) => {
-                    if (this.isConnectionResponseValid(data)) {
-                        if (data.state) {
-                            this.saveLogin(email, data.token)
+                .then((response: response_format) => {
+                    if (this.isConnectionResponseValid(response)) {
+                        if (response.error === ERROR_TYPE.SUCCESS) {
+                            this.saveLogin(email, response.data.token)
                                 .then(() => {
                                     resolve(true);
                                 })
                                 .catch(() => {
-                                    reject(ERROR_TYPE.SAVE_TOKEN);
+                                    reject(ERROR_TYPE.UNKNOWN);
                                 });
-                        } else if (data.data !== undefined
-                            && data.data.consent !== undefined
-                            && !data.data.consent)
-                            reject(ERROR_TYPE.NO_CONSENT);
-                        else
-                            reject(ERROR_TYPE.BAD_CREDENTIALS);
+                        } else
+                            reject(response.error);
                     } else
                         reject(ERROR_TYPE.CONNECTION_ERROR);
                 })
@@ -143,35 +160,32 @@ export default class ConnectionManager {
         });
     }
 
-    isRequestResponseValid(response: Object) {
+    isResponseValid(response: response_format) {
         let valid = response !== undefined
-            && response.state !== undefined
-            && typeof response.state === "boolean";
+            && response.error !== undefined
+            && typeof response.error === "number";
 
-        if (valid && response.state)
-            valid = valid
-                && response.data !== undefined
-                && typeof response.data === "object";
+        valid = valid
+            && response.data !== undefined
+            && typeof response.data === "object";
         return valid;
     }
 
-    isConnectionResponseValid(response: Object) {
-        let valid = response !== undefined
-            && response.state !== undefined
-            && typeof response.state === "boolean";
+    isConnectionResponseValid(response: response_format) {
+        let valid = this.isResponseValid(response);
 
-        if (valid && response.state)
+        if (valid && response.error === ERROR_TYPE.SUCCESS)
             valid = valid
-                && response.token !== undefined
-                && response.token !== ''
-                && typeof response.token === "string";
+                && response.data.token !== undefined
+                && response.data.token !== ''
+                && typeof response.data.token === "string";
         return valid;
     }
 
-    async authenticatedRequest(url: string) {
+    async authenticatedRequest(path: string) {
         return new Promise((resolve, reject) => {
             if (this.getToken() !== null) {
-                fetch(url, {
+                fetch(API_ENDPOINT + path, {
                     method: 'POST',
                     headers: new Headers({
                         'Accept': 'application/json',
@@ -179,12 +193,13 @@ export default class ConnectionManager {
                     }),
                     body: JSON.stringify({token: this.getToken()})
                 }).then(async (response) => response.json())
-                    .then((data) => {
-                        if (this.isRequestResponseValid(data)) {
-                            if (data.state)
-                                resolve(data.data);
+                    .then((response: response_format) => {
+                        console.log(response);
+                        if (this.isResponseValid(response)) {
+                            if (response.error === ERROR_TYPE.SUCCESS)
+                                resolve(response.data);
                             else
-                                reject(ERROR_TYPE.BAD_CREDENTIALS);
+                                reject(response.error);
                         } else
                             reject(ERROR_TYPE.CONNECTION_ERROR);
                     })
@@ -192,7 +207,7 @@ export default class ConnectionManager {
                         reject(ERROR_TYPE.CONNECTION_ERROR);
                     });
             } else
-                reject(ERROR_TYPE.NO_TOKEN);
+                reject(ERROR_TYPE.UNKNOWN);
         });
     }
 }
