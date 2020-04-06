@@ -4,6 +4,7 @@ import * as React from 'react';
 import {ScrollView, StyleSheet} from "react-native";
 import {Avatar, Card, Paragraph, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
+import {stringToDate} from "../../utils/Planning";
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
 
@@ -11,6 +12,30 @@ type Props = {
     navigation: Object,
     theme: Object,
 }
+
+const FAKE_DATE = {
+    "date_begin": "2020-04-06 13:00",
+    "date_end": "2020-04-06 20:00",
+    "date_result_begin": "2020-04-06 20:15",
+    "date_result_end": "2020-04-07 12:00",
+};
+
+const FAKE_DATE2 = {
+    "date_begin": null,
+    "date_end": null,
+    "date_result_begin": null,
+    "date_result_end": null,
+};
+
+const FAKE_TEAMS = {
+    has_voted: false,
+    teams: [
+        {
+            id: 1,
+            name: "TEST TEAM",
+        },
+    ],
+};
 
 type State = {}
 
@@ -20,20 +45,87 @@ class VoteScreen extends React.Component<Props, State> {
 
     colors: Object;
 
+    teams: Array<Object> | null;
+    hasVoted: boolean;
+    datesString: Object;
+    dates: Object;
+
+    today: Date;
+
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
+        this.hasVoted = false;
+        this.teams = null;
+        this.today = new Date();
     }
 
-    getScreen = (data: Object) => {
-        console.log(data);
+    getScreen = (data: Array<Object>) => {
+        data[0] = FAKE_TEAMS;
+        data[1] = FAKE_DATE;
+
+        if (data[0] !== null) {
+            this.teams = data[0].teams;
+            this.hasVoted = data[0].has_voted;
+        }
+        this.datesString = data[1];
+        this.generateDateObject();
+        console.log(this.teams);
+        console.log(this.datesString);
+        console.log(this.dates);
         return (
             <ScrollView>
+                {
+                    this.isVoteAvailable()
+                        ? this.getContent()
+                        : null
+                }
                 {this.getTitleCard()}
-                {this.getVoteCard()}
             </ScrollView>
         );
     };
+
+    generateDateObject() {
+        this.dates = {
+            date_begin: stringToDate(this.datesString.date_begin),
+            date_end: stringToDate(this.datesString.date_end),
+            date_result_begin: stringToDate(this.datesString.date_result_begin),
+            date_result_end: stringToDate(this.datesString.date_result_end),
+        };
+    }
+
+    isVoteAvailable() {
+        return this.dates.date_begin !== null;
+    }
+
+    isVoteRunning() {
+        return this.today > this.dates.date_begin && this.today < this.dates.date_end;
+    }
+
+    isVoteStarted() {
+        return this.today > this.dates.date_begin;
+    }
+
+    isResultRunning() {
+        return this.today > this.dates.date_result_begin && this.today < this.dates.date_result_end;
+    }
+
+    isResultStarted() {
+        return this.today > this.dates.date_result_begin;
+    }
+
+    getContent() {
+        if (!this.isVoteStarted())
+            return this.getTeaseVoteCard();
+        else if (this.isVoteRunning() && !this.hasVoted)
+            return this.getVoteCard();
+        else if (!this.isResultStarted())
+            return this.getWaitVoteCard();
+        else if (this.isResultRunning())
+            return this.getVoteResultCard();
+        else
+            return null;
+    }
 
     getTitleCard() {
         return (
@@ -64,12 +156,15 @@ class VoteScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * The user has not voted yet, and the votes are open
+     */
     getVoteCard() {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={"VOTE OPEN"}
-                    subtitle={"VALID UNTIL DATE END"}
+                    title={"getVoteCard"}
+                    subtitle={"getVoteCard"}
                 />
                 <Card.Content>
                     <Paragraph>TEAM1</Paragraph>
@@ -79,12 +174,15 @@ class VoteScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Votes have ended, results can be displayed
+     */
     getVoteResultCard() {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={"VOTE RESULTS"}
-                    subtitle={"DATE END RESULTS"}
+                    title={"getVoteResultCard"}
+                    subtitle={"getVoteResultCard"}
                 />
                 <Card.Content>
                     <Paragraph>TEAM1</Paragraph>
@@ -94,8 +192,36 @@ class VoteScreen extends React.Component<Props, State> {
         );
     }
 
-    getEmptyVoteCard() {
+    /**
+     * Vote will open shortly
+     */
+    getTeaseVoteCard() {
+        return (
+            <Card style={styles.card}>
+                <Card.Title
+                    title={"getTeaseVoteCard"}
+                    subtitle={"getTeaseVoteCard"}
+                />
+                <Card.Content>
+                </Card.Content>
+            </Card>
+        );
+    }
 
+    /**
+     * User has voted, waiting for results
+     */
+    getWaitVoteCard() {
+        return (
+            <Card style={styles.card}>
+                <Card.Title
+                    title={"getWaitVoteCard"}
+                    subtitle={"getWaitVoteCard"}
+                />
+                <Card.Content>
+                </Card.Content>
+            </Card>
+        );
     }
 
     render() {
@@ -108,8 +234,8 @@ class VoteScreen extends React.Component<Props, State> {
                         mandatory: false,
                     },
                     {
-                        link: 'elections/dates',
-                        mandatory: true,
+                        link: 'elections/datesString',
+                        mandatory: false,
                     },
                 ]}
                 renderFunction={this.getScreen}
