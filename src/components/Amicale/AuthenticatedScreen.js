@@ -36,6 +36,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         this.connectionManager = ConnectionManager.getInstance();
         this.props.navigation.addListener('focus', this.onScreenFocus.bind(this));
         this.data = new Array(this.props.links.length);
+        this.fetchData(); // TODO remove in prod (only use for fast refresh)
     }
 
     onScreenFocus() {

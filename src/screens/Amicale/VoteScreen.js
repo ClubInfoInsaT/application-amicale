@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {ScrollView, StyleSheet} from "react-native";
-import {Avatar, Card, Paragraph, withTheme} from 'react-native-paper';
+import {FlatList, StyleSheet} from "react-native";
+import {Avatar, Button, Card, Paragraph, RadioButton, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {stringToDate} from "../../utils/Planning";
 
@@ -37,11 +37,15 @@ const FAKE_TEAMS = {
     ],
 };
 
-type State = {}
+type State = {
+    selectedTeam: string,
+}
 
 class VoteScreen extends React.Component<Props, State> {
 
-    state = {};
+    state = {
+        selectedTeam: "0",
+    };
 
     colors: Object;
 
@@ -52,13 +56,29 @@ class VoteScreen extends React.Component<Props, State> {
 
     today: Date;
 
+    mainFlatListData: Array<Object>;
+
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
         this.hasVoted = false;
         this.teams = null;
         this.today = new Date();
+
+        this.mainFlatListData = [
+            {key: 'main'},
+            {key: 'info'},
+        ]
     }
+
+    mainRenderItem = ({item}: Object) => {
+        if (item.key === 'info')
+            return this.getTitleCard();
+        else if (item.key === 'main' && this.isVoteAvailable())
+            return this.getContent();
+        else
+            return null;
+    };
 
     getScreen = (data: Array<Object>) => {
         data[0] = FAKE_TEAMS;
@@ -72,16 +92,12 @@ class VoteScreen extends React.Component<Props, State> {
         this.generateDateObject();
         console.log(this.teams);
         console.log(this.datesString);
-        console.log(this.dates);
         return (
-            <ScrollView>
-                {
-                    this.isVoteAvailable()
-                        ? this.getContent()
-                        : null
-                }
-                {this.getTitleCard()}
-            </ScrollView>
+            <FlatList
+                data={this.mainFlatListData}
+                extraData={this.state.selectedTeam}
+                renderItem={this.mainRenderItem}
+            />
         );
     };
 
@@ -156,6 +172,14 @@ class VoteScreen extends React.Component<Props, State> {
         );
     }
 
+    onVoteSelectionChange = (team: string) => {
+        this.setState({selectedTeam: team})
+    };
+
+    onVotePress = () => {
+        console.log("vote sent");
+    };
+
     /**
      * The user has not voted yet, and the votes are open
      */
@@ -163,16 +187,44 @@ class VoteScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={"getVoteCard"}
-                    subtitle={"getVoteCard"}
+                    title={"VOTE OPEN"}
+                    subtitle={"VOTE NOW"}
+                    left={(props) => <Avatar.Icon
+                        {...props}
+                        icon={"alert-decagram"}
+                    />}
                 />
                 <Card.Content>
-                    <Paragraph>TEAM1</Paragraph>
-                    <Paragraph>TEAM2</Paragraph>
+                    <RadioButton.Group
+                        onValueChange={this.onVoteSelectionChange}
+                        value={this.state.selectedTeam}
+                    >
+                        <FlatList
+                            data={this.teams}
+                            keyExtractor={this.voteKeyExtractor}
+                            extraData={this.state.selectedTeam}
+                            renderItem={this.voteRenderItem}
+                        />
+                    </RadioButton.Group>
                 </Card.Content>
+                <Card.Actions>
+                    <Button
+                        icon="send"
+                        mode="contained"
+                        onPress={this.onVotePress}
+                        style={{marginLeft: 'auto'}}>
+                        SEND VOTE
+                    </Button>
+                </Card.Actions>
             </Card>
         );
     }
+
+    voteKeyExtractor = (item: Object) => item.id.toString();
+
+    voteRenderItem = ({item}: Object) => {
+        return <RadioButton.Item label={item.name} value={item.id.toString()}/>
+    };
 
     /**
      * Votes have ended, results can be displayed
