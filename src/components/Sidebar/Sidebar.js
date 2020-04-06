@@ -161,18 +161,17 @@ class SideBar extends React.Component<Props, State> {
     }
 
     onRouteChange = (event) => {
-        if (event.data.state.routes !== undefined) {
-            const route = event.data.state.routes[0]; // get the current route (ROOT)
-            if (route.state !== undefined) {
-                const state = route.state; // Get the Drawer's state if it exists
-                // Get the current route name. This will only show Drawer routes.
-                // Tab routes will be shown as 'Main'
-                const routeName = state.routeNames[state.index];
-                if (this.state.activeRoute !== routeName)
-                    this.setState({activeRoute: routeName});
-            }
-
+        try {
+            const state = event.data.state.routes[0].state; // Get the Drawer's state if it exists
+            // Get the current route name. This will only show Drawer routes.
+            // Tab routes will be shown as 'Main'
+            const routeName = state.routeNames[state.index];
+            if (this.state.activeRoute !== routeName)
+                this.setState({activeRoute: routeName});
+        } catch(e) {
+            this.setState({activeRoute: 'Main'});
         }
+
     };
 
     showDisconnectDialog = () => this.setState({dialogVisible: true});
