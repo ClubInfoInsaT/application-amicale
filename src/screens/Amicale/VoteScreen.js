@@ -16,7 +16,7 @@ import {
 } from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {getTimeOnlyString, stringToDate} from "../../utils/Planning";
-import LoadingConfirmDialog from "../../components/Custom/LoadingConfirmDialog";
+import LoadingConfirmDialog from "../../components/Dialog/LoadingConfirmDialog";
 import ConnectionManager from "../../managers/ConnectionManager";
 
 const ICON_AMICALE = require('../../../assets/amicale.png');

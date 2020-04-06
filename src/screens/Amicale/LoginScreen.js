@@ -3,10 +3,10 @@
 import * as React from 'react';
 import {Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableWithoutFeedback, View} from "react-native";
 import {Avatar, Button, Card, HelperText, Paragraph, TextInput, withTheme} from 'react-native-paper';
-import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
+import ConnectionManager from "../../managers/ConnectionManager";
 import {openBrowser} from "../../utils/WebBrowser";
 import i18n from 'i18n-js';
-import AlertDialog from "../../components/Custom/AlertDialog";
+import ErrorDialog from "../../components/Dialog/ErrorDialog";
 
 type Props = {
     navigation: Object,
@@ -19,8 +19,7 @@ type State = {
     isPasswordValidated: boolean,
     loading: boolean,
     dialogVisible: boolean,
-    dialogTitle: string,
-    dialogMessage: string,
+    dialogError: number,
 }
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
@@ -38,8 +37,7 @@ class LoginScreen extends React.Component<Props, State> {
         isPasswordValidated: false,
         loading: false,
         dialogVisible: false,
-        dialogTitle: '',
-        dialogMessage: '',
+        dialogError: 0,
     };
 
     colors: Object;
@@ -66,11 +64,10 @@ class LoginScreen extends React.Component<Props, State> {
         this.colors = props.theme.colors;
     }
 
-    showErrorDialog = (title: string, message: string) =>
+    showErrorDialog = (error: number) =>
         this.setState({
-            dialogTitle: title,
-            dialogMessage: message,
-            dialogVisible: true
+            dialogVisible: true,
+            dialogError: error,
         });
 
     hideErrorDialog = () => this.setState({dialogVisible: false});
@@ -132,9 +129,7 @@ class LoginScreen extends React.Component<Props, State> {
                 .then((data) => {
                     this.handleSuccess();
                 })
-                .catch((error) => {
-                    this.handleErrors(error);
-                })
+                .catch(this.showErrorDialog)
                 .finally(() => {
                     this.setState({loading: false});
                 });
@@ -143,29 +138,6 @@ class LoginScreen extends React.Component<Props, State> {
 
     handleSuccess() {
         this.props.navigation.navigate('ProfileScreen');
-    }
-
-    handleErrors(error: number) {
-        const title = i18n.t("loginScreen.errors.title");
-        let message;
-        switch (error) {
-            case ERROR_TYPE.BAD_CREDENTIALS:
-                message = i18n.t("loginScreen.errors.credentials");
-                break;
-            case ERROR_TYPE.NO_CONSENT:
-                message = i18n.t("loginScreen.errors.consent");
-                break;
-            case ERROR_TYPE.CONNECTION_ERROR:
-                message = i18n.t("loginScreen.errors.connection");
-                break;
-            case ERROR_TYPE.SERVER_ERROR:
-                message = "SERVER ERROR"; // TODO translate
-                break;
-            default:
-                message = i18n.t("loginScreen.errors.unknown");
-                break;
-        }
-        this.showErrorDialog(title, message);
     }
 
     getFormInput() {
@@ -297,12 +269,10 @@ class LoginScreen extends React.Component<Props, State> {
                             {this.getSecondaryCard()}
                         </View>
                     </TouchableWithoutFeedback>
-                    <AlertDialog
-                        {...this.props}
+                    <ErrorDialog
                         visible={this.state.dialogVisible}
-                        title={this.state.dialogTitle}
-                        message={this.state.dialogMessage}
                         onDismiss={this.hideErrorDialog}
+                        errorCode={this.state.dialogError}
                     />
                 </ScrollView>
             </KeyboardAvoidingView>

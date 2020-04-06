@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {Button, Dialog, Paragraph, Portal, withTheme} from 'react-native-paper';
+import {Button, Dialog, Paragraph, Portal} from 'react-native-paper';
 
 type Props = {
-    navigation: Object,
     visible: boolean,
     onDismiss: Function,
     title: string,
@@ -10,10 +9,6 @@ type Props = {
 }
 
 class AlertDialog extends React.PureComponent<Props> {
-
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (
@@ -34,4 +29,4 @@ class AlertDialog extends React.PureComponent<Props> {
     }
 }
 
-export default withTheme(AlertDialog);
+export default AlertDialog;
