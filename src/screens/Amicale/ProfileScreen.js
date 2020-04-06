@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, ScrollView, StyleSheet} from "react-native";
+import {FlatList, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {openBrowser} from "../../utils/WebBrowser";
@@ -28,9 +28,16 @@ class ProfileScreen extends React.Component<Props, State> {
 
     data: Object;
 
+    flatListData: Array<Object>;
+
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
+        this.flatListData = [
+            {id: '0'},
+            {id: '1'},
+            {id: '2'},
+        ]
     }
 
     componentDidMount() {
@@ -51,17 +58,30 @@ class ProfileScreen extends React.Component<Props, State> {
     getScreen = (data: Object) => {
         this.data = data[0];
         return (
-            <ScrollView>
-                {this.getPersonalCard()}
-                {this.getClubCard()}
-                {this.getMembershipCar()}
+            <View>
+                {/*$FlowFixMe*/}
+                <FlatList
+                    renderItem={this.getRenderItem}
+                    data={this.flatListData}
+                />
                 <LogoutDialog
                     {...this.props}
                     visible={this.state.dialogVisible}
                     onDismiss={this.hideDisconnectDialog}
                 />
-            </ScrollView>
+            </View>
         )
+    };
+
+    getRenderItem = ({item}: Object) => {
+        switch (item.id) {
+            case '0':
+                return this.getPersonalCard();
+            case '1':
+                return this.getClubCard();
+            case '2':
+                return this.getMembershipCar();
+        }
     };
 
     getPersonalCard() {
