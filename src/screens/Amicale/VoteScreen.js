@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, StyleSheet} from "react-native";
+import {FlatList, StyleSheet, View} from "react-native";
 import {
     ActivityIndicator,
     Avatar,
@@ -16,19 +16,16 @@ import {
 } from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {getTimeOnlyString, stringToDate} from "../../utils/Planning";
+import LoadingConfirmDialog from "../../components/Custom/LoadingConfirmDialog";
+import ConnectionManager from "../../managers/ConnectionManager";
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
 
-type Props = {
-    navigation: Object,
-    theme: Object,
-}
-
 const FAKE_DATE = {
     "date_begin": "2020-04-06 21:50",
-    "date_end": "2020-04-06 21:50",
-    "date_result_begin": "2020-04-06 21:50",
-    "date_result_end": "2020-04-06 21:50",
+    "date_end": "2020-04-07 23:50",
+    "date_result_begin": "2020-04-07 21:50",
+    "date_result_end": "2020-04-07 21:50",
 };
 
 const FAKE_DATE2 = {
@@ -67,14 +64,21 @@ const FAKE_TEAMS2 = {
     ],
 };
 
+type Props = {
+    navigation: Object,
+    theme: Object,
+}
+
 type State = {
     selectedTeam: string,
+    voteDialogVisible: boolean,
 }
 
 class VoteScreen extends React.Component<Props, State> {
 
     state = {
         selectedTeam: "none",
+        voteDialogVisible: false,
     };
 
     colors: Object;
@@ -120,16 +124,46 @@ class VoteScreen extends React.Component<Props, State> {
         }
         this.datesString = data[1];
         this.generateDateObject();
-        console.log(this.teams);
-        console.log(this.datesString);
         return (
-            //$FlowFixMe
-            <FlatList
-                data={this.mainFlatListData}
-                extraData={this.state.selectedTeam}
-                renderItem={this.mainRenderItem}
-            />
+            <View>
+                {/*$FlowFixMe*/}
+                <FlatList
+                    data={this.mainFlatListData}
+                    extraData={this.state.selectedTeam}
+                    renderItem={this.mainRenderItem}
+                />
+                <LoadingConfirmDialog
+                    {...this.props}
+                    visible={this.state.voteDialogVisible}
+                    onDismiss={this.onVoteDialogDismiss}
+                    onAccept={this.onVoteDialogAccept}
+                    title={"VOTE?"}
+                    titleLoading={"SENDING VOTE..."}
+                    message={"SURE?"}
+                />
+            </View>
         );
+    };
+
+    onVoteDialogDismiss = () => this.setState({voteDialogVisible: false});
+
+    showVoteDialog = () => this.setState({voteDialogVisible: true});
+
+    onVoteDialogAccept = async () => {
+        return new Promise((resolve, reject) => {
+            ConnectionManager.getInstance().authenticatedRequest(
+                "elections/vote",
+                ["vote"],
+                [parseInt(this.state.selectedTeam)])
+                .then(() => {
+                    this.onVoteDialogDismiss();
+                    resolve();
+                })
+                .catch(() => {
+                    this.onVoteDialogDismiss();
+                    resolve();
+                });
+        });
     };
 
     generateDateObject() {
@@ -208,7 +242,7 @@ class VoteScreen extends React.Component<Props, State> {
     };
 
     onVotePress = () => {
-        console.log("vote sent");
+        this.showVoteDialog();
     };
 
     voteKeyExtractor = (item: Object) => item.id.toString();

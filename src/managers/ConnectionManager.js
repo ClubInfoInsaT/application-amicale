@@ -182,16 +182,31 @@ export default class ConnectionManager {
         return valid;
     }
 
-    async authenticatedRequest(path: string) {
+    generatePostArguments(keys: Array<string>, values: Array<string>) {
+        let data = {};
+        for (let i = 0; i < keys.length; i++) {
+            data[keys[i]] = values[i];
+        }
+        return data;
+    }
+
+    async authenticatedRequest(path: string, keys: Array<string>, values: Array<any>) {
         return new Promise((resolve, reject) => {
             if (this.getToken() !== null) {
+                let data = {};
+                if (keys !== undefined && values !== undefined && keys.length === values.length)
+                    data = this.generatePostArguments(keys, values);
+                console.log(data);
                 fetch(API_ENDPOINT + path, {
                     method: 'POST',
                     headers: new Headers({
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
                     }),
-                    body: JSON.stringify({token: this.getToken()})
+                    body: JSON.stringify({
+                        token: this.getToken(),
+                        ...data
+                    })
                 }).then(async (response) => response.json())
                     .then((response: response_format) => {
                         console.log(response);
