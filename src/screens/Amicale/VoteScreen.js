@@ -2,9 +2,20 @@
 
 import * as React from 'react';
 import {FlatList, StyleSheet} from "react-native";
-import {Avatar, Button, Card, Paragraph, RadioButton, withTheme} from 'react-native-paper';
+import {
+    ActivityIndicator,
+    Avatar,
+    Button,
+    Card,
+    List,
+    Paragraph,
+    ProgressBar,
+    RadioButton,
+    Subheading,
+    withTheme
+} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
-import {stringToDate} from "../../utils/Planning";
+import {getTimeOnlyString, stringToDate} from "../../utils/Planning";
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
 
@@ -14,10 +25,10 @@ type Props = {
 }
 
 const FAKE_DATE = {
-    "date_begin": "2020-04-06 13:00",
-    "date_end": "2020-04-06 20:00",
-    "date_result_begin": "2020-04-06 20:15",
-    "date_result_end": "2020-04-07 12:00",
+    "date_begin": "2020-04-06 21:50",
+    "date_end": "2020-04-06 21:50",
+    "date_result_begin": "2020-04-06 21:50",
+    "date_result_end": "2020-04-06 21:50",
 };
 
 const FAKE_DATE2 = {
@@ -32,7 +43,26 @@ const FAKE_TEAMS = {
     teams: [
         {
             id: 1,
-            name: "TEST TEAM",
+            name: "TEST TEAM1",
+        },
+        {
+            id: 2,
+            name: "TEST TEAM2",
+        },
+    ],
+};
+const FAKE_TEAMS2 = {
+    has_voted: false,
+    teams: [
+        {
+            id: 1,
+            name: "TEST TEAM1",
+            votes: 1,
+        },
+        {
+            id: 2,
+            name: "TEST TEAM2",
+            votes: 9,
         },
     ],
 };
@@ -44,12 +74,12 @@ type State = {
 class VoteScreen extends React.Component<Props, State> {
 
     state = {
-        selectedTeam: "0",
+        selectedTeam: "none",
     };
 
     colors: Object;
 
-    teams: Array<Object> | null;
+    teams: Array<Object>;
     hasVoted: boolean;
     datesString: Object;
     dates: Object;
@@ -57,12 +87,12 @@ class VoteScreen extends React.Component<Props, State> {
     today: Date;
 
     mainFlatListData: Array<Object>;
+    totalVotes: number;
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
         this.hasVoted = false;
-        this.teams = null;
         this.today = new Date();
 
         this.mainFlatListData = [
@@ -81,7 +111,7 @@ class VoteScreen extends React.Component<Props, State> {
     };
 
     getScreen = (data: Array<Object>) => {
-        data[0] = FAKE_TEAMS;
+        data[0] = FAKE_TEAMS2;
         data[1] = FAKE_DATE;
 
         if (data[0] !== null) {
@@ -93,6 +123,7 @@ class VoteScreen extends React.Component<Props, State> {
         console.log(this.teams);
         console.log(this.datesString);
         return (
+            //$FlowFixMe
             <FlatList
                 data={this.mainFlatListData}
                 extraData={this.state.selectedTeam}
@@ -180,6 +211,10 @@ class VoteScreen extends React.Component<Props, State> {
         console.log("vote sent");
     };
 
+    voteKeyExtractor = (item: Object) => item.id.toString();
+
+    voteRenderItem = ({item}: Object) => <RadioButton.Item label={item.name} value={item.id.toString()}/>;
+
     /**
      * The user has not voted yet, and the votes are open
      */
@@ -199,6 +234,7 @@ class VoteScreen extends React.Component<Props, State> {
                         onValueChange={this.onVoteSelectionChange}
                         value={this.state.selectedTeam}
                     >
+                        {/*$FlowFixMe*/}
                         <FlatList
                             data={this.teams}
                             keyExtractor={this.voteKeyExtractor}
@@ -212,7 +248,9 @@ class VoteScreen extends React.Component<Props, State> {
                         icon="send"
                         mode="contained"
                         onPress={this.onVotePress}
-                        style={{marginLeft: 'auto'}}>
+                        style={{marginLeft: 'auto'}}
+                        disabled={this.state.selectedTeam === "none"}
+                    >
                         SEND VOTE
                     </Button>
                 </Card.Actions>
@@ -220,29 +258,73 @@ class VoteScreen extends React.Component<Props, State> {
         );
     }
 
-    voteKeyExtractor = (item: Object) => item.id.toString();
+    sortByVotes = (a: Object, b: Object) => b.votes - a.votes;
 
-    voteRenderItem = ({item}: Object) => {
-        return <RadioButton.Item label={item.name} value={item.id.toString()}/>
-    };
+    getTotalVotes() {
+        let count = 0;
+        for (let i = 0; i < this.teams.length; i++) {
+            count += this.teams[i].votes;
+        }
+        return count;
+    }
+
+    getWinnerId() {
+        return this.teams[0].id;
+    }
 
     /**
      * Votes have ended, results can be displayed
      */
     getVoteResultCard() {
+        this.totalVotes = this.getTotalVotes();
+        this.teams.sort(this.sortByVotes);
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={"getVoteResultCard"}
-                    subtitle={"getVoteResultCard"}
+                    title={"RESULTS"}
+                    subtitle={"AVAILABLE UNTIL " + this.getDateString(this.dates.date_result_end, this.datesString.date_result_end)}
+                    left={(props) => <Avatar.Icon
+                        {...props}
+                        icon={"podium-gold"}
+                    />}
                 />
                 <Card.Content>
-                    <Paragraph>TEAM1</Paragraph>
-                    <Paragraph>TEAM2</Paragraph>
+                    <Subheading>TOTAL VOTES : {this.totalVotes}</Subheading>
+                    {/*$FlowFixMe*/}
+                    <FlatList
+                        data={this.teams}
+                        keyExtractor={this.voteKeyExtractor}
+                        renderItem={this.resultRenderItem}
+                    />
                 </Card.Content>
             </Card>
         );
     }
+
+    resultRenderItem = ({item}: Object) => {
+        const isWinner = this.getWinnerId() === item.id;
+        return (
+            <Card style={{
+                marginTop: 10,
+                elevation: isWinner ? 5 : 3,
+            }}>
+                <List.Item
+                    title={item.name}
+                    description={item.votes + " VOTES"}
+                    left={props => isWinner
+                        ? <List.Icon {...props} icon="trophy" color={this.colors.primary}/>
+                        : null}
+                    titleStyle={{
+                        color: isWinner
+                            ? this.colors.primary
+                            : this.colors.text
+                    }}
+                    style={{padding: 0}}
+                />
+                <ProgressBar progress={item.votes / this.totalVotes} color={this.colors.primary}/>
+            </Card>
+        );
+    };
 
     /**
      * Vote will open shortly
@@ -251,29 +333,57 @@ class VoteScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={"getTeaseVoteCard"}
-                    subtitle={"getTeaseVoteCard"}
+                    title={"VOTE INCOMING"}
+                    subtitle={"GET READY"}
+                    left={props => <Avatar.Icon
+                        {...props}
+                        icon="vote"/>}
                 />
                 <Card.Content>
+                    <Paragraph>
+                        VOTE STARTS
+                        AT {this.getDateString(this.dates.date_begin, this.datesString.date_begin)}
+                    </Paragraph>
                 </Card.Content>
             </Card>
         );
     }
 
     /**
-     * User has voted, waiting for results
+     * Votes have ended waiting for results
      */
     getWaitVoteCard() {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={"getWaitVoteCard"}
-                    subtitle={"getWaitVoteCard"}
+                    title={"VOTES HAVE ENDED"}
+                    subtitle={"WAITING FOR RESULTS"}
+                    left={(props) => <ActivityIndicator {...props}/>}
                 />
                 <Card.Content>
+                    {
+                        this.hasVoted
+                            ? <Paragraph>THX FOR THE VOTE</Paragraph>
+                            : null
+                    }
+                    {
+                        this.dates.date_result_begin !== null
+                            ? <Paragraph>
+                                RESULTS AVAILABLE
+                                AT {this.getDateString(this.dates.date_result_begin, this.datesString.date_result_begin)}
+                            </Paragraph>
+                            : <Paragraph>RESULTS AVAILABLE SHORTLY</Paragraph>
+                    }
                 </Card.Content>
             </Card>
         );
+    }
+
+    getDateString(date: Date, dateString: string) {
+        if (this.today.getDate() === date.getDate())
+            return getTimeOnlyString(dateString);
+        else
+            return dateString;
     }
 
     render() {

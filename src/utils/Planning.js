@@ -56,6 +56,20 @@ export function getDateOnlyString(dateString: string): string | null {
 }
 
 /**
+ * Gets only the time part of the given event date string in the format
+ * YYYY-MM-DD HH:MM
+ *
+ * @param dateString The string to get the date from
+ * @return {string|null} Time in format HH:MM or null if given string is invalid
+ */
+export function getTimeOnlyString(dateString: string): string | null {
+    if (isEventDateStringFormatValid(dateString))
+        return dateString.split(" ")[1];
+    else
+        return null;
+}
+
+/**
  * Checks if the given date string is in the format
  * YYYY-MM-DD HH:MM
  *
