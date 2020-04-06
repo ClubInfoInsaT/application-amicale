@@ -237,13 +237,6 @@ class LoginScreen extends React.Component<Props, State> {
                     {this.getFormInput()}
                     <Card.Actions>
                         <Button
-                            icon="help-circle"
-                            mode="contained"
-                            onPress={this.onResetPasswordClick}
-                            style={{marginLeft: 'auto'}}>
-                            {i18n.t("loginScreen.resetPassword")}
-                        </Button>
-                        <Button
                             icon="send"
                             mode="contained"
                             disabled={!this.shouldEnableLogin()}
@@ -251,6 +244,15 @@ class LoginScreen extends React.Component<Props, State> {
                             onPress={this.onSubmit}
                             style={{marginLeft: 'auto'}}>
                             {i18n.t("loginScreen.login")}
+                        </Button>
+                    </Card.Actions>
+                    <Card.Actions>
+                        <Button
+                            icon="help-circle"
+                            mode="contained"
+                            onPress={this.onResetPasswordClick}
+                            style={{marginLeft: 'auto'}}>
+                            {i18n.t("loginScreen.resetPassword")}
                         </Button>
                     </Card.Actions>
                 </Card.Content>
