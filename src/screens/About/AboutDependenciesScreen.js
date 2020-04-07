@@ -32,23 +32,40 @@ type Props = {
     route: Object
 }
 
+const LIST_ITEM_HEIGHT = 64;
+
 /**
  * Class defining a screen showing the list of libraries used by the app, taken from package.json
  */
 export default class AboutDependenciesScreen extends React.Component<Props> {
 
+    data: Array<Object>;
+
+    constructor() {
+        super();
+        this.data = generateListFromObject(packageJson.dependencies);
+    }
+
+    keyExtractor = (item: Object) => item.name;
+
+    renderItem = ({item}: Object) =>
+        <List.Item
+            title={item.name}
+            description={item.version.replace('^', '').replace('~', '')}
+            style={{height: LIST_ITEM_HEIGHT}}
+        />;
+
+    itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
+
     render() {
-        const data = generateListFromObject(packageJson.dependencies);
         return (
             <FlatList
-                data={data}
-                keyExtractor={(item) => item.name}
-                style={{minHeight: 300, width: '100%'}}
-                renderItem={({item}) =>
-                    <List.Item
-                        title={item.name}
-                        description={item.version.replace('^', '').replace('~', '')}
-                    />}
+                data={this.data}
+                keyExtractor={this.keyExtractor}
+                renderItem={this.renderItem}
+                // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+                removeClippedSubviews={true}
+                getItemLayout={this.itemLayout}
             />
         );
     }

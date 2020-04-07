@@ -1,10 +1,10 @@
 // @flow
 
 import * as React from 'react';
-import {ScrollView, View} from "react-native";
+import {FlatList, View} from "react-native";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import CustomModal from "../../components/Custom/CustomModal";
-import {Button, Card, List, Subheading, TextInput, Title, withTheme} from 'react-native-paper';
+import {Button, List, Subheading, TextInput, Title, withTheme} from 'react-native-paper';
 
 type Props = {
     navigation: Object,
@@ -12,7 +12,7 @@ type Props = {
 
 type State = {
     modalCurrentDisplayItem: Object,
-    currentPreferences: Object,
+    currentPreferences: Array<Object>,
 }
 
 /**
@@ -23,10 +23,6 @@ class DebugScreen extends React.Component<Props, State> {
 
     modalRef: Object;
     modalInputValue = '';
-    state = {
-        modalCurrentDisplayItem: {},
-        currentPreferences: JSON.parse(JSON.stringify(AsyncStorageManager.getInstance().preferences))
-    };
 
     onModalRef: Function;
 
@@ -36,40 +32,20 @@ class DebugScreen extends React.Component<Props, State> {
         super(props);
         this.onModalRef = this.onModalRef.bind(this);
         this.colors = props.theme.colors;
+        let copy = {...AsyncStorageManager.getInstance().preferences};
+        console.log(copy);
+        let currentPreferences = [];
+        Object.values(copy).map((object) => {
+            currentPreferences.push(object);
+        });
+        this.state = {
+            modalCurrentDisplayItem: {},
+            currentPreferences: currentPreferences
+        };
     }
 
     /**
-     * Gets a clickable list item
-     *
-     * @param onPressCallback The function to call when clicking on the item
-     * @param icon The item's icon
-     * @param title The item's title
-     * @param subtitle The item's subtitle
-     * @return {*}
-     */
-    static getGeneralItem(onPressCallback: Function, icon: ?string, title: string, subtitle: string) {
-        if (icon !== undefined) {
-            return (
-                <List.Item
-                    title={title}
-                    description={subtitle}
-                    left={() => <List.Icon icon={icon}/>}
-                    onPress={onPressCallback}
-                />
-            );
-        } else {
-            return (
-                <List.Item
-                    title={title}
-                    description={subtitle}
-                    onPress={onPressCallback}
-                />
-            );
-        }
-    }
-
-    /**
-     * Show the
+     * Show the edit modal
      * @param item
      */
     showEditModal(item: Object) {
@@ -123,6 +99,17 @@ class DebugScreen extends React.Component<Props, State> {
         );
     }
 
+    findIndexOfKey(key: string) {
+        let index = -1;
+        for (let i = 0; i < this.state.currentPreferences.length; i++) {
+            if (this.state.currentPreferences[i].key === key) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
     /**
      * Saves the new value of the given preference
      *
@@ -131,11 +118,12 @@ class DebugScreen extends React.Component<Props, State> {
      */
     saveNewPrefs(key: string, value: string) {
         this.setState((prevState) => {
-            let currentPreferences = {...prevState.currentPreferences};
-            currentPreferences[key].current = value;
+            let currentPreferences = [...prevState.currentPreferences];
+            currentPreferences[this.findIndexOfKey(key)].current = value;
             return {currentPreferences};
         });
         AsyncStorageManager.getInstance().savePref(key, value);
+        this.modalRef.close();
     }
 
     /**
@@ -147,31 +135,28 @@ class DebugScreen extends React.Component<Props, State> {
         this.modalRef = ref;
     }
 
+    renderItem = ({item}: Object) => {
+        return (
+            <List.Item
+                title={item.key}
+                description={'Click to edit'}
+                onPress={() => this.showEditModal(item)}
+            />
+        );
+    };
+
     render() {
         return (
             <View>
                 <CustomModal onRef={this.onModalRef}>
                     {this.getModalContent()}
                 </CustomModal>
-                <ScrollView style={{padding: 5}}>
-                    <Card style={{margin: 5}}>
-                        <Card.Title
-                            title={'Preferences'}
-                        />
-                        <Card.Content>
-                            {Object.values(this.state.currentPreferences).map((object) =>
-                                <View>
-                                    {DebugScreen.getGeneralItem(
-                                        () => this.showEditModal(object),
-                                        undefined,
-                                        //$FlowFixMe
-                                        object.key,
-                                        'Click to edit')}
-                                </View>
-                            )}
-                        </Card.Content>
-                    </Card>
-                </ScrollView>
+                {/*$FlowFixMe*/}
+                <FlatList
+                    data={this.state.currentPreferences}
+                    extraData={this.state.currentPreferences}
+                    renderItem={this.renderItem}
+                />
             </View>
         );
     }
