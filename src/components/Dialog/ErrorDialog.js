@@ -15,22 +15,31 @@ class ErrorDialog extends React.PureComponent<Props> {
     message: string;
 
     generateMessage() {
-        this.title = i18n.t("loginScreen.errors.title");
+        this.title = i18n.t("errors.title");
         switch (this.props.errorCode) {
             case ERROR_TYPE.BAD_CREDENTIALS:
-                this.message = i18n.t("loginScreen.errors.credentials");
+                this.message = i18n.t("errors.badCredentials");
+                break;
+            case ERROR_TYPE.BAD_TOKEN:
+                this.message = i18n.t("errors.badToken");
                 break;
             case ERROR_TYPE.NO_CONSENT:
-                this.message = i18n.t("loginScreen.errors.consent");
+                this.message = i18n.t("errors.noConsent");
+                break;
+            case ERROR_TYPE.BAD_INPUT:
+                this.message = i18n.t("errors.badInput");
+                break;
+            case ERROR_TYPE.FORBIDDEN:
+                this.message = i18n.t("errors.forbidden");
                 break;
             case ERROR_TYPE.CONNECTION_ERROR:
-                this.message = i18n.t("loginScreen.errors.connection");
+                this.message = i18n.t("errors.connectionError");
                 break;
             case ERROR_TYPE.SERVER_ERROR:
-                this.message = "SERVER ERROR"; // TODO translate
+                this.message = i18n.t("errors.serverError");
                 break;
             default:
-                this.message = i18n.t("loginScreen.errors.unknown");
+                this.message = i18n.t("errors.unknown");
                 break;
         }
     }

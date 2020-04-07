@@ -3,8 +3,7 @@
 import * as React from 'react';
 import {withTheme} from 'react-native-paper';
 import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
-import NetworkErrorComponent from "../Custom/NetworkErrorComponent";
-import i18n from 'i18n-js';
+import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 
 type Props = {
@@ -98,32 +97,9 @@ class AuthenticatedScreen extends React.Component<Props, State> {
     }
 
     getErrorRender() {
-        let message;
-        let icon;
-        switch (this.errorCode) {
-            case ERROR_TYPE.BAD_CREDENTIALS:
-                message = i18n.t("loginScreen.errors.credentials");
-                icon = "account-alert-outline";
-                break;
-            case ERROR_TYPE.BAD_TOKEN:
-                message = "BAD TOKEN"; // TODO translate
-                icon = "access-point-network-off";
-                break;
-            case ERROR_TYPE.CONNECTION_ERROR:
-                message = i18n.t("loginScreen.errors.connection");
-                icon = "access-point-network-off";
-                break;
-            default:
-                message = i18n.t("loginScreen.errors.unknown");
-                icon = "alert-circle-outline";
-                break;
-        }
-
         return (
-            <NetworkErrorComponent
-                {...this.props}
-                icon={icon}
-                message={message}
+            <ErrorView
+                errorCode={this.errorCode}
                 onRefresh={this.fetchData}
             />
         );

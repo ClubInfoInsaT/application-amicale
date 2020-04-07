@@ -5,10 +5,10 @@ import {Button, Subheading, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import i18n from 'i18n-js';
+import {ERROR_TYPE} from "../../managers/ConnectionManager";
 
 type Props = {
-    message: string,
-    icon: string,
+    errorCode: number,
     onRefresh: Function,
 }
 
@@ -16,9 +16,12 @@ type State = {
     refreshing: boolean,
 }
 
-class NetworkErrorComponent extends React.PureComponent<Props, State> {
+class ErrorView extends React.PureComponent<Props, State> {
 
     colors: Object;
+
+    message: string;
+    icon: string;
 
     state = {
         refreshing: false,
@@ -29,7 +32,45 @@ class NetworkErrorComponent extends React.PureComponent<Props, State> {
         this.colors = props.theme.colors;
     }
 
+    generateMessage() {
+        switch (this.props.errorCode) {
+            case ERROR_TYPE.BAD_CREDENTIALS:
+                this.message = i18n.t("errors.badCredentials");
+                this.icon = "account-alert-outline";
+                break;
+            case ERROR_TYPE.BAD_TOKEN:
+                this.message = i18n.t("errors.badToken");
+                this.icon = "account-alert-outline";
+                break;
+            case ERROR_TYPE.NO_CONSENT:
+                this.message = i18n.t("errors.noConsent");
+                this.icon = "account-remove-outline";
+                break;
+            case ERROR_TYPE.BAD_INPUT:
+                this.message = i18n.t("errors.badInput");
+                this.icon = "alert-circle-outline";
+                break;
+            case ERROR_TYPE.FORBIDDEN:
+                this.message = i18n.t("errors.forbidden");
+                this.icon = "lock";
+                break;
+            case ERROR_TYPE.CONNECTION_ERROR:
+                this.message = i18n.t("errors.connectionError");
+                this.icon = "access-point-network-off";
+                break;
+            case ERROR_TYPE.SERVER_ERROR:
+                this.message = i18n.t("errors.serverError");
+                this.icon = "server-network-off";
+                break;
+            default:
+                this.message = i18n.t("errors.unknown");
+                this.icon = "alert-circle-outline";
+                break;
+        }
+    }
+
     render() {
+        this.generateMessage();
         return (
             <View style={{
                 ...styles.outer,
@@ -38,7 +79,7 @@ class NetworkErrorComponent extends React.PureComponent<Props, State> {
                 <View style={styles.inner}>
                     <View style={styles.iconContainer}>
                         <MaterialCommunityIcons
-                            name={this.props.icon}
+                            name={this.icon}
                             size={150}
                             color={this.colors.textDisabled}/>
                     </View>
@@ -46,7 +87,7 @@ class NetworkErrorComponent extends React.PureComponent<Props, State> {
                         ...styles.subheading,
                         color: this.colors.textDisabled
                     }}>
-                        {this.props.message}
+                        {this.message}
                     </Subheading>
                     <Button
                         mode={'contained'}
@@ -86,4 +127,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default withTheme(NetworkErrorComponent);
+export default withTheme(ErrorView);

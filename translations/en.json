@@ -237,14 +237,17 @@
     "whyAccountParagraph": "An Amicale account allows you to take part in several activities around campus. You can join a club, or even create your own!",
     "whyAccountParagraph2": "Logging into your Amicale account on the app will allow you to see all available clubs on the campus, vote for the upcoming elections, and more to come!",
     "noAccount": "No Account? Go to the Amicale's building during open hours to create one.",
-    "errors": {
-      "title": "Error!",
-      "connection": "Network error. Please check your internet connection.",
-      "credentials": "Email or password invalid.",
-      "saveToken": "Failed to save connection information, please contact support.",
-      "consent": "You did not give your consent for data processing to the Amicale.",
-      "unknown": "Unknown error, please contact support."
-    }
+  },
+  "errors": {
+    "title": "Error!",
+    "badCredentials": "Email or password invalid.",
+    "badToken": "Session expired, please login again.",
+    "noConsent": "You did not give your consent for data processing to the Amicale.",
+    "badInput": "Invalid input. Please try again.",
+    "forbidden": "You do not have access to this data.",
+    "connectionError": "Network error. Please check your internet connection.",
+    "serverError": "Server error. Please contact support.",
+    "unknown": "Unknown error. Please contact support."
   },
   "clubs": {
     "clubList": "Club list",

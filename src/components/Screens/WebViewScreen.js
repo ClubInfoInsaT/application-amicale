@@ -2,11 +2,10 @@
 
 import * as React from 'react';
 import WebView from "react-native-webview";
-import {withTheme} from 'react-native-paper';
 import HeaderButton from "../Custom/HeaderButton";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
-import NetworkErrorComponent from "../Custom/NetworkErrorComponent";
-import i18n from "i18n-js";
+import ErrorView from "../Custom/ErrorView";
+import {ERROR_TYPE} from "../../managers/ConnectionManager";
 
 type Props = {
     navigation: Object,
@@ -32,20 +31,12 @@ class WebViewScreen extends React.PureComponent<Props> {
         hasSideMenu: true,
         hasFooter: true,
     };
+
     webviewRef: Object;
 
-    onRefreshClicked: Function;
-    onWebviewRef: Function;
-    getRenderLoading: Function;
-
-    colors: Object;
-
-    constructor(props) {
-        super(props);
-        this.onRefreshClicked = this.onRefreshClicked.bind(this);
-        this.onWebviewRef = this.onWebviewRef.bind(this);
-        this.getRenderLoading = this.getRenderLoading.bind(this);
-        this.colors = props.theme.colors;
+    constructor() {
+        super();
+        this.webviewRef = React.createRef();
     }
 
     /**
@@ -70,33 +61,19 @@ class WebViewScreen extends React.PureComponent<Props> {
     /**
      * Callback to use when refresh button is clicked. Reloads the webview.
      */
-    onRefreshClicked() {
-        if (this.webviewRef !== null)
-            this.webviewRef.reload();
-    }
-
-    /**
-     * Callback used when receiving the webview ref. Stores the ref for later use
-     *
-     * @param ref
-     */
-    onWebviewRef(ref: Object) {
-        this.webviewRef = ref
-    }
+    onRefreshClicked = () => this.webviewRef.current.reload();
 
     /**
      * Gets the loading indicator
      *
      * @return {*}
      */
-    getRenderLoading() {
-        return <BasicLoadingScreen/>;
-    }
+    getRenderLoading = () => <BasicLoadingScreen/>;
 
     render() {
         return (
             <WebView
-                ref={this.onWebviewRef}
+                ref={this.webviewRef}
                 source={{uri: this.props.data[0]['url']}}
                 style={{
                     width: '100%',
@@ -106,15 +83,13 @@ class WebViewScreen extends React.PureComponent<Props> {
                 injectedJavaScript={this.props.data[0]['customJS']}
                 javaScriptEnabled={true}
                 renderLoading={this.getRenderLoading}
-                renderError={() => <NetworkErrorComponent
-                    {...this.props}
+                renderError={() => <ErrorView
+                    errorCode={ERROR_TYPE.CONNECTION_ERROR}
                     onRefresh={this.onRefreshClicked}
-                    message={i18n.t("loginScreen.errors.connection")}
-                    icon={'access-point-network-off'}
                 />}
             />
         );
     }
 }
 
-export default withTheme(WebViewScreen);
+export default WebViewScreen;

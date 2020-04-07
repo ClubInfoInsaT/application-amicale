@@ -5,8 +5,9 @@ import {readData} from "../../utils/WebData";
 import i18n from "i18n-js";
 import {Snackbar} from 'react-native-paper';
 import {RefreshControl, SectionList, View} from "react-native";
-import NetworkErrorComponent from "../Custom/NetworkErrorComponent";
+import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
+import {ERROR_TYPE} from "../../managers/ConnectionManager";
 
 type Props = {
     navigation: Object,
@@ -192,9 +193,8 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                     style={{minHeight: '100%'}}
                     ListEmptyComponent={this.state.refreshing
                         ? <BasicLoadingScreen/>
-                        : <NetworkErrorComponent
-                            message={i18n.t('general.networkError')}
-                            icon={"access-point-network-off"}
+                        : <ErrorView
+                            errorCode={ERROR_TYPE.CONNECTION_ERROR}
                             onRefresh={this.onRefresh}/>
                     }
                     getItemLayout={this.props.itemHeight !== undefined ? this.itemLayout : undefined}

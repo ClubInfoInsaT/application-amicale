@@ -236,15 +236,18 @@
     "whyAccountSub": "Ce que vous pouvez faire avec un compte",
     "whyAccountParagraph": "Un compte Amicale vous donne la possibilité de participer à diverses activités sur le campus. Vous pouvez rejoindre des clubs ou même créer le votre !",
     "whyAccountParagraph2": "Vous connecter à votre compte Amicale sur l'appli vous permettra de voir tous les clubs en activité, de voter pour les prochaines élections, et plus à venir !",
-    "noAccount": "Pas de compte ? Passez à l'Amicale pendant une perm pour en créer un.",
-    "errors": {
-      "title": "Erreur !",
-      "connection": "Erreur de réseau. Merci de vérifier votre connexion Internet.",
-      "credentials": "Email ou mot de passe invalide.",
-      "saveToken": "Erreur de sauvegarde des informations de connexion, merci de contacter le support.",
-      "consent": "Vous n'avez pas donné votre consentement pour l'utilisation de vos données personnelles.",
-      "unknown": "Erreur inconnue, merci de contacter le support."
-    }
+    "noAccount": "Pas de compte ? Passez à l'Amicale pendant une perm pour en créer un."
+  },
+  "errors": {
+    "title": "Erreur !",
+    "badCredentials": "Email ou mot de passe invalide.",
+    "badToken": "Session expirée, merci de vous reconnecter.",
+    "noConsent": "Vous n'avez pas donné votre consentement pour l'utilisation de vos données personnelles.",
+    "badInput": "Entrée invalide. Merci de réessayer.",
+    "forbidden": "Vous n'avez pas accès à cette information.",
+    "connectionError": "Erreur de réseau. Merci de vérifier votre connexion Internet.",
+    "serverError": "Erreur de serveur. Merci de contacter le support.",
+    "unknown": "Erreur inconnue. Merci de contacter le support."
   },
   "clubs": {
     "clubList": "Liste des clubs",
