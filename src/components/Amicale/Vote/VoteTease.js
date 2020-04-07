@@ -3,6 +3,7 @@
 import * as React from 'react';
 import {Avatar, Card, Paragraph} from "react-native-paper";
 import {StyleSheet} from "react-native";
+import i18n from 'i18n-js';
 
 type Props = {
     startDate: string,
@@ -18,16 +19,15 @@ export default class VoteTease extends React.Component<Props> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={"VOTE INCOMING"}
-                    subtitle={"GET READY"}
+                    title={i18n.t('voteScreen.tease.title')}
+                    subtitle={i18n.t('voteScreen.tease.subtitle')}
                     left={props => <Avatar.Icon
                         {...props}
                         icon="vote"/>}
                 />
                 <Card.Content>
                     <Paragraph>
-                        VOTE STARTS
-                        AT {this.props.startDate}
+                        {i18n.t('voteScreen.tease.message') + ' ' + this.props.startDate}
                     </Paragraph>
                 </Card.Content>
             </Card>

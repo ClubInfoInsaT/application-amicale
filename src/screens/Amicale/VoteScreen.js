@@ -11,9 +11,9 @@ import VoteResults from "../../components/Amicale/Vote/VoteResults";
 import VoteWait from "../../components/Amicale/Vote/VoteWait";
 
 const FAKE_DATE = {
-    "date_begin": "2020-04-06 21:50",
-    "date_end": "2020-04-07 23:50",
-    "date_result_begin": "2020-04-07 21:50",
+    "date_begin": "2020-04-07 21:50",
+    "date_end": "2020-04-06 23:50",
+    "date_result_begin": "2020-04-06 21:50",
     "date_result_end": "2020-04-07 22:50",
 };
 
@@ -201,7 +201,8 @@ export default class VoteScreen extends React.Component<Props, State> {
         let startDate = null;
         if (this.dates.date_result_begin !== null)
             startDate = this.getDateString(this.dates.date_result_begin, this.datesString.date_result_begin);
-        return <VoteWait startDate={startDate} hasVoted={this.hasVoted} justVoted={this.state.hasVoted}
+        return <VoteWait startDate={startDate} hasVoted={this.hasVoted || this.state.hasVoted}
+                         justVoted={this.state.hasVoted}
                          isVoteRunning={this.isVoteRunning()}/>;
     }
 

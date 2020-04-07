@@ -15,7 +15,8 @@
     "debug": "Debug",
     "login": "Login",
     "logout": "Logout",
-    "profile": "Profile"
+    "profile": "Profile",
+    "vote": "Elections"
   },
   "sidenav": {
     "divider1": "Student websites",
@@ -236,7 +237,7 @@
     "whyAccountSub": "What can you do wth an account",
     "whyAccountParagraph": "An Amicale account allows you to take part in several activities around campus. You can join a club, or even create your own!",
     "whyAccountParagraph2": "Logging into your Amicale account on the app will allow you to see all available clubs on the campus, vote for the upcoming elections, and more to come!",
-    "noAccount": "No Account? Go to the Amicale's building during open hours to create one.",
+    "noAccount": "No Account? Go to the Amicale's building during open hours to create one."
   },
   "errors": {
     "title": "Error!",
@@ -256,6 +257,42 @@
     "managersUnavailable": "This club has no one :(",
     "categories": "Categories",
     "categoriesFilterMessage": "Click on a category to filter the list"
+  },
+  "voteScreen": {
+    "select": {
+      "title": "Elections open",
+      "subtitle": "Vote now!",
+      "sendButton": "Send Vote",
+      "dialogTitle": "Send Vote?",
+      "dialogTitleLoading": "Sending vote...",
+      "dialogMessage": "Are you sure you want to send your vote? You will not be able to change it."
+    },
+    "tease": {
+      "title": "Elections incoming",
+      "subtitle": "Be ready to vote!",
+      "message" : "Vote start:"
+    },
+    "wait": {
+      "titleSubmitted": "Vote submitted!",
+      "titleEnded": "Votes closed",
+      "subtitle" : "Waiting for results...",
+      "messageSubmitted" : "Vote submitted successfully.",
+      "messageVoted" : "Thank you for your participation.",
+      "messageDate" : "Results available:",
+      "messageDateUndefined" : "Results will be available shortly"
+    },
+    "results": {
+      "title": "Results",
+      "subtitle": "Available until:",
+      "totalVotes" : "Total votes:",
+      "votes" : "votes"
+    },
+    "title": {
+      "title": "The Elections",
+      "subtitle": "Why your vote is important",
+      "paragraph1" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rhoncus porttitor suscipit. Quisque hendrerit, quam id vestibulum vestibulum, lorem nisi hendrerit nisi, a eleifend sapien diam ut elit. Curabitur sit amet vulputate lectus. Donec semper cursus sapienvel finibus.",
+      "paragraph2" : "Sed et venenatis turpis. Fusce malesuada magna urna, sed vehicula sem luctus in. Vivamus faucibus vel eros a ultricies. In sed laoreet ante, luctus mattis tellus. Etiam vitae ipsum sagittis, consequat purus sed, blandit risus."
+    }
   },
   "dialog": {
     "ok": "OK",

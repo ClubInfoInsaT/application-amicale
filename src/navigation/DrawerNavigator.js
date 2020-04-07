@@ -256,7 +256,7 @@ function VoteStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: "VoteScreen",
+                        title: i18n.t('screens.vote'),
                         headerLeft: openDrawer
                     };
                 }}

@@ -6,6 +6,7 @@ import {FlatList, StyleSheet, View} from "react-native";
 import ConnectionManager from "../../../managers/ConnectionManager";
 import LoadingConfirmDialog from "../../Dialog/LoadingConfirmDialog";
 import ErrorDialog from "../../Dialog/ErrorDialog";
+import i18n from 'i18n-js';
 
 type Props = {
     teams: Array<Object>,
@@ -74,8 +75,8 @@ export default class VoteSelect extends React.PureComponent<Props, State> {
             <View>
                 <Card style={styles.card}>
                     <Card.Title
-                        title={"VOTE OPEN"}
-                        subtitle={"VOTE NOW"}
+                        title={i18n.t('voteScreen.select.title')}
+                        subtitle={i18n.t('voteScreen.select.subtitle')}
                         left={(props) => <Avatar.Icon
                             {...props}
                             icon={"alert-decagram"}
@@ -103,7 +104,7 @@ export default class VoteSelect extends React.PureComponent<Props, State> {
                             style={{marginLeft: 'auto'}}
                             disabled={this.state.selectedTeam === "none"}
                         >
-                            SEND VOTE
+                            {i18n.t('voteScreen.select.sendButton')}
                         </Button>
                     </Card.Actions>
                 </Card>
@@ -111,9 +112,9 @@ export default class VoteSelect extends React.PureComponent<Props, State> {
                     visible={this.state.voteDialogVisible}
                     onDismiss={this.onVoteDialogDismiss}
                     onAccept={this.onVoteDialogAccept}
-                    title={"VOTE?"}
-                    titleLoading={"SENDING VOTE..."}
-                    message={"SURE?"}
+                    title={i18n.t('voteScreen.select.dialogTitle')}
+                    titleLoading={i18n.t('voteScreen.select.dialogTitleLoading')}
+                    message={i18n.t('voteScreen.select.dialogMessage')}
                 />
                 <ErrorDialog
                     visible={this.state.errorDialogVisible}

@@ -70,7 +70,7 @@ class SideBar extends React.Component<Props, State> {
                 onlyWhenLoggedIn: true,
             },
             {
-                name: "VOTE",
+                name: i18n.t('screens.vote'),
                 route: "VoteScreen",
                 icon: "vote",
                 onlyWhenLoggedIn: true,

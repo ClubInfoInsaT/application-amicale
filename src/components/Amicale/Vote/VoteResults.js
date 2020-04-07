@@ -3,6 +3,7 @@
 import * as React from 'react';
 import {Avatar, Card, List, ProgressBar, Subheading, withTheme} from "react-native-paper";
 import {FlatList, StyleSheet} from "react-native";
+import i18n from 'i18n-js';
 
 type Props = {
     teams: Array<Object>,
@@ -51,7 +52,7 @@ class VoteResults extends React.Component<Props> {
             }}>
                 <List.Item
                     title={item.name}
-                    description={item.votes + " VOTES"}
+                    description={item.votes + ' ' + i18n.t('voteScreen.results.votes')}
                     left={props => isWinner
                         ? <List.Icon {...props} icon="trophy" color={this.colors.primary}/>
                         : null}
@@ -71,15 +72,15 @@ class VoteResults extends React.Component<Props> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={"RESULTS"}
-                    subtitle={"AVAILABLE UNTIL " + this.props.dateEnd}
+                    title={i18n.t('voteScreen.results.title')}
+                    subtitle={i18n.t('voteScreen.results.subtitle') + ' ' + this.props.dateEnd}
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon={"podium-gold"}
                     />}
                 />
                 <Card.Content>
-                    <Subheading>TOTAL VOTES : {this.totalVotes}</Subheading>
+                    <Subheading>{i18n.t('voteScreen.results.totalVotes') + ' ' +this.totalVotes}</Subheading>
                     {/*$FlowFixMe*/}
                     <FlatList
                         data={this.props.teams}

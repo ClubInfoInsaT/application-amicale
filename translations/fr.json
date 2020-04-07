@@ -15,7 +15,8 @@
     "debug": "Debug",
     "login": "Se Connecter",
     "logout": "Se Déconnecter",
-    "profile": "Profil"
+    "profile": "Profil",
+    "vote": "Élections"
   },
   "sidenav": {
     "divider1": "Sites étudiants",
@@ -256,6 +257,42 @@
     "managersUnavailable": "Ce club est tout seul :(",
     "categories": "Catégories",
     "categoriesFilterMessage": "Cliquez sur une catégorie pour filtrer la liste"
+  },
+  "voteScreen": {
+    "select": {
+      "title": "Élections ouvertes",
+      "subtitle": "Votez maintenant !",
+      "sendButton": "Envoyer votre vote",
+      "dialogTitle": "Envoyer votre vote ?",
+      "dialogTitleLoading": "Envoi du vote...",
+      "dialogMessage": "Êtes vous sûr de vouloir envoyer votre vote ? Vous ne pourrez plus le changer."
+    },
+    "tease": {
+      "title": "Les élections arrivent",
+      "subtitle": "Préparez vous à voter !",
+      "message" : "Début des votes :"
+    },
+    "wait": {
+      "titleSubmitted": "Vote envoyé !",
+      "titleEnded": "Votes fermés",
+      "subtitle" : "Attente des résultats...",
+      "messageSubmitted" : "Votre vote a bien été envoyé.",
+      "messageVoted" : "Merci pour votre participation.",
+      "messageDate" : "Disponibilité des résultats :",
+      "messageDateUndefined" : "les résultats seront disponibles sous peu."
+    },
+    "results": {
+      "title": "Résultats",
+      "subtitle": "Disponibles jusqu'à :",
+      "totalVotes" : "Nombre total de votes :",
+      "votes" : "votes"
+    },
+    "title": {
+      "title": "Les Élections",
+      "subtitle": "Pourquoi votre vote est important",
+      "paragraph1" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rhoncus porttitor suscipit. Quisque hendrerit, quam id vestibulum vestibulum, lorem nisi hendrerit nisi, a eleifend sapien diam ut elit. Curabitur sit amet vulputate lectus. Donec semper cursus sapienvel finibus.",
+      "paragraph2" : "Sed et venenatis turpis. Fusce malesuada magna urna, sed vehicula sem luctus in. Vivamus faucibus vel eros a ultricies. In sed laoreet ante, luctus mattis tellus. Etiam vitae ipsum sagittis, consequat purus sed, blandit risus."
+    }
   },
   "dialog": {
     "ok": "OK",
