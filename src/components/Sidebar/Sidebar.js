@@ -1,15 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import {Dimensions, FlatList, Image, Platform, StyleSheet, View,} from 'react-native';
+import {Dimensions, FlatList, Image, StyleSheet, View,} from 'react-native';
 import i18n from "i18n-js";
-import {openBrowser} from "../../utils/WebBrowser";
-import {Drawer, TouchableRipple, withTheme} from "react-native-paper";
+import {TouchableRipple} from "react-native-paper";
 import ConnectionManager from "../../managers/ConnectionManager";
 import LogoutDialog from "../Amicale/LogoutDialog";
+import SideBarSection from "./SideBarSection";
 
 const deviceWidth = Dimensions.get("window").width;
-const LIST_ITEM_HEIGHT = 48;
 
 type Props = {
     navigation: Object,
@@ -30,8 +29,6 @@ class SideBar extends React.Component<Props, State> {
 
     dataSet: Array<Object>;
 
-    colors: Object;
-
     /**
      * Generate the dataset
      *
@@ -40,16 +37,14 @@ class SideBar extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         // Dataset used to render the drawer
-        this.dataSet = [
+        const mainData = [
             {
                 name: i18n.t('screens.home'),
                 route: "Main",
                 icon: "home",
             },
-            {
-                name: i18n.t('sidenav.divider4'),
-                route: "Divider4"
-            },
+        ];
+        const amicaleData = [
             {
                 name: i18n.t('screens.login'),
                 route: "LoginScreen",
@@ -82,10 +77,8 @@ class SideBar extends React.Component<Props, State> {
                 icon: "logout",
                 onlyWhenLoggedIn: true,
             },
-            {
-                name: i18n.t('sidenav.divider2'),
-                route: "Divider2"
-            },
+        ];
+        const servicesData = [
             {
                 name: i18n.t('screens.menuSelf'),
                 route: "SelfMenuScreen",
@@ -113,10 +106,8 @@ class SideBar extends React.Component<Props, State> {
                 link: "https://ent.insa-toulouse.fr/",
                 icon: "notebook",
             },
-            {
-                name: i18n.t('sidenav.divider1'),
-                route: "Divider1"
-            },
+        ];
+        const websitesData = [
             {
                 name: "Amicale",
                 route: "AmicaleScreen",
@@ -141,10 +132,8 @@ class SideBar extends React.Component<Props, State> {
                 link: "https://www.etud.insa-toulouse.fr/~tutorinsa/",
                 icon: "school",
             },
-            {
-                name: i18n.t('sidenav.divider3'),
-                route: "Divider3"
-            },
+        ];
+        const othersData = [
             {
                 name: i18n.t('screens.settings'),
                 route: "SettingsScreen",
@@ -156,7 +145,39 @@ class SideBar extends React.Component<Props, State> {
                 icon: "information",
             },
         ];
-        this.colors = props.theme.colors;
+
+        this.dataSet = [
+            {
+                key: '1',
+                name: i18n.t('screens.home'),
+                startOpen: true, // App always starts on Main
+                data: mainData
+            },
+            {
+                key: '2',
+                name: i18n.t('sidenav.divider4'),
+                startOpen: false, // TODO set by user preferences
+                data: amicaleData
+            },
+            {
+                key: '3',
+                name: i18n.t('sidenav.divider2'),
+                startOpen: false,
+                data: servicesData
+            },
+            {
+                key: '4',
+                name: i18n.t('sidenav.divider1'),
+                startOpen: false,
+                data: websitesData
+            },
+            {
+                key: '5',
+                name: i18n.t('sidenav.divider3'),
+                startOpen: false,
+                data: othersData
+            },
+        ];
         ConnectionManager.getInstance().addLoginStateListener(this.onLoginStateChange);
         this.props.navigation.addListener('state', this.onRouteChange);
         this.state = {
@@ -166,7 +187,7 @@ class SideBar extends React.Component<Props, State> {
         };
     }
 
-    onRouteChange = (event) => {
+    onRouteChange = (event: Object) => {
         try {
             const state = event.data.state.routes[0].state; // Get the Drawer's state if it exists
             // Get the current route name. This will only show Drawer routes.
@@ -174,7 +195,7 @@ class SideBar extends React.Component<Props, State> {
             const routeName = state.routeNames[state.index];
             if (this.state.activeRoute !== routeName)
                 this.setState({activeRoute: routeName});
-        } catch(e) {
+        } catch (e) {
             this.setState({activeRoute: 'Main'});
         }
 
@@ -184,33 +205,7 @@ class SideBar extends React.Component<Props, State> {
 
     hideDisconnectDialog = () => this.setState({dialogVisible: false});
 
-
     onLoginStateChange = (isLoggedIn: boolean) => this.setState({isLoggedIn: isLoggedIn});
-
-    /**
-     * Callback when a drawer item is pressed.
-     * It will either navigate to the associated screen, or open the browser to the associated link
-     *
-     * @param item The item pressed
-     */
-    onListItemPress(item: Object) {
-        if (item.link !== undefined)
-            openBrowser(item.link, this.colors.primary);
-        else if (item.action !== undefined)
-            item.action();
-        else
-            this.props.navigation.navigate(item.route);
-    }
-
-    /**
-     * Key extractor for list items
-     *
-     * @param item The item to extract the key from
-     * @return {string} The extracted key
-     */
-    listKeyExtractor(item: Object): string {
-        return item.route;
-    }
 
     /**
      * Gets the render item for the given list item
@@ -219,46 +214,22 @@ class SideBar extends React.Component<Props, State> {
      * @return {*}
      */
     getRenderItem = ({item}: Object) => {
-        const onListItemPress = this.onListItemPress.bind(this, item);
-        const onlyWhenLoggedOut = item.onlyWhenLoggedOut !== undefined && item.onlyWhenLoggedOut === true;
-        const onlyWhenLoggedIn = item.onlyWhenLoggedIn !== undefined && item.onlyWhenLoggedIn === true;
-        const shouldEmphasis = item.shouldEmphasis !== undefined && item.shouldEmphasis === true;
-        if (onlyWhenLoggedIn && !this.state.isLoggedIn || onlyWhenLoggedOut && this.state.isLoggedIn)
-            return null;
-        else if (item.icon !== undefined) {
-            return (
-                <Drawer.Item
-                    label={item.name}
-                    active={this.state.activeRoute === item.route}
-                    icon={item.icon}
-                    onPress={onListItemPress}
-                    style={{
-                        height: LIST_ITEM_HEIGHT,
-                        justifyContent: 'center',
-                    }}
-                />
-            );
-        } else {
-            return (
-                <Drawer.Item
-                    label={item.name}
-                    style={{
-                        height: LIST_ITEM_HEIGHT,
-                        justifyContent: 'center',
-                    }}
-                />
-            );
-        }
+        return <SideBarSection
+            {...this.props}
+            listKey={item.key}
+            activeRoute={this.state.activeRoute}
+            isLoggedIn={this.state.isLoggedIn}
+            sectionName={item.name}
+            startOpen={item.startOpen}
+            listData={item.data}
+        />
     };
 
-    itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
-
     render() {
-        const onPress = this.onListItemPress.bind(this, {route: 'TetrisScreen'});
         return (
             <View style={{height: '100%'}}>
                 <TouchableRipple
-                    onPress={onPress}
+                    onPress={() => this.props.navigation.navigate("TetrisScreen")}
                 >
                     <Image
                         source={require("../../../assets/drawer-cover.png")}
@@ -269,10 +240,7 @@ class SideBar extends React.Component<Props, State> {
                 <FlatList
                     data={this.dataSet}
                     extraData={this.state.isLoggedIn.toString() + this.state.activeRoute}
-                    keyExtractor={this.listKeyExtractor}
                     renderItem={this.getRenderItem}
-                    // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-                    getItemLayout={this.itemLayout}
                 />
                 <LogoutDialog
                     {...this.props}
@@ -292,17 +260,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 20
     },
-    text: {
-        fontWeight: Platform.OS === "ios" ? "500" : "400",
-        fontSize: 16,
-        marginLeft: 20
-    },
-    badgeText: {
-        fontSize: Platform.OS === "ios" ? 13 : 11,
-        fontWeight: "400",
-        textAlign: "center",
-        marginTop: Platform.OS === "android" ? -3 : undefined
-    }
 });
 
-export default withTheme(SideBar);
+export default SideBar;
