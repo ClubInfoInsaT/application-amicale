@@ -72,6 +72,7 @@ type Props = {
 
 type State = {
     selectedTeam: string,
+    hasVoted: boolean,
     voteDialogVisible: boolean,
     errorDialogVisible: boolean,
     currentError: number,
@@ -84,6 +85,7 @@ class VoteScreen extends React.Component<Props, State> {
         voteDialogVisible: false,
         errorDialogVisible: false,
         currentError: 0,
+        hasVoted: false,
     };
 
     colors: Object;
@@ -98,16 +100,56 @@ class VoteScreen extends React.Component<Props, State> {
     mainFlatListData: Array<Object>;
     totalVotes: number;
 
+    authRef: Object;
+
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
         this.hasVoted = false;
         this.today = new Date();
-
+        this.authRef = React.createRef();
         this.mainFlatListData = [
             {key: 'main'},
             {key: 'info'},
         ]
+    }
+
+    reloadData = () => this.authRef.current.reload();
+
+    generateDateObject() {
+        this.dates = {
+            date_begin: stringToDate(this.datesString.date_begin),
+            date_end: stringToDate(this.datesString.date_end),
+            date_result_begin: stringToDate(this.datesString.date_result_begin),
+            date_result_end: stringToDate(this.datesString.date_result_end),
+        };
+    }
+
+    getDateString(date: Date, dateString: string) {
+        if (this.today.getDate() === date.getDate())
+            return getTimeOnlyString(dateString);
+        else
+            return dateString;
+    }
+
+    isVoteAvailable() {
+        return this.dates.date_begin !== null;
+    }
+
+    isVoteRunning() {
+        return this.today > this.dates.date_begin && this.today < this.dates.date_end;
+    }
+
+    isVoteStarted() {
+        return this.today > this.dates.date_begin;
+    }
+
+    isResultRunning() {
+        return this.today > this.dates.date_result_begin && this.today < this.dates.date_result_end;
+    }
+
+    isResultStarted() {
+        return this.today > this.dates.date_result_begin;
     }
 
     mainRenderItem = ({item}: Object) => {
@@ -134,7 +176,7 @@ class VoteScreen extends React.Component<Props, State> {
                 {/*$FlowFixMe*/}
                 <FlatList
                     data={this.mainFlatListData}
-                    extraData={this.state.selectedTeam}
+                    extraData={this.state.selectedTeam + this.state.hasVoted.toString()}
                     renderItem={this.mainRenderItem}
                 />
                 <LoadingConfirmDialog
@@ -154,14 +196,15 @@ class VoteScreen extends React.Component<Props, State> {
         );
     };
 
-    onVoteDialogDismiss = () => this.setState({voteDialogVisible: false});
-    onErrorDialogDismiss = () => this.setState({errorDialogVisible: false});
-
     showVoteDialog = () => this.setState({voteDialogVisible: true});
-    showErrorDialog = (error: number) => this.setState({
-        errorDialogVisible: true,
-        currentError: error,
-    });
+
+    onVoteDialogDismiss = (voteStatus: boolean) => {
+        voteStatus = voteStatus === undefined ? false : voteStatus;
+        this.setState({
+            voteDialogVisible: false,
+            hasVoted: voteStatus,
+        })
+    };
 
     onVoteDialogAccept = async () => {
         return new Promise((resolve, reject) => {
@@ -170,50 +213,31 @@ class VoteScreen extends React.Component<Props, State> {
                 ["vote"],
                 [parseInt(this.state.selectedTeam)])
                 .then(() => {
-                    this.onVoteDialogDismiss();
+                    this.onVoteDialogDismiss(true);
                     resolve();
                 })
                 .catch((error: number) => {
-                    this.onVoteDialogDismiss();
+                    this.onVoteDialogDismiss(false);
                     this.showErrorDialog(error);
                     resolve();
                 });
         });
     };
 
-    generateDateObject() {
-        this.dates = {
-            date_begin: stringToDate(this.datesString.date_begin),
-            date_end: stringToDate(this.datesString.date_end),
-            date_result_begin: stringToDate(this.datesString.date_result_begin),
-            date_result_end: stringToDate(this.datesString.date_result_end),
-        };
-    }
+    showErrorDialog = (error: number) => this.setState({
+        errorDialogVisible: true,
+        currentError: error,
+    });
 
-    isVoteAvailable() {
-        return this.dates.date_begin !== null;
-    }
-
-    isVoteRunning() {
-        return this.today > this.dates.date_begin && this.today < this.dates.date_end;
-    }
-
-    isVoteStarted() {
-        return this.today > this.dates.date_begin;
-    }
-
-    isResultRunning() {
-        return this.today > this.dates.date_result_begin && this.today < this.dates.date_result_end;
-    }
-
-    isResultStarted() {
-        return this.today > this.dates.date_result_begin;
-    }
+    onErrorDialogDismiss = () => {
+        this.setState({errorDialogVisible: false});
+        this.reloadData();
+    };
 
     getContent() {
         if (!this.isVoteStarted())
             return this.getTeaseVoteCard();
-        else if (this.isVoteRunning() && !this.hasVoted)
+        else if (this.isVoteRunning() && (!this.hasVoted && !this.state.hasVoted))
             return this.getVoteCard();
         else if (!this.isResultStarted())
             return this.getWaitVoteCard();
@@ -405,14 +429,23 @@ class VoteScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={"VOTES HAVE ENDED"}
+                    title={this.isVoteRunning() ? "VOTE SUBMITTED" : "VOTES HAVE ENDED"}
                     subtitle={"WAITING FOR RESULTS"}
                     left={(props) => <ActivityIndicator {...props}/>}
                 />
                 <Card.Content>
                     {
+                        this.state.hasVoted
+                            ? <Paragraph style={{color: this.colors.success}}>
+                                VOTE SUBMITTED. THX FOR YOUR PARTICIPATION
+                            </Paragraph>
+                            : null
+                    }
+                    {
                         this.hasVoted
-                            ? <Paragraph>THX FOR THE VOTE</Paragraph>
+                            ? <Paragraph style={{color: this.colors.success}}>
+                                THX FOR THE VOTE
+                            </Paragraph>
                             : null
                     }
                     {
@@ -428,17 +461,11 @@ class VoteScreen extends React.Component<Props, State> {
         );
     }
 
-    getDateString(date: Date, dateString: string) {
-        if (this.today.getDate() === date.getDate())
-            return getTimeOnlyString(dateString);
-        else
-            return dateString;
-    }
-
     render() {
         return (
             <AuthenticatedScreen
                 {...this.props}
+                ref={this.authRef}
                 links={[
                     {
                         link: 'elections/teams',

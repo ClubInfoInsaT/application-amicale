@@ -105,6 +105,10 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         );
     }
 
+    reload() {
+        this.fetchData();
+    }
+
     render() {
         return (
             this.state.loading
