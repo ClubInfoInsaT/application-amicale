@@ -40,33 +40,33 @@ class SideBar extends React.Component<Props, State> {
         const mainData = [
             {
                 name: i18n.t('screens.home'),
-                route: "Main",
+                route: "main",
                 icon: "home",
             },
         ];
         const amicaleData = [
             {
                 name: i18n.t('screens.login'),
-                route: "LoginScreen",
+                route: "login",
                 icon: "login",
                 onlyWhenLoggedOut: true,
                 shouldEmphasis: true,
             },
             {
                 name: i18n.t('screens.profile'),
-                route: "ProfileScreen",
+                route: "profile",
                 icon: "account",
                 onlyWhenLoggedIn: true,
             },
             {
                 name: i18n.t('clubs.clubList'),
-                route: "ClubListScreen",
+                route: "club-list",
                 icon: "account-group",
                 onlyWhenLoggedIn: true,
             },
             {
                 name: i18n.t('screens.vote'),
-                route: "VoteScreen",
+                route: "vote",
                 icon: "vote",
                 onlyWhenLoggedIn: true,
             },
@@ -81,28 +81,28 @@ class SideBar extends React.Component<Props, State> {
         const servicesData = [
             {
                 name: i18n.t('screens.menuSelf'),
-                route: "SelfMenuScreen",
+                route: "self-menu",
                 icon: "silverware-fork-knife",
             },
             {
                 name: i18n.t('screens.availableRooms'),
-                route: "AvailableRoomScreen",
+                route: "available-rooms",
                 icon: "calendar-check",
             },
             {
                 name: i18n.t('screens.bib'),
-                route: "BibScreen",
+                route: "bib",
                 icon: "book",
             },
             {
                 name: i18n.t('screens.bluemind'),
-                route: "BlueMindScreen",
+                route: "bluemind",
                 link: "https://etud-mel.insa-toulouse.fr/webmail/",
                 icon: "email",
             },
             {
                 name: i18n.t('screens.ent'),
-                route: "EntScreen",
+                route: "ent",
                 link: "https://ent.insa-toulouse.fr/",
                 icon: "notebook",
             },
@@ -110,25 +110,25 @@ class SideBar extends React.Component<Props, State> {
         const websitesData = [
             {
                 name: "Amicale",
-                route: "AmicaleScreen",
+                route: "amicale",
                 link: "https://amicale-insat.fr/",
                 icon: "alpha-a-box",
             },
             {
                 name: "Élus Étudiants",
-                route: "ElusEtudScreen",
+                route: "elus-etudiants",
                 link: "https://etud.insa-toulouse.fr/~eeinsat/",
                 icon: "alpha-e-box",
             },
             {
                 name: "Wiketud",
-                route: "WiketudScreen",
+                route: "wiketud",
                 link: "https://wiki.etud.insa-toulouse.fr",
                 icon: "wikipedia",
             },
             {
                 name: "Tutor'INSA",
-                route: "TutorInsaScreen",
+                route: "tutor-insa",
                 link: "https://www.etud.insa-toulouse.fr/~tutorinsa/",
                 icon: "school",
             },
@@ -136,12 +136,12 @@ class SideBar extends React.Component<Props, State> {
         const othersData = [
             {
                 name: i18n.t('screens.settings'),
-                route: "SettingsScreen",
+                route: "settings",
                 icon: "settings",
             },
             {
                 name: i18n.t('screens.about'),
-                route: "AboutScreen",
+                route: "about",
                 icon: "information",
             },
         ];
@@ -229,7 +229,7 @@ class SideBar extends React.Component<Props, State> {
         return (
             <View style={{height: '100%'}}>
                 <TouchableRipple
-                    onPress={() => this.props.navigation.navigate("TetrisScreen")}
+                    onPress={() => this.props.navigation.navigate("tetris")}
                 >
                     <Image
                         source={require("../../../assets/drawer-cover.png")}

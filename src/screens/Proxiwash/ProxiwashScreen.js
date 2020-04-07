@@ -143,7 +143,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * This will open the ProxiwashAboutScreen.
      */
     onAboutPress() {
-        this.props.navigation.navigate('ProxiwashAboutScreen');
+        this.props.navigation.navigate('proxiwash-about');
     }
 
     /**

@@ -71,7 +71,7 @@ class ClubListScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getHeaderButtons = () => {
-        const onPress = () => this.props.navigation.navigate("ClubAboutScreen");
+        const onPress = () => this.props.navigation.navigate("club-about");
         return <HeaderButton icon={'information'} onPress={onPress}/>;
     };
 
@@ -186,7 +186,7 @@ class ClubListScreen extends React.Component<Props, State> {
      * @param item The article pressed
      */
     onListItemPress(item: Object) {
-        this.props.navigation.navigate("ClubDisplayScreen", {data: item, categories: this.categories});
+        this.props.navigation.navigate("club-information", {data: item, categories: this.categories});
     }
 
     render() {

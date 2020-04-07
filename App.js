@@ -5,7 +5,7 @@ import {Platform, StatusBar} from 'react-native';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
 import CustomIntroSlider from "./src/components/Custom/CustomIntroSlider";
-import {SplashScreen} from 'expo';
+import {Linking, SplashScreen} from 'expo';
 import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -41,12 +41,73 @@ export default class App extends React.Component<Props, State> {
     onIntroDone: Function;
     onUpdateTheme: Function;
 
+    navigatorRef: Object;
+
+    defaultRoute: Array<string>;
+    defaultData: Object;
+
+    createDrawerNavigator: Function;
+
     constructor() {
         super();
         LocaleManager.initTranslations();
         this.onIntroDone = this.onIntroDone.bind(this);
         this.onUpdateTheme = this.onUpdateTheme.bind(this);
         SplashScreen.preventAutoHide();
+        this.navigatorRef = React.createRef();
+        this.defaultRoute = [];
+        this.defaultData = {};
+        // this.defaultRoute = ["main", "home", "club-information"];
+        // this.defaultData = {clubId: 0};
+        this.handleUrls();
+    }
+
+    handleUrls() {
+        console.log(Linking.makeUrl('main/home/club-information', {clubId: 1}));
+        Linking.addEventListener('url', this.onUrl);
+        Linking.parseInitialURLAsync().then(this.onParsedUrl);
+    }
+
+    onUrl = (url: string) => {
+        this.onParsedUrl(Linking.parse(url));
+    };
+
+    onParsedUrl = ({path, queryParams}: Object) => {
+        if (path !== null) {
+            let pathArray = path.split('/');
+            if (this.isClubInformationLink(pathArray))
+                this.handleClubInformationUrl(queryParams);
+            else if (this.isPlanningInformationLink(pathArray))
+                this.handlePlanningInformationUrl(queryParams);
+        }
+    };
+
+    isClubInformationLink(pathArray: Array<string>) {
+        return pathArray[0] === "main" && pathArray[1] === "home" && pathArray[2] === "club-information";
+    }
+
+    isPlanningInformationLink(pathArray: Array<string>) {
+        return pathArray[0] === "main" && pathArray[1] === "home" && pathArray[2] === "planning-information";
+    }
+
+    handleClubInformationUrl(params: Object) {
+        if (params !== undefined && params.clubId !== undefined) {
+            let id = parseInt(params.clubId);
+            if (!isNaN(id)) {
+                this.defaultRoute = ["main", "home", "club-information"];
+                this.defaultData = {clubId: id};
+            }
+        }
+    }
+
+    handlePlanningInformationUrl(params: Object) {
+        if (params !== undefined && params.eventId !== undefined) {
+            let id = parseInt(params.eventId);
+            if (!isNaN(id)) {
+                this.defaultRoute = ["main", "home", "planning-information"];
+                this.defaultData = {eventId: id};
+            }
+        }
     }
 
     /**
@@ -92,8 +153,10 @@ export default class App extends React.Component<Props, State> {
         await initExpoToken();
         try {
             await ConnectionManager.getInstance().recoverLogin();
-        } catch (e) {}
+        } catch (e) {
+        }
 
+        this.createDrawerNavigator = () => <DrawerNavigator defaultPath={this.defaultRoute} defaultData={this.defaultData}/>;
         this.onLoadFinished();
     }
 
@@ -130,9 +193,9 @@ export default class App extends React.Component<Props, State> {
         } else {
             return (
                 <PaperProvider theme={this.state.currentTheme}>
-                    <NavigationContainer theme={this.state.currentTheme}>
+                    <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
                         <Stack.Navigator headerMode="none">
-                            <Stack.Screen name="Root" component={DrawerNavigator}/>
+                            <Stack.Screen name="Root" component={this.createDrawerNavigator}/>
                         </Stack.Navigator>
                     </NavigationContainer>
                 </PaperProvider>

@@ -29,6 +29,7 @@ const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
 type Props = {
     navigation: Object,
+    route: Object,
     theme: Object,
 }
 
@@ -51,6 +52,9 @@ class HomeScreen extends React.Component<Props> {
         this.colors = props.theme.colors;
 
         this.isLoggedIn = null;
+        if (this.props.route.params.nextScreen !== undefined && this.props.route.params.nextScreen !== null) {
+            this.props.navigation.navigate(this.props.route.params.nextScreen, this.props.route.params.data);
+        }
     }
 
     /**
@@ -80,8 +84,8 @@ class HomeScreen extends React.Component<Props> {
 
     getHeaderButton = () => {
         const screen = this.isLoggedIn
-            ? "ProfileScreen"
-            : "LoginScreen";
+            ? "profile"
+            : "login";
         const icon = this.isLoggedIn
             ? "account"
             : "login";
@@ -93,13 +97,13 @@ class HomeScreen extends React.Component<Props> {
         />;
     };
 
-    onProxiwashClick = () => this.props.navigation.navigate('Proxiwash');
+    onProxiwashClick = () => this.props.navigation.navigate('proxiwash');
 
     onTutorInsaClick = () => openBrowser("https://www.etud.insa-toulouse.fr/~tutorinsa/", this.colors.primary);
 
-    onProximoClick = () => this.props.navigation.navigate('Proximo');
+    onProximoClick = () => this.props.navigation.navigate('proximo');
 
-    onMenuClick = () => this.props.navigation.navigate('SelfMenuScreen');
+    onMenuClick = () => this.props.navigation.navigate('self-menu');
 
     /**
      * Creates the dataset to be used in the FlatList
@@ -338,8 +342,8 @@ class HomeScreen extends React.Component<Props> {
             subtitle = i18n.t('homeScreen.dashboard.todayEventsSubtitleNA');
 
         let displayEvent = this.getDisplayEvent(futureEvents);
-        const clickContainerAction = () => this.props.navigation.navigate('Planning');
-        const clickPreviewAction = () => this.props.navigation.navigate('PlanningDisplayScreen', {data: displayEvent});
+        const clickContainerAction = () => this.props.navigation.navigate('planning');
+        const clickPreviewAction = () => this.props.navigation.navigate('planning-information', {data: displayEvent});
 
         return (
             <DashboardItem

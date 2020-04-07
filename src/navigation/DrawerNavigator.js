@@ -39,12 +39,12 @@ const AboutStack = createStackNavigator();
 function AboutStackComponent() {
     return (
         <AboutStack.Navigator
-            initialRouteName="AboutScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <AboutStack.Screen
-                name="AboutScreen"
+                name="index"
                 component={AboutScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -55,14 +55,14 @@ function AboutStackComponent() {
                 }}
             />
             <AboutStack.Screen
-                name="AboutDependenciesScreen"
+                name="dependencies"
                 component={AboutDependenciesScreen}
                 options={{
                     title: i18n.t('aboutScreen.libs')
                 }}
             />
             <AboutStack.Screen
-                name="DebugScreen"
+                name="debug"
                 component={DebugScreen}
                 options={{
                     title: i18n.t('aboutScreen.debug')
@@ -77,12 +77,12 @@ const SettingsStack = createStackNavigator();
 function SettingsStackComponent() {
     return (
         <SettingsStack.Navigator
-            initialRouteName="SettingsScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <SettingsStack.Screen
-                name="SettingsScreen"
+                name="index"
                 component={SettingsScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -101,12 +101,12 @@ const SelfMenuStack = createStackNavigator();
 function SelfMenuStackComponent() {
     return (
         <SelfMenuStack.Navigator
-            initialRouteName="SelfMenuScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <SelfMenuStack.Screen
-                name="SelfMenuScreen"
+                name="index"
                 component={SelfMenuScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -125,12 +125,12 @@ const AvailableRoomStack = createStackNavigator();
 function AvailableRoomStackComponent() {
     return (
         <AvailableRoomStack.Navigator
-            initialRouteName="AvailableRoomScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <AvailableRoomStack.Screen
-                name="AvailableRoomScreen"
+                name="index"
                 component={AvailableRoomScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -149,12 +149,12 @@ const BibStack = createStackNavigator();
 function BibStackComponent() {
     return (
         <BibStack.Navigator
-            initialRouteName="BibScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <BibStack.Screen
-                name="BibScreen"
+                name="index"
                 component={BibScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -173,12 +173,12 @@ const TetrisStack = createStackNavigator();
 function TetrisStackComponent() {
     return (
         <TetrisStack.Navigator
-            initialRouteName="TetrisScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <TetrisStack.Screen
-                name="TetrisScreen"
+                name="index"
                 component={TetrisScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -197,12 +197,12 @@ const LoginStack = createStackNavigator();
 function LoginStackComponent() {
     return (
         <LoginStack.Navigator
-            initialRouteName="LoginScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <LoginStack.Screen
-                name="LoginScreen"
+                name="index"
                 component={LoginScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -221,12 +221,12 @@ const ProfileStack = createStackNavigator();
 function ProfileStackComponent() {
     return (
         <ProfileStack.Navigator
-            initialRouteName="ProfileScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <ProfileStack.Screen
-                name="ProfileScreen"
+                name="index"
                 component={ProfileScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -246,12 +246,12 @@ const VoteStack = createStackNavigator();
 function VoteStackComponent() {
     return (
         <VoteStack.Navigator
-            initialRouteName="VoteScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <VoteStack.Screen
-                name="VoteScreen"
+                name="index"
                 component={VoteScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -270,12 +270,12 @@ const ClubStack = createStackNavigator();
 function ClubStackComponent() {
     return (
         <ClubStack.Navigator
-            initialRouteName="ClubListScreen"
+            initialRouteName={"index"}
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <ClubStack.Screen
-                name="ClubListScreen"
+                name="index"
                 component={ClubListScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -286,7 +286,7 @@ function ClubStackComponent() {
                 }}
             />
             <ClubStack.Screen
-                name="ClubDisplayScreen"
+                name="club-information"
                 component={ClubDisplayScreen}
                 options={({navigation}) => {
                     return {
@@ -296,7 +296,7 @@ function ClubStackComponent() {
                 }}
             />
             <ClubStack.Screen
-                name="ClubAboutScreen"
+                name="club-about"
                 component={ClubAboutScreen}
                 options={({navigation}) => {
                     return {
@@ -316,61 +316,88 @@ function getDrawerContent(props) {
     return <Sidebar {...props}/>
 }
 
-export default function DrawerNavigator() {
-    return (
-        <Drawer.Navigator
-            initialRouteName={'Main'}
-            headerMode={'float'}
-            backBehavior={'initialRoute'}
-            drawerType={'front'}
-            drawerContent={(props) => getDrawerContent(props)}
-            screenOptions={defaultScreenOptions}
-        >
-            <Drawer.Screen
-                name="Main"
-                component={TabNavigator}
+type Props = {
+    defaultPath: Array<string>,
+    defaultData: Object
+}
+
+
+export default class DrawerNavigator extends React.Component<Props> {
+
+    defaultRoute: string;
+    defaultSubRoute: string | null;
+
+    createTabNavigator: Object;
+
+    constructor(props: Object) {
+        super(props);
+        this.defaultRoute = 'Main';
+        this.defaultSubRoute = null;
+
+        if (props.defaultPath.length > 0)
+            this.defaultRoute = props.defaultPath[0];
+        if (props.defaultPath.length > 1)
+            this.defaultSubRoute = props.defaultPath[1];
+
+        this.createTabNavigator = () => <TabNavigator defaultPath={props.defaultPath} defaultData={props.defaultData}/>
+    }
+
+    render() {
+        return (
+            <Drawer.Navigator
+                initialRouteName={this.defaultRoute}
+                headerMode={'float'}
+                backBehavior={'initialRoute'}
+                drawerType={'front'}
+                drawerContent={(props) => getDrawerContent(props)}
+                screenOptions={defaultScreenOptions}
             >
-            </Drawer.Screen>
-            <Drawer.Screen
-                name="SettingsScreen"
-                component={SettingsStackComponent}
-            />
-            <Drawer.Screen
-                name="AboutScreen"
-                component={AboutStackComponent}
-            />
-            <Drawer.Screen
-                name="SelfMenuScreen"
-                component={SelfMenuStackComponent}
-            />
-            <Drawer.Screen
-                name="AvailableRoomScreen"
-                component={AvailableRoomStackComponent}
-            />
-            <Drawer.Screen
-                name="BibScreen"
-                component={BibStackComponent}
-            />
-            <Drawer.Screen
-                name="TetrisScreen"
-                component={TetrisStackComponent}
-            />
-            <Drawer.Screen
-                name="LoginScreen"
-                component={LoginStackComponent}
-            />
-            <Drawer.Screen
-                name="ProfileScreen"
-                component={ProfileStackComponent}
-            />
-            <Drawer.Screen
-                name="ClubListScreen"
-                component={ClubStackComponent}
-            />
-            <Drawer.Screen
-                name="VoteScreen"
-                component={VoteStackComponent}
-            />
-        </Drawer.Navigator>
-    );
+                <Drawer.Screen
+                    name="main"
+                    component={this.createTabNavigator}
+                >
+                </Drawer.Screen>
+                <Drawer.Screen
+                    name="settings"
+                    component={SettingsStackComponent}
+                />
+                <Drawer.Screen
+                    name="about"
+                    component={AboutStackComponent}
+                />
+                <Drawer.Screen
+                    name="self-menu"
+                    component={SelfMenuStackComponent}
+                />
+                <Drawer.Screen
+                    name="available-rooms"
+                    component={AvailableRoomStackComponent}
+                />
+                <Drawer.Screen
+                    name="bib"
+                    component={BibStackComponent}
+                />
+                <Drawer.Screen
+                    name="tetris"
+                    component={TetrisStackComponent}
+                />
+                <Drawer.Screen
+                    name="login"
+                    component={LoginStackComponent}
+                />
+                <Drawer.Screen
+                    name="profile"
+                    component={ProfileStackComponent}
+                />
+                <Drawer.Screen
+                    name="club-list"
+                    component={ClubStackComponent}
+                />
+                <Drawer.Screen
+                    name="vote"
+                    component={VoteStackComponent}
+                />
+            </Drawer.Navigator>
+        );
+    }
 }

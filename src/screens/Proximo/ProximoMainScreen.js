@@ -95,7 +95,7 @@ class ProximoMainScreen extends React.Component<Props, State> {
                     this.getAvailableArticles(this.articles, undefined) : []
             },
         };
-        this.props.navigation.navigate('ProximoListScreen', searchScreenData);
+        this.props.navigation.navigate('proximo-list', searchScreenData);
     }
 
     /**
@@ -103,7 +103,7 @@ class ProximoMainScreen extends React.Component<Props, State> {
      * This will open the ProximoAboutScreen
      */
     onPressAboutBtn() {
-        this.props.navigation.navigate('ProximoAboutScreen');
+        this.props.navigation.navigate('proximo-about');
     }
 
     /**
@@ -212,7 +212,7 @@ class ProximoMainScreen extends React.Component<Props, State> {
             data: item,
         };
         const subtitle = item.data.length + " " + (item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article'));
-        const onPress = this.props.navigation.navigate.bind(this, 'ProximoListScreen', dataToSend);
+        const onPress = this.props.navigation.navigate.bind(this, 'proximo-list', dataToSend);
         if (item.data.length > 0) {
             return (
                 <List.Item

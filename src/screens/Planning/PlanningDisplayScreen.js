@@ -15,38 +15,54 @@ type Props = {
 };
 
 type State = {
-    imageModalVisible: boolean,
 };
 
 function openWebLink(event, link) {
     Linking.openURL(link).catch((err) => console.error('Error opening link', err));
 }
 
+const FAKE_EVENT = {
+    "id": 142,
+    "title": "Soir\u00e9e Impact'INSA",
+    "logo": null,
+    "date_begin": "2020-04-22 19:00",
+    "date_end": "2020-04-22 00:00",
+    "description": "<p>R\u00e9servation salle de boom + PK pour la soir\u00e9e Impact'Insa<\/p>",
+    "club": "Impact Insa",
+    "category_id": 10,
+    "url": "https:\/\/www.amicale-insat.fr\/event\/142\/view"
+};
+
 /**
  * Class defining a planning event information page.
  */
 class PlanningDisplayScreen extends React.Component<Props, State> {
 
-    displayData = this.props.route.params['data'];
+    displayData: Object;
+    shouldFetchData: boolean;
+    eventId: number;
 
     colors: Object;
 
     state = {
-        imageModalVisible: false,
+
     };
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
+
+        if (this.props.route.params.data !== undefined) {
+            this.displayData = this.props.route.params.data;
+            this.eventId = this.props.route.params.data.eventId;
+            this.shouldFetchData = false;
+        } else {
+            this.displayData = FAKE_EVENT;
+            this.eventId = this.props.route.params.eventId;
+            this.shouldFetchData = true;
+            console.log(this.eventId);
+        }
     }
-
-    showImageModal = () => {
-        this.setState({imageModalVisible: true});
-    };
-
-    hideImageModal = () => {
-        this.setState({imageModalVisible: false});
-    };
 
     render() {
         // console.log("rendering planningDisplayScreen");

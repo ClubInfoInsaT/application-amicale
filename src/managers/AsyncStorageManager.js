@@ -61,7 +61,7 @@ export default class AsyncStorageManager {
         },
         defaultStartScreen: {
             key: 'defaultStartScreen',
-            default: 'Home',
+            default: 'home',
             current: '',
         },
         proxiwashShowBanner: {

@@ -16,14 +16,15 @@ import AsyncStorageManager from "../managers/AsyncStorageManager";
 import HeaderButton from "../components/Custom/HeaderButton";
 import {withTheme} from 'react-native-paper';
 import i18n from "i18n-js";
+import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 
 
 const TAB_ICONS = {
-    Home: 'triangle',
-    Planning: 'calendar-range',
-    Proxiwash: 'tshirt-crew',
-    Proximo: 'cart',
-    Planex: 'clock',
+    home: 'triangle',
+    planning: 'calendar-range',
+    proxiwash: 'tshirt-crew',
+    proximo: 'cart',
+    planex: 'clock',
 };
 
 const defaultScreenOptions = {
@@ -43,12 +44,12 @@ const ProximoStack = createStackNavigator();
 function ProximoStackComponent() {
     return (
         <ProximoStack.Navigator
-            initialRouteName="ProximoMainScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <ProximoStack.Screen
-                name="ProximoMainScreen"
+                name="index"
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
@@ -59,14 +60,14 @@ function ProximoStackComponent() {
                 component={ProximoMainScreen}
             />
             <ProximoStack.Screen
-                name="ProximoListScreen"
+                name="proximo-list"
                 options={{
                     title: 'Articles'
                 }}
                 component={ProximoListScreen}
             />
             <ProximoStack.Screen
-                name="ProximoAboutScreen"
+                name="proximo-about"
                 component={ProximoAboutScreen}
                 options={{
                     title: 'Proximo',
@@ -82,12 +83,12 @@ const ProxiwashStack = createStackNavigator();
 function ProxiwashStackComponent() {
     return (
         <ProxiwashStack.Navigator
-            initialRouteName="ProxiwashScreen"
+            initialRouteName="index"
             headerMode='float'
             screenOptions={defaultScreenOptions}
         >
             <ProxiwashStack.Screen
-                name="ProxiwashScreen"
+                name="index"
                 component={ProxiwashScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -98,7 +99,7 @@ function ProxiwashStackComponent() {
                 }}
             />
             <ProxiwashStack.Screen
-                name="ProxiwashAboutScreen"
+                name="proxiwash-about"
                 component={ProxiwashAboutScreen}
                 options={{
                     title: 'Proxiwash',
@@ -114,12 +115,12 @@ const PlanningStack = createStackNavigator();
 function PlanningStackComponent() {
     return (
         <PlanningStack.Navigator
-            initialRouteName="PlanningScreen"
+            initialRouteName="index"
             headerMode='float'
             screenOptions={defaultScreenOptions}
         >
             <PlanningStack.Screen
-                name="PlanningScreen"
+                name="index"
                 component={PlanningScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -130,7 +131,7 @@ function PlanningStackComponent() {
                 }}
             />
             <PlanningStack.Screen
-                name="PlanningDisplayScreen"
+                name="planning-information"
                 component={PlanningDisplayScreen}
                 options={{
                     title: 'Details',
@@ -143,15 +144,15 @@ function PlanningStackComponent() {
 
 const HomeStack = createStackNavigator();
 
-function HomeStackComponent() {
+function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
     return (
         <HomeStack.Navigator
-            initialRouteName="HomeScreen"
+            initialRouteName={"index"}
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <HomeStack.Screen
-                name="HomeScreen"
+                name="index"
                 component={HomeScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -160,13 +161,24 @@ function HomeStackComponent() {
                         headerLeft: openDrawer
                     };
                 }}
+                initialParams={{data: defaultData, nextScreen: initialRoute}}
             />
             <HomeStack.Screen
-                name="PlanningDisplayScreen"
+                name="planning-information"
                 component={PlanningDisplayScreen}
                 options={{
                     title: 'Details',
                     ...TransitionPresets.ModalSlideFromBottomIOS,
+                }}
+            />
+            <HomeStack.Screen
+                name="club-information"
+                component={ClubDisplayScreen}
+                options={({navigation}) => {
+                    return {
+                        title: "",
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                    };
                 }}
             />
         </HomeStack.Navigator>
@@ -178,12 +190,12 @@ const PlanexStack = createStackNavigator();
 function PlanexStackComponent() {
     return (
         <PlanexStack.Navigator
-            initialRouteName="HomeScreen"
+            initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <PlanexStack.Screen
-                name="PlanexScreen"
+                name="index"
                 component={PlanexScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -199,46 +211,71 @@ function PlanexStackComponent() {
 
 const Tab = createMaterialBottomTabNavigator();
 
-function TabNavigator(props) {
-    const {colors} = props.theme;
-    return (
-        <Tab.Navigator
-            initialRouteName={AsyncStorageManager.getInstance().preferences.defaultStartScreen.current}
-            barStyle={{backgroundColor: colors.surface}}
-            screenOptions={({route}) => ({
-                tabBarIcon: ({focused, color, size}) => {
-                    let icon = TAB_ICONS[route.name];
-                    // tintColor is ignoring activeColor and inactiveColor for some reason
-                    icon = focused ? icon : icon + ('-outline');
-                    return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
-                },
-            })}
-            activeColor={colors.primary}
-            inactiveColor={colors.tabIcon}
-        >
-            <Tab.Screen
-                name="Proximo"
-                component={ProximoStackComponent}
-            />
-            <Tab.Screen
-                name="Planning"
-                component={PlanningStackComponent}
-            />
-            <Tab.Screen
-                name="Home"
-                component={HomeStackComponent}
-                options={{title: i18n.t('screens.home')}}
-            />
-            <Tab.Screen
-                name="Proxiwash"
-                component={ProxiwashStackComponent}
-            />
-            <Tab.Screen
-                name="Planex"
-                component={PlanexStackComponent}
-            />
-        </Tab.Navigator>
-    );
+type Props = {
+    defaultPath: Array<string>,
+    defaultData: Object
+}
+
+class TabNavigator extends React.Component<Props>{
+
+    createHomeStackComponent: Object;
+    colors: Object;
+
+    constructor(props) {
+        super(props);
+        this.colors = props.theme.colors;
+        this.defaultRoute = AsyncStorageManager.getInstance().preferences.defaultStartScreen.current.toLowerCase();
+        this.defaultSubRoute = null;
+
+        if (props.defaultPath.length > 1)
+            this.defaultRoute = props.defaultPath[1];
+        if (props.defaultPath.length > 2)
+            this.defaultSubRoute = props.defaultPath[2];
+
+
+        this.createHomeStackComponent = () => HomeStackComponent(this.defaultSubRoute, props.defaultData);
+    }
+
+    render() {
+        return (
+            <Tab.Navigator
+                initialRouteName={this.defaultRoute}
+                barStyle={{backgroundColor: this.colors.surface}}
+                screenOptions={({route}) => ({
+                    tabBarIcon: ({focused, color, size}) => {
+                        let icon = TAB_ICONS[route.name];
+                        // tintColor is ignoring activeColor and inactiveColor for some reason
+                        icon = focused ? icon : icon + ('-outline');
+                        return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
+                    },
+                })}
+                activeColor={this.colors.primary}
+                inactiveColor={this.colors.tabIcon}
+            >
+                <Tab.Screen
+                    name="proximo"
+                    component={ProximoStackComponent}
+                />
+                <Tab.Screen
+                    name="planning"
+                    component={PlanningStackComponent}
+                />
+                <Tab.Screen
+                    name="home"
+                    component={this.createHomeStackComponent}
+                    options={{title: i18n.t('screens.home')}}
+                />
+                <Tab.Screen
+                    name="proxiwash"
+                    component={ProxiwashStackComponent}
+                />
+                <Tab.Screen
+                    name="planex"
+                    component={PlanexStackComponent}
+                />
+            </Tab.Navigator>
+        );
+    }
 }
 
 export default withTheme(TabNavigator);

@@ -185,7 +185,7 @@ export default class PlanningScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getRenderItem(item: eventObject) {
-        const onPress = this.props.navigation.navigate.bind(this, 'PlanningDisplayScreen', {data: item});
+        const onPress = this.props.navigation.navigate.bind(this, 'planning-information', {data: item});
         if (item.logo !== null) {
             return (
                 <View>

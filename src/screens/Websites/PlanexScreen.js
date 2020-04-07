@@ -134,7 +134,7 @@ export default class PlanexScreen extends React.Component<Props, State> {
      */
     onGoToSettings() {
         this.onHideBanner();
-        this.props.navigation.navigate('SettingsScreen');
+        this.props.navigation.navigate('settings');
     }
 
     render() {

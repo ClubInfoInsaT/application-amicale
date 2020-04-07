@@ -101,7 +101,7 @@ class AboutScreen extends React.Component<Props, State> {
             showChevron: true
         },
         {
-            onPressCallback: () => this.props.navigation.navigate('DebugScreen'),
+            onPressCallback: () => this.props.navigation.navigate('debug'),
             icon: 'bug-check',
             text: i18n.t('aboutScreen.debug'),
             showChevron: true,
@@ -165,7 +165,7 @@ class AboutScreen extends React.Component<Props, State> {
             showChevron: true
         },
         {
-            onPressCallback: () => this.props.navigation.navigate('AboutDependenciesScreen'),
+            onPressCallback: () => this.props.navigation.navigate('dependencies'),
             icon: 'developer-board',
             text: i18n.t('aboutScreen.libs'),
             showChevron: true

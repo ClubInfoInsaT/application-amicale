@@ -21,7 +21,7 @@ class ActionsDashBoardItem extends React.PureComponent<Props> {
 
     openDrawer = () => this.props.navigation.openDrawer();
 
-    gotToSettings = () => this.props.navigation.navigate("SettingsScreen");
+    gotToSettings = () => this.props.navigation.navigate("settings");
 
     render() {
         return (
