@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableWithoutFeedback, View} from "react-native";
+import {KeyboardAvoidingView, ScrollView, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, HelperText, Paragraph, TextInput, withTheme} from 'react-native-paper';
 import ConnectionManager from "../../managers/ConnectionManager";
 import {openBrowser} from "../../utils/WebBrowser";
@@ -44,11 +44,6 @@ class LoginScreen extends React.Component<Props, State> {
 
     onEmailChange: Function;
     onPasswordChange: Function;
-    validateEmail: Function;
-    validatePassword: Function;
-    onSubmit: Function;
-    onEmailSubmit: Function;
-    onResetPasswordClick: Function;
 
     passwordInputRef: Object;
 
@@ -56,11 +51,7 @@ class LoginScreen extends React.Component<Props, State> {
         super(props);
         this.onEmailChange = this.onInputChange.bind(this, true);
         this.onPasswordChange = this.onInputChange.bind(this, false);
-        this.validateEmail = this.validateEmail.bind(this);
-        this.validatePassword = this.validatePassword.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-        this.onEmailSubmit = this.onEmailSubmit.bind(this);
-        this.onResetPasswordClick = this.onResetPasswordClick.bind(this);
+
         this.colors = props.theme.colors;
     }
 
@@ -72,37 +63,23 @@ class LoginScreen extends React.Component<Props, State> {
 
     hideErrorDialog = () => this.setState({dialogVisible: false});
 
-    onResetPasswordClick() {
-        openBrowser(RESET_PASSWORD_LINK, this.colors.primary);
-    }
+    handleSuccess = () => this.props.navigation.navigate('ProfileScreen');
 
-    validateEmail() {
-        this.setState({isEmailValidated: true});
-    }
+    onResetPasswordClick = () => openBrowser(RESET_PASSWORD_LINK, this.colors.primary);
 
-    isEmailValid() {
-        return emailRegex.test(this.state.email);
-    }
+    validateEmail = () => this.setState({isEmailValidated: true});
 
-    shouldShowEmailError() {
-        return this.state.isEmailValidated && !this.isEmailValid();
-    }
+    isEmailValid() {return emailRegex.test(this.state.email);}
 
-    validatePassword() {
-        this.setState({isPasswordValidated: true});
-    }
+    shouldShowEmailError() {return this.state.isEmailValidated && !this.isEmailValid();}
 
-    isPasswordValid() {
-        return this.state.password !== '';
-    }
+    validatePassword = () => this.setState({isPasswordValidated: true});
 
-    shouldShowPasswordError() {
-        return this.state.isPasswordValidated && !this.isPasswordValid();
-    }
+    isPasswordValid() {return this.state.password !== '';}
 
-    shouldEnableLogin() {
-        return this.isEmailValid() && this.isPasswordValid() && !this.state.loading;
-    }
+    shouldShowPasswordError() {return this.state.isPasswordValidated && !this.isPasswordValid();}
+
+    shouldEnableLogin() {return this.isEmailValid() && this.isPasswordValid() && !this.state.loading;}
 
     onInputChange(isEmail: boolean, value: string) {
         if (isEmail) {
@@ -118,27 +95,19 @@ class LoginScreen extends React.Component<Props, State> {
         }
     }
 
-    onEmailSubmit() {
-        this.passwordInputRef.focus();
-    }
+    onEmailSubmit = () => this.passwordInputRef.focus();
 
-    onSubmit() {
+    onSubmit = () => {
         if (this.shouldEnableLogin()) {
             this.setState({loading: true});
             ConnectionManager.getInstance().connect(this.state.email, this.state.password)
-                .then((data) => {
-                    this.handleSuccess();
-                })
+                .then(this.handleSuccess)
                 .catch(this.showErrorDialog)
                 .finally(() => {
                     this.setState({loading: false});
                 });
         }
-    }
-
-    handleSuccess() {
-        this.props.navigation.navigate('ProfileScreen');
-    }
+    };
 
     getFormInput() {
         return (
@@ -263,12 +232,10 @@ class LoginScreen extends React.Component<Props, State> {
                 keyboardVerticalOffset={100}
             >
                 <ScrollView>
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <View>
-                            {this.getMainCard()}
-                            {this.getSecondaryCard()}
-                        </View>
-                    </TouchableWithoutFeedback>
+                    <View>
+                        {this.getMainCard()}
+                        {this.getSecondaryCard()}
+                    </View>
                     <ErrorDialog
                         visible={this.state.dialogVisible}
                         onDismiss={this.hideErrorDialog}
