@@ -18,6 +18,7 @@ import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {getTimeOnlyString, stringToDate} from "../../utils/Planning";
 import LoadingConfirmDialog from "../../components/Dialog/LoadingConfirmDialog";
 import ConnectionManager from "../../managers/ConnectionManager";
+import ErrorDialog from "../../components/Dialog/ErrorDialog";
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
 
@@ -72,6 +73,8 @@ type Props = {
 type State = {
     selectedTeam: string,
     voteDialogVisible: boolean,
+    errorDialogVisible: boolean,
+    currentError: number,
 }
 
 class VoteScreen extends React.Component<Props, State> {
@@ -79,6 +82,8 @@ class VoteScreen extends React.Component<Props, State> {
     state = {
         selectedTeam: "none",
         voteDialogVisible: false,
+        errorDialogVisible: false,
+        currentError: 0,
     };
 
     colors: Object;
@@ -133,7 +138,6 @@ class VoteScreen extends React.Component<Props, State> {
                     renderItem={this.mainRenderItem}
                 />
                 <LoadingConfirmDialog
-                    {...this.props}
                     visible={this.state.voteDialogVisible}
                     onDismiss={this.onVoteDialogDismiss}
                     onAccept={this.onVoteDialogAccept}
@@ -141,13 +145,23 @@ class VoteScreen extends React.Component<Props, State> {
                     titleLoading={"SENDING VOTE..."}
                     message={"SURE?"}
                 />
+                <ErrorDialog
+                    visible={this.state.errorDialogVisible}
+                    onDismiss={this.onErrorDialogDismiss}
+                    errorCode={this.state.currentError}
+                />
             </View>
         );
     };
 
     onVoteDialogDismiss = () => this.setState({voteDialogVisible: false});
+    onErrorDialogDismiss = () => this.setState({errorDialogVisible: false});
 
     showVoteDialog = () => this.setState({voteDialogVisible: true});
+    showErrorDialog = (error: number) => this.setState({
+        errorDialogVisible: true,
+        currentError: error,
+    });
 
     onVoteDialogAccept = async () => {
         return new Promise((resolve, reject) => {
@@ -159,8 +173,9 @@ class VoteScreen extends React.Component<Props, State> {
                     this.onVoteDialogDismiss();
                     resolve();
                 })
-                .catch(() => {
+                .catch((error: number) => {
                     this.onVoteDialogDismiss();
+                    this.showErrorDialog(error);
                     resolve();
                 });
         });
