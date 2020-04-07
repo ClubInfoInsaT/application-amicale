@@ -70,7 +70,12 @@ class AuthenticatedScreen extends React.Component<Props, State> {
             : null;
         this.errorCode = error;
 
-        if (this.allRequestsFinished())
+        if (this.errorCode === ERROR_TYPE.BAD_TOKEN) { // Token expired, logout user
+            this.connectionManager.disconnect()
+                .then(() => {
+                    this.props.navigation.navigate("LoginScreen");
+                });
+        } else if (this.allRequestsFinished())
             this.setState({loading: false});
     }
 
