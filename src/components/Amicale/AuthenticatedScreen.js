@@ -48,7 +48,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
             this.setState({loading: true});
         if (this.connectionManager.isLoggedIn()) {
             for (let i = 0; i < this.props.links.length; i++) {
-                this.connectionManager.authenticatedRequest(this.props.links[i].link)
+                this.connectionManager.authenticatedRequest(this.props.links[i].link, null, null)
                     .then((data) => {
                         this.onFinishedLoading(data, i, -1);
                     })

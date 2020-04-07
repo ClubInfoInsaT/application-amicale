@@ -190,11 +190,11 @@ export default class ConnectionManager {
         return data;
     }
 
-    async authenticatedRequest(path: string, keys: Array<string>, values: Array<any>) {
+    async authenticatedRequest(path: string, keys: Array<string>|null, values: Array<any>|null) {
         return new Promise((resolve, reject) => {
             if (this.getToken() !== null) {
                 let data = {};
-                if (keys !== undefined && values !== undefined && keys.length === values.length)
+                if (keys !== null && values !== null && keys.length === values.length)
                     data = this.generatePostArguments(keys, values);
                 console.log(data);
                 fetch(API_ENDPOINT + path, {
