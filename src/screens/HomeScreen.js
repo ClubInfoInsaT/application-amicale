@@ -77,7 +77,13 @@ class HomeScreen extends React.Component<Props> {
                 headerRight: this.getHeaderButton,
             });
         }
-        // TODO if already on home screen
+        // Handle link open when home is focused
+        this.props.navigation.addListener('state', this.handleNavigationParams);
+        // handle link open when home is not focused or created
+        this.handleNavigationParams();
+    };
+
+    handleNavigationParams = () => {
         if (this.props.route.params !== undefined) {
             if (this.props.route.params.shouldOpen !== undefined && this.props.route.params.shouldOpen) {
                 this.props.navigation.navigate(this.props.route.params.nextScreen, this.props.route.params.data);
