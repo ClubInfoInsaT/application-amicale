@@ -19,7 +19,7 @@ type Props = {
     stickyHeader: boolean,
     createDataset: Function,
     updateData: number,
-    itemHeight: number,
+    itemHeight: number | null,
 }
 
 type State = {
@@ -43,7 +43,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         renderSectionHeader: null,
         stickyHeader: false,
         updateData: 0,
-        itemHeight: undefined,
+        itemHeight: null,
     };
 
     refreshInterval: IntervalID;
@@ -198,7 +198,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                             errorCode={ERROR_TYPE.CONNECTION_ERROR}
                             onRefresh={this.onRefresh}/>
                     }
-                    getItemLayout={this.props.itemHeight !== undefined ? this.itemLayout : undefined}
+                    getItemLayout={this.props.itemHeight !== null ? this.itemLayout : undefined}
                 />
                 <Snackbar
                     visible={this.state.snackbarVisible}

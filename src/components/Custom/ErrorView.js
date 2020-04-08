@@ -9,6 +9,7 @@ import {ERROR_TYPE} from "../../managers/ConnectionManager";
 
 type Props = {
     navigation: Object,
+    route: Object,
     errorCode: number,
     onRefresh: Function,
 }
@@ -85,7 +86,11 @@ class ErrorView extends React.PureComponent<Props, State> {
         </Button>;
     }
 
-    goToLogin = () => this.props.navigation.navigate("login");
+    goToLogin = () => this.props.navigation.navigate("login",
+        {
+           screen: 'index',
+           params: {nextScreen: this.props.route.name}
+        });
 
     getLoginButton() {
         return <Button

@@ -73,7 +73,7 @@ export default class App extends React.Component<Props, State> {
         // Navigate to nested navigator and pass data to the index screen
         this.navigatorRef.current.navigate('home', {
             screen: 'index',
-            params: {nextScreen: route, data: data, shouldOpen: true}
+            params: {nextScreen: route, data: data}
         });
     };
 

@@ -169,7 +169,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
                 initialParams={data}
             />
             <HomeStack.Screen
-                name="planning-information"
+                name="home-planning-information"
                 component={PlanningDisplayScreen}
                 options={{
                     title: i18n.t('screens.planningDisplayScreen'),
@@ -177,7 +177,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
                 }}
             />
             <HomeStack.Screen
-                name="club-information"
+                name="home-club-information"
                 component={ClubDisplayScreen}
                 options={({navigation}) => {
                     return {

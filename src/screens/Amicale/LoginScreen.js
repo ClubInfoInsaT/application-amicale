@@ -7,9 +7,11 @@ import ConnectionManager from "../../managers/ConnectionManager";
 import {openBrowser} from "../../utils/WebBrowser";
 import i18n from 'i18n-js';
 import ErrorDialog from "../../components/Dialog/ErrorDialog";
+import {CommonActions} from "@react-navigation/native";
 
 type Props = {
     navigation: Object,
+    route: Object,
 }
 
 type State = {
@@ -44,8 +46,9 @@ class LoginScreen extends React.Component<Props, State> {
 
     onEmailChange: Function;
     onPasswordChange: Function;
-
     passwordInputRef: Object;
+
+    nextScreen: string;
 
     constructor(props) {
         super(props);
@@ -53,7 +56,17 @@ class LoginScreen extends React.Component<Props, State> {
         this.onPasswordChange = this.onInputChange.bind(this, false);
 
         this.colors = props.theme.colors;
+
+        this.props.navigation.addListener('focus', this.onScreenFocus);
     }
+
+    onScreenFocus = () => {
+        if (this.props.route.params !== undefined && this.props.route.params.nextScreen !== undefined) {
+            this.nextScreen = this.props.route.params.nextScreen;
+            this.props.navigation.dispatch(CommonActions.setParams({nextScreen: 'profile'}));
+        } else
+            this.nextScreen = 'profile';
+    };
 
     showErrorDialog = (error: number) =>
         this.setState({
@@ -63,23 +76,33 @@ class LoginScreen extends React.Component<Props, State> {
 
     hideErrorDialog = () => this.setState({dialogVisible: false});
 
-    handleSuccess = () => this.props.navigation.navigate('profile');
+    handleSuccess = () => this.props.navigation.navigate(this.nextScreen);
 
     onResetPasswordClick = () => openBrowser(RESET_PASSWORD_LINK, this.colors.primary);
 
     validateEmail = () => this.setState({isEmailValidated: true});
 
-    isEmailValid() {return emailRegex.test(this.state.email);}
+    isEmailValid() {
+        return emailRegex.test(this.state.email);
+    }
 
-    shouldShowEmailError() {return this.state.isEmailValidated && !this.isEmailValid();}
+    shouldShowEmailError() {
+        return this.state.isEmailValidated && !this.isEmailValid();
+    }
 
     validatePassword = () => this.setState({isPasswordValidated: true});
 
-    isPasswordValid() {return this.state.password !== '';}
+    isPasswordValid() {
+        return this.state.password !== '';
+    }
 
-    shouldShowPasswordError() {return this.state.isPasswordValidated && !this.isPasswordValid();}
+    shouldShowPasswordError() {
+        return this.state.isPasswordValidated && !this.isPasswordValid();
+    }
 
-    shouldEnableLogin() {return this.isEmailValid() && this.isPasswordValid() && !this.state.loading;}
+    shouldEnableLogin() {
+        return this.isEmailValid() && this.isPasswordValid() && !this.state.loading;
+    }
 
     onInputChange(isEmail: boolean, value: string) {
         if (isEmail) {

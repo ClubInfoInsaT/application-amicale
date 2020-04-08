@@ -39,17 +39,12 @@ type Props = {
  */
 class HomeScreen extends React.Component<Props> {
 
-    getRenderItem: Function;
-    createDataset: Function;
-
     colors: Object;
 
     isLoggedIn: boolean | null;
 
     constructor(props) {
         super(props);
-        this.getRenderItem = this.getRenderItem.bind(this);
-        this.createDataset = this.createDataset.bind(this);
         this.colors = props.theme.colors;
 
         this.isLoggedIn = null;
@@ -85,10 +80,10 @@ class HomeScreen extends React.Component<Props> {
 
     handleNavigationParams = () => {
         if (this.props.route.params !== undefined) {
-            if (this.props.route.params.shouldOpen !== undefined && this.props.route.params.shouldOpen) {
+            if (this.props.route.params.nextScreen !== undefined && this.props.route.params.nextScreen !== null) {
                 this.props.navigation.navigate(this.props.route.params.nextScreen, this.props.route.params.data);
                 // reset params to prevent infinite loop
-                this.props.navigation.dispatch(CommonActions.setParams({ shouldOpen: false }));
+                this.props.navigation.dispatch(CommonActions.setParams({ nextScreen: null }));
             }
         }
     };
@@ -122,7 +117,7 @@ class HomeScreen extends React.Component<Props> {
      * @param fetchedData
      * @return {*}
      */
-    createDataset(fetchedData: Object) {
+    createDataset = (fetchedData: Object) => {
         // fetchedData = DATA;
         let newsData = [];
         let dashboardData = [];
@@ -201,7 +196,7 @@ class HomeScreen extends React.Component<Props> {
             return this.getDashboardEventItem(content);
         else if (item['id'] === 'top')
             return this.getDashboardTopItem(content);
-        else if (item['id'] === 'actions')
+        else
             return this.getActionsDashboardItem();
     }
 
@@ -462,10 +457,11 @@ class HomeScreen extends React.Component<Props> {
      * @param section The current section
      * @return {*}
      */
-    getRenderItem({item, section}: Object) {
-        return (section['id'] === SECTIONS_ID[0] ?
-            this.getDashboardItem(item) : this.getFeedItem(item));
-    }
+    getRenderItem = ({item, section}: Object) => {
+        return (section['id'] === SECTIONS_ID[0]
+            ? this.getDashboardItem(item)
+            : this.getFeedItem(item));
+    };
 
     openScanner = () => this.props.navigation.navigate("scanner");
 
