@@ -194,6 +194,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                     ListEmptyComponent={this.state.refreshing
                         ? <BasicLoadingScreen/>
                         : <ErrorView
+                            {...this.props}
                             errorCode={ERROR_TYPE.CONNECTION_ERROR}
                             onRefresh={this.onRefresh}/>
                     }

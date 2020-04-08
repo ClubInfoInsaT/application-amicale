@@ -3,6 +3,7 @@
     "home": "Accueil",
     "planning": "Planning",
     "planningDisplayScreen": "Détails",
+    "clubDisplayScreen": "Détails",
     "proxiwash": "Proxiwash",
     "proximo": "Proximo",
     "proximoArticles": "Articles",
@@ -253,7 +254,7 @@
   "errors": {
     "title": "Erreur !",
     "badCredentials": "Email ou mot de passe invalide.",
-    "badToken": "Session expirée, merci de vous reconnecter.",
+    "badToken": "Vous n'êtes pas connecté. Merci de vous connecter puis réessayez.",
     "noConsent": "Vous n'avez pas donné votre consentement pour l'utilisation de vos données personnelles.",
     "badInput": "Entrée invalide. Merci de réessayer.",
     "forbidden": "Vous n'avez pas accès à cette information.",

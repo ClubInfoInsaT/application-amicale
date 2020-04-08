@@ -1,14 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {withTheme} from 'react-native-paper';
 import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
 import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 
 type Props = {
     navigation: Object,
-    theme: Object,
     links: Array<{link: string, mandatory: boolean}>,
     renderFunction: Function,
 }
@@ -25,24 +23,35 @@ class AuthenticatedScreen extends React.Component<Props, State> {
 
     currentUserToken: string | null;
     connectionManager: ConnectionManager;
-    errorCode: number;
-    data: Array<Object>;
-    colors: Object;
+    errors: Array<number>;
+    fetchedData: Array<Object>;
 
-    constructor(props) {
+    constructor(props: Object) {
         super(props);
-        this.colors = props.theme.colors;
         this.connectionManager = ConnectionManager.getInstance();
-        this.props.navigation.addListener('focus', this.onScreenFocus.bind(this));
-        this.data = new Array(this.props.links.length);
+        this.props.navigation.addListener('focus', this.onScreenFocus);
+        this.fetchedData = new Array(this.props.links.length);
+        this.errors = new Array(this.props.links.length);
         this.fetchData(); // TODO remove in prod (only use for fast refresh)
     }
 
-    onScreenFocus() {
-        if (this.currentUserToken !== this.connectionManager.getToken())
+    /**
+     * Refreshes screen if user changed
+     */
+    onScreenFocus = () => {
+        if (this.currentUserToken !== this.connectionManager.getToken()){
+            this.currentUserToken = this.connectionManager.getToken();
             this.fetchData();
-    }
+        }
+    };
 
+    /**
+     * Fetches the data from the server.
+     *
+     * If the user is not logged in errorCode is set to BAD_TOKEN and all requests fail.
+     *
+     * If the user is logged in, send all requests.
+     */
     fetchData = () => {
         if (!this.state.loading)
             this.setState({loading: true});
@@ -50,39 +59,51 @@ class AuthenticatedScreen extends React.Component<Props, State> {
             for (let i = 0; i < this.props.links.length; i++) {
                 this.connectionManager.authenticatedRequest(this.props.links[i].link, null, null)
                     .then((data) => {
-                        this.onFinishedLoading(data, i, -1);
+                        this.onRequestFinished(data, i, -1);
                     })
                     .catch((error) => {
-                        this.onFinishedLoading(null, i, error);
+                        this.onRequestFinished(null, i, error);
                     });
             }
-
         } else {
-            this.onFinishedLoading(null, -1, ERROR_TYPE.BAD_CREDENTIALS);
+            for (let i = 0; i < this.props.links.length; i++) {
+                this.onRequestFinished(null, i, ERROR_TYPE.BAD_TOKEN);
+            }
         }
     };
 
-    onFinishedLoading(data: Object, index: number, error: number) {
-        if (index >= 0 && index < this.props.links.length)
-            this.data[index] = data;
-        this.currentUserToken = data !== undefined
-            ? this.connectionManager.getToken()
-            : null;
-        this.errorCode = error;
+    /**
+     * Callback used when a request finishes, successfully or not.
+     * Saves data and error code.
+     * If the token is invalid, logout the user and open the login screen.
+     * If the last request was received, stop the loading screen.
+     *
+     * @param data The data fetched from the server
+     * @param index The index for the data
+     * @param error The error code received
+     */
+    onRequestFinished(data: Object | null, index: number, error: number) {
+        if (index >= 0 && index < this.props.links.length){
+            this.fetchedData[index] = data;
+            this.errors[index] = error;
+        }
 
-        if (this.errorCode === ERROR_TYPE.BAD_TOKEN) { // Token expired, logout user
-            this.connectionManager.disconnect()
-                .then(() => {
-                    this.props.navigation.navigate("login");
-                });
-        } else if (this.allRequestsFinished())
+        if (error === ERROR_TYPE.BAD_TOKEN) // Token expired, logout user
+            this.connectionManager.disconnect();
+
+        if (this.allRequestsFinished())
             this.setState({loading: false});
     }
 
+    /**
+     * Checks if all requests finished processing
+     *
+     * @return {boolean} True if all finished
+     */
     allRequestsFinished() {
         let finished = true;
-        for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i] === undefined) {
+        for (let i = 0; i < this.fetchedData.length; i++) {
+            if (this.fetchedData[i] === undefined) {
                 finished = false;
                 break;
             }
@@ -90,10 +111,17 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         return finished;
     }
 
+    /**
+     * Checks if all requests have finished successfully.
+     * This will return false only if a mandatory request failed.
+     * All non-mandatory requests can fail without impacting the return value.
+     *
+     * @return {boolean} True if all finished successfully
+     */
     allRequestsValid() {
         let valid = true;
-        for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i] === null && this.props.links[i].mandatory) {
+        for (let i = 0; i < this.fetchedData.length; i++) {
+            if (this.fetchedData[i] === null && this.props.links[i].mandatory) {
                 valid = false;
                 break;
             }
@@ -101,15 +129,40 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         return valid;
     }
 
+    /**
+     * Gets the error to render.
+     * Non-mandatory requests are ignored.
+     *
+     *
+     * @return {number} The error code or ERROR_TYPE.SUCCESS if no error was found
+     */
+    getError() {
+        for (let i = 0; i < this.errors.length; i++) {
+            if (this.errors[i] !== 0 && this.props.links[i].mandatory) {
+                return this.errors[i];
+            }
+        }
+        return ERROR_TYPE.SUCCESS;
+    }
+
+    /**
+     * Gets the error view to display in case of error
+     *
+     * @return {*}
+     */
     getErrorRender() {
         return (
             <ErrorView
-                errorCode={this.errorCode}
+                {...this.props}
+                errorCode={this.getError()}
                 onRefresh={this.fetchData}
             />
         );
     }
 
+    /**
+     * Reloads the data, to be called using ref by parent components
+     */
     reload() {
         this.fetchData();
     }
@@ -119,10 +172,10 @@ class AuthenticatedScreen extends React.Component<Props, State> {
             this.state.loading
                 ? <BasicLoadingScreen/>
                 : (this.allRequestsValid()
-                ? this.props.renderFunction(this.data)
+                ? this.props.renderFunction(this.fetchedData)
                 : this.getErrorRender())
         );
     }
 }
 
-export default withTheme(AuthenticatedScreen);
+export default AuthenticatedScreen;

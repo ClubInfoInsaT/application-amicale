@@ -181,7 +181,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
                 component={ClubDisplayScreen}
                 options={({navigation}) => {
                     return {
-                        title: '',
+                        title: i18n.t('screens.clubDisplayScreen'),
                         ...TransitionPresets.ModalSlideFromBottomIOS,
                     };
                 }}

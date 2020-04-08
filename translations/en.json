@@ -3,6 +3,7 @@
     "home": "Home",
     "planning": "Planning",
     "planningDisplayScreen": "Event details",
+    "clubDisplayScreen": "Club details",
     "proxiwash": "Proxiwash",
     "proximo": "Proximo",
     "proximoArticles": "Articles",
@@ -253,7 +254,7 @@
   "errors": {
     "title": "Error!",
     "badCredentials": "Email or password invalid.",
-    "badToken": "Session expired, please login again.",
+    "badToken": "You are not logged in. Please login and try again.",
     "noConsent": "You did not give your consent for data processing to the Amicale.",
     "badInput": "Invalid input. Please try again.",
     "forbidden": "You do not have access to this data.",

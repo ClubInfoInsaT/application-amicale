@@ -235,7 +235,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Sets the given data as the watchlist
+     * Sets the given fetchedData as the watchlist
      *
      * @param data
      */

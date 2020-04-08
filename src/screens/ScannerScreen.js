@@ -42,7 +42,6 @@ class ScannerScreen extends React.Component<Props, State> {
     updatePermissionStatus = ({status}) => this.setState({hasPermission: status === "granted"});
 
     handleCodeScanned = ({type, data}) => {
-
         if (!URLHandler.isUrlValid(data))
             this.showErrorDialog();
         else {

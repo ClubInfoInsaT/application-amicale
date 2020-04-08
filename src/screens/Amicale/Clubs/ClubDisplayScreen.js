@@ -39,7 +39,7 @@ const FakeClub = {
 };
 
 /**
- * Class defining a planning event information page.
+ * Class defining a club event information page.
  * If called with data and categories navigation parameters, will use those to display the data.
  * If called with clubId parameter, will fetch the information on the server
  */
@@ -61,7 +61,6 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         super(props);
         this.colors = props.theme.colors;
 
-        console.log(this.props.route.params);
         if (this.props.route.params.data !== undefined && this.props.route.params.categories !== undefined) {
             this.displayData = this.props.route.params.data;
             this.categories = this.props.route.params.categories;
@@ -72,7 +71,6 @@ class ClubDisplayScreen extends React.Component<Props, State> {
             this.categories = null;
             this.clubId = this.props.route.params.clubId;
             this.shouldFetchData = true;
-            console.log(this.clubId);
         }
     }
 
@@ -135,6 +133,8 @@ class ClubDisplayScreen extends React.Component<Props, State> {
     }
 
     getScreen = (data: Object) => {
+        console.log('fetchedData passed to screen:');
+        console.log(data);
         data = FakeClub;
         this.updateHeaderTitle(data);
 
@@ -183,8 +183,8 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                 {...this.props}
                 links={[
                     {
-                        link: 'clubs/list/' + this.clubId,
-                        mandatory: false,
+                        link: 'clubs/' + this.clubId,
+                        mandatory: true,
                     }
                 ]}
                 renderFunction={this.getScreen}

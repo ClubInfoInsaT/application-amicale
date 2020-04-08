@@ -33,7 +33,6 @@ class DebugScreen extends React.Component<Props, State> {
         this.onModalRef = this.onModalRef.bind(this);
         this.colors = props.theme.colors;
         let copy = {...AsyncStorageManager.getInstance().preferences};
-        console.log(copy);
         let currentPreferences = [];
         Object.values(copy).map((object) => {
             currentPreferences.push(object);

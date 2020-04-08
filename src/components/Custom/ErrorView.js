@@ -8,6 +8,7 @@ import i18n from 'i18n-js';
 import {ERROR_TYPE} from "../../managers/ConnectionManager";
 
 type Props = {
+    navigation: Object,
     errorCode: number,
     onRefresh: Function,
 }
@@ -23,6 +24,8 @@ class ErrorView extends React.PureComponent<Props, State> {
     message: string;
     icon: string;
 
+    showLoginButton: boolean;
+
     state = {
         refreshing: false,
     };
@@ -33,6 +36,7 @@ class ErrorView extends React.PureComponent<Props, State> {
     }
 
     generateMessage() {
+        this.showLoginButton = false;
         switch (this.props.errorCode) {
             case ERROR_TYPE.BAD_CREDENTIALS:
                 this.message = i18n.t("errors.badCredentials");
@@ -41,6 +45,7 @@ class ErrorView extends React.PureComponent<Props, State> {
             case ERROR_TYPE.BAD_TOKEN:
                 this.message = i18n.t("errors.badToken");
                 this.icon = "account-alert-outline";
+                this.showLoginButton = true;
                 break;
             case ERROR_TYPE.NO_CONSENT:
                 this.message = i18n.t("errors.noConsent");
@@ -69,6 +74,30 @@ class ErrorView extends React.PureComponent<Props, State> {
         }
     }
 
+    getRetryButton() {
+        return <Button
+            mode={'contained'}
+            icon={'refresh'}
+            onPress={this.props.onRefresh}
+            style={styles.button}
+        >
+            {i18n.t("general.retry")}
+        </Button>;
+    }
+
+    goToLogin = () => this.props.navigation.navigate("login");
+
+    getLoginButton() {
+        return <Button
+            mode={'contained'}
+            icon={'login'}
+            onPress={this.goToLogin}
+            style={styles.button}
+        >
+            {i18n.t("screens.login")}
+        </Button>;
+    }
+
     render() {
         this.generateMessage();
         return (
@@ -89,14 +118,9 @@ class ErrorView extends React.PureComponent<Props, State> {
                     }}>
                         {this.message}
                     </Subheading>
-                    <Button
-                        mode={'contained'}
-                        icon={'refresh'}
-                        onPress={this.props.onRefresh}
-                        style={styles.button}
-                    >
-                        {i18n.t("general.retry")}
-                    </Button>
+                    {this.showLoginButton
+                        ? this.getLoginButton()
+                        : this.getRetryButton()}
                 </View>
             </View>
         );
