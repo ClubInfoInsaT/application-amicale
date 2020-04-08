@@ -41,9 +41,8 @@ class ProfileScreen extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        const rightButton = this.getHeaderButtons.bind(this);
         this.props.navigation.setOptions({
-            headerRight: rightButton,
+            headerRight: this.getHeaderButton,
         });
     }
 
@@ -51,9 +50,7 @@ class ProfileScreen extends React.Component<Props, State> {
 
     hideDisconnectDialog = () => this.setState({dialogVisible: false});
 
-    getHeaderButtons() {
-        return <HeaderButton icon={'logout'} onPress={this.showDisconnectDialog}/>;
-    }
+    getHeaderButton = () => <HeaderButton icon={'logout'} onPress={this.showDisconnectDialog}/>;
 
     getScreen = (data: Object) => {
         this.data = data[0];
@@ -84,6 +81,67 @@ class ProfileScreen extends React.Component<Props, State> {
         }
     };
 
+    /**
+     * Checks if the given field is available
+     *
+     * @param field The field to check
+     * @return {boolean}
+     */
+    isFieldAvailable(field: ?string) {
+        return field !== null;
+    }
+
+    /**
+     * Gets the given field value.
+     * If the field does not have a value, returns a placeholder text
+     *
+     * @param field The field to get the value from
+     * @return {*}
+     */
+    getFieldValue(field: ?string) {
+        return this.isFieldAvailable(field)
+            ? field
+            : i18n.t("profileScreen.noData");
+    }
+
+    /**
+     * Gets the color depending on the value.
+     *
+     * @param field The field to get the color for
+     * @return {*}
+     */
+    getFieldColor(field: ?string) {
+        return this.isFieldAvailable(field)
+            ? this.colors.text
+            : this.colors.textDisabled;
+    }
+
+    /**
+     * Gets a list item showing personal information
+     *
+     * @param field The field to display
+     * @param icon The icon to use
+     * @return {*}
+     */
+    getPersonalListItem(field: ?string, icon: string) {
+        return (
+            <List.Item
+                title={this.getFieldValue(field)}
+                left={props => <List.Icon
+                    {...props}
+                    icon={icon}
+                    color={this.getFieldColor(field)}
+                />}
+                titleStyle={{color: this.getFieldColor(field)}}
+            />
+        );
+    }
+
+    /**
+     * Gets a card containing user personal information
+     *
+     * @return {*}
+     */
     getPersonalCard() {
         return (
             <Card style={styles.card}>
@@ -121,6 +179,11 @@ class ProfileScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Gets a cars containing clubs the user is part of
+     *
+     * @return {*}
+     */
     getClubCard() {
         return (
             <Card style={styles.card}>
@@ -142,6 +205,11 @@ class ProfileScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Gets a card showing if the user has payed his membership
+     *
+     * @return {*}
+     */
     getMembershipCar() {
         return (
             <Card style={styles.card}>
@@ -164,10 +232,38 @@ class ProfileScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Gets the item showing if the user has payed his membership
+     *
+     * @return {*}
+     */
+    getMembershipItem(state: boolean) {
+        return (
+            <List.Item
+                title={state ? i18n.t("profileScreen.membershipPayed") : i18n.t("profileScreen.membershipNotPayed")}
+                left={props => <List.Icon
+                    {...props}
+                    color={state ? this.colors.success : this.colors.danger}
+                    icon={state ? 'check' : 'close'}
+                />}
+            />
+        );
+    }
+
+    /**
+     * Opens the club details screen for the club of given ID
+     * @param id The club's id to open
+     */
     openClubDetailsScreen(id: number) {
         this.props.navigation.navigate("club-information", {clubId: id});
     }
 
+    /**
+     * Gets a list item for the club list
+     *
+     * @param item The club to render
+     * @return {*}
+     */
     clubListItem = ({item}: Object) => {
         const onPress = () => this.openClubDetailsScreen(0); // TODO get club id
         const isManager = false; // TODO detect if manager
@@ -187,6 +283,12 @@ class ProfileScreen extends React.Component<Props, State> {
 
     clubKeyExtractor = (item: Object) => item.name;
 
+    /**
+     * Renders the list of clubs the user is part of
+     *
+     * @param list The club list
+     * @return {*}
+     */
     getClubList(list: Array<string>) {
         let dataset = [];
         for (let i = 0; i < list.length; i++) {
@@ -198,49 +300,6 @@ class ProfileScreen extends React.Component<Props, State> {
                 renderItem={this.clubListItem}
                 keyExtractor={this.clubKeyExtractor}
                 data={dataset}
-            />
-        );
-    }
-
-    getMembershipItem(state: boolean) {
-        return (
-            <List.Item
-                title={state ? i18n.t("profileScreen.membershipPayed") : i18n.t("profileScreen.membershipNotPayed")}
-                left={props => <List.Icon
-                    {...props}
-                    color={state ? this.colors.success : this.colors.danger}
-                    icon={state ? 'check' : 'close'}
-                />}
-            />
-        );
-    }
-
-    isFieldAvailable(field: ?string) {
-        return field !== null;
-    }
-
-    getFieldValue(field: ?string) {
-        return this.isFieldAvailable(field)
-            ? field
-            : i18n.t("profileScreen.noData");
-    }
-
-    getFieldColor(field: ?string) {
-        return this.isFieldAvailable(field)
-            ? this.colors.text
-            : this.colors.textDisabled;
-    }
-
-    getPersonalListItem(field: ?string, icon: string) {
-        return (
-            <List.Item
-                title={this.getFieldValue(field)}
-                left={props => <List.Icon
-                    {...props}
-                    icon={icon}
-                    color={this.getFieldColor(field)}
-                />}
-                titleStyle={{color: this.getFieldColor(field)}}
             />
         );
     }
