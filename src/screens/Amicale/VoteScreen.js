@@ -53,7 +53,9 @@ const FAKE_TEAMS2 = {
     ],
 };
 
-type Props = {}
+type Props = {
+    navigation: Object
+}
 
 type State = {
     hasVoted: boolean,
@@ -135,9 +137,12 @@ export default class VoteScreen extends React.Component<Props, State> {
             return null;
     };
 
-    getScreen = (data: Array<Object>) => {
-        data[0] = FAKE_TEAMS2;
-        data[1] = FAKE_DATE;
+    getScreen = (data: Array<Object | null>) => {
+        // data[0] = FAKE_TEAMS2;
+        // data[1] = FAKE_DATE;
+
+        if (data[1] === null)
+            data[1] = {date_begin: null};
 
         if (data[0] !== null) {
             this.teams = data[0].teams;

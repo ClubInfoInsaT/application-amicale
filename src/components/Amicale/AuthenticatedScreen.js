@@ -32,7 +32,6 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         this.props.navigation.addListener('focus', this.onScreenFocus);
         this.fetchedData = new Array(this.props.links.length);
         this.errors = new Array(this.props.links.length);
-        this.fetchData(); // TODO remove in prod (only use for fast refresh)
     }
 
     /**
