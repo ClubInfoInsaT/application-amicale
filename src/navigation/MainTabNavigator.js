@@ -145,6 +145,10 @@ function PlanningStackComponent() {
 const HomeStack = createStackNavigator();
 
 function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
+    let data;
+    if (initialRoute !== null)
+        data = {data: defaultData, nextScreen: initialRoute, shouldOpen: true};
+
     return (
         <HomeStack.Navigator
             initialRouteName={"index"}
@@ -161,7 +165,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
                         headerLeft: openDrawer
                     };
                 }}
-                initialParams={{data: defaultData, nextScreen: initialRoute}}
+                initialParams={data}
             />
             <HomeStack.Screen
                 name="planning-information"
@@ -212,7 +216,7 @@ function PlanexStackComponent() {
 const Tab = createMaterialBottomTabNavigator();
 
 type Props = {
-    defaultPath: Array<string>,
+    defaultRoute: string | null,
     defaultData: Object
 }
 
@@ -221,19 +225,17 @@ class TabNavigator extends React.Component<Props>{
     createHomeStackComponent: Object;
     colors: Object;
 
+    defaultRoute: string;
+
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
         this.defaultRoute = AsyncStorageManager.getInstance().preferences.defaultStartScreen.current.toLowerCase();
-        this.defaultSubRoute = null;
 
-        if (props.defaultPath.length > 1)
-            this.defaultRoute = props.defaultPath[1];
-        if (props.defaultPath.length > 2)
-            this.defaultSubRoute = props.defaultPath[2];
+        if (props.defaultRoute !== null)
+            this.defaultRoute = 'home';
 
-
-        this.createHomeStackComponent = () => HomeStackComponent(this.defaultSubRoute, props.defaultData);
+        this.createHomeStackComponent = () => HomeStackComponent(props.defaultRoute, props.defaultData);
     }
 
     render() {

@@ -14,6 +14,7 @@ import {openBrowser} from "../utils/WebBrowser";
 import ActionsDashBoardItem from "../components/Home/ActionsDashboardItem";
 import HeaderButton from "../components/Custom/HeaderButton";
 import ConnectionManager from "../managers/ConnectionManager";
+import {CommonActions} from '@react-navigation/native';
 // import DATA from "../dashboard_data.json";
 
 
@@ -52,9 +53,6 @@ class HomeScreen extends React.Component<Props> {
         this.colors = props.theme.colors;
 
         this.isLoggedIn = null;
-        if (this.props.route.params.nextScreen !== undefined && this.props.route.params.nextScreen !== null) {
-            this.props.navigation.navigate(this.props.route.params.nextScreen, this.props.route.params.data);
-        }
     }
 
     /**
@@ -79,7 +77,14 @@ class HomeScreen extends React.Component<Props> {
                 headerRight: this.getHeaderButton,
             });
         }
-
+        // TODO if already on home screen
+        if (this.props.route.params !== undefined) {
+            if (this.props.route.params.shouldOpen !== undefined && this.props.route.params.shouldOpen) {
+                this.props.navigation.navigate(this.props.route.params.nextScreen, this.props.route.params.data);
+                // reset params to prevent infinite loop
+                this.props.navigation.dispatch(CommonActions.setParams({ shouldOpen: false }));
+            }
+        }
     };
 
     getHeaderButton = () => {

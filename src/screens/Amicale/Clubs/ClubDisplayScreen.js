@@ -61,6 +61,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         super(props);
         this.colors = props.theme.colors;
 
+        console.log(this.props.route.params);
         if (this.props.route.params.data !== undefined && this.props.route.params.categories !== undefined) {
             this.displayData = this.props.route.params.data;
             this.categories = this.props.route.params.categories;

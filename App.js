@@ -5,7 +5,7 @@ import {Platform, StatusBar} from 'react-native';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
 import CustomIntroSlider from "./src/components/Custom/CustomIntroSlider";
-import {Linking, SplashScreen} from 'expo';
+import {SplashScreen} from 'expo';
 import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -15,6 +15,7 @@ import {Provider as PaperProvider} from 'react-native-paper';
 import AprilFoolsManager from "./src/managers/AprilFoolsManager";
 import Update from "./src/constants/Update";
 import ConnectionManager from "./src/managers/ConnectionManager";
+import URLHandler from "./src/utils/URLHandler";
 
 type Props = {};
 
@@ -43,10 +44,12 @@ export default class App extends React.Component<Props, State> {
 
     navigatorRef: Object;
 
-    defaultRoute: Array<string>;
+    defaultRoute: string | null;
     defaultData: Object;
 
     createDrawerNavigator: Function;
+
+    urlHandler: URLHandler;
 
     constructor() {
         super();
@@ -55,60 +58,24 @@ export default class App extends React.Component<Props, State> {
         this.onUpdateTheme = this.onUpdateTheme.bind(this);
         SplashScreen.preventAutoHide();
         this.navigatorRef = React.createRef();
-        this.defaultRoute = [];
+        this.defaultRoute = null;
         this.defaultData = {};
-        // this.defaultRoute = ["main", "home", "club-information"];
-        // this.defaultData = {clubId: 0};
-        this.handleUrls();
+        this.urlHandler = new URLHandler(this.onInitialURLParsed, this.onDetectURL);
+        this.urlHandler.listen();
     }
 
-    handleUrls() {
-        console.log(Linking.makeUrl('main/home/club-information', {clubId: 1}));
-        Linking.addEventListener('url', this.onUrl);
-        Linking.parseInitialURLAsync().then(this.onParsedUrl);
-    }
-
-    onUrl = (url: string) => {
-        this.onParsedUrl(Linking.parse(url));
+    onInitialURLParsed = ({route, data}: Object) => {
+        this.defaultRoute = route;
+        this.defaultData = data;
     };
 
-    onParsedUrl = ({path, queryParams}: Object) => {
-        if (path !== null) {
-            let pathArray = path.split('/');
-            if (this.isClubInformationLink(pathArray))
-                this.handleClubInformationUrl(queryParams);
-            else if (this.isPlanningInformationLink(pathArray))
-                this.handlePlanningInformationUrl(queryParams);
-        }
+    onDetectURL = ({route, data}: Object) => {
+        // Navigate to nested navigator and pass data to the index screen
+        this.navigatorRef.current.navigate('home', {
+            screen: 'index',
+            params: {nextScreen: route, data: data, shouldOpen: true}
+        });
     };
-
-    isClubInformationLink(pathArray: Array<string>) {
-        return pathArray[0] === "main" && pathArray[1] === "home" && pathArray[2] === "club-information";
-    }
-
-    isPlanningInformationLink(pathArray: Array<string>) {
-        return pathArray[0] === "main" && pathArray[1] === "home" && pathArray[2] === "planning-information";
-    }
-
-    handleClubInformationUrl(params: Object) {
-        if (params !== undefined && params.clubId !== undefined) {
-            let id = parseInt(params.clubId);
-            if (!isNaN(id)) {
-                this.defaultRoute = ["main", "home", "club-information"];
-                this.defaultData = {clubId: id};
-            }
-        }
-    }
-
-    handlePlanningInformationUrl(params: Object) {
-        if (params !== undefined && params.eventId !== undefined) {
-            let id = parseInt(params.eventId);
-            if (!isNaN(id)) {
-                this.defaultRoute = ["main", "home", "planning-information"];
-                this.defaultData = {eventId: id};
-            }
-        }
-    }
 
     /**
      * Updates the theme
@@ -156,7 +123,8 @@ export default class App extends React.Component<Props, State> {
         } catch (e) {
         }
 
-        this.createDrawerNavigator = () => <DrawerNavigator defaultPath={this.defaultRoute} defaultData={this.defaultData}/>;
+        this.createDrawerNavigator = () => <DrawerNavigator defaultRoute={this.defaultRoute}
+                                                            defaultData={this.defaultData}/>;
         this.onLoadFinished();
     }
 

@@ -196,7 +196,7 @@ export default class ConnectionManager {
                 let data = {};
                 if (keys !== null && values !== null && keys.length === values.length)
                     data = this.generatePostArguments(keys, values);
-                console.log(data);
+                // console.log(data);
                 fetch(API_ENDPOINT + path, {
                     method: 'POST',
                     headers: new Headers({
@@ -209,7 +209,7 @@ export default class ConnectionManager {
                     })
                 }).then(async (response) => response.json())
                     .then((response: response_format) => {
-                        console.log(response);
+                        // console.log(response);
                         if (this.isResponseValid(response)) {
                             if (response.error === ERROR_TYPE.SUCCESS)
                                 resolve(response.data);

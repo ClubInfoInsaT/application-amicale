@@ -317,35 +317,25 @@ function getDrawerContent(props) {
 }
 
 type Props = {
-    defaultPath: Array<string>,
+    defaultRoute: string | null,
     defaultData: Object
 }
 
 
 export default class DrawerNavigator extends React.Component<Props> {
 
-    defaultRoute: string;
-    defaultSubRoute: string | null;
-
     createTabNavigator: Object;
 
     constructor(props: Object) {
         super(props);
-        this.defaultRoute = 'Main';
-        this.defaultSubRoute = null;
 
-        if (props.defaultPath.length > 0)
-            this.defaultRoute = props.defaultPath[0];
-        if (props.defaultPath.length > 1)
-            this.defaultSubRoute = props.defaultPath[1];
-
-        this.createTabNavigator = () => <TabNavigator defaultPath={props.defaultPath} defaultData={props.defaultData}/>
+        this.createTabNavigator = () => <TabNavigator defaultRoute={props.defaultRoute} defaultData={props.defaultData}/>
     }
 
     render() {
         return (
             <Drawer.Navigator
-                initialRouteName={this.defaultRoute}
+                initialRouteName={'Main'}
                 headerMode={'float'}
                 backBehavior={'initialRoute'}
                 drawerType={'front'}
