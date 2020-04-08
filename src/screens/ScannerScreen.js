@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {StyleSheet, View} from "react-native";
-import {Text, withTheme} from 'react-native-paper';
+import {Button, Text, withTheme} from 'react-native-paper';
 import {BarCodeScanner} from "expo-barcode-scanner";
 import {Camera} from 'expo-camera';
 import URLHandler from "../utils/URLHandler";
@@ -15,6 +15,8 @@ type State = {
     hasPermission: boolean,
     scanned: boolean,
     dialogVisible: boolean,
+    dialogTitle: string,
+    dialogMessage: string,
 };
 
 class ScannerScreen extends React.Component<Props, State> {
@@ -23,6 +25,8 @@ class ScannerScreen extends React.Component<Props, State> {
         hasPermission: false,
         scanned: false,
         dialogVisible: false,
+        dialogTitle: "",
+        dialogMessage: "",
     };
 
     constructor() {
@@ -30,22 +34,39 @@ class ScannerScreen extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        Camera.requestPermissionsAsync().then(this.updatePermissionStatus);
+        this.requestPermissions();
     }
+
+    requestPermissions = () => Camera.requestPermissionsAsync().then(this.updatePermissionStatus);
 
     updatePermissionStatus = ({status}) => this.setState({hasPermission: status === "granted"});
 
-
     handleCodeScanned = ({type, data}) => {
-        this.setState({scanned: true});
+
         if (!URLHandler.isUrlValid(data))
             this.showErrorDialog();
-        else
+        else {
+            this.setState({scanned: true});
             Linking.openURL(data);
+        }
     };
 
     getPermissionScreen() {
-        return <Text>PLS</Text>
+        return <View style={{marginLeft: 10, marginRight: 10}}>
+            <Text>{i18n.t("scannerScreen.errorPermission")}</Text>
+            <Button
+                icon="camera"
+                mode="contained"
+                onPress={this.requestPermissions}
+                style={{
+                    marginTop: 10,
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                }}
+            >
+                {i18n.t("scannerScreen.buttonPermission")}
+            </Button>
+        </View>
     }
 
     getOverlay() {
@@ -78,8 +99,22 @@ class ScannerScreen extends React.Component<Props, State> {
         );
     }
 
+    showHelpDialog = () => {
+        this.setState({
+            dialogVisible: true,
+            scanned: true,
+            dialogTitle: i18n.t("scannerScreen.helpTitle"),
+            dialogMessage: i18n.t("scannerScreen.helpMessage"),
+        });
+    };
+
     showErrorDialog() {
-        this.setState({dialogVisible: true});
+        this.setState({
+            dialogVisible: true,
+            scanned: true,
+            dialogTitle: i18n.t("scannerScreen.errorTitle"),
+            dialogMessage: i18n.t("scannerScreen.errorMessage"),
+        });
     }
 
     onDialogDismiss = () => this.setState({
@@ -90,12 +125,6 @@ class ScannerScreen extends React.Component<Props, State> {
     getScanner() {
         return (
             <View style={styles.cameraContainer}>
-                <AlertDialog
-                    visible={this.state.dialogVisible}
-                    onDismiss={this.onDialogDismiss}
-                    title={i18n.t("scannerScreen.errorTitle")}
-                    message={i18n.t("scannerScreen.errorMessage")}
-                />
                 <Camera
                     onBarCodeScanned={this.state.scanned ? undefined : this.handleCodeScanned}
                     type={Camera.Constants.Type.back}
@@ -118,6 +147,20 @@ class ScannerScreen extends React.Component<Props, State> {
                     ? this.getScanner()
                     : this.getPermissionScreen()
                 }
+                <AlertDialog
+                    visible={this.state.dialogVisible}
+                    onDismiss={this.onDialogDismiss}
+                    title={this.state.dialogTitle}
+                    message={this.state.dialogMessage}
+                />
+                <Button
+                    icon="information"
+                    mode="contained"
+                    onPress={this.showHelpDialog}
+                    style={styles.button}
+                >
+                    {i18n.t("scannerScreen.helpButton")}
+                </Button>
             </View>
         );
     }
@@ -166,6 +209,12 @@ const styles = StyleSheet.create({
         marginBottom: 'auto',
         aspectRatio: 1,
         width: '100%',
+    },
+    button: {
+        position: 'absolute',
+        bottom: 5,
+        width: '80%',
+        left: '10%'
     },
     overlayTopLeft: {
         ...overlayBoxStyle,

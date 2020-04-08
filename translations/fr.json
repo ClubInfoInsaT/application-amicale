@@ -227,8 +227,13 @@
     "membershipNotPayed": "Non payée"
   },
   "scannerScreen": {
+    "errorPermission": "Scanotron 3000 a besoin d'accéder à la caméra pour scanner des QR codes.\nLa caméra ne sera jamais utilisée autrement.",
+    "buttonPermission": "Autoriser l'accès à la caméra",
     "errorTitle": "QR code invalide",
-    "errorMessage": "Le QR code scannée n'a pas été reconnu. Merci de vérifier sa validité."
+    "errorMessage": "Le QR code scannée n'a pas été reconnu. Merci de vérifier sa validité.",
+    "helpButton": "Quoi scanner ?",
+    "helpTitle": "Comment utiliser Scanotron 3000",
+    "helpMessage": "Trouvez des QR codes Campus affichés par des clubs ou des respo d'évenements, scannez les et accédez à des informations détaillées !"
   },
   "loginScreen": {
     "title": "Compte Amicale",

@@ -227,8 +227,13 @@
     "membershipNotPayed": "Not payed"
   },
   "scannerScreen": {
+    "errorPermission": "Scanotron 3000 needs access to the camera in order to scan QR codes.\nThe camera will never be used for any other purpose.",
+    "buttonPermission": "Grant camera access",
     "errorTitle": "QR code invalid",
-    "errorMessage": "The QR code scanned could not be recognised, please make sure it is valid."
+    "errorMessage": "The QR code scanned could not be recognised, please make sure it is valid.",
+    "helpButton": "What can I scan?",
+    "helpTitle": "How to use Scanotron 3000",
+    "helpMessage": "Find Campus QR codes posted by clubs and events, scan them and get instant access to detailed information!"
   },
   "loginScreen": {
     "title": "Amicale account",

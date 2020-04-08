@@ -68,16 +68,12 @@ class ClubDisplayScreen extends React.Component<Props, State> {
             this.clubId = this.props.route.params.data.id;
             this.shouldFetchData = false;
         } else {
-            this.displayData = {};
+            this.displayData = null;
             this.categories = null;
             this.clubId = this.props.route.params.clubId;
             this.shouldFetchData = true;
             console.log(this.clubId);
         }
-    }
-
-    componentDidMount(): * {
-        this.props.navigation.setOptions({title: this.displayData.name})
     }
 
     getCategoryName(id: number) {
@@ -134,8 +130,13 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         );
     }
 
+    updateHeaderTitle(data: Object) {
+        this.props.navigation.setOptions({title: data.name})
+    }
+
     getScreen = (data: Object) => {
         data = FakeClub;
+        this.updateHeaderTitle(data);
 
         return (
             <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
