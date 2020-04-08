@@ -22,38 +22,42 @@ export default class URLHandler {
     }
 
     onUrl = ({url}: Object) => {
-        let data = this.getUrlData(Linking.parse(url));
+        let data = URLHandler.getUrlData(Linking.parse(url));
         if (data !== null)
             this.onDetectURL(data);
     };
 
     onInitialUrl = ({path, queryParams}: Object) => {
-        let data = this.getUrlData({path, queryParams});
+        let data = URLHandler.getUrlData({path, queryParams});
         if (data !== null)
             this.onInitialURLParsed(data);
     };
 
-    getUrlData({path, queryParams}: Object) {
+    static getUrlData({path, queryParams}: Object) {
         let data = null;
         if (path !== null) {
             let pathArray = path.split('/');
-            if (this.isClubInformationLink(pathArray))
-                data = this.generateClubInformationData(queryParams);
-            else if (this.isPlanningInformationLink(pathArray))
-                data = this.generatePlanningInformationData(queryParams);
+            if (URLHandler.isClubInformationLink(pathArray))
+                data = URLHandler.generateClubInformationData(queryParams);
+            else if (URLHandler.isPlanningInformationLink(pathArray))
+                data = URLHandler.generatePlanningInformationData(queryParams);
         }
         return data;
     }
 
-    isClubInformationLink(pathArray: Array<string>) {
+    static isUrlValid(url: string) {
+        return this.getUrlData(Linking.parse(url)) !== null;
+    }
+
+    static isClubInformationLink(pathArray: Array<string>) {
         return pathArray[0] === "main" && pathArray[1] === "home" && pathArray[2] === "club-information";
     }
 
-    isPlanningInformationLink(pathArray: Array<string>) {
+    static isPlanningInformationLink(pathArray: Array<string>) {
         return pathArray[0] === "main" && pathArray[1] === "home" && pathArray[2] === "planning-information";
     }
 
-    generateClubInformationData(params: Object): Object | null {
+    static generateClubInformationData(params: Object): Object | null {
         if (params !== undefined && params.clubId !== undefined) {
             let id = parseInt(params.clubId);
             if (!isNaN(id)) {
@@ -63,7 +67,7 @@ export default class URLHandler {
         return null;
     }
 
-    generatePlanningInformationData(params: Object): Object | null {
+    static generatePlanningInformationData(params: Object): Object | null {
         if (params !== undefined && params.eventId !== undefined) {
             let id = parseInt(params.eventId);
             if (!isNaN(id)) {

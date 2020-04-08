@@ -1,11 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../components/Home/EventDashboardItem";
 import WebSectionList from "../components/Lists/WebSectionList";
-import {Text, withTheme} from 'react-native-paper';
+import {FAB, Text, withTheme} from 'react-native-paper';
 import FeedItem from "../components/Home/FeedItem";
 import SquareDashboardItem from "../components/Home/SmallDashboardItem";
 import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardItem";
@@ -467,9 +467,12 @@ class HomeScreen extends React.Component<Props> {
             this.getDashboardItem(item) : this.getFeedItem(item));
     }
 
+    openScanner = () => this.props.navigation.navigate("scanner");
+
     render() {
         const nav = this.props.navigation;
         return (
+            <View>
             <WebSectionList
                 createDataset={this.createDataset}
                 navigation={nav}
@@ -477,8 +480,23 @@ class HomeScreen extends React.Component<Props> {
                 refreshOnFocus={true}
                 fetchUrl={DATA_URL}
                 renderItem={this.getRenderItem}/>
+                <FAB
+                    style={styles.fab}
+                    icon="qrcode-scan"
+                    onPress={this.openScanner}
+                />
+            </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    fab: {
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: 0,
+    },
+});
 
 export default withTheme(HomeScreen);

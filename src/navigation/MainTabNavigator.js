@@ -17,6 +17,7 @@ import HeaderButton from "../components/Custom/HeaderButton";
 import {withTheme} from 'react-native-paper';
 import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
+import ScannerScreen from "../screens/ScannerScreen";
 
 
 const TAB_ICONS = {
@@ -62,7 +63,7 @@ function ProximoStackComponent() {
             <ProximoStack.Screen
                 name="proximo-list"
                 options={{
-                    title: 'Articles'
+                    title: i18n.t('screens.proximoArticles')
                 }}
                 component={ProximoListScreen}
             />
@@ -70,7 +71,7 @@ function ProximoStackComponent() {
                 name="proximo-about"
                 component={ProximoAboutScreen}
                 options={{
-                    title: 'Proximo',
+                    title: i18n.t('screens.proximo'),
                     ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
@@ -93,7 +94,7 @@ function ProxiwashStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'Proxiwash',
+                        title: i18n.t('screens.proxiwash'),
                         headerLeft: openDrawer
                     };
                 }}
@@ -102,7 +103,7 @@ function ProxiwashStackComponent() {
                 name="proxiwash-about"
                 component={ProxiwashAboutScreen}
                 options={{
-                    title: 'Proxiwash',
+                    title: i18n.t('screens.proxiwash'),
                     ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
@@ -125,7 +126,7 @@ function PlanningStackComponent() {
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
                     return {
-                        title: 'Planning',
+                        title: i18n.t('screens.planning'),
                         headerLeft: openDrawer
                     };
                 }}
@@ -134,7 +135,7 @@ function PlanningStackComponent() {
                 name="planning-information"
                 component={PlanningDisplayScreen}
                 options={{
-                    title: 'Details',
+                    title: i18n.t('screens.planningDisplayScreen'),
                     ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
@@ -171,7 +172,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
                 name="planning-information"
                 component={PlanningDisplayScreen}
                 options={{
-                    title: 'Details',
+                    title: i18n.t('screens.planningDisplayScreen'),
                     ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
@@ -180,7 +181,17 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
                 component={ClubDisplayScreen}
                 options={({navigation}) => {
                     return {
-                        title: "",
+                        title: '',
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                    };
+                }}
+            />
+            <HomeStack.Screen
+                name="scanner"
+                component={ScannerScreen}
+                options={({navigation}) => {
+                    return {
+                        title: i18n.t('screens.scanner'),
                         ...TransitionPresets.ModalSlideFromBottomIOS,
                     };
                 }}

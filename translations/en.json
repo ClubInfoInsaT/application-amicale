@@ -2,9 +2,10 @@
   "screens": {
     "home": "Home",
     "planning": "Planning",
-    "planningDisplayScreen": "Event Details",
+    "planningDisplayScreen": "Event details",
     "proxiwash": "Proxiwash",
     "proximo": "Proximo",
+    "proximoArticles": "Articles",
     "menuSelf": "RU Menu",
     "settings": "Settings",
     "availableRooms": "Available rooms",
@@ -16,7 +17,8 @@
     "login": "Login",
     "logout": "Logout",
     "profile": "Profile",
-    "vote": "Elections"
+    "vote": "Elections",
+    "scanner": "Scanotron 3000"
   },
   "sidenav": {
     "divider1": "Student websites",
@@ -223,6 +225,10 @@
     "membershipSubtitle": "Allows you to take part in various activities",
     "membershipPayed": "Payed",
     "membershipNotPayed": "Not payed"
+  },
+  "scannerScreen": {
+    "errorTitle": "QR code invalid",
+    "errorMessage": "The QR code scanned could not be recognised, please make sure it is valid."
   },
   "loginScreen": {
     "title": "Amicale account",

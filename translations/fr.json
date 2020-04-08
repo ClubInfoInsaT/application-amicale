@@ -5,6 +5,7 @@
     "planningDisplayScreen": "Détails",
     "proxiwash": "Proxiwash",
     "proximo": "Proximo",
+    "proximoArticles": "Articles",
     "menuSelf": "Menu du RU",
     "settings": "Paramètres",
     "availableRooms": "Salles dispo",
@@ -16,7 +17,8 @@
     "login": "Se Connecter",
     "logout": "Se Déconnecter",
     "profile": "Profil",
-    "vote": "Élections"
+    "vote": "Élections",
+    "scanner": "Scanotron 3000"
   },
   "sidenav": {
     "divider1": "Sites étudiants",
@@ -223,6 +225,10 @@
     "membershipSubtitle": "Permet de participer à diverses activités",
     "membershipPayed": "Payée",
     "membershipNotPayed": "Non payée"
+  },
+  "scannerScreen": {
+    "errorTitle": "QR code invalide",
+    "errorMessage": "Le QR code scannée n'a pas été reconnu. Merci de vérifier sa validité."
   },
   "loginScreen": {
     "title": "Compte Amicale",
