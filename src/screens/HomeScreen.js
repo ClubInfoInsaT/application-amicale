@@ -68,6 +68,8 @@ class HomeScreen extends React.Component<Props> {
 
     componentDidMount() {
         this.props.navigation.addListener('focus', this.onScreenFocus);
+        // Handle link open when home is focused
+        this.props.navigation.addListener('state', this.handleNavigationParams);
     }
 
     onScreenFocus = () => {
@@ -77,8 +79,6 @@ class HomeScreen extends React.Component<Props> {
                 headerRight: this.getHeaderButton,
             });
         }
-        // Handle link open when home is focused
-        this.props.navigation.addListener('state', this.handleNavigationParams);
         // handle link open when home is not focused or created
         this.handleNavigationParams();
     };
