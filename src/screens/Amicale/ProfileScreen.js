@@ -79,7 +79,7 @@ class ProfileScreen extends React.Component<Props, State> {
                 return this.getPersonalCard();
             case '1':
                 return this.getClubCard();
-            case '2':
+            default:
                 return this.getMembershipCar();
         }
     };
@@ -164,20 +164,39 @@ class ProfileScreen extends React.Component<Props, State> {
         );
     }
 
+    openClubDetailsScreen(id: number) {
+        this.props.navigation.navigate("club-information", {clubId: id});
+    }
+
+    clubListItem = ({item}: Object) => {
+        const onPress = () => this.openClubDetailsScreen(0); // TODO get club id
+        const isManager = false; // TODO detect if manager
+        let description = i18n.t("profileScreen.isMember");
+        let icon = (props) => <List.Icon {...props} icon="chevron-right"/>;
+        if (isManager) {
+            description = i18n.t("profileScreen.isManager");
+            icon = (props) => <List.Icon {...props} icon="star" color={this.colors.primary}/>;
+        }
+        return <List.Item
+            title={item.name}
+            description={description}
+            left={icon}
+            onPress={onPress}
+        />;
+    };
+
+    clubKeyExtractor = (item: Object) => item.name;
+
     getClubList(list: Array<string>) {
         let dataset = [];
         for (let i = 0; i < list.length; i++) {
             dataset.push({name: list[i]});
         }
         return (
+            //$FlowFixMe
             <FlatList
-                renderItem={({item}) =>
-                    <List.Item
-                        title={item.name}
-                        left={props => <List.Icon {...props} icon="chevron-right"/>}
-                    />
-                }
-                keyExtractor={item => item.name}
+                renderItem={this.clubListItem}
+                keyExtractor={this.clubKeyExtractor}
                 data={dataset}
             />
         );

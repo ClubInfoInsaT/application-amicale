@@ -236,6 +236,16 @@ function ProfileStackComponent() {
                     };
                 }}
             />
+            <ClubStack.Screen
+                name="club-information"
+                component={ClubDisplayScreen}
+                options={({navigation}) => {
+                    return {
+                        title: i18n.t('screens.clubDisplayScreen'),
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                    };
+                }}
+            />
         </ProfileStack.Navigator>
     );
 }
@@ -290,7 +300,7 @@ function ClubStackComponent() {
                 component={ClubDisplayScreen}
                 options={({navigation}) => {
                     return {
-                        title: "",
+                        title: i18n.t('screens.clubDisplayScreen'),
                         ...TransitionPresets.ModalSlideFromBottomIOS,
                     };
                 }}
@@ -300,7 +310,7 @@ function ClubStackComponent() {
                 component={ClubAboutScreen}
                 options={({navigation}) => {
                     return {
-                        title: "ABOUT",
+                        title: i18n.t('screens.about'),
                         ...TransitionPresets.ModalSlideFromBottomIOS,
                     };
                 }}

@@ -135,6 +135,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
     getScreen = (data: Object) => {
         console.log('fetchedData passed to screen:');
         console.log(data);
+        console.log("Using fake data");
         data = FakeClub;
         this.updateHeaderTitle(data);
 
