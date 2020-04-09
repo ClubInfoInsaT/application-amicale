@@ -52,6 +52,7 @@ class VoteResults extends React.Component<Props> {
 
     resultRenderItem = ({item}: Object) => {
         const isWinner = this.winnerIds.indexOf(item.id) !== -1;
+        const isDraw = this.winnerIds.length > 1;
         return (
             <Card style={{
                 marginTop: 10,
@@ -61,7 +62,7 @@ class VoteResults extends React.Component<Props> {
                     title={item.name}
                     description={item.votes + ' ' + i18n.t('voteScreen.results.votes')}
                     left={props => isWinner
-                        ? <List.Icon {...props} icon="trophy" color={this.colors.primary}/>
+                        ? <List.Icon {...props} icon={isDraw ? "trophy-outline" : "trophy"} color={this.colors.primary}/>
                         : null}
                     titleStyle={{
                         color: isWinner
