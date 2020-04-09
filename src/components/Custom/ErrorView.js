@@ -86,11 +86,13 @@ class ErrorView extends React.PureComponent<Props, State> {
         </Button>;
     }
 
-    goToLogin = () => this.props.navigation.navigate("login",
+    goToLogin = () => {
+        console.log(this.props.route);
+        this.props.navigation.navigate("login",
         {
-           screen: 'index',
+           screen: 'login',
            params: {nextScreen: this.props.route.name}
-        });
+        })};
 
     getLoginButton() {
         return <Button

@@ -39,12 +39,12 @@ const AboutStack = createStackNavigator();
 function AboutStackComponent() {
     return (
         <AboutStack.Navigator
-            initialRouteName="index"
+            initialRouteName="about"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <AboutStack.Screen
-                name="index"
+                name="about"
                 component={AboutScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -77,12 +77,12 @@ const SettingsStack = createStackNavigator();
 function SettingsStackComponent() {
     return (
         <SettingsStack.Navigator
-            initialRouteName="index"
+            initialRouteName="settings"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <SettingsStack.Screen
-                name="index"
+                name="settings"
                 component={SettingsScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -101,12 +101,12 @@ const SelfMenuStack = createStackNavigator();
 function SelfMenuStackComponent() {
     return (
         <SelfMenuStack.Navigator
-            initialRouteName="index"
+            initialRouteName="self-menu"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <SelfMenuStack.Screen
-                name="index"
+                name="self-menu"
                 component={SelfMenuScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -125,12 +125,12 @@ const AvailableRoomStack = createStackNavigator();
 function AvailableRoomStackComponent() {
     return (
         <AvailableRoomStack.Navigator
-            initialRouteName="index"
+            initialRouteName="available-rooms"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <AvailableRoomStack.Screen
-                name="index"
+                name="available-rooms"
                 component={AvailableRoomScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -149,12 +149,12 @@ const BibStack = createStackNavigator();
 function BibStackComponent() {
     return (
         <BibStack.Navigator
-            initialRouteName="index"
+            initialRouteName="bib"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <BibStack.Screen
-                name="index"
+                name="bib"
                 component={BibScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -173,12 +173,12 @@ const TetrisStack = createStackNavigator();
 function TetrisStackComponent() {
     return (
         <TetrisStack.Navigator
-            initialRouteName="index"
+            initialRouteName="tetris"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <TetrisStack.Screen
-                name="index"
+                name="tetris"
                 component={TetrisScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -197,12 +197,12 @@ const LoginStack = createStackNavigator();
 function LoginStackComponent() {
     return (
         <LoginStack.Navigator
-            initialRouteName="index"
+            initialRouteName="login"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <LoginStack.Screen
-                name="index"
+                name="login"
                 component={LoginScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -221,12 +221,12 @@ const ProfileStack = createStackNavigator();
 function ProfileStackComponent() {
     return (
         <ProfileStack.Navigator
-            initialRouteName="index"
+            initialRouteName="profile"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <ProfileStack.Screen
-                name="index"
+                name="profile"
                 component={ProfileScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -256,12 +256,12 @@ const VoteStack = createStackNavigator();
 function VoteStackComponent() {
     return (
         <VoteStack.Navigator
-            initialRouteName="index"
+            initialRouteName="vote"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <VoteStack.Screen
-                name="index"
+                name="vote"
                 component={VoteScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
@@ -280,12 +280,12 @@ const ClubStack = createStackNavigator();
 function ClubStackComponent() {
     return (
         <ClubStack.Navigator
-            initialRouteName={"index"}
+            initialRouteName={"club-list"}
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
             <ClubStack.Screen
-                name="index"
+                name="club-list"
                 component={ClubListScreen}
                 options={({navigation}) => {
                     const openDrawer = getDrawerButton.bind(this, navigation);
