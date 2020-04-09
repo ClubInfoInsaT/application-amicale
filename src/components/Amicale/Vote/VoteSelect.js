@@ -45,8 +45,7 @@ export default class VoteSelect extends React.PureComponent<Props, State> {
         return new Promise((resolve, reject) => {
             ConnectionManager.getInstance().authenticatedRequest(
                 "elections/vote",
-                ["vote"],
-                [parseInt(this.state.selectedTeam)])
+                {"vote": parseInt(this.state.selectedTeam)})
                 .then(() => {
                     this.onVoteDialogDismiss();
                     this.props.onVoteSuccess();

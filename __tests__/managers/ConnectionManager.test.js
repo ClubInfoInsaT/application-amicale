@@ -1,5 +1,6 @@
 import React from 'react';
-import ConnectionManager, {ERROR_TYPE} from "../../src/managers/ConnectionManager";
+import ConnectionManager from "../../src/managers/ConnectionManager";
+import {ERROR_TYPE} from "../../src/utils/WebData";
 import * as SecureStore from 'expo-secure-store';
 
 let fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS but in react-native
@@ -61,47 +62,6 @@ test('recoverLogin error crypto with saved token', () => {
 
 test('recoverLogin success saved', () => {
     return expect(c.recoverLogin()).resolves.toBe('token2');
-});
-
-test('isRequestResponseValid', () => {
-    let json = {
-        error: 0,
-        data: {}
-    };
-    expect(c.isResponseValid(json)).toBeTrue();
-    json = {
-        error: 1,
-        data: {}
-    };
-    expect(c.isResponseValid(json)).toBeTrue();
-    json = {
-        error: 50,
-        data: {}
-    };
-    expect(c.isResponseValid(json)).toBeTrue();
-    json = {
-        error: 50,
-        data: {truc: 'machin'}
-    };
-    expect(c.isResponseValid(json)).toBeTrue();
-    json = {
-        message: 'coucou'
-    };
-    expect(c.isResponseValid(json)).toBeFalse();
-    json = {
-        error: 'coucou',
-        data: {truc: 'machin'}
-    };
-    expect(c.isResponseValid(json)).toBeFalse();
-    json = {
-        error: 0,
-        data: 'coucou'
-    };
-    expect(c.isResponseValid(json)).toBeFalse();
-    json = {
-        error: 0,
-    };
-    expect(c.isResponseValid(json)).toBeFalse();
 });
 
 test("isConnectionResponseValid", () => {

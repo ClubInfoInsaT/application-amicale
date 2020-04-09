@@ -193,9 +193,10 @@ class ClubListScreen extends React.Component<Props, State> {
         return (
             <AuthenticatedScreen
                 {...this.props}
-                links={[
+                requests={[
                     {
                         link: 'clubs/list',
+                        params: {},
                         mandatory: true,
                     }
                 ]}

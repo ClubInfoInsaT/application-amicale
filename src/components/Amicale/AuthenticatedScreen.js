@@ -1,13 +1,18 @@
 // @flow
 
 import * as React from 'react';
-import ConnectionManager, {ERROR_TYPE} from "../../managers/ConnectionManager";
+import ConnectionManager from "../../managers/ConnectionManager";
+import {ERROR_TYPE} from "../../utils/WebData";
 import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 
 type Props = {
     navigation: Object,
-    links: Array<{link: string, mandatory: boolean}>,
+    requests: Array<{
+        link: string,
+        params: Object,
+        mandatory: boolean
+    }>,
     renderFunction: Function,
 }
 
@@ -30,15 +35,15 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         super(props);
         this.connectionManager = ConnectionManager.getInstance();
         this.props.navigation.addListener('focus', this.onScreenFocus);
-        this.fetchedData = new Array(this.props.links.length);
-        this.errors = new Array(this.props.links.length);
+        this.fetchedData = new Array(this.props.requests.length);
+        this.errors = new Array(this.props.requests.length);
     }
 
     /**
      * Refreshes screen if user changed
      */
     onScreenFocus = () => {
-        if (this.currentUserToken !== this.connectionManager.getToken()){
+        if (this.currentUserToken !== this.connectionManager.getToken()) {
             this.currentUserToken = this.connectionManager.getToken();
             this.fetchData();
         }
@@ -55,8 +60,10 @@ class AuthenticatedScreen extends React.Component<Props, State> {
         if (!this.state.loading)
             this.setState({loading: true});
         if (this.connectionManager.isLoggedIn()) {
-            for (let i = 0; i < this.props.links.length; i++) {
-                this.connectionManager.authenticatedRequest(this.props.links[i].link, null, null)
+            for (let i = 0; i < this.props.requests.length; i++) {
+                this.connectionManager.authenticatedRequest(
+                    this.props.requests[i].link,
+                    this.props.requests[i].params)
                     .then((data) => {
                         this.onRequestFinished(data, i, -1);
                     })
@@ -65,7 +72,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
                     });
             }
         } else {
-            for (let i = 0; i < this.props.links.length; i++) {
+            for (let i = 0; i < this.props.requests.length; i++) {
                 this.onRequestFinished(null, i, ERROR_TYPE.BAD_TOKEN);
             }
         }
@@ -82,7 +89,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
      * @param error The error code received
      */
     onRequestFinished(data: Object | null, index: number, error: number) {
-        if (index >= 0 && index < this.props.links.length){
+        if (index >= 0 && index < this.props.requests.length) {
             this.fetchedData[index] = data;
             this.errors[index] = error;
         }
@@ -120,7 +127,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
     allRequestsValid() {
         let valid = true;
         for (let i = 0; i < this.fetchedData.length; i++) {
-            if (this.fetchedData[i] === null && this.props.links[i].mandatory) {
+            if (this.fetchedData[i] === null && this.props.requests[i].mandatory) {
                 valid = false;
                 break;
             }
@@ -137,7 +144,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
      */
     getError() {
         for (let i = 0; i < this.errors.length; i++) {
-            if (this.errors[i] !== 0 && this.props.links[i].mandatory) {
+            if (this.errors[i] !== 0 && this.props.requests[i].mandatory) {
                 return this.errors[i];
             }
         }

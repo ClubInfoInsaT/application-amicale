@@ -8,6 +8,9 @@ import {getDateOnlyString, getFormattedEventTime} from '../../utils/Planning';
 import {Card, withTheme} from 'react-native-paper';
 import DateManager from "../../managers/DateManager";
 import ImageModal from 'react-native-image-modal';
+import BasicLoadingScreen from "../../components/Custom/BasicLoadingScreen";
+import {apiRequest} from "../../utils/WebData";
+import ErrorView from "../../components/Custom/ErrorView";
 
 type Props = {
     navigation: Object,
@@ -15,23 +18,14 @@ type Props = {
 };
 
 type State = {
+    loading: boolean
 };
 
 function openWebLink(event, link) {
     Linking.openURL(link).catch((err) => console.error('Error opening link', err));
 }
 
-const FAKE_EVENT = {
-    "id": 142,
-    "title": "Soir\u00e9e Impact'INSA",
-    "logo": null,
-    "date_begin": "2020-04-22 19:00",
-    "date_end": "2020-04-22 00:00",
-    "description": "<p>R\u00e9servation salle de boom + PK pour la soir\u00e9e Impact'Insa<\/p>",
-    "club": "Impact Insa",
-    "category_id": 10,
-    "url": "https:\/\/www.amicale-insat.fr\/event\/142\/view"
-};
+const CLUB_INFO_PATH = "event/info";
 
 /**
  * Class defining a planning event information page.
@@ -41,12 +35,9 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
     displayData: Object;
     shouldFetchData: boolean;
     eventId: number;
+    errorCode: number;
 
     colors: Object;
-
-    state = {
-
-    };
 
     constructor(props) {
         super(props);
@@ -54,18 +45,45 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
 
         if (this.props.route.params.data !== undefined) {
             this.displayData = this.props.route.params.data;
-            this.eventId = this.props.route.params.data.eventId;
+            console.log(this.displayData);
+            this.eventId = this.displayData.id;
             this.shouldFetchData = false;
+            this.errorCode = 0;
+            this.state = {
+                loading: false,
+            };
         } else {
-            this.displayData = FAKE_EVENT;
+            this.displayData = null;
             this.eventId = this.props.route.params.eventId;
             this.shouldFetchData = true;
-            console.log(this.eventId);
+            this.errorCode = 0;
+            this.state = {
+                loading: true,
+            };
+            this.fetchData();
+
         }
     }
 
-    render() {
-        // console.log("rendering planningDisplayScreen");
+    fetchData = () => {
+        this.setState({loading: true});
+        apiRequest(CLUB_INFO_PATH, 'POST', {id: this.eventId})
+            .then(this.onFetchSuccess)
+            .catch(this.onFetchError);
+    };
+
+    onFetchSuccess = (data: Object) => {
+        this.displayData = data;
+        console.log(this.displayData);
+        this.setState({loading: false});
+    };
+
+    onFetchError = (error: number) => {
+        this.errorCode = error;
+        this.setState({loading: false});
+    };
+
+    getContent() {
         let subtitle = getFormattedEventTime(
             this.displayData["date_begin"], this.displayData["date_end"]);
         let dateString = getDateOnlyString(this.displayData["date_begin"]);
@@ -105,6 +123,15 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
                     : <View/>}
             </ScrollView>
         );
+    }
+
+    render() {
+        if (this.state.loading)
+            return <BasicLoadingScreen/>;
+        else if (this.errorCode === 0)
+            return this.getContent();
+        else
+            return <ErrorView {...this.props} errorCode={this.errorCode}   onRefresh={this.fetchData}/>;
     }
 }
 

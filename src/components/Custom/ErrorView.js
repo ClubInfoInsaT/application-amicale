@@ -5,7 +5,7 @@ import {Button, Subheading, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import i18n from 'i18n-js';
-import {ERROR_TYPE} from "../../managers/ConnectionManager";
+import {ERROR_TYPE} from "../../utils/WebData";
 
 type Props = {
     navigation: Object,

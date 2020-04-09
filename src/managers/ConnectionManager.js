@@ -1,23 +1,7 @@
 // @flow
 
 import * as SecureStore from 'expo-secure-store';
-
-export const ERROR_TYPE = {
-    SUCCESS: 0,
-    BAD_CREDENTIALS: 1,
-    BAD_TOKEN: 2,
-    NO_CONSENT: 3,
-    BAD_INPUT: 400,
-    FORBIDDEN: 403,
-    CONNECTION_ERROR: 404,
-    SERVER_ERROR: 500,
-    UNKNOWN: 999,
-};
-
-type response_format = {
-    error: number,
-    data: Object,
-}
+import {apiRequest, ERROR_TYPE, isResponseValid} from "../utils/WebData";
 
 /**
  * champ: error
@@ -30,7 +14,7 @@ type response_format = {
  * 500 : SERVER_ERROR -> pb coté serveur
  */
 
-const API_ENDPOINT = "https://www.amicale-insat.fr/api/";
+
 const AUTH_PATH = "password";
 
 export default class ConnectionManager {
@@ -126,53 +110,27 @@ export default class ConnectionManager {
     }
 
     async connect(email: string, password: string) {
-        let data = {
-            email: email,
-            password: password,
-        };
         return new Promise((resolve, reject) => {
-            fetch(API_ENDPOINT + AUTH_PATH, {
-                method: 'POST',
-                headers: new Headers({
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }),
-                body: JSON.stringify(data)
-            }).then(async (response) => response.json())
-                .then((response: response_format) => {
-                    if (this.isConnectionResponseValid(response)) {
-                        if (response.error === ERROR_TYPE.SUCCESS) {
-                            this.saveLogin(email, response.data.token)
-                                .then(() => {
-                                    resolve(true);
-                                })
-                                .catch(() => {
-                                    reject(ERROR_TYPE.UNKNOWN);
-                                });
-                        } else
-                            reject(response.error);
-                    } else
-                        reject(ERROR_TYPE.CONNECTION_ERROR);
+            const data = {
+                email: email,
+                password: password,
+            };
+            apiRequest(AUTH_PATH, 'POST', data)
+                .then((response) => {
+                    this.saveLogin(email, response.token)
+                        .then(() => {
+                            resolve(true);
+                        })
+                        .catch(() => {
+                            reject(ERROR_TYPE.UNKNOWN);
+                        });
                 })
-                .catch((error) => {
-                    reject(ERROR_TYPE.CONNECTION_ERROR);
-                });
+                .catch((error) => reject(error));
         });
     }
 
-    isResponseValid(response: response_format) {
-        let valid = response !== undefined
-            && response.error !== undefined
-            && typeof response.error === "number";
-
-        valid = valid
-            && response.data !== undefined
-            && typeof response.data === "object";
-        return valid;
-    }
-
-    isConnectionResponseValid(response: response_format) {
-        let valid = this.isResponseValid(response);
+    isConnectionResponseValid(response: Object) {
+        let valid = isResponseValid(response);
 
         if (valid && response.error === ERROR_TYPE.SUCCESS)
             valid = valid
@@ -182,45 +140,17 @@ export default class ConnectionManager {
         return valid;
     }
 
-    generatePostArguments(keys: Array<string>, values: Array<string>) {
-        let data = {};
-        for (let i = 0; i < keys.length; i++) {
-            data[keys[i]] = values[i];
-        }
-        return data;
-    }
-
-    async authenticatedRequest(path: string, keys: Array<string>|null, values: Array<any>|null) {
+    async authenticatedRequest(path: string, params: Object) {
         return new Promise((resolve, reject) => {
             if (this.getToken() !== null) {
-                let data = {};
-                if (keys !== null && values !== null && keys.length === values.length)
-                    data = this.generatePostArguments(keys, values);
                 // console.log(data);
-                fetch(API_ENDPOINT + path, {
-                    method: 'POST',
-                    headers: new Headers({
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    }),
-                    body: JSON.stringify({
-                        token: this.getToken(),
-                        ...data
-                    })
-                }).then(async (response) => response.json())
-                    .then((response: response_format) => {
-                        // console.log(response);
-                        if (this.isResponseValid(response)) {
-                            if (response.error === ERROR_TYPE.SUCCESS)
-                                resolve(response.data);
-                            else
-                                reject(response.error);
-                        } else
-                            reject(ERROR_TYPE.CONNECTION_ERROR);
-                    })
-                    .catch(() => {
-                        reject(ERROR_TYPE.CONNECTION_ERROR);
-                    });
+                let data = {
+                    token: this.getToken(),
+                    ...params
+                };
+                apiRequest(path, 'POST', data)
+                    .then((response) => resolve(response))
+                    .catch((error) => reject(error));
             } else
                 reject(ERROR_TYPE.UNKNOWN);
         });

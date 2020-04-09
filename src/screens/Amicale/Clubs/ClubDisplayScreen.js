@@ -22,22 +22,6 @@ function openWebLink(event, link) {
     Linking.openURL(link).catch((err) => console.error('Error opening link', err));
 }
 
-const FakeClub = {
-    "category": [
-        3,
-        6,
-    ],
-    "description": "<p class=\"ql-align-justify\">Les 100 Tours de l’INSA reviennent en force pour une cinquième édition les 5 et 6 juin prochain&nbsp;!</p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\">Prépare-toi pour le plus gros évènement de l’année sur le campus de notre belle école qui nous réunit tous autour d’activités folles&nbsp;pour fêter la fin de l’année dans la bonne humeur !</p><p class=\"ql-align-justify\">L’éco-festival tournera autour d’une grande course par équipe qui nous vaut ce doux nom de 100 tours. Ce sera le moment de défier tes potes pour tenter de remporter de nombreux lots, et surtout l’admiration de tous. Mais cela ne s’arrête pas là, puisque tu pourras aussi participer à des activités à sensation, divers ateliers, et de quoi chiller avec tes potes en écoutant de la bonne musique. Tu pourras ensuite enchaîner sur LA soirée de l’année, rythmée par des artistes sur-motivés&nbsp;!</p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\">Tu es bien entendu le bienvenu si l’envie te prend de rejoindre l’équipe et de nous aider à organiser cet évènement du turfu&nbsp;!</p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\">La team 100 Tours</p><p class=\"ql-align-justify\"><br></p><p>Contact&nbsp;: <a href=\"mailto:100Tours@amicale-insat.fr\" target=\"_blank\">100tours@amicale-insat.fr</a></p><p>Facebook&nbsp;: Les 100 Tours de l’INSA</p><p>Instagram&nbsp;: 100tours.insatoulouse</p>",
-    "id": 110,
-    "logo": "https://www.amicale-insat.fr/storage/clubLogos/2cca8885dd3bdf902124f038b548962b.jpeg",
-    "name": "100 Tours",
-    "responsibles": [
-        "Juliette Duval",
-        "Emilie Cuminal",
-        "Maxime Doré",
-    ],
-};
-
 /**
  * Class defining a club event information page.
  * If called with data and categories navigation parameters, will use those to display the data.
@@ -132,11 +116,8 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         this.props.navigation.setOptions({title: data.name})
     }
 
-    getScreen = (data: Object) => {
-        console.log('fetchedData passed to screen:');
-        console.log(data);
-        console.log("Using fake data");
-        data = FakeClub;
+    getScreen = (response: Array<Object>) => {
+        let data = response[0];
         this.updateHeaderTitle(data);
 
         return (
@@ -182,16 +163,17 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         if (this.shouldFetchData)
             return <AuthenticatedScreen
                 {...this.props}
-                links={[
+                requests={[
                     {
-                        link: 'clubs/' + this.clubId,
-                        mandatory: true,
+                        link: 'clubs/info',
+                        params: {'id': this.clubId},
+                        mandatory: true
                     }
                 ]}
                 renderFunction={this.getScreen}
             />;
         else
-            return this.getScreen(this.displayData);
+            return this.getScreen([this.displayData]);
     }
 }
 

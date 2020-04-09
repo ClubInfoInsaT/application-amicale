@@ -1,13 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {readData} from "../../utils/WebData";
+import {ERROR_TYPE, readData} from "../../utils/WebData";
 import i18n from "i18n-js";
 import {Snackbar} from 'react-native-paper';
 import {RefreshControl, SectionList, View} from "react-native";
 import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
-import {ERROR_TYPE} from "../../managers/ConnectionManager";
 
 type Props = {
     navigation: Object,

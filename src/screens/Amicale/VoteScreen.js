@@ -216,13 +216,15 @@ export default class VoteScreen extends React.Component<Props, State> {
             <AuthenticatedScreen
                 {...this.props}
                 ref={this.authRef}
-                links={[
+                requests={[
                     {
                         link: 'elections/teams',
+                        params: {},
                         mandatory: false,
                     },
                     {
                         link: 'elections/datesString',
+                        params: {},
                         mandatory: false,
                     },
                 ]}

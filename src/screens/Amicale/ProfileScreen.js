@@ -265,11 +265,10 @@ class ProfileScreen extends React.Component<Props, State> {
      * @return {*}
      */
     clubListItem = ({item}: Object) => {
-        const onPress = () => this.openClubDetailsScreen(0); // TODO get club id
-        const isManager = false; // TODO detect if manager
+        const onPress = () => this.openClubDetailsScreen(item.id);
         let description = i18n.t("profileScreen.isMember");
         let icon = (props) => <List.Icon {...props} icon="chevron-right"/>;
-        if (isManager) {
+        if (item.is_manager) {
             description = i18n.t("profileScreen.isManager");
             icon = (props) => <List.Icon {...props} icon="star" color={this.colors.primary}/>;
         }
@@ -289,17 +288,13 @@ class ProfileScreen extends React.Component<Props, State> {
      * @param list The club list
      * @return {*}
      */
-    getClubList(list: Array<string>) {
-        let dataset = [];
-        for (let i = 0; i < list.length; i++) {
-            dataset.push({name: list[i]});
-        }
+    getClubList(list: Array<Object>) {
         return (
             //$FlowFixMe
             <FlatList
                 renderItem={this.clubListItem}
                 keyExtractor={this.clubKeyExtractor}
-                data={dataset}
+                data={list}
             />
         );
     }
@@ -308,9 +303,10 @@ class ProfileScreen extends React.Component<Props, State> {
         return (
             <AuthenticatedScreen
                 {...this.props}
-                links={[
+                requests={[
                     {
                         link: 'user/profile',
+                        params: {},
                         mandatory: true,
                     }
                 ]}
