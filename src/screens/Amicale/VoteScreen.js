@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, View} from "react-native";
+import {FlatList, RefreshControl, View} from "react-native";
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {getTimeOnlyString, stringToDate} from "../../utils/Planning";
 import VoteTitle from "../../components/Amicale/Vote/VoteTitle";
@@ -9,7 +9,6 @@ import VoteTease from "../../components/Amicale/Vote/VoteTease";
 import VoteSelect from "../../components/Amicale/Vote/VoteSelect";
 import VoteResults from "../../components/Amicale/Vote/VoteResults";
 import VoteWait from "../../components/Amicale/Vote/VoteWait";
-import {Button} from "react-native-paper";
 
 const FAKE_DATE = {
     "date_begin": "2020-04-09 15:50",
@@ -59,6 +58,8 @@ const FAKE_TEAMS2 = {
     ],
 };
 
+const MIN_REFRESH_TIME = 5 * 1000;
+
 type Props = {
     navigation: Object
 }
@@ -81,6 +82,7 @@ export default class VoteScreen extends React.Component<Props, State> {
     today: Date;
 
     mainFlatListData: Array<Object>;
+    lastRefresh: Date;
 
     authRef: Object;
 
@@ -95,7 +97,15 @@ export default class VoteScreen extends React.Component<Props, State> {
         ]
     }
 
-    reloadData = () => this.authRef.current.reload();
+    reloadData = () => {
+        let canRefresh;
+        if (this.lastRefresh !== undefined)
+            canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) > MIN_REFRESH_TIME;
+        else
+            canRefresh = true;
+        if (canRefresh)
+            this.authRef.current.reload()
+    };
 
     generateDateObject() {
         this.dates = {
@@ -146,6 +156,7 @@ export default class VoteScreen extends React.Component<Props, State> {
     getScreen = (data: Array<Object | null>) => {
         // data[0] = FAKE_TEAMS2;
         // data[1] = FAKE_DATE;
+        this.lastRefresh = new Date();
 
         if (data[1] === null)
             data[1] = {date_begin: null};
@@ -161,12 +172,15 @@ export default class VoteScreen extends React.Component<Props, State> {
                 {/*$FlowFixMe*/}
                 <FlatList
                     data={this.mainFlatListData}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={false}
+                            onRefresh={this.reloadData}
+                        />
+                    }
                     extraData={this.state.hasVoted.toString()}
                     renderItem={this.mainRenderItem}
                 />
-                <Button onPress={this.reloadData}>
-                    REFRESH
-                </Button>
             </View>
         );
     };
