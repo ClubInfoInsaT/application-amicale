@@ -24,15 +24,12 @@ class ProfileScreen extends React.Component<Props, State> {
         dialogVisible: false,
     };
 
-    colors: Object;
-
     data: Object;
 
     flatListData: Array<Object>;
 
-    constructor(props) {
-        super(props);
-        this.colors = props.theme.colors;
+    constructor() {
+        super();
         this.flatListData = [
             {id: '0'},
             {id: '1'},
@@ -105,18 +102,6 @@ class ProfileScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Gets the color depending on the value.
-     *
-     * @param field The field to get the color for
-     * @return {*}
-     */
-    getFieldColor(field: ?string) {
-        return this.isFieldAvailable(field)
-            ? this.colors.text
-            : this.colors.textDisabled;
-    }
-
-    /**
      * Gets a list item showing personal information
      *
      * @param field The field to display
@@ -124,15 +109,17 @@ class ProfileScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getPersonalListItem(field: ?string, icon: string) {
+        let title = this.isFieldAvailable(field) ? this.getFieldValue(field) : ':(';
+        let subtitle = this.isFieldAvailable(field) ? '' : this.getFieldValue(field);
         return (
             <List.Item
-                title={this.getFieldValue(field)}
+                title={title}
+                description={subtitle}
                 left={props => <List.Icon
                     {...props}
                     icon={icon}
-                    color={this.getFieldColor(field)}
+                    color={this.isFieldAvailable(field) ? undefined : this.props.theme.colors.textDisabled}
                 />}
-                titleStyle={{color: this.getFieldColor(field)}}
             />
         );
     }
@@ -151,7 +138,7 @@ class ProfileScreen extends React.Component<Props, State> {
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon="account"
-                        color={this.colors.primary}
+                        color={this.props.theme.colors.primary}
                         style={styles.icon}
                     />}
                 />
@@ -169,7 +156,7 @@ class ProfileScreen extends React.Component<Props, State> {
                         <Button
                             icon="account-edit"
                             mode="contained"
-                            onPress={() => openBrowser(this.data.link, this.colors.primary)}
+                            onPress={() => openBrowser(this.data.link, this.props.theme.colors.primary)}
                             style={styles.editButton}>
                             {i18n.t("profileScreen.editInformation")}
                         </Button>
@@ -193,7 +180,7 @@ class ProfileScreen extends React.Component<Props, State> {
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon="account-group"
-                        color={this.colors.primary}
+                        color={this.props.theme.colors.primary}
                         style={styles.icon}
                     />}
                 />
@@ -219,7 +206,7 @@ class ProfileScreen extends React.Component<Props, State> {
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon="credit-card"
-                        color={this.colors.primary}
+                        color={this.props.theme.colors.primary}
                         style={styles.icon}
                     />}
                 />
@@ -243,7 +230,7 @@ class ProfileScreen extends React.Component<Props, State> {
                 title={state ? i18n.t("profileScreen.membershipPayed") : i18n.t("profileScreen.membershipNotPayed")}
                 left={props => <List.Icon
                     {...props}
-                    color={state ? this.colors.success : this.colors.danger}
+                    color={state ? this.props.theme.colors.success : this.props.theme.colors.danger}
                     icon={state ? 'check' : 'close'}
                 />}
             />
@@ -270,7 +257,7 @@ class ProfileScreen extends React.Component<Props, State> {
         let icon = (props) => <List.Icon {...props} icon="chevron-right"/>;
         if (item.is_manager) {
             description = i18n.t("profileScreen.isManager");
-            icon = (props) => <List.Icon {...props} icon="star" color={this.colors.primary}/>;
+            icon = (props) => <List.Icon {...props} icon="star" color={this.props.theme.colors.primary}/>;
         }
         return <List.Item
             title={item.name}

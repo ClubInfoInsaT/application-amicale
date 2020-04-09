@@ -2,12 +2,11 @@
 
 import * as React from 'react';
 import {ScrollView, View} from 'react-native';
-import HTML from "react-native-render-html";
-import {Linking} from "expo";
 import {Avatar, Card, Chip, Paragraph, withTheme} from 'react-native-paper';
 import ImageModal from 'react-native-image-modal';
 import i18n from "i18n-js";
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
+import CustomHTML from "../../../components/Custom/CustomHTML";
 
 type Props = {
     navigation: Object,
@@ -17,10 +16,6 @@ type Props = {
 type State = {
     imageModalVisible: boolean,
 };
-
-function openWebLink(event, link) {
-    Linking.openURL(link).catch((err) => console.error('Error opening link', err));
-}
 
 /**
  * Class defining a club event information page.
@@ -146,12 +141,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                 {data.description !== null ?
                     // Surround description with div to allow text styling if the description is not html
                     <Card.Content>
-                        <HTML html={"<div>" + data.description + "</div>"}
-                              tagsStyles={{
-                                  p: {color: this.colors.text,},
-                                  div: {color: this.colors.text}
-                              }}
-                              onLinkPress={openWebLink}/>
+                        <CustomHTML html={data.description}/>
                     </Card.Content>
                     : <View/>}
                 {this.getManagersRender(data.responsibles)}

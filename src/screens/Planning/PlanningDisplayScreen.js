@@ -2,8 +2,6 @@
 
 import * as React from 'react';
 import {ScrollView, View} from 'react-native';
-import HTML from "react-native-render-html";
-import {Linking} from "expo";
 import {getDateOnlyString, getFormattedEventTime} from '../../utils/Planning';
 import {Card, withTheme} from 'react-native-paper';
 import DateManager from "../../managers/DateManager";
@@ -11,6 +9,7 @@ import ImageModal from 'react-native-image-modal';
 import BasicLoadingScreen from "../../components/Custom/BasicLoadingScreen";
 import {apiRequest} from "../../utils/WebData";
 import ErrorView from "../../components/Custom/ErrorView";
+import CustomHTML from "../../components/Custom/CustomHTML";
 
 type Props = {
     navigation: Object,
@@ -20,10 +19,6 @@ type Props = {
 type State = {
     loading: boolean
 };
-
-function openWebLink(event, link) {
-    Linking.openURL(link).catch((err) => console.error('Error opening link', err));
-}
 
 const CLUB_INFO_PATH = "event/info";
 
@@ -111,14 +106,8 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
                     : <View/>}
 
                 {this.displayData.description !== null ?
-                    // Surround description with div to allow text styling if the description is not html
                     <Card.Content>
-                        <HTML html={"<div>" + this.displayData.description + "</div>"}
-                              tagsStyles={{
-                                  p: {color: this.colors.text,},
-                                  div: {color: this.colors.text}
-                              }}
-                              onLinkPress={openWebLink}/>
+                        <CustomHTML html={this.displayData.description}/>
                     </Card.Content>
                     : <View/>}
             </ScrollView>
@@ -131,7 +120,7 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
         else if (this.errorCode === 0)
             return this.getContent();
         else
-            return <ErrorView {...this.props} errorCode={this.errorCode}   onRefresh={this.fetchData}/>;
+            return <ErrorView {...this.props} errorCode={this.errorCode} onRefresh={this.fetchData}/>;
     }
 }
 

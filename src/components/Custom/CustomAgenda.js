@@ -45,7 +45,8 @@ class CustomAgenda extends React.Component<Props> {
     }
 
     render() {
-        if (this.props.theme.colors.text === "#ffffff") // We are in light mode
+        // Completely recreate the component on theme change to force theme reload
+        if (this.props.theme.dark)
             return (
                 <View style={{flex: 1}}>
                     {this.getAgenda()}

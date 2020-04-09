@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 import {StyleSheet, View} from "react-native";
-import HTML from "react-native-render-html";
 import i18n from "i18n-js";
-import {Avatar, Button, Card, withTheme} from 'react-native-paper';
+import {Avatar, Button, Card} from 'react-native-paper';
 import {getFormattedEventTime, isDescriptionEmpty} from "../../utils/Planning";
+import CustomHTML from "../Custom/CustomHTML";
 
 /**
  * Component used to display an event preview if an event is available
@@ -14,7 +14,6 @@ import {getFormattedEventTime, isDescriptionEmpty} from "../../utils/Planning";
  * @return {*}
  */
 function PreviewEventDashboardItem(props) {
-    const {colors} = props.theme;
     const isEmpty = props.event === undefined
         ? true
         : isDescriptionEmpty(props.event['description']);
@@ -43,12 +42,7 @@ function PreviewEventDashboardItem(props) {
                     />}
                 {!isEmpty ?
                     <Card.Content style={styles.content}>
-                        <HTML html={"<div>" + props.event['description'] + "</div>"}
-                              tagsStyles={{
-                                  p: {color: colors.text,},
-                                  div: {color: colors.text},
-                              }}/>
-
+                        <CustomHTML html={props.event['description']}/>
                     </Card.Content> : null}
 
                 <Card.Actions style={styles.actions}>
@@ -82,4 +76,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default withTheme(PreviewEventDashboardItem);
+export default PreviewEventDashboardItem;
