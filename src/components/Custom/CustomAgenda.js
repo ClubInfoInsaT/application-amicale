@@ -1,46 +1,59 @@
 import * as React from 'react';
+import {View} from "react-native";
 import {withTheme} from 'react-native-paper';
 import {Agenda} from "react-native-calendars";
 
+type Props = {
+    theme: Object,
+}
+
 /**
  * Abstraction layer for Agenda component, using custom configuration
- *
- * @param props Props to pass to the element. Must specify an onRef prop to get an Agenda ref.
- * @return {*}
  */
-function CustomAgenda(props) {
-    const {colors} = props.theme;
-    return (
-        <Agenda
-            {...props}
-            ref={props.onRef}
+class CustomAgenda extends React.Component<Props> {
+
+    getAgenda() {
+        return <Agenda
+            {...this.props}
+            ref={this.props.onRef}
             theme={{
-                backgroundColor: colors.agendaBackgroundColor,
-                calendarBackground: colors.background,
-                textSectionTitleColor: colors.agendaDayTextColor,
-                selectedDayBackgroundColor: colors.primary,
+                backgroundColor: this.props.theme.colors.agendaBackgroundColor,
+                calendarBackground: this.props.theme.colors.background,
+                textSectionTitleColor: this.props.theme.colors.agendaDayTextColor,
+                selectedDayBackgroundColor: this.props.theme.colors.primary,
                 selectedDayTextColor: '#ffffff',
-                todayTextColor: colors.primary,
-                dayTextColor: colors.text,
-                textDisabledColor: colors.agendaDayTextColor,
-                dotColor: colors.primary,
+                todayTextColor: this.props.theme.colors.primary,
+                dayTextColor: this.props.theme.colors.text,
+                textDisabledColor: this.props.theme.colors.agendaDayTextColor,
+                dotColor: this.props.theme.colors.primary,
                 selectedDotColor: '#ffffff',
                 arrowColor: 'orange',
-                monthTextColor: colors.primary,
-                indicatorColor: colors.primary,
+                monthTextColor: this.props.theme.colors.primary,
+                indicatorColor: this.props.theme.colors.primary,
                 textDayFontWeight: '300',
                 textMonthFontWeight: 'bold',
                 textDayHeaderFontWeight: '300',
                 textDayFontSize: 16,
                 textMonthFontSize: 16,
                 textDayHeaderFontSize: 16,
-                agendaDayTextColor: colors.agendaDayTextColor,
-                agendaDayNumColor: colors.agendaDayTextColor,
-                agendaTodayColor: colors.primary,
-                agendaKnobColor: colors.primary,
+                agendaDayTextColor: this.props.theme.colors.agendaDayTextColor,
+                agendaDayNumColor: this.props.theme.colors.agendaDayTextColor,
+                agendaTodayColor: this.props.theme.colors.primary,
+                agendaKnobColor: this.props.theme.colors.primary,
             }}
-        />
-    );
+        />;
+    }
+
+    render() {
+        if (this.props.theme.colors.text === "#ffffff") // We are in light mode
+            return (
+                <View style={{flex: 1}}>
+                    {this.getAgenda()}
+                </View>
+            );
+        else
+            return this.getAgenda();
+    }
 }
 
 export default withTheme(CustomAgenda);

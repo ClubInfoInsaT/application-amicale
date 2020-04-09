@@ -40,7 +40,7 @@ const AGENDA_MONTH_SPAN = 3;
 /**
  * Class defining the app's planning screen
  */
-export default class PlanningScreen extends React.Component<Props, State> {
+class PlanningScreen extends React.Component<Props, State> {
 
     agendaRef: Object;
 
@@ -226,10 +226,15 @@ export default class PlanningScreen extends React.Component<Props, State> {
         );
     }
 
+    componentDidUpdate(prevProps: Props, prevState: State, prevContext: *): * {
+        console.log('coucou');
+    }
+
     render() {
         // console.log("rendering PlanningScreen");
         return (
             <CustomAgenda
+                {...this.props}
                 // the list of items that have to be displayed in agenda. If you want to render item as empty date
                 // the value of date key kas to be an empty array []. If there exists no value for date key it is
                 // considered that the date in question is not yet loaded
@@ -259,3 +264,5 @@ export default class PlanningScreen extends React.Component<Props, State> {
         );
     }
 }
+
+export default PlanningScreen;

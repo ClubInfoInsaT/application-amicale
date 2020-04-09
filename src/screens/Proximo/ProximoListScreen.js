@@ -4,9 +4,10 @@ import * as React from 'react';
 import {FlatList, Image, Platform, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
 import CustomModal from "../../components/Custom/CustomModal";
-import {IconButton, RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
+import {RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
 import {stringMatchQuery} from "../../utils/Search";
 import ProximoListItem from "../../components/Lists/ProximoListItem";
+import HeaderButton from "../../components/Custom/HeaderButton";
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -37,6 +38,7 @@ const LIST_ITEM_HEIGHT = 84;
 type Props = {
     navigation: Object,
     route: Object,
+    theme: Object,
 }
 
 type State = {
@@ -54,8 +56,6 @@ class ProximoListScreen extends React.Component<Props, State> {
     listData: Array<Object>;
     shouldFocusSearchBar: boolean;
 
-    colors: Object;
-
     constructor(props) {
         super(props);
         this.listData = this.props.route.params['data']['data'];
@@ -65,8 +65,6 @@ class ProximoListScreen extends React.Component<Props, State> {
             currentSortMode: 3,
             modalCurrentDisplayItem: null,
         };
-
-        this.colors = props.theme.colors;
     }
 
 
@@ -104,14 +102,7 @@ class ProximoListScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getSortMenuButton = () => {
-        return (
-            <IconButton
-                icon="sort"
-                color={this.colors.text}
-                size={26}
-                onPress={this.onSortMenuPress}
-            />
-        );
+        return <HeaderButton icon="sort" onPress={this.onSortMenuPress}/>;
     };
 
     /**
@@ -164,11 +155,11 @@ class ProximoListScreen extends React.Component<Props, State> {
     getStockColor(availableStock: number) {
         let color: string;
         if (availableStock > 3)
-            color = this.colors.success;
+            color = this.props.theme.colors.success;
         else if (availableStock > 0)
-            color = this.colors.warning;
+            color = this.props.theme.colors.warning;
         else
-            color = this.colors.danger;
+            color = this.props.theme.colors.danger;
         return color;
     }
 
