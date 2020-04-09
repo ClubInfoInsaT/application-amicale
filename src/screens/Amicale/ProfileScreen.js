@@ -269,6 +269,8 @@ class ProfileScreen extends React.Component<Props, State> {
 
     clubKeyExtractor = (item: Object) => item.name;
 
+    sortClubList = (a: Object, b: Object) => a.is_manager ? -1 : 1;
+
     /**
      * Renders the list of clubs the user is part of
      *
@@ -276,6 +278,7 @@ class ProfileScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getClubList(list: Array<Object>) {
+        list.sort(this.sortClubList);
         return (
             //$FlowFixMe
             <FlatList
