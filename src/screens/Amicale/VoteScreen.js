@@ -9,12 +9,13 @@ import VoteTease from "../../components/Amicale/Vote/VoteTease";
 import VoteSelect from "../../components/Amicale/Vote/VoteSelect";
 import VoteResults from "../../components/Amicale/Vote/VoteResults";
 import VoteWait from "../../components/Amicale/Vote/VoteWait";
+import {Button} from "react-native-paper";
 
 const FAKE_DATE = {
-    "date_begin": "2020-04-07 21:50",
-    "date_end": "2020-04-06 23:50",
-    "date_result_begin": "2020-04-06 21:50",
-    "date_result_end": "2020-04-07 22:50",
+    "date_begin": "2020-04-09 15:50",
+    "date_end": "2020-04-09 15:50",
+    "date_result_begin": "2020-04-09 15:50",
+    "date_result_end": "2020-04-09 22:50",
 };
 
 const FAKE_DATE2 = {
@@ -43,12 +44,17 @@ const FAKE_TEAMS2 = {
         {
             id: 1,
             name: "TEST TEAM1",
-            votes: 1,
+            votes: 9,
         },
         {
             id: 2,
             name: "TEST TEAM2",
             votes: 9,
+        },
+        {
+            id: 3,
+            name: "TEST TEAM3",
+            votes: 5,
         },
     ],
 };
@@ -158,6 +164,9 @@ export default class VoteScreen extends React.Component<Props, State> {
                     extraData={this.state.hasVoted.toString()}
                     renderItem={this.mainRenderItem}
                 />
+                <Button onPress={this.reloadData}>
+                    REFRESH
+                </Button>
             </View>
         );
     };
@@ -223,7 +232,7 @@ export default class VoteScreen extends React.Component<Props, State> {
                         mandatory: false,
                     },
                     {
-                        link: 'elections/datesString',
+                        link: 'elections/dates',
                         params: {},
                         mandatory: false,
                     },

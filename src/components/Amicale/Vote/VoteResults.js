@@ -13,7 +13,7 @@ type Props = {
 class VoteResults extends React.Component<Props> {
 
     totalVotes: number;
-    winnerId: number;
+    winnerIds: Array<number>;
     colors: Object;
 
     constructor(props) {
@@ -21,7 +21,7 @@ class VoteResults extends React.Component<Props> {
         this.colors = props.theme.colors;
         props.teams.sort(this.sortByVotes);
         this.getTotalVotes(props.teams);
-        this.getWinnerId(props.teams);
+        this.getWinnerIds(props.teams);
     }
 
     shouldComponentUpdate() {
@@ -37,14 +37,21 @@ class VoteResults extends React.Component<Props> {
         }
     }
 
-    getWinnerId(teams: Array<Object>) {
-        this.winnerId = teams[0].id;
+    getWinnerIds(teams: Array<Object>){
+        let max = teams[0].votes;
+        this.winnerIds= [];
+        for (let i = 0; i < teams.length; i++) {
+            if (teams[i].votes === max)
+                this.winnerIds.push(teams[i].id);
+            else
+                break;
+        }
     }
 
     voteKeyExtractor = (item: Object) => item.id.toString();
 
     resultRenderItem = ({item}: Object) => {
-        const isWinner = this.winnerId === item.id;
+        const isWinner = this.winnerIds.indexOf(item.id) !== -1;
         return (
             <Card style={{
                 marginTop: 10,
