@@ -32,7 +32,7 @@ class CustomHTML extends React.Component<Props> {
         // Completely recreate the component on theme change to force theme reload
         if (this.props.theme.dark)
             return (
-                <View style={{flex: 1}}>
+                <View>
                     {this.getHTML()}
                 </View>
             );

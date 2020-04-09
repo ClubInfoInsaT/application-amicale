@@ -83,7 +83,7 @@ class HomeScreen extends React.Component<Props> {
             if (this.props.route.params.nextScreen !== undefined && this.props.route.params.nextScreen !== null) {
                 this.props.navigation.navigate(this.props.route.params.nextScreen, this.props.route.params.data);
                 // reset params to prevent infinite loop
-                this.props.navigation.dispatch(CommonActions.setParams({ nextScreen: null }));
+                this.props.navigation.dispatch(CommonActions.setParams({nextScreen: null}));
             }
         }
     };
@@ -137,7 +137,7 @@ class HomeScreen extends React.Component<Props> {
                 id: SECTIONS_ID[1]
             }
         ];
-    }
+    };
 
     /**
      * Generates the dataset associated to the dashboard to be displayed in the FlatList as a section
@@ -349,7 +349,7 @@ class HomeScreen extends React.Component<Props> {
 
         let displayEvent = this.getDisplayEvent(futureEvents);
         const clickContainerAction = () => this.props.navigation.navigate('planning');
-        const clickPreviewAction = () => this.props.navigation.navigate('planning-information', {data: displayEvent});
+        const clickPreviewAction = () => this.props.navigation.navigate('home-planning-information', {data: displayEvent});
 
         return (
             <DashboardItem
@@ -469,13 +469,13 @@ class HomeScreen extends React.Component<Props> {
         const nav = this.props.navigation;
         return (
             <View>
-            <WebSectionList
-                createDataset={this.createDataset}
-                navigation={nav}
-                autoRefreshTime={REFRESH_TIME}
-                refreshOnFocus={true}
-                fetchUrl={DATA_URL}
-                renderItem={this.getRenderItem}/>
+                <WebSectionList
+                    createDataset={this.createDataset}
+                    navigation={nav}
+                    autoRefreshTime={REFRESH_TIME}
+                    refreshOnFocus={true}
+                    fetchUrl={DATA_URL}
+                    renderItem={this.getRenderItem}/>
                 <FAB
                     style={styles.fab}
                     icon="qrcode-scan"

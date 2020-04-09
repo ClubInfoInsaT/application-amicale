@@ -13,7 +13,7 @@ import CustomHTML from "../Custom/CustomHTML";
  * @param props Props to pass to the component
  * @return {*}
  */
-function PreviewEventDashboardItem(props) {
+function PreviewEventDashboardItem(props : Object) {
     const isEmpty = props.event === undefined
         ? true
         : isDescriptionEmpty(props.event['description']);
