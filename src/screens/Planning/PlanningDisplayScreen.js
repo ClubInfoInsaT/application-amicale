@@ -40,7 +40,6 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
 
         if (this.props.route.params.data !== undefined) {
             this.displayData = this.props.route.params.data;
-            console.log(this.displayData);
             this.eventId = this.displayData.id;
             this.shouldFetchData = false;
             this.errorCode = 0;
@@ -69,7 +68,6 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
 
     onFetchSuccess = (data: Object) => {
         this.displayData = data;
-        console.log(this.displayData);
         this.setState({loading: false});
     };
 

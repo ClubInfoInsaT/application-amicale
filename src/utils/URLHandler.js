@@ -36,7 +36,6 @@ export default class URLHandler {
     };
 
     static getUrlData({path, queryParams}: Object) {
-        console.log(path);
         let data = null;
         if (path !== null) {
             if (URLHandler.isClubInformationLink(path))

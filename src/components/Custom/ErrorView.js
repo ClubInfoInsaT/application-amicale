@@ -87,7 +87,6 @@ class ErrorView extends React.PureComponent<Props, State> {
     }
 
     goToLogin = () => {
-        console.log(this.props.route);
         this.props.navigation.navigate("login",
         {
            screen: 'login',

@@ -226,10 +226,6 @@ class PlanningScreen extends React.Component<Props, State> {
         );
     }
 
-    componentDidUpdate(prevProps: Props, prevState: State, prevContext: *): * {
-        console.log('coucou');
-    }
-
     render() {
         // console.log("rendering PlanningScreen");
         return (
