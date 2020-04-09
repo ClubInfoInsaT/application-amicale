@@ -234,13 +234,11 @@ type Props = {
 class TabNavigator extends React.Component<Props>{
 
     createHomeStackComponent: Object;
-    colors: Object;
 
     defaultRoute: string;
 
     constructor(props) {
         super(props);
-        this.colors = props.theme.colors;
         this.defaultRoute = AsyncStorageManager.getInstance().preferences.defaultStartScreen.current.toLowerCase();
 
         if (props.defaultRoute !== null)
@@ -253,7 +251,7 @@ class TabNavigator extends React.Component<Props>{
         return (
             <Tab.Navigator
                 initialRouteName={this.defaultRoute}
-                barStyle={{backgroundColor: this.colors.surface}}
+                barStyle={{backgroundColor: this.props.theme.colors.surface}}
                 screenOptions={({route}) => ({
                     tabBarIcon: ({focused, color, size}) => {
                         let icon = TAB_ICONS[route.name];
@@ -262,8 +260,8 @@ class TabNavigator extends React.Component<Props>{
                         return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
                     },
                 })}
-                activeColor={this.colors.primary}
-                inactiveColor={this.colors.tabIcon}
+                activeColor={this.props.theme.colors.primary}
+                inactiveColor={this.props.theme.colors.tabIcon}
             >
                 <Tab.Screen
                     name="proximo"
