@@ -4,6 +4,7 @@
     "planning": "Planning",
     "planningDisplayScreen": "Event details",
     "clubDisplayScreen": "Club details",
+    "clubsAbout": "Clubs",
     "proxiwash": "Proxiwash",
     "proximo": "Proximo",
     "proximoArticles": "Articles",
@@ -270,7 +271,8 @@
     "managersSubtitle": "These people make the club live",
     "managersUnavailable": "This club has no one :(",
     "categories": "Categories",
-    "categoriesFilterMessage": "Click on a category to filter the list"
+    "categoriesFilterMessage": "Click on a category to filter the list",
+    "aboutText": "The clubs, making the campus live, with more than sixty clubs offering various activities! From the philosophy club to the PABI (Production Artisanale de Bière Insaienne), without forgetting the multiple music and dance clubs, you will surely find an activity that suits you!"
   },
   "voteScreen": {
     "select": {
@@ -304,8 +306,8 @@
     "title": {
       "title": "The Elections",
       "subtitle": "Why your vote is important",
-      "paragraph1" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rhoncus porttitor suscipit. Quisque hendrerit, quam id vestibulum vestibulum, lorem nisi hendrerit nisi, a eleifend sapien diam ut elit. Curabitur sit amet vulputate lectus. Donec semper cursus sapienvel finibus.",
-      "paragraph2" : "Sed et venenatis turpis. Fusce malesuada magna urna, sed vehicula sem luctus in. Vivamus faucibus vel eros a ultricies. In sed laoreet ante, luctus mattis tellus. Etiam vitae ipsum sagittis, consequat purus sed, blandit risus."
+      "paragraph1" : "The Amicale's elections is the right moment for you to choose the next team, which will handle different projects on the campus, help organizing your favorite events, animate the campus life during the whole year, and relay your ideas to the administration, so that your campus life is the most enjoyable possible!\nYour turn to make a change!\uD83D\uDE09",
+      "paragraph2" : "Note: If there is only one list, it is still important to vote to show your support, so that the administration knows the current list is supported by students. It is always a plus when taking difficult decisions! \uD83D\uDE09"
     }
   },
   "dialog": {

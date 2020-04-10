@@ -310,7 +310,7 @@ function ClubStackComponent() {
                 component={ClubAboutScreen}
                 options={({navigation}) => {
                     return {
-                        title: i18n.t('screens.about'),
+                        title: i18n.t('screens.clubsAbout'),
                         ...TransitionPresets.ModalSlideFromBottomIOS,
                     };
                 }}
