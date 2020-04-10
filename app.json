@@ -44,7 +44,8 @@
         "backgroundColor": "#be1522"
       },
       "permissions": [
-        "VIBRATE"
+        "VIBRATE",
+        "CAMERA"
       ]
     }
   }
