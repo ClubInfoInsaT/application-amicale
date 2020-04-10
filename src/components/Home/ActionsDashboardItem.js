@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Button, Card, withTheme} from 'react-native-paper';
-import {StyleSheet} from "react-native";
+import {Platform, StyleSheet} from "react-native";
 import i18n from 'i18n-js';
 
 type Props = {
@@ -38,13 +38,25 @@ class ActionsDashBoardItem extends React.PureComponent<Props> {
                     >
                         {i18n.t("homeScreen.servicesButton")}
                     </Button>
-                    <Button
-                        icon="settings"
-                        mode="contained"
-                        onPress={this.gotToSettings}
-                        style={styles.settingsButton}
-                        compact
-                    />
+                    {
+                        // Leave space to fix ios icon position
+                        Platform.OS === 'ios'
+                            ? <Button
+                                icon="settings"
+                                mode="contained"
+                                onPress={this.gotToSettings}
+                                style={styles.settingsButton}
+                                compact
+                            > </Button>
+                            : <Button
+                                icon="settings"
+                                mode="contained"
+                                onPress={this.gotToSettings}
+                                style={styles.settingsButton}
+                                compact
+                            />
+                    }
+
                 </Card.Content>
             </Card>
         );
