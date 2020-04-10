@@ -108,11 +108,11 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 onValueChange={this.onStartScreenPickerValueChange}
                 value={this.state.startScreenPickerSelected}
             >
-                <ToggleButton icon="shopping" value="Proximo"/>
-                <ToggleButton icon="calendar-range" value="Planning"/>
-                <ToggleButton icon="triangle" value="Home"/>
-                <ToggleButton icon="washing-machine" value="Proxiwash"/>
-                <ToggleButton icon="timetable" value="Planex"/>
+                <ToggleButton icon="shopping" value="proximo"/>
+                <ToggleButton icon="calendar-range" value="planning"/>
+                <ToggleButton icon="triangle" value="home"/>
+                <ToggleButton icon="washing-machine" value="proxiwash"/>
+                <ToggleButton icon="timetable" value="planex"/>
             </ToggleButton.Row>
         );
     }
