@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {View} from "react-native";
-import {withTheme} from 'react-native-paper';
+import {Text, withTheme} from 'react-native-paper';
 import HTML from "react-native-render-html";
 import {Linking} from "expo";
 
@@ -18,26 +17,21 @@ class CustomHTML extends React.Component<Props> {
         Linking.openURL(link).catch((err) => console.error('Error opening link', err));
     };
 
-    getHTML() {
-        // Surround description with div to allow text styling if the description is not html
-        return <HTML html={"<div>" + this.props.html + "</div>"}
-                     tagsStyles={{
-                         p: {color: this.props.theme.colors.text},
-                         div: {color: this.props.theme.colors.text}
-                     }}
-                     onLinkPress={this.openWebLink}/>;
-    }
+    getBasicText = (htmlAttribs, children, convertedCSSStyles, passProps) => {
+        // console.log(convertedCSSStyles);
+        return <Text {...passProps}>{children}</Text>;
+    };
 
     render() {
-        // Completely recreate the component on theme change to force theme reload
-        if (this.props.theme.dark)
-            return (
-                <View>
-                    {this.getHTML()}
-                </View>
-            );
-        else
-            return this.getHTML();
+        // Surround description with p to allow text styling if the description is not html
+        return <HTML
+            html={"<p>" + this.props.html + "</p>"}
+            renderers={{
+                p: this.getBasicText,
+            }}
+            ignoredStyles={['color', 'background-color']}
+
+            onLinkPress={this.openWebLink}/>;
     }
 }
 
