@@ -5,6 +5,7 @@
     "planningDisplayScreen": "Event details",
     "clubDisplayScreen": "Club details",
     "clubsAbout": "Clubs",
+    "amicaleAbout": "The Amicale",
     "proxiwash": "Proxiwash",
     "proximo": "Proximo",
     "proximoArticles": "Articles",
@@ -277,6 +278,22 @@
       "title": "A question ?",
       "subtitle": "Ask the Amicale",
       "message": "You have a question concerning the clubs?\nYou want to revive or create a club?\nContact the Amicale at the following address:"
+    }
+  },
+  "amicaleAbout": {
+    "title": "A question ?",
+    "subtitle": "Ask the Amicale",
+    "message": "You want to revive a club?\nYou want to start a new project?\nHere are al the contacts you need! Do not hesitate to write a mail or send a message to the Amicale's Facebook page!",
+    "roles": {
+      "interSchools": "Inter Schools",
+      "culture": "Culture",
+      "animation": "Animation",
+      "clubs": "Clubs",
+      "event": "Events",
+      "tech" : "Technique",
+      "communication": "Communication",
+      "intraSchools": "Alumni / IAT",
+      "publicRelations": "Public Relations"
     }
   },
   "voteScreen": {

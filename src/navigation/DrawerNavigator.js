@@ -21,6 +21,7 @@ import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import VoteScreen from "../screens/Amicale/VoteScreen";
+import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -275,6 +276,31 @@ function VoteStackComponent() {
     );
 }
 
+const AmicaleContactStack = createStackNavigator();
+
+function AmicaleContactStackComponent() {
+    return (
+        <AmicaleContactStack.Navigator
+            initialRouteName="amicale-contact"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <AmicaleContactStack.Screen
+                name="amicale-contact"
+                component={AmicaleContactScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: i18n.t('screens.amicaleAbout'),
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </AmicaleContactStack.Navigator>
+    );
+}
+
+
 const ClubStack = createStackNavigator();
 
 function ClubStackComponent() {
@@ -396,6 +422,10 @@ export default class DrawerNavigator extends React.Component<Props> {
                 <Drawer.Screen
                     name="vote"
                     component={VoteStackComponent}
+                />
+                <Drawer.Screen
+                    name="amicale-contact"
+                    component={AmicaleContactStackComponent}
                 />
             </Drawer.Navigator>
         );

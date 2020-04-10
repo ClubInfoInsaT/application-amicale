@@ -53,6 +53,11 @@ class SideBar extends React.Component<Props, State> {
                 shouldEmphasis: true,
             },
             {
+                name: i18n.t('screens.amicaleAbout'),
+                route: "amicale-contact",
+                icon: "information",
+            },
+            {
                 name: i18n.t('screens.profile'),
                 route: "profile",
                 icon: "account",
