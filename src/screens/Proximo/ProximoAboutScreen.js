@@ -46,7 +46,7 @@ export default class ProximoAboutScreen extends React.Component<Props> {
                         left={props => <List.Icon {...props} icon={'cash'}/>}
                     />
                     <Card.Content>
-                        <Paragraph>18{i18n.t('proximoScreen.paymentMethodsDescription')}</Paragraph>
+                        <Paragraph>{i18n.t('proximoScreen.paymentMethodsDescription')}</Paragraph>
                     </Card.Content>
                 </Card>
             </ScrollView>
