@@ -8,7 +8,7 @@ import i18n from "i18n-js";
 import ClubListItem from "../../../components/Lists/ClubListItem";
 import {isItemInCategoryFilter, stringMatchQuery} from "../../../utils/Search";
 import ClubListHeader from "../../../components/Lists/ClubListHeader";
-import HeaderButton from "../../../components/Custom/HeaderButton";
+import MaterialHeaderButtons, {Item} from "../../../components/Custom/HeaderButton";
 
 type Props = {
     navigation: Object,
@@ -72,7 +72,9 @@ class ClubListScreen extends React.Component<Props, State> {
      */
     getHeaderButtons = () => {
         const onPress = () => this.props.navigation.navigate("club-about");
-        return <HeaderButton icon={'information'} onPress={onPress}/>;
+        return <MaterialHeaderButtons>
+            <Item title="main" iconName="information" onPress={onPress}/>
+        </MaterialHeaderButtons>;
     };
 
     /**

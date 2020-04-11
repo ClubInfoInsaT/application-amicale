@@ -13,11 +13,11 @@ import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../managers/AsyncStorageManager";
-import HeaderButton from "../components/Custom/HeaderButton";
 import {withTheme} from 'react-native-paper';
 import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ScannerScreen from "../screens/ScannerScreen";
+import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 
 
 const TAB_ICONS = {
@@ -36,7 +36,9 @@ const defaultScreenOptions = {
 
 function getDrawerButton(navigation: Object) {
     return (
-        <HeaderButton icon={'menu'} onPress={navigation.openDrawer}/>
+        <MaterialHeaderButtons left={true}>
+            <Item title="menu" iconName="menu" onPress={navigation.openDrawer}/>
+        </MaterialHeaderButtons>
     );
 }
 
@@ -231,7 +233,7 @@ type Props = {
     defaultData: Object
 }
 
-class TabNavigator extends React.Component<Props>{
+class TabNavigator extends React.Component<Props> {
 
     createHomeStackComponent: Object;
 

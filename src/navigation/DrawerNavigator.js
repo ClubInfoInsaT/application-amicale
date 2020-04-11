@@ -13,7 +13,6 @@ import TetrisScreen from "../screens/Tetris/TetrisScreen";
 import DebugScreen from '../screens/About/DebugScreen';
 import Sidebar from "../components/Sidebar/Sidebar";
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
-import HeaderButton from "../components/Custom/HeaderButton";
 import i18n from "i18n-js";
 import LoginScreen from "../screens/Amicale/LoginScreen";
 import ProfileScreen from "../screens/Amicale/ProfileScreen";
@@ -22,6 +21,7 @@ import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import VoteScreen from "../screens/Amicale/VoteScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
+import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -31,7 +31,9 @@ const defaultScreenOptions = {
 
 function getDrawerButton(navigation: Object) {
     return (
-        <HeaderButton icon={'menu'} onPress={navigation.openDrawer}/>
+        <MaterialHeaderButtons left={true}>
+            <Item title="menu" iconName="menu" onPress={navigation.openDrawer}/>
+        </MaterialHeaderButtons>
     );
 }
 
@@ -365,7 +367,8 @@ export default class DrawerNavigator extends React.Component<Props> {
     constructor(props: Object) {
         super(props);
 
-        this.createTabNavigator = () => <TabNavigator defaultRoute={props.defaultRoute} defaultData={props.defaultData}/>
+        this.createTabNavigator = () => <TabNavigator defaultRoute={props.defaultRoute}
+                                                      defaultData={props.defaultData}/>
     }
 
     render() {

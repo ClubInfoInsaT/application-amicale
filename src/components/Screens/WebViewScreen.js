@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 import WebView from "react-native-webview";
-import HeaderButton from "../Custom/HeaderButton";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 import ErrorView from "../Custom/ErrorView";
-import {ERROR_TYPE} from "../../managers/ConnectionManager";
+import {ERROR_TYPE} from "../../utils/WebData";
+import MaterialHeaderButtons, {Item} from '../Custom/HeaderButton';
 
 type Props = {
     navigation: Object,
@@ -55,7 +55,11 @@ class WebViewScreen extends React.PureComponent<Props> {
      * @return {*}
      */
     getRefreshButton() {
-        return <HeaderButton icon={'refresh'} onPress={this.onRefreshClicked}/>
+        return (
+            <MaterialHeaderButtons>
+                <Item title="refresh" iconName="refresh" onPress={this.onRefreshClicked}/>
+            </MaterialHeaderButtons>
+        );
     };
 
     /**

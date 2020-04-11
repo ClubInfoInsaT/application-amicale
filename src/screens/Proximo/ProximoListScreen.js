@@ -7,7 +7,7 @@ import CustomModal from "../../components/Custom/CustomModal";
 import {RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
 import {stringMatchQuery} from "../../utils/Search";
 import ProximoListItem from "../../components/Lists/ProximoListItem";
-import HeaderButton from "../../components/Custom/HeaderButton";
+import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -102,7 +102,9 @@ class ProximoListScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getSortMenuButton = () => {
-        return <HeaderButton icon="sort" onPress={this.onSortMenuPress}/>;
+        return <MaterialHeaderButtons>
+            <Item title="main" iconName="sort" onPress={this.onSortMenuPress}/>
+        </MaterialHeaderButtons>;
     };
 
     /**

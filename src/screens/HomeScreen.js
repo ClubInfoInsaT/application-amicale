@@ -12,9 +12,9 @@ import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardI
 import {stringToDate} from "../utils/Planning";
 import {openBrowser} from "../utils/WebBrowser";
 import ActionsDashBoardItem from "../components/Home/ActionsDashboardItem";
-import HeaderButton from "../components/Custom/HeaderButton";
 import ConnectionManager from "../managers/ConnectionManager";
 import {CommonActions} from '@react-navigation/native';
+import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 // import DATA from "../dashboard_data.json";
 
 
@@ -96,11 +96,9 @@ class HomeScreen extends React.Component<Props> {
             ? "account"
             : "login";
         const onPress = () => this.props.navigation.navigate(screen);
-        return <HeaderButton
-            icon={icon}
-            onPress={onPress}
-            color={this.isLoggedIn ? undefined : this.colors.primary}
-        />;
+        return <MaterialHeaderButtons>
+            <Item title="main" iconName={icon} onPress={onPress}/>
+        </MaterialHeaderButtons>;
     };
 
     onProxiwashClick = () => this.props.navigation.navigate('proxiwash');

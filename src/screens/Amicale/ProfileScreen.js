@@ -5,9 +5,9 @@ import {FlatList, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {openBrowser} from "../../utils/WebBrowser";
-import HeaderButton from "../../components/Custom/HeaderButton";
 import i18n from 'i18n-js';
 import LogoutDialog from "../../components/Amicale/LogoutDialog";
+import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
 
 type Props = {
     navigation: Object,
@@ -47,7 +47,9 @@ class ProfileScreen extends React.Component<Props, State> {
 
     hideDisconnectDialog = () => this.setState({dialogVisible: false});
 
-    getHeaderButton = () => <HeaderButton icon={'logout'} onPress={this.showDisconnectDialog}/>;
+    getHeaderButton = () => <MaterialHeaderButtons>
+        <Item title="logout" iconName="logout" onPress={this.showDisconnectDialog}/>
+    </MaterialHeaderButtons>;
 
     getScreen = (data: Object) => {
         this.data = data[0];

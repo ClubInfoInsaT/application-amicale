@@ -5,7 +5,7 @@ import {View} from 'react-native'
 import i18n from "i18n-js";
 import WebSectionList from "../../components/Lists/WebSectionList";
 import {List, withTheme} from 'react-native-paper';
-import HeaderButton from "../../components/Custom/HeaderButton";
+import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 const LIST_ITEM_HEIGHT = 84;
@@ -111,15 +111,10 @@ class ProximoMainScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getHeaderButtons() {
-        return (
-            <View
-                style={{
-                    flexDirection: 'row',
-                }}>
-                <HeaderButton icon={'magnify'} onPress={this.onPressSearchBtn}/>
-                <HeaderButton icon={'information'} onPress={this.onPressAboutBtn}/>
-            </View>
-        );
+        return <MaterialHeaderButtons>
+            <Item title="magnify" iconName="magnify" onPress={this.onPressSearchBtn}/>
+            <Item title="information" iconName="information" onPress={this.onPressAboutBtn}/>
+        </MaterialHeaderButtons>;
     }
 
     /**

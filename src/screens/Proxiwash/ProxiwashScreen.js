@@ -8,11 +8,11 @@ import * as Notifications from "../../utils/Notifications";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import * as Expo from "expo";
 import {Avatar, Banner, Button, Card, Text, withTheme} from 'react-native-paper';
-import HeaderButton from "../../components/Custom/HeaderButton";
 import ProxiwashListItem from "../../components/Lists/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
 import CustomModal from "../../components/Custom/CustomModal";
 import AprilFoolsManager from "../../managers/AprilFoolsManager";
+import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -152,7 +152,9 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getAboutButton() {
-        return <HeaderButton icon={'information'} onPress={this.onAboutPress}/>;
+        return <MaterialHeaderButtons>
+            <Item title="information" iconName="information" onPress={this.onAboutPress}/>
+        </MaterialHeaderButtons>;
     }
 
     /**

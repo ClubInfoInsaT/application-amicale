@@ -6,9 +6,9 @@ import {IconButton, Text, withTheme} from 'react-native-paper';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import GameLogic from "./GameLogic";
 import Grid from "./components/Grid";
-import HeaderButton from "../../components/Custom/HeaderButton";
 import Preview from "./components/Preview";
 import i18n from "i18n-js";
+import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
 
 type Props = {
     navigation: Object,
@@ -62,14 +62,9 @@ class TetrisScreen extends React.Component<Props, State> {
     }
 
     getRightButton() {
-        return (
-            <View
-                style={{
-                    flexDirection: 'row',
-                }}>
-                <HeaderButton icon={'pause'} onPress={() => this.togglePause()}/>
-            </View>
-        );
+        return <MaterialHeaderButtons>
+            <Item title="pause" iconName="pause" onPress={() => this.togglePause()}/>
+        </MaterialHeaderButtons>;
     }
 
     /**
