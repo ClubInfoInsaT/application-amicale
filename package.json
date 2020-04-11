@@ -52,7 +52,6 @@
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "~2.2.0",
     "react-native-webview": "8.1.1",
-    "react-navigation-collapsible": "^5.4.0",
     "react-navigation-header-buttons": "^3.0.5"
   },
   "devDependencies": {

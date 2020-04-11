@@ -1,16 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, FlatList, Image, Platform, ScrollView, View} from "react-native";
+import {FlatList, Image, Platform, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
 import CustomModal from "../../components/Custom/CustomModal";
 import {RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
 import {stringMatchQuery} from "../../utils/Search";
 import ProximoListItem from "../../components/Lists/ProximoListItem";
 import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
-import {withCollapsible} from "../../utils/withCollapsible";
-
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -42,7 +39,6 @@ type Props = {
     navigation: Object,
     route: Object,
     theme: Object,
-    collapsibleStack: Object,
 }
 
 type State = {
@@ -326,9 +322,7 @@ class ProximoListScreen extends React.Component<Props, State> {
 
     itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
 
-
     render() {
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
             <View style={{
                 height: '100%'
@@ -337,7 +331,7 @@ class ProximoListScreen extends React.Component<Props, State> {
                     {this.state.modalCurrentDisplayItem}
                 </CustomModal>
                 {/*$FlowFixMe*/}
-                <AnimatedFlatList
+                <FlatList
                     data={this.listData}
                     extraData={this.state.currentSearchString + this.state.currentSortMode}
                     keyExtractor={this.keyExtractor}
@@ -346,14 +340,10 @@ class ProximoListScreen extends React.Component<Props, State> {
                     removeClippedSubviews={true}
                     getItemLayout={this.itemLayout}
                     initialNumToRender={10}
-                    // Animations
-                    onScroll={onScroll}
-                    contentContainerStyle={{paddingTop: containerPaddingTop}}
-                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
                 />
             </View>
         );
     }
 }
 
-export default withCollapsible(withTheme(ProximoListScreen));
+export default withTheme(ProximoListScreen);

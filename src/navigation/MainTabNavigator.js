@@ -13,12 +13,12 @@ import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../managers/AsyncStorageManager";
-import {useTheme, withTheme} from 'react-native-paper';
+import {withTheme} from 'react-native-paper';
 import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ScannerScreen from "../screens/ScannerScreen";
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
-import {createCollapsibleStack} from 'react-navigation-collapsible';
+
 
 const TAB_ICONS = {
     home: 'triangle',
@@ -44,9 +44,7 @@ function getDrawerButton(navigation: Object) {
 
 const ProximoStack = createStackNavigator();
 
-function ProximoStackComponent(props: Object) {
-
-    const {colors} = useTheme();
+function ProximoStackComponent() {
     return (
         <ProximoStack.Navigator
             initialRouteName="index"
@@ -64,19 +62,13 @@ function ProximoStackComponent(props: Object) {
                 }}
                 component={ProximoMainScreen}
             />
-            {createCollapsibleStack(
-                <ProximoStack.Screen
-                    name="proximo-list"
-                    options={{
-                        title: i18n.t('screens.proximoArticles')
-                    }}
-                    component={ProximoListScreen}
-                />,
-                {
-                    collapsedColor: colors.surface,
-                    useNativeDriver: true /* Optional, default: true */,
-                }
-            )}
+            <ProximoStack.Screen
+                name="proximo-list"
+                options={{
+                    title: i18n.t('screens.proximoArticles')
+                }}
+                component={ProximoListScreen}
+            />
             <ProximoStack.Screen
                 name="proximo-about"
                 component={ProximoAboutScreen}
