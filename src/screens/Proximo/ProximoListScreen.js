@@ -227,38 +227,10 @@ class ProximoListScreen extends React.Component<Props, State> {
                     onValueChange={value => this.setSortMode(value)}
                     value={this.state.currentSortMode}
                 >
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center'
-                    }}>
-                        <RadioButton value={1}/>
-                        <Text>{i18n.t('proximoScreen.sortPrice')}</Text>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center'
-                    }}>
-                        <RadioButton value={2}/>
-                        <Text>{i18n.t('proximoScreen.sortPriceReverse')}</Text>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center'
-                    }}>
-                        <RadioButton value={3}/>
-                        <Text>{i18n.t('proximoScreen.sortName')}</Text>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center'
-                    }}>
-                        <RadioButton value={4}/>
-                        <Text>{i18n.t('proximoScreen.sortNameReverse')}</Text>
-                    </View>
+                    <RadioButton.Item label={i18n.t('proximoScreen.sortPrice')} value={1}/>
+                    <RadioButton.Item label={i18n.t('proximoScreen.sortPriceReverse')} value={2}/>
+                    <RadioButton.Item label={i18n.t('proximoScreen.sortName')} value={3}/>
+                    <RadioButton.Item label={i18n.t('proximoScreen.sortNameReverse')} value={4}/>
                 </RadioButton.Group>
             </View>
         );
