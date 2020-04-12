@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import WebViewScreen from "../../components/Screens/WebViewScreen";
-import i18n from "i18n-js";
 
 type Props = {
     navigation: Object,
@@ -39,25 +38,9 @@ export default class AvailableRoomScreen extends React.Component<Props> {
         return (
             <WebViewScreen
                 navigation={nav}
-                data={[
-                    {
-                        url: ROOM_URL,
-                        icon: 'file-document-outline',
-                        name: i18n.t('availableRoomScreen.normalRoom'),
-                        customJS: this.customInjectedJS
-                    },
-                    {
-                        url: PC_URL,
-                        icon: 'monitor',
-                        name: i18n.t('availableRoomScreen.computerRoom'),
-                        customJS: this.customInjectedJS
-                    },
-                ]}
-                customInjectedJS={this.customInjectedJS}
-                headerTitle={i18n.t('screens.availableRooms')}
-                hasHeaderBackButton={true}
-                hasSideMenu={false}
-                hasFooter={false}/>
+                url={ROOM_URL}
+                customJS={this.customInjectedJS}
+                customInjectedJS={this.customInjectedJS}/>
         );
     }
 }

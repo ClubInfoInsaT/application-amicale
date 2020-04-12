@@ -8,18 +8,17 @@ import * as Touchable from "react-native/Libraries/Components/Touchable/Touchabl
 
 const MaterialHeaderButton = (props: Object) => (
     <HeaderButton
-        {...props}
         IconComponent={MaterialCommunityIcons}
         iconSize={26}
         color={props.theme.colors.text}
         background={Touchable.Ripple(props.theme.colors.ripple, true)}
+        {...props}
     />
 );
 
 const MaterialHeaderButtons = (props: Object) => {
     return (
         <HeaderButtons
-            {...props}
             HeaderButtonComponent={withTheme(MaterialHeaderButton)}
             OverflowIcon={
                 <MaterialCommunityIcons
@@ -28,6 +27,7 @@ const MaterialHeaderButtons = (props: Object) => {
                     color={props.theme.colors.text}
                 />
             }
+            {...props}
         />
     );
 };

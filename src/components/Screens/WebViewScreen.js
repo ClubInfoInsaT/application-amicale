@@ -6,19 +6,14 @@ import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 import ErrorView from "../Custom/ErrorView";
 import {ERROR_TYPE} from "../../utils/WebData";
 import MaterialHeaderButtons, {Item} from '../Custom/HeaderButton';
+import {HiddenItem} from "react-navigation-header-buttons";
+import {Linking} from "expo";
+import i18n from 'i18n-js';
 
 type Props = {
     navigation: Object,
-    data: Array<{
-        url: string,
-        icon: string,
-        name: string,
-        customJS: string
-    }>,
-    headerTitle: string,
-    hasHeaderBackButton: boolean,
-    hasSideMenu: boolean,
-    hasFooter: boolean,
+    url: string,
+    customJS: string,
 }
 
 /**
@@ -27,9 +22,7 @@ type Props = {
 class WebViewScreen extends React.PureComponent<Props> {
 
     static defaultProps = {
-        hasBackButton: false,
-        hasSideMenu: true,
-        hasFooter: true,
+        customJS: '',
     };
 
     webviewRef: Object;
@@ -57,7 +50,22 @@ class WebViewScreen extends React.PureComponent<Props> {
     getRefreshButton() {
         return (
             <MaterialHeaderButtons>
-                <Item title="refresh" iconName="refresh" onPress={this.onRefreshClicked}/>
+                <Item
+                    title="refresh"
+                    iconName="refresh"
+                    onPress={this.onRefreshClicked}/>
+                <HiddenItem
+                    title={i18n.t("general.goBack")}
+                    iconName="arrow-left"
+                    onPress={this.onGoBackClicked}/>
+                <HiddenItem
+                    title={i18n.t("general.goForward")}
+                    iconName="arrow-right"
+                    onPress={this.onGoForwardClicked}/>
+                <HiddenItem
+                    title={i18n.t("general.openInBrowser")}
+                    iconName="web"
+                    onPress={this.onOpenClicked}/>
             </MaterialHeaderButtons>
         );
     };
@@ -66,6 +74,10 @@ class WebViewScreen extends React.PureComponent<Props> {
      * Callback to use when refresh button is clicked. Reloads the webview.
      */
     onRefreshClicked = () => this.webviewRef.current.reload();
+    onGoBackClicked = () => this.webviewRef.current.goBack();
+    onGoForwardClicked = () => this.webviewRef.current.goForward();
+
+    onOpenClicked = () => Linking.openURL(this.props.url);
 
     /**
      * Gets the loading indicator
@@ -78,13 +90,9 @@ class WebViewScreen extends React.PureComponent<Props> {
         return (
             <WebView
                 ref={this.webviewRef}
-                source={{uri: this.props.data[0]['url']}}
-                style={{
-                    width: '100%',
-                    height: '100%',
-                }}
+                source={{uri: this.props.url}}
                 startInLoadingState={true}
-                injectedJavaScript={this.props.data[0]['customJS']}
+                injectedJavaScript={this.props.customJS}
                 javaScriptEnabled={true}
                 renderLoading={this.getRenderLoading}
                 renderError={() => <ErrorView

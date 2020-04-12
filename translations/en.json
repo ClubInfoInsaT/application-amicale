@@ -345,7 +345,10 @@
   "general": {
     "loading": "Loading...",
     "retry": "Retry",
-    "networkError": "Unable to contact servers. Make sure you are connected to Internet."
+    "networkError": "Unable to contact servers. Make sure you are connected to Internet.",
+    "goBack": "Go Back",
+    "goForward": "Go Forward",
+    "openInBrowser": "Open in Browser"
   },
   "date": {
     "daysOfWeek": {
