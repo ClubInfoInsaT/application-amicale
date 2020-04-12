@@ -29,11 +29,14 @@ class ProxiwashListItem extends React.Component<Props> {
             (props.nbAvailable <= 1)
                 ? i18n.t('proxiwashScreen.numAvailable')
                 : i18n.t('proxiwashScreen.numAvailablePlural'));
+        const iconColor = props.nbAvailable > 0
+        ? this.props.theme.colors.success
+        : this.props.theme.colors.primary;
         return (
             <View style={styles.container}>
                 <Avatar.Icon
                     icon={props.isDryer ? 'tumble-dryer' : 'washing-machine'}
-                    color={this.props.theme.colors.primary}
+                    color={iconColor}
                     style={styles.icon}
                 />
                 <View style={{justifyContent: 'center'}}>
