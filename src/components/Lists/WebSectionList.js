@@ -202,7 +202,6 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                             errorCode={ERROR_TYPE.CONNECTION_ERROR}
                             onRefresh={this.onRefresh}/>
                     }
-                    removeClippedSubviews={true}
                     getItemLayout={this.props.itemHeight !== null ? this.itemLayout : undefined}
                     // Animations
                     onScroll={this.props.onScroll}
