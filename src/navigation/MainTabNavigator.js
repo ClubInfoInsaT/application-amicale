@@ -18,6 +18,7 @@ import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ScannerScreen from "../screens/ScannerScreen";
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
+import FeedItemScreen from "../screens/FeedItemScreen";
 
 
 const TAB_ICONS = {
@@ -184,6 +185,16 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
                 options={({navigation}) => {
                     return {
                         title: i18n.t('screens.clubDisplayScreen'),
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                    };
+                }}
+            />
+            <HomeStack.Screen
+                name="feed-information"
+                component={FeedItemScreen}
+                options={({navigation}) => {
+                    return {
+                        title: 'FEEEEED',
                         ...TransitionPresets.ModalSlideFromBottomIOS,
                     };
                 }}

@@ -8,12 +8,11 @@ import ImageModal from 'react-native-image-modal';
 const ICON_AMICALE = require('../../../assets/amicale.png');
 
 type Props = {
+    navigation: Object,
     theme: Object,
     title: string,
     subtitle: string,
-    full_picture: string,
-    message: string,
-    onOutLinkPress: Function,
+    height: number,
 }
 
 
@@ -38,42 +37,68 @@ class FeedItem extends React.Component<Props> {
         );
     }
 
+    onPress = () => {
+        this.props.navigation.navigate('feed-information',
+            {
+                data: this.props.item,
+                date: this.props.subtitle
+            })
+    };
+
     render() {
-        console.log('render feed');
+        const item = this.props.item;
+        const hasImage = item.full_picture !== '' && item.full_picture !== undefined;
+
+        const cardMargin = 10;
+        const cardHeight = this.props.height - 2 * cardMargin;
+        const imageSize = 250;
+        const titleHeight = 80;
+        const actionsHeight = 48;
+        const textHeight = hasImage
+            ? cardHeight - titleHeight - actionsHeight - imageSize
+            : cardHeight - titleHeight - actionsHeight;
         return (
-            <Card style={{margin: 10}}>
+            <Card
+                style={{
+                    margin: cardMargin,
+                    height: cardHeight,
+                }}
+                onPress={this.onPress}
+            >
                 <Card.Title
                     title={this.props.title}
                     subtitle={this.props.subtitle}
                     left={this.getAvatar}
+                    style={{height: titleHeight}}
                 />
-                {this.props.full_picture !== '' && this.props.full_picture !== undefined ?
+                {hasImage ?
                     <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
                         <ImageModal
                             resizeMode="contain"
                             imageBackgroundColor={"#000"}
                             style={{
-                                width: 250,
-                                height: 250,
+                                width: imageSize,
+                                height: imageSize,
                             }}
                             source={{
-                                uri: this.props.full_picture,
+                                uri: item.full_picture,
                             }}
-                        /></View> : <View/>}
+                        /></View> : null}
                 <Card.Content>
-                    {this.props.message !== undefined ?
+                    {item.message !== undefined ?
                         <Autolink
-                            text={this.props.message}
+                            text={item.message}
                             hashtag="facebook"
                             component={Text}
-                        /> : <View/>
+                            style={{height: textHeight}}
+                        /> : null
                     }
                 </Card.Content>
-                <Card.Actions>
+                <Card.Actions style={{height: actionsHeight}}>
                     <Button
-                        color={'#57aeff'}
-                        onPress={this.props.onOutLinkPress}
-                        icon={'facebook'}>
+                        onPress={this.onPress}
+                        icon={'plus'}
+                        style={{marginLeft: 'auto'}}>
                         {i18n.t('homeScreen.dashboard.seeMore')}
                     </Button>
                 </Card.Actions>

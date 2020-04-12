@@ -21,7 +21,6 @@ class ActionsDashBoardItem extends React.Component<Props> {
     gotToSettings = () => this.props.navigation.navigate("settings");
 
     render() {
-        console.log('render action dashboard');
         return (
             <Card style={{
                 ...styles.card,

@@ -164,7 +164,11 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
      */
     hideSnackBar = () => this.setState({snackbarVisible: false});
 
-    itemLayout = (data, index) => ({length: this.props.itemHeight, offset: this.props.itemHeight * index, index});
+    itemLayout = (data: Object, index: number) => ({
+        length: this.props.itemHeight,
+        offset: this.props.itemHeight * index,
+        index
+    });
 
     render() {
         let dataset = [];
@@ -197,6 +201,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                             errorCode={ERROR_TYPE.CONNECTION_ERROR}
                             onRefresh={this.onRefresh}/>
                     }
+                    removeClippedSubviews={true}
                     getItemLayout={this.props.itemHeight !== null ? this.itemLayout : undefined}
                 />
                 <Snackbar
@@ -204,7 +209,8 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                     onDismiss={this.hideSnackBar}
                     action={{
                         label: 'OK',
-                        onPress: () => {},
+                        onPress: () => {
+                        },
                     }}
                     duration={4000}
                 >

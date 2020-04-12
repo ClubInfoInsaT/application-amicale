@@ -14,12 +14,12 @@ import ActionsDashBoardItem from "../components/Home/ActionsDashboardItem";
 import ConnectionManager from "../managers/ConnectionManager";
 import {CommonActions} from '@react-navigation/native';
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
-import {Linking} from "expo";
 // import DATA from "../dashboard_data.json";
 
 
 const NAME_AMICALE = 'Amicale INSA Toulouse';
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/dashboard/dashboard_data.json";
+const FEED_ITEM_HEIGHT = 500;
 
 const SECTIONS_ID = [
     'dashboard',
@@ -415,14 +415,13 @@ class HomeScreen extends React.Component<Props> {
      * @return {*}
      */
     getFeedItem(item: Object) {
-        const onOutLinkPress = () => Linking.openURL(item.permalink_url);
         return (
             <FeedItem
+                {...this.props}
+                item={item}
                 title={NAME_AMICALE}
                 subtitle={HomeScreen.getFormattedDate(item.created_time)}
-                full_picture={item.full_picture}
-                message={item.message}
-                onOutLinkPress={onOutLinkPress}
+                height={FEED_ITEM_HEIGHT}
             />
         );
     }
@@ -452,7 +451,9 @@ class HomeScreen extends React.Component<Props> {
                     autoRefreshTime={REFRESH_TIME}
                     refreshOnFocus={true}
                     fetchUrl={DATA_URL}
-                    renderItem={this.getRenderItem}/>
+                    renderItem={this.getRenderItem}
+                    itemHeight={FEED_ITEM_HEIGHT}
+                />
                 <FAB
                     style={styles.fab}
                     icon="qrcode-scan"
