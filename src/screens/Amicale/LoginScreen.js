@@ -7,7 +7,6 @@ import ConnectionManager from "../../managers/ConnectionManager";
 import i18n from 'i18n-js';
 import ErrorDialog from "../../components/Dialog/ErrorDialog";
 import {CommonActions} from "@react-navigation/native";
-import {Linking} from "expo";
 
 type Props = {
     navigation: Object,
@@ -26,7 +25,7 @@ type State = {
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
 
-const RESET_PASSWORD_LINK = "https://www.amicale-insat.fr/password/reset";
+const RESET_PASSWORD_PATH = "password/reset";
 
 const emailRegex = /^.+@.+\..+$/;
 
@@ -78,7 +77,10 @@ class LoginScreen extends React.Component<Props, State> {
 
     handleSuccess = () => this.props.navigation.navigate(this.nextScreen);
 
-    onResetPasswordClick = () => Linking.openURL(RESET_PASSWORD_LINK);
+    onResetPasswordClick = () => this.props.navigation.navigate('amicale-website', {
+        screen: 'amicale-website',
+        params: {path: RESET_PASSWORD_PATH}
+    });
 
     validateEmail = () => this.setState({isEmailValidated: true});
 
