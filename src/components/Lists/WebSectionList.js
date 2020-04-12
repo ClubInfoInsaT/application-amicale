@@ -4,7 +4,7 @@ import * as React from 'react';
 import {ERROR_TYPE, readData} from "../../utils/WebData";
 import i18n from "i18n-js";
 import {Snackbar} from 'react-native-paper';
-import {RefreshControl, SectionList, View} from "react-native";
+import {Animated, RefreshControl, View} from "react-native";
 import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 
@@ -19,6 +19,7 @@ type Props = {
     createDataset: Function,
     updateData: number,
     itemHeight: number | null,
+    onScroll: Function,
 }
 
 type State = {
@@ -178,7 +179,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         return (
             <View>
                 {/*$FlowFixMe*/}
-                <SectionList
+                <Animated.SectionList
                     sections={dataset}
                     extraData={this.props.updateData}
                     refreshControl={
@@ -203,6 +204,8 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                     }
                     removeClippedSubviews={true}
                     getItemLayout={this.props.itemHeight !== null ? this.itemLayout : undefined}
+                    // Animations
+                    onScroll={this.props.onScroll}
                 />
                 <Snackbar
                     visible={this.state.snackbarVisible}

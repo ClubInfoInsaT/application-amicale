@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {Animated, FlatList, StyleSheet, View} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../components/Home/EventDashboardItem";
 import WebSectionList from "../components/Lists/WebSectionList";
@@ -14,6 +14,7 @@ import ActionsDashBoardItem from "../components/Home/ActionsDashboardItem";
 import ConnectionManager from "../managers/ConnectionManager";
 import {CommonActions} from '@react-navigation/native';
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
+import {AnimatedValue} from "react-native-reanimated";
 // import DATA from "../dashboard_data.json";
 
 
@@ -26,6 +27,8 @@ const SECTIONS_ID = [
     'news_feed'
 ];
 
+const AnimatedFAB = Animated.createAnimatedComponent(FAB);
+
 const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
 type Props = {
@@ -34,19 +37,35 @@ type Props = {
     theme: Object,
 }
 
+type State = {
+    showFab: boolean,
+    fabPosition: AnimatedValue
+}
+
 /**
  * Class defining the app's home screen
  */
-class HomeScreen extends React.Component<Props> {
+class HomeScreen extends React.Component<Props, State> {
 
     colors: Object;
 
     isLoggedIn: boolean | null;
+    isAnimationDownPlaying: boolean;
+    isAnimationUpPlaying: boolean;
+
+    downAnimation;
+    upAnimation;
+
+    state = {
+        showFab: true,
+        fabPosition: new Animated.Value(0),
+    };
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
-
+        this.isAnimationDownPlaying = false;
+        this.isAnimationUpPlaying = false;
         this.isLoggedIn = null;
     }
 
@@ -379,7 +398,7 @@ class HomeScreen extends React.Component<Props> {
     }
 
     dashboardRowRenderItem = ({item}: Object) => {
-        return(
+        return (
             <SquareDashboardItem
                 color={item.color}
                 icon={item.icon}
@@ -398,14 +417,14 @@ class HomeScreen extends React.Component<Props> {
      */
     getDashboardRow(content: Array<Object>) {
         return <FlatList
-                data={content}
-                renderItem={this.dashboardRowRenderItem}
-                horizontal={true}
-                contentContainerStyle={{
+            data={content}
+            renderItem={this.dashboardRowRenderItem}
+            horizontal={true}
+            contentContainerStyle={{
                 marginLeft: 'auto',
                 marginRight: 'auto',
-                }}
-            />;
+            }}
+        />;
     }
 
     /**
@@ -441,6 +460,38 @@ class HomeScreen extends React.Component<Props> {
 
     openScanner = () => this.props.navigation.navigate("scanner");
 
+    onScroll = ({nativeEvent}: Object) => {
+        if (nativeEvent.velocity.y > 0.2) { // Go down
+            if (!this.isAnimationDownPlaying) {
+                this.isAnimationDownPlaying = true;
+                if (this.isAnimationUpPlaying)
+                    this.upAnimation.stop();
+                this.downAnimation = Animated.spring(this.state.fabPosition, {
+                    toValue: 100,
+                    duration: 50,
+                    useNativeDriver: true,
+                });
+                this.downAnimation.start(() => {
+                    this.isAnimationDownPlaying = false
+                });
+            }
+        } else if (nativeEvent.velocity.y < -0.2) { // Go up
+            if (!this.isAnimationUpPlaying) {
+                this.isAnimationUpPlaying = true;
+                if (this.isAnimationDownPlaying)
+                    this.downAnimation.stop();
+                this.upAnimation = Animated.spring(this.state.fabPosition, {
+                    toValue: 0,
+                    duration: 50,
+                    useNativeDriver: true,
+                });
+                this.upAnimation.start(() => {
+                    this.isAnimationUpPlaying = false
+                });
+            }
+        }
+    };
+
     render() {
         const nav = this.props.navigation;
         return (
@@ -453,9 +504,13 @@ class HomeScreen extends React.Component<Props> {
                     fetchUrl={DATA_URL}
                     renderItem={this.getRenderItem}
                     itemHeight={FEED_ITEM_HEIGHT}
+                    onScroll={this.onScroll}
                 />
-                <FAB
-                    style={styles.fab}
+                <AnimatedFAB
+                    style={{
+                        ...styles.fab,
+                        transform: [{translateY: this.state.fabPosition}]
+                    }}
                     icon="qrcode-scan"
                     onPress={this.openScanner}
                 />
