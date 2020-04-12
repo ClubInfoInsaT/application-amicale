@@ -194,7 +194,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
                 component={FeedItemScreen}
                 options={({navigation}) => {
                     return {
-                        title: 'FEEEEED',
+                        title: i18n.t('screens.feedDisplayScreen'),
                         ...TransitionPresets.ModalSlideFromBottomIOS,
                     };
                 }}
