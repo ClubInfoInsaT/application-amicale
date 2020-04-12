@@ -1,11 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../components/Home/EventDashboardItem";
 import WebSectionList from "../components/Lists/WebSectionList";
-import {FAB, Text, withTheme} from 'react-native-paper';
+import {FAB, withTheme} from 'react-native-paper';
 import FeedItem from "../components/Home/FeedItem";
 import SquareDashboardItem from "../components/Home/SmallDashboardItem";
 import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardItem";
@@ -159,24 +159,58 @@ class HomeScreen extends React.Component<Props> {
                 content: undefined
             },
         ];
-        for (let [key, value] of Object.entries(dashboardData)) {
+        for (let [key, value: number | Object | Array<string>] of Object.entries(dashboardData)) {
             switch (key) {
+                case 'available_machines':
+                    dataset[0]['content'][0] = {
+                        id: 'washers',
+                        data: value.washers,
+                        icon: 'washing-machine',
+                        color: this.colors.proxiwashColor,
+                        onPress: this.onProxiwashClick,
+                        isAvailable: value.washers > 0
+                    };
+                    dataset[0]['content'][1] = {
+                        ...dataset[0]['content'][0],
+                        id: 'dryers',
+                        data: value.dryers,
+                        icon: 'tumble-dryer',
+                        isAvailable: value.dryers > 0
+                    };
+                    break;
+                case 'available_tutorials':
+                    dataset[0]['content'][2] = {
+                        id: key,
+                        data: value,
+                        icon: 'school',
+                        color: this.colors.tutorinsaColor,
+                        onPress: this.onTutorInsaClick,
+                        isAvailable: parseInt(value) > 0
+                    };
+                    break;
+                case 'proximo_articles':
+                    dataset[0]['content'][3] = {
+                        id: key,
+                        data: value,
+                        icon: 'shopping',
+                        color: this.colors.proximoColor,
+                        onPress: this.onProximoClick,
+                        isAvailable: parseInt(value) > 0
+                    };
+                    break;
+                case 'today_menu':
+                    dataset[0]['content'][4] = {
+                        id: key,
+                        data: 0,
+                        icon: 'silverware-fork-knife',
+                        color: this.colors.menu,
+                        onPress: this.onMenuClick,
+                        isAvailable: value.length > 0
+                    };
+                    break;
                 case 'today_events':
                     dataset[2]['content'] = value;
                     break;
-                case 'available_machines':
-                    dataset[0]['content'][0] = {id: key, data: value};
-                    break;
-                case 'available_tutorials':
-                    dataset[0]['content'][1] = {id: key, data: value};
-                    break;
-                case 'proximo_articles':
-                    dataset[0]['content'][2] = {id: key, data: value};
-                    break;
-                case 'today_menu':
-                    dataset[0]['content'][3] = {id: key, data: value};
-                    break;
-
             }
         }
         return dataset
@@ -191,14 +225,14 @@ class HomeScreen extends React.Component<Props> {
     getDashboardItem(item: Object) {
         let content = item['content'];
         if (item['id'] === 'event')
-            return this.getDashboardEventItem(content);
+            return this.getDashboardEvent(content);
         else if (item['id'] === 'top')
-            return this.getDashboardTopItem(content);
+            return this.getDashboardRow(content);
         else
-            return this.getActionsDashboardItem();
+            return this.getDashboardActions();
     }
 
-    getActionsDashboardItem() {
+    getDashboardActions() {
         return <ActionsDashBoardItem {...this.props}/>;
     }
 
@@ -317,6 +351,8 @@ class HomeScreen extends React.Component<Props> {
         return displayEvent;
     }
 
+    onEventContainerClick = () => this.props.navigation.navigate('planning');
+
     /**
      * Gets the event render item.
      * If a preview is available, it will be rendered inside
@@ -324,42 +360,17 @@ class HomeScreen extends React.Component<Props> {
      * @param content
      * @return {*}
      */
-    getDashboardEventItem(content: Array<Object>) {
-        let icon = 'calendar-range';
-        let title = i18n.t('homeScreen.dashboard.todayEventsTitle');
-        let subtitle;
+    getDashboardEvent(content: Array<Object>) {
         let futureEvents = this.getFutureEvents(content);
-        let isAvailable = futureEvents.length > 0;
-        if (isAvailable) {
-            subtitle =
-                <Text>
-                    <Text style={{fontWeight: "bold"}}>{futureEvents.length}</Text>
-                    <Text>
-                        {
-                            futureEvents.length > 1 ?
-                                i18n.t('homeScreen.dashboard.todayEventsSubtitlePlural') :
-                                i18n.t('homeScreen.dashboard.todayEventsSubtitle')
-                        }
-                    </Text>
-                </Text>;
-        } else
-            subtitle = i18n.t('homeScreen.dashboard.todayEventsSubtitleNA');
-
         let displayEvent = this.getDisplayEvent(futureEvents);
-        const clickContainerAction = () => this.props.navigation.navigate('planning');
-        const clickPreviewAction = () => this.props.navigation.navigate('home-planning-information', {data: displayEvent});
-
+        const clickPreviewAction = () =>
+            this.props.navigation.navigate('home-planning-information', {data: displayEvent});
         return (
             <DashboardItem
-                {...this.props}
-                subtitle={subtitle}
-                icon={icon}
-                clickAction={clickContainerAction}
-                title={title}
-                isAvailable={isAvailable}
+                eventNumber={futureEvents.length}
+                clickAction={this.onEventContainerClick}
             >
                 <PreviewEventDashboardItem
-                    {...this.props}
                     event={displayEvent}
                     clickAction={clickPreviewAction}
                 />
@@ -367,66 +378,34 @@ class HomeScreen extends React.Component<Props> {
         );
     }
 
+    dashboardRowRenderItem = ({item}: Object) => {
+        return(
+            <SquareDashboardItem
+                color={item.color}
+                icon={item.icon}
+                clickAction={item.onPress}
+                isAvailable={item.isAvailable}
+                badgeNumber={item.data}
+            />
+        );
+    };
+
     /**
      * Gets a classic dashboard item.
      *
      * @param content
      * @return {*}
      */
-    getDashboardTopItem(content: Array<Object>) {
-        let proxiwashData = content[0]['data'];
-        let tutorinsaData = content[1]['data'];
-        let proximoData = content[2]['data'];
-        let menuData = content[3]['data'];
-        return (
-            <View style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                flexWrap: 'wrap',
-                margin: 10,
-            }}>
-                <SquareDashboardItem
-                    color={this.colors.proxiwashColor}
-                    icon={'washing-machine'}
-                    clickAction={this.onProxiwashClick}
-                    isAvailable={parseInt(proxiwashData['washers']) > 0}
-                    badgeNumber={proxiwashData['washers']}
-                />
-                <SquareDashboardItem
-                    color={this.colors.proxiwashColor}
-                    icon={'tumble-dryer'}
-                    clickAction={this.onProxiwashClick}
-                    isAvailable={parseInt(proxiwashData['dryers']) > 0}
-                    badgeNumber={proxiwashData['dryers']}
-                />
-                <SquareDashboardItem
-                    color={this.colors.tutorinsaColor}
-                    icon={'school'}
-                    clickAction={this.onTutorInsaClick}
-                    isAvailable={tutorinsaData > 0}
-                    badgeNumber={tutorinsaData}
-                />
-                <SquareDashboardItem
-                    color={this.colors.proximoColor}
-                    icon={'shopping'}
-                    clickAction={this.onProximoClick}
-                    isAvailable={parseInt(proximoData) > 0}
-                    badgeNumber={parseInt(proximoData)}
-                />
-                <SquareDashboardItem
-                    color={this.colors.menuColor}
-                    icon={'silverware-fork-knife'}
-                    clickAction={this.onMenuClick}
-                    isAvailable={menuData.length > 0}
-                    badgeNumber={0}
-                />
-            </View>
-        );
-    }
-
-    openLink(link: string) {
-        Linking.openURL(link);
+    getDashboardRow(content: Array<Object>) {
+        return <FlatList
+                data={content}
+                renderItem={this.dashboardRowRenderItem}
+                horizontal={true}
+                contentContainerStyle={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                }}
+            />;
     }
 
     /**
@@ -436,7 +415,7 @@ class HomeScreen extends React.Component<Props> {
      * @return {*}
      */
     getFeedItem(item: Object) {
-        const onOutLinkPress = this.openLink.bind(this, item.permalink_url);
+        const onOutLinkPress = () => Linking.openURL(item.permalink_url);
         return (
             <FeedItem
                 title={NAME_AMICALE}

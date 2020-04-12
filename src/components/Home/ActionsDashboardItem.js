@@ -10,13 +10,10 @@ type Props = {
     theme: Object,
 }
 
-class ActionsDashBoardItem extends React.PureComponent<Props> {
+class ActionsDashBoardItem extends React.Component<Props> {
 
-    colors: Object;
-
-    constructor(props) {
-        super(props);
-        this.colors = this.props.theme.colors;
+    shouldComponentUpdate(nextProps: Props): boolean {
+        return (nextProps.theme.dark !== this.props.theme.dark)
     }
 
     openDrawer = () => this.props.navigation.openDrawer();
@@ -24,10 +21,11 @@ class ActionsDashBoardItem extends React.PureComponent<Props> {
     gotToSettings = () => this.props.navigation.navigate("settings");
 
     render() {
+        console.log('render action dashboard');
         return (
             <Card style={{
                 ...styles.card,
-                borderColor: this.colors.primary,
+                borderColor: this.props.theme.colors.primary,
             }}>
                 <Card.Content style={styles.content}>
                     <Button

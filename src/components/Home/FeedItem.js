@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Avatar, Button, Card, Text, withTheme} from 'react-native-paper';
+import {Avatar, Button, Card, Text} from 'react-native-paper';
 import {View} from "react-native";
 import Autolink from "react-native-autolink";
 import i18n from "i18n-js";
@@ -7,15 +7,24 @@ import ImageModal from 'react-native-image-modal';
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
 
+type Props = {
+    theme: Object,
+    title: string,
+    subtitle: string,
+    full_picture: string,
+    message: string,
+    onOutLinkPress: Function,
+}
+
+
 /**
  * Component used to display a feed item
  */
-class FeedItem extends React.Component {
+class FeedItem extends React.Component<Props> {
 
     shouldComponentUpdate() {
         return false;
     }
-
 
     /**
      * Gets the amicale INSAT logo
@@ -30,6 +39,7 @@ class FeedItem extends React.Component {
     }
 
     render() {
+        console.log('render feed');
         return (
             <Card style={{margin: 10}}>
                 <Card.Title
@@ -72,4 +82,4 @@ class FeedItem extends React.Component {
     }
 }
 
-export default withTheme(FeedItem);
+export default FeedItem;
