@@ -19,7 +19,6 @@ export const AmicaleWebsiteScreen = (props: Object) => {
             props.navigation.dispatch(CommonActions.setParams({path: null}));
         }
     }
-    console.log(path);
     return (
         <WebViewScreen
             {...props}

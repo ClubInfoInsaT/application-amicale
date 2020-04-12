@@ -38,9 +38,7 @@ export async function initExpoToken() {
             let expoToken = await Notifications.getExpoPushTokenAsync();
             // Save token for instant use later on
             AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.expoToken.key, expoToken);
-        } catch (e) {
-            console.log(e);
-        }
+        } catch (e) {}
     }
 }
 

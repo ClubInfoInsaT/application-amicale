@@ -1,107 +1,169 @@
 import * as React from 'react';
-import {Avatar, Card, Text, withTheme} from 'react-native-paper';
+import {Avatar, List, ProgressBar, Surface, Text, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
+import i18n from "i18n-js";
+import AprilFoolsManager from "../../managers/AprilFoolsManager";
+
+type Props = {
+    item: Object,
+    onPress: Function,
+    isWatched: boolean,
+    isDryer: boolean,
+    height: number,
+}
 
 /**
  * Component used to display a proxiwash item, showing machine progression and state
- *
- * @param props Props to pass to the component
- * @return {*}
  */
-function ProxiwashListItem(props) {
-    const {colors} = props.theme;
-    let stateColors = {};
-    stateColors[ProxiwashConstants.machineStates.TERMINE] = colors.proxiwashFinishedColor;
-    stateColors[ProxiwashConstants.machineStates.DISPONIBLE] = colors.proxiwashReadyColor;
-    stateColors[ProxiwashConstants.machineStates["EN COURS"]] = colors.proxiwashRunningColor;
-    stateColors[ProxiwashConstants.machineStates.HS] = colors.proxiwashBrokenColor;
-    stateColors[ProxiwashConstants.machineStates.ERREUR] = colors.proxiwashErrorColor;
-    const icon = (
-        props.isWatched ?
-            <Avatar.Icon
+class ProxiwashListItem extends React.Component<Props> {
+
+    stateColors: Object;
+    stateStrings: Object;
+
+    title: string;
+
+    constructor(props) {
+        super(props);
+        this.stateColors = {};
+        this.stateStrings = {};
+
+        this.updateStateStrings();
+
+        let displayNumber = props.item.number;
+        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
+            displayNumber = AprilFoolsManager.getProxiwashMachineDisplayNumber(parseInt(props.item.number));
+
+        this.title = props.isDryer
+            ? i18n.t('proxiwashScreen.dryer')
+            : i18n.t('proxiwashScreen.washer');
+        this.title += ' n°' + displayNumber;
+    }
+
+    shouldComponentUpdate(nextProps: Props): boolean {
+        const props = this.props;
+        return (nextProps.theme.dark !== props.theme.dark)
+            || (nextProps.item.state !== props.item.state)
+            || (nextProps.item.donePercent !== props.item.donePercent)
+            || (nextProps.isWatched !== props.isWatched);
+    }
+
+    updateStateStrings() {
+        this.stateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.states.finished');
+        this.stateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
+        this.stateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.states.running');
+        this.stateStrings[ProxiwashConstants.machineStates.HS] = i18n.t('proxiwashScreen.states.broken');
+        this.stateStrings[ProxiwashConstants.machineStates.ERREUR] = i18n.t('proxiwashScreen.states.error');
+    }
+
+    updateStateColors() {
+        const colors = this.props.theme.colors;
+        this.stateColors[ProxiwashConstants.machineStates.TERMINE] = colors.proxiwashFinishedColor;
+        this.stateColors[ProxiwashConstants.machineStates.DISPONIBLE] = colors.proxiwashReadyColor;
+        this.stateColors[ProxiwashConstants.machineStates["EN COURS"]] = colors.proxiwashRunningColor;
+        this.stateColors[ProxiwashConstants.machineStates.HS] = colors.proxiwashBrokenColor;
+        this.stateColors[ProxiwashConstants.machineStates.ERREUR] = colors.proxiwashErrorColor;
+    }
+
+    onListItemPress = () => this.props.onPress(this.title, this.props.item, this.props.isDryer);
+
+    render() {
+        const props = this.props;
+        const colors = props.theme.colors;
+        const machineState = props.item.state;
+        const isRunning = ProxiwashConstants.machineStates[machineState] === ProxiwashConstants.machineStates["EN COURS"];
+        const isReady = ProxiwashConstants.machineStates[machineState] === ProxiwashConstants.machineStates.DISPONIBLE;
+        const description = isRunning ? props.item.startTime + '/' + props.item.endTime : '';
+        const stateIcon = ProxiwashConstants.stateIcons[machineState];
+        const stateString = this.stateStrings[ProxiwashConstants.machineStates[machineState]];
+        const progress = isRunning
+            ? props.item.donePercent !== ''
+                ? parseInt(props.item.donePercent) / 100
+                : 0
+            : 1;
+
+        const icon = props.isWatched
+            ? <Avatar.Icon
                 icon={'bell-ring'}
                 size={45}
                 color={colors.primary}
                 style={styles.icon}
-            /> :
-            <Avatar.Icon
+            />
+            : <Avatar.Icon
                 icon={props.isDryer ? 'tumble-dryer' : 'washing-machine'}
-                color={colors.text}
                 size={40}
+                color={colors.text}
                 style={styles.icon}
-            />
-    );
-    return (
-        <Card
-            style={{
-                margin: 5,
-                height: props.height,
-                justifyContent: 'center',
-            }}
-            onPress={props.onPress}
-        >
-            {ProxiwashConstants.machineStates[props.state] === ProxiwashConstants.machineStates["EN COURS"] ?
-                <Card style={{
-                    ...styles.backgroundCard,
-                    backgroundColor: colors.proxiwashRunningBgColor,
-
-                }}/> : null
-            }
-
-            <Card style={{
-                ...styles.progressionCard,
-                width: props.progress,
-                backgroundColor: stateColors[ProxiwashConstants.machineStates[props.state]],
-            }}/>
-            <Card.Title
-                title={props.title}
-                titleStyle={{fontSize: 17}}
-                subtitle={props.description}
-                style={styles.title}
-                left={() => icon}
-                right={() => (
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{justifyContent: 'center'}}>
-                            <Text style={
-                                ProxiwashConstants.machineStates[props.state] === ProxiwashConstants.machineStates.TERMINE ?
-                                    {fontWeight: 'bold',} : {}}
-                            >
-                                {props.statusText}
-                            </Text>
-                        </View>
-                        <Avatar.Icon
-                            icon={props.statusIcon}
-                            color={colors.text}
-                            size={30}
-                            style={styles.icon}
+            />;
+        this.updateStateColors();
+        return (
+            <Surface
+                style={{
+                    ...styles.container,
+                    height: props.height,
+                    borderRadius: 4,
+                }}
+            >
+                {
+                    !isReady
+                        ? <ProgressBar
+                            style={{
+                                ...styles.progressBar,
+                                height: props.height
+                            }}
+                            progress={progress}
+                            color={this.stateColors[ProxiwashConstants.machineStates[machineState]]}
                         />
-                    </View>)}
-            />
-        </Card>
-    );
+                        : null
+                }
+                <List.Item
+                    title={this.title}
+                    description={description}
+                    style={{
+                        height: props.height,
+                        justifyContent: 'center',
+                    }}
+                    onPress={this.onListItemPress}
+                    left={() => icon}
+                    right={() => (
+                        <View style={{flexDirection: 'row',}}>
+                            <View style={{justifyContent: 'center',}}>
+                                <Text style={
+                                    ProxiwashConstants.machineStates[machineState] === ProxiwashConstants.machineStates.TERMINE ?
+                                        {fontWeight: 'bold',} : {}}
+                                >
+                                    {stateString}
+                                </Text>
+                            </View>
+                            <View style={{justifyContent: 'center',}}>
+                                <Avatar.Icon
+                                    icon={stateIcon}
+                                    color={colors.text}
+                                    size={30}
+                                    style={styles.icon}
+                                />
+                            </View>
+                        </View>)}
+                />
+            </Surface>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
+    container: {
+        margin: 5,
+        justifyContent: 'center',
+        elevation: 1
+    },
     icon: {
         backgroundColor: 'transparent'
     },
-    backgroundCard: {
-        height: '100%',
+    progressBar: {
         position: 'absolute',
         left: 0,
-        width: '100%',
-        elevation: 0,
+        borderRadius: 4,
     },
-    progressionCard: {
-        height: '100%',
-        position: 'absolute',
-        left: 0,
-        elevation: 0,
-    },
-    title: {
-        backgroundColor: 'transparent',
-    }
 });
 
 export default withTheme(ProxiwashListItem);

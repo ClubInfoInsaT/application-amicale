@@ -13,12 +13,11 @@ import ProxiwashConstants from "../../constants/ProxiwashConstants";
 import CustomModal from "../../components/Custom/CustomModal";
 import AprilFoolsManager from "../../managers/AprilFoolsManager";
 import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
+import ProxiwashSectionHeader from "../../components/Lists/ProxiwashSectionHeader";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
-let stateStrings = {};
 let modalStateStrings = {};
-let stateIcons = {};
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
@@ -30,7 +29,6 @@ type Props = {
 
 type State = {
     refreshing: boolean,
-    firstLoading: boolean,
     modalCurrentDisplayItem: React.Node,
     machinesWatched: Array<string>,
     bannerVisible: boolean,
@@ -45,22 +43,12 @@ class ProxiwashScreen extends React.Component<Props, State> {
 
     modalRef: Object;
 
-    onAboutPress: Function;
-    getRenderItem: Function;
-    getRenderSectionHeader: Function;
-    createDataset: Function;
-    onHideBanner: Function;
-    onModalRef: Function;
-
     fetchedData: Object;
-    colors: Object;
 
     state = {
         refreshing: false,
-        firstLoading: true,
-        fetchedData: {},
-        machinesWatched: [],
         modalCurrentDisplayItem: null,
+        machinesWatched: [],
         bannerVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === '1',
     };
 
@@ -69,53 +57,31 @@ class ProxiwashScreen extends React.Component<Props, State> {
      */
     constructor(props) {
         super(props);
-        stateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.states.finished');
-        stateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.states.ready');
-        stateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.states.running');
-        stateStrings[ProxiwashConstants.machineStates.HS] = i18n.t('proxiwashScreen.states.broken');
-        stateStrings[ProxiwashConstants.machineStates.ERREUR] = i18n.t('proxiwashScreen.states.error');
-
         modalStateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.modal.finished');
         modalStateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.modal.ready');
         modalStateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.modal.running');
         modalStateStrings[ProxiwashConstants.machineStates.HS] = i18n.t('proxiwashScreen.modal.broken');
         modalStateStrings[ProxiwashConstants.machineStates.ERREUR] = i18n.t('proxiwashScreen.modal.error');
-
-        stateIcons[ProxiwashConstants.machineStates.TERMINE] = 'check-circle';
-        stateIcons[ProxiwashConstants.machineStates.DISPONIBLE] = 'radiobox-blank';
-        stateIcons[ProxiwashConstants.machineStates["EN COURS"]] = 'progress-check';
-        stateIcons[ProxiwashConstants.machineStates.HS] = 'alert-octagram-outline';
-        stateIcons[ProxiwashConstants.machineStates.ERREUR] = 'alert';
-
-        // let dataString = AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current;
-        this.onAboutPress = this.onAboutPress.bind(this);
-        this.getRenderItem = this.getRenderItem.bind(this);
-        this.getRenderSectionHeader = this.getRenderSectionHeader.bind(this);
-        this.createDataset = this.createDataset.bind(this);
-        this.onHideBanner = this.onHideBanner.bind(this);
-        this.onModalRef = this.onModalRef.bind(this);
-        this.colors = props.theme.colors;
     }
 
     /**
      * Callback used when closing the banner.
      * This hides the banner and saves to preferences to prevent it from reopening
      */
-    onHideBanner() {
+    onHideBanner = () => {
         this.setState({bannerVisible: false});
         AsyncStorageManager.getInstance().savePref(
             AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.key,
             '0'
         );
-    }
+    };
 
     /**
      * Setup notification channel for android and add listeners to detect notifications fired
      */
     componentDidMount() {
-        const rightButton = this.getAboutButton.bind(this);
         this.props.navigation.setOptions({
-            headerRight: rightButton,
+            headerRight: this.getAboutButton,
         });
         if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
             // Get latest watchlist from server
@@ -142,20 +108,17 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * Callback used when pressing the about button.
      * This will open the ProxiwashAboutScreen.
      */
-    onAboutPress() {
-        this.props.navigation.navigate('proxiwash-about');
-    }
+    onAboutPress = () => this.props.navigation.navigate('proxiwash-about');
 
     /**
      * Gets the about header button
      *
      * @return {*}
      */
-    getAboutButton() {
-        return <MaterialHeaderButtons>
+    getAboutButton = () =>
+        <MaterialHeaderButtons>
             <Item title="information" iconName="information" onPress={this.onAboutPress}/>
         </MaterialHeaderButtons>;
-    }
 
     /**
      * Extracts the key for the given item
@@ -261,7 +224,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * @param fetchedData
      * @return {*}
      */
-    createDataset(fetchedData: Object) {
+    createDataset = (fetchedData: Object) => {
         let data = fetchedData;
         if (AprilFoolsManager.getInstance().isAprilFoolsEnabled()) {
             data = JSON.parse(JSON.stringify(fetchedData)); // Deep copy
@@ -284,7 +247,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
                 keyExtractor: this.getKeyExtractor
             },
         ];
-    }
+    };
 
     /**
      * Shows a modal for the given item
@@ -293,14 +256,14 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * @param item The item to display information for in the modal
      * @param isDryer True if the given item is a dryer
      */
-    showModal(title: string, item: Object, isDryer: boolean) {
+    showModal = (title: string, item: Object, isDryer: boolean) => {
         this.setState({
             modalCurrentDisplayItem: this.getModalContent(title, item, isDryer)
         });
         if (this.modalRef) {
             this.modalRef.open();
         }
-    }
+    };
 
     /**
      * Callback used when the user clicks on enable notifications for a machine
@@ -362,7 +325,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
                     title={title}
                     left={() => <Avatar.Icon
                         icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
-                        color={this.colors.text}
+                        color={this.props.theme.colors.text}
                         style={{backgroundColor: 'transparent'}}/>}
 
                 />
@@ -390,9 +353,9 @@ class ProxiwashScreen extends React.Component<Props, State> {
      *
      * @param ref
      */
-    onModalRef(ref: Object) {
+    onModalRef = (ref: Object) => {
         this.modalRef = ref;
-    }
+    };
 
     /**
      * Gets the number of machines available
@@ -420,43 +383,16 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * @param section The section to render
      * @return {*}
      */
-    getRenderSectionHeader({section}: Object) {
+    getRenderSectionHeader = ({section}: Object) => {
         const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
         const nbAvailable = this.getMachineAvailableNumber(isDryer);
-        const subtitle = nbAvailable + ' ' + ((nbAvailable <= 1) ? i18n.t('proxiwashScreen.numAvailable')
-            : i18n.t('proxiwashScreen.numAvailablePlural'));
         return (
-            <View style={{
-                flexDirection: 'row',
-                marginLeft: 5,
-                marginRight: 5,
-                marginBottom: 10,
-                marginTop: 20,
-            }}>
-                <Avatar.Icon
-                    icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
-                    color={this.colors.primary}
-                    style={{backgroundColor: 'transparent'}}
-                />
-                <View style={{
-                    justifyContent: 'center',
-                }}>
-                    <Text style={{
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                    }}>
-                        {section.title}
-                    </Text>
-
-                    <Text style={{
-                        color: this.colors.subtitle,
-                    }}>
-                        {subtitle}
-                    </Text>
-                </View>
-            </View>
+            <ProxiwashSectionHeader
+                title={section.title}
+                nbAvailable={nbAvailable}
+                isDryer={isDryer}/>
         );
-    }
+    };
 
     /**
      * Gets the list item to be rendered
@@ -465,34 +401,18 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * @param section The object describing the current SectionList section
      * @returns {React.Node}
      */
-    getRenderItem({item, section}: Object) {
-        const isMachineRunning = ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"];
-        let displayNumber = item.number;
-        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
-            displayNumber = AprilFoolsManager.getProxiwashMachineDisplayNumber(parseInt(item.number));
-        const machineName = (section.title === i18n.t('proxiwashScreen.dryers') ?
-            i18n.t('proxiwashScreen.dryer') :
-            i18n.t('proxiwashScreen.washer')) + ' n°' + displayNumber;
+    getRenderItem = ({item, section}: Object) => {
         const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
-        const onPress = this.showModal.bind(this, machineName, item, isDryer);
-        let width = item.donePercent !== '' ? (parseInt(item.donePercent)).toString() + '%' : 0;
-        if (ProxiwashConstants.machineStates[item.state] === '0')
-            width = '100%';
         return (
             <ProxiwashListItem
-                title={machineName}
-                description={isMachineRunning ? item.startTime + '/' + item.endTime : ''}
-                onPress={onPress}
-                progress={width}
-                state={item.state}
+                item={item}
+                onPress={this.showModal}
                 isWatched={this.isMachineWatched(item.number)}
                 isDryer={isDryer}
-                statusText={stateStrings[ProxiwashConstants.machineStates[item.state]]}
-                statusIcon={stateIcons[ProxiwashConstants.machineStates[item.state]]}
                 height={LIST_ITEM_HEIGHT}
             />
         );
-    }
+    };
 
     render() {
         const nav = this.props.navigation;
