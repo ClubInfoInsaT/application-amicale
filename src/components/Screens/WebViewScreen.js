@@ -9,6 +9,7 @@ import MaterialHeaderButtons, {Item} from '../Custom/HeaderButton';
 import {HiddenItem} from "react-navigation-header-buttons";
 import {Linking} from "expo";
 import i18n from 'i18n-js';
+import {BackHandler} from "react-native";
 
 type Props = {
     navigation: Object,
@@ -27,9 +28,12 @@ class WebViewScreen extends React.PureComponent<Props> {
 
     webviewRef: Object;
 
+    canGoBack: boolean;
+
     constructor() {
         super();
         this.webviewRef = React.createRef();
+        this.canGoBack = false;
     }
 
     /**
@@ -40,7 +44,31 @@ class WebViewScreen extends React.PureComponent<Props> {
         this.props.navigation.setOptions({
             headerRight: rightButton,
         });
+        this.props.navigation.addListener(
+            'focus',
+            () =>
+                BackHandler.addEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
+        this.props.navigation.addListener(
+            'blur',
+            () =>
+                BackHandler.removeEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
     }
+
+    onBackButtonPressAndroid = () => {
+        if (this.canGoBack){
+            this.onGoBackClicked();
+            return true;
+        }
+        return false;
+    };
 
     /**
      * Gets a header refresh button
@@ -99,6 +127,9 @@ class WebViewScreen extends React.PureComponent<Props> {
                     errorCode={ERROR_TYPE.CONNECTION_ERROR}
                     onRefresh={this.onRefreshClicked}
                 />}
+                onNavigationStateChange={navState => {
+                    this.canGoBack = navState.canGoBack;
+                }}
             />
         );
     }
