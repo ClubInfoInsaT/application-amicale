@@ -222,7 +222,7 @@ class HomeScreen extends React.Component<Props, State> {
                         id: key,
                         data: 0,
                         icon: 'silverware-fork-knife',
-                        color: this.colors.menu,
+                        color: this.colors.menuColor,
                         onPress: this.onMenuClick,
                         isAvailable: value.length > 0
                     };
