@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {FlatList} from "react-native";
 import {Drawer, List, withTheme} from 'react-native-paper';
-import {openBrowser} from "../../utils/WebBrowser";
+import {Linking} from "expo";
 
 type Props = {
     navigation: Object,
@@ -58,7 +58,7 @@ class SideBarSection extends React.PureComponent<Props, State> {
      */
     onListItemPress(item: Object) {
         if (item.link !== undefined)
-            openBrowser(item.link, this.colors.primary);
+            Linking.openURL(item.link);
         else if (item.action !== undefined)
             item.action();
         else

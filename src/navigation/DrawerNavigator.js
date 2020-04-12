@@ -22,6 +22,10 @@ import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import VoteScreen from "../screens/Amicale/VoteScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
+import {AmicaleWebsiteScreen} from "../screens/Websites/AmicaleWebsiteScreen";
+import {TutorInsaWebsiteScreen} from "../screens/Websites/TutorInsaWebsiteScreen";
+import {WiketudWebsiteScreen} from "../screens/Websites/WiketudWebsiteScreen";
+import {ElusEtudiantsWebsiteScreen} from "../screens/Websites/ElusEtudiantsWebsiteScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -170,6 +174,104 @@ function BibStackComponent() {
         </BibStack.Navigator>
     );
 }
+
+const AmicaleWebsiteStack = createStackNavigator();
+
+function AmicaleWebsiteStackComponent() {
+    return (
+        <AmicaleWebsiteStack.Navigator
+            initialRouteName="amicale-website"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <AmicaleWebsiteStack.Screen
+                name="amicale-website"
+                component={AmicaleWebsiteScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: "Amicale",
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </AmicaleWebsiteStack.Navigator>
+    );
+}
+
+const ElusEtudiantsStack = createStackNavigator();
+
+function ElusEtudiantsStackComponent() {
+    return (
+        <ElusEtudiantsStack.Navigator
+            initialRouteName="elus-etudiants"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <ElusEtudiantsStack.Screen
+                name="elus-etudiants"
+                component={ElusEtudiantsWebsiteScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: "Élus Étudiants",
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </ElusEtudiantsStack.Navigator>
+    );
+}
+
+const WiketudStack = createStackNavigator();
+
+function WiketudStackComponent() {
+    return (
+        <WiketudStack.Navigator
+            initialRouteName="wiketud"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <WiketudStack.Screen
+                name="wiketud"
+                component={WiketudWebsiteScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: "Wiketud",
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </WiketudStack.Navigator>
+    );
+}
+
+const TutorInsaStack = createStackNavigator();
+
+function TutorInsaStackComponent() {
+    return (
+        <TutorInsaStack.Navigator
+            initialRouteName="tutorinsa"
+            headerMode="float"
+            screenOptions={defaultScreenOptions}
+        >
+            <TutorInsaStack.Screen
+                name="tutorinsa"
+                component={TutorInsaWebsiteScreen}
+                options={({navigation}) => {
+                    const openDrawer = getDrawerButton.bind(this, navigation);
+                    return {
+                        title: "Tutor'INSA",
+                        headerLeft: openDrawer
+                    };
+                }}
+            />
+        </TutorInsaStack.Navigator>
+    );
+}
+
+
 
 const TetrisStack = createStackNavigator();
 
@@ -405,6 +507,22 @@ export default class DrawerNavigator extends React.Component<Props> {
                 <Drawer.Screen
                     name="bib"
                     component={BibStackComponent}
+                />
+                <Drawer.Screen
+                    name="amicale-website"
+                    component={AmicaleWebsiteStackComponent}
+                />
+                <Drawer.Screen
+                    name="elus-etudiants"
+                    component={ElusEtudiantsStackComponent}
+                />
+                <Drawer.Screen
+                    name="wiketud"
+                    component={WiketudStackComponent}
+                />
+                <Drawer.Screen
+                    name="tutorinsa"
+                    component={TutorInsaStackComponent}
                 />
                 <Drawer.Screen
                     name="tetris"

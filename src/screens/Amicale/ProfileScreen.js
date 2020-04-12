@@ -4,10 +4,10 @@ import * as React from 'react';
 import {FlatList, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
-import {openBrowser} from "../../utils/WebBrowser";
 import i18n from 'i18n-js';
 import LogoutDialog from "../../components/Amicale/LogoutDialog";
 import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
+import {Linking} from "expo";
 
 type Props = {
     navigation: Object,
@@ -158,7 +158,7 @@ class ProfileScreen extends React.Component<Props, State> {
                         <Button
                             icon="account-edit"
                             mode="contained"
-                            onPress={() => openBrowser(this.data.link, this.props.theme.colors.primary)}
+                            onPress={() => Linking.openURL(this.data.link)}
                             style={styles.editButton}>
                             {i18n.t("profileScreen.editInformation")}
                         </Button>

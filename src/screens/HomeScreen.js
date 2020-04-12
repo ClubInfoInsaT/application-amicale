@@ -10,11 +10,11 @@ import FeedItem from "../components/Home/FeedItem";
 import SquareDashboardItem from "../components/Home/SmallDashboardItem";
 import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardItem";
 import {stringToDate} from "../utils/Planning";
-import {openBrowser} from "../utils/WebBrowser";
 import ActionsDashBoardItem from "../components/Home/ActionsDashboardItem";
 import ConnectionManager from "../managers/ConnectionManager";
 import {CommonActions} from '@react-navigation/native';
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
+import {Linking} from "expo";
 // import DATA from "../dashboard_data.json";
 
 
@@ -103,7 +103,7 @@ class HomeScreen extends React.Component<Props> {
 
     onProxiwashClick = () => this.props.navigation.navigate('proxiwash');
 
-    onTutorInsaClick = () => openBrowser("https://www.etud.insa-toulouse.fr/~tutorinsa/", this.colors.primary);
+    onTutorInsaClick = () => this.props.navigation.navigate('tutorinsa');
 
     onProximoClick = () => this.props.navigation.navigate('proximo');
 
@@ -426,7 +426,7 @@ class HomeScreen extends React.Component<Props> {
     }
 
     openLink(link: string) {
-        openBrowser(link, this.colors.primary);
+        Linking.openURL(link);
     }
 
     /**

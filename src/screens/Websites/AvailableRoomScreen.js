@@ -9,7 +9,6 @@ type Props = {
 
 
 const ROOM_URL = 'http://planex.insa-toulouse.fr/salles.php';
-const PC_URL = 'http://planex.insa-toulouse.fr/sallesInfo.php';
 const CUSTOM_CSS_GENERAL = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/rooms/customMobile.css';
 
 /**
@@ -39,8 +38,7 @@ export default class AvailableRoomScreen extends React.Component<Props> {
             <WebViewScreen
                 navigation={nav}
                 url={ROOM_URL}
-                customJS={this.customInjectedJS}
-                customInjectedJS={this.customInjectedJS}/>
+                customJS={this.customInjectedJS}/>
         );
     }
 }

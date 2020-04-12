@@ -115,26 +115,22 @@ class SideBar extends React.Component<Props, State> {
         const websitesData = [
             {
                 name: "Amicale",
-                route: "amicale",
-                link: "https://amicale-insat.fr/",
+                route: "amicale-website",
                 icon: "alpha-a-box",
             },
             {
                 name: "Élus Étudiants",
                 route: "elus-etudiants",
-                link: "https://etud.insa-toulouse.fr/~eeinsat/",
                 icon: "alpha-e-box",
             },
             {
                 name: "Wiketud",
                 route: "wiketud",
-                link: "https://wiki.etud.insa-toulouse.fr",
                 icon: "wikipedia",
             },
             {
                 name: "Tutor'INSA",
-                route: "tutor-insa",
-                link: "https://www.etud.insa-toulouse.fr/~tutorinsa/",
+                route: "tutorinsa",
                 icon: "school",
             },
         ];
