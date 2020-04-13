@@ -26,6 +26,8 @@ import {AmicaleWebsiteScreen} from "../screens/Websites/AmicaleWebsiteScreen";
 import {TutorInsaWebsiteScreen} from "../screens/Websites/TutorInsaWebsiteScreen";
 import {WiketudWebsiteScreen} from "../screens/Websites/WiketudWebsiteScreen";
 import {ElusEtudiantsWebsiteScreen} from "../screens/Websites/ElusEtudiantsWebsiteScreen";
+import {createCollapsibleStack} from "react-navigation-collapsible";
+import {useTheme} from "react-native-paper";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -106,23 +108,33 @@ function SettingsStackComponent() {
 const SelfMenuStack = createStackNavigator();
 
 function SelfMenuStackComponent() {
+    const {colors} = useTheme();
     return (
         <SelfMenuStack.Navigator
             initialRouteName="self-menu"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <SelfMenuStack.Screen
-                name="self-menu"
-                component={SelfMenuScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.menuSelf'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
+            {createCollapsibleStack(
+                <SelfMenuStack.Screen
+                    name="self-menu"
+                    component={SelfMenuScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: i18n.t('screens.menuSelf'),
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: true,
+                }
+            )}
         </SelfMenuStack.Navigator>
     );
 }
@@ -130,23 +142,33 @@ function SelfMenuStackComponent() {
 const AvailableRoomStack = createStackNavigator();
 
 function AvailableRoomStackComponent() {
+    const {colors} = useTheme();
     return (
         <AvailableRoomStack.Navigator
             initialRouteName="available-rooms"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <AvailableRoomStack.Screen
-                name="available-rooms"
-                component={AvailableRoomScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.availableRooms'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
+            {createCollapsibleStack(
+                <AvailableRoomStack.Screen
+                    name="available-rooms"
+                    component={AvailableRoomScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: i18n.t('screens.availableRooms'),
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: false, // native driver does not work with webview
+                }
+            )}
         </AvailableRoomStack.Navigator>
     );
 }
@@ -154,23 +176,33 @@ function AvailableRoomStackComponent() {
 const BibStack = createStackNavigator();
 
 function BibStackComponent() {
+    const {colors} = useTheme();
     return (
         <BibStack.Navigator
             initialRouteName="bib"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <BibStack.Screen
-                name="bib"
-                component={BibScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.bib'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
+            {createCollapsibleStack(
+                <BibStack.Screen
+                    name="bib"
+                    component={BibScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: i18n.t('screens.bib'),
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: false, // native driver does not work with webview
+                }
+            )}
         </BibStack.Navigator>
     );
 }
@@ -178,23 +210,33 @@ function BibStackComponent() {
 const AmicaleWebsiteStack = createStackNavigator();
 
 function AmicaleWebsiteStackComponent() {
+    const {colors} = useTheme();
     return (
         <AmicaleWebsiteStack.Navigator
             initialRouteName="amicale-website"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <AmicaleWebsiteStack.Screen
-                name="amicale-website"
-                component={AmicaleWebsiteScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: "Amicale",
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
+            {createCollapsibleStack(
+                <AmicaleWebsiteStack.Screen
+                    name="amicale-website"
+                    component={AmicaleWebsiteScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: "Amicale",
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: false, // native driver does not work with webview
+                }
+            )}
         </AmicaleWebsiteStack.Navigator>
     );
 }
@@ -202,23 +244,33 @@ function AmicaleWebsiteStackComponent() {
 const ElusEtudiantsStack = createStackNavigator();
 
 function ElusEtudiantsStackComponent() {
+    const {colors} = useTheme();
     return (
         <ElusEtudiantsStack.Navigator
             initialRouteName="elus-etudiants"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <ElusEtudiantsStack.Screen
-                name="elus-etudiants"
-                component={ElusEtudiantsWebsiteScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: "Élus Étudiants",
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
+            {createCollapsibleStack(
+                <ElusEtudiantsStack.Screen
+                    name="elus-etudiants"
+                    component={ElusEtudiantsWebsiteScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: "Élus Étudiants",
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: false, // native driver does not work with webview
+                }
+            )}
         </ElusEtudiantsStack.Navigator>
     );
 }
@@ -226,23 +278,33 @@ function ElusEtudiantsStackComponent() {
 const WiketudStack = createStackNavigator();
 
 function WiketudStackComponent() {
+    const {colors} = useTheme();
     return (
         <WiketudStack.Navigator
             initialRouteName="wiketud"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <WiketudStack.Screen
-                name="wiketud"
-                component={WiketudWebsiteScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: "Wiketud",
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
+            {createCollapsibleStack(
+                <WiketudStack.Screen
+                    name="wiketud"
+                    component={WiketudWebsiteScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: "Wiketud",
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: false, // native driver does not work with webview
+                }
+            )}
         </WiketudStack.Navigator>
     );
 }
@@ -250,27 +312,36 @@ function WiketudStackComponent() {
 const TutorInsaStack = createStackNavigator();
 
 function TutorInsaStackComponent() {
+    const {colors} = useTheme();
     return (
         <TutorInsaStack.Navigator
             initialRouteName="tutorinsa"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <TutorInsaStack.Screen
-                name="tutorinsa"
-                component={TutorInsaWebsiteScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: "Tutor'INSA",
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
+            {createCollapsibleStack(
+                <TutorInsaStack.Screen
+                    name="tutorinsa"
+                    component={TutorInsaWebsiteScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: "Tutor'INSA",
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: false, // native driver does not work with webview
+                }
+            )}
         </TutorInsaStack.Navigator>
     );
 }
-
 
 
 const TetrisStack = createStackNavigator();
@@ -408,23 +479,33 @@ function AmicaleContactStackComponent() {
 const ClubStack = createStackNavigator();
 
 function ClubStackComponent() {
+    const {colors} = useTheme();
     return (
         <ClubStack.Navigator
             initialRouteName={"club-list"}
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <ClubStack.Screen
-                name="club-list"
-                component={ClubListScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('clubs.clubList'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
+            {createCollapsibleStack(
+                <ClubStack.Screen
+                    name="club-list"
+                    component={ClubListScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: i18n.t('clubs.clubList'),
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: true,
+                }
+            )}
             <ClubStack.Screen
                 name="club-information"
                 component={ClubDisplayScreen}

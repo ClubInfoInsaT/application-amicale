@@ -7,6 +7,7 @@ import {Snackbar} from 'react-native-paper';
 import {Animated, RefreshControl, View} from "react-native";
 import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
+import {withCollapsible} from "../../utils/withCollapsible";
 
 type Props = {
     navigation: Object,
@@ -20,6 +21,7 @@ type Props = {
     updateData: number,
     itemHeight: number | null,
     onScroll: Function,
+    collapsibleStack: Object,
 }
 
 type State = {
@@ -31,13 +33,14 @@ type State = {
 
 
 const MIN_REFRESH_TIME = 5 * 1000;
+
 /**
  * Component used to render a SectionList with data fetched from the web
  *
  * This is a pure component, meaning it will only update if a shallow comparison of state and props is different.
  * To force the component to update, change the value of updateData.
  */
-export default class WebSectionList extends React.PureComponent<Props, State> {
+class WebSectionList extends React.PureComponent<Props, State> {
 
     static defaultProps = {
         renderSectionHeader: null,
@@ -171,11 +174,16 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         index
     });
 
+    onListScroll= (event) => {
+
+    };
+
     render() {
         let dataset = [];
         if (this.state.fetchedData !== undefined)
             dataset = this.props.createDataset(this.state.fetchedData);
         const shouldRenderHeader = this.props.renderSectionHeader !== null;
+        const {containerPaddingTop, scrollIndicatorInsetTop, onScrollWithListener} = this.props.collapsibleStack;
         return (
             <View>
                 {/*$FlowFixMe*/}
@@ -184,6 +192,7 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                     extraData={this.props.updateData}
                     refreshControl={
                         <RefreshControl
+                            progressViewOffset={containerPaddingTop}
                             refreshing={this.state.refreshing}
                             onRefresh={this.onRefresh}
                         />
@@ -193,7 +202,6 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                     //$FlowFixMe
                     renderItem={this.props.renderItem}
                     stickySectionHeadersEnabled={this.props.stickyHeader}
-                    contentContainerStyle={{minHeight: '100%'}}
                     style={{minHeight: '100%'}}
                     ListEmptyComponent={this.state.refreshing
                         ? <BasicLoadingScreen/>
@@ -204,7 +212,12 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
                     }
                     getItemLayout={this.props.itemHeight !== null ? this.itemLayout : undefined}
                     // Animations
-                    onScroll={this.props.onScroll}
+                    onScroll={onScrollWithListener(this.props.onScroll)}
+                    contentContainerStyle={{
+                        paddingTop: containerPaddingTop,
+                        minHeight: '100%'
+                    }}
+                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
                 />
                 <Snackbar
                     visible={this.state.snackbarVisible}
@@ -222,3 +235,5 @@ export default class WebSectionList extends React.PureComponent<Props, State> {
         );
     }
 }
+
+export default withCollapsible(WebSectionList);

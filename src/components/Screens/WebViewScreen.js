@@ -9,13 +9,17 @@ import MaterialHeaderButtons, {Item} from '../Custom/HeaderButton';
 import {HiddenItem} from "react-navigation-header-buttons";
 import {Linking} from "expo";
 import i18n from 'i18n-js';
-import {BackHandler} from "react-native";
+import {Animated, BackHandler} from "react-native";
+import {withCollapsible} from "../../utils/withCollapsible";
 
 type Props = {
     navigation: Object,
     url: string,
     customJS: string,
+    collapsibleStack: Object,
 }
+
+const AnimatedWebView = Animated.createAnimatedComponent(WebView);
 
 /**
  * Class defining a webview screen.
@@ -63,7 +67,7 @@ class WebViewScreen extends React.PureComponent<Props> {
     }
 
     onBackButtonPressAndroid = () => {
-        if (this.canGoBack){
+        if (this.canGoBack) {
             this.onGoBackClicked();
             return true;
         }
@@ -112,15 +116,48 @@ class WebViewScreen extends React.PureComponent<Props> {
      *
      * @return {*}
      */
-    getRenderLoading = () => <BasicLoadingScreen/>;
+    getRenderLoading = () => <BasicLoadingScreen isAbsolute={true}/>;
+
+// document.getElementsByTagName('body')[0].style.paddingTop = '100px';
+
+// $( 'body *' ).filter(function(){
+//   var position = $(this).css('position');
+//   var top = $(this).css('top');
+//   if((position === 'fixed') && top !== 'auto'){
+//     console.log(top);
+//     $(this).css('top', 'calc(' + top + ' + 100px)');
+//     console.log($(this).css('top'));
+//   };
+// });
+
+// document.querySelectorAll('body *').forEach(function(node){
+//   var style = window.getComputedStyle(node);
+//   var position = style.getPropertyValue('position');
+//   var top = style.getPropertyValue('top');
+//   if((position === 'fixed') && top !== 'auto'){
+//     console.log(top);
+//     node.style.top = 'calc(' + top + ' + 100px)';
+//     console.log(node.style.top);
+//   	console.log(node);
+//   };
+// });
+
+    getJavascriptPadding(padding: number) {
+        return (
+            "document.getElementsByTagName('body')[0].style.paddingTop = '" + padding + "px';\n" +
+            "true;"
+        );
+    }
 
     render() {
+        const {containerPaddingTop, onScroll} = this.props.collapsibleStack;
+        const customJS = this.getJavascriptPadding(containerPaddingTop);
         return (
-            <WebView
+            <AnimatedWebView
                 ref={this.webviewRef}
                 source={{uri: this.props.url}}
                 startInLoadingState={true}
-                injectedJavaScript={this.props.customJS}
+                injectedJavaScript={this.props.customJS + customJS}
                 javaScriptEnabled={true}
                 renderLoading={this.getRenderLoading}
                 renderError={() => <ErrorView
@@ -130,9 +167,11 @@ class WebViewScreen extends React.PureComponent<Props> {
                 onNavigationStateChange={navState => {
                     this.canGoBack = navState.canGoBack;
                 }}
+                // Animations
+                onScroll={onScroll}
             />
         );
     }
 }
 
-export default WebViewScreen;
+export default withCollapsible(WebViewScreen);

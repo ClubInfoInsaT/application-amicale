@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, Platform} from "react-native";
+import {Animated, Platform} from "react-native";
 import {Chip, Searchbar, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import i18n from "i18n-js";
@@ -9,10 +9,12 @@ import ClubListItem from "../../../components/Lists/ClubListItem";
 import {isItemInCategoryFilter, stringMatchQuery} from "../../../utils/Search";
 import ClubListHeader from "../../../components/Lists/ClubListHeader";
 import MaterialHeaderButtons, {Item} from "../../../components/Custom/HeaderButton";
+import {withCollapsible} from "../../../utils/withCollapsible";
 
 type Props = {
     navigation: Object,
     theme: Object,
+    collapsibleStack: Object,
 }
 
 type State = {
@@ -94,9 +96,10 @@ class ClubListScreen extends React.Component<Props, State> {
 
     getScreen = (data: Object) => {
         this.categories = data[0].categories;
+        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
             //$FlowFixMe
-            <FlatList
+            <Animated.FlatList
                 data={data[0].clubs}
                 keyExtractor={this.keyExtractor}
                 renderItem={this.getRenderItem}
@@ -104,6 +107,10 @@ class ClubListScreen extends React.Component<Props, State> {
                 // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
                 removeClippedSubviews={true}
                 getItemLayout={this.itemLayout}
+                // Animations
+                onScroll={onScroll}
+                contentContainerStyle={{paddingTop: containerPaddingTop}}
+                scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
             />
         )
     };
@@ -208,4 +215,4 @@ class ClubListScreen extends React.Component<Props, State> {
     }
 }
 
-export default withTheme(ClubListScreen);
+export default withCollapsible(withTheme(ClubListScreen));

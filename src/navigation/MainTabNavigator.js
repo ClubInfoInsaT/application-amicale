@@ -13,12 +13,13 @@ import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../managers/AsyncStorageManager";
-import {withTheme} from 'react-native-paper';
+import {useTheme, withTheme} from 'react-native-paper';
 import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ScannerScreen from "../screens/ScannerScreen";
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 import FeedItemScreen from "../screens/FeedItemScreen";
+import {createCollapsibleStack} from "react-navigation-collapsible";
 
 
 const TAB_ICONS = {
@@ -46,30 +47,49 @@ function getDrawerButton(navigation: Object) {
 const ProximoStack = createStackNavigator();
 
 function ProximoStackComponent() {
+    const {colors} = useTheme();
     return (
         <ProximoStack.Navigator
             initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <ProximoStack.Screen
-                name="index"
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: 'Proximo',
-                        headerLeft: openDrawer
-                    };
-                }}
-                component={ProximoMainScreen}
-            />
-            <ProximoStack.Screen
-                name="proximo-list"
-                options={{
-                    title: i18n.t('screens.proximoArticles')
-                }}
-                component={ProximoListScreen}
-            />
+            {createCollapsibleStack(
+                <ProximoStack.Screen
+                    name="index"
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: 'Proximo',
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                    component={ProximoMainScreen}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: true,
+                }
+            )}
+            {createCollapsibleStack(
+                <ProximoStack.Screen
+                    name="proximo-list"
+                    options={{
+                        title: i18n.t('screens.proximoArticles'),
+                        headerStyle: {
+                            backgroundColor: colors.surface,
+                        }
+                    }}
+                    component={ProximoListScreen}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: true,
+                }
+            )}
             <ProximoStack.Screen
                 name="proximo-about"
                 component={ProximoAboutScreen}
@@ -85,23 +105,33 @@ function ProximoStackComponent() {
 const ProxiwashStack = createStackNavigator();
 
 function ProxiwashStackComponent() {
+    const {colors} = useTheme();
     return (
         <ProxiwashStack.Navigator
             initialRouteName="index"
             headerMode='float'
             screenOptions={defaultScreenOptions}
         >
-            <ProxiwashStack.Screen
-                name="index"
-                component={ProxiwashScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.proxiwash'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
+            {createCollapsibleStack(
+                <ProxiwashStack.Screen
+                    name="index"
+                    component={ProxiwashScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: i18n.t('screens.proxiwash'),
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: true,
+                }
+            )}
             <ProxiwashStack.Screen
                 name="proxiwash-about"
                 component={ProxiwashAboutScreen}
@@ -117,6 +147,7 @@ function ProxiwashStackComponent() {
 const PlanningStack = createStackNavigator();
 
 function PlanningStackComponent() {
+    const {colors} = useTheme();
     return (
         <PlanningStack.Navigator
             initialRouteName="index"
@@ -152,25 +183,34 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
     let data;
     if (initialRoute !== null)
         data = {data: defaultData, nextScreen: initialRoute, shouldOpen: true};
-
+    const {colors} = useTheme();
     return (
         <HomeStack.Navigator
             initialRouteName={"index"}
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <HomeStack.Screen
-                name="index"
-                component={HomeScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.home'),
-                        headerLeft: openDrawer
-                    };
-                }}
-                initialParams={data}
-            />
+            {createCollapsibleStack(
+                <HomeStack.Screen
+                    name="index"
+                    component={HomeScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: i18n.t('screens.home'),
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                    initialParams={data}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: true,
+                }
+            )}
             <HomeStack.Screen
                 name="home-planning-information"
                 component={PlanningDisplayScreen}
@@ -216,23 +256,33 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
 const PlanexStack = createStackNavigator();
 
 function PlanexStackComponent() {
+    const {colors} = useTheme();
     return (
         <PlanexStack.Navigator
             initialRouteName="index"
             headerMode="float"
             screenOptions={defaultScreenOptions}
         >
-            <PlanexStack.Screen
-                name="index"
-                component={PlanexScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: 'Planex',
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
+            {createCollapsibleStack(
+                <PlanexStack.Screen
+                    name="index"
+                    component={PlanexScreen}
+                    options={({navigation}) => {
+                        const openDrawer = getDrawerButton.bind(this, navigation);
+                        return {
+                            title: 'Planex',
+                            headerLeft: openDrawer,
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: false, // native driver does not work with webview
+                }
+            )}
         </PlanexStack.Navigator>
     );
 }
