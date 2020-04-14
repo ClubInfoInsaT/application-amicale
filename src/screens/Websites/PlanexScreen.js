@@ -29,9 +29,6 @@ type State = {
 
 const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
 
-const CUSTOM_CSS_GENERAL = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customMobile3.css';
-const CUSTOM_CSS_NIGHTMODE = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/planex/customDark2.css';
-
 // // JS + JQuery functions used to remove alpha from events. Copy paste in browser console for quick testing
 // // Remove alpha from given Jquery node
 // function removeAlpha(node) {
@@ -90,25 +87,34 @@ const OBSERVE_MUTATIONS_INJECTED =
     '    removeAlpha($(this));\n' +
     '});';
 
-const FULL_CALENDAR_SETTINGS =
-    `var calendar = $('#calendar').fullCalendar('getCalendar');
-    calendar.option({
-      eventClick: function (data, event, view) {
-          var message = {
-          title: data.title,
-          color: data.color,
-          start: data.start._d,
-          end: data.end._d,
-        };
-       window.ReactNativeWebView.postMessage(JSON.stringify(message));
-      }
-    });`;
+const FULL_CALENDAR_SETTINGS = `
+var calendar = $('#calendar').fullCalendar('getCalendar');
+calendar.option({
+  eventClick: function (data, event, view) {
+      var message = {
+      title: data.title,
+      color: data.color,
+      start: data.start._d,
+      end: data.end._d,
+    };
+   window.ReactNativeWebView.postMessage(JSON.stringify(message));
+  }
+});`;
 
-const LISTEN_TO_MESSAGES =
-    `document.addEventListener("message", function(event) {
-      console.log("Received post message", event);//Get Event from React Native
-      alert(event.data);
-    }, false);`
+const LISTEN_TO_MESSAGES = `
+document.addEventListener("message", function(event) {
+    //alert(event.data);
+    var data = JSON.parse(event.data);
+    $('#calendar').fullCalendar(data.action, data.data);
+}, false);`
+
+const CUSTOM_CSS = "body>.container{padding-top:20px; padding-bottom: 50px}header{display:none}.fc-toolbar .fc-center{width:100%}.fc-toolbar .fc-center>*{float:none;width:100%;margin:0}#entite{margin-bottom:5px!important}#entite,#groupe{width:calc(100% - 20px);margin:0 10px}#calendar .fc-left,#calendar .fc-right{display:none}#groupe_visibility{width:100%}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-time{font-size:.5rem}#calendar .fc-month-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-month-view .fc-content-skeleton .fc-time{font-size:.7rem}.fc-axis{font-size:.8rem;width:15px!important}.fc-day-header{font-size:.8rem}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}";
+const CUSTOM_CSS_DARK = "body{background-color:#121212}.fc-unthemed .fc-content,.fc-unthemed .fc-divider,.fc-unthemed .fc-list-heading td,.fc-unthemed .fc-list-view,.fc-unthemed .fc-popover,.fc-unthemed .fc-row,.fc-unthemed tbody,.fc-unthemed td,.fc-unthemed th,.fc-unthemed thead{border-color:#222}.fc-toolbar .fc-center>*,h2,table{color:#fff}.fc-event-container{color:#121212}.fc-event-container .fc-bg{opacity:0.2;background-color:#000}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}";
+
+const INJECT_STYLE = `
+$('head').append('<meta name="viewport" content="width=device-width, initial-scale=0.9">');
+$('head').append('<style>` + CUSTOM_CSS + `</style>');
+`;
 
 /**
  * Class defining the app's Planex screen.
@@ -120,8 +126,7 @@ class PlanexScreen extends React.Component<Props, State> {
     barRef: Object;
 
     customInjectedJS: string;
-    onHideBanner: Function;
-    onGoToSettings: Function;
+
     state = {
         bannerVisible:
             AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
@@ -138,48 +143,54 @@ class PlanexScreen extends React.Component<Props, State> {
         super();
         this.webScreenRef = React.createRef();
         this.barRef = React.createRef();
+        this.generateInjectedCSS();
+    }
+
+    generateInjectedCSS() {
         this.customInjectedJS =
             "$(document).ready(function() {" +
             OBSERVE_MUTATIONS_INJECTED +
             FULL_CALENDAR_SETTINGS +
             LISTEN_TO_MESSAGES +
-            "$('head').append('<meta name=\"viewport\" content=\"width=device-width, initial-scale=0.9\">');" +
-            "$('head').append('<link rel=\"stylesheet\" href=\"" + CUSTOM_CSS_GENERAL + '" type="text/css"/>\');';
+            INJECT_STYLE;
 
         if (ThemeManager.getNightMode())
-            this.customInjectedJS += '$("head").append(\'<link rel="stylesheet" href="' + CUSTOM_CSS_NIGHTMODE + '" type="text/css"/>\');';
+            this.customInjectedJS += "$('head').append('<style>" + CUSTOM_CSS_DARK + "</style>');";
 
         this.customInjectedJS +=
             'removeAlpha();' +
             '});true;'; // Prevents crash on ios
-        this.onHideBanner = this.onHideBanner.bind(this);
-        this.onGoToSettings = this.onGoToSettings.bind(this);
+    }
+
+    componentWillUpdate(prevProps: Props) {
+        if (prevProps.theme.dark !== this.props.theme.dark)
+            this.generateInjectedCSS();
     }
 
     /**
      * Callback used when closing the banner.
      * This hides the banner and saves to preferences to prevent it from reopening
      */
-    onHideBanner() {
+    onHideBanner = () => {
         this.setState({bannerVisible: false});
         AsyncStorageManager.getInstance().savePref(
             AsyncStorageManager.getInstance().preferences.planexShowBanner.key,
             '0'
         );
-    }
+    };
 
     /**
      * Callback used when the used click on the navigate to settings button.
      * This will hide the banner and open the SettingsScreen
      *
      */
-    onGoToSettings() {
+    onGoToSettings = () => {
         this.onHideBanner();
         this.props.navigation.navigate('settings');
-    }
+    };
 
-    sendMessage = (msg: string) => {
-        this.webScreenRef.current.postMessage(msg);
+    sendMessage = (action: string, data: any) => {
+        this.webScreenRef.current.postMessage(JSON.stringify({action: action, data: data}));
     }
 
     onMessage = (event: Object) => {
@@ -209,13 +220,23 @@ class PlanexScreen extends React.Component<Props, State> {
         this.barRef.current.onScroll(event);
     };
 
+    getWebView() {
+        return (
+            <WebViewScreen
+                ref={this.webScreenRef}
+                navigation={this.props.navigation}
+                url={PLANEX_URL}
+                customJS={this.customInjectedJS}
+                onMessage={this.onMessage}
+                onScroll={this.onScroll}
+            />
+        );
+    }
+
     render() {
-        const nav = this.props.navigation;
         const {containerPaddingTop} = this.props.collapsibleStack;
         return (
-            <View style={{
-                height: '100%'
-            }}>
+            <View style={{height: '100%'}}>
                 <Banner
                     style={{
                         marginTop: this.state.bannerVisible ? containerPaddingTop : 0,
@@ -244,15 +265,13 @@ class PlanexScreen extends React.Component<Props, State> {
                     onDismiss={this.hideDialog}
                     title={this.state.dialogTitle}
                     message={this.state.dialogMessage}/>
-                <WebViewScreen
-                    ref={this.webScreenRef}
-                    navigation={nav}
-                    url={PLANEX_URL}
-                    customJS={this.customInjectedJS}
-                    onMessage={this.onMessage}
-                    onScroll={this.onScroll}
+                {this.props.theme.dark // Force component theme update
+                    ? this.getWebView()
+                    : <View style={{height: '100%'}}>{this.getWebView()}</View>}
+                <AnimatedBottomBar
+                    ref={this.barRef}
+                    onPress={this.sendMessage}
                 />
-                <AnimatedBottomBar ref={this.barRef}/>
             </View>
         );
     }
