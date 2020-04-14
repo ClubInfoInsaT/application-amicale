@@ -119,11 +119,12 @@ export function stringToDate(dateString: string): Date | null {
  * @param date The date object to convert
  * @return {string} The converted string
  */
-export function dateToString(date: Date): string {
+export function dateToString(date: Date, isUTC: boolean): string {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
     const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, '0');
+    const h = isUTC ? date.getUTCHours() : date.getHours();
+    const hours = String(h).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
 }

@@ -14,6 +14,7 @@ import CustomModal from "../../components/Custom/CustomModal";
 import AprilFoolsManager from "../../managers/AprilFoolsManager";
 import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
 import ProxiwashSectionHeader from "../../components/Lists/ProxiwashSectionHeader";
+import {withCollapsible} from "../../utils/withCollapsible";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -25,6 +26,7 @@ const LIST_ITEM_HEIGHT = 64;
 type Props = {
     navigation: Object,
     theme: Object,
+    collapsibleStack: Object,
 }
 
 type State = {
@@ -416,9 +418,13 @@ class ProxiwashScreen extends React.Component<Props, State> {
 
     render() {
         const nav = this.props.navigation;
+        const {containerPaddingTop} = this.props.collapsibleStack;
         return (
             <View>
                 <Banner
+                    style={{
+                    marginTop: this.state.bannerVisible ? containerPaddingTop : 0,
+                }}
                     visible={this.state.bannerVisible}
                     actions={[
                         {
@@ -450,4 +456,4 @@ class ProxiwashScreen extends React.Component<Props, State> {
     }
 }
 
-export default withTheme(ProxiwashScreen);
+export default withCollapsible(withTheme(ProxiwashScreen));

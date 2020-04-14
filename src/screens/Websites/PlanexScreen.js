@@ -7,13 +7,21 @@ import {Avatar, Banner} from "react-native-paper";
 import i18n from "i18n-js";
 import {View} from "react-native";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
+import AlertDialog from "../../components/Dialog/AlertDialog";
+import {withCollapsible} from "../../utils/withCollapsible";
+import {dateToString, getTimeOnlyString} from "../../utils/Planning";
+import DateManager from "../../managers/DateManager";
 
 type Props = {
     navigation: Object,
+    collapsibleStack: Object,
 }
 
 type State = {
     bannerVisible: boolean,
+    dialogVisible: boolean,
+    dialogTitle: string,
+    dialogMessage: string,
 }
 
 
@@ -79,11 +87,34 @@ const OBSERVE_MUTATIONS_INJECTED =
     '$(".fc-event-container .fc-event").each(function(index) {\n' +
     '    removeAlpha($(this));\n' +
     '});';
+
+const FULL_CALENDAR_SETTINGS =
+    `var calendar = $('#calendar').fullCalendar('getCalendar');
+    calendar.option({
+      eventClick: function (data, event, view) {
+          var message = {
+          title: data.title,
+          color: data.color,
+          start: data.start._d,
+          end: data.end._d,
+        };
+       window.ReactNativeWebView.postMessage(JSON.stringify(message));
+      }
+    });`;
+
+const LISTEN_TO_MESSAGES =
+    `document.addEventListener("message", function(event) {
+      console.log("Received post message", event);//Get Event from React Native
+      alert(event.data);
+    }, false);`
+
 /**
  * Class defining the app's Planex screen.
  * This screen uses a webview to render the page
  */
-export default class PlanexScreen extends React.Component<Props, State> {
+class PlanexScreen extends React.Component<Props, State> {
+
+    webScreenRef: Object;
 
     customInjectedJS: string;
     onHideBanner: Function;
@@ -92,6 +123,9 @@ export default class PlanexScreen extends React.Component<Props, State> {
         bannerVisible:
             AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
             AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex',
+        dialogVisible: false,
+        dialogTitle: "",
+        dialogMessage: "",
     };
 
     /**
@@ -99,11 +133,14 @@ export default class PlanexScreen extends React.Component<Props, State> {
      */
     constructor() {
         super();
+        this.webScreenRef = React.createRef();
         this.customInjectedJS =
-            '$(document).ready(function() {' +
+            "$(document).ready(function() {" +
             OBSERVE_MUTATIONS_INJECTED +
-            '$("head").append(\'<meta name="viewport" content="width=device-width, initial-scale=0.9">\');' +
-            '$("head").append(\'<link rel="stylesheet" href="' + CUSTOM_CSS_GENERAL + '" type="text/css"/>\');';
+            FULL_CALENDAR_SETTINGS +
+            LISTEN_TO_MESSAGES +
+            "$('head').append('<meta name=\"viewport\" content=\"width=device-width, initial-scale=0.9\">');" +
+            "$('head').append('<link rel=\"stylesheet\" href=\"" + CUSTOM_CSS_GENERAL + '" type="text/css"/>\');';
 
         if (ThemeManager.getNightMode())
             this.customInjectedJS += '$("head").append(\'<link rel="stylesheet" href="' + CUSTOM_CSS_NIGHTMODE + '" type="text/css"/>\');';
@@ -137,13 +174,45 @@ export default class PlanexScreen extends React.Component<Props, State> {
         this.props.navigation.navigate('settings');
     }
 
+    sendMessage = () => {
+        let data= 'coucou'
+        this.webScreenRef.current.postMessage(data);
+    }
+
+    onMessage = (event: Object) => {
+        let data = JSON.parse(event.nativeEvent.data);
+        let startDate = dateToString(new Date(data.start), true);
+        let endDate = dateToString(new Date(data.end), true);
+        let msg = DateManager.getInstance().getTranslatedDate(startDate) + "\n";
+        msg += getTimeOnlyString(startDate) + ' - ' + getTimeOnlyString(endDate);
+        this.showDialog(data.title, msg)
+    };
+
+    showDialog = (title: string, message: string) => {
+        this.setState({
+            dialogVisible: true,
+            dialogTitle: title,
+            dialogMessage: message,
+        });
+    };
+
+    hideDialog = () => {
+        this.setState({
+            dialogVisible: false,
+        });
+    };
+
     render() {
         const nav = this.props.navigation;
+        const {containerPaddingTop} = this.props.collapsibleStack;
         return (
             <View style={{
                 height: '100%'
             }}>
                 <Banner
+                    style={{
+                        marginTop: this.state.bannerVisible ? containerPaddingTop : 0,
+                    }}
                     visible={this.state.bannerVisible}
                     actions={[
                         {
@@ -163,12 +232,21 @@ export default class PlanexScreen extends React.Component<Props, State> {
                 >
                     {i18n.t('planexScreen.enableStartScreen')}
                 </Banner>
+                <AlertDialog
+                    visible={this.state.dialogVisible}
+                    onDismiss={this.hideDialog}
+                    title={this.state.dialogTitle}
+                    message={this.state.dialogMessage}/>
                 <WebViewScreen
+                    ref={this.webScreenRef}
                     navigation={nav}
                     url={PLANEX_URL}
-                    customJS={this.customInjectedJS}/>
+                    customJS={this.customInjectedJS}
+                    onMessage={this.onMessage}
+                />
             </View>
         );
     }
 }
 
+export default withCollapsible(PlanexScreen);

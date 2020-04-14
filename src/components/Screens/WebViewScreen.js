@@ -17,6 +17,7 @@ type Props = {
     url: string,
     customJS: string,
     collapsibleStack: Object,
+    onMessage: Function,
 }
 
 const AnimatedWebView = Animated.createAnimatedComponent(WebView);
@@ -111,6 +112,10 @@ class WebViewScreen extends React.PureComponent<Props> {
 
     onOpenClicked = () => Linking.openURL(this.props.url);
 
+    postMessage = (message: string) => {
+        this.webviewRef.current.getNode().postMessage(message);
+    }
+
     /**
      * Gets the loading indicator
      *
@@ -167,6 +172,7 @@ class WebViewScreen extends React.PureComponent<Props> {
                 onNavigationStateChange={navState => {
                     this.canGoBack = navState.canGoBack;
                 }}
+                onMessage={this.props.onMessage}
                 // Animations
                 onScroll={onScroll}
             />
