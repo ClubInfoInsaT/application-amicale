@@ -9,7 +9,7 @@ type Props = {
 
 
 const ROOM_URL = 'http://planex.insa-toulouse.fr/salles.php';
-const CUSTOM_CSS_GENERAL = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/rooms/customMobile.css';
+const CUSTOM_CSS_GENERAL = 'https://etud.insa-toulouse.fr/~amicale_app/custom_css/rooms/customMobile2.css';
 
 /**
  * Class defining the app's available rooms screen.
