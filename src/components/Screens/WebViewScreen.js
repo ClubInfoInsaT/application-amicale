@@ -18,6 +18,7 @@ type Props = {
     customJS: string,
     collapsibleStack: Object,
     onMessage: Function,
+    onScroll: Function,
 }
 
 const AnimatedWebView = Animated.createAnimatedComponent(WebView);
@@ -155,7 +156,7 @@ class WebViewScreen extends React.PureComponent<Props> {
     }
 
     render() {
-        const {containerPaddingTop, onScroll} = this.props.collapsibleStack;
+        const {containerPaddingTop, onScrollWithListener} = this.props.collapsibleStack;
         const customJS = this.getJavascriptPadding(containerPaddingTop);
         return (
             <AnimatedWebView
@@ -174,7 +175,7 @@ class WebViewScreen extends React.PureComponent<Props> {
                 }}
                 onMessage={this.props.onMessage}
                 // Animations
-                onScroll={onScroll}
+                onScroll={onScrollWithListener(this.props.onScroll)}
             />
         );
     }

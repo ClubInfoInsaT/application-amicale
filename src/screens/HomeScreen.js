@@ -1,11 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, FlatList, StyleSheet, View} from 'react-native';
+import {Animated, FlatList, View} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../components/Home/EventDashboardItem";
 import WebSectionList from "../components/Lists/WebSectionList";
-import {FAB, withTheme} from 'react-native-paper';
+import {withTheme} from 'react-native-paper';
 import FeedItem from "../components/Home/FeedItem";
 import SquareDashboardItem from "../components/Home/SmallDashboardItem";
 import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardItem";
@@ -15,6 +15,7 @@ import ConnectionManager from "../managers/ConnectionManager";
 import {CommonActions} from '@react-navigation/native';
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 import {AnimatedValue} from "react-native-reanimated";
+import AnimatedFAB from "../components/Custom/AnimatedFAB";
 // import DATA from "../dashboard_data.json";
 
 
@@ -27,8 +28,6 @@ const SECTIONS_ID = [
     'news_feed'
 ];
 
-const AnimatedFAB = Animated.createAnimatedComponent(FAB);
-
 const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
 type Props = {
@@ -38,7 +37,6 @@ type Props = {
 }
 
 type State = {
-    showFab: boolean,
     fabPosition: AnimatedValue
 }
 
@@ -50,23 +48,18 @@ class HomeScreen extends React.Component<Props, State> {
     colors: Object;
 
     isLoggedIn: boolean | null;
-    isAnimationDownPlaying: boolean;
-    isAnimationUpPlaying: boolean;
 
-    downAnimation;
-    upAnimation;
+    fabRef: Object;
 
     state = {
-        showFab: true,
         fabPosition: new Animated.Value(0),
     };
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
-        this.isAnimationDownPlaying = false;
-        this.isAnimationUpPlaying = false;
         this.isLoggedIn = null;
+        this.fabRef = React.createRef();
     }
 
     /**
@@ -460,36 +453,8 @@ class HomeScreen extends React.Component<Props, State> {
 
     openScanner = () => this.props.navigation.navigate("scanner");
 
-    onScroll = ({nativeEvent}: Object) => {
-        if (nativeEvent.velocity.y > 0.2) { // Go down
-            if (!this.isAnimationDownPlaying) {
-                this.isAnimationDownPlaying = true;
-                if (this.isAnimationUpPlaying)
-                    this.upAnimation.stop();
-                this.downAnimation = Animated.spring(this.state.fabPosition, {
-                    toValue: 100,
-                    duration: 50,
-                    useNativeDriver: true,
-                });
-                this.downAnimation.start(() => {
-                    this.isAnimationDownPlaying = false
-                });
-            }
-        } else if (nativeEvent.velocity.y < -0.2) { // Go up
-            if (!this.isAnimationUpPlaying) {
-                this.isAnimationUpPlaying = true;
-                if (this.isAnimationDownPlaying)
-                    this.downAnimation.stop();
-                this.upAnimation = Animated.spring(this.state.fabPosition, {
-                    toValue: 0,
-                    duration: 50,
-                    useNativeDriver: true,
-                });
-                this.upAnimation.start(() => {
-                    this.isAnimationUpPlaying = false
-                });
-            }
-        }
+    onScroll = (event: Object) => {
+        this.fabRef.current.onScroll(event);
     };
 
     render() {
@@ -507,10 +472,7 @@ class HomeScreen extends React.Component<Props, State> {
                     onScroll={this.onScroll}
                 />
                 <AnimatedFAB
-                    style={{
-                        ...styles.fab,
-                        transform: [{translateY: this.state.fabPosition}]
-                    }}
+                    ref={this.fabRef}
                     icon="qrcode-scan"
                     onPress={this.openScanner}
                 />
@@ -518,14 +480,5 @@ class HomeScreen extends React.Component<Props, State> {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    fab: {
-        position: 'absolute',
-        margin: 16,
-        right: 0,
-        bottom: 0,
-    },
-});
 
 export default withTheme(HomeScreen);

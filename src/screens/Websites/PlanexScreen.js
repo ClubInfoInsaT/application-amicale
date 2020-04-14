@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ThemeManager from "../../managers/ThemeManager";
 import WebViewScreen from "../../components/Screens/WebViewScreen";
-import {Avatar, Banner} from "react-native-paper";
+import {Avatar, Banner, withTheme} from "react-native-paper";
 import i18n from "i18n-js";
 import {View} from "react-native";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
@@ -11,9 +11,11 @@ import AlertDialog from "../../components/Dialog/AlertDialog";
 import {withCollapsible} from "../../utils/withCollapsible";
 import {dateToString, getTimeOnlyString} from "../../utils/Planning";
 import DateManager from "../../managers/DateManager";
+import AnimatedBottomBar from "../../components/Custom/AnimatedBottomBar";
 
 type Props = {
     navigation: Object,
+    theme: Object,
     collapsibleStack: Object,
 }
 
@@ -115,6 +117,7 @@ const LISTEN_TO_MESSAGES =
 class PlanexScreen extends React.Component<Props, State> {
 
     webScreenRef: Object;
+    barRef: Object;
 
     customInjectedJS: string;
     onHideBanner: Function;
@@ -134,6 +137,7 @@ class PlanexScreen extends React.Component<Props, State> {
     constructor() {
         super();
         this.webScreenRef = React.createRef();
+        this.barRef = React.createRef();
         this.customInjectedJS =
             "$(document).ready(function() {" +
             OBSERVE_MUTATIONS_INJECTED +
@@ -174,9 +178,8 @@ class PlanexScreen extends React.Component<Props, State> {
         this.props.navigation.navigate('settings');
     }
 
-    sendMessage = () => {
-        let data= 'coucou'
-        this.webScreenRef.current.postMessage(data);
+    sendMessage = (msg: string) => {
+        this.webScreenRef.current.postMessage(msg);
     }
 
     onMessage = (event: Object) => {
@@ -200,6 +203,10 @@ class PlanexScreen extends React.Component<Props, State> {
         this.setState({
             dialogVisible: false,
         });
+    };
+
+    onScroll = (event: Object) => {
+        this.barRef.current.onScroll(event);
     };
 
     render() {
@@ -243,10 +250,12 @@ class PlanexScreen extends React.Component<Props, State> {
                     url={PLANEX_URL}
                     customJS={this.customInjectedJS}
                     onMessage={this.onMessage}
+                    onScroll={this.onScroll}
                 />
+                <AnimatedBottomBar ref={this.barRef}/>
             </View>
         );
     }
 }
 
-export default withCollapsible(PlanexScreen);
+export default withCollapsible(withTheme(PlanexScreen));
