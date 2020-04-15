@@ -13,6 +13,7 @@ import {dateToString, getTimeOnlyString} from "../../utils/Planning";
 import DateManager from "../../managers/DateManager";
 import AnimatedBottomBar from "../../components/Custom/AnimatedBottomBar";
 import {CommonActions} from "@react-navigation/native";
+import ErrorView from "../../components/Custom/ErrorView";
 
 type Props = {
     navigation: Object,
@@ -143,7 +144,7 @@ class PlanexScreen extends React.Component<Props, State> {
 
         let currentGroup = AsyncStorageManager.getInstance().preferences.planexCurrentGroup.current;
         if (currentGroup === '')
-            currentGroup = {name: "SELECT GROUP", id: 0};
+            currentGroup = {name: "SELECT GROUP", id: -1};
         else
             currentGroup = JSON.parse(currentGroup);
         this.state = {
@@ -260,16 +261,26 @@ class PlanexScreen extends React.Component<Props, State> {
     };
 
     getWebView() {
-        return (
-            <WebViewScreen
-                ref={this.webScreenRef}
-                navigation={this.props.navigation}
-                url={PLANEX_URL}
-                customJS={this.customInjectedJS}
-                onMessage={this.onMessage}
-                onScroll={this.onScroll}
+        if (this.state.currentGroup.id !== -1) {
+            return (
+                <WebViewScreen
+                    ref={this.webScreenRef}
+                    navigation={this.props.navigation}
+                    url={PLANEX_URL}
+                    customJS={this.customInjectedJS}
+                    onMessage={this.onMessage}
+                    onScroll={this.onScroll}
+                />
+            );
+        } else {
+            return <ErrorView
+                {...this.props}
+                icon={'account-clock'}
+                message={i18n.t("planexScreen.noGroupSelected")}
+                showRetryButton={false}
             />
-        );
+        }
+
     }
 
     render() {

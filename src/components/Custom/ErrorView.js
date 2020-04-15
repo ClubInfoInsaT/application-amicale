@@ -12,6 +12,9 @@ type Props = {
     route: Object,
     errorCode: number,
     onRefresh: Function,
+    icon: string,
+    message: string,
+    showRetryButton: boolean,
 }
 
 type State = {
@@ -27,6 +30,13 @@ class ErrorView extends React.PureComponent<Props, State> {
 
     showLoginButton: boolean;
 
+    static defaultProps = {
+        errorCode: 0,
+        icon: '',
+        message: '',
+        showRetryButton: true,
+    }
+
     state = {
         refreshing: false,
     };
@@ -38,41 +48,47 @@ class ErrorView extends React.PureComponent<Props, State> {
 
     generateMessage() {
         this.showLoginButton = false;
-        switch (this.props.errorCode) {
-            case ERROR_TYPE.BAD_CREDENTIALS:
-                this.message = i18n.t("errors.badCredentials");
-                this.icon = "account-alert-outline";
-                break;
-            case ERROR_TYPE.BAD_TOKEN:
-                this.message = i18n.t("errors.badToken");
-                this.icon = "account-alert-outline";
-                this.showLoginButton = true;
-                break;
-            case ERROR_TYPE.NO_CONSENT:
-                this.message = i18n.t("errors.noConsent");
-                this.icon = "account-remove-outline";
-                break;
-            case ERROR_TYPE.BAD_INPUT:
-                this.message = i18n.t("errors.badInput");
-                this.icon = "alert-circle-outline";
-                break;
-            case ERROR_TYPE.FORBIDDEN:
-                this.message = i18n.t("errors.forbidden");
-                this.icon = "lock";
-                break;
-            case ERROR_TYPE.CONNECTION_ERROR:
-                this.message = i18n.t("errors.connectionError");
-                this.icon = "access-point-network-off";
-                break;
-            case ERROR_TYPE.SERVER_ERROR:
-                this.message = i18n.t("errors.serverError");
-                this.icon = "server-network-off";
-                break;
-            default:
-                this.message = i18n.t("errors.unknown");
-                this.icon = "alert-circle-outline";
-                break;
+        if (this.props.errorCode !== 0) {
+            switch (this.props.errorCode) {
+                case ERROR_TYPE.BAD_CREDENTIALS:
+                    this.message = i18n.t("errors.badCredentials");
+                    this.icon = "account-alert-outline";
+                    break;
+                case ERROR_TYPE.BAD_TOKEN:
+                    this.message = i18n.t("errors.badToken");
+                    this.icon = "account-alert-outline";
+                    this.showLoginButton = true;
+                    break;
+                case ERROR_TYPE.NO_CONSENT:
+                    this.message = i18n.t("errors.noConsent");
+                    this.icon = "account-remove-outline";
+                    break;
+                case ERROR_TYPE.BAD_INPUT:
+                    this.message = i18n.t("errors.badInput");
+                    this.icon = "alert-circle-outline";
+                    break;
+                case ERROR_TYPE.FORBIDDEN:
+                    this.message = i18n.t("errors.forbidden");
+                    this.icon = "lock";
+                    break;
+                case ERROR_TYPE.CONNECTION_ERROR:
+                    this.message = i18n.t("errors.connectionError");
+                    this.icon = "access-point-network-off";
+                    break;
+                case ERROR_TYPE.SERVER_ERROR:
+                    this.message = i18n.t("errors.serverError");
+                    this.icon = "server-network-off";
+                    break;
+                default:
+                    this.message = i18n.t("errors.unknown");
+                    this.icon = "alert-circle-outline";
+                    break;
+            }
+        } else {
+            this.message = this.props.message;
+            this.icon = this.props.icon;
         }
+
     }
 
     getRetryButton() {
@@ -88,10 +104,11 @@ class ErrorView extends React.PureComponent<Props, State> {
 
     goToLogin = () => {
         this.props.navigation.navigate("login",
-        {
-           screen: 'login',
-           params: {nextScreen: this.props.route.name}
-        })};
+            {
+                screen: 'login',
+                params: {nextScreen: this.props.route.name}
+            })
+    };
 
     getLoginButton() {
         return <Button
@@ -124,9 +141,11 @@ class ErrorView extends React.PureComponent<Props, State> {
                     }}>
                         {this.message}
                     </Subheading>
-                    {this.showLoginButton
-                        ? this.getLoginButton()
-                        : this.getRetryButton()}
+                    {this.props.showRetryButton
+                        ? (this.showLoginButton
+                            ? this.getLoginButton()
+                            : this.getRetryButton())
+                        : null}
                 </View>
             </View>
         );
@@ -148,6 +167,7 @@ const styles = StyleSheet.create({
     },
     subheading: {
         textAlign: 'center',
+        paddingHorizontal: 20
     },
     button: {
         marginTop: 10,

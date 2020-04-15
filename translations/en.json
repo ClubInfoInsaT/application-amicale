@@ -212,7 +212,8 @@
   "planexScreen": {
     "enableStartScreen": "Come here often? Set it as default screen!",
     "enableStartOK": "Yes please!",
-    "enableStartCancel": "Later"
+    "enableStartCancel": "Later",
+    "noGroupSelected": "No group selected. Please select your group using the big beautiful red button bellow."
   },
   "availableRoomScreen": {
     "normalRoom": "Work",
