@@ -79,6 +79,11 @@ export default class AsyncStorageManager {
             default: '1',
             current: '',
         },
+        planexCurrentGroup: {
+            key: 'planexCurrentGroup',
+            default: '',
+            current: '',
+        },
     };
 
     /**

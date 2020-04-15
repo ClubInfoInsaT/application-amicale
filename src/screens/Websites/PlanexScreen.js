@@ -12,9 +12,11 @@ import {withCollapsible} from "../../utils/withCollapsible";
 import {dateToString, getTimeOnlyString} from "../../utils/Planning";
 import DateManager from "../../managers/DateManager";
 import AnimatedBottomBar from "../../components/Custom/AnimatedBottomBar";
+import {CommonActions} from "@react-navigation/native";
 
 type Props = {
     navigation: Object,
+    route: Object,
     theme: Object,
     collapsibleStack: Object,
 }
@@ -24,6 +26,7 @@ type State = {
     dialogVisible: boolean,
     dialogTitle: string,
     dialogMessage: string,
+    currentGroup: Object,
 }
 
 
@@ -105,10 +108,13 @@ const LISTEN_TO_MESSAGES = `
 document.addEventListener("message", function(event) {
     //alert(event.data);
     var data = JSON.parse(event.data);
-    $('#calendar').fullCalendar(data.action, data.data);
+    if (data.action === "setGroup")
+        displayAde(data.data);
+    else
+        $('#calendar').fullCalendar(data.action, data.data);
 }, false);`
 
-const CUSTOM_CSS = "body>.container{padding-top:20px; padding-bottom: 50px}header{display:none}.fc-toolbar .fc-center{width:100%}.fc-toolbar .fc-center>*{float:none;width:100%;margin:0}#entite{margin-bottom:5px!important}#entite,#groupe{width:calc(100% - 20px);margin:0 10px}#calendar .fc-left,#calendar .fc-right{display:none}#groupe_visibility{width:100%}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-time{font-size:.5rem}#calendar .fc-month-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-month-view .fc-content-skeleton .fc-time{font-size:.7rem}.fc-axis{font-size:.8rem;width:15px!important}.fc-day-header{font-size:.8rem}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}";
+const CUSTOM_CSS = "body>.container{padding-top:20px; padding-bottom: 50px}header,#entite,#groupe_visibility,#calendar .fc-left,#calendar .fc-right{display:none}.fc-toolbar .fc-center{width:100%}.fc-toolbar .fc-center>*{float:none;width:100%;margin:0}#entite{margin-bottom:5px!important}#entite,#groupe{width:calc(100% - 20px);margin:0 10px}#groupe_visibility{width:100%}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-time{font-size:.5rem}#calendar .fc-month-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-month-view .fc-content-skeleton .fc-time{font-size:.7rem}.fc-axis{font-size:.8rem;width:15px!important}.fc-day-header{font-size:.8rem}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}";
 const CUSTOM_CSS_DARK = "body{background-color:#121212}.fc-unthemed .fc-content,.fc-unthemed .fc-divider,.fc-unthemed .fc-list-heading td,.fc-unthemed .fc-list-view,.fc-unthemed .fc-popover,.fc-unthemed .fc-row,.fc-unthemed tbody,.fc-unthemed td,.fc-unthemed th,.fc-unthemed thead{border-color:#222}.fc-toolbar .fc-center>*,h2,table{color:#fff}.fc-event-container{color:#121212}.fc-event-container .fc-bg{opacity:0.2;background-color:#000}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}";
 
 const INJECT_STYLE = `
@@ -127,15 +133,6 @@ class PlanexScreen extends React.Component<Props, State> {
 
     customInjectedJS: string;
 
-    state = {
-        bannerVisible:
-            AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
-            AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex',
-        dialogVisible: false,
-        dialogTitle: "",
-        dialogMessage: "",
-    };
-
     /**
      * Defines custom injected JavaScript to improve the page display on mobile
      */
@@ -143,16 +140,58 @@ class PlanexScreen extends React.Component<Props, State> {
         super();
         this.webScreenRef = React.createRef();
         this.barRef = React.createRef();
-        this.generateInjectedCSS();
+
+        let currentGroup = AsyncStorageManager.getInstance().preferences.planexCurrentGroup.current;
+        if (currentGroup === '')
+            currentGroup = {name: "SELECT GROUP", id: 0};
+        else
+            currentGroup = JSON.parse(currentGroup);
+        this.state = {
+            bannerVisible:
+                AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
+                AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex',
+            dialogVisible: false,
+            dialogTitle: "",
+            dialogMessage: "",
+            currentGroup: currentGroup,
+        };
+        this.generateInjectedJS(currentGroup.id);
     }
 
-    generateInjectedCSS() {
-        this.customInjectedJS =
-            "$(document).ready(function() {" +
-            OBSERVE_MUTATIONS_INJECTED +
-            FULL_CALENDAR_SETTINGS +
-            LISTEN_TO_MESSAGES +
-            INJECT_STYLE;
+    componentDidMount() {
+        this.props.navigation.addListener('focus', this.onScreenFocus);
+    }
+
+    onScreenFocus = () => {
+        this.handleNavigationParams();
+    };
+
+    handleNavigationParams = () => {
+        if (this.props.route.params !== undefined) {
+            if (this.props.route.params.group !== undefined && this.props.route.params.group !== null) {
+                // reset params to prevent infinite loop
+                this.selectNewGroup(this.props.route.params.group);
+                this.props.navigation.dispatch(CommonActions.setParams({group: null}));
+            }
+        }
+    };
+
+    selectNewGroup(group: Object) {
+        this.sendMessage('setGroup', group.id);
+        this.setState({currentGroup: group});
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.planexCurrentGroup.key,
+            JSON.stringify(group));
+        this.generateInjectedJS(group.id);
+    }
+
+    generateInjectedJS(groupID: number) {
+        this.customInjectedJS = "$(document).ready(function() {"
+            + OBSERVE_MUTATIONS_INJECTED
+            + FULL_CALENDAR_SETTINGS
+            + "displayAde(" + groupID + ");" // Reset Ade
+            + LISTEN_TO_MESSAGES
+            + INJECT_STYLE;
 
         if (ThemeManager.getNightMode())
             this.customInjectedJS += "$('head').append('<style>" + CUSTOM_CSS_DARK + "</style>');";
@@ -162,10 +201,10 @@ class PlanexScreen extends React.Component<Props, State> {
             '});true;'; // Prevents crash on ios
     }
 
-    componentWillUpdate(prevProps: Props) {
-        if (prevProps.theme.dark !== this.props.theme.dark)
-            this.generateInjectedCSS();
-    }
+    // componentWillUpdate(prevProps: Props) {
+    //     if (prevProps.theme.dark !== this.props.theme.dark)
+    //         this.generateInjectedCSS();
+    // }
 
     /**
      * Callback used when closing the banner.
@@ -269,8 +308,10 @@ class PlanexScreen extends React.Component<Props, State> {
                     ? this.getWebView()
                     : <View style={{height: '100%'}}>{this.getWebView()}</View>}
                 <AnimatedBottomBar
+                    {...this.props}
                     ref={this.barRef}
                     onPress={this.sendMessage}
+                    currentGroup={this.state.currentGroup.name}
                 />
             </View>
         );

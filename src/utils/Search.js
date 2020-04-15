@@ -11,7 +11,8 @@ export function sanitizeString(str: string): string {
     return str.toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
-        .replace(" ", "");
+        .replace(/ /g, "")
+        .replace(/_/g, "");
 }
 
 export function stringMatchQuery(str: string, query: string) {

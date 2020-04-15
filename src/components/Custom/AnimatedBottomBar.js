@@ -2,12 +2,14 @@
 
 import * as React from 'react';
 import {StyleSheet, View} from "react-native";
-import {IconButton, Surface, withTheme} from "react-native-paper";
+import {Button, IconButton, Surface, withTheme} from "react-native-paper";
 import AutoHideComponent from "./AutoHideComponent";
 
 type Props = {
+    navigation: Object,
     theme: Object,
     onPress: Function,
+    currentGroup: string,
 }
 
 type State = {
@@ -37,6 +39,10 @@ class AnimatedBottomBar extends React.Component<Props, State> {
         this.displayModeIcons[DISPLAY_MODES.DAY] = "calendar-text";
         this.displayModeIcons[DISPLAY_MODES.WEEK] = "calendar-week";
         this.displayModeIcons[DISPLAY_MODES.MONTH] = "calendar-range";
+    }
+
+    shouldComponentUpdate(nextProps: Props) {
+        return (nextProps.currentGroup !== this.props.currentGroup);
     }
 
     onScroll = (event: Object) => {
@@ -79,6 +85,13 @@ class AnimatedBottomBar extends React.Component<Props, State> {
                             style={{marginLeft: 5}}
                             onPress={() => this.props.onPress('today', undefined)}/>
                     </View>
+                        <Button
+                            icon="book-variant"
+                            onPress={() => this.props.navigation.navigate('group-select')}
+                            style={{maxWidth: '40%'}}
+                        >
+                            {this.props.currentGroup.replace(/_/g, " ")}
+                        </Button>
                     <View style={{flexDirection: 'row'}}>
                         <IconButton
                             icon="chevron-left"

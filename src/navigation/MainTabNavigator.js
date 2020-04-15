@@ -20,6 +20,7 @@ import ScannerScreen from "../screens/ScannerScreen";
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 import FeedItemScreen from "../screens/FeedItemScreen";
 import {createCollapsibleStack} from "react-navigation-collapsible";
+import GroupSelectionScreen from "../screens/GroupSelectionScreen";
 
 
 const TAB_ICONS = {
@@ -281,6 +282,22 @@ function PlanexStackComponent() {
                 {
                     collapsedColor: 'transparent',
                     useNativeDriver: false, // native driver does not work with webview
+                }
+            )}
+            {createCollapsibleStack(
+                <PlanexStack.Screen
+                    name="group-select"
+                    component={GroupSelectionScreen}
+                    options={({navigation}) => {
+                        return {
+                            title: 'GroupSelectionScreen',
+                            ...TransitionPresets.ModalSlideFromBottomIOS,
+                        };
+                    }}
+                />,
+                {
+                    collapsedColor: 'transparent',
+                    useNativeDriver: true,
                 }
             )}
         </PlanexStack.Navigator>
