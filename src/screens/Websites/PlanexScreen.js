@@ -261,8 +261,19 @@ class PlanexScreen extends React.Component<Props, State> {
     };
 
     getWebView() {
-        if (this.state.currentGroup.id !== -1) {
-            return (
+        const showWebview = this.state.currentGroup.id !== -1;
+
+        return (
+            <View style={{height: '100%'}}>
+                {!showWebview
+                    ? <ErrorView
+                        {...this.props}
+                        icon={'account-clock'}
+                        message={i18n.t("planexScreen.noGroupSelected")}
+                        showRetryButton={false}
+                    />
+                    : null}
+
                 <WebViewScreen
                     ref={this.webScreenRef}
                     navigation={this.props.navigation}
@@ -271,16 +282,8 @@ class PlanexScreen extends React.Component<Props, State> {
                     onMessage={this.onMessage}
                     onScroll={this.onScroll}
                 />
-            );
-        } else {
-            return <ErrorView
-                {...this.props}
-                icon={'account-clock'}
-                message={i18n.t("planexScreen.noGroupSelected")}
-                showRetryButton={false}
-            />
-        }
-
+            </View>
+        );
     }
 
     render() {
