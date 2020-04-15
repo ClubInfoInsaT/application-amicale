@@ -41,8 +41,9 @@ class AnimatedBottomBar extends React.Component<Props, State> {
         this.displayModeIcons[DISPLAY_MODES.MONTH] = "calendar-range";
     }
 
-    shouldComponentUpdate(nextProps: Props) {
-        return (nextProps.currentGroup !== this.props.currentGroup);
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
+        return (nextProps.currentGroup !== this.props.currentGroup)
+            || (nextState.currentMode !== this.state.currentMode);
     }
 
     onScroll = (event: Object) => {
@@ -85,20 +86,9 @@ class AnimatedBottomBar extends React.Component<Props, State> {
                             style={{marginLeft: 5}}
                             onPress={() => this.props.onPress('today', undefined)}/>
                     </View>
-                    <View style={{
-                        position: "absolute",
-                        left: 0,
-                        right: 0,
-                        alignItems: "center",
-                        width: '100%',
-                        height: '100%'
-                    }}>
+                    <View style={styles.fabContainer}>
                     <FAB
-                        style={{
-                            position: 'absolute',
-                            alignSelf: 'center',
-                            top: -10,
-                        }}
+                        style={styles.fab}
                         icon="account-clock"
                         onPress={() => this.props.navigation.navigate('group-select')}
                     />
@@ -134,6 +124,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 50,
         elevation: 2,
+    },
+    fabContainer: {
+        position: "absolute",
+        left: 0,
+        right: 0,
+        alignItems: "center",
+        width: '100%',
+        height: '100%'
+    },
+    fab: {
+        position: 'absolute',
+        alignSelf: 'center',
+        top: -10,
     }
 });
 
