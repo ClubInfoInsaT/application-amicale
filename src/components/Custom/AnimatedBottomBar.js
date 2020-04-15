@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {StyleSheet, View} from "react-native";
-import {Button, IconButton, Surface, withTheme} from "react-native-paper";
+import {FAB, IconButton, Surface, withTheme} from "react-native-paper";
 import AutoHideComponent from "./AutoHideComponent";
 
 type Props = {
@@ -85,13 +85,24 @@ class AnimatedBottomBar extends React.Component<Props, State> {
                             style={{marginLeft: 5}}
                             onPress={() => this.props.onPress('today', undefined)}/>
                     </View>
-                        <Button
-                            icon="book-variant"
-                            onPress={() => this.props.navigation.navigate('group-select')}
-                            style={{maxWidth: '40%'}}
-                        >
-                            {this.props.currentGroup.replace(/_/g, " ")}
-                        </Button>
+                    <View style={{
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
+                        alignItems: "center",
+                        width: '100%',
+                        height: '100%'
+                    }}>
+                    <FAB
+                        style={{
+                            position: 'absolute',
+                            alignSelf: 'center',
+                            top: -10,
+                        }}
+                        icon="account-clock"
+                        onPress={() => this.props.navigation.navigate('group-select')}
+                    />
+                    </View>
                     <View style={{flexDirection: 'row'}}>
                         <IconButton
                             icon="chevron-left"
@@ -117,13 +128,12 @@ const styles = StyleSheet.create({
         width: '90%',
     },
     surface: {
+        position: 'relative',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         borderRadius: 50,
         elevation: 2,
-        padding: 10,
-        paddingHorizontal: 20,
     }
 });
 
