@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, View} from "react-native";
+import {Platform} from "react-native";
 import i18n from "i18n-js";
 import {Searchbar, withTheme} from "react-native-paper";
 import {stringMatchQuery} from "../utils/Search";
@@ -206,20 +206,16 @@ class GroupSelectionScreen extends React.Component<Props, State> {
 
     render() {
         return (
-            <View style={{
-                height: '100%'
-            }}>
-                <WebSectionList
-                    {...this.props}
-                    createDataset={this.createDataset}
-                    autoRefreshTime={0}
-                    refreshOnFocus={false}
-                    fetchUrl={GROUPS_URL}
-                    renderItem={this.renderItem}
-                    updateData={this.state.currentSearchString + this.state.favoriteGroups.length}
-                    itemHeight={LIST_ITEM_HEIGHT}
-                />
-            </View>
+            <WebSectionList
+                {...this.props}
+                createDataset={this.createDataset}
+                autoRefreshTime={0}
+                refreshOnFocus={false}
+                fetchUrl={GROUPS_URL}
+                renderItem={this.renderItem}
+                updateData={this.state.currentSearchString + this.state.favoriteGroups.length}
+                itemHeight={LIST_ITEM_HEIGHT}
+            />
         );
     }
 }
