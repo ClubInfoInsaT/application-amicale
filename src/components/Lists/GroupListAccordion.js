@@ -18,8 +18,6 @@ type State = {
 
 const LIST_ITEM_HEIGHT = 64;
 
-const REPLACE_REGEX = /_/g;
-
 export default class GroupListAccordion extends React.Component<Props, State> {
 
     state = {
@@ -43,7 +41,7 @@ export default class GroupListAccordion extends React.Component<Props, State> {
             const onPress = () => this.props.onGroupPress(item);
             return (
                 <List.Item
-                    title={item.name.replace(REPLACE_REGEX, " ")}
+                    title={item.name}
                     onPress={onPress}
                     left={props =>
                         <List.Icon

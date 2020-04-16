@@ -137,16 +137,18 @@ class PlanexScreen extends React.Component<Props, State> {
     /**
      * Defines custom injected JavaScript to improve the page display on mobile
      */
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.webScreenRef = React.createRef();
         this.barRef = React.createRef();
 
         let currentGroup = AsyncStorageManager.getInstance().preferences.planexCurrentGroup.current;
         if (currentGroup === '')
             currentGroup = {name: "SELECT GROUP", id: -1};
-        else
+        else {
             currentGroup = JSON.parse(currentGroup);
+            props.navigation.setOptions({title: currentGroup.name})
+        }
         this.state = {
             bannerVisible:
                 AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
@@ -183,6 +185,7 @@ class PlanexScreen extends React.Component<Props, State> {
         AsyncStorageManager.getInstance().savePref(
             AsyncStorageManager.getInstance().preferences.planexCurrentGroup.key,
             JSON.stringify(group));
+        this.props.navigation.setOptions({title: group.name})
         this.generateInjectedJS(group.id);
     }
 

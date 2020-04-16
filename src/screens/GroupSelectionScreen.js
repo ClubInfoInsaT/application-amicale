@@ -30,6 +30,7 @@ function sortName(a, b) {
 }
 
 const GROUPS_URL = 'http://planex.insa-toulouse.fr/wsAdeGrp.php?projectId=1';
+const REPLACE_REGEX = /_/g;
 
 /**
  * Class defining proximo's article list of a certain category.
@@ -126,10 +127,17 @@ class GroupSelectionScreen extends React.Component<Props, State> {
     generateData(fetchedData: Object) {
         let data = [];
         for (let key in fetchedData) {
+            this.formatGroupNames(fetchedData[key]);
             data.push(fetchedData[key]);
         }
         data.sort(sortName);
         return data;
+    }
+
+    formatGroupNames(item: Object) {
+        for (let i = 0; i < item.content.length; i++) {
+            item.content[i].name = item.content[i].name.replace(REPLACE_REGEX, " ")
+        }
     }
 
     /**
