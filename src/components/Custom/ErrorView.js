@@ -6,6 +6,7 @@ import {StyleSheet, View} from "react-native";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import i18n from 'i18n-js';
 import {ERROR_TYPE} from "../../utils/WebData";
+import * as Animatable from 'react-native-animatable';
 
 type Props = {
     navigation: Object,
@@ -124,10 +125,15 @@ class ErrorView extends React.PureComponent<Props, State> {
     render() {
         this.generateMessage();
         return (
-            <View style={{
+            <Animatable.View
+                style={{
                 ...styles.outer,
                 backgroundColor: this.colors.background
-            }}>
+            }}
+                animation={"zoomIn"}
+                duration={200}
+                useNativeDriver
+            >
                 <View style={styles.inner}>
                     <View style={styles.iconContainer}>
                         <MaterialCommunityIcons
@@ -147,7 +153,7 @@ class ErrorView extends React.PureComponent<Props, State> {
                             : this.getRetryButton())
                         : null}
                 </View>
-            </View>
+            </Animatable.View>
         );
     }
 }

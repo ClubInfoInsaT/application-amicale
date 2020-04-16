@@ -8,6 +8,7 @@ import {Animated, RefreshControl, View} from "react-native";
 import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 import {withCollapsible} from "../../utils/withCollapsible";
+import * as Animatable from 'react-native-animatable';
 
 type Props = {
     navigation: Object,
@@ -174,9 +175,29 @@ class WebSectionList extends React.PureComponent<Props, State> {
         index
     });
 
-    onListScroll= (event) => {
+    renderSectionHeader = (data: Object) => {
+        return (
+            <Animatable.View
+                animation={"fadeInUp"}
+                duration={500}
+                useNativeDriver
+            >
+                {this.props.renderSectionHeader(data)}
+            </Animatable.View>
+        );
+    }
 
-    };
+    renderItem = (data: Object) => {
+        return (
+            <Animatable.View
+                animation={"fadeInUp"}
+                duration={500}
+                useNativeDriver
+            >
+                {this.props.renderItem(data)}
+            </Animatable.View>
+        );
+    }
 
     render() {
         let dataset = [];
@@ -198,9 +219,9 @@ class WebSectionList extends React.PureComponent<Props, State> {
                         />
                     }
                     //$FlowFixMe
-                    renderSectionHeader={shouldRenderHeader ? this.props.renderSectionHeader : this.getEmptySectionHeader}
+                    renderSectionHeader={shouldRenderHeader ? this.renderSectionHeader : this.getEmptySectionHeader}
                     //$FlowFixMe
-                    renderItem={this.props.renderItem}
+                    renderItem={this.renderItem}
                     stickySectionHeadersEnabled={this.props.stickyHeader}
                     style={{minHeight: '100%'}}
                     ListEmptyComponent={this.state.refreshing
