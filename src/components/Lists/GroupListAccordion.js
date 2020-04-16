@@ -81,9 +81,6 @@ class GroupListAccordion extends React.Component<Props, State> {
 
     render() {
         const item = this.props.item;
-        console.log("=====================================================");
-        console.log(this.props.currentSearchString);
-        console.log(this.state.expanded);
         return (
             <List.Accordion
                 title={item.name}

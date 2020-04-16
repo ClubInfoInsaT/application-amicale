@@ -80,7 +80,6 @@ class GroupSelectionScreen extends React.Component<Props, State> {
      * @param str The new search string
      */
     onSearchStringChange = (str: string) => {
-        console.log('search');
         this.setState({currentSearchString: str})
     };
 
@@ -134,7 +133,6 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         else
             this.addGroupToFavorites(newFavorites, group);
         this.setState({favoriteGroups: newFavorites})
-        console.log(newFavorites);
         AsyncStorageManager.getInstance().savePref(
             AsyncStorageManager.getInstance().preferences.planexFavoriteGroups.key,
             JSON.stringify(newFavorites));
