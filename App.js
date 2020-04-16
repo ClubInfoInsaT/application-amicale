@@ -16,6 +16,7 @@ import AprilFoolsManager from "./src/managers/AprilFoolsManager";
 import Update from "./src/constants/Update";
 import ConnectionManager from "./src/managers/ConnectionManager";
 import URLHandler from "./src/utils/URLHandler";
+import {setSafeBounceHeight} from "react-navigation-collapsible";
 
 type Props = {};
 
@@ -62,6 +63,7 @@ export default class App extends React.Component<Props, State> {
         this.defaultData = {};
         this.urlHandler = new URLHandler(this.onInitialURLParsed, this.onDetectURL);
         this.urlHandler.listen();
+        setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 0);
     }
 
     onInitialURLParsed = ({route, data}: Object) => {
