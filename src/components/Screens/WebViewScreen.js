@@ -113,8 +113,9 @@ class WebViewScreen extends React.PureComponent<Props> {
 
     onOpenClicked = () => Linking.openURL(this.props.url);
 
-    postMessage = (message: string) => {
-        this.webviewRef.current.getNode().postMessage(message);
+    injectJavaScript = (script: string) => {
+        // console.log(this.webviewRef.current.getNode().webViewRef.current);
+        this.webviewRef.current.getNode().injectJavaScript(script);
     }
 
     /**

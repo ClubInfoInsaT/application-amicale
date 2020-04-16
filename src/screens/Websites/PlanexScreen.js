@@ -105,15 +105,15 @@ calendar.option({
   }
 });`;
 
-const LISTEN_TO_MESSAGES = `
-document.addEventListener("message", function(event) {
-    //alert(event.data);
+const EXEC_COMMAND = `
+function execCommand(event) {
+    alert(JSON.stringify(event));
     var data = JSON.parse(event.data);
     if (data.action === "setGroup")
         displayAde(data.data);
     else
         $('#calendar').fullCalendar(data.action, data.data);
-}, false);`
+};`
 
 const CUSTOM_CSS = "body>.container{padding-top:20px; padding-bottom: 50px}header,#entite,#groupe_visibility,#calendar .fc-left,#calendar .fc-right{display:none}.fc-toolbar .fc-center{width:100%}.fc-toolbar .fc-center>*{float:none;width:100%;margin:0}#entite{margin-bottom:5px!important}#entite,#groupe{width:calc(100% - 20px);margin:0 10px}#groupe_visibility{width:100%}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-time{font-size:.5rem}#calendar .fc-month-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-month-view .fc-content-skeleton .fc-time{font-size:.7rem}.fc-axis{font-size:.8rem;width:15px!important}.fc-day-header{font-size:.8rem}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}";
 const CUSTOM_CSS_DARK = "body{background-color:#121212}.fc-unthemed .fc-content,.fc-unthemed .fc-divider,.fc-unthemed .fc-list-heading td,.fc-unthemed .fc-list-view,.fc-unthemed .fc-popover,.fc-unthemed .fc-row,.fc-unthemed tbody,.fc-unthemed td,.fc-unthemed th,.fc-unthemed thead{border-color:#222}.fc-toolbar .fc-center>*,h2,table{color:#fff}.fc-event-container{color:#121212}.fc-event-container .fc-bg{opacity:0.2;background-color:#000}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}";
@@ -195,15 +195,17 @@ class PlanexScreen extends React.Component<Props, State> {
             + FULL_CALENDAR_SETTINGS
             + "displayAde(" + groupID + ");" // Reset Ade
             + (DateManager.isWeekend(new Date()) ? "calendar.next()" : "")
-            + LISTEN_TO_MESSAGES
             + INJECT_STYLE;
 
         if (ThemeManager.getNightMode())
             this.customInjectedJS += "$('head').append('<style>" + CUSTOM_CSS_DARK + "</style>');";
 
         this.customInjectedJS +=
-            'removeAlpha();' +
-            '});true;'; // Prevents crash on ios
+            'removeAlpha();'
+            + '});'
+            + EXEC_COMMAND
+            + "function cc(msg) {alert(msg)};"
+            + 'true;'; // Prevents crash on ios
     }
 
     // componentWillUpdate(prevProps: Props) {
@@ -234,7 +236,12 @@ class PlanexScreen extends React.Component<Props, State> {
     };
 
     sendMessage = (action: string, data: any) => {
-        this.webScreenRef.current.postMessage(JSON.stringify({action: action, data: data}));
+        let command;
+        if (action === "setGroup")
+            command = "displayAde(" + data + ")";
+        else
+            command = "$('#calendar').fullCalendar('" + action + "', '" + data + "')";
+        this.webScreenRef.current.injectJavaScript(command + ';true;');
     }
 
     onMessage = (event: Object) => {

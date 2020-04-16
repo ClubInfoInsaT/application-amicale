@@ -30,6 +30,8 @@ export default class AutoHideComponent extends React.Component<Props, State> {
     }
 
     onScroll({nativeEvent}: Object) {
+        if (nativeEvent.velocity === undefined)
+            return;
         if (nativeEvent.velocity.y > 0.2) { // Go down
             if (!this.isAnimationDownPlaying) {
                 this.isAnimationDownPlaying = true;
