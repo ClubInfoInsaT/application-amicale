@@ -4,6 +4,9 @@ import * as React from 'react';
 import {FlatList} from "react-native";
 import {Drawer, List, withTheme} from 'react-native-paper';
 import {Linking} from "expo";
+import Collapsible from "react-native-collapsible";
+import * as Animatable from "react-native-animatable";
+import {View} from "react-native-animatable";
 
 type Props = {
     navigation: Object,
@@ -19,6 +22,8 @@ type State = {
     expanded: boolean
 }
 
+const AnimatedListIcon = Animatable.createAnimatableComponent(List.Icon);
+
 const LIST_ITEM_HEIGHT = 48;
 
 class SideBarSection extends React.PureComponent<Props, State> {
@@ -29,10 +34,12 @@ class SideBarSection extends React.PureComponent<Props, State> {
 
     colors: Object;
     shouldExpand: boolean;
+    chevronRef: Object;
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
+        this.chevronRef = React.createRef();
     }
 
     /**
@@ -104,8 +111,10 @@ class SideBarSection extends React.PureComponent<Props, State> {
     };
 
     toggleAccordion = () => {
-        if ((!this.state.expanded && this.shouldExpand) || !this.shouldExpand)
+        if ((!this.state.expanded && this.shouldExpand) || !this.shouldExpand) {
+            this.chevronRef.current.transitionTo({ rotate: this.state.expanded ? '0deg' : '180deg' });
             this.setState({expanded: !this.state.expanded})
+        }
     };
 
     shouldRenderAccordion() {
@@ -140,13 +149,22 @@ class SideBarSection extends React.PureComponent<Props, State> {
             if (this.shouldExpand)
                 this.toggleAccordion();
             return (
-                <List.Accordion
-                    title={this.props.sectionName}
-                    expanded={this.state.expanded}
-                    onPress={this.toggleAccordion}
-                >
-                    {this.getFlatList()}
-                </List.Accordion>
+                <View>
+                    <List.Item
+                        title={this.props.sectionName}
+                        // expanded={this.state.expanded}
+                        onPress={this.toggleAccordion}
+                        right={(props) => <AnimatedListIcon
+                            ref={this.chevronRef}
+                            {...props}
+                            icon={"chevron-down"}
+                            useNativeDriver
+                        />}
+                    />
+                    <Collapsible collapsed={!this.state.expanded}>
+                        {this.getFlatList()}
+                    </Collapsible>
+                </View>
             );
         } else
             return this.getFlatList();

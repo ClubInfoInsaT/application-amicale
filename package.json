@@ -43,6 +43,7 @@
     "react-native-appearance": "~0.3.3",
     "react-native-autolink": "^3.0.0",
     "react-native-calendars": "^1.260.0",
+    "react-native-collapsible": "^1.5.2",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-image-modal": "^1.0.1",
     "react-native-modalize": "^1.3.6",
