@@ -75,6 +75,13 @@ class AnimatedBottomBar extends React.Component<Props, State> {
                 ref={this.ref}
                 style={styles.container}>
                 <Surface style={styles.surface}>
+                    <View style={styles.fabContainer}>
+                        <FAB
+                            style={styles.fab}
+                            icon="account-clock"
+                            onPress={() => this.props.navigation.navigate('group-select')}
+                        />
+                    </View>
                     <View style={{flexDirection: 'row'}}>
                         <IconButton
                             icon={this.displayModeIcons[this.state.currentMode]}
@@ -85,13 +92,6 @@ class AnimatedBottomBar extends React.Component<Props, State> {
                             color={buttonColor}
                             style={{marginLeft: 5}}
                             onPress={() => this.props.onPress('today', undefined)}/>
-                    </View>
-                    <View style={styles.fabContainer}>
-                    <FAB
-                        style={styles.fab}
-                        icon="account-clock"
-                        onPress={() => this.props.navigation.navigate('group-select')}
-                    />
                     </View>
                     <View style={{flexDirection: 'row'}}>
                         <IconButton
