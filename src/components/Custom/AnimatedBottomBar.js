@@ -4,12 +4,15 @@ import * as React from 'react';
 import {StyleSheet, View} from "react-native";
 import {FAB, IconButton, Surface, withTheme} from "react-native-paper";
 import AutoHideComponent from "./AutoHideComponent";
+import * as Animatable from 'react-native-animatable';
+
+const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
 
 type Props = {
     navigation: Object,
     theme: Object,
     onPress: Function,
-    currentGroup: string,
+    seekAttention: boolean,
 }
 
 type State = {
@@ -42,7 +45,7 @@ class AnimatedBottomBar extends React.Component<Props, State> {
     }
 
     shouldComponentUpdate(nextProps: Props, nextState: State) {
-        return (nextProps.currentGroup !== this.props.currentGroup)
+        return (nextProps.seekAttention !== this.props.seekAttention)
             || (nextState.currentMode !== this.state.currentMode);
     }
 
@@ -76,7 +79,11 @@ class AnimatedBottomBar extends React.Component<Props, State> {
                 style={styles.container}>
                 <Surface style={styles.surface}>
                     <View style={styles.fabContainer}>
-                        <FAB
+                        <AnimatedFAB
+                            animation={this.props.seekAttention ? "jello" : undefined}
+                            easing="ease-out"
+                            iterationCount="infinite"
+                            // useNativeDriver={true}
                             style={styles.fab}
                             icon="account-clock"
                             onPress={() => this.props.navigation.navigate('group-select')}

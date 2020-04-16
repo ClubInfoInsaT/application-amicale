@@ -336,7 +336,7 @@ class PlanexScreen extends React.Component<Props, State> {
                     {...this.props}
                     ref={this.barRef}
                     onPress={this.sendMessage}
-                    currentGroup={this.state.currentGroup.name}
+                    seekAttention={this.state.currentGroup.id === -1}
                 />
             </View>
         );
