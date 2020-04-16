@@ -191,6 +191,7 @@ class PlanexScreen extends React.Component<Props, State> {
             + OBSERVE_MUTATIONS_INJECTED
             + FULL_CALENDAR_SETTINGS
             + "displayAde(" + groupID + ");" // Reset Ade
+            + (DateManager.isWeekend(new Date()) ? "calendar.next()" : "")
             + LISTEN_TO_MESSAGES
             + INJECT_STYLE;
 

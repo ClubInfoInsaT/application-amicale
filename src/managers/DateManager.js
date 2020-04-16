@@ -58,4 +58,8 @@ export default class DateManager {
         return this.daysOfWeek[date.getDay()] + " " + date.getDate() + " " + this.monthsOfYear[date.getMonth()] + " " + date.getFullYear();
     }
 
+    static isWeekend(date: Date) {
+        return date.getDay() === 6 || date.getDay() === 0;
+    }
+
 }
