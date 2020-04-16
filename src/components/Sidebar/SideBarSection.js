@@ -1,12 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList} from "react-native";
+import {FlatList, View} from "react-native";
 import {Drawer, List, withTheme} from 'react-native-paper';
 import {Linking} from "expo";
 import Collapsible from "react-native-collapsible";
 import * as Animatable from "react-native-animatable";
-import {View} from "react-native-animatable";
 
 type Props = {
     navigation: Object,
