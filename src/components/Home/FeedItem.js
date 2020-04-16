@@ -53,7 +53,7 @@ class FeedItem extends React.Component<Props> {
         const cardHeight = this.props.height - 2 * cardMargin;
         const imageSize = 250;
         const titleHeight = 80;
-        const actionsHeight = 48;
+        const actionsHeight = 60;
         const textHeight = hasImage
             ? cardHeight - titleHeight - actionsHeight - imageSize
             : cardHeight - titleHeight - actionsHeight;
