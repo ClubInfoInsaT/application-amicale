@@ -33,7 +33,6 @@ export default class AutoHideComponent extends React.Component<Props, State> {
 
     onScroll({nativeEvent}: Object) {
         const speed = nativeEvent.contentOffset.y < 0 ? 0 : this.lastOffset - nativeEvent.contentOffset.y;
-        console.log(nativeEvent);
         if (speed < -5) { // Go down
             if (!this.isAnimationDownPlaying) {
                 this.isAnimationDownPlaying = true;
