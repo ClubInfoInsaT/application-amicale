@@ -13,7 +13,7 @@ import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../managers/AsyncStorageManager";
-import {useTheme, withTheme} from 'react-native-paper';
+import {FAB, useTheme, withTheme} from 'react-native-paper';
 import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ScannerScreen from "../screens/ScannerScreen";
@@ -21,7 +21,6 @@ import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 import FeedItemScreen from "../screens/FeedItemScreen";
 import {createCollapsibleStack} from "react-navigation-collapsible";
 import GroupSelectionScreen from "../screens/GroupSelectionScreen";
-
 
 const TAB_ICONS = {
     home: 'triangle',
@@ -330,18 +329,31 @@ class TabNavigator extends React.Component<Props> {
         this.createHomeStackComponent = () => HomeStackComponent(props.defaultRoute, props.defaultData);
     }
 
+    getHomeButton(focused: boolean) {
+        let icon = focused ? require('../../assets/tab-icon.png') : require('../../assets/tab-icon-outline.png')
+        return (
+                <FAB
+                    icon={icon}
+                    small
+                    style={{position: 'absolute', top: '-25%'}}/>
+        );
+    }
+
     render() {
         return (
             <Tab.Navigator
                 initialRouteName={this.defaultRoute}
-                barStyle={{backgroundColor: this.props.theme.colors.surface}}
+                barStyle={{backgroundColor: this.props.theme.colors.surface, overflow: 'visible'}}
                 screenOptions={({route}) => ({
-                    tabBarIcon: ({focused, color, size}) => {
+                    tabBarIcon: ({focused, color}) => {
                         let icon = TAB_ICONS[route.name];
-                        // tintColor is ignoring activeColor and inactiveColor for some reason
                         icon = focused ? icon : icon + ('-outline');
-                        return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
+                        if (route.name !== "home")
+                            return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
+                        else
+                            return this.getHomeButton(focused);
                     },
+                    tabBarLabel: route.name !== 'home' ? undefined : ''
                 })}
                 activeColor={this.props.theme.colors.primary}
                 inactiveColor={this.props.theme.colors.tabIcon}
