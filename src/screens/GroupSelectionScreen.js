@@ -80,6 +80,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
      * @param str The new search string
      */
     onSearchStringChange = (str: string) => {
+        console.log('search');
         this.setState({currentSearchString: str})
     };
 

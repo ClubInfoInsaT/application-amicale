@@ -49,6 +49,7 @@ class GroupListAccordion extends React.Component<Props, State> {
 
     renderItem = ({item}: Object) => {
         if (stringMatchQuery(item.name, this.props.currentSearchString)) {
+
             const onPress = () => this.props.onGroupPress(item);
             const onStartPress = () => this.props.onFavoritePress(item);
             return (
@@ -80,6 +81,9 @@ class GroupListAccordion extends React.Component<Props, State> {
 
     render() {
         const item = this.props.item;
+        console.log("=====================================================");
+        console.log(this.props.currentSearchString);
+        console.log(this.state.expanded);
         return (
             <List.Accordion
                 title={item.name}
@@ -106,7 +110,7 @@ class GroupListAccordion extends React.Component<Props, State> {
                     keyExtractor={this.keyExtractor}
                     listKey={item.id}
                     // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-                    getItemLayout={this.itemLayout}
+                    // getItemLayout={this.itemLayout} // Broken with search
                     removeClippedSubviews={true}
                 />
             </List.Accordion>
