@@ -21,6 +21,8 @@ export default class AutoHideComponent extends React.Component<Props, State> {
     downAnimation;
     upAnimation;
 
+    lastOffset: number;
+
     state = {
         fabPosition: new Animated.Value(0),
     };
@@ -30,9 +32,8 @@ export default class AutoHideComponent extends React.Component<Props, State> {
     }
 
     onScroll({nativeEvent}: Object) {
-        if (nativeEvent.velocity === undefined)
-            return;
-        if (nativeEvent.velocity.y > 0.2) { // Go down
+        const speed = this.lastOffset - nativeEvent.contentOffset.y;
+        if (speed < -5) { // Go down
             if (!this.isAnimationDownPlaying) {
                 this.isAnimationDownPlaying = true;
                 if (this.isAnimationUpPlaying)
@@ -46,7 +47,7 @@ export default class AutoHideComponent extends React.Component<Props, State> {
                     this.isAnimationDownPlaying = false
                 });
             }
-        } else if (nativeEvent.velocity.y < -0.2) { // Go up
+        } else if (speed > 5) { // Go up
             if (!this.isAnimationUpPlaying) {
                 this.isAnimationUpPlaying = true;
                 if (this.isAnimationDownPlaying)
@@ -61,6 +62,7 @@ export default class AutoHideComponent extends React.Component<Props, State> {
                 });
             }
         }
+        this.lastOffset = nativeEvent.contentOffset.y;
     }
 
     render() {
