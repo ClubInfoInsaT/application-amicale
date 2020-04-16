@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     fab: {
         position: 'absolute',
         alignSelf: 'center',
-        top: -10,
+        top: '-25%',
     }
 });
 
