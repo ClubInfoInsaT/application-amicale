@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {Avatar, List, ProgressBar, Surface, Text, withTheme} from 'react-native-paper';
+import {ActivityIndicator, Avatar, List, ProgressBar, Surface, Text, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
 import i18n from "i18n-js";
 import AprilFoolsManager from "../../managers/AprilFoolsManager";
+import * as Animatable from "react-native-animatable";
 
 type Props = {
     item: Object,
@@ -12,6 +13,9 @@ type Props = {
     isDryer: boolean,
     height: number,
 }
+
+const AnimatedIcon = Animatable.createAnimatableComponent(Avatar.Icon);
+
 
 /**
  * Component used to display a proxiwash item, showing machine progression and state
@@ -83,14 +87,21 @@ class ProxiwashListItem extends React.Component<Props> {
             : 1;
 
         const icon = props.isWatched
-            ? <Avatar.Icon
+            ? <AnimatedIcon
                 icon={'bell-ring'}
-                size={45}
+                animation={"rubberBand"}
+                useNativeDriver
+                size={50}
                 color={colors.primary}
                 style={styles.icon}
             />
-            : <Avatar.Icon
+            : <AnimatedIcon
                 icon={props.isDryer ? 'tumble-dryer' : 'washing-machine'}
+                animation={isRunning ? "flash" : undefined}
+                iterationCount={"infinite"}
+                easing={"linear"}
+                duration={2000}
+                useNativeDriver
                 size={40}
                 color={colors.text}
                 style={styles.icon}
@@ -136,12 +147,20 @@ class ProxiwashListItem extends React.Component<Props> {
                                 </Text>
                             </View>
                             <View style={{justifyContent: 'center',}}>
-                                <Avatar.Icon
-                                    icon={stateIcon}
-                                    color={colors.text}
-                                    size={30}
-                                    style={styles.icon}
-                                />
+                                {
+                                    isRunning
+                                        ? <ActivityIndicator
+                                            animating={true}
+                                            size={'small'}
+                                            style={{marginLeft: 10}}/>
+                                        : <Avatar.Icon
+                                            icon={stateIcon}
+                                            color={colors.text}
+                                            size={30}
+                                            style={styles.icon}
+                                        />
+                                }
+
                             </View>
                         </View>)}
                 />
