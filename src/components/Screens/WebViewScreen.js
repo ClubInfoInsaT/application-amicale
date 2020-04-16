@@ -114,7 +114,6 @@ class WebViewScreen extends React.PureComponent<Props> {
     onOpenClicked = () => Linking.openURL(this.props.url);
 
     injectJavaScript = (script: string) => {
-        // console.log(this.webviewRef.current.getNode().webViewRef.current);
         this.webviewRef.current.getNode().injectJavaScript(script);
     }
 
@@ -125,46 +124,21 @@ class WebViewScreen extends React.PureComponent<Props> {
      */
     getRenderLoading = () => <BasicLoadingScreen isAbsolute={true}/>;
 
-// document.getElementsByTagName('body')[0].style.paddingTop = '100px';
-
-// $( 'body *' ).filter(function(){
-//   var position = $(this).css('position');
-//   var top = $(this).css('top');
-//   if((position === 'fixed') && top !== 'auto'){
-//     console.log(top);
-//     $(this).css('top', 'calc(' + top + ' + 100px)');
-//     console.log($(this).css('top'));
-//   };
-// });
-
-// document.querySelectorAll('body *').forEach(function(node){
-//   var style = window.getComputedStyle(node);
-//   var position = style.getPropertyValue('position');
-//   var top = style.getPropertyValue('top');
-//   if((position === 'fixed') && top !== 'auto'){
-//     console.log(top);
-//     node.style.top = 'calc(' + top + ' + 100px)';
-//     console.log(node.style.top);
-//   	console.log(node);
-//   };
-// });
-
     getJavascriptPadding(padding: number) {
         return (
-            "document.getElementsByTagName('body')[0].style.paddingTop = '" + padding + "px';\n" +
+            "document.getElementsByTagName('body')[0].style.paddingTop = '" + padding + "px';" +
             "true;"
         );
     }
 
     render() {
         const {containerPaddingTop, onScrollWithListener} = this.props.collapsibleStack;
-        const customJS = this.getJavascriptPadding(containerPaddingTop);
         return (
             <AnimatedWebView
                 ref={this.webviewRef}
                 source={{uri: this.props.url}}
                 startInLoadingState={true}
-                injectedJavaScript={this.props.customJS + customJS}
+                injectedJavaScript={this.props.customJS}
                 javaScriptEnabled={true}
                 renderLoading={this.getRenderLoading}
                 renderError={() => <ErrorView
@@ -175,6 +149,7 @@ class WebViewScreen extends React.PureComponent<Props> {
                     this.canGoBack = navState.canGoBack;
                 }}
                 onMessage={this.props.onMessage}
+                onLoad={() => this.injectJavaScript(this.getJavascriptPadding(containerPaddingTop))}
                 // Animations
                 onScroll={onScrollWithListener(this.props.onScroll)}
             />

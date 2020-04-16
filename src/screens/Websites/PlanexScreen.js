@@ -204,7 +204,6 @@ class PlanexScreen extends React.Component<Props, State> {
             'removeAlpha();'
             + '});'
             + EXEC_COMMAND
-            + "function cc(msg) {alert(msg)};"
             + 'true;'; // Prevents crash on ios
     }
 
