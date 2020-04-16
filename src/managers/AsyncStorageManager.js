@@ -84,6 +84,11 @@ export default class AsyncStorageManager {
             default: '',
             current: '',
         },
+        planexFavoriteGroups: {
+            key: 'planexFavoriteGroups',
+            default: '[]',
+            current: '',
+        },
     };
 
     /**

@@ -7,6 +7,7 @@ import {Searchbar, withTheme} from "react-native-paper";
 import {stringMatchQuery} from "../utils/Search";
 import WebSectionList from "../components/Lists/WebSectionList";
 import GroupListAccordion from "../components/Lists/GroupListAccordion";
+import AsyncStorageManager from "../managers/AsyncStorageManager";
 
 const LIST_ITEM_HEIGHT = 70;
 
@@ -19,6 +20,7 @@ type Props = {
 
 type State = {
     currentSearchString: string,
+    favoriteGroups: Array<Object>,
 };
 
 function sortName(a, b) {
@@ -41,6 +43,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         super(props);
         this.state = {
             currentSearchString: '',
+            favoriteGroups: JSON.parse(AsyncStorageManager.getInstance().preferences.planexFavoriteGroups.current),
         };
     }
 
@@ -93,6 +96,49 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         });
     };
 
+    onListFavoritePress = (item: Object) => {
+        this.updateGroupFavorites(item);
+    };
+
+    isGroupInFavorites(group: Object) {
+        let isFav = false;
+        for (let i = 0; i < this.state.favoriteGroups.length; i++) {
+            if (group.id === this.state.favoriteGroups[i].id) {
+                isFav = true;
+                break;
+            }
+        }
+        return isFav;
+    }
+
+    removeGroupFromFavorites(favorites: Array<Object>, group: Object) {
+        for (let i = 0; i < favorites.length; i++) {
+            if (group.id === favorites[i].id) {
+                favorites.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    addGroupToFavorites(favorites: Array<Object>, group: Object) {
+        group.isFav = true;
+        favorites.push(group);
+        favorites.sort(sortName);
+    }
+
+    updateGroupFavorites(group: Object) {
+        let newFavorites = [...this.state.favoriteGroups]
+        if (this.isGroupInFavorites(group))
+            this.removeGroupFromFavorites(newFavorites, group);
+        else
+            this.addGroupToFavorites(newFavorites, group);
+        this.setState({favoriteGroups: newFavorites})
+        console.log(newFavorites);
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.planexFavoriteGroups.key,
+            JSON.stringify(newFavorites));
+    }
+
     shouldDisplayAccordion(item: Object) {
         let shouldDisplay = false;
         for (let i = 0; i < item.content.length; i++) {
@@ -116,7 +162,9 @@ class GroupSelectionScreen extends React.Component<Props, State> {
                 <GroupListAccordion
                     item={item}
                     onGroupPress={this.onListItemPress}
+                    onFavoritePress={this.onListFavoritePress}
                     currentSearchString={this.state.currentSearchString}
+                    favoriteNumber={this.state.favoriteGroups.length}
                     height={LIST_ITEM_HEIGHT}
                 />
             );
@@ -127,16 +175,18 @@ class GroupSelectionScreen extends React.Component<Props, State> {
     generateData(fetchedData: Object) {
         let data = [];
         for (let key in fetchedData) {
-            this.formatGroupNames(fetchedData[key]);
+            this.formatGroups(fetchedData[key]);
             data.push(fetchedData[key]);
         }
         data.sort(sortName);
+        data.unshift({name: "FAVORITES", id: "0", content: this.state.favoriteGroups});
         return data;
     }
 
-    formatGroupNames(item: Object) {
+    formatGroups(item: Object) {
         for (let i = 0; i < item.content.length; i++) {
             item.content[i].name = item.content[i].name.replace(REPLACE_REGEX, " ")
+            item.content[i].isFav = this.isGroupInFavorites(item.content[i]);
         }
     }
 
@@ -167,7 +217,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
                     refreshOnFocus={false}
                     fetchUrl={GROUPS_URL}
                     renderItem={this.renderItem}
-                    updateData={this.state.currentSearchString}
+                    updateData={this.state.currentSearchString + this.state.favoriteGroups.length}
                     itemHeight={LIST_ITEM_HEIGHT}
                 />
             </View>

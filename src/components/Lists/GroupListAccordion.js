@@ -1,15 +1,18 @@
 // @flow
 
 import * as React from 'react';
-import {List} from 'react-native-paper';
+import {IconButton, List, withTheme} from 'react-native-paper';
 import {FlatList} from "react-native";
 import {stringMatchQuery} from "../../utils/Search";
 
 type Props = {
     item: Object,
     onGroupPress: Function,
+    onFavoritePress: Function,
     currentSearchString: string,
+    favoriteNumber: number,
     height: number,
+    theme: Object,
 }
 
 type State = {
@@ -18,10 +21,13 @@ type State = {
 
 const LIST_ITEM_HEIGHT = 64;
 
-export default class GroupListAccordion extends React.Component<Props, State> {
+class GroupListAccordion extends React.Component<Props, State> {
 
-    state = {
-        expanded: false,
+    constructor(props) {
+        super(props);
+        this.state = {
+            expanded: props.item.id === "0",
+        }
     }
 
     shouldComponentUpdate(nextProps: Props, nextSate: State) {
@@ -29,16 +35,22 @@ export default class GroupListAccordion extends React.Component<Props, State> {
             this.state.expanded = nextProps.currentSearchString.length > 0;
 
         return (nextProps.currentSearchString !== this.props.currentSearchString)
-            || (nextSate.expanded !== this.state.expanded);
+            || (nextSate.expanded !== this.state.expanded)
+            || (nextProps.favoriteNumber !== this.props.favoriteNumber);
     }
 
     onPress = () => this.setState({expanded: !this.state.expanded});
 
     keyExtractor = (item: Object) => item.id.toString();
 
+    isItemFavorite(item: Object) {
+        return item.isFav !== undefined && item.isFav;
+    }
+
     renderItem = ({item}: Object) => {
         if (stringMatchQuery(item.name, this.props.currentSearchString)) {
             const onPress = () => this.props.onGroupPress(item);
+            const onStartPress = () => this.props.onFavoritePress(item);
             return (
                 <List.Item
                     title={item.name}
@@ -48,9 +60,12 @@ export default class GroupListAccordion extends React.Component<Props, State> {
                             {...props}
                             icon={"chevron-right"}/>}
                     right={props =>
-                        <List.Icon
+                        <IconButton
                             {...props}
-                            icon={"star"}/>}
+                            icon={"star"}
+                            onPress={onStartPress}
+                            color={this.isItemFavorite(item) ? this.props.theme.colors.tetrisScore : props.color}
+                        />}
                     style={{
                         height: LIST_ITEM_HEIGHT,
                         justifyContent: 'center',
@@ -74,6 +89,14 @@ export default class GroupListAccordion extends React.Component<Props, State> {
                     height: this.props.height,
                     justifyContent: 'center',
                 }}
+                left={props =>
+                    item.id === "0"
+                    ? <List.Icon
+                        {...props}
+                        icon={"star"}
+                        color={this.props.theme.colors.tetrisScore}
+                    />
+                : null}
             >
                 {/*$FlowFixMe*/}
                 <FlatList
@@ -90,3 +113,5 @@ export default class GroupListAccordion extends React.Component<Props, State> {
         );
     }
 }
+
+export default withTheme(GroupListAccordion)
