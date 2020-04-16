@@ -291,6 +291,9 @@ function PlanexStackComponent() {
                     options={({navigation}) => {
                         return {
                             title: 'GroupSelectionScreen',
+                            headerStyle: {
+                                backgroundColor: colors.surface,
+                            },
                             ...TransitionPresets.ModalSlideFromBottomIOS,
                         };
                     }}
@@ -345,11 +348,14 @@ class TabNavigator extends React.Component<Props> {
             >
                 <Tab.Screen
                     name="proximo"
+                    option
                     component={ProximoStackComponent}
+                    options={{title: i18n.t('screens.proximo')}}
                 />
                 <Tab.Screen
                     name="planning"
                     component={PlanningStackComponent}
+                    options={{title: i18n.t('screens.planning')}}
                 />
                 <Tab.Screen
                     name="home"
@@ -359,10 +365,12 @@ class TabNavigator extends React.Component<Props> {
                 <Tab.Screen
                     name="proxiwash"
                     component={ProxiwashStackComponent}
+                    options={{title: i18n.t('screens.proxiwash')}}
                 />
                 <Tab.Screen
                     name="planex"
                     component={PlanexStackComponent}
+                    options={{title: "Planex"}}
                 />
             </Tab.Navigator>
         );
