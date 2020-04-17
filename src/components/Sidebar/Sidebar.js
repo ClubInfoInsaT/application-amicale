@@ -192,7 +192,7 @@ class SideBar extends React.Component<Props, State> {
         try {
             const state = event.data.state.routes[0].state; // Get the Drawer's state if it exists
             // Get the current route name. This will only show Drawer routes.
-            // Tab routes will be shown as 'Main'
+            // Tabbar routes will be shown as 'Main'
             const routeName = state.routeNames[state.index];
             if (this.state.activeRoute !== routeName)
                 this.setState({activeRoute: routeName});

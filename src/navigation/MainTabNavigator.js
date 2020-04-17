@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import {createMaterialBottomTabNavigator} from "@react-navigation/material-bottom-tabs";
+import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 
 import HomeScreen from '../screens/HomeScreen';
 import PlanningScreen from '../screens/Planning/PlanningScreen';
@@ -11,9 +11,8 @@ import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
 import ProximoListScreen from "../screens/Proximo/ProximoListScreen";
 import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Websites/PlanexScreen';
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import AsyncStorageManager from "../managers/AsyncStorageManager";
-import {FAB, useTheme, withTheme} from 'react-native-paper';
+import {useTheme, withTheme} from 'react-native-paper';
 import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ScannerScreen from "../screens/ScannerScreen";
@@ -21,6 +20,7 @@ import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 import FeedItemScreen from "../screens/FeedItemScreen";
 import {createCollapsibleStack} from "react-navigation-collapsible";
 import GroupSelectionScreen from "../screens/GroupSelectionScreen";
+import CustomTabBar from "../components/Tabbar/CustomTabBar";
 
 const TAB_ICONS = {
     home: 'triangle',
@@ -306,7 +306,7 @@ function PlanexStackComponent() {
     );
 }
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 type Props = {
     defaultRoute: string | null,
@@ -329,16 +329,6 @@ class TabNavigator extends React.Component<Props> {
         this.createHomeStackComponent = () => HomeStackComponent(props.defaultRoute, props.defaultData);
     }
 
-    getHomeButton(focused: boolean) {
-        let icon = focused ? require('../../assets/tab-icon.png') : require('../../assets/tab-icon-outline.png')
-        return (
-                <FAB
-                    icon={icon}
-                    small
-                    style={{position: 'absolute', top: '-25%'}}/>
-        );
-    }
-
     render() {
         return (
             <Tab.Navigator
@@ -349,14 +339,15 @@ class TabNavigator extends React.Component<Props> {
                         let icon = TAB_ICONS[route.name];
                         icon = focused ? icon : icon + ('-outline');
                         if (route.name !== "home")
-                            return <MaterialCommunityIcons name={icon} color={color} size={26}/>;
+                            return icon;
                         else
-                            return this.getHomeButton(focused);
+                            return null;
                     },
-                    tabBarLabel: route.name !== 'home' ? undefined : ''
+                    tabBarLabel: route.name !== 'home' ? undefined : '',
+                    activeColor: this.props.theme.colors.primary,
+                    inactiveColor: this.props.theme.colors.tabIcon
                 })}
-                activeColor={this.props.theme.colors.primary}
-                inactiveColor={this.props.theme.colors.tabIcon}
+                tabBar={props => <CustomTabBar {...props} />}
             >
                 <Tab.Screen
                     name="proximo"
