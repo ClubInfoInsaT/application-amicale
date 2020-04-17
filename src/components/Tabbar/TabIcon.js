@@ -35,15 +35,15 @@ class TabIcon extends React.Component<Props> {
                     scale: 1, translateY: 0
                 },
                 "0.9": {
-                    scale: 1.6, translateY: 6
+                    scale: 1.5, translateY: 7
                 },
                 "1": {
-                    scale: 1.5, translateY: 5
+                    scale: 1.4, translateY: 6
                 },
             },
             focusOut: {
                 "0": {
-                    scale: 1.5, translateY: 5
+                    scale: 1.4, translateY: 6
                 },
                 "1": {
                     scale: 1, translateY: 0

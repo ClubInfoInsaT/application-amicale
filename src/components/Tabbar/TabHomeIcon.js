@@ -20,7 +20,7 @@ const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
 class TabHomeIcon extends React.Component<Props> {
 
     focusedIcon = require('../../../assets/tab-icon.png');
-    unFocusedIcon = require('../../../assets/tab-icon-outline.png');
+    unFocusedIcon = require('../../../assets/tab-icon-outline.png'); // has a weird rotating on icon change
 
     constructor(props) {
         super(props);
@@ -30,15 +30,15 @@ class TabHomeIcon extends React.Component<Props> {
                     scale: 1, translateY: 0
                 },
                 "0.9": {
-                    scale: 1.4, translateY: -6
+                    scale: 1.3, translateY: -6
                 },
                 "1": {
-                    scale: 1.3, translateY: -5
+                    scale: 1.2, translateY: -5
                 },
             },
             fabFocusOut: {
                 "0": {
-                    scale: 1.3, translateY: -5
+                    scale: 1.2, translateY: -5
                 },
                 "1": {
                     scale: 1, translateY: 0
