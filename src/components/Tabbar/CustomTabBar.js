@@ -77,12 +77,15 @@ class CustomTabBar extends React.Component<Props> {
                             label={label}
                             focused={isFocused}
                             extraData={state.index > index}
+                            key={route.key}
                         />
                     } else
                         return <TabHomeIcon
                             onPress={onPress}
                             onLongPress={onLongPress}
-                            focused={isFocused}/>
+                            focused={isFocused}
+                            key={route.key}
+                        />
                 })}
             </View>
         );
