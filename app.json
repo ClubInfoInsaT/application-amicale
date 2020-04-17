@@ -20,8 +20,8 @@
     "androidStatusBar": {
       "barStyle": "light-content",
       "hidden": false,
-      "translucent": true,
-      "backgroundColor": "#00000000"
+      "translucent": false,
+      "backgroundColor": "#000000"
     },
     "androidNavigationBar": {
       "barStyle": "light-content",

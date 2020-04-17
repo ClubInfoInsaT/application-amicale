@@ -74,7 +74,6 @@ class FeedItem extends React.Component<Props> {
                 {hasImage ?
                     <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
                         <ImageModal
-                            isTranslucent={Platform.OS === 'android'}
                             resizeMode="contain"
                             imageBackgroundColor={"#000"}
                             style={{

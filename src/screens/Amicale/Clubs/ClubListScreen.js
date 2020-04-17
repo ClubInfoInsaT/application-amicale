@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, Platform} from "react-native";
+import {Animated, Platform, StatusBar} from "react-native";
 import {Chip, Searchbar, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import i18n from "i18n-js";
@@ -97,6 +97,12 @@ class ClubListScreen extends React.Component<Props, State> {
     getScreen = (data: Object) => {
         this.categories = data[0].categories;
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
+        const padding = Platform.OS === 'android' // Fix for android non translucent bar on expo
+            ? containerPaddingTop - StatusBar.currentHeight
+            : containerPaddingTop;
+        const inset = Platform.OS === 'android'
+            ? scrollIndicatorInsetTop - StatusBar.currentHeight
+            : scrollIndicatorInsetTop;
         return (
             //$FlowFixMe
             <Animated.FlatList
@@ -109,8 +115,8 @@ class ClubListScreen extends React.Component<Props, State> {
                 getItemLayout={this.itemLayout}
                 // Animations
                 onScroll={onScroll}
-                contentContainerStyle={{paddingTop: containerPaddingTop}}
-                scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+                contentContainerStyle={{paddingTop: padding}}
+                scrollIndicatorInsets={{top: inset}}
             />
         )
     };

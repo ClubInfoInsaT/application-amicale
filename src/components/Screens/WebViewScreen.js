@@ -9,7 +9,7 @@ import MaterialHeaderButtons, {Item} from '../Custom/HeaderButton';
 import {HiddenItem} from "react-navigation-header-buttons";
 import {Linking} from "expo";
 import i18n from 'i18n-js';
-import {Animated, BackHandler} from "react-native";
+import {Animated, BackHandler, Platform, StatusBar} from "react-native";
 import {withCollapsible} from "../../utils/withCollapsible";
 
 type Props = {
@@ -133,6 +133,9 @@ class WebViewScreen extends React.PureComponent<Props> {
 
     render() {
         const {containerPaddingTop, onScrollWithListener} = this.props.collapsibleStack;
+        const padding = Platform.OS === 'android'  // Fix for android non translucent bar on expo
+            ? containerPaddingTop - StatusBar.currentHeight
+            : containerPaddingTop;
         return (
             <AnimatedWebView
                 ref={this.webviewRef}
@@ -149,7 +152,7 @@ class WebViewScreen extends React.PureComponent<Props> {
                     this.canGoBack = navState.canGoBack;
                 }}
                 onMessage={this.props.onMessage}
-                onLoad={() => this.injectJavaScript(this.getJavascriptPadding(containerPaddingTop))}
+                onLoad={() => this.injectJavaScript(this.getJavascriptPadding(padding))}
                 // Animations
                 onScroll={onScrollWithListener(this.props.onScroll)}
             />

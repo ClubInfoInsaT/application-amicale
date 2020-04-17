@@ -5,7 +5,7 @@ import ThemeManager from "../../managers/ThemeManager";
 import WebViewScreen from "../../components/Screens/WebViewScreen";
 import {Avatar, Banner, withTheme} from "react-native-paper";
 import i18n from "i18n-js";
-import {View} from "react-native";
+import {Platform, StatusBar, View} from "react-native";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import AlertDialog from "../../components/Dialog/AlertDialog";
 import {withCollapsible} from "../../utils/withCollapsible";
@@ -299,13 +299,16 @@ class PlanexScreen extends React.Component<Props, State> {
 
     render() {
         const {containerPaddingTop} = this.props.collapsibleStack;
+        const padding = Platform.OS === 'android' // Fix for android non translucent bar on expo
+            ? containerPaddingTop - StatusBar.currentHeight
+            : containerPaddingTop;
         return (
             <AnimatedFocusView
                 {...this.props}
             >
                 <Banner
                     style={{
-                        marginTop: this.state.bannerVisible ? containerPaddingTop : 0,
+                        marginTop: this.state.bannerVisible ? padding : 0,
                     }}
                     visible={this.state.bannerVisible}
                     actions={[

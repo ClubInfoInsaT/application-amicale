@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, Image, Platform, ScrollView, View} from "react-native";
+import {Animated, Image, Platform, ScrollView, StatusBar, View} from "react-native";
 import i18n from "i18n-js";
 import CustomModal from "../../components/Custom/CustomModal";
 import {RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
@@ -298,6 +298,12 @@ class ProximoListScreen extends React.Component<Props, State> {
 
     render() {
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
+        const padding = Platform.OS === 'android' // Fix for android non translucent bar on expo
+            ? containerPaddingTop - StatusBar.currentHeight
+            : containerPaddingTop;
+        const inset = Platform.OS === 'android'
+            ? scrollIndicatorInsetTop - StatusBar.currentHeight
+            : scrollIndicatorInsetTop;
         return (
             <View style={{
                 height: '100%'
@@ -317,8 +323,8 @@ class ProximoListScreen extends React.Component<Props, State> {
                     initialNumToRender={10}
                     // Animations
                     onScroll={onScroll}
-                    contentContainerStyle={{paddingTop: containerPaddingTop}}
-                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+                    contentContainerStyle={{paddingTop: padding}}
+                    scrollIndicatorInsets={{top: inset}}
                 />
             </View>
         );

@@ -17,7 +17,6 @@ import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 import {AnimatedValue} from "react-native-reanimated";
 import AnimatedFAB from "../components/Custom/AnimatedFAB";
 import AnimatedFocusView from "../components/Custom/AnimatedFocusView";
-import {SafeAreaView} from "react-native-safe-area-context";
 // import DATA from "../dashboard_data.json";
 
 
@@ -472,7 +471,6 @@ class HomeScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         return (
-            <SafeAreaView style={{flex: 1,}}>
             <AnimatedFocusView
                 {...this.props}
             >
@@ -492,7 +490,6 @@ class HomeScreen extends React.Component<Props, State> {
                     onPress={this.openScanner}
                 />
             </AnimatedFocusView>
-            </SafeAreaView>
         );
     }
 }

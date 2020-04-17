@@ -89,13 +89,15 @@ export default class App extends React.Component<Props, State> {
     };
 
     setupStatusBar() {
-        if (ThemeManager.getNightMode()) {
-            StatusBar.setBarStyle('light-content', true);
-        } else {
-            StatusBar.setBarStyle('dark-content', true);
+        if (Platform.OS === 'ios') {
+            if (ThemeManager.getNightMode()) {
+                StatusBar.setBarStyle('light-content', true);
+            } else {
+                StatusBar.setBarStyle('dark-content', true);
+            }
         }
-        StatusBar.setTranslucent(false);
-        StatusBar.setBackgroundColor(ThemeManager.getCurrentTheme().colors.surface);
+        // StatusBar.setTranslucent(false);
+        // StatusBar.setBackgroundColor(ThemeManager.getCurrentTheme().colors.surface);
     }
 
     /**
