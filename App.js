@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, StatusBar} from 'react-native';
+import {Platform, StatusBar, YellowBox} from 'react-native';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
 import CustomIntroSlider from "./src/components/Custom/CustomIntroSlider";
@@ -17,6 +17,10 @@ import Update from "./src/constants/Update";
 import ConnectionManager from "./src/managers/ConnectionManager";
 import URLHandler from "./src/utils/URLHandler";
 import {setSafeBounceHeight} from "react-navigation-collapsible";
+
+YellowBox.ignoreWarnings([ // collapsible headers cause this warning, just ignore as it is not an issue
+    'Non-serializable values were found in the navigation state',
+]);
 
 type Props = {};
 
