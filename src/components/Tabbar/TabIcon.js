@@ -100,6 +100,7 @@ class TabIcon extends React.Component<Props> {
                             color: props.color,
                             marginLeft: 'auto',
                             marginRight: 'auto',
+                            fontSize: 10,
                         }}
                     >
                         {props.label}
