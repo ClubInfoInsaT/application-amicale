@@ -24,8 +24,8 @@
       "backgroundColor": "#00000000"
     },
     "androidNavigationBar": {
-      "visible": true,
-      "barStyle": "light-content"
+      "barStyle": "light-content",
+      "backgroundColor": "#121212"
     },
     "splash": {
       "backgroundColor": "#be1522",
