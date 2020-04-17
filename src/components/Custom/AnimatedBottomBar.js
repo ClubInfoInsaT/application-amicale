@@ -80,9 +80,11 @@ class AnimatedBottomBar extends React.Component<Props, State> {
                 <Surface style={styles.surface}>
                     <View style={styles.fabContainer}>
                         <AnimatedFAB
-                            animation={this.props.seekAttention ? "jello" : undefined}
+                            animation={this.props.seekAttention ? "bounce" : undefined}
                             easing="ease-out"
+                            iterationDelay={500}
                             iterationCount="infinite"
+                            useNativeDriver
                             // useNativeDriver={true}
                             style={styles.fab}
                             icon="account-clock"
