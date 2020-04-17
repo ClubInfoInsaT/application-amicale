@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {View} from "react-native";
 import {withTheme} from 'react-native-paper';
 import TabIcon from "./TabIcon";
 import TabHomeIcon from "./TabHomeIcon";
+import * as Animatable from 'react-native-animatable';
 
 type Props = {
     state: Object,
@@ -42,10 +42,15 @@ class CustomTabBar extends React.Component<Props> {
         const descriptors = this.props.descriptors;
         const navigation = this.props.navigation;
         return (
-            <View style={{
-                flexDirection: 'row',
-                height: TAB_BAR_HEIGHT,
-            }}>
+            <Animatable.View
+                animation={"fadeInUp"}
+                duration={500}
+                useNativeDriver
+                style={{
+                    flexDirection: 'row',
+                    height: TAB_BAR_HEIGHT,
+                }}
+            >
                 {state.routes.map((route, index) => {
                     const {options} = descriptors[route.key];
                     const label =
@@ -87,7 +92,7 @@ class CustomTabBar extends React.Component<Props> {
                             key={route.key}
                         />
                 })}
-            </View>
+            </Animatable.View>
         );
     }
 }
