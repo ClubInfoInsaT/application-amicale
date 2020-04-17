@@ -97,10 +97,10 @@ class ProxiwashListItem extends React.Component<Props> {
             />
             : <AnimatedIcon
                 icon={props.isDryer ? 'tumble-dryer' : 'washing-machine'}
-                animation={isRunning ? "flash" : undefined}
+                animation={isRunning ? "pulse" : undefined}
                 iterationCount={"infinite"}
                 easing={"linear"}
-                duration={2000}
+                duration={1000}
                 useNativeDriver
                 size={40}
                 color={colors.text}
