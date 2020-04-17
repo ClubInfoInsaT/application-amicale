@@ -3,18 +3,30 @@
     "name": "Campus",
     "description": "Application mobile compatible Android et iOS pour l'Amicale INSA Toulouse. Grâce à cette application, vous avez facilement accès aux news du campus, aux emplois du temps, à l'état de la laverie, et bien d'autres services ! Ceci est une version Beta, Toutes les fonctionnalités ne sont pas encore implémentées, et il est possible de rencontrer quelques bugs.",
     "slug": "application-amicale",
-    "scheme": "campus-insat",
+    "backgroundColor": "#ffffff",
     "privacy": "public",
+    "version": "2.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
-    "version": "2.0.0",
     "orientation": "portrait",
     "primaryColor": "#be1522",
-    "userInterfaceStyle": "automatic",
     "icon": "./assets/android.icon.png",
+    "scheme": "campus-insat",
+    "facebookAutoInitEnabled": false,
+    "facebookAutoLogAppEventsEnabled": false,
+    "facebookAdvertiserIDCollectionEnabled": false,
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "hidden": false,
+      "translucent": true,
+      "backgroundColor": "#00000000"
+    },
+    "androidNavigationBar": {
+      "visible": true,
+      "barStyle": "light-content"
+    },
     "splash": {
       "backgroundColor": "#be1522",
       "resizeMode": "contain",
@@ -28,12 +40,13 @@
     "updates": {
       "enabled": false
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
       "bundleIdentifier": "fr.amicaleinsat.application",
-      "icon": "./assets/ios.icon.png"
+      "icon": "./assets/ios.icon.png",
+      "appStoreUrl": "https://apps.apple.com/us/app/campus-amicale-insat/id1477722148?ls=1",
+      "usesIcloudStorage": false,
+      "usesAppleSignIn":  false,
+      "accessesContactNotes": false
     },
     "android": {
       "package": "fr.amicaleinsat.application",
@@ -43,10 +56,17 @@
         "foregroundImage": "./assets/android.adaptive-icon.png",
         "backgroundColor": "#be1522"
       },
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=fr.amicaleinsat.application",
       "permissions": [
         "VIBRATE",
         "CAMERA"
       ]
-    }
+    },
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+
+
   }
 }

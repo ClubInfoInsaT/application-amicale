@@ -40,9 +40,6 @@ export default class App extends React.Component<Props, State> {
         currentTheme: null,
     };
 
-    onIntroDone: Function;
-    onUpdateTheme: Function;
-
     navigatorRef: Object;
 
     defaultRoute: string | null;
@@ -55,8 +52,6 @@ export default class App extends React.Component<Props, State> {
     constructor() {
         super();
         LocaleManager.initTranslations();
-        this.onIntroDone = this.onIntroDone.bind(this);
-        this.onUpdateTheme = this.onUpdateTheme.bind(this);
         SplashScreen.preventAutoHide();
         this.navigatorRef = React.createRef();
         this.defaultRoute = null;
@@ -82,12 +77,12 @@ export default class App extends React.Component<Props, State> {
     /**
      * Updates the theme
      */
-    onUpdateTheme() {
+    onUpdateTheme = () => {
         this.setState({
             currentTheme: ThemeManager.getCurrentTheme()
         });
         this.setupStatusBar();
-    }
+    };
 
     setupStatusBar() {
         if (ThemeManager.getNightMode()) {
@@ -95,12 +90,14 @@ export default class App extends React.Component<Props, State> {
         } else {
             StatusBar.setBarStyle('dark-content', true);
         }
+        StatusBar.setTranslucent(false);
+        StatusBar.setBackgroundColor(ThemeManager.getCurrentTheme().colors.surface);
     }
 
     /**
      * Callback when user ends the intro. Save in preferences to avaoid showing back the introSlides
      */
-    onIntroDone() {
+    onIntroDone = () => {
         this.setState({
             showIntro: false,
             showUpdate: false,
@@ -109,7 +106,7 @@ export default class App extends React.Component<Props, State> {
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showIntro.key, '0');
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.updateNumber.key, Update.number.toString());
         AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showAprilFoolsStart.key, '0');
-    }
+    };
 
     async componentDidMount() {
         await this.loadAssetsAsync();
