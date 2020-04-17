@@ -18,6 +18,25 @@ const TAB_BAR_HEIGHT = 48;
  */
 class CustomTabBar extends React.Component<Props> {
 
+    shouldComponentUpdate(nextProps: Props): boolean {
+        return (nextProps.theme.dark !== this.props.theme.dark)
+            || (nextProps.state.index !== this.props.state.index);
+    }
+
+    onItemPress(route: Object, currentIndex: number, destIndex: number) {
+        const event = this.props.navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+        });
+        if (currentIndex !== destIndex && !event.defaultPrevented) {
+            this.props.navigation.navigate(route.name, {
+                screen: 'index',
+                params: {animationDir: currentIndex < destIndex ? "right" : "left"}
+            });
+        }
+    }
+
     render() {
         const state = this.props.state;
         const descriptors = this.props.descriptors;
@@ -38,17 +57,7 @@ class CustomTabBar extends React.Component<Props> {
 
                     const isFocused = state.index === index;
 
-                    const onPress = () => {
-                        const event = navigation.emit({
-                            type: 'tabPress',
-                            target: route.key,
-                            canPreventDefault: true,
-                        });
-
-                        if (!isFocused && !event.defaultPrevented) {
-                            navigation.navigate(route.name);
-                        }
-                    };
+                    const onPress = () => this.onItemPress(route, state.index, index);
 
                     const onLongPress = () => {
                         navigation.emit({
@@ -66,7 +75,9 @@ class CustomTabBar extends React.Component<Props> {
                             icon={options.tabBarIcon(iconData)}
                             color={color}
                             label={label}
-                            focused={isFocused}/>
+                            focused={isFocused}
+                            extraData={state.index > index}
+                        />
                     } else
                         return <TabHomeIcon
                             onPress={onPress}

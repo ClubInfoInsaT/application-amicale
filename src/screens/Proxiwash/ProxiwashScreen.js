@@ -15,6 +15,7 @@ import AprilFoolsManager from "../../managers/AprilFoolsManager";
 import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
 import ProxiwashSectionHeader from "../../components/Lists/ProxiwashSectionHeader";
 import {withCollapsible} from "../../utils/withCollapsible";
+import AnimatedFocusView from "../../components/Custom/AnimatedFocusView";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -25,6 +26,7 @@ const LIST_ITEM_HEIGHT = 64;
 
 type Props = {
     navigation: Object,
+    route: Object,
     theme: Object,
     collapsibleStack: Object,
 }
@@ -420,7 +422,9 @@ class ProxiwashScreen extends React.Component<Props, State> {
         const nav = this.props.navigation;
         const {containerPaddingTop} = this.props.collapsibleStack;
         return (
-            <View>
+            <AnimatedFocusView
+                {...this.props}
+            >
                 <Banner
                     style={{
                     marginTop: this.state.bannerVisible ? containerPaddingTop : 0,
@@ -451,7 +455,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
                     autoRefreshTime={REFRESH_TIME}
                     refreshOnFocus={true}
                     updateData={this.state.machinesWatched.length}/>
-            </View>
+            </AnimatedFocusView>
         );
     }
 }

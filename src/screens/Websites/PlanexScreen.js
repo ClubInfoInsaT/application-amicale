@@ -14,6 +14,7 @@ import DateManager from "../../managers/DateManager";
 import AnimatedBottomBar from "../../components/Custom/AnimatedBottomBar";
 import {CommonActions} from "@react-navigation/native";
 import ErrorView from "../../components/Custom/ErrorView";
+import AnimatedFocusView from "../../components/Custom/AnimatedFocusView";
 
 type Props = {
     navigation: Object,
@@ -299,7 +300,9 @@ class PlanexScreen extends React.Component<Props, State> {
     render() {
         const {containerPaddingTop} = this.props.collapsibleStack;
         return (
-            <View style={{height: '100%'}}>
+            <AnimatedFocusView
+                {...this.props}
+            >
                 <Banner
                     style={{
                         marginTop: this.state.bannerVisible ? containerPaddingTop : 0,
@@ -337,7 +340,7 @@ class PlanexScreen extends React.Component<Props, State> {
                     onPress={this.sendMessage}
                     seekAttention={this.state.currentGroup.id === -1}
                 />
-            </View>
+            </AnimatedFocusView>
         );
     }
 }

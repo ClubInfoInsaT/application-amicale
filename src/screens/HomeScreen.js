@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, FlatList, View} from 'react-native';
+import {Animated, FlatList} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../components/Home/EventDashboardItem";
 import WebSectionList from "../components/Lists/WebSectionList";
@@ -16,6 +16,7 @@ import {CommonActions} from '@react-navigation/native';
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 import {AnimatedValue} from "react-native-reanimated";
 import AnimatedFAB from "../components/Custom/AnimatedFAB";
+import AnimatedFocusView from "../components/Custom/AnimatedFocusView";
 // import DATA from "../dashboard_data.json";
 
 
@@ -113,11 +114,21 @@ class HomeScreen extends React.Component<Props, State> {
         </MaterialHeaderButtons>;
     };
 
-    onProxiwashClick = () => this.props.navigation.navigate('proxiwash');
+    onProxiwashClick = () => {
+        this.props.navigation.navigate("proxiwash", {
+            screen: 'index',
+            params: {animationDir: "right"} // Play tab animation
+        });
+    };
+
+    onProximoClick = () => {
+        this.props.navigation.navigate("proximo", {
+            screen: 'index',
+            params: {animationDir: "left"} // Play tab animation
+        });
+    };
 
     onTutorInsaClick = () => this.props.navigation.navigate('tutorinsa');
-
-    onProximoClick = () => this.props.navigation.navigate('proximo');
 
     onMenuClick = () => this.props.navigation.navigate('self-menu');
 
@@ -460,7 +471,9 @@ class HomeScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         return (
-            <View>
+            <AnimatedFocusView
+                {...this.props}
+            >
                 <WebSectionList
                     createDataset={this.createDataset}
                     navigation={nav}
@@ -476,7 +489,7 @@ class HomeScreen extends React.Component<Props, State> {
                     icon="qrcode-scan"
                     onPress={this.openScanner}
                 />
-            </View>
+            </AnimatedFocusView>
         );
     }
 }

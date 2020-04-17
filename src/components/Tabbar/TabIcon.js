@@ -14,6 +14,7 @@ type Props = {
     onPress: Function,
     onLongPress: Function,
     theme: Object,
+    extraData: any,
 }
 
 const AnimatedIcon = Animatable.createAnimatableComponent(MaterialCommunityIcons);
@@ -58,7 +59,8 @@ class TabIcon extends React.Component<Props> {
 
     shouldComponentUpdate(nextProps: Props): boolean {
         return (nextProps.focused !== this.props.focused)
-            || (nextProps.theme.dark !== this.props.theme.dark);
+            || (nextProps.theme.dark !== this.props.theme.dark)
+            || (nextProps.extraData !== this.props.extraData);
     }
 
     render(): React$Node {
