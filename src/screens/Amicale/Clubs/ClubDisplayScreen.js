@@ -126,6 +126,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                         marginBottom: 10,
                     }}>
                         <ImageModal
+                            isTranslucent={Platform.OS === 'android'}
                             resizeMode="contain"
                             imageBackgroundColor={this.colors.background}
                             style={{

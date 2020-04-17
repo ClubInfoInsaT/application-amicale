@@ -91,6 +91,7 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
                 {this.displayData.logo !== null ?
                     <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
                         <ImageModal
+                            isTranslucent={Platform.OS === 'android'}
                             resizeMode="contain"
                             imageBackgroundColor={this.colors.background}
                             style={{
