@@ -30,15 +30,15 @@ class TabHomeIcon extends React.Component<Props> {
                     scale: 1, translateY: 0
                 },
                 "0.9": {
-                    scale: 1.3, translateY: -6
+                    scale: 1.2, translateY: -9
                 },
                 "1": {
-                    scale: 1.2, translateY: -5
+                    scale: 1.1, translateY: -7
                 },
             },
             fabFocusOut: {
                 "0": {
-                    scale: 1.2, translateY: -5
+                    scale: 1.1, translateY: -6
                 },
                 "1": {
                     scale: 1, translateY: 0
