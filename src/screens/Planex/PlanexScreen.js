@@ -7,14 +7,14 @@ import {Avatar, Banner, withTheme} from "react-native-paper";
 import i18n from "i18n-js";
 import {View} from "react-native";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import AlertDialog from "../../components/Dialog/AlertDialog";
+import AlertDialog from "../../components/Dialogs/AlertDialog";
 import {withCollapsible} from "../../utils/withCollapsible";
 import {dateToString, getTimeOnlyString} from "../../utils/Planning";
 import DateManager from "../../managers/DateManager";
-import AnimatedBottomBar from "../../components/Custom/AnimatedBottomBar";
+import AnimatedBottomBar from "../../components/Animations/AnimatedBottomBar";
 import {CommonActions} from "@react-navigation/native";
-import ErrorView from "../../components/Custom/ErrorView";
-import AnimatedFocusView from "../../components/Custom/AnimatedFocusView";
+import ErrorView from "../../components/Screens/ErrorView";
+import AnimatedFocusView from "../../components/Animations/AnimatedFocusView";
 
 type Props = {
     navigation: Object,

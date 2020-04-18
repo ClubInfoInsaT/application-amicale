@@ -6,7 +6,7 @@ import {Avatar, Card, Chip, Paragraph, withTheme} from 'react-native-paper';
 import ImageModal from 'react-native-image-modal';
 import i18n from "i18n-js";
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
-import CustomHTML from "../../../components/Custom/CustomHTML";
+import CustomHTML from "../../../components/Overrides/CustomHTML";
 import CustomTabBar from "../../../components/Tabbar/CustomTabBar";
 
 type Props = {

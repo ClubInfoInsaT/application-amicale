@@ -3,19 +3,19 @@
 import * as React from 'react';
 import {Alert, Platform, View} from 'react-native';
 import i18n from "i18n-js";
-import WebSectionList from "../../components/Lists/WebSectionList";
+import WebSectionList from "../../components/Screens/WebSectionList";
 import * as Notifications from "../../utils/Notifications";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import * as Expo from "expo";
 import {Avatar, Banner, Button, Card, Text, withTheme} from 'react-native-paper';
-import ProxiwashListItem from "../../components/Lists/ProxiwashListItem";
+import ProxiwashListItem from "../../components/Lists/Proxiwash/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
-import CustomModal from "../../components/Custom/CustomModal";
+import CustomModal from "../../components/Overrides/CustomModal";
 import AprilFoolsManager from "../../managers/AprilFoolsManager";
-import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
-import ProxiwashSectionHeader from "../../components/Lists/ProxiwashSectionHeader";
+import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
+import ProxiwashSectionHeader from "../../components/Lists/Proxiwash/ProxiwashSectionHeader";
 import {withCollapsible} from "../../utils/withCollapsible";
-import AnimatedFocusView from "../../components/Custom/AnimatedFocusView";
+import AnimatedFocusView from "../../components/Animations/AnimatedFocusView";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 

@@ -4,8 +4,8 @@ import * as React from 'react';
 import {Avatar, Button, Card, RadioButton} from "react-native-paper";
 import {FlatList, StyleSheet, View} from "react-native";
 import ConnectionManager from "../../../managers/ConnectionManager";
-import LoadingConfirmDialog from "../../Dialog/LoadingConfirmDialog";
-import ErrorDialog from "../../Dialog/ErrorDialog";
+import LoadingConfirmDialog from "../../Dialogs/LoadingConfirmDialog";
+import ErrorDialog from "../../Dialogs/ErrorDialog";
 import i18n from 'i18n-js';
 
 type Props = {

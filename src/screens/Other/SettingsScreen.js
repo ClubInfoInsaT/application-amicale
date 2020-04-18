@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 import {ScrollView} from "react-native";
-import ThemeManager from '../managers/ThemeManager';
+import ThemeManager from '../../managers/ThemeManager';
 import i18n from "i18n-js";
-import AsyncStorageManager from "../managers/AsyncStorageManager";
-import {setMachineReminderNotificationTime} from "../utils/Notifications";
+import AsyncStorageManager from "../../managers/AsyncStorageManager";
+import {setMachineReminderNotificationTime} from "../../utils/Notifications";
 import {Card, List, Switch, ToggleButton} from 'react-native-paper';
 import {Appearance} from "react-native-appearance";
 

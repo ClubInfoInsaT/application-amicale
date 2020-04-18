@@ -5,7 +5,7 @@ import {StyleSheet} from "react-native";
 import i18n from "i18n-js";
 import {Avatar, Button, Card} from 'react-native-paper';
 import {getFormattedEventTime, isDescriptionEmpty} from "../../utils/Planning";
-import CustomHTML from "../Custom/CustomHTML";
+import CustomHTML from "../Overrides/CustomHTML";
 
 type Props = {
     event: Object,

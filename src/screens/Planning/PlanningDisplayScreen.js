@@ -6,10 +6,10 @@ import {getDateOnlyString, getFormattedEventTime} from '../../utils/Planning';
 import {Card, withTheme} from 'react-native-paper';
 import DateManager from "../../managers/DateManager";
 import ImageModal from 'react-native-image-modal';
-import BasicLoadingScreen from "../../components/Custom/BasicLoadingScreen";
+import BasicLoadingScreen from "../../components/Screens/BasicLoadingScreen";
 import {apiRequest} from "../../utils/WebData";
-import ErrorView from "../../components/Custom/ErrorView";
-import CustomHTML from "../../components/Custom/CustomHTML";
+import ErrorView from "../../components/Screens/ErrorView";
+import CustomHTML from "../../components/Overrides/CustomHTML";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 
 type Props = {

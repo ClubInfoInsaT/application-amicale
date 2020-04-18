@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {ActivityIndicator, Avatar, List, ProgressBar, Surface, Text, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
-import ProxiwashConstants from "../../constants/ProxiwashConstants";
+import ProxiwashConstants from "../../../constants/ProxiwashConstants";
 import i18n from "i18n-js";
-import AprilFoolsManager from "../../managers/AprilFoolsManager";
+import AprilFoolsManager from "../../../managers/AprilFoolsManager";
 import * as Animatable from "react-native-animatable";
 
 type Props = {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/Home/HomeScreen';
 import PlanningScreen from '../screens/Planning/PlanningScreen';
 import PlanningDisplayScreen from '../screens/Planning/PlanningDisplayScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
@@ -10,16 +10,16 @@ import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
 import ProximoListScreen from "../screens/Proximo/ProximoListScreen";
 import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
-import PlanexScreen from '../screens/Websites/PlanexScreen';
+import PlanexScreen from '../screens/Planex/PlanexScreen';
 import AsyncStorageManager from "../managers/AsyncStorageManager";
 import {useTheme, withTheme} from 'react-native-paper';
 import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
-import ScannerScreen from "../screens/ScannerScreen";
-import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
-import FeedItemScreen from "../screens/FeedItemScreen";
+import ScannerScreen from "../screens/Home/ScannerScreen";
+import MaterialHeaderButtons, {Item} from "../components/Overrides/CustomHeaderButton";
+import FeedItemScreen from "../screens/Home/FeedItemScreen";
 import {createCollapsibleStack} from "react-navigation-collapsible";
-import GroupSelectionScreen from "../screens/GroupSelectionScreen";
+import GroupSelectionScreen from "../screens/Planex/GroupSelectionScreen";
 import CustomTabBar from "../components/Tabbar/CustomTabBar";
 
 const TAB_ICONS = {

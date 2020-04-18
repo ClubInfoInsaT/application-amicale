@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import i18n from 'i18n-js';
-import LoadingConfirmDialog from "../Dialog/LoadingConfirmDialog";
+import LoadingConfirmDialog from "../Dialogs/LoadingConfirmDialog";
 import ConnectionManager from "../../managers/ConnectionManager";
 
 type Props = {

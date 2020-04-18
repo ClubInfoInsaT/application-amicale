@@ -4,10 +4,10 @@ import * as React from 'react';
 import {Platform} from "react-native";
 import i18n from "i18n-js";
 import {Searchbar, withTheme} from "react-native-paper";
-import {stringMatchQuery} from "../utils/Search";
-import WebSectionList from "../components/Lists/WebSectionList";
-import GroupListAccordion from "../components/Lists/GroupListAccordion";
-import AsyncStorageManager from "../managers/AsyncStorageManager";
+import {stringMatchQuery} from "../../utils/Search";
+import WebSectionList from "../../components/Screens/WebSectionList";
+import GroupListAccordion from "../../components/Lists/PlanexGroups/GroupListAccordion";
+import AsyncStorageManager from "../../managers/AsyncStorageManager";
 
 const LIST_ITEM_HEIGHT = 70;
 

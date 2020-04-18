@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {FlatList, View} from "react-native";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import CustomModal from "../../components/Custom/CustomModal";
+import CustomModal from "../../components/Overrides/CustomModal";
 import {Button, List, Subheading, TextInput, Title, withTheme} from 'react-native-paper';
 
 type Props = {

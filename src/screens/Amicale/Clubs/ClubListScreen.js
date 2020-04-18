@@ -5,10 +5,10 @@ import {Animated, Platform} from "react-native";
 import {Chip, Searchbar, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import i18n from "i18n-js";
-import ClubListItem from "../../../components/Lists/ClubListItem";
+import ClubListItem from "../../../components/Lists/Clubs/ClubListItem";
 import {isItemInCategoryFilter, stringMatchQuery} from "../../../utils/Search";
-import ClubListHeader from "../../../components/Lists/ClubListHeader";
-import MaterialHeaderButtons, {Item} from "../../../components/Custom/HeaderButton";
+import ClubListHeader from "../../../components/Lists/Clubs/ClubListHeader";
+import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
 import {withCollapsible} from "../../../utils/withCollapsible";
 
 type Props = {

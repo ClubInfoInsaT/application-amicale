@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 import WebView from "react-native-webview";
-import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
-import ErrorView from "../Custom/ErrorView";
+import BasicLoadingScreen from "./BasicLoadingScreen";
+import ErrorView from "./ErrorView";
 import {ERROR_TYPE} from "../../utils/WebData";
-import MaterialHeaderButtons, {Item} from '../Custom/HeaderButton';
+import MaterialHeaderButtons, {Item} from '../Overrides/CustomHeaderButton';
 import {HiddenItem} from "react-navigation-header-buttons";
 import {Linking} from "expo";
 import i18n from 'i18n-js';

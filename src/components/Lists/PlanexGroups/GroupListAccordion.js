@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {List, withTheme} from 'react-native-paper';
 import {FlatList, View} from "react-native";
-import {stringMatchQuery} from "../../utils/Search";
+import {stringMatchQuery} from "../../../utils/Search";
 import Collapsible from "react-native-collapsible";
 import * as Animatable from "react-native-animatable";
 import GroupListItem from "./GroupListItem";

@@ -5,7 +5,7 @@ import {KeyboardAvoidingView, ScrollView, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, HelperText, Paragraph, TextInput, withTheme} from 'react-native-paper';
 import ConnectionManager from "../../managers/ConnectionManager";
 import i18n from 'i18n-js';
-import ErrorDialog from "../../components/Dialog/ErrorDialog";
+import ErrorDialog from "../../components/Dialogs/ErrorDialog";
 import {CommonActions} from "@react-navigation/native";
 
 type Props = {

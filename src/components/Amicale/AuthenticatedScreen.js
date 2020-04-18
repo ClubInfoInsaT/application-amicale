@@ -3,8 +3,8 @@
 import * as React from 'react';
 import ConnectionManager from "../../managers/ConnectionManager";
 import {ERROR_TYPE} from "../../utils/WebData";
-import ErrorView from "../Custom/ErrorView";
-import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
+import ErrorView from "../Screens/ErrorView";
+import BasicLoadingScreen from "../Screens/BasicLoadingScreen";
 
 type Props = {
     navigation: Object,

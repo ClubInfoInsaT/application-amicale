@@ -4,7 +4,7 @@ import * as React from 'react';
 import {Platform, StatusBar, YellowBox} from 'react-native';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
-import CustomIntroSlider from "./src/components/Custom/CustomIntroSlider";
+import CustomIntroSlider from "./src/components/Overrides/CustomIntroSlider";
 import {SplashScreen} from 'expo';
 import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';

@@ -6,7 +6,7 @@ import {Avatar, Button, Card, Divider, List, withTheme} from 'react-native-paper
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import i18n from 'i18n-js';
 import LogoutDialog from "../../components/Amicale/LogoutDialog";
-import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
+import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 
 type Props = {
     navigation: Object,

@@ -3,20 +3,20 @@
 import * as React from 'react';
 import {Animated, FlatList} from 'react-native';
 import i18n from "i18n-js";
-import DashboardItem from "../components/Home/EventDashboardItem";
-import WebSectionList from "../components/Lists/WebSectionList";
+import DashboardItem from "../../components/Home/EventDashboardItem";
+import WebSectionList from "../../components/Screens/WebSectionList";
 import {withTheme} from 'react-native-paper';
-import FeedItem from "../components/Home/FeedItem";
-import SquareDashboardItem from "../components/Home/SmallDashboardItem";
-import PreviewEventDashboardItem from "../components/Home/PreviewEventDashboardItem";
-import {stringToDate} from "../utils/Planning";
-import ActionsDashBoardItem from "../components/Home/ActionsDashboardItem";
-import ConnectionManager from "../managers/ConnectionManager";
+import FeedItem from "../../components/Home/FeedItem";
+import SquareDashboardItem from "../../components/Home/SmallDashboardItem";
+import PreviewEventDashboardItem from "../../components/Home/PreviewEventDashboardItem";
+import {stringToDate} from "../../utils/Planning";
+import ActionsDashBoardItem from "../../components/Home/ActionsDashboardItem";
+import ConnectionManager from "../../managers/ConnectionManager";
 import {CommonActions} from '@react-navigation/native';
-import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
+import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 import {AnimatedValue} from "react-native-reanimated";
-import AnimatedFAB from "../components/Custom/AnimatedFAB";
-import AnimatedFocusView from "../components/Custom/AnimatedFocusView";
+import AnimatedFAB from "../../components/Animations/AnimatedFAB";
+import AnimatedFocusView from "../../components/Animations/AnimatedFocusView";
 // import DATA from "../dashboard_data.json";
 
 

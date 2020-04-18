@@ -13,8 +13,8 @@ import {
     getFormattedEventTime,
 } from '../../utils/Planning';
 import {Avatar, Divider, List} from 'react-native-paper';
-import CustomAgenda from "../../components/Custom/CustomAgenda";
-import AnimatedFocusView from "../../components/Custom/AnimatedFocusView";
+import CustomAgenda from "../../components/Overrides/CustomAgenda";
+import AnimatedFocusView from "../../components/Animations/AnimatedFocusView";
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],

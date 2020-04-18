@@ -8,7 +8,7 @@ import GameLogic from "./GameLogic";
 import Grid from "./components/Grid";
 import Preview from "./components/Preview";
 import i18n from "i18n-js";
-import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
+import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 
 type Props = {
     navigation: Object,

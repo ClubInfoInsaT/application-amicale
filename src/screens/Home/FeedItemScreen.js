@@ -5,16 +5,16 @@ import {ScrollView, View} from 'react-native';
 import {Avatar, Card, Text, withTheme} from 'react-native-paper';
 import ImageModal from 'react-native-image-modal';
 import Autolink from "react-native-autolink";
-import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
+import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 import {Linking} from "expo";
-import CustomTabBar from "../components/Tabbar/CustomTabBar";
+import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 
 type Props = {
     navigation: Object,
     route: Object
 };
 
-const ICON_AMICALE = require('../../assets/amicale.png');
+const ICON_AMICALE = require('../../../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
 /**
  * Class defining a planning event information page.
