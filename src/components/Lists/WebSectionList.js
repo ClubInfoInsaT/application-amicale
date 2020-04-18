@@ -9,6 +9,8 @@ import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 import {withCollapsible} from "../../utils/withCollapsible";
 import * as Animatable from 'react-native-animatable';
+import AutoHideHandler from "../../utils/AutoHideHandler";
+import CustomTabBar from "../Tabbar/CustomTabBar";
 
 type Props = {
     navigation: Object,
@@ -52,6 +54,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
 
     refreshInterval: IntervalID;
     lastRefresh: Date;
+    hideHandler: AutoHideHandler;
 
     state = {
         refreshing: false,
@@ -72,6 +75,8 @@ class WebSectionList extends React.PureComponent<Props, State> {
         this.onFetchSuccess = this.onFetchSuccess.bind(this);
         this.onFetchError = this.onFetchError.bind(this);
         this.getEmptySectionHeader = this.getEmptySectionHeader.bind(this);
+        this.hideHandler = new AutoHideHandler(false);
+        this.hideHandler.addListener(this.onHideChange);
     }
 
     /**
@@ -199,6 +204,16 @@ class WebSectionList extends React.PureComponent<Props, State> {
         );
     }
 
+    onScroll = (event: Object) => {
+        this.hideHandler.onScroll(event);
+        if (this.props.onScroll)
+            this.props.onScroll(event);
+    }
+
+    onHideChange = (shouldHide: boolean) => {
+        this.props.navigation.setParams({hideTabBar: shouldHide});
+    }
+
     render() {
         let dataset = [];
         if (this.state.fetchedData !== undefined)
@@ -233,9 +248,10 @@ class WebSectionList extends React.PureComponent<Props, State> {
                     }
                     getItemLayout={this.props.itemHeight !== null ? this.itemLayout : undefined}
                     // Animations
-                    onScroll={onScrollWithListener(this.props.onScroll)}
+                    onScroll={onScrollWithListener(this.onScroll)}
                     contentContainerStyle={{
                         paddingTop: containerPaddingTop,
+                        paddingBottom: CustomTabBar.TAB_BAR_HEIGHT,
                         minHeight: '100%'
                     }}
                     scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}

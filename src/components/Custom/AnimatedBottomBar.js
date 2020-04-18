@@ -3,8 +3,9 @@
 import * as React from 'react';
 import {StyleSheet, View} from "react-native";
 import {FAB, IconButton, Surface, withTheme} from "react-native-paper";
-import AutoHideComponent from "./AutoHideComponent";
+import AutoHideHandler from "../../utils/AutoHideHandler";
 import * as Animatable from 'react-native-animatable';
+import CustomTabBar from "../Tabbar/CustomTabBar";
 
 const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
 
@@ -28,6 +29,7 @@ const DISPLAY_MODES = {
 class AnimatedBottomBar extends React.Component<Props, State> {
 
     ref: Object;
+    hideHandler: AutoHideHandler;
 
     displayModeIcons: Object;
 
@@ -38,6 +40,9 @@ class AnimatedBottomBar extends React.Component<Props, State> {
     constructor() {
         super();
         this.ref = React.createRef();
+        this.hideHandler = new AutoHideHandler(false);
+        this.hideHandler.addListener(this.onHideChange);
+
         this.displayModeIcons = {};
         this.displayModeIcons[DISPLAY_MODES.DAY] = "calendar-text";
         this.displayModeIcons[DISPLAY_MODES.WEEK] = "calendar-week";
@@ -49,8 +54,17 @@ class AnimatedBottomBar extends React.Component<Props, State> {
             || (nextState.currentMode !== this.state.currentMode);
     }
 
+    onHideChange = (shouldHide: boolean) => {
+        if (this.ref.current) {
+            if (shouldHide)
+                this.ref.current.fadeOutDown(600);
+            else
+                this.ref.current.fadeInUp(500);
+        }
+    }
+
     onScroll = (event: Object) => {
-        this.ref.current.onScroll(event);
+        this.hideHandler.onScroll(event);
     };
 
     changeDisplayMode = () => {
@@ -74,9 +88,13 @@ class AnimatedBottomBar extends React.Component<Props, State> {
     render() {
         const buttonColor = this.props.theme.colors.primary;
         return (
-            <AutoHideComponent
+            <Animatable.View
                 ref={this.ref}
-                style={styles.container}>
+                useNativeDriver
+                style={{
+                    ...styles.container,
+                    bottom: 10 + CustomTabBar.TAB_BAR_HEIGHT
+                }}>
                 <Surface style={styles.surface}>
                     <View style={styles.fabContainer}>
                         <AnimatedFAB
@@ -114,7 +132,7 @@ class AnimatedBottomBar extends React.Component<Props, State> {
                             onPress={() => this.props.onPress('next', undefined)}/>
                     </View>
                 </Surface>
-            </AutoHideComponent>
+            </Animatable.View>
         );
     }
 }
@@ -123,7 +141,6 @@ const styles = StyleSheet.create({
     container: {
         position: 'absolute',
         left: '5%',
-        bottom: 10,
         width: '90%',
     },
     surface: {

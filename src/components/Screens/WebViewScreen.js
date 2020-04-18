@@ -11,6 +11,7 @@ import {Linking} from "expo";
 import i18n from 'i18n-js';
 import {Animated, BackHandler} from "react-native";
 import {withCollapsible} from "../../utils/withCollapsible";
+import AutoHideHandler from "../../utils/AutoHideHandler";
 
 type Props = {
     navigation: Object,
@@ -33,6 +34,7 @@ class WebViewScreen extends React.PureComponent<Props> {
     };
 
     webviewRef: Object;
+    hideHandler: AutoHideHandler;
 
     canGoBack: boolean;
 
@@ -40,6 +42,8 @@ class WebViewScreen extends React.PureComponent<Props> {
         super();
         this.webviewRef = React.createRef();
         this.canGoBack = false;
+        this.hideHandler = new AutoHideHandler(false);
+        this.hideHandler.addListener(this.onHideChange);
     }
 
     /**
@@ -131,6 +135,16 @@ class WebViewScreen extends React.PureComponent<Props> {
         );
     }
 
+    onScroll = (event: Object) => {
+        this.hideHandler.onScroll(event);
+        if (this.props.onScroll)
+            this.props.onScroll(event);
+    }
+
+    onHideChange = (shouldHide: boolean) => {
+        this.props.navigation.setParams({hideTabBar: shouldHide});
+    }
+
     render() {
         const {containerPaddingTop, onScrollWithListener} = this.props.collapsibleStack;
         return (
@@ -151,7 +165,7 @@ class WebViewScreen extends React.PureComponent<Props> {
                 onMessage={this.props.onMessage}
                 onLoad={() => this.injectJavaScript(this.getJavascriptPadding(containerPaddingTop))}
                 // Animations
-                onScroll={onScrollWithListener(this.props.onScroll)}
+                onScroll={onScrollWithListener(this.onScroll)}
             />
         );
     }

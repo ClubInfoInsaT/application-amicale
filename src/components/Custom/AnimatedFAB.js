@@ -3,42 +3,56 @@
 import * as React from 'react';
 import {StyleSheet} from "react-native";
 import {FAB} from "react-native-paper";
-import {AnimatedValue} from "react-native-reanimated";
-import AutoHideComponent from "./AutoHideComponent";
+import AutoHideHandler from "../../utils/AutoHideHandler";
+import * as Animatable from 'react-native-animatable';
+import CustomTabBar from "../Tabbar/CustomTabBar";
 
 type Props = {
+    navigation: Object,
     icon: string,
     onPress: Function,
 }
 
-type State = {
-    fabPosition: AnimatedValue
-}
+const AnimatedFab = Animatable.createAnimatableComponent(FAB);
 
-export default class AnimatedFAB extends React.Component<Props, State> {
+export default class AnimatedFAB extends React.Component<Props> {
 
     ref: Object;
+    hideHandler: AutoHideHandler;
 
     constructor() {
         super();
         this.ref = React.createRef();
+        this.hideHandler = new AutoHideHandler(false);
+        this.hideHandler.addListener(this.onHideChange);
     }
 
     onScroll = (event: Object) => {
-        this.ref.current.onScroll(event);
+        this.hideHandler.onScroll(event);
     };
+
+    onHideChange = (shouldHide: boolean) => {
+        if (this.ref.current) {
+            if (shouldHide)
+                this.ref.current.bounceOutDown(1000);
+            else
+                this.ref.current.bounceInUp(1000);
+        }
+    }
 
     render() {
         return (
-            <AutoHideComponent
+            <AnimatedFab
                 ref={this.ref}
-                style={styles.fab}>
-                <FAB
-                    icon={this.props.icon}
-                    onPress={this.props.onPress}
-                />
-            </AutoHideComponent>
-           );
+                useNativeDriver
+                icon={this.props.icon}
+                onPress={this.props.onPress}
+                style={{
+                    ...styles.fab,
+                    bottom: CustomTabBar.TAB_BAR_HEIGHT
+                }}
+            />
+        );
     }
 }
 
@@ -47,6 +61,5 @@ const styles = StyleSheet.create({
         position: 'absolute',
         margin: 16,
         right: 0,
-        bottom: 0,
     },
 });

@@ -343,9 +343,18 @@ class TabNavigator extends React.Component<Props> {
                         else
                             return null;
                     },
+                    tabBarVisible: () => {
+                        const state = route.state;
+                        // Get the current route in the stack
+                        const screen = state ? state.routes[state.index] : undefined;
+                        const params = screen ? screen.params : undefined;
+                        const hideTabBar = params ? params.hideTabBar : undefined;
+                        return hideTabBar !== undefined ? !hideTabBar : true;
+                    },
+                    animationEnabled: true,
                     tabBarLabel: route.name !== 'home' ? undefined : '',
                     activeColor: this.props.theme.colors.primary,
-                    inactiveColor: this.props.theme.colors.tabIcon
+                    inactiveColor: this.props.theme.colors.tabIcon,
                 })}
                 tabBar={props => <CustomTabBar {...props} />}
             >

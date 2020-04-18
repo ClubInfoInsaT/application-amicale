@@ -9,6 +9,8 @@ import {stringMatchQuery} from "../../utils/Search";
 import ProximoListItem from "../../components/Lists/ProximoListItem";
 import MaterialHeaderButtons, {Item} from "../../components/Custom/HeaderButton";
 import {withCollapsible} from "../../utils/withCollapsible";
+import CustomTabBar from "../../components/Tabbar/CustomTabBar";
+import AutoHideHandler from "../../utils/AutoHideHandler";
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -57,6 +59,7 @@ class ProximoListScreen extends React.Component<Props, State> {
     modalRef: Object;
     listData: Array<Object>;
     shouldFocusSearchBar: boolean;
+    hideHandler: AutoHideHandler;
 
     constructor(props) {
         super(props);
@@ -67,6 +70,8 @@ class ProximoListScreen extends React.Component<Props, State> {
             currentSortMode: 3,
             modalCurrentDisplayItem: null,
         };
+        this.hideHandler = new AutoHideHandler(false);
+        this.hideHandler.addListener(this.onHideChange);
     }
 
 
@@ -296,8 +301,17 @@ class ProximoListScreen extends React.Component<Props, State> {
 
     itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
 
+
+    onScroll = (event: Object) => {
+        this.hideHandler.onScroll(event);
+    };
+
+    onHideChange = (shouldHide: boolean) => {
+        this.props.navigation.setParams({hideTabBar: shouldHide});
+    }
+
     render() {
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
+        const {containerPaddingTop, scrollIndicatorInsetTop, onScrollWithListener} = this.props.collapsibleStack;
         return (
             <View style={{
                 height: '100%'
@@ -316,8 +330,11 @@ class ProximoListScreen extends React.Component<Props, State> {
                     getItemLayout={this.itemLayout}
                     initialNumToRender={10}
                     // Animations
-                    onScroll={onScroll}
-                    contentContainerStyle={{paddingTop: containerPaddingTop}}
+                    onScroll={onScrollWithListener(this.onScroll)}
+                    contentContainerStyle={{
+                        paddingTop: containerPaddingTop,
+                        paddingBottom: CustomTabBar.TAB_BAR_HEIGHT
+                    }}
                     scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
                 />
             </View>

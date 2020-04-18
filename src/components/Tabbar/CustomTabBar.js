@@ -11,16 +11,24 @@ type Props = {
     theme: Object,
 }
 
-const TAB_BAR_HEIGHT = 48;
-
 /**
  * Abstraction layer for Agenda component, using custom configuration
  */
 class CustomTabBar extends React.Component<Props> {
 
-    shouldComponentUpdate(nextProps: Props): boolean {
-        return (nextProps.theme.dark !== this.props.theme.dark)
-            || (nextProps.state.index !== this.props.state.index);
+    static TAB_BAR_HEIGHT = 48;
+
+    // shouldComponentUpdate(nextProps: Props): boolean {
+    //     return (nextProps.theme.dark !== this.props.theme.dark)
+    //         || (nextProps.state.index !== this.props.state.index);
+    // }
+
+    isHidden: boolean;
+    tabRef: Object;
+
+    constructor() {
+        super();
+        this.tabRef = React.createRef();
     }
 
     onItemPress(route: Object, currentIndex: number, destIndex: number) {
@@ -43,12 +51,18 @@ class CustomTabBar extends React.Component<Props> {
         const navigation = this.props.navigation;
         return (
             <Animatable.View
+                ref={this.tabRef}
                 animation={"fadeInUp"}
                 duration={500}
                 useNativeDriver
                 style={{
                     flexDirection: 'row',
-                    height: TAB_BAR_HEIGHT,
+                    height: CustomTabBar.TAB_BAR_HEIGHT,
+                    width: '100%',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    backgroundColor: this.props.theme.colors.surface,
                 }}
             >
                 {state.routes.map((route, index) => {
@@ -70,6 +84,20 @@ class CustomTabBar extends React.Component<Props> {
                             target: route.key,
                         });
                     };
+                    if (isFocused) {
+                        const tabVisible = options.tabBarVisible();
+                        console.log(tabVisible);
+                        if (this.tabRef.current) {
+                            if (this.isHidden && tabVisible) {
+                                this.isHidden = false;
+                                this.tabRef.current.slideInUp(300);
+                            } else if (!this.isHidden && !tabVisible){
+                                this.isHidden = true;
+                                this.tabRef.current.slideOutDown(300);
+                            }
+                        }
+
+                    }
 
                     const color = isFocused ? options.activeColor : options.inactiveColor;
                     const iconData = {focused: isFocused, color: color};

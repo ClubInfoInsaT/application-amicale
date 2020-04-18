@@ -485,6 +485,7 @@ class HomeScreen extends React.Component<Props, State> {
                     onScroll={this.onScroll}
                 />
                 <AnimatedFAB
+                    {...this.props}
                     ref={this.fabRef}
                     icon="qrcode-scan"
                     onPress={this.openScanner}
