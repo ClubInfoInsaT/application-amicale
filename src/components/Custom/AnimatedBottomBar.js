@@ -57,9 +57,9 @@ class AnimatedBottomBar extends React.Component<Props, State> {
     onHideChange = (shouldHide: boolean) => {
         if (this.ref.current) {
             if (shouldHide)
-                this.ref.current.fadeOutDown(600);
+                this.ref.current.bounceOutDown(1000);
             else
-                this.ref.current.fadeInUp(500);
+                this.ref.current.bounceInUp(1000);
         }
     }
 
