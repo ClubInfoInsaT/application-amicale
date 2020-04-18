@@ -62,7 +62,7 @@ export default class App extends React.Component<Props, State> {
         this.defaultData = {};
         this.urlHandler = new URLHandler(this.onInitialURLParsed, this.onDetectURL);
         this.urlHandler.listen();
-        setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 0);
+        setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 20);
     }
 
     onInitialURLParsed = ({route, data}: Object) => {

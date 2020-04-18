@@ -9,7 +9,6 @@ import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 import {withCollapsible} from "../../utils/withCollapsible";
 import * as Animatable from 'react-native-animatable';
-import AutoHideHandler from "../../utils/AutoHideHandler";
 import CustomTabBar from "../Tabbar/CustomTabBar";
 
 type Props = {
@@ -52,9 +51,9 @@ class WebSectionList extends React.PureComponent<Props, State> {
         itemHeight: null,
     };
 
+    scrollRef: Object;
     refreshInterval: IntervalID;
     lastRefresh: Date;
-    hideHandler: AutoHideHandler;
 
     state = {
         refreshing: false,
@@ -75,8 +74,6 @@ class WebSectionList extends React.PureComponent<Props, State> {
         this.onFetchSuccess = this.onFetchSuccess.bind(this);
         this.onFetchError = this.onFetchError.bind(this);
         this.getEmptySectionHeader = this.getEmptySectionHeader.bind(this);
-        this.hideHandler = new AutoHideHandler(false);
-        this.hideHandler.addListener(this.onHideChange);
     }
 
     /**
@@ -88,6 +85,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
         const onScreenBlur = this.onScreenBlur.bind(this);
         this.props.navigation.addListener('focus', onScreenFocus);
         this.props.navigation.addListener('blur', onScreenBlur);
+        this.scrollRef = React.createRef();
         this.onRefresh();
     }
 
@@ -99,6 +97,8 @@ class WebSectionList extends React.PureComponent<Props, State> {
             this.onRefresh();
         if (this.props.autoRefreshTime > 0)
             this.refreshInterval = setInterval(this.onRefresh, this.props.autoRefreshTime)
+        // if (this.scrollRef.current) // Reset scroll to top
+        //     this.scrollRef.current.getNode().scrollToLocation({animated:false, itemIndex:0, sectionIndex:0});
     }
 
     /**
@@ -205,13 +205,8 @@ class WebSectionList extends React.PureComponent<Props, State> {
     }
 
     onScroll = (event: Object) => {
-        this.hideHandler.onScroll(event);
         if (this.props.onScroll)
             this.props.onScroll(event);
-    }
-
-    onHideChange = (shouldHide: boolean) => {
-        this.props.navigation.setParams({hideTabBar: shouldHide});
     }
 
     render() {
@@ -224,6 +219,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
             <View>
                 {/*$FlowFixMe*/}
                 <Animated.SectionList
+                    ref={this.scrollRef}
                     sections={dataset}
                     extraData={this.props.updateData}
                     refreshControl={

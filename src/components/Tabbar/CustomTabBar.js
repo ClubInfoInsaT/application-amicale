@@ -2,33 +2,45 @@ import * as React from 'react';
 import {withTheme} from 'react-native-paper';
 import TabIcon from "./TabIcon";
 import TabHomeIcon from "./TabHomeIcon";
-import * as Animatable from 'react-native-animatable';
+import {AnimatedValue} from "react-native-reanimated";
+import {Animated} from 'react-native';
 
 type Props = {
     state: Object,
     descriptors: Object,
     navigation: Object,
     theme: Object,
+    collapsibleStack: Object,
+}
+
+type State = {
+    translateY: AnimatedValue,
 }
 
 /**
  * Abstraction layer for Agenda component, using custom configuration
  */
-class CustomTabBar extends React.Component<Props> {
+class CustomTabBar extends React.Component<Props, State> {
 
     static TAB_BAR_HEIGHT = 48;
+
+    barSynced: boolean; // Is the bar synced with the header for animations?
+
+    state = {
+        translateY: new Animated.Value(0),
+    }
 
     // shouldComponentUpdate(nextProps: Props): boolean {
     //     return (nextProps.theme.dark !== this.props.theme.dark)
     //         || (nextProps.state.index !== this.props.state.index);
     // }
 
-    isHidden: boolean;
     tabRef: Object;
 
     constructor() {
         super();
         this.tabRef = React.createRef();
+        this.barSynced = false;
     }
 
     onItemPress(route: Object, currentIndex: number, destIndex: number) {
@@ -38,6 +50,7 @@ class CustomTabBar extends React.Component<Props> {
             canPreventDefault: true,
         });
         if (currentIndex !== destIndex && !event.defaultPrevented) {
+            this.state.translateY = new Animated.Value(0);
             this.props.navigation.navigate(route.name, {
                 screen: 'index',
                 params: {animationDir: currentIndex < destIndex ? "right" : "left"}
@@ -45,16 +58,21 @@ class CustomTabBar extends React.Component<Props> {
         }
     }
 
+    onRouteChange = () => {
+        this.barSynced = false;
+    }
+
     render() {
         const state = this.props.state;
         const descriptors = this.props.descriptors;
         const navigation = this.props.navigation;
+        this.props.navigation.addListener('state', this.onRouteChange);
         return (
-            <Animatable.View
+            <Animated.View
                 ref={this.tabRef}
-                animation={"fadeInUp"}
-                duration={500}
-                useNativeDriver
+                // animation={"fadeInUp"}
+                // duration={500}
+                // useNativeDriver
                 style={{
                     flexDirection: 'row',
                     height: CustomTabBar.TAB_BAR_HEIGHT,
@@ -63,6 +81,7 @@ class CustomTabBar extends React.Component<Props> {
                     bottom: 0,
                     left: 0,
                     backgroundColor: this.props.theme.colors.surface,
+                    transform: [{translateY: this.state.translateY}]
                 }}
             >
                 {state.routes.map((route, index) => {
@@ -85,18 +104,14 @@ class CustomTabBar extends React.Component<Props> {
                         });
                     };
                     if (isFocused) {
-                        const tabVisible = options.tabBarVisible();
-                        console.log(tabVisible);
-                        if (this.tabRef.current) {
-                            if (this.isHidden && tabVisible) {
-                                this.isHidden = false;
-                                this.tabRef.current.slideInUp(300);
-                            } else if (!this.isHidden && !tabVisible){
-                                this.isHidden = true;
-                                this.tabRef.current.slideOutDown(300);
-                            }
+                        const stackState = route.state;
+                        const stackRoute = route.state ? stackState.routes[stackState.index] : undefined;
+                        const params = stackRoute ? stackRoute.params : undefined;
+                        const collapsible = params ? params.collapsible : undefined;
+                        if (collapsible && !this.barSynced) {
+                            this.barSynced = true;
+                            this.setState({translateY: Animated.multiply(-1.5, collapsible.translateY)});
                         }
-
                     }
 
                     const color = isFocused ? options.activeColor : options.inactiveColor;
@@ -120,7 +135,7 @@ class CustomTabBar extends React.Component<Props> {
                             key={route.key}
                         />
                 })}
-            </Animatable.View>
+            </Animated.View>
         );
     }
 }
