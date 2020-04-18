@@ -10,26 +10,28 @@ import BasicLoadingScreen from "./BasicLoadingScreen";
 import {withCollapsible} from "../../utils/withCollapsible";
 import * as Animatable from 'react-native-animatable';
 import CustomTabBar from "../Tabbar/CustomTabBar";
+import {Collapsible} from "react-navigation-collapsible";
 
 type Props = {
-    navigation: Object,
+    navigation: { [key: string]: any },
     fetchUrl: string,
     autoRefreshTime: number,
     refreshOnFocus: boolean,
-    renderItem: React.Node,
-    renderSectionHeader: React.Node,
-    stickyHeader: boolean,
-    createDataset: Function,
-    updateData: number,
-    itemHeight: number | null,
-    onScroll: Function,
-    collapsibleStack: Object,
+    renderItem: (data: { [key: string]: any }) => React.Node,
+    createDataset: (data: { [key: string]: any }) => Array<Object>,
+    onScroll: (event: SyntheticEvent<EventTarget>) => void,
+    collapsibleStack: Collapsible,
+
+    itemHeight?: number,
+    updateData?: number,
+    renderSectionHeader?: (data: { [key: string]: any }) => React.Node,
+    stickyHeader?: boolean,
 }
 
 type State = {
     refreshing: boolean,
     firstLoading: boolean,
-    fetchedData: ?Object,
+    fetchedData: { [key: string]: any } | null,
     snackbarVisible: boolean
 };
 
@@ -45,36 +47,20 @@ const MIN_REFRESH_TIME = 5 * 1000;
 class WebSectionList extends React.PureComponent<Props, State> {
 
     static defaultProps = {
-        renderSectionHeader: null,
         stickyHeader: false,
         updateData: 0,
-        itemHeight: null,
     };
 
-    scrollRef: Object;
+    scrollRef: { current: null | Animated.SectionList };
     refreshInterval: IntervalID;
-    lastRefresh: Date;
+    lastRefresh: Date | null;
 
     state = {
         refreshing: false,
         firstLoading: true,
-        fetchedData: undefined,
+        fetchedData: null,
         snackbarVisible: false
     };
-
-    onRefresh: Function;
-    onFetchSuccess: Function;
-    onFetchError: Function;
-    getEmptySectionHeader: Function;
-
-    constructor() {
-        super();
-        // creating references to functions used in render()
-        this.onRefresh = this.onRefresh.bind(this);
-        this.onFetchSuccess = this.onFetchSuccess.bind(this);
-        this.onFetchError = this.onFetchError.bind(this);
-        this.getEmptySectionHeader = this.getEmptySectionHeader.bind(this);
-    }
 
     /**
      * Registers react navigation events on first screen load.
@@ -87,13 +73,14 @@ class WebSectionList extends React.PureComponent<Props, State> {
         this.props.navigation.addListener('blur', onScreenBlur);
         this.scrollRef = React.createRef();
         this.onRefresh();
+        this.lastRefresh = null;
     }
 
     /**
      * Refreshes data when focusing the screen and setup a refresh interval if asked to
      */
     onScreenFocus() {
-        if (this.props.refreshOnFocus && this.lastRefresh !== undefined)
+        if (this.props.refreshOnFocus && this.lastRefresh)
             this.onRefresh();
         if (this.props.autoRefreshTime > 0)
             this.refreshInterval = setInterval(this.onRefresh, this.props.autoRefreshTime)
@@ -115,36 +102,37 @@ class WebSectionList extends React.PureComponent<Props, State> {
      *
      * @param fetchedData The newly fetched data
      */
-    onFetchSuccess(fetchedData: Object) {
+    onFetchSuccess = (fetchedData: { [key: string]: any }) => {
         this.setState({
             fetchedData: fetchedData,
             refreshing: false,
             firstLoading: false
         });
         this.lastRefresh = new Date();
-    }
+    };
 
     /**
      * Callback used when fetch encountered an error.
      * It will reset the displayed data and show an error.
      */
-    onFetchError() {
+    onFetchError = () => {
         this.setState({
-            fetchedData: undefined,
+            fetchedData: null,
             refreshing: false,
             firstLoading: false
         });
         this.showSnackBar();
-    }
+    };
 
     /**
      * Refreshes data and shows an animations while doing it
      */
-    onRefresh() {
+    onRefresh = () => {
         let canRefresh;
-        if (this.lastRefresh !== undefined)
-            canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) > MIN_REFRESH_TIME;
-        else
+        if (this.lastRefresh != null) {
+            const last = this.lastRefresh;
+            canRefresh = (new Date().getTime() - last.getTime()) > MIN_REFRESH_TIME;
+        } else
             canRefresh = true;
         if (canRefresh) {
             this.setState({refreshing: true});
@@ -152,17 +140,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
                 .then(this.onFetchSuccess)
                 .catch(this.onFetchError);
         }
-    }
-
-    /**
-     * Gets an empty section header
-     *
-     * @param section The current section
-     * @return {*}
-     */
-    getEmptySectionHeader({section}: Object) {
-        return <View/>;
-    }
+    };
 
     /**
      * Shows the error popup
@@ -174,25 +152,38 @@ class WebSectionList extends React.PureComponent<Props, State> {
      */
     hideSnackBar = () => this.setState({snackbarVisible: false});
 
-    itemLayout = (data: Object, index: number) => ({
-        length: this.props.itemHeight,
-        offset: this.props.itemHeight * index,
-        index
-    });
+    itemLayout = (data: { [key: string]: any }, index: number) => {
+        const height = this.props.itemHeight;
+        if (height == null)
+            return undefined;
+        return {
+            length: height,
+            offset: height * index,
+            index
+        }
+    };
 
-    renderSectionHeader = (data: Object) => {
-        return (
-            <Animatable.View
-                animation={"fadeInUp"}
-                duration={500}
-                useNativeDriver
-            >
-                {this.props.renderSectionHeader(data)}
-            </Animatable.View>
-        );
+    renderSectionHeader = (data: { section: { [key: string]: any } }) => {
+        if (this.props.renderSectionHeader != null) {
+            return (
+                <Animatable.View
+                    animation={"fadeInUp"}
+                    duration={500}
+                    useNativeDriver
+                >
+                    {this.props.renderSectionHeader(data)}
+                </Animatable.View>
+            );
+        } else
+            return null;
     }
 
-    renderItem = (data: Object) => {
+    renderItem = (data: {
+        item: { [key: string]: any },
+        index: number,
+        section: { [key: string]: any },
+        separators: { [key: string]: any },
+    }) => {
         return (
             <Animatable.View
                 animation={"fadeInUp"}
@@ -204,16 +195,15 @@ class WebSectionList extends React.PureComponent<Props, State> {
         );
     }
 
-    onScroll = (event: Object) => {
+    onScroll = (event: SyntheticEvent<EventTarget>) => {
         if (this.props.onScroll)
             this.props.onScroll(event);
     }
 
     render() {
         let dataset = [];
-        if (this.state.fetchedData !== undefined)
+        if (this.state.fetchedData != null)
             dataset = this.props.createDataset(this.state.fetchedData);
-        const shouldRenderHeader = this.props.renderSectionHeader !== null;
         const {containerPaddingTop, scrollIndicatorInsetTop, onScrollWithListener} = this.props.collapsibleStack;
         return (
             <View>
@@ -230,7 +220,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
                         />
                     }
                     //$FlowFixMe
-                    renderSectionHeader={shouldRenderHeader ? this.renderSectionHeader : this.getEmptySectionHeader}
+                    renderSectionHeader={this.renderSectionHeader}
                     //$FlowFixMe
                     renderItem={this.renderItem}
                     stickySectionHeadersEnabled={this.props.stickyHeader}
@@ -242,7 +232,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
                             errorCode={ERROR_TYPE.CONNECTION_ERROR}
                             onRefresh={this.onRefresh}/>
                     }
-                    getItemLayout={this.props.itemHeight !== null ? this.itemLayout : undefined}
+                    getItemLayout={this.props.itemHeight != null ? this.itemLayout : undefined}
                     // Animations
                     onScroll={onScrollWithListener(this.onScroll)}
                     contentContainerStyle={{
