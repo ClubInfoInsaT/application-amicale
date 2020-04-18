@@ -7,6 +7,7 @@ import ImageModal from 'react-native-image-modal';
 import Autolink from "react-native-autolink";
 import MaterialHeaderButtons, {Item} from "../components/Custom/HeaderButton";
 import {Linking} from "expo";
+import CustomTabBar from "../components/Tabbar/CustomTabBar";
 
 type Props = {
     navigation: Object,
@@ -58,7 +59,7 @@ class FeedItemScreen extends React.Component<Props> {
     getContent() {
         const hasImage = this.displayData.full_picture !== '' && this.displayData.full_picture !== undefined;
         return (
-            <ScrollView style={{margin: 5}}>
+            <ScrollView style={{margin: 5,}}>
                 <Card.Title
                     title={NAME_AMICALE}
                     subtitle={this.date}
@@ -77,7 +78,7 @@ class FeedItemScreen extends React.Component<Props> {
                                 uri: this.displayData.full_picture,
                             }}
                         /></View> : null}
-                <Card.Content>
+                <Card.Content style={{paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
                     {this.displayData.message !== undefined ?
                         <Autolink
                             text={this.displayData.message}

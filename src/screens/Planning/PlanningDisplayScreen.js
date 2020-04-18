@@ -10,6 +10,7 @@ import BasicLoadingScreen from "../../components/Custom/BasicLoadingScreen";
 import {apiRequest} from "../../utils/WebData";
 import ErrorView from "../../components/Custom/ErrorView";
 import CustomHTML from "../../components/Custom/CustomHTML";
+import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 
 type Props = {
     navigation: Object,
@@ -104,7 +105,7 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
                     : <View/>}
 
                 {this.displayData.description !== null ?
-                    <Card.Content>
+                    <Card.Content style={{paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
                         <CustomHTML html={this.displayData.description}/>
                     </Card.Content>
                     : <View/>}

@@ -7,6 +7,7 @@ import ImageModal from 'react-native-image-modal';
 import i18n from "i18n-js";
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import CustomHTML from "../../../components/Custom/CustomHTML";
+import CustomTabBar from "../../../components/Tabbar/CustomTabBar";
 
 type Props = {
     navigation: Object,
@@ -90,7 +91,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         }
         const hasManagers = resp.length > 0;
         return (
-            <Card style={{marginTop: 10, marginBottom: 10}}>
+            <Card style={{marginTop: 10, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
                 <Card.Title
                     title={i18n.t('clubs.managers')}
                     subtitle={hasManagers ? i18n.t('clubs.managersSubtitle') : i18n.t('clubs.managersUnavailable')}

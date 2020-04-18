@@ -9,6 +9,7 @@ import URLHandler from "../utils/URLHandler";
 import {Linking} from "expo";
 import AlertDialog from "../components/Dialog/AlertDialog";
 import i18n from 'i18n-js';
+import CustomTabBar from "../components/Tabbar/CustomTabBar";
 
 type Props = {};
 type State = {
@@ -141,25 +142,30 @@ class ScannerScreen extends React.Component<Props, State> {
 
     render() {
         return (
-            <View style={styles.container}>
-                {this.state.hasPermission
-                    ? this.getScanner()
-                    : this.getPermissionScreen()
-                }
+            <View style={{
+                ...styles.container,
+                marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20
+            }}>
+                    {this.state.hasPermission
+                        ? this.getScanner()
+                        : this.getPermissionScreen()
+                    }
+                <View style={{height: 50}}>
+                    <Button
+                        icon="information"
+                        mode="contained"
+                        onPress={this.showHelpDialog}
+                        style={styles.button}
+                    >
+                        {i18n.t("scannerScreen.helpButton")}
+                    </Button>
+                </View>
                 <AlertDialog
                     visible={this.state.dialogVisible}
                     onDismiss={this.onDialogDismiss}
                     title={this.state.dialogTitle}
                     message={this.state.dialogMessage}
                 />
-                <Button
-                    icon="information"
-                    mode="contained"
-                    onPress={this.showHelpDialog}
-                    style={styles.button}
-                >
-                    {i18n.t("scannerScreen.helpButton")}
-                </Button>
             </View>
         );
     }
@@ -200,8 +206,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#000000' // the rock-solid workaround
     },
     cameraContainer: {
         marginTop: 'auto',

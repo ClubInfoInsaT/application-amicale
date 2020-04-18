@@ -3,6 +3,8 @@
 import * as React from 'react';
 import {withTheme} from 'react-native-paper';
 import {Modalize} from "react-native-modalize";
+import {View} from "react-native-animatable";
+import CustomTabBar from "../Tabbar/CustomTabBar";
 
 /**
  * Abstraction layer for Modalize component, using custom configuration
@@ -20,7 +22,12 @@ function CustomModal(props) {
             modalStyle={{backgroundColor: colors.card}}
             handleStyle={{backgroundColor: colors.primary}}
         >
-            {props.children}
+            <View style={{
+                paddingBottom: CustomTabBar.TAB_BAR_HEIGHT
+            }}>
+                {props.children}
+            </View>
+
         </Modalize>
     );
 }
