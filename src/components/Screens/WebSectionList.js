@@ -207,7 +207,6 @@ class WebSectionList extends React.PureComponent<Props, State> {
         const {containerPaddingTop, scrollIndicatorInsetTop, onScrollWithListener} = this.props.collapsibleStack;
         return (
             <View>
-                {/*$FlowFixMe*/}
                 <Animated.SectionList
                     ref={this.scrollRef}
                     sections={dataset}
@@ -219,9 +218,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
                             onRefresh={this.onRefresh}
                         />
                     }
-                    //$FlowFixMe
                     renderSectionHeader={this.renderSectionHeader}
-                    //$FlowFixMe
                     renderItem={this.renderItem}
                     stickySectionHeadersEnabled={this.props.stickyHeader}
                     style={{minHeight: '100%'}}
