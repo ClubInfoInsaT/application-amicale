@@ -15,7 +15,6 @@ type Props = {
     navigation: Object,
     route: Object,
     theme: Object,
-    collapsibleStack: Object,
 }
 
 type State = {

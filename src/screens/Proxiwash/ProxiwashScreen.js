@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Alert, Platform, StatusBar, View} from 'react-native';
+import {Alert, Platform, View} from 'react-native';
 import i18n from "i18n-js";
 import WebSectionList from "../../components/Lists/WebSectionList";
 import * as Notifications from "../../utils/Notifications";
@@ -421,16 +421,13 @@ class ProxiwashScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         const {containerPaddingTop} = this.props.collapsibleStack;
-        const padding = Platform.OS === 'android' // Fix for android non translucent bar on expo
-            ? containerPaddingTop - StatusBar.currentHeight
-            : containerPaddingTop;
         return (
             <AnimatedFocusView
                 {...this.props}
             >
                 <Banner
                     style={{
-                    marginTop: this.state.bannerVisible ? padding : 0,
+                    marginTop: this.state.bannerVisible ? containerPaddingTop : 0,
                 }}
                     visible={this.state.bannerVisible}
                     actions={[

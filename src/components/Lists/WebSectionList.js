@@ -4,7 +4,7 @@ import * as React from 'react';
 import {ERROR_TYPE, readData} from "../../utils/WebData";
 import i18n from "i18n-js";
 import {Snackbar} from 'react-native-paper';
-import {Animated, Platform, RefreshControl, StatusBar, View} from "react-native";
+import {Animated, RefreshControl, View} from "react-native";
 import ErrorView from "../Custom/ErrorView";
 import BasicLoadingScreen from "../Custom/BasicLoadingScreen";
 import {withCollapsible} from "../../utils/withCollapsible";
@@ -205,12 +205,6 @@ class WebSectionList extends React.PureComponent<Props, State> {
             dataset = this.props.createDataset(this.state.fetchedData);
         const shouldRenderHeader = this.props.renderSectionHeader !== null;
         const {containerPaddingTop, scrollIndicatorInsetTop, onScrollWithListener} = this.props.collapsibleStack;
-        const padding = Platform.OS === 'android' // Fix for android non translucent bar on expo
-            ? containerPaddingTop - StatusBar.currentHeight
-            : containerPaddingTop;
-        const inset = Platform.OS === 'android'
-            ? scrollIndicatorInsetTop - StatusBar.currentHeight
-            : scrollIndicatorInsetTop;
         return (
             <View>
                 {/*$FlowFixMe*/}
@@ -219,7 +213,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
                     extraData={this.props.updateData}
                     refreshControl={
                         <RefreshControl
-                            progressViewOffset={padding}
+                            progressViewOffset={containerPaddingTop}
                             refreshing={this.state.refreshing}
                             onRefresh={this.onRefresh}
                         />
@@ -241,10 +235,10 @@ class WebSectionList extends React.PureComponent<Props, State> {
                     // Animations
                     onScroll={onScrollWithListener(this.props.onScroll)}
                     contentContainerStyle={{
-                        paddingTop: padding,
+                        paddingTop: containerPaddingTop,
                         minHeight: '100%'
                     }}
-                    scrollIndicatorInsets={{top: inset}}
+                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
                 />
                 <Snackbar
                     visible={this.state.snackbarVisible}
