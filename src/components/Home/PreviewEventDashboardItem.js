@@ -6,10 +6,13 @@ import i18n from "i18n-js";
 import {Avatar, Button, Card} from 'react-native-paper';
 import {getFormattedEventTime, isDescriptionEmpty} from "../../utils/Planning";
 import CustomHTML from "../Overrides/CustomHTML";
+import type {CustomTheme} from "../../managers/ThemeManager";
+import type {event} from "../../screens/Home/HomeScreen";
 
 type Props = {
-    event: Object,
-    clickAction: Function,
+    event?: event,
+    clickAction: () => void,
+    theme?: CustomTheme,
 }
 
 /**
@@ -19,14 +22,15 @@ class PreviewEventDashboardItem extends React.Component<Props> {
 
     render() {
         const props = this.props;
-        const isEmpty = props.event === undefined
+        const isEmpty = props.event == null
             ? true
-            : isDescriptionEmpty(props.event['description']);
+            : isDescriptionEmpty(props.event.description);
 
-        if (props.event !== undefined && props.event !== null) {
-            const hasImage = props.event['logo'] !== '' && props.event['logo'] !== null;
+        if (props.event != null) {
+            const event = props.event;
+            const hasImage = event.logo !== '' && event.logo != null;
             const getImage = () => <Avatar.Image
-                source={{uri: props.event['logo']}}
+                source={{uri: event.logo}}
                 size={50}
                 style={styles.avatar}/>;
             return (
@@ -37,17 +41,17 @@ class PreviewEventDashboardItem extends React.Component<Props> {
                 >
                     {hasImage ?
                         <Card.Title
-                            title={props.event['title']}
-                            subtitle={getFormattedEventTime(props.event['date_begin'], props.event['date_end'])}
+                            title={event.title}
+                            subtitle={getFormattedEventTime(event.date_begin, event.date_end)}
                             left={getImage}
                         /> :
                         <Card.Title
-                            title={props.event['title']}
-                            subtitle={getFormattedEventTime(props.event['date_begin'], props.event['date_end'])}
+                            title={event.title}
+                            subtitle={getFormattedEventTime(event.date_begin, event.date_end)}
                         />}
                     {!isEmpty ?
                         <Card.Content style={styles.content}>
-                            <CustomHTML html={props.event['description']}/>
+                            <CustomHTML html={event.description}/>
                         </Card.Content> : null}
 
                     <Card.Actions style={styles.actions}>

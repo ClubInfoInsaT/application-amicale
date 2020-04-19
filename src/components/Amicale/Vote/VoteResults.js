@@ -1,16 +1,17 @@
 // @flow
 
 import * as React from 'react';
-import {Avatar, Card, List, ProgressBar, Subheading, Theme, withTheme} from "react-native-paper";
+import {Avatar, Card, List, ProgressBar, Subheading, withTheme} from "react-native-paper";
 import {FlatList, StyleSheet} from "react-native";
 import i18n from 'i18n-js';
 import type {team} from "../../../screens/Amicale/VoteScreen";
+import type {CustomTheme} from "../../../managers/ThemeManager";
 
 
 type Props = {
     teams: Array<team>,
     dateEnd: string,
-    theme: Theme,
+    theme: CustomTheme,
 }
 
 class VoteResults extends React.Component<Props> {
@@ -38,9 +39,9 @@ class VoteResults extends React.Component<Props> {
         }
     }
 
-    getWinnerIds(teams: Array<team>){
+    getWinnerIds(teams: Array<team>) {
         let max = teams[0].votes;
-        this.winnerIds= [];
+        this.winnerIds = [];
         for (let i = 0; i < teams.length; i++) {
             if (teams[i].votes === max)
                 this.winnerIds.push(teams[i].id);
@@ -51,7 +52,7 @@ class VoteResults extends React.Component<Props> {
 
     voteKeyExtractor = (item: team) => item.id.toString();
 
-    resultRenderItem = ({item}: {item: team}) => {
+    resultRenderItem = ({item}: { item: team }) => {
         const isWinner = this.winnerIds.indexOf(item.id) !== -1;
         const isDraw = this.winnerIds.length > 1;
         const colors = this.props.theme.colors;
@@ -90,7 +91,7 @@ class VoteResults extends React.Component<Props> {
                     />}
                 />
                 <Card.Content>
-                    <Subheading>{i18n.t('voteScreen.results.totalVotes') + ' ' +this.totalVotes}</Subheading>
+                    <Subheading>{i18n.t('voteScreen.results.totalVotes') + ' ' + this.totalVotes}</Subheading>
                     {/*$FlowFixMe*/}
                     <FlatList
                         data={this.props.teams}

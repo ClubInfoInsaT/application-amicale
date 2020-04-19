@@ -6,12 +6,13 @@ import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
 import CustomIntroSlider from "./src/components/Overrides/CustomIntroSlider";
 import {SplashScreen} from 'expo';
+import type {CustomTheme} from "./src/managers/ThemeManager";
 import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import DrawerNavigator from './src/navigation/DrawerNavigator';
 import {initExpoToken} from "./src/utils/Notifications";
-import {Provider as PaperProvider, Theme} from 'react-native-paper';
+import {Provider as PaperProvider} from 'react-native-paper';
 import AprilFoolsManager from "./src/managers/AprilFoolsManager";
 import Update from "./src/constants/Update";
 import ConnectionManager from "./src/managers/ConnectionManager";
@@ -30,7 +31,7 @@ type State = {
     showIntro: boolean,
     showUpdate: boolean,
     showAprilFools: boolean,
-    currentTheme: Theme | null,
+    currentTheme: CustomTheme | null,
 };
 
 const Stack = createStackNavigator();

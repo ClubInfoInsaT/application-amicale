@@ -4,11 +4,13 @@ import * as React from 'react';
 import {Avatar, Card, Text, withTheme} from 'react-native-paper';
 import {StyleSheet} from "react-native";
 import i18n from "i18n-js";
+import type {CustomTheme} from "../../managers/ThemeManager";
 
 type Props = {
     eventNumber: number;
-    clickAction: Function,
-    theme: Object,
+    clickAction: () => void,
+    theme: CustomTheme,
+    children?: React.Node
 }
 
 /**

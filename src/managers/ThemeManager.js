@@ -1,11 +1,60 @@
 // @flow
 
 import AsyncStorageManager from "./AsyncStorageManager";
-import {DarkTheme, DefaultTheme} from 'react-native-paper';
+import {DarkTheme, DefaultTheme, Theme} from 'react-native-paper';
 import AprilFoolsManager from "./AprilFoolsManager";
 import {Appearance} from 'react-native-appearance';
 
 const colorScheme = Appearance.getColorScheme();
+
+export type CustomTheme = {
+    ...Theme,
+    colors: {
+        primary: string,
+        accent: string,
+        tabIcon: string,
+        card: string,
+        dividerBackground: string,
+        ripple: string,
+        textDisabled: string,
+        icon: string,
+        subtitle: string,
+        success: string,
+        warning: string,
+        danger: string,
+
+        // Calendar/Agenda
+        agendaBackgroundColor: string,
+        agendaDayTextColor: string,
+
+        // PROXIWASH
+        proxiwashFinishedColor: string,
+        proxiwashReadyColor: string,
+        proxiwashRunningColor: string,
+        proxiwashRunningBgColor: string,
+        proxiwashBrokenColor: string,
+        proxiwashErrorColor: string,
+
+        // Screens
+        planningColor: string,
+        proximoColor: string,
+        proxiwashColor: string,
+        menuColor: string,
+        tutorinsaColor: string,
+
+        // Tetris
+        tetrisBackground: string,
+        tetrisBorder:string,
+        tetrisScore:string,
+        tetrisI : string,
+        tetrisO : string,
+        tetrisT : string,
+        tetrisS : string,
+        tetrisZ : string,
+        tetrisJ : string,
+        tetrisL : string,
+    },
+}
 
 /**
  * Singleton class used to manage themes
@@ -22,9 +71,9 @@ export default class ThemeManager {
     /**
      * Gets the light theme
      *
-     * @return {Object} Object containing theme variables
+     * @return {CustomTheme} Object containing theme variables
      * */
-    static getWhiteTheme(): Object {
+    static getWhiteTheme(): CustomTheme {
         return {
             ...DefaultTheme,
             colors: {
@@ -41,6 +90,7 @@ export default class ThemeManager {
                 success: "#5cb85c",
                 warning: "#f0ad4e",
                 danger: "#d9534f",
+                cc: 'dst',
 
                 // Calendar/Agenda
                 agendaBackgroundColor: '#f3f3f4',
@@ -79,9 +129,9 @@ export default class ThemeManager {
     /**
      * Gets the dark theme
      *
-     * @return {Object} Object containing theme variables
+     * @return {CustomTheme} Object containing theme variables
      * */
-    static getDarkTheme(): Object {
+    static getDarkTheme(): CustomTheme {
         return {
             ...DarkTheme,
             colors: {
@@ -162,9 +212,9 @@ export default class ThemeManager {
     /**
      * Get the current theme based on night mode and events
      *
-     * @returns {Object} The current theme
+     * @returns {CustomTheme} The current theme
      */
-    static getCurrentTheme(): Object {
+    static getCurrentTheme(): CustomTheme {
         if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
             return AprilFoolsManager.getAprilFoolsTheme(ThemeManager.getWhiteTheme());
         else
@@ -174,9 +224,9 @@ export default class ThemeManager {
     /**
      * Get the theme based on night mode
      *
-     * @return {Object} The theme
+     * @return {CustomTheme} The theme
      */
-    static getBaseTheme() {
+    static getBaseTheme(): CustomTheme {
         if (ThemeManager.getNightMode())
             return ThemeManager.getDarkTheme();
         else
@@ -188,7 +238,7 @@ export default class ThemeManager {
      *
      * @param callback Function to call after theme change
      */
-    setUpdateThemeCallback(callback: ?Function) {
+    setUpdateThemeCallback(callback: () => void) {
         this.updateThemeCallback = callback;
     }
 
@@ -200,7 +250,7 @@ export default class ThemeManager {
     setNightMode(isNightMode: boolean) {
         let nightModeKey = AsyncStorageManager.getInstance().preferences.nightMode.key;
         AsyncStorageManager.getInstance().savePref(nightModeKey, isNightMode ? '1' : '0');
-        if (this.updateThemeCallback !== null)
+        if (this.updateThemeCallback != null)
             this.updateThemeCallback();
     }
 

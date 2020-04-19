@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, FlatList} from 'react-native';
+import {FlatList} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../../components/Home/EventDashboardItem";
 import WebSectionList from "../../components/Screens/WebSectionList";
@@ -14,9 +14,10 @@ import ActionsDashBoardItem from "../../components/Home/ActionsDashboardItem";
 import ConnectionManager from "../../managers/ConnectionManager";
 import {CommonActions} from '@react-navigation/native';
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
-import {AnimatedValue} from "react-native-reanimated";
 import AnimatedFAB from "../../components/Animations/AnimatedFAB";
 import AnimatedFocusView from "../../components/Animations/AnimatedFocusView";
+import {StackNavigationProp} from "@react-navigation/stack";
+import type {CustomTheme} from "../../managers/ThemeManager";
 // import DATA from "../dashboard_data.json";
 
 
@@ -31,30 +32,80 @@ const SECTIONS_ID = [
 
 const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
-type Props = {
-    navigation: Object,
-    route: Object,
-    theme: Object,
+type rawDashboard = {
+    news_feed: {
+        data: Array<feedItem>,
+    },
+    dashboard: fullDashboard,
 }
 
-type State = {
-    fabPosition: AnimatedValue
+export type feedItem = {
+    full_picture: string,
+    message: string,
+    permalink_url: string,
+    created_time: number,
+    id: string,
+};
+
+type fullDashboard = {
+    today_menu: Array<{ [key: string]: any }>,
+    proximo_articles: number,
+    available_machines: {
+        dryers: number,
+        washers: number,
+    },
+    today_events: Array<{ [key: string]: any }>,
+    available_tutorials: number,
+}
+
+type dashboardItem = {
+    id: string,
+    content: Array<{ [key: string]: any }>
+};
+
+type dashboardSmallItem = {
+    id: string,
+    data: number,
+    icon: string,
+    color: string,
+    onPress: () => void,
+    isAvailable: boolean
+};
+
+export type event = {
+    id: number,
+    title: string,
+    logo: string | null,
+    date_begin: string,
+    date_end: string,
+    description: string,
+    club: string,
+    category_id: number,
+    url: string,
+}
+
+type listSection = {
+    title: string,
+    data: Array<dashboardItem> | Array<feedItem>,
+    id: string
+};
+
+type Props = {
+    navigation: StackNavigationProp,
+    route: { params: any, ... },
+    theme: CustomTheme,
 }
 
 /**
  * Class defining the app's home screen
  */
-class HomeScreen extends React.Component<Props, State> {
+class HomeScreen extends React.Component<Props> {
 
     colors: Object;
 
     isLoggedIn: boolean | null;
 
-    fabRef: Object;
-
-    state = {
-        fabPosition: new Animated.Value(0),
-    };
+    fabRef: { current: null | AnimatedFAB };
 
     constructor(props) {
         super(props);
@@ -69,8 +120,8 @@ class HomeScreen extends React.Component<Props, State> {
      * @param dateString {string} The Unix Timestamp representation of a date
      * @return {string} The formatted output date
      */
-    static getFormattedDate(dateString: string) {
-        let date = new Date(Number.parseInt(dateString) * 1000);
+    static getFormattedDate(dateString: number) {
+        let date = new Date(dateString * 1000);
         return date.toLocaleString();
     }
 
@@ -92,8 +143,8 @@ class HomeScreen extends React.Component<Props, State> {
     };
 
     handleNavigationParams = () => {
-        if (this.props.route.params !== undefined) {
-            if (this.props.route.params.nextScreen !== undefined && this.props.route.params.nextScreen !== null) {
+        if (this.props.route.params != null) {
+            if (this.props.route.params.nextScreen != null) {
                 this.props.navigation.navigate(this.props.route.params.nextScreen, this.props.route.params.data);
                 // reset params to prevent infinite loop
                 this.props.navigation.dispatch(CommonActions.setParams({nextScreen: null}));
@@ -138,14 +189,14 @@ class HomeScreen extends React.Component<Props, State> {
      * @param fetchedData
      * @return {*}
      */
-    createDataset = (fetchedData: Object) => {
+    createDataset = (fetchedData: rawDashboard) => {
         // fetchedData = DATA;
         let newsData = [];
         let dashboardData = [];
-        if (fetchedData['news_feed'] !== undefined)
-            newsData = fetchedData['news_feed']['data'];
-        if (fetchedData['dashboard'] !== undefined)
-            dashboardData = this.generateDashboardDataset(fetchedData['dashboard']);
+        if (fetchedData.news_feed != null)
+            newsData = fetchedData.news_feed.data;
+        if (fetchedData.dashboard != null)
+            dashboardData = this.generateDashboardDataset(fetchedData.dashboard);
         return [
             {
                 title: '',
@@ -164,79 +215,61 @@ class HomeScreen extends React.Component<Props, State> {
      * Generates the dataset associated to the dashboard to be displayed in the FlatList as a section
      *
      * @param dashboardData
-     * @return {*}
+     * @return {Array<dashboardItem>}
      */
-    generateDashboardDataset(dashboardData: Object) {
-        let dataset = [
-
+    generateDashboardDataset(dashboardData: fullDashboard): Array<dashboardItem> {
+        return [
             {
                 id: 'top',
-                content: []
-            },
-            {
-                id: 'actions',
-                content: undefined
-            },
-            {
-                id: 'event',
-                content: undefined
-            },
-        ];
-        for (let [key, value: number | Object | Array<string>] of Object.entries(dashboardData)) {
-            switch (key) {
-                case 'available_machines':
-                    dataset[0]['content'][0] = {
+                content: [
+                    {
                         id: 'washers',
-                        data: value.washers,
+                        data: dashboardData.available_machines.washers,
                         icon: 'washing-machine',
                         color: this.colors.proxiwashColor,
                         onPress: this.onProxiwashClick,
-                        isAvailable: value.washers > 0
-                    };
-                    dataset[0]['content'][1] = {
-                        ...dataset[0]['content'][0],
+                        isAvailable: dashboardData.available_machines.washers > 0
+                    },
+                    {
                         id: 'dryers',
-                        data: value.dryers,
+                        data: dashboardData.available_machines.dryers,
                         icon: 'tumble-dryer',
-                        isAvailable: value.dryers > 0
-                    };
-                    break;
-                case 'available_tutorials':
-                    dataset[0]['content'][2] = {
-                        id: key,
-                        data: value,
+                        color: this.colors.proxiwashColor,
+                        onPress: this.onProxiwashClick,
+                        isAvailable: dashboardData.available_machines.dryers > 0
+                    },
+                    {
+                        id: 'available_tutorials',
+                        data: dashboardData.available_tutorials,
                         icon: 'school',
                         color: this.colors.tutorinsaColor,
                         onPress: this.onTutorInsaClick,
-                        isAvailable: parseInt(value) > 0
-                    };
-                    break;
-                case 'proximo_articles':
-                    dataset[0]['content'][3] = {
-                        id: key,
-                        data: value,
+                        isAvailable: dashboardData.available_tutorials > 0
+                    },
+                    {
+                        id: 'proximo_articles',
+                        data: dashboardData.proximo_articles,
                         icon: 'shopping',
                         color: this.colors.proximoColor,
                         onPress: this.onProximoClick,
-                        isAvailable: parseInt(value) > 0
-                    };
-                    break;
-                case 'today_menu':
-                    dataset[0]['content'][4] = {
-                        id: key,
-                        data: 0,
-                        icon: 'silverware-fork-knife',
+                        isAvailable: dashboardData.proximo_articles > 0
+                    },
+                    {
+                        id: 'silverware-fork-knife',
+                        data: dashboardData.today_menu,
+                        icon: 'shopping',
                         color: this.colors.menuColor,
                         onPress: this.onMenuClick,
-                        isAvailable: value.length > 0
-                    };
-                    break;
-                case 'today_events':
-                    dataset[2]['content'] = value;
-                    break;
-            }
-        }
-        return dataset
+                        isAvailable: dashboardData.today_menu.length > 0
+                    },
+                ]
+            },
+            {id: 'actions', content: []},
+            {
+                id: 'event',
+                content: dashboardData.today_events
+            },
+        ];
     }
 
     /**
@@ -245,11 +278,11 @@ class HomeScreen extends React.Component<Props, State> {
      * @param item The item to display
      * @return {*}
      */
-    getDashboardItem(item: Object) {
-        let content = item['content'];
-        if (item['id'] === 'event')
+    getDashboardItem(item: dashboardItem) {
+        let content = item.content;
+        if (item.id === 'event')
             return this.getDashboardEvent(content);
-        else if (item['id'] === 'top')
+        else if (item.id === 'top')
             return this.getDashboardRow(content);
         else
             return this.getDashboardActions();
@@ -278,14 +311,14 @@ class HomeScreen extends React.Component<Props, State> {
     /**
      * Gets the duration (in milliseconds) of an event
      *
-     * @param event {Object}
+     * @param event {event}
      * @return {number} The number of milliseconds
      */
-    getEventDuration(event: Object): number {
-        let start = stringToDate(event['date_begin']);
-        let end = stringToDate(event['date_end']);
+    getEventDuration(event: event): number {
+        let start = stringToDate(event.date_begin);
+        let end = stringToDate(event.date_end);
         let duration = 0;
-        if (start !== undefined && start !== null && end !== undefined && end !== null)
+        if (start != null && end != null)
             duration = end - start;
         return duration;
     }
@@ -297,11 +330,11 @@ class HomeScreen extends React.Component<Props, State> {
      * @param limit
      * @return {Array<Object>}
      */
-    getEventsAfterLimit(events: Object, limit: Date): Array<Object> {
+    getEventsAfterLimit(events: Array<event>, limit: Date): Array<event> {
         let validEvents = [];
         for (let event of events) {
-            let startDate = stringToDate(event['date_begin']);
-            if (startDate !== undefined && startDate !== null && startDate >= limit) {
+            let startDate = stringToDate(event.date_begin);
+            if (startDate != null && startDate >= limit) {
                 validEvents.push(event);
             }
         }
@@ -314,7 +347,7 @@ class HomeScreen extends React.Component<Props, State> {
      *
      * @param events
      */
-    getLongestEvent(events: Array<Object>): Object {
+    getLongestEvent(events: Array<event>): event {
         let longestEvent = events[0];
         let longestTime = 0;
         for (let event of events) {
@@ -332,16 +365,16 @@ class HomeScreen extends React.Component<Props, State> {
      *
      * @param events
      */
-    getFutureEvents(events: Array<Object>): Array<Object> {
+    getFutureEvents(events: Array<event>): Array<event> {
         let validEvents = [];
         let now = new Date();
         for (let event of events) {
-            let startDate = stringToDate(event['date_begin']);
-            let endDate = stringToDate(event['date_end']);
-            if (startDate !== undefined && startDate !== null) {
+            let startDate = stringToDate(event.date_begin);
+            let endDate = stringToDate(event.date_end);
+            if (startDate != null) {
                 if (startDate > now)
                     validEvents.push(event);
-                else if (endDate !== undefined && endDate !== null) {
+                else if (endDate != null) {
                     if (endDate > now || endDate < startDate) // Display event if it ends the following day
                         validEvents.push(event);
                 }
@@ -356,8 +389,8 @@ class HomeScreen extends React.Component<Props, State> {
      * @param events
      * @return {Object}
      */
-    getDisplayEvent(events: Array<Object>): Object {
-        let displayEvent = undefined;
+    getDisplayEvent(events: Array<event>): event | null {
+        let displayEvent = null;
         if (events.length > 1) {
             let eventsAfterLimit = this.getEventsAfterLimit(events, this.getTodayEventTimeLimit());
             if (eventsAfterLimit.length > 0) {
@@ -383,7 +416,7 @@ class HomeScreen extends React.Component<Props, State> {
      * @param content
      * @return {*}
      */
-    getDashboardEvent(content: Array<Object>) {
+    getDashboardEvent(content: Array<event>) {
         let futureEvents = this.getFutureEvents(content);
         let displayEvent = this.getDisplayEvent(futureEvents);
         const clickPreviewAction = () =>
@@ -394,14 +427,14 @@ class HomeScreen extends React.Component<Props, State> {
                 clickAction={this.onEventContainerClick}
             >
                 <PreviewEventDashboardItem
-                    event={displayEvent}
+                    event={displayEvent != null ? displayEvent : undefined}
                     clickAction={clickPreviewAction}
                 />
             </DashboardItem>
         );
     }
 
-    dashboardRowRenderItem = ({item}: Object) => {
+    dashboardRowRenderItem = ({item}: { item: dashboardSmallItem }) => {
         return (
             <SquareDashboardItem
                 color={item.color}
@@ -419,16 +452,18 @@ class HomeScreen extends React.Component<Props, State> {
      * @param content
      * @return {*}
      */
-    getDashboardRow(content: Array<Object>) {
-        return <FlatList
-            data={content}
-            renderItem={this.dashboardRowRenderItem}
-            horizontal={true}
-            contentContainerStyle={{
-                marginLeft: 'auto',
-                marginRight: 'auto',
-            }}
-        />;
+    getDashboardRow(content: Array<dashboardSmallItem>) {
+        return (
+            //$FlowFixMe
+            <FlatList
+                data={content}
+                renderItem={this.dashboardRowRenderItem}
+                horizontal={true}
+                contentContainerStyle={{
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                }}
+            />);
     }
 
     /**
@@ -437,7 +472,7 @@ class HomeScreen extends React.Component<Props, State> {
      * @param item The feed item to display
      * @return {*}
      */
-    getFeedItem(item: Object) {
+    getFeedItem(item: feedItem) {
         return (
             <FeedItem
                 {...this.props}
@@ -456,27 +491,34 @@ class HomeScreen extends React.Component<Props, State> {
      * @param section The current section
      * @return {*}
      */
-    getRenderItem = ({item, section}: Object) => {
-        return (section['id'] === SECTIONS_ID[0]
-            ? this.getDashboardItem(item)
-            : this.getFeedItem(item));
+    getRenderItem = ({item, section}: {
+        item: { [key: string]: any },
+        section: listSection
+    }) => {
+        if (section.id === SECTIONS_ID[0]) {
+            const data: dashboardItem = item;
+            return this.getDashboardItem(data);
+        } else {
+            const data: feedItem = item;
+            return this.getFeedItem(data);
+        }
     };
 
     openScanner = () => this.props.navigation.navigate("scanner");
 
-    onScroll = (event: Object) => {
-        this.fabRef.current.onScroll(event);
+    onScroll = (event: SyntheticEvent<EventTarget>) => {
+        if (this.fabRef.current != null)
+            this.fabRef.current.onScroll(event);
     };
 
     render() {
-        const nav = this.props.navigation;
         return (
             <AnimatedFocusView
                 {...this.props}
             >
                 <WebSectionList
+                    {...this.props}
                     createDataset={this.createDataset}
-                    navigation={nav}
                     autoRefreshTime={REFRESH_TIME}
                     refreshOnFocus={true}
                     fetchUrl={DATA_URL}

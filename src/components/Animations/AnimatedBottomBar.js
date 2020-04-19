@@ -2,17 +2,18 @@
 
 import * as React from 'react';
 import {StyleSheet, View} from "react-native";
-import {FAB, IconButton, Surface, Theme, withTheme} from "react-native-paper";
+import {FAB, IconButton, Surface, withTheme} from "react-native-paper";
 import AutoHideHandler from "../../utils/AutoHideHandler";
 import * as Animatable from 'react-native-animatable';
 import CustomTabBar from "../Tabbar/CustomTabBar";
 import {StackNavigationProp} from "@react-navigation/stack";
+import type {CustomTheme} from "../../managers/ThemeManager";
 
 const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
 
 type Props = {
     navigation: StackNavigationProp,
-    theme: Theme,
+    theme: CustomTheme,
     onPress: (action: string, data: any) => void,
     seekAttention: boolean,
 }

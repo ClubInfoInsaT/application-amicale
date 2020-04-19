@@ -1,16 +1,17 @@
 // @flow
 
 import * as React from 'react';
-import {ActivityIndicator, Card, Paragraph, Theme, withTheme} from "react-native-paper";
+import {ActivityIndicator, Card, Paragraph, withTheme} from "react-native-paper";
 import {StyleSheet} from "react-native";
 import i18n from 'i18n-js';
+import type {CustomTheme} from "../../../managers/ThemeManager";
 
 type Props = {
     startDate: string | null,
     justVoted: boolean,
     hasVoted: boolean,
     isVoteRunning: boolean,
-    theme: Theme,
+    theme: CustomTheme,
 }
 
 class VoteWait extends React.Component<Props> {

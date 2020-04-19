@@ -3,15 +3,16 @@
 import * as React from 'react';
 import {Badge, IconButton, withTheme} from 'react-native-paper';
 import {View} from "react-native";
+import type {CustomTheme} from "../../managers/ThemeManager";
 
 
 type Props = {
     color: string,
     icon: string,
-    clickAction: Function,
+    clickAction: () => void,
     isAvailable: boolean,
     badgeNumber: number,
-    theme: Object,
+    theme: CustomTheme,
 };
 
 /**

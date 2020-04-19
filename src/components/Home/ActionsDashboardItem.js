@@ -4,10 +4,12 @@ import * as React from 'react';
 import {Button, Card, withTheme} from 'react-native-paper';
 import {Platform, StyleSheet} from "react-native";
 import i18n from 'i18n-js';
+import {DrawerNavigationProp} from "@react-navigation/drawer";
+import type {CustomTheme} from "../../managers/ThemeManager";
 
 type Props = {
-    navigation: Object,
-    theme: Object,
+    navigation: DrawerNavigationProp,
+    theme: CustomTheme,
 }
 
 class ActionsDashBoardItem extends React.Component<Props> {
