@@ -12,8 +12,7 @@ const deviceWidth = Dimensions.get("window").width;
 
 type Props = {
     navigation: Object,
-    state: Object,
-    theme: Object,
+    theme?: Object,
 };
 
 type State = {

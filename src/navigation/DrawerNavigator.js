@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createDrawerNavigator, DrawerNavigationProp} from '@react-navigation/drawer';
 import TabNavigator from './MainTabNavigator';
 import SettingsScreen from '../screens/Other/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
@@ -35,7 +35,7 @@ const defaultScreenOptions = {
     ...TransitionPresets.SlideFromRightIOS,
 };
 
-function getDrawerButton(navigation: Object) {
+function getDrawerButton(navigation: DrawerNavigationProp) {
     return (
         <MaterialHeaderButtons left={true}>
             <Item title="menu" iconName="menu" onPress={navigation.openDrawer}/>
@@ -415,11 +415,9 @@ function ProfileStackComponent() {
             <ClubStack.Screen
                 name="club-information"
                 component={ClubDisplayScreen}
-                options={({navigation}) => {
-                    return {
-                        title: i18n.t('screens.clubDisplayScreen'),
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
-                    };
+                options={{
+                    title: i18n.t('screens.clubDisplayScreen'),
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
         </ProfileStack.Navigator>
@@ -509,21 +507,17 @@ function ClubStackComponent() {
             <ClubStack.Screen
                 name="club-information"
                 component={ClubDisplayScreen}
-                options={({navigation}) => {
-                    return {
-                        title: i18n.t('screens.clubDisplayScreen'),
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
-                    };
+                options={{
+                    title: i18n.t('screens.clubDisplayScreen'),
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
             <ClubStack.Screen
                 name="club-about"
                 component={ClubAboutScreen}
-                options={({navigation}) => {
-                    return {
-                        title: i18n.t('screens.clubsAbout'),
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
-                    };
+                options={{
+                    title: i18n.t('screens.clubsAbout'),
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
         </ClubStack.Navigator>
@@ -533,26 +527,21 @@ function ClubStackComponent() {
 
 const Drawer = createDrawerNavigator();
 
-function getDrawerContent(props) {
-    return <Sidebar {...props}/>
-}
-
 type Props = {
-    defaultRoute: string | null,
-    defaultData: Object
+    defaultHomeRoute: string | null,
+    defaultHomeData: { [key: string]: any }
 }
-
 
 export default class DrawerNavigator extends React.Component<Props> {
 
-    createTabNavigator: Object;
+    createTabNavigator: () => React.Element<TabNavigator>;
 
-    constructor(props: Object) {
+    constructor(props: Props) {
         super(props);
-
-        this.createTabNavigator = () => <TabNavigator defaultRoute={props.defaultRoute}
-                                                      defaultData={props.defaultData}/>
+        this.createTabNavigator = () => <TabNavigator {...props}/>
     }
+
+    getDrawerContent = (props: { navigation: DrawerNavigationProp }) => <Sidebar {...props}/>
 
     render() {
         return (
@@ -561,7 +550,7 @@ export default class DrawerNavigator extends React.Component<Props> {
                 headerMode={'float'}
                 backBehavior={'initialRoute'}
                 drawerType={'front'}
-                drawerContent={(props) => getDrawerContent(props)}
+                drawerContent={this.getDrawerContent}
                 screenOptions={defaultScreenOptions}
             >
                 <Drawer.Screen

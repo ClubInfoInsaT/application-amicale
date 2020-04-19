@@ -12,7 +12,7 @@ import ProximoListScreen from "../screens/Proximo/ProximoListScreen";
 import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Planex/PlanexScreen';
 import AsyncStorageManager from "../managers/AsyncStorageManager";
-import {useTheme, withTheme} from 'react-native-paper';
+import {useTheme} from 'react-native-paper';
 import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ScannerScreen from "../screens/Home/ScannerScreen";
@@ -21,14 +21,7 @@ import FeedItemScreen from "../screens/Home/FeedItemScreen";
 import {createCollapsibleStack} from "react-navigation-collapsible";
 import GroupSelectionScreen from "../screens/Planex/GroupSelectionScreen";
 import CustomTabBar from "../components/Tabbar/CustomTabBar";
-
-const TAB_ICONS = {
-    home: 'triangle',
-    planning: 'calendar-range',
-    proxiwash: 'tshirt-crew',
-    proximo: 'cart',
-    planex: 'clock',
-};
+import {DrawerNavigationProp} from "@react-navigation/drawer";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -36,7 +29,7 @@ const defaultScreenOptions = {
     ...TransitionPresets.SlideFromRightIOS,
 };
 
-function getDrawerButton(navigation: Object) {
+function getDrawerButton(navigation: DrawerNavigationProp) {
     return (
         <MaterialHeaderButtons left={true}>
             <Item title="menu" iconName="menu" onPress={navigation.openDrawer}/>
@@ -147,7 +140,6 @@ function ProxiwashStackComponent() {
 const PlanningStack = createStackNavigator();
 
 function PlanningStackComponent() {
-    const {colors} = useTheme();
     return (
         <PlanningStack.Navigator
             initialRouteName="index"
@@ -179,10 +171,10 @@ function PlanningStackComponent() {
 
 const HomeStack = createStackNavigator();
 
-function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
-    let data;
-    if (initialRoute !== null)
-        data = {data: defaultData, nextScreen: initialRoute, shouldOpen: true};
+function HomeStackComponent(initialRoute: string | null, defaultData: { [key: string]: any }) {
+    let params = undefined;
+    if (initialRoute != null)
+        params = {data: defaultData, nextScreen: initialRoute, shouldOpen: true};
     const {colors} = useTheme();
     return (
         <HomeStack.Navigator
@@ -204,7 +196,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
                             },
                         };
                     }}
-                    initialParams={data}
+                    initialParams={params}
                 />,
                 {
                     collapsedColor: 'transparent',
@@ -222,31 +214,25 @@ function HomeStackComponent(initialRoute: string | null, defaultData: Object) {
             <HomeStack.Screen
                 name="home-club-information"
                 component={ClubDisplayScreen}
-                options={({navigation}) => {
-                    return {
-                        title: i18n.t('screens.clubDisplayScreen'),
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
-                    };
+                options={{
+                    title: i18n.t('screens.clubDisplayScreen'),
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
             <HomeStack.Screen
                 name="feed-information"
                 component={FeedItemScreen}
-                options={({navigation}) => {
-                    return {
-                        title: i18n.t('screens.feedDisplayScreen'),
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
-                    };
+                options={{
+                    title: i18n.t('screens.feedDisplayScreen'),
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
             <HomeStack.Screen
                 name="scanner"
                 component={ScannerScreen}
-                options={({navigation}) => {
-                    return {
-                        title: i18n.t('screens.scanner'),
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
-                    };
+                options={{
+                    title: i18n.t('screens.scanner'),
+                    ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
             />
         </HomeStack.Navigator>
@@ -287,14 +273,12 @@ function PlanexStackComponent() {
                 <PlanexStack.Screen
                     name="group-select"
                     component={GroupSelectionScreen}
-                    options={({navigation}) => {
-                        return {
-                            title: 'GroupSelectionScreen',
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                            ...TransitionPresets.ModalSlideFromBottomIOS,
-                        };
+                    options={{
+                        title: 'GroupSelectionScreen',
+                        headerStyle: {
+                            backgroundColor: colors.surface,
+                        },
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
                     }}
                 />,
                 {
@@ -309,44 +293,28 @@ function PlanexStackComponent() {
 const Tab = createBottomTabNavigator();
 
 type Props = {
-    defaultRoute: string | null,
-    defaultData: Object
+    defaultHomeRoute: string | null,
+    defaultHomeData: { [key: string]: any }
 }
 
-class TabNavigator extends React.Component<Props> {
+export default class TabNavigator extends React.Component<Props> {
 
-    createHomeStackComponent: Object;
-
+    createHomeStackComponent: () => HomeStackComponent;
     defaultRoute: string;
 
     constructor(props) {
         super(props);
-        this.defaultRoute = AsyncStorageManager.getInstance().preferences.defaultStartScreen.current.toLowerCase();
-
-        if (props.defaultRoute !== null)
+        if (props.defaultHomeRoute != null)
             this.defaultRoute = 'home';
-
-        this.createHomeStackComponent = () => HomeStackComponent(props.defaultRoute, props.defaultData);
+        else
+            this.defaultRoute = AsyncStorageManager.getInstance().preferences.defaultStartScreen.current.toLowerCase();
+        this.createHomeStackComponent = () => HomeStackComponent(props.defaultHomeRoute, props.defaultHomeData);
     }
 
     render() {
         return (
             <Tab.Navigator
                 initialRouteName={this.defaultRoute}
-                barStyle={{backgroundColor: this.props.theme.colors.surface, overflow: 'visible'}}
-                screenOptions={({route}) => ({
-                    tabBarIcon: ({focused, color}) => {
-                        let icon = TAB_ICONS[route.name];
-                        icon = focused ? icon : icon + ('-outline');
-                        if (route.name !== "home")
-                            return icon;
-                        else
-                            return null;
-                    },
-                    tabBarLabel: route.name !== 'home' ? undefined : '',
-                    activeColor: this.props.theme.colors.primary,
-                    inactiveColor: this.props.theme.colors.tabIcon,
-                })}
                 tabBar={props => <CustomTabBar {...props} />}
             >
                 <Tab.Screen
@@ -379,5 +347,3 @@ class TabNavigator extends React.Component<Props> {
         );
     }
 }
-
-export default withTheme(TabNavigator);
