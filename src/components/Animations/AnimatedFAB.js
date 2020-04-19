@@ -6,18 +6,19 @@ import {FAB} from "react-native-paper";
 import AutoHideHandler from "../../utils/AutoHideHandler";
 import * as Animatable from 'react-native-animatable';
 import CustomTabBar from "../Tabbar/CustomTabBar";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
-    navigation: Object,
+    navigation: StackNavigationProp,
     icon: string,
-    onPress: Function,
+    onPress: () => void,
 }
 
 const AnimatedFab = Animatable.createAnimatableComponent(FAB);
 
 export default class AnimatedFAB extends React.Component<Props> {
 
-    ref: Object;
+    ref: { current: null | Animatable.View };
     hideHandler: AutoHideHandler;
 
     constructor() {
@@ -27,12 +28,12 @@ export default class AnimatedFAB extends React.Component<Props> {
         this.hideHandler.addListener(this.onHideChange);
     }
 
-    onScroll = (event: Object) => {
+    onScroll = (event: SyntheticEvent<EventTarget>) => {
         this.hideHandler.onScroll(event);
     };
 
     onHideChange = (shouldHide: boolean) => {
-        if (this.ref.current) {
+        if (this.ref.current != null) {
             if (shouldHide)
                 this.ref.current.bounceOutDown(1000);
             else

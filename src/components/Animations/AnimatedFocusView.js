@@ -3,16 +3,17 @@
 import * as React from 'react';
 import * as Animatable from "react-native-animatable";
 import {CommonActions} from "@react-navigation/native";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
-    navigation: Object,
-    route: Object,
-    children: React$Node
+    navigation: StackNavigationProp,
+    route: { params?: any, ... },
+    children: React.Node
 }
 
 export default class AnimatedFocusView extends React.Component<Props> {
 
-    ref: Object;
+    ref: { current: null | Animatable.View };
 
     constructor() {
         super();
@@ -24,7 +25,7 @@ export default class AnimatedFocusView extends React.Component<Props> {
     }
 
     onScreenFocus = () => {
-        if (this.props.route.params !== undefined) {
+        if (this.props.route.params != null) {
             if (this.props.route.params.animationDir && this.ref.current) {
                 if (this.props.route.params.animationDir === "right")
                     this.ref.current.fadeInRight(300);
