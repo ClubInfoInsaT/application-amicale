@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, StatusBar, YellowBox} from 'react-native';
+import {Platform, StatusBar, View, YellowBox} from 'react-native';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
 import CustomIntroSlider from "./src/components/Overrides/CustomIntroSlider";
@@ -17,6 +17,7 @@ import Update from "./src/constants/Update";
 import ConnectionManager from "./src/managers/ConnectionManager";
 import URLHandler from "./src/utils/URLHandler";
 import {setSafeBounceHeight} from "react-navigation-collapsible";
+import * as Animatable from 'react-native-animatable';
 
 YellowBox.ignoreWarnings([ // collapsible headers cause this warning, just ignore as it is not an issue
     'Non-serializable values were found in the navigation state',
@@ -173,7 +174,6 @@ export default class App extends React.Component<Props, State> {
             showUpdate: this.storageManager.preferences.updateNumber.current !== Update.number.toString(),
             showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && this.storageManager.preferences.showAprilFoolsStart.current === '1',
         });
-        SplashScreen.hide();
     }
 
     /**
@@ -191,11 +191,27 @@ export default class App extends React.Component<Props, State> {
         } else {
             return (
                 <PaperProvider theme={this.state.currentTheme}>
-                    <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
-                        <Stack.Navigator headerMode="none">
-                            <Stack.Screen name="Root" component={this.createDrawerNavigator}/>
-                        </Stack.Navigator>
-                    </NavigationContainer>
+                    <View style={{
+                        flex: 1,
+                        backgroundColor: ThemeManager.getCurrentTheme().colors.background
+                    }}>
+                        <Animatable.View
+                            style={{flex: 1,}}
+                            animation={"fadeIn"}
+                            duration={1000}
+                            useNativeDriver
+                            onAnimationBegin={() => {
+                                // delay the hiding even 1ms is enough to prevent flickering
+                                setTimeout(() => SplashScreen.hide(), 1);
+                            }}
+                        >
+                            <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
+                                <Stack.Navigator headerMode="none">
+                                    <Stack.Screen name="Root" component={this.createDrawerNavigator}/>
+                                </Stack.Navigator>
+                            </NavigationContainer>
+                        </Animatable.View>
+                    </View>
                 </PaperProvider>
             );
         }
