@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {ActivityIndicator, Card, Paragraph, withTheme} from "react-native-paper";
+import {ActivityIndicator, Card, Paragraph, Theme, withTheme} from "react-native-paper";
 import {StyleSheet} from "react-native";
 import i18n from 'i18n-js';
 
@@ -10,22 +10,18 @@ type Props = {
     justVoted: boolean,
     hasVoted: boolean,
     isVoteRunning: boolean,
+    theme: Theme,
 }
 
 class VoteWait extends React.Component<Props> {
-
-    colors: Object;
-
-    constructor(props) {
-        super(props);
-        this.colors = props.theme.colors;
-    }
 
     shouldComponentUpdate() {
         return false;
     }
 
     render() {
+        const colors = this.props.theme.colors;
+        const startDate = this.props.startDate;
         return (
             <Card style={styles.card}>
                 <Card.Title
@@ -38,22 +34,22 @@ class VoteWait extends React.Component<Props> {
                 <Card.Content>
                     {
                         this.props.justVoted
-                            ? <Paragraph style={{color: this.colors.success}}>
+                            ? <Paragraph style={{color: colors.success}}>
                                 {i18n.t('voteScreen.wait.messageSubmitted')}
                             </Paragraph>
                             : null
                     }
                     {
                         this.props.hasVoted
-                            ? <Paragraph style={{color: this.colors.success}}>
+                            ? <Paragraph style={{color: colors.success}}>
                                 {i18n.t('voteScreen.wait.messageVoted')}
                             </Paragraph>
                             : null
                     }
                     {
-                        this.props.startDate !== null
+                        startDate != null
                             ? <Paragraph>
-                                {i18n.t('voteScreen.wait.messageDate') + ' ' + this.props.startDate}
+                                {i18n.t('voteScreen.wait.messageDate') + ' ' + startDate}
                             </Paragraph>
                             : <Paragraph>{i18n.t('voteScreen.wait.messageDateUndefined')}</Paragraph>
                     }

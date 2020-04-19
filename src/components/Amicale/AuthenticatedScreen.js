@@ -5,15 +5,16 @@ import ConnectionManager from "../../managers/ConnectionManager";
 import {ERROR_TYPE} from "../../utils/WebData";
 import ErrorView from "../Screens/ErrorView";
 import BasicLoadingScreen from "../Screens/BasicLoadingScreen";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
-    navigation: Object,
+    navigation: StackNavigationProp,
     requests: Array<{
         link: string,
         params: Object,
         mandatory: boolean
     }>,
-    renderFunction: Function,
+    renderFunction: (Array<{ [key: string]: any } | null>) => React.Node,
 }
 
 type State = {
@@ -29,7 +30,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
     currentUserToken: string | null;
     connectionManager: ConnectionManager;
     errors: Array<number>;
-    fetchedData: Array<Object>;
+    fetchedData: Array<{ [key: string]: any } | null>;
 
     constructor(props: Object) {
         super(props);
@@ -88,7 +89,7 @@ class AuthenticatedScreen extends React.Component<Props, State> {
      * @param index The index for the data
      * @param error The error code received
      */
-    onRequestFinished(data: Object | null, index: number, error: number) {
+    onRequestFinished(data: { [key: string]: any } | null, index: number, error: number) {
         if (index >= 0 && index < this.props.requests.length) {
             this.fetchedData[index] = data;
             this.errors[index] = error;

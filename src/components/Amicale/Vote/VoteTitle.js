@@ -7,9 +7,7 @@ import i18n from 'i18n-js';
 
 const ICON_AMICALE = require('../../../../assets/amicale.png');
 
-type Props = {}
-
-export default class VoteTitle extends React.Component<Props> {
+export default class VoteTitle extends React.Component<{}> {
 
     shouldComponentUpdate() {
         return false;

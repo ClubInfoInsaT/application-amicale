@@ -4,17 +4,18 @@ import * as React from 'react';
 import i18n from 'i18n-js';
 import LoadingConfirmDialog from "../Dialogs/LoadingConfirmDialog";
 import ConnectionManager from "../../managers/ConnectionManager";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
-    navigation: Object,
+    navigation: StackNavigationProp,
     visible: boolean,
-    onDismiss: Function,
+    onDismiss: () => void,
 }
 
 class LogoutDialog extends React.PureComponent<Props> {
 
     onClickAccept = async () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             ConnectionManager.getInstance().disconnect()
                 .then(() => {
                     this.props.navigation.reset({

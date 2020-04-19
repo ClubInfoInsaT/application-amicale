@@ -10,53 +10,78 @@ import VoteSelect from "../../components/Amicale/Vote/VoteSelect";
 import VoteResults from "../../components/Amicale/Vote/VoteResults";
 import VoteWait from "../../components/Amicale/Vote/VoteWait";
 
-const FAKE_DATE = {
-    "date_begin": "2020-04-09 15:50",
-    "date_end": "2020-04-09 15:50",
-    "date_result_begin": "2020-04-09 15:50",
-    "date_result_end": "2020-04-09 22:50",
+export type team = {
+    id: number,
+    name: string,
+    votes: number,
+}
+
+type teamResponse = {
+    has_voted: boolean,
+    teams: Array<team>,
 };
 
-const FAKE_DATE2 = {
-    "date_begin": null,
-    "date_end": null,
-    "date_result_begin": null,
-    "date_result_end": null,
-};
+type stringVoteDates = {
+    date_begin: string,
+    date_end: string,
+    date_result_begin: string,
+    date_result_end: string,
+}
 
-const FAKE_TEAMS = {
-    has_voted: false,
-    teams: [
-        {
-            id: 1,
-            name: "TEST TEAM1",
-        },
-        {
-            id: 2,
-            name: "TEST TEAM2",
-        },
-    ],
-};
-const FAKE_TEAMS2 = {
-    has_voted: false,
-    teams: [
-        {
-            id: 1,
-            name: "TEST TEAM1",
-            votes: 9,
-        },
-        {
-            id: 2,
-            name: "TEST TEAM2",
-            votes: 9,
-        },
-        {
-            id: 3,
-            name: "TEST TEAM3",
-            votes: 5,
-        },
-    ],
-};
+type objectVoteDates = {
+    date_begin: Date,
+    date_end: Date,
+    date_result_begin: Date,
+    date_result_end: Date,
+}
+
+// const FAKE_DATE = {
+//     "date_begin": "2020-04-19 15:50",
+//     "date_end": "2020-04-19 15:50",
+//     "date_result_begin": "2020-04-19 19:50",
+//     "date_result_end": "2020-04-19 22:50",
+// };
+//
+// const FAKE_DATE2 = {
+//     "date_begin": null,
+//     "date_end": null,
+//     "date_result_begin": null,
+//     "date_result_end": null,
+// };
+//
+// const FAKE_TEAMS = {
+//     has_voted: false,
+//     teams: [
+//         {
+//             id: 1,
+//             name: "TEST TEAM1",
+//         },
+//         {
+//             id: 2,
+//             name: "TEST TEAM2",
+//         },
+//     ],
+// };
+// const FAKE_TEAMS2 = {
+//     has_voted: false,
+//     teams: [
+//         {
+//             id: 1,
+//             name: "TEST TEAM1",
+//             votes: 9,
+//         },
+//         {
+//             id: 2,
+//             name: "TEST TEAM2",
+//             votes: 9,
+//         },
+//         {
+//             id: 3,
+//             name: "TEST TEAM3",
+//             votes: 5,
+//         },
+//     ],
+// };
 
 const MIN_REFRESH_TIME = 5 * 1000;
 
@@ -74,17 +99,17 @@ export default class VoteScreen extends React.Component<Props, State> {
         hasVoted: false,
     };
 
-    teams: Array<Object>;
+    teams: Array<team>;
     hasVoted: boolean;
-    datesString: Object;
-    dates: Object;
+    datesString: null | stringVoteDates;
+    dates: null | objectVoteDates;
 
     today: Date;
 
-    mainFlatListData: Array<Object>;
+    mainFlatListData: Array<{ key: string }>;
     lastRefresh: Date;
 
-    authRef: Object;
+    authRef: { current: null | AuthenticatedScreen };
 
     constructor() {
         super();
@@ -103,69 +128,81 @@ export default class VoteScreen extends React.Component<Props, State> {
             canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) > MIN_REFRESH_TIME;
         else
             canRefresh = true;
-        if (canRefresh)
+        if (canRefresh && this.authRef.current != null)
             this.authRef.current.reload()
     };
 
     generateDateObject() {
-        this.dates = {
-            date_begin: stringToDate(this.datesString.date_begin),
-            date_end: stringToDate(this.datesString.date_end),
-            date_result_begin: stringToDate(this.datesString.date_result_begin),
-            date_result_end: stringToDate(this.datesString.date_result_end),
-        };
+        const strings = this.datesString;
+        if (strings != null) {
+            const dateBegin = stringToDate(strings.date_begin);
+            const dateEnd = stringToDate(strings.date_end);
+            const dateResultBegin = stringToDate(strings.date_result_begin);
+            const dateResultEnd = stringToDate(strings.date_result_end);
+            if (dateBegin != null && dateEnd != null && dateResultBegin != null && dateResultEnd != null) {
+                this.dates = {
+                    date_begin: dateBegin,
+                    date_end: dateEnd,
+                    date_result_begin: dateResultBegin,
+                    date_result_end: dateResultEnd,
+                };
+            } else
+                this.dates = null;
+        } else
+            this.dates = null;
     }
 
     getDateString(date: Date, dateString: string): string {
         if (this.today.getDate() === date.getDate()) {
             const str = getTimeOnlyString(dateString);
-            return str !== null ? str : "";
+            return str != null ? str : "";
         } else
             return dateString;
     }
 
-    isVoteAvailable() {
-        return this.dates.date_begin !== null;
-    }
-
     isVoteRunning() {
-        return this.today > this.dates.date_begin && this.today < this.dates.date_end;
+        return this.dates != null && this.today > this.dates.date_begin && this.today < this.dates.date_end;
     }
 
     isVoteStarted() {
-        return this.today > this.dates.date_begin;
+        return this.dates != null && this.today > this.dates.date_begin;
     }
 
     isResultRunning() {
-        return this.today > this.dates.date_result_begin && this.today < this.dates.date_result_end;
+        return this.dates != null && this.today > this.dates.date_result_begin && this.today < this.dates.date_result_end;
     }
 
     isResultStarted() {
-        return this.today > this.dates.date_result_begin;
+        return this.dates != null && this.today > this.dates.date_result_begin;
     }
 
     mainRenderItem = ({item}: Object) => {
         if (item.key === 'info')
             return <VoteTitle/>;
-        else if (item.key === 'main' && this.isVoteAvailable())
+        else if (item.key === 'main' && this.dates != null)
             return this.getContent();
         else
             return null;
     };
 
-    getScreen = (data: Array<Object | null>) => {
+    getScreen = (data: Array<{ [key: string]: any } | null>) => {
         // data[0] = FAKE_TEAMS2;
         // data[1] = FAKE_DATE;
         this.lastRefresh = new Date();
 
-        if (data[1] === null)
-            data[1] = {date_begin: null};
+        const teams : teamResponse | null = data[0];
+        const dateStrings : stringVoteDates | null = data[1];
 
-        if (data[0] !== null) {
-            this.teams = data[0].teams;
-            this.hasVoted = data[0].has_voted;
+        if (dateStrings != null && dateStrings.date_begin == null)
+            this.datesString = null;
+        else
+            this.datesString = dateStrings;
+
+        if (teams != null) {
+            this.teams = teams.teams;
+            this.hasVoted = teams.has_voted;
         }
-        this.datesString = data[1];
+
         this.generateDateObject();
         return (
             <View>
@@ -211,15 +248,26 @@ export default class VoteScreen extends React.Component<Props, State> {
      * Votes have ended, results can be displayed
      */
     getVoteResultCard() {
-        return <VoteResults teams={this.teams}
-                            dateEnd={this.getDateString(this.dates.date_result_end, this.datesString.date_result_end)}/>;
+        if (this.dates != null && this.datesString != null)
+            return <VoteResults
+                teams={this.teams}
+                dateEnd={this.getDateString(
+                    this.dates.date_result_end,
+                    this.datesString.date_result_end)}
+            />;
+        else
+            return null;
     }
 
     /**
      * Vote will open shortly
      */
     getTeaseVoteCard() {
-        return <VoteTease startDate={this.getDateString(this.dates.date_begin, this.datesString.date_begin)}/>;
+        if (this.dates != null && this.datesString != null)
+            return <VoteTease
+                startDate={this.getDateString(this.dates.date_begin, this.datesString.date_begin)}/>;
+        else
+            return null;
     }
 
     /**
@@ -227,7 +275,7 @@ export default class VoteScreen extends React.Component<Props, State> {
      */
     getWaitVoteCard() {
         let startDate = null;
-        if (this.dates.date_result_begin !== null)
+        if (this.dates != null && this.datesString != null && this.dates.date_result_begin != null)
             startDate = this.getDateString(this.dates.date_result_begin, this.datesString.date_result_begin);
         return <VoteWait startDate={startDate} hasVoted={this.hasVoted || this.state.hasVoted}
                          justVoted={this.state.hasVoted}

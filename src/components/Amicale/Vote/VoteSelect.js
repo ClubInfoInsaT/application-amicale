@@ -7,11 +7,12 @@ import ConnectionManager from "../../../managers/ConnectionManager";
 import LoadingConfirmDialog from "../../Dialogs/LoadingConfirmDialog";
 import ErrorDialog from "../../Dialogs/ErrorDialog";
 import i18n from 'i18n-js';
+import type {team} from "../../../screens/Amicale/VoteScreen";
 
 type Props = {
-    teams: Array<Object>,
-    onVoteSuccess: Function,
-    onVoteError: Function,
+    teams: Array<team>,
+    onVoteSuccess: () => void,
+    onVoteError: () => void,
 }
 
 type State = {
@@ -33,16 +34,16 @@ export default class VoteSelect extends React.PureComponent<Props, State> {
 
     onVoteSelectionChange = (team: string) => this.setState({selectedTeam: team});
 
-    voteKeyExtractor = (item: Object) => item.id.toString();
+    voteKeyExtractor = (item: team) => item.id.toString();
 
-    voteRenderItem = ({item}: Object) => <RadioButton.Item label={item.name} value={item.id.toString()}/>;
+    voteRenderItem = ({item}: { item: team }) => <RadioButton.Item label={item.name} value={item.id.toString()}/>;
 
     showVoteDialog = () => this.setState({voteDialogVisible: true});
 
     onVoteDialogDismiss = () => this.setState({voteDialogVisible: false,});
 
     onVoteDialogAccept = async () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             ConnectionManager.getInstance().authenticatedRequest(
                 "elections/vote",
                 {"team": parseInt(this.state.selectedTeam)})
@@ -76,10 +77,11 @@ export default class VoteSelect extends React.PureComponent<Props, State> {
                     <Card.Title
                         title={i18n.t('voteScreen.select.title')}
                         subtitle={i18n.t('voteScreen.select.subtitle')}
-                        left={(props) => <Avatar.Icon
-                            {...props}
-                            icon={"alert-decagram"}
-                        />}
+                        left={(props) =>
+                            <Avatar.Icon
+                                {...props}
+                                icon={"alert-decagram"}
+                            />}
                     />
                     <Card.Content>
                         <RadioButton.Group
