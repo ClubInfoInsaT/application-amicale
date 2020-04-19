@@ -1,11 +1,13 @@
+// @flow
+
 import * as React from 'react';
 import {ActivityIndicator, Button, Dialog, Paragraph, Portal} from 'react-native-paper';
 import i18n from "i18n-js";
 
 type Props = {
     visible: boolean,
-    onDismiss: Function,
-    onAccept: Function, // async function to be executed
+    onDismiss: () => void,
+    onAccept: () => Promise<void>, // async function to be executed
     title: string,
     titleLoading: string,
     message: string,
@@ -21,18 +23,25 @@ class LoadingConfirmDialog extends React.PureComponent<Props, State> {
         loading: false,
     };
 
+    /**
+     * Set the dialog into loading state and closes it when operation finishes
+     */
     onClickAccept = () => {
         this.setState({loading: true});
-        this.props.onAccept()
-            .then(() => {
-                //Wait for fade out animations to finish before hiding loading
-                setTimeout(() => {
-                    this.setState({loading: false})
-                }, 200);
-
-            });
+        this.props.onAccept().then(this.hideLoading);
     };
 
+    /**
+     * Waits for fade out animations to finish before hiding loading
+     * @returns {TimeoutID}
+     */
+    hideLoading = () => setTimeout(() => {
+        this.setState({loading: false})
+    }, 200);
+
+    /**
+     * Hide the dialog if it is not loading
+     */
     onDismiss = () => {
         if (!this.state.loading)
             this.props.onDismiss();

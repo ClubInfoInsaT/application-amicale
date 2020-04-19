@@ -1,3 +1,5 @@
+// @flow
+
 import * as React from 'react';
 import i18n from "i18n-js";
 import {ERROR_TYPE} from "../../utils/WebData";
@@ -5,7 +7,7 @@ import AlertDialog from "./AlertDialog";
 
 type Props = {
     visible: boolean,
-    onDismiss: Function,
+    onDismiss: () => void,
     errorCode: number,
 }
 

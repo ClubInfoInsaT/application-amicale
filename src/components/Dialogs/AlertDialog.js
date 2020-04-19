@@ -1,9 +1,11 @@
+// @flow
+
 import * as React from 'react';
 import {Button, Dialog, Paragraph, Portal} from 'react-native-paper';
 
 type Props = {
     visible: boolean,
-    onDismiss: Function,
+    onDismiss: () => void,
     title: string,
     message: string,
 }
