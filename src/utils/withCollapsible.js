@@ -14,12 +14,13 @@ export const withCollapsible = (Component: any) => {
             progress,
             opacity,
         } = useCollapsibleStack();
+        const statusbarHeight = StatusBar.currentHeight != null ? StatusBar.currentHeight : 0;
         return <Component
             collapsibleStack={{
                 onScroll,
                 onScrollWithListener,
-                containerPaddingTop: containerPaddingTop - StatusBar.currentHeight,
-                scrollIndicatorInsetTop: scrollIndicatorInsetTop - StatusBar.currentHeight,
+                containerPaddingTop: containerPaddingTop - statusbarHeight,
+                scrollIndicatorInsetTop: scrollIndicatorInsetTop - statusbarHeight,
                 translateY,
                 progress,
                 opacity,
