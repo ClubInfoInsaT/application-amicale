@@ -4,9 +4,9 @@ import * as React from 'react';
 import {List, withTheme} from 'react-native-paper';
 import {FlatList, View} from "react-native";
 import {stringMatchQuery} from "../../../utils/Search";
-import Collapsible from "react-native-collapsible";
 import * as Animatable from "react-native-animatable";
 import GroupListItem from "./GroupListItem";
+import AnimatedAccordion from "../../Animations/AnimatedAccordion";
 
 type Props = {
     item: Object,
@@ -47,11 +47,6 @@ class GroupListAccordion extends React.Component<Props, State> {
             || (nextProps.item.content.length !== this.props.item.content.length);
     }
 
-    onPress = () => {
-        this.chevronRef.current.transitionTo({rotate: this.state.expanded ? '0deg' : '180deg'});
-        this.setState({expanded: !this.state.expanded})
-    };
-
     keyExtractor = (item: Object) => item.id.toString();
 
     renderItem = ({item}: Object) => {
@@ -73,20 +68,14 @@ class GroupListAccordion extends React.Component<Props, State> {
 
     render() {
         const item = this.props.item;
-        const accordionColor = this.state.expanded
-            ? this.props.theme.colors.primary
-            : this.props.theme.colors.text;
-        // console.log(item.id);
         return (
             <View>
-                <List.Item
+                <AnimatedAccordion
                     title={item.name}
-                    onPress={this.onPress}
                     style={{
                         height: this.props.height,
                         justifyContent: 'center',
                     }}
-                    titleStyle={{color: accordionColor}}
                     left={props =>
                         item.id === "0"
                             ? <List.Icon
@@ -95,35 +84,19 @@ class GroupListAccordion extends React.Component<Props, State> {
                                 color={this.props.theme.colors.tetrisScore}
                             />
                             : null}
-                    right={(props) => <AnimatedListIcon
-                        ref={this.chevronRef}
-                        {...props}
-                        icon={"chevron-down"}
-                        color={this.state.expanded
-                            ? this.props.theme.colors.primary
-                            : props.color
-                        }
-                        useNativeDriver
-                    />}
-                />
-                <Collapsible
-                    collapsed={!this.state.expanded}
-                    ease={"easeInOut"}
+                    unmountWhenCollapsed={true}// Only render list if expanded for increased performance
                 >
-                    {this.state.expanded // Only render list if expanded for increased performance
-                        ? <FlatList
-                            data={item.content}
-                            extraData={this.props.currentSearchString}
-                            renderItem={this.renderItem}
-                            keyExtractor={this.keyExtractor}
-                            listKey={item.id}
-                            // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-                            getItemLayout={this.itemLayout} // Broken with search
-                            removeClippedSubviews={true}
-                        />
-                        : null}
-
-                </Collapsible>
+                    <FlatList
+                        data={item.content}
+                        extraData={this.props.currentSearchString}
+                        renderItem={this.renderItem}
+                        keyExtractor={this.keyExtractor}
+                        listKey={item.id}
+                        // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+                        getItemLayout={this.itemLayout} // Broken with search
+                        removeClippedSubviews={true}
+                    />
+                </AnimatedAccordion>
             </View>
         );
     }

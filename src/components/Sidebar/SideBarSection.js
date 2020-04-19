@@ -1,11 +1,10 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, View} from "react-native";
-import {Drawer, List, withTheme} from 'react-native-paper';
+import {FlatList} from "react-native";
+import {Drawer, withTheme} from 'react-native-paper';
 import {Linking} from "expo";
-import Collapsible from "react-native-collapsible";
-import * as Animatable from "react-native-animatable";
+import AnimatedAccordion from "../Animations/AnimatedAccordion";
 
 type Props = {
     navigation: Object,
@@ -17,28 +16,17 @@ type Props = {
     listData: Array<Object>,
 }
 
-type State = {
-    expanded: boolean
-}
-
-const AnimatedListIcon = Animatable.createAnimatableComponent(List.Icon);
-
 const LIST_ITEM_HEIGHT = 48;
 
-class SideBarSection extends React.PureComponent<Props, State> {
-
-    state = {
-        expanded: this.props.startOpen,
-    };
+class SideBarSection extends React.PureComponent<Props> {
 
     colors: Object;
-    shouldExpand: boolean;
-    chevronRef: Object;
+    accordionRef: {current: null | AnimatedAccordion};
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
-        this.chevronRef = React.createRef();
+        this.accordionRef = React.createRef();
     }
 
     /**
@@ -50,7 +38,7 @@ class SideBarSection extends React.PureComponent<Props, State> {
     shouldExpandList() {
         for (let i = 0; i < this.props.listData.length; i++) {
             if (this.props.listData[i].route === this.props.activeRoute) {
-                return this.state.expanded === false;
+                return true;
             }
         }
         return false;
@@ -109,13 +97,6 @@ class SideBarSection extends React.PureComponent<Props, State> {
         );
     };
 
-    toggleAccordion = () => {
-        if ((!this.state.expanded && this.shouldExpand) || !this.shouldExpand) {
-            this.chevronRef.current.transitionTo({ rotate: this.state.expanded ? '0deg' : '180deg' });
-            this.setState({expanded: !this.state.expanded})
-        }
-    };
-
     shouldRenderAccordion() {
         let itemsToRender = 0;
         for (let i = 0; i < this.props.listData.length; i++) {
@@ -144,26 +125,13 @@ class SideBarSection extends React.PureComponent<Props, State> {
 
     render() {
         if (this.shouldRenderAccordion()) {
-            this.shouldExpand = this.shouldExpandList();
-            if (this.shouldExpand)
-                this.toggleAccordion();
             return (
-                <View>
-                    <List.Item
-                        title={this.props.sectionName}
-                        // expanded={this.state.expanded}
-                        onPress={this.toggleAccordion}
-                        right={(props) => <AnimatedListIcon
-                            ref={this.chevronRef}
-                            {...props}
-                            icon={"chevron-down"}
-                            useNativeDriver
-                        />}
-                    />
-                    <Collapsible collapsed={!this.state.expanded}>
-                        {this.getFlatList()}
-                    </Collapsible>
-                </View>
+                <AnimatedAccordion
+                    title={this.props.sectionName}
+                    keepOpen={this.shouldExpandList()}
+                >
+                    {this.getFlatList()}
+                </AnimatedAccordion>
             );
         } else
             return this.getFlatList();

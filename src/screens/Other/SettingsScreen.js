@@ -8,6 +8,7 @@ import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import {setMachineReminderNotificationTime} from "../../utils/Notifications";
 import {Card, List, Switch, ToggleButton} from 'react-native-paper';
 import {Appearance} from "react-native-appearance";
+import AnimatedAccordion from "../../components/Animations/AnimatedAccordion";
 
 type Props = {
     navigation: Object,
@@ -89,6 +90,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
             <ToggleButton.Row
                 onValueChange={this.onProxiwashNotifPickerValueChange}
                 value={this.state.proxiwashNotifPickerSelected}
+                style={{marginLeft: 'auto', marginRight: 'auto'}}
             >
                 <ToggleButton icon="close" value="never"/>
                 <ToggleButton icon="numeric-2" value="2"/>
@@ -107,6 +109,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
             <ToggleButton.Row
                 onValueChange={this.onStartScreenPickerValueChange}
                 value={this.state.startScreenPickerSelected}
+                style={{marginLeft: 'auto', marginRight: 'auto'}}
             >
                 <ToggleButton icon="shopping" value="proximo"/>
                 <ToggleButton icon="calendar-range" value="planning"/>
@@ -188,25 +191,25 @@ export default class SettingsScreen extends React.Component<Props, State> {
                                     this.state.nightMode
                                 ) : null
                         }
-                        <List.Accordion
+                        <AnimatedAccordion
                             title={i18n.t('settingsScreen.startScreen')}
-                            description={i18n.t('settingsScreen.startScreenSub')}
+                            subtitle={i18n.t('settingsScreen.startScreenSub')}
                             left={props => <List.Icon {...props} icon="power"/>}
                         >
                             {this.getStartScreenPicker()}
-                        </List.Accordion>
+                        </AnimatedAccordion>
                     </List.Section>
                 </Card>
                 <Card style={{margin: 5}}>
                     <Card.Title title="Proxiwash"/>
                     <List.Section>
-                        <List.Accordion
+                        <AnimatedAccordion
                             title={i18n.t('settingsScreen.proxiwashNotifReminder')}
                             description={i18n.t('settingsScreen.proxiwashNotifReminderSub')}
                             left={props => <List.Icon {...props} icon="washing-machine"/>}
                         >
                             {this.getProxiwashNotifPicker()}
-                        </List.Accordion>
+                        </AnimatedAccordion>
                     </List.Section>
                 </Card>
             </ScrollView>

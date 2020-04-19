@@ -4,21 +4,15 @@ import * as React from 'react';
 import {Card, List, Text, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
 import i18n from 'i18n-js';
+import AnimatedAccordion from "../../Animations/AnimatedAccordion";
 
 type Props = {
     categoryRender: Function,
     categories: Array<Object>,
 }
 
-type State = {
-    expanded: boolean,
-}
+class ClubListHeader extends React.Component<Props> {
 
-class ClubListHeader extends React.Component<Props, State> {
-
-    state = {
-        expanded: true
-    };
 
     colors: Object;
 
@@ -35,22 +29,19 @@ class ClubListHeader extends React.Component<Props, State> {
         return final;
     }
 
-    onPress = () => this.setState({expanded: !this.state.expanded});
-
     render() {
         return (
             <Card style={styles.card}>
-                <List.Accordion
+                <AnimatedAccordion
                     title={i18n.t("clubs.categories")}
                     left={props => <List.Icon {...props} icon="star"/>}
-                    expanded={this.state.expanded}
-                    onPress={this.onPress}
+                    startOpen={true}
                 >
                     <Text style={styles.text}>{i18n.t("clubs.categoriesFilterMessage")}</Text>
                     <View style={styles.chipContainer}>
                         {this.getCategoriesRender()}
                     </View>
-                </List.Accordion>
+                </AnimatedAccordion>
             </Card>
         );
     }
