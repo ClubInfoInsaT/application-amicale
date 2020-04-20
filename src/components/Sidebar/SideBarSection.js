@@ -5,6 +5,7 @@ import {FlatList} from "react-native";
 import {Drawer, withTheme} from 'react-native-paper';
 import {Linking} from "expo";
 import AnimatedAccordion from "../Animations/AnimatedAccordion";
+import {StackActions} from '@react-navigation/native';
 
 type Props = {
     navigation: Object,
@@ -55,8 +56,14 @@ class SideBarSection extends React.PureComponent<Props> {
             Linking.openURL(item.link);
         else if (item.action !== undefined)
             item.action();
-        else
+        else if (this.props.activeRoute === "main")
             this.props.navigation.navigate(item.route);
+        else {
+            this.props.navigation.dispatch(
+                StackActions.replace(item.route)
+            );
+            this.props.navigation.closeDrawer();
+        }
     }
 
     /**

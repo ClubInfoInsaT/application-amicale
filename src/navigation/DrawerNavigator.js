@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import {createDrawerNavigator, DrawerNavigationProp} from '@react-navigation/drawer';
-import TabNavigator from './MainTabNavigator';
 import SettingsScreen from '../screens/Other/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
@@ -21,13 +20,13 @@ import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import VoteScreen from "../screens/Amicale/VoteScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
-import MaterialHeaderButtons, {Item} from "../components/Overrides/CustomHeaderButton";
 import {AmicaleWebsiteScreen} from "../screens/Websites/AmicaleWebsiteScreen";
 import {TutorInsaWebsiteScreen} from "../screens/Websites/TutorInsaWebsiteScreen";
 import {WiketudWebsiteScreen} from "../screens/Websites/WiketudWebsiteScreen";
 import {ElusEtudiantsWebsiteScreen} from "../screens/Websites/ElusEtudiantsWebsiteScreen";
 import {createCollapsibleStack} from "react-navigation-collapsible";
 import {useTheme} from "react-native-paper";
+import TabNavigator from "./MainTabNavigator";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -35,495 +34,136 @@ const defaultScreenOptions = {
     ...TransitionPresets.SlideFromRightIOS,
 };
 
-function getDrawerButton(navigation: DrawerNavigationProp) {
-    return (
-        <MaterialHeaderButtons left={true}>
-            <Item title="menu" iconName="menu" onPress={navigation.openDrawer}/>
-        </MaterialHeaderButtons>
-    );
+function createScreenCollapsibleStack (name: string, component: any, title: string, useNativeDriver?: boolean) {
+    const {colors} = useTheme();
+    return createCollapsibleStack(
+        <DrawerStack.Screen
+            name={name}
+            component={component}
+            options={{
+                title: title,
+                headerStyle: {
+                    backgroundColor: colors.surface,
+                },
+            }}
+        />,
+        {
+            collapsedColor: 'transparent',
+            useNativeDriver: useNativeDriver != null ? useNativeDriver : true, // native driver does not work with webview
+        }
+    )
 }
 
-const AboutStack = createStackNavigator();
-
-function AboutStackComponent() {
-    return (
-        <AboutStack.Navigator
-            initialRouteName="about"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            <AboutStack.Screen
-                name="about"
-                component={AboutScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.about'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
-            <AboutStack.Screen
-                name="dependencies"
-                component={AboutDependenciesScreen}
-                options={{
-                    title: i18n.t('aboutScreen.libs')
-                }}
-            />
-            <AboutStack.Screen
-                name="debug"
-                component={DebugScreen}
-                options={{
-                    title: i18n.t('aboutScreen.debug')
-                }}
-            />
-        </AboutStack.Navigator>
-    );
+function getWebsiteStack(name: string, component: any, title: string) {
+    return createScreenCollapsibleStack(name, component, title, false);
 }
 
-const SettingsStack = createStackNavigator();
+const DrawerStack = createStackNavigator();
 
-function SettingsStackComponent() {
-    return (
-        <SettingsStack.Navigator
-            initialRouteName="settings"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            <SettingsStack.Screen
-                name="settings"
-                component={SettingsScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
+function DrawerStackComponent(props) {
+        return (
+            <DrawerStack.Navigator
+                initialRouteName={'main'}
+                headerMode={'screen'}
+                screenOptions={defaultScreenOptions}
+            >
+                <DrawerStack.Screen
+                    name="main"
+                    component={props.createTabNavigator}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+                <DrawerStack.Screen
+                    name="settings"
+                    component={SettingsScreen}
+                    options={{
                         title: i18n.t('screens.settings'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
-        </SettingsStack.Navigator>
-    );
-}
-
-const SelfMenuStack = createStackNavigator();
-
-function SelfMenuStackComponent() {
-    const {colors} = useTheme();
-    return (
-        <SelfMenuStack.Navigator
-            initialRouteName="self-menu"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            {createCollapsibleStack(
-                <SelfMenuStack.Screen
-                    name="self-menu"
-                    component={SelfMenuScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: i18n.t('screens.menuSelf'),
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
                     }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: true,
-                }
-            )}
-        </SelfMenuStack.Navigator>
-    );
-}
-
-const AvailableRoomStack = createStackNavigator();
-
-function AvailableRoomStackComponent() {
-    const {colors} = useTheme();
-    return (
-        <AvailableRoomStack.Navigator
-            initialRouteName="available-rooms"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            {createCollapsibleStack(
-                <AvailableRoomStack.Screen
-                    name="available-rooms"
-                    component={AvailableRoomScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: i18n.t('screens.availableRooms'),
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
+                />
+                <DrawerStack.Screen
+                    name="about"
+                    component={AboutScreen}
+                    options={{
+                        title: i18n.t('screens.about'),
                     }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: false, // native driver does not work with webview
-                }
-            )}
-        </AvailableRoomStack.Navigator>
-    );
-}
-
-const BibStack = createStackNavigator();
-
-function BibStackComponent() {
-    const {colors} = useTheme();
-    return (
-        <BibStack.Navigator
-            initialRouteName="bib"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            {createCollapsibleStack(
-                <BibStack.Screen
-                    name="bib"
-                    component={BibScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: i18n.t('screens.bib'),
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
+                />
+                <DrawerStack.Screen
+                    name="dependencies"
+                    component={AboutDependenciesScreen}
+                    options={{
+                        title: i18n.t('aboutScreen.libs')
                     }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: false, // native driver does not work with webview
-                }
-            )}
-        </BibStack.Navigator>
-    );
-}
-
-const AmicaleWebsiteStack = createStackNavigator();
-
-function AmicaleWebsiteStackComponent() {
-    const {colors} = useTheme();
-    return (
-        <AmicaleWebsiteStack.Navigator
-            initialRouteName="amicale-website"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            {createCollapsibleStack(
-                <AmicaleWebsiteStack.Screen
-                    name="amicale-website"
-                    component={AmicaleWebsiteScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: "Amicale",
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
+                />
+                <DrawerStack.Screen
+                    name="debug"
+                    component={DebugScreen}
+                    options={{
+                        title: i18n.t('aboutScreen.debug')
                     }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: false, // native driver does not work with webview
-                }
-            )}
-        </AmicaleWebsiteStack.Navigator>
-    );
-}
-
-const ElusEtudiantsStack = createStackNavigator();
-
-function ElusEtudiantsStackComponent() {
-    const {colors} = useTheme();
-    return (
-        <ElusEtudiantsStack.Navigator
-            initialRouteName="elus-etudiants"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            {createCollapsibleStack(
-                <ElusEtudiantsStack.Screen
-                    name="elus-etudiants"
-                    component={ElusEtudiantsWebsiteScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: "Élus Étudiants",
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
-                    }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: false, // native driver does not work with webview
-                }
-            )}
-        </ElusEtudiantsStack.Navigator>
-    );
-}
-
-const WiketudStack = createStackNavigator();
-
-function WiketudStackComponent() {
-    const {colors} = useTheme();
-    return (
-        <WiketudStack.Navigator
-            initialRouteName="wiketud"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            {createCollapsibleStack(
-                <WiketudStack.Screen
-                    name="wiketud"
-                    component={WiketudWebsiteScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: "Wiketud",
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
-                    }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: false, // native driver does not work with webview
-                }
-            )}
-        </WiketudStack.Navigator>
-    );
-}
-
-const TutorInsaStack = createStackNavigator();
-
-function TutorInsaStackComponent() {
-    const {colors} = useTheme();
-    return (
-        <TutorInsaStack.Navigator
-            initialRouteName="tutorinsa"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            {createCollapsibleStack(
-                <TutorInsaStack.Screen
-                    name="tutorinsa"
-                    component={TutorInsaWebsiteScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: "Tutor'INSA",
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
-                    }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: false, // native driver does not work with webview
-                }
-            )}
-        </TutorInsaStack.Navigator>
-    );
-}
-
-
-const TetrisStack = createStackNavigator();
-
-function TetrisStackComponent() {
-    return (
-        <TetrisStack.Navigator
-            initialRouteName="tetris"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            <TetrisStack.Screen
-                name="tetris"
-                component={TetrisScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
+                />
+                {createScreenCollapsibleStack("self-menu", SelfMenuScreen, i18n.t('screens.menuSelf'))}
+                {getWebsiteStack("available-rooms", AvailableRoomScreen, i18n.t('screens.availableRooms'))}
+                {getWebsiteStack("bib", BibScreen, i18n.t('screens.bib'))}
+                {getWebsiteStack("amicale-website", AmicaleWebsiteScreen, "Amicale")}
+                {getWebsiteStack("elus-etudiants", ElusEtudiantsWebsiteScreen, "Élus Étudiants")}
+                {getWebsiteStack("wiketud", WiketudWebsiteScreen, "Wiketud")}
+                {getWebsiteStack("tutorinsa", TutorInsaWebsiteScreen, "Tutor'INSA")}
+                <DrawerStack.Screen
+                    name="tetris"
+                    component={TetrisScreen}
+                    options={{
                         title: i18n.t("game.title"),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
-        </TetrisStack.Navigator>
-    );
-}
-
-const LoginStack = createStackNavigator();
-
-function LoginStackComponent() {
-    return (
-        <LoginStack.Navigator
-            initialRouteName="login"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            <LoginStack.Screen
-                name="login"
-                component={LoginScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.login'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
-        </LoginStack.Navigator>
-    );
-}
-
-const ProfileStack = createStackNavigator();
-
-function ProfileStackComponent() {
-    return (
-        <ProfileStack.Navigator
-            initialRouteName="profile"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            <ProfileStack.Screen
-                name="profile"
-                component={ProfileScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.profile'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
-            <ClubStack.Screen
-                name="club-information"
-                component={ClubDisplayScreen}
-                options={{
-                    title: i18n.t('screens.clubDisplayScreen'),
-                    ...TransitionPresets.ModalSlideFromBottomIOS,
-                }}
-            />
-        </ProfileStack.Navigator>
-    );
-}
-
-
-const VoteStack = createStackNavigator();
-
-function VoteStackComponent() {
-    return (
-        <VoteStack.Navigator
-            initialRouteName="vote"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            <VoteStack.Screen
-                name="vote"
-                component={VoteScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.vote'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
-        </VoteStack.Navigator>
-    );
-}
-
-const AmicaleContactStack = createStackNavigator();
-
-function AmicaleContactStackComponent() {
-    return (
-        <AmicaleContactStack.Navigator
-            initialRouteName="amicale-contact"
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            <AmicaleContactStack.Screen
-                name="amicale-contact"
-                component={AmicaleContactScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.amicaleAbout'),
-                        headerLeft: openDrawer
-                    };
-                }}
-            />
-        </AmicaleContactStack.Navigator>
-    );
-}
-
-
-const ClubStack = createStackNavigator();
-
-function ClubStackComponent() {
-    const {colors} = useTheme();
-    return (
-        <ClubStack.Navigator
-            initialRouteName={"club-list"}
-            headerMode="float"
-            screenOptions={defaultScreenOptions}
-        >
-            {createCollapsibleStack(
-                <ClubStack.Screen
-                    name="club-list"
-                    component={ClubListScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: i18n.t('clubs.clubList'),
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
                     }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: true,
-                }
-            )}
-            <ClubStack.Screen
-                name="club-information"
-                component={ClubDisplayScreen}
-                options={{
-                    title: i18n.t('screens.clubDisplayScreen'),
-                    ...TransitionPresets.ModalSlideFromBottomIOS,
-                }}
-            />
-            <ClubStack.Screen
-                name="club-about"
-                component={ClubAboutScreen}
-                options={{
-                    title: i18n.t('screens.clubsAbout'),
-                    ...TransitionPresets.ModalSlideFromBottomIOS,
-                }}
-            />
-        </ClubStack.Navigator>
-    );
+                />
+                <DrawerStack.Screen
+                    name="login"
+                    component={LoginScreen}
+                    options={{
+                        title: i18n.t('screens.login'),
+                    }}
+                />
+                <DrawerStack.Screen
+                    name="profile"
+                    component={ProfileScreen}
+                    options={{
+                            title: i18n.t('screens.profile'),
+                        }}
+                />
+                {createScreenCollapsibleStack("club-list", ClubListScreen, i18n.t('clubs.clubList'))}
+                <DrawerStack.Screen
+                    name="club-information"
+                    component={ClubDisplayScreen}
+                    options={{
+                        title: i18n.t('screens.clubDisplayScreen'),
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                    }}
+                />
+                <DrawerStack.Screen
+                    name="club-about"
+                    component={ClubAboutScreen}
+                    options={{
+                        title: i18n.t('screens.clubsAbout'),
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                    }}
+                />
+                <DrawerStack.Screen
+                    name="vote"
+                    component={VoteScreen}
+                    options={{
+                        title: i18n.t('screens.vote'),
+                    }}
+                />
+                <DrawerStack.Screen
+                    name="amicale-contact"
+                    component={AmicaleContactScreen}
+                    options={{
+                        title: i18n.t('screens.amicaleAbout'),
+                    }}
+                />
+            </DrawerStack.Navigator>
+        );
 }
-
 
 const Drawer = createDrawerNavigator();
 
@@ -534,92 +174,32 @@ type Props = {
 
 export default class DrawerNavigator extends React.Component<Props> {
 
-    createTabNavigator: () => React.Element<TabNavigator>;
+    createDrawerStackComponent: () => React.Node;
 
     constructor(props: Props) {
         super(props);
-        this.createTabNavigator = () => <TabNavigator {...props}/>
+        const createTabNavigator = () => <TabNavigator {...props}/>
+        this.createDrawerStackComponent = () => <DrawerStackComponent createTabNavigator={createTabNavigator}/>;
     }
 
     getDrawerContent = (props: {
         navigation: DrawerNavigationProp,
-        state: {[key: string] : any}
+        state: { [key: string]: any }
     }) => <Sidebar {...props}/>
 
     render() {
         return (
             <Drawer.Navigator
-                initialRouteName={'Main'}
-                headerMode={'float'}
+                initialRouteName={'stack'}
+                headerMode={'none'}
                 backBehavior={'initialRoute'}
                 drawerType={'front'}
                 drawerContent={this.getDrawerContent}
                 screenOptions={defaultScreenOptions}
             >
                 <Drawer.Screen
-                    name="main"
-                    component={this.createTabNavigator}
-                >
-                </Drawer.Screen>
-                <Drawer.Screen
-                    name="settings"
-                    component={SettingsStackComponent}
-                />
-                <Drawer.Screen
-                    name="about"
-                    component={AboutStackComponent}
-                />
-                <Drawer.Screen
-                    name="self-menu"
-                    component={SelfMenuStackComponent}
-                />
-                <Drawer.Screen
-                    name="available-rooms"
-                    component={AvailableRoomStackComponent}
-                />
-                <Drawer.Screen
-                    name="bib"
-                    component={BibStackComponent}
-                />
-                <Drawer.Screen
-                    name="amicale-website"
-                    component={AmicaleWebsiteStackComponent}
-                />
-                <Drawer.Screen
-                    name="elus-etudiants"
-                    component={ElusEtudiantsStackComponent}
-                />
-                <Drawer.Screen
-                    name="wiketud"
-                    component={WiketudStackComponent}
-                />
-                <Drawer.Screen
-                    name="tutorinsa"
-                    component={TutorInsaStackComponent}
-                />
-                <Drawer.Screen
-                    name="tetris"
-                    component={TetrisStackComponent}
-                />
-                <Drawer.Screen
-                    name="login"
-                    component={LoginStackComponent}
-                />
-                <Drawer.Screen
-                    name="profile"
-                    component={ProfileStackComponent}
-                />
-                <Drawer.Screen
-                    name="club-list"
-                    component={ClubStackComponent}
-                />
-                <Drawer.Screen
-                    name="vote"
-                    component={VoteStackComponent}
-                />
-                <Drawer.Screen
-                    name="amicale-contact"
-                    component={AmicaleContactStackComponent}
+                    name="stack"
+                    component={this.createDrawerStackComponent}
                 />
             </Drawer.Navigator>
         );

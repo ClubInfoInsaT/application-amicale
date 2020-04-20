@@ -75,7 +75,7 @@ class LoginScreen extends React.Component<Props, State> {
 
     hideErrorDialog = () => this.setState({dialogVisible: false});
 
-    handleSuccess = () => this.props.navigation.navigate(this.nextScreen);
+    handleSuccess = () => this.props.navigation.replace(this.nextScreen);
 
     onResetPasswordClick = () => this.props.navigation.navigate('amicale-website', {
         screen: 'amicale-website',

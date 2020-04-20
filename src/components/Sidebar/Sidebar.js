@@ -188,11 +188,15 @@ class SideBar extends React.Component<Props, State> {
     }
 
     shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-        const nextNavigationState = nextProps.state;
+        const nextNavigationState = nextProps.state.routes[0].state;
         const nextRoute = nextNavigationState.routes[nextNavigationState.index].name;
 
-        const currentNavigationState = this.props.state;
-        const currentRoute = currentNavigationState.routes[currentNavigationState.index].name;
+        let currentRoute = "main";
+        const currentNavigationState = this.props.state.routes[0].state;
+        if (currentNavigationState != null) {
+            currentRoute = currentNavigationState.routes[currentNavigationState.index].name;
+        }
+
 
         this.activeRoute = nextRoute;
         return (nextState !== this.state)
