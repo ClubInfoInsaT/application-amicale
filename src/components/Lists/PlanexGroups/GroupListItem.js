@@ -2,12 +2,14 @@
 
 import * as React from 'react';
 import {IconButton, List, withTheme} from 'react-native-paper';
+import type {CustomTheme} from "../../../managers/ThemeManager";
+import type {group} from "../../../screens/Planex/GroupSelectionScreen";
 
 type Props = {
-    theme: Object,
-    onPress: Function,
-    onStartPress: Function,
-    item: Object,
+    theme: CustomTheme,
+    onPress: () => void,
+    onStarPress: () => void,
+    item: group,
     height: number,
 }
 
@@ -17,11 +19,8 @@ type State = {
 
 class GroupListItem extends React.Component<Props, State> {
 
-    colors: Object;
-
     constructor(props) {
         super(props);
-        this.colors = props.theme.colors;
         this.state = {
             isFav: (props.item.isFav !== undefined && props.item.isFav),
         }
@@ -33,10 +32,11 @@ class GroupListItem extends React.Component<Props, State> {
 
     onStarPress = () => {
         this.setState({isFav: !this.state.isFav});
-        this.props.onStartPress();
+        this.props.onStarPress();
     }
 
     render() {
+        const colors = this.props.theme.colors;
         return (
             <List.Item
                 title={this.props.item.name}
@@ -51,7 +51,7 @@ class GroupListItem extends React.Component<Props, State> {
                         icon={"star"}
                         onPress={this.onStarPress}
                         color={this.state.isFav
-                            ? this.props.theme.colors.tetrisScore
+                            ? colors.tetrisScore
                             : props.color}
                     />}
                 style={{

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Card, List, Text, withTheme} from 'react-native-paper';
+import {Card, List, Text} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
 import i18n from 'i18n-js';
 import AnimatedAccordion from "../../Animations/AnimatedAccordion";
@@ -12,14 +12,6 @@ type Props = {
 }
 
 class ClubListHeader extends React.Component<Props> {
-
-
-    colors: Object;
-
-    constructor(props) {
-        super(props);
-        this.colors = props.theme.colors;
-    }
 
     getCategoriesRender() {
         let final = [];
@@ -67,4 +59,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default withTheme(ClubListHeader);
+export default ClubListHeader;

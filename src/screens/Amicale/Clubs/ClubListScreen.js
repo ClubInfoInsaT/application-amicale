@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Animated, Platform} from "react-native";
-import {Chip, Searchbar, withTheme} from 'react-native-paper';
+import {Chip, Searchbar} from 'react-native-paper';
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import i18n from "i18n-js";
 import ClubListItem from "../../../components/Lists/Clubs/ClubListItem";
@@ -10,11 +10,29 @@ import {isItemInCategoryFilter, stringMatchQuery} from "../../../utils/Search";
 import ClubListHeader from "../../../components/Lists/Clubs/ClubListHeader";
 import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
 import {withCollapsible} from "../../../utils/withCollapsible";
+import {StackNavigationProp} from "@react-navigation/stack";
+import type {CustomTheme} from "../../../managers/ThemeManager";
+import {Collapsible} from "react-navigation-collapsible";
+
+export type category = {
+    id: number,
+    name: string,
+};
+
+export type club = {
+    id: number,
+    name: string,
+    description: string,
+    logo: string,
+    email:string,
+    category: [number, number],
+    responsibles: Array<string>,
+};
 
 type Props = {
-    navigation: Object,
-    theme: Object,
-    collapsibleStack: Object,
+    navigation: StackNavigationProp,
+    theme: CustomTheme,
+    collapsibleStack: Collapsible,
 }
 
 type State = {
@@ -31,14 +49,7 @@ class ClubListScreen extends React.Component<Props, State> {
         currentSearchString: '',
     };
 
-    colors: Object;
-
-    categories: Array<Object>;
-
-    constructor(props) {
-        super(props);
-        this.colors = props.theme.colors;
-    }
+    categories: Array<category>;
 
     /**
      * Creates the header content
@@ -88,19 +99,25 @@ class ClubListScreen extends React.Component<Props, State> {
         this.updateFilteredData(str, null);
     };
 
-    keyExtractor = (item: Object) => {
+    keyExtractor = (item: club) => {
         return item.id.toString();
     };
 
     itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
 
-    getScreen = (data: Object) => {
-        this.categories = data[0].categories;
+    getScreen = (data: Array<{categories: Array<category>, clubs: Array<club>} | null>) => {
+        let categoryList = [];
+        let clubList = [];
+        if (data[0] != null) {
+            categoryList = data[0].categories;
+            clubList = data[0].clubs;
+        }
+        this.categories = categoryList;
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
             //$FlowFixMe
             <Animated.FlatList
-                data={data[0].clubs}
+                data={clubList}
                 keyExtractor={this.keyExtractor}
                 renderItem={this.getRenderItem}
                 ListHeaderComponent={this.getListHeader()}
@@ -138,7 +155,7 @@ class ClubListScreen extends React.Component<Props, State> {
             })
     }
 
-    getChipRender = (category: Object, key: string) => {
+    getChipRender = (category: category, key: string) => {
         const onPress = this.onChipSelect.bind(this, category.id);
         return <Chip
             selected={isItemInCategoryFilter(this.state.currentlySelectedCategories, [category.id])}
@@ -165,7 +182,7 @@ class ClubListScreen extends React.Component<Props, State> {
         }
     };
 
-    shouldRenderItem(item) {
+    shouldRenderItem(item: club) {
         let shouldRender = this.state.currentlySelectedCategories.length === 0
             || isItemInCategoryFilter(this.state.currentlySelectedCategories, item.category);
         if (shouldRender)
@@ -173,7 +190,7 @@ class ClubListScreen extends React.Component<Props, State> {
         return shouldRender;
     }
 
-    getRenderItem = ({item}: Object) => {
+    getRenderItem = ({item}: {item: club}) => {
         const onPress = this.onListItemPress.bind(this, item);
         if (this.shouldRenderItem(item)) {
             return (
@@ -194,7 +211,7 @@ class ClubListScreen extends React.Component<Props, State> {
      *
      * @param item The article pressed
      */
-    onListItemPress(item: Object) {
+    onListItemPress(item: club) {
         this.props.navigation.navigate("club-information", {data: item, categories: this.categories});
     }
 
@@ -215,4 +232,4 @@ class ClubListScreen extends React.Component<Props, State> {
     }
 }
 
-export default withCollapsible(withTheme(ClubListScreen));
+export default withCollapsible(ClubListScreen);

@@ -3,22 +3,23 @@
 import * as React from 'react';
 import {Avatar, Chip, List, withTheme} from 'react-native-paper';
 import {View} from "react-native";
+import type {category, club} from "../../../screens/Amicale/Clubs/ClubListScreen";
+import type {CustomTheme} from "../../../managers/ThemeManager";
 
 type Props = {
-    onPress: Function,
-    categoryTranslator: Function,
-    item: Object,
+    onPress: () => void,
+    categoryTranslator: (id: number) => category,
+    item: club,
     height: number,
+    theme: CustomTheme,
 }
 
 class ClubListItem extends React.Component<Props> {
 
-    colors: Object;
     hasManagers: boolean;
 
     constructor(props) {
         super(props);
-        this.colors = props.theme.colors;
         this.hasManagers = props.item.responsibles.length > 0;
     }
 
@@ -29,8 +30,8 @@ class ClubListItem extends React.Component<Props> {
     getCategoriesRender(categories: Array<number | null>) {
         let final = [];
         for (let i = 0; i < categories.length; i++) {
-            if (categories[i] !== null){
-                const category = this.props.categoryTranslator(categories[i]);
+            if (categories[i] !== null) {
+                const category: category = this.props.categoryTranslator(categories[i]);
                 final.push(
                     <Chip
                         style={{marginRight: 5, marginBottom: 5}}
@@ -46,6 +47,7 @@ class ClubListItem extends React.Component<Props> {
 
     render() {
         const categoriesRender = this.getCategoriesRender.bind(this, this.props.item.category);
+        const colors = this.props.theme.colors;
         return (
             <List.Item
                 title={this.props.item.name}
@@ -65,7 +67,7 @@ class ClubListItem extends React.Component<Props> {
                     }}
                     size={48}
                     icon={this.hasManagers ? "check-circle-outline" : "alert-circle-outline"}
-                    color={this.hasManagers ? this.colors.success : this.colors.primary}
+                    color={this.hasManagers ? colors.success : colors.primary}
                 />}
                 style={{
                     height: this.props.height,

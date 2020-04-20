@@ -3,26 +3,37 @@
 import * as React from 'react';
 import {Platform} from "react-native";
 import i18n from "i18n-js";
-import {Searchbar, withTheme} from "react-native-paper";
+import {Searchbar} from "react-native-paper";
 import {stringMatchQuery} from "../../utils/Search";
 import WebSectionList from "../../components/Screens/WebSectionList";
 import GroupListAccordion from "../../components/Lists/PlanexGroups/GroupListAccordion";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 const LIST_ITEM_HEIGHT = 70;
 
+export type group = {
+    name: string,
+    id: number,
+    isFav: boolean,
+};
+
+export type groupCategory = {
+    name: string,
+    id: number,
+    content: Array<group>,
+};
+
 type Props = {
-    navigation: Object,
-    route: Object,
-    theme: Object,
+    navigation: StackNavigationProp,
 }
 
 type State = {
     currentSearchString: string,
-    favoriteGroups: Array<Object>,
+    favoriteGroups: Array<group>,
 };
 
-function sortName(a, b) {
+function sortName(a: group | groupCategory, b: group | groupCategory) {
     if (a.name.toLowerCase() < b.name.toLowerCase())
         return -1;
     if (a.name.toLowerCase() > b.name.toLowerCase())
@@ -38,7 +49,7 @@ const REPLACE_REGEX = /_/g;
  */
 class GroupSelectionScreen extends React.Component<Props, State> {
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             currentSearchString: '',
@@ -88,18 +99,18 @@ class GroupSelectionScreen extends React.Component<Props, State> {
      *
      * @param item The article pressed
      */
-    onListItemPress = (item: Object) => {
+    onListItemPress = (item: group) => {
         this.props.navigation.navigate("planex", {
             screen: "index",
             params: {group: item}
         });
     };
 
-    onListFavoritePress = (item: Object) => {
+    onListFavoritePress = (item: group) => {
         this.updateGroupFavorites(item);
     };
 
-    isGroupInFavorites(group: Object) {
+    isGroupInFavorites(group: group) {
         let isFav = false;
         for (let i = 0; i < this.state.favoriteGroups.length; i++) {
             if (group.id === this.state.favoriteGroups[i].id) {
@@ -110,7 +121,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         return isFav;
     }
 
-    removeGroupFromFavorites(favorites: Array<Object>, group: Object) {
+    removeGroupFromFavorites(favorites: Array<group>, group: group) {
         for (let i = 0; i < favorites.length; i++) {
             if (group.id === favorites[i].id) {
                 favorites.splice(i, 1);
@@ -119,13 +130,13 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         }
     }
 
-    addGroupToFavorites(favorites: Array<Object>, group: Object) {
+    addGroupToFavorites(favorites: Array<group>, group: group) {
         group.isFav = true;
         favorites.push(group);
         favorites.sort(sortName);
     }
 
-    updateGroupFavorites(group: Object) {
+    updateGroupFavorites(group: group) {
         let newFavorites = [...this.state.favoriteGroups]
         if (this.isGroupInFavorites(group))
             this.removeGroupFromFavorites(newFavorites, group);
@@ -137,7 +148,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
             JSON.stringify(newFavorites));
     }
 
-    shouldDisplayAccordion(item: Object) {
+    shouldDisplayAccordion(item: groupCategory) {
         let shouldDisplay = false;
         for (let i = 0; i < item.content.length; i++) {
             if (stringMatchQuery(item.content[i].name, this.state.currentSearchString)) {
@@ -154,7 +165,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
      * @param item The article to render
      * @return {*}
      */
-    renderItem = ({item}: Object) => {
+    renderItem = ({item}: { item: groupCategory }) => {
         if (this.shouldDisplayAccordion(item)) {
             return (
                 <GroupListAccordion
@@ -170,18 +181,18 @@ class GroupSelectionScreen extends React.Component<Props, State> {
             return null;
     };
 
-    generateData(fetchedData: Object) {
+    generateData(fetchedData: { [key: string]: groupCategory }) {
         let data = [];
         for (let key in fetchedData) {
             this.formatGroups(fetchedData[key]);
             data.push(fetchedData[key]);
         }
         data.sort(sortName);
-        data.unshift({name: "FAVORITES", id: "0", content: this.state.favoriteGroups});
+        data.unshift({name: "FAVORITES", id: 0, content: this.state.favoriteGroups});
         return data;
     }
 
-    formatGroups(item: Object) {
+    formatGroups(item: groupCategory) {
         for (let i = 0; i < item.content.length; i++) {
             item.content[i].name = item.content[i].name.replace(REPLACE_REGEX, " ")
             item.content[i].isFav = this.isGroupInFavorites(item.content[i]);
@@ -194,7 +205,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
      * @param fetchedData
      * @return {*}
      * */
-    createDataset = (fetchedData: Object) => {
+    createDataset = (fetchedData: { [key: string]: groupCategory }) => {
         return [
             {
                 title: '',
@@ -219,4 +230,4 @@ class GroupSelectionScreen extends React.Component<Props, State> {
     }
 }
 
-export default withTheme(GroupSelectionScreen);
+export default GroupSelectionScreen;
