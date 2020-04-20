@@ -9,7 +9,6 @@ import {AppLoading} from 'expo';
 import type {CustomTheme} from "./src/managers/ThemeManager";
 import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 import DrawerNavigator from './src/navigation/DrawerNavigator';
 import {initExpoToken} from "./src/utils/Notifications";
 import {Provider as PaperProvider} from 'react-native-paper';
@@ -18,6 +17,11 @@ import Update from "./src/constants/Update";
 import ConnectionManager from "./src/managers/ConnectionManager";
 import URLHandler from "./src/utils/URLHandler";
 import {setSafeBounceHeight} from "react-navigation-collapsible";
+import {enableScreens} from 'react-native-screens';
+
+// Native optimizations https://reactnavigation.org/docs/react-native-screens
+enableScreens();
+
 
 YellowBox.ignoreWarnings([ // collapsible headers cause this warning, just ignore as it is not an issue
     'Non-serializable values were found in the navigation state',
@@ -32,8 +36,6 @@ type State = {
     showAprilFools: boolean,
     currentTheme: CustomTheme | null,
 };
-
-const Stack = createStackNavigator();
 
 export default class App extends React.Component<Props, State> {
 
@@ -190,9 +192,10 @@ export default class App extends React.Component<Props, State> {
             return (
                 <PaperProvider theme={this.state.currentTheme}>
                     <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
-                        <Stack.Navigator headerMode="none">
-                            <Stack.Screen name="Root" component={this.createDrawerNavigator}/>
-                        </Stack.Navigator>
+                        <DrawerNavigator
+                            defaultHomeRoute={this.defaultHomeRoute}
+                            defaultHomeData={this.defaultHomeData}
+                        />
                     </NavigationContainer>
                 </PaperProvider>
             );

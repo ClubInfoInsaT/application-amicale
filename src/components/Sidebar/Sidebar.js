@@ -7,18 +7,19 @@ import {TouchableRipple} from "react-native-paper";
 import ConnectionManager from "../../managers/ConnectionManager";
 import LogoutDialog from "../Amicale/LogoutDialog";
 import SideBarSection from "./SideBarSection";
+import {DrawerNavigationProp} from "@react-navigation/drawer";
 
 const deviceWidth = Dimensions.get("window").width;
 
 type Props = {
-    navigation: Object,
+    navigation: DrawerNavigationProp,
+    state: {[key: string] : any},
     theme?: Object,
 };
 
 type State = {
     isLoggedIn: boolean,
     dialogVisible: boolean,
-    activeRoute: string;
 };
 
 /**
@@ -27,7 +28,7 @@ type State = {
 class SideBar extends React.Component<Props, State> {
 
     dataSet: Array<Object>;
-
+    activeRoute: string;
     /**
      * Generate the dataset
      *
@@ -35,6 +36,7 @@ class SideBar extends React.Component<Props, State> {
      */
     constructor(props: Props) {
         super(props);
+        this.activeRoute = 'main';
         // Dataset used to render the drawer
         const mainData = [
             {
@@ -179,27 +181,23 @@ class SideBar extends React.Component<Props, State> {
             },
         ];
         ConnectionManager.getInstance().addLoginStateListener(this.onLoginStateChange);
-        this.props.navigation.addListener('state', this.onRouteChange);
         this.state = {
             isLoggedIn: ConnectionManager.getInstance().isLoggedIn(),
             dialogVisible: false,
-            activeRoute: 'Main',
         };
     }
 
-    onRouteChange = (event: Object) => {
-        try {
-            const state = event.data.state.routes[0].state; // Get the Drawer's state if it exists
-            // Get the current route name. This will only show Drawer routes.
-            // Tabbar routes will be shown as 'Main'
-            const routeName = state.routeNames[state.index];
-            if (this.state.activeRoute !== routeName)
-                this.setState({activeRoute: routeName});
-        } catch (e) {
-            this.setState({activeRoute: 'Main'});
-        }
+    shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+        const nextNavigationState = nextProps.state;
+        const nextRoute = nextNavigationState.routes[nextNavigationState.index].name;
 
-    };
+        const currentNavigationState = this.props.state;
+        const currentRoute = currentNavigationState.routes[currentNavigationState.index].name;
+
+        this.activeRoute = nextRoute;
+        return (nextState !== this.state)
+            || (nextRoute !== currentRoute);
+    }
 
     showDisconnectDialog = () => this.setState({dialogVisible: true});
 
@@ -217,7 +215,7 @@ class SideBar extends React.Component<Props, State> {
         return <SideBarSection
             {...this.props}
             listKey={item.key}
-            activeRoute={this.state.activeRoute}
+            activeRoute={this.activeRoute}
             isLoggedIn={this.state.isLoggedIn}
             sectionName={item.name}
             startOpen={item.startOpen}
@@ -239,7 +237,7 @@ class SideBar extends React.Component<Props, State> {
                 {/*$FlowFixMe*/}
                 <FlatList
                     data={this.dataSet}
-                    extraData={this.state.isLoggedIn.toString() + this.state.activeRoute}
+                    extraData={this.state.isLoggedIn.toString() + this.activeRoute}
                     renderItem={this.getRenderItem}
                 />
                 <LogoutDialog

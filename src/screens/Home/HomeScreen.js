@@ -15,9 +15,9 @@ import ConnectionManager from "../../managers/ConnectionManager";
 import {CommonActions} from '@react-navigation/native';
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 import AnimatedFAB from "../../components/Animations/AnimatedFAB";
-import AnimatedFocusView from "../../components/Animations/AnimatedFocusView";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import {View} from "react-native-animatable";
 // import DATA from "../dashboard_data.json";
 
 
@@ -166,17 +166,11 @@ class HomeScreen extends React.Component<Props> {
     };
 
     onProxiwashClick = () => {
-        this.props.navigation.navigate("proxiwash", {
-            screen: 'index',
-            params: {animationDir: "right"} // Play tab animation
-        });
+        this.props.navigation.navigate("proxiwash");
     };
 
     onProximoClick = () => {
-        this.props.navigation.navigate("proximo", {
-            screen: 'index',
-            params: {animationDir: "left"} // Play tab animation
-        });
+        this.props.navigation.navigate("proximo");
     };
 
     onTutorInsaClick = () => this.props.navigation.navigate('tutorinsa');
@@ -513,8 +507,8 @@ class HomeScreen extends React.Component<Props> {
 
     render() {
         return (
-            <AnimatedFocusView
-                {...this.props}
+            <View
+                style={{flex: 1}}
             >
                 <WebSectionList
                     {...this.props}
@@ -532,7 +526,7 @@ class HomeScreen extends React.Component<Props> {
                     icon="qrcode-scan"
                     onPress={this.openScanner}
                 />
-            </AnimatedFocusView>
+            </View>
         );
     }
 }

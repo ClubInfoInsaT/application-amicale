@@ -14,7 +14,6 @@ import {
 } from '../../utils/Planning';
 import {Avatar, Divider, List} from 'react-native-paper';
 import CustomAgenda from "../../components/Overrides/CustomAgenda";
-import AnimatedFocusView from "../../components/Animations/AnimatedFocusView";
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
@@ -231,38 +230,34 @@ class PlanningScreen extends React.Component<Props, State> {
     render() {
         // console.log("rendering PlanningScreen");
         return (
-            <AnimatedFocusView
+            <CustomAgenda
                 {...this.props}
-            >
-                <CustomAgenda
-                    {...this.props}
-                    // the list of items that have to be displayed in agenda. If you want to render item as empty date
-                    // the value of date key kas to be an empty array []. If there exists no value for date key it is
-                    // considered that the date in question is not yet loaded
-                    items={this.state.agendaItems}
-                    // initially selected day
-                    selected={this.currentDate}
-                    // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-                    minDate={this.currentDate}
-                    // Max amount of months allowed to scroll to the past. Default = 50
-                    pastScrollRange={1}
-                    // Max amount of months allowed to scroll to the future. Default = 50
-                    futureScrollRange={AGENDA_MONTH_SPAN}
-                    // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
-                    onRefresh={this.onRefresh}
-                    // callback that fires when the calendar is opened or closed
-                    onCalendarToggled={this.onCalendarToggled}
-                    // Set this true while waiting for new data from a refresh
-                    refreshing={this.state.refreshing}
-                    renderItem={this.getRenderItem}
-                    renderEmptyDate={this.getRenderEmptyDate}
-                    rowHasChanged={this.rowHasChanged}
-                    // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-                    firstDay={1}
-                    // ref to this agenda in order to handle back button event
-                    onRef={this.onAgendaRef}
-                />
-            </AnimatedFocusView>
+                // the list of items that have to be displayed in agenda. If you want to render item as empty date
+                // the value of date key kas to be an empty array []. If there exists no value for date key it is
+                // considered that the date in question is not yet loaded
+                items={this.state.agendaItems}
+                // initially selected day
+                selected={this.currentDate}
+                // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+                minDate={this.currentDate}
+                // Max amount of months allowed to scroll to the past. Default = 50
+                pastScrollRange={1}
+                // Max amount of months allowed to scroll to the future. Default = 50
+                futureScrollRange={AGENDA_MONTH_SPAN}
+                // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
+                onRefresh={this.onRefresh}
+                // callback that fires when the calendar is opened or closed
+                onCalendarToggled={this.onCalendarToggled}
+                // Set this true while waiting for new data from a refresh
+                refreshing={this.state.refreshing}
+                renderItem={this.getRenderItem}
+                renderEmptyDate={this.getRenderEmptyDate}
+                rowHasChanged={this.rowHasChanged}
+                // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+                firstDay={1}
+                // ref to this agenda in order to handle back button event
+                onRef={this.onAgendaRef}
+            />
         );
     }
 }

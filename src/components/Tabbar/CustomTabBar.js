@@ -61,10 +61,7 @@ class CustomTabBar extends React.Component<Props, State> {
         });
         if (currentIndex !== destIndex && !event.defaultPrevented) {
             this.state.translateY = new Animated.Value(0);
-            this.props.navigation.navigate(route.name, {
-                screen: 'index',
-                params: {animationDir: currentIndex < destIndex ? "right" : "left"}
-            });
+            this.props.navigation.navigate(route.name);
         }
     }
 

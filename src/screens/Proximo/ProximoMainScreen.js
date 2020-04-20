@@ -6,7 +6,6 @@ import i18n from "i18n-js";
 import WebSectionList from "../../components/Screens/WebSectionList";
 import {List, withTheme} from 'react-native-paper';
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
-import AnimatedFocusView from "../../components/Animations/AnimatedFocusView";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 const LIST_ITEM_HEIGHT = 84;
@@ -234,17 +233,13 @@ class ProximoMainScreen extends React.Component<Props, State> {
     render() {
         const nav = this.props.navigation;
         return (
-            <AnimatedFocusView
-                {...this.props}
-            >
-                <WebSectionList
-                    createDataset={this.createDataset}
-                    navigation={nav}
-                    autoRefreshTime={0}
-                    refreshOnFocus={false}
-                    fetchUrl={DATA_URL}
-                    renderItem={this.getRenderItem}/>
-            </AnimatedFocusView>
+            <WebSectionList
+                createDataset={this.createDataset}
+                navigation={nav}
+                autoRefreshTime={0}
+                refreshOnFocus={false}
+                fetchUrl={DATA_URL}
+                renderItem={this.getRenderItem}/>
         );
     }
 }

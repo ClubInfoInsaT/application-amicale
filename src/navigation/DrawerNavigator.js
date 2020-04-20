@@ -541,7 +541,10 @@ export default class DrawerNavigator extends React.Component<Props> {
         this.createTabNavigator = () => <TabNavigator {...props}/>
     }
 
-    getDrawerContent = (props: { navigation: DrawerNavigationProp }) => <Sidebar {...props}/>
+    getDrawerContent = (props: {
+        navigation: DrawerNavigationProp,
+        state: {[key: string] : any}
+    }) => <Sidebar {...props}/>
 
     render() {
         return (
