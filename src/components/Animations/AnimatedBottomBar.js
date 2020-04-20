@@ -59,9 +59,9 @@ class AnimatedBottomBar extends React.Component<Props, State> {
     onHideChange = (shouldHide: boolean) => {
         if (this.ref.current != null) {
             if (shouldHide)
-                this.ref.current.bounceOutDown(1000);
+                this.ref.current.fadeOutDown(500);
             else
-                this.ref.current.bounceInUp(1000);
+                this.ref.current.fadeInUp(500);
         }
     }
 
@@ -105,7 +105,6 @@ class AnimatedBottomBar extends React.Component<Props, State> {
                             iterationDelay={500}
                             iterationCount="infinite"
                             useNativeDriver
-                            // useNativeDriver={true}
                             style={styles.fab}
                             icon="account-clock"
                             onPress={() => this.props.navigation.navigate('group-select')}
