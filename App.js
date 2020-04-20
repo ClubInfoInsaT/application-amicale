@@ -66,6 +66,9 @@ export default class App extends React.Component<Props, State> {
         this.urlHandler = new URLHandler(this.onInitialURLParsed, this.onDetectURL);
         this.urlHandler.listen();
         setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 20);
+        this.loadAssetsAsync().then(() => {
+            this.onLoadFinished();
+        });
     }
 
     /**
@@ -133,12 +136,6 @@ export default class App extends React.Component<Props, State> {
         this.storageManager.savePref(this.storageManager.preferences.showAprilFoolsStart.key, '0');
     };
 
-    componentDidMount() {
-        this.loadAssetsAsync().then(() => {
-            this.onLoadFinished();
-        });
-    }
-
     /**
      * Loads every async data
      *
@@ -175,7 +172,6 @@ export default class App extends React.Component<Props, State> {
             showUpdate: this.storageManager.preferences.updateNumber.current !== Update.number.toString(),
             showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && this.storageManager.preferences.showAprilFoolsStart.current === '1',
         });
-        // SplashScreen.hide();
     }
 
     /**
