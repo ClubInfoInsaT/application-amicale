@@ -188,7 +188,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
             data.push(fetchedData[key]);
         }
         data.sort(sortName);
-        data.unshift({name: "FAVORITES", id: 0, content: this.state.favoriteGroups});
+        data.unshift({name: i18n.t("planexScreen.favorites"), id: 0, content: this.state.favoriteGroups});
         return data;
     }
 

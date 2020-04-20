@@ -74,7 +74,7 @@ class GroupListAccordion extends React.Component<Props, State> {
                         justifyContent: 'center',
                     }}
                     left={props =>
-                        item.id === "0"
+                        item.id === 0
                             ? <List.Icon
                                 {...props}
                                 icon={"star"}

@@ -213,7 +213,8 @@
     "enableStartScreen": "Vous venez souvent ici ? Démarrez l'appli sur cette page!",
     "enableStartOK": "Oui svp!",
     "enableStartCancel": "Plus tard",
-    "noGroupSelected": "Pas de group sélectionné. Merci de choisir un groupe avec le beau bouton rouge ci-dessous."
+    "noGroupSelected": "Pas de group sélectionné. Merci de choisir un groupe avec le beau bouton rouge ci-dessous.",
+    "favorites": "Favoris"
   },
   "availableRoomScreen": {
     "normalRoom": "Travail",
