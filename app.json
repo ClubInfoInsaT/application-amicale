@@ -65,8 +65,6 @@
     "userInterfaceStyle": "automatic",
     "assetBundlePatterns": [
       "**/*"
-    ],
-
-
+    ]
   }
 }
