@@ -115,13 +115,12 @@ export default class App extends React.Component<Props, State> {
      * as the android status bar is always set to black.
      */
     setupStatusBar() {
-        if (Platform.OS === 'ios') {
-            if (ThemeManager.getNightMode()) {
-                StatusBar.setBarStyle('light-content', true);
-            } else {
-                StatusBar.setBarStyle('dark-content', true);
-            }
+        if (ThemeManager.getNightMode()) {
+            StatusBar.setBarStyle('light-content', true);
+        } else {
+            StatusBar.setBarStyle('dark-content', true);
         }
+        StatusBar.setBackgroundColor(ThemeManager.getCurrentTheme().colors.surface, true);
     }
 
     /**
