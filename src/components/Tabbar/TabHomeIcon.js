@@ -64,7 +64,6 @@ class TabHomeIcon extends React.Component<Props> {
 
     render(): React$Node {
         const props = this.props;
-        console.log(props.focused)
         return (
             <View style={{
                 flex: 1,
