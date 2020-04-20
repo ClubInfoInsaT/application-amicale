@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {View} from "react-native";
+import {Image, View} from "react-native";
 import {FAB, withTheme} from 'react-native-paper';
 import * as Animatable from "react-native-animatable";
 
@@ -20,7 +20,7 @@ const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
 class TabHomeIcon extends React.Component<Props> {
 
     focusedIcon = require('../../../assets/tab-icon.png');
-    unFocusedIcon = require('../../../assets/tab-icon-outline.png'); // has a weird rotating on icon change
+    unFocusedIcon = require('../../../assets/tab-icon-outline.png');
 
     constructor(props) {
         super(props);
@@ -47,12 +47,24 @@ class TabHomeIcon extends React.Component<Props> {
         });
     }
 
+    iconRender = ({size, color}) =>
+        this.props.focused
+            ? <Image
+                source={this.focusedIcon}
+                style={{width: size, height: size, tintColor: color}}
+            />
+            : <Image
+                source={this.unFocusedIcon}
+                style={{width: size, height: size, tintColor: color}}
+            />;
+
     shouldComponentUpdate(nextProps: Props): boolean {
         return (nextProps.focused !== this.props.focused);
     }
 
     render(): React$Node {
         const props = this.props;
+        console.log(props.focused)
         return (
             <View style={{
                 flex: 1,
@@ -65,7 +77,7 @@ class TabHomeIcon extends React.Component<Props> {
                     useNativeDriver
                     onPress={props.onPress}
                     onLongPress={props.onLongPress}
-                    icon={this.focusedIcon}
+                    icon={this.iconRender}
                     style={{
                         marginLeft: 'auto',
                         marginRight: 'auto'
