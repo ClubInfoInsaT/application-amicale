@@ -255,9 +255,9 @@ class HomeScreen extends React.Component<Props> {
                         isAvailable: dashboardData.proximo_articles > 0
                     },
                     {
-                        id: 'silverware-fork-knife',
+                        id: 'today_menu',
                         data: dashboardData.today_menu,
-                        icon: 'shopping',
+                        icon: 'silverware-fork-knife',
                         color: this.colors.menuColor,
                         onPress: this.onMenuClick,
                         isAvailable: dashboardData.today_menu.length > 0
