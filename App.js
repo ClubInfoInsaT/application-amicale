@@ -1,11 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, StatusBar, View, YellowBox} from 'react-native';
+import {Platform, StatusBar, YellowBox} from 'react-native';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
 import CustomIntroSlider from "./src/components/Overrides/CustomIntroSlider";
-import {SplashScreen} from 'expo';
+import {AppLoading} from 'expo';
 import type {CustomTheme} from "./src/managers/ThemeManager";
 import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
@@ -18,7 +18,6 @@ import Update from "./src/constants/Update";
 import ConnectionManager from "./src/managers/ConnectionManager";
 import URLHandler from "./src/utils/URLHandler";
 import {setSafeBounceHeight} from "react-navigation-collapsible";
-import * as Animatable from 'react-native-animatable';
 
 YellowBox.ignoreWarnings([ // collapsible headers cause this warning, just ignore as it is not an issue
     'Non-serializable values were found in the navigation state',
@@ -59,7 +58,7 @@ export default class App extends React.Component<Props, State> {
     constructor() {
         super();
         LocaleManager.initTranslations();
-        SplashScreen.preventAutoHide();
+        // SplashScreen.preventAutoHide();
         this.navigatorRef = React.createRef();
         this.defaultHomeRoute = null;
         this.defaultHomeData = {};
@@ -145,7 +144,7 @@ export default class App extends React.Component<Props, State> {
      *
      * @returns {Promise<void>}
      */
-    async loadAssetsAsync() {
+    loadAssetsAsync = async () => {
         await this.storageManager.loadPreferences();
         await initExpoToken();
         try {
@@ -161,7 +160,8 @@ export default class App extends React.Component<Props, State> {
         // Only show intro if this is the first time starting the app
         this.createDrawerNavigator = () => <DrawerNavigator
             defaultHomeRoute={this.defaultHomeRoute}
-            defaultHomeData={this.defaultHomeData}/>;
+            defaultHomeData={this.defaultHomeData}
+        />;
         ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
         // Status bar goes dark if set too fast on ios
         if (Platform.OS === 'ios')
@@ -175,6 +175,7 @@ export default class App extends React.Component<Props, State> {
             showUpdate: this.storageManager.preferences.updateNumber.current !== Update.number.toString(),
             showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && this.storageManager.preferences.showAprilFoolsStart.current === '1',
         });
+        // SplashScreen.hide();
     }
 
     /**
@@ -182,7 +183,7 @@ export default class App extends React.Component<Props, State> {
      */
     render() {
         if (this.state.isLoading) {
-            return null;
+            return <AppLoading/>;
         } else if (this.state.showIntro || this.state.showUpdate || this.state.showAprilFools) {
             return <CustomIntroSlider
                 onDone={this.onIntroDone}
@@ -192,27 +193,11 @@ export default class App extends React.Component<Props, State> {
         } else {
             return (
                 <PaperProvider theme={this.state.currentTheme}>
-                    <View style={{
-                        flex: 1,
-                        backgroundColor: ThemeManager.getCurrentTheme().colors.background
-                    }}>
-                        <Animatable.View
-                            style={{flex: 1,}}
-                            animation={"fadeIn"}
-                            duration={1000}
-                            useNativeDriver
-                            onAnimationBegin={() => {
-                                // delay the hiding even 1ms is enough to prevent flickering
-                                setTimeout(() => SplashScreen.hide(), 1);
-                            }}
-                        >
-                            <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
-                                <Stack.Navigator headerMode="none">
-                                    <Stack.Screen name="Root" component={this.createDrawerNavigator}/>
-                                </Stack.Navigator>
-                            </NavigationContainer>
-                        </Animatable.View>
-                    </View>
+                    <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
+                        <Stack.Navigator headerMode="none">
+                            <Stack.Screen name="Root" component={this.createDrawerNavigator}/>
+                        </Stack.Navigator>
+                    </NavigationContainer>
                 </PaperProvider>
             );
         }
