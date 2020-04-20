@@ -14,6 +14,7 @@ type Props = {
 
 type State = {
     translateY: AnimatedValue,
+    barSynced: boolean,
 }
 
 const TAB_ICONS = {
@@ -30,12 +31,12 @@ class CustomTabBar extends React.Component<Props, State> {
 
     static TAB_BAR_HEIGHT = 48;
 
-    barSynced: boolean; // Is the bar synced with the header for animations?
     activeColor: string;
     inactiveColor: string;
 
     state = {
         translateY: new Animated.Value(0),
+        barSynced: false,// Is the bar synced with the header for animations?
     }
 
     // shouldComponentUpdate(nextProps: Props): boolean {
@@ -48,7 +49,6 @@ class CustomTabBar extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.tabRef = React.createRef();
-        this.barSynced = false;
         this.activeColor = props.theme.colors.primary;
         this.inactiveColor = props.theme.colors.tabIcon;
     }
@@ -79,7 +79,7 @@ class CustomTabBar extends React.Component<Props, State> {
 
 
     onRouteChange = () => {
-        this.barSynced = false;
+        this.setState({barSynced: false});
     }
 
     renderIcon = (route, index) => {
@@ -107,9 +107,11 @@ class CustomTabBar extends React.Component<Props, State> {
             const stackRoute = route.state ? stackState.routes[stackState.index] : undefined;
             const params = stackRoute ? stackRoute.params : undefined;
             const collapsible = params ? params.collapsible : undefined;
-            if (collapsible && !this.barSynced) {
-                this.barSynced = true;
-                this.setState({translateY: Animated.multiply(-1.5, collapsible.translateY)});
+            if (collapsible && !this.state.barSynced) {
+                this.setState({
+                    translateY: Animated.multiply(-1.5, collapsible.translateY),
+                    barSynced: true,
+                });
             }
         }
 
