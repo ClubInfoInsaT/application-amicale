@@ -1,13 +1,14 @@
 {
   "screens": {
     "home": "Accueil",
-    "planning": "Planning",
+    "planning": "Événements",
     "planningDisplayScreen": "Détails",
     "clubDisplayScreen": "Détails",
     "feedDisplayScreen": "Détails",
     "clubsAbout": "Les Clubs",
     "amicaleAbout": "L' Amicale",
     "proxiwash": "Proxiwash",
+    "services": "Services",
     "proximo": "Proximo",
     "proximoArticles": "Articles",
     "menuSelf": "Menu du RU",

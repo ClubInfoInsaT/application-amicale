@@ -28,8 +28,8 @@ import {AmicaleWebsiteScreen} from "../screens/Websites/AmicaleWebsiteScreen";
 import {ElusEtudiantsWebsiteScreen} from "../screens/Websites/ElusEtudiantsWebsiteScreen";
 import {WiketudWebsiteScreen} from "../screens/Websites/WiketudWebsiteScreen";
 import {TutorInsaWebsiteScreen} from "../screens/Websites/TutorInsaWebsiteScreen";
-import {ENTWebsiteScreen} from "../screens/Websites/ENTWebsiteScreen.js";
-import {BlueMindWebsiteScreen} from "../screens/Websites/BlueMindWebsiteScreen.js";
+import {ENTWebsiteScreen} from "../screens/Websites/ENTWebsiteScreen";
+import {BlueMindWebsiteScreen} from "../screens/Websites/BlueMindWebsiteScreen";
 import LoginScreen from "../screens/Amicale/LoginScreen";
 import ProfileScreen from "../screens/Amicale/ProfileScreen";
 import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
@@ -91,7 +91,7 @@ function ServicesStackComponent() {
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, "SERVICES")}
+            {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, i18n.t('screens.services'))}
 
             {createScreenCollapsibleStack("proximo", ServicesStack, ProximoMainScreen, "Proximo")}
             {createScreenCollapsibleStack(
@@ -111,11 +111,9 @@ function ServicesStackComponent() {
                 }}
             />
 
-
-            {/*{createScreenCollapsibleStack("index", PlanningStack, InsaHomeScreen, "INSA HOME")}*/}
-            {getWebsiteStack("available-rooms", PlanningStack, AvailableRoomScreen, i18n.t('screens.availableRooms'))}
-            {getWebsiteStack("bib", PlanningStack, BibScreen, i18n.t('screens.bib'))}
-            {createScreenCollapsibleStack("self-menu", PlanningStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
+            {getWebsiteStack("available-rooms", ServicesStack, AvailableRoomScreen, i18n.t('screens.availableRooms'))}
+            {getWebsiteStack("bib", ServicesStack, BibScreen, i18n.t('screens.bib'))}
+            {createScreenCollapsibleStack("self-menu", ServicesStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
 
             {getWebsiteStack("amicale-website", ServicesStack, AmicaleWebsiteScreen, "Amicale")}
             {getWebsiteStack("elus-etudiants", ServicesStack, ElusEtudiantsWebsiteScreen, "Élus Étudiants")}
@@ -158,14 +156,14 @@ function PlanningStackComponent() {
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            <ServicesStack.Screen
+            <PlanningStack.Screen
                 name="planning"
                 component={PlanningScreen}
                 options={{
                     title: i18n.t('screens.planning'),
                 }}
             />
-            <ServicesStack.Screen
+            <PlanningStack.Screen
                 name="planning-information"
                 component={PlanningDisplayScreen}
                 options={{
@@ -239,7 +237,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                     ...modalTransition,
                 }}
             />
-            {createScreenCollapsibleStack("self-menu", PlanningStack, SelfMenuScreen, i18n.t('screens.menuSelf'), true, {...modalTransition})}
+            {createScreenCollapsibleStack("self-menu", HomeStack, SelfMenuScreen, i18n.t('screens.menuSelf'), true, {...modalTransition})}
 
             <HomeStack.Screen
                 name="login"
@@ -346,7 +344,7 @@ export default class TabNavigator extends React.Component<Props> {
                     name="services"
                     option
                     component={ServicesStackComponent}
-                    options={{title: "SERVICES"}}
+                    options={{title: i18n.t('screens.services')}}
                 />
 
                 <Tab.Screen
@@ -357,7 +355,7 @@ export default class TabNavigator extends React.Component<Props> {
                 <Tab.Screen
                     name="planning"
                     component={PlanningStackComponent}
-                    options={{title: "EVENTS"}}
+                    options={{title: i18n.t('screens.planning')}}
                 />
 
                 <Tab.Screen
