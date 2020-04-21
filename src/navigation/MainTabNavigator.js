@@ -28,7 +28,6 @@ import {AmicaleWebsiteScreen} from "../screens/Websites/AmicaleWebsiteScreen";
 import {ElusEtudiantsWebsiteScreen} from "../screens/Websites/ElusEtudiantsWebsiteScreen";
 import {WiketudWebsiteScreen} from "../screens/Websites/WiketudWebsiteScreen";
 import {TutorInsaWebsiteScreen} from "../screens/Websites/TutorInsaWebsiteScreen";
-import TetrisScreen from "../screens/Tetris/TetrisScreen";
 import LoginScreen from "../screens/Amicale/LoginScreen";
 import ProfileScreen from "../screens/Amicale/ProfileScreen";
 import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
@@ -37,7 +36,6 @@ import VoteScreen from "../screens/Amicale/VoteScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
 import AmicaleHomeScreen from "../screens/Amicale/AmicaleHomeScreen";
 import WebsitesHomeScreen from "../screens/Websites/WebsitesHomeScreen";
-import InsaHomeScreen from "../screens/Insa/InsaHomeScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -77,41 +75,32 @@ function createScreenCollapsibleStack(
     )
 }
 
-function getWebsiteStack(name: string, Stack:  any, component: any, title: string) {
+function getWebsiteStack(name: string, Stack: any, component: any, title: string) {
     return createScreenCollapsibleStack(name, Stack, component, title, false);
 }
 
 
-const StudentsStack = createStackNavigator();
+const ServicesStack = createStackNavigator();
 
-function StudentsStackComponent() {
+function ServicesStackComponent() {
     return (
-        <StudentsStack.Navigator
+        <ServicesStack.Navigator
             initialRouteName="index"
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            <StudentsStack.Screen
-                name="index"
-                component={WebsitesHomeScreen}
-                options={{
-                    title: "WEBSITES HOME",
-                }}
-            />
-            {getWebsiteStack("amicale-website", StudentsStack, AmicaleWebsiteScreen, "Amicale")}
-            {getWebsiteStack("elus-etudiants", StudentsStack, ElusEtudiantsWebsiteScreen, "Élus Étudiants")}
-            {getWebsiteStack("wiketud", StudentsStack, WiketudWebsiteScreen, "Wiketud")}
-            {getWebsiteStack("tutorinsa", StudentsStack, TutorInsaWebsiteScreen, "Tutor'INSA")}
-            {createScreenCollapsibleStack("proximo", StudentsStack, ProximoMainScreen, "Proximo")}
+            {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, "SERVICES")}
+
+            {createScreenCollapsibleStack("proximo", ServicesStack, ProximoMainScreen, "Proximo")}
             {createScreenCollapsibleStack(
                 "proximo-list",
-                StudentsStack,
+                ServicesStack,
                 ProximoListScreen,
                 i18n.t('screens.proximoArticles'),
                 true,
                 {...screenTransition},
             )}
-            <StudentsStack.Screen
+            <ServicesStack.Screen
                 name="proximo-about"
                 component={ProximoAboutScreen}
                 options={{
@@ -119,22 +108,18 @@ function StudentsStackComponent() {
                     ...modalTransition,
                 }}
             />
-            <StudentsStack.Screen
-                name="planning"
-                component={PlanningScreen}
-                options={{
-                    title: i18n.t('screens.planning'),
-                }}
-            />
-            <StudentsStack.Screen
-                name="planning-information"
-                component={PlanningDisplayScreen}
-                options={{
-                    title: i18n.t('screens.planningDisplayScreen'),
-                    ...modalTransition,
-                }}
-            />
-        </StudentsStack.Navigator>
+
+
+            {/*{createScreenCollapsibleStack("index", PlanningStack, InsaHomeScreen, "INSA HOME")}*/}
+            {getWebsiteStack("available-rooms", PlanningStack, AvailableRoomScreen, i18n.t('screens.availableRooms'))}
+            {getWebsiteStack("bib", PlanningStack, BibScreen, i18n.t('screens.bib'))}
+            {createScreenCollapsibleStack("self-menu", PlanningStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
+
+            {getWebsiteStack("amicale-website", ServicesStack, AmicaleWebsiteScreen, "Amicale")}
+            {getWebsiteStack("elus-etudiants", ServicesStack, ElusEtudiantsWebsiteScreen, "Élus Étudiants")}
+            {getWebsiteStack("wiketud", ServicesStack, WiketudWebsiteScreen, "Wiketud")}
+            {getWebsiteStack("tutorinsa", ServicesStack, TutorInsaWebsiteScreen, "Tutor'INSA")}
+        </ServicesStack.Navigator>
     );
 }
 
@@ -160,20 +145,31 @@ function ProxiwashStackComponent() {
     );
 }
 
-const InsaStack = createStackNavigator();
+const PlanningStack = createStackNavigator();
 
-function InsaStackComponent() {
+function PlanningStackComponent() {
     return (
-        <InsaStack.Navigator
+        <PlanningStack.Navigator
             initialRouteName="index"
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {createScreenCollapsibleStack("index", InsaStack, InsaHomeScreen, "INSA HOME")}
-            {getWebsiteStack("available-rooms", InsaStack, AvailableRoomScreen, i18n.t('screens.availableRooms'))}
-            {getWebsiteStack("bib", InsaStack, BibScreen, i18n.t('screens.bib'))}
-            {createScreenCollapsibleStack("self-menu", InsaStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
-        </InsaStack.Navigator>
+            <ServicesStack.Screen
+                name="planning"
+                component={PlanningScreen}
+                options={{
+                    title: i18n.t('screens.planning'),
+                }}
+            />
+            <ServicesStack.Screen
+                name="planning-information"
+                component={PlanningDisplayScreen}
+                options={{
+                    title: i18n.t('screens.planningDisplayScreen'),
+                    ...modalTransition,
+                }}
+            />
+        </PlanningStack.Navigator>
     );
 }
 
@@ -208,14 +204,6 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                 }
             )}
             <HomeStack.Screen
-                name="feed-information"
-                component={FeedItemScreen}
-                options={{
-                    title: i18n.t('screens.feedDisplayScreen'),
-                    ...modalTransition,
-                }}
-            />
-            <HomeStack.Screen
                 name="scanner"
                 component={ScannerScreen}
                 options={{
@@ -224,20 +212,30 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                 }}
             />
             <HomeStack.Screen
-                name="home-planning-information"
+                name="club-information"
+                component={ClubDisplayScreen}
+                options={{
+                    title: i18n.t('screens.clubDisplayScreen'),
+                    ...modalTransition,
+                }}
+            />
+            <HomeStack.Screen
+                name="feed-information"
+                component={FeedItemScreen}
+                options={{
+                    title: i18n.t('screens.feedDisplayScreen'),
+                    ...modalTransition,
+                }}
+            />
+            <HomeStack.Screen
+                name="planning-information"
                 component={PlanningDisplayScreen}
                 options={{
                     title: i18n.t('screens.planningDisplayScreen'),
                     ...modalTransition,
                 }}
             />
-            <HomeStack.Screen
-                name="tetris"
-                component={TetrisScreen}
-                options={{
-                    title: i18n.t("game.title"),
-                }}
-            />
+
             <HomeStack.Screen
                 name="login"
                 component={LoginScreen}
@@ -253,14 +251,6 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                 }}
             />
             {createScreenCollapsibleStack("club-list", HomeStack, ClubListScreen, i18n.t('clubs.clubList'))}
-            <HomeStack.Screen
-                name="club-information"
-                component={ClubDisplayScreen}
-                options={{
-                    title: i18n.t('screens.clubDisplayScreen'),
-                    ...modalTransition,
-                }}
-            />
             <HomeStack.Screen
                 name="club-about"
                 component={ClubAboutScreen}
@@ -348,10 +338,10 @@ export default class TabNavigator extends React.Component<Props> {
                     options={{title: i18n.t('screens.proxiwash')}}
                 />
                 <Tab.Screen
-                    name="students"
+                    name="services"
                     option
-                    component={StudentsStackComponent}
-                    options={{title: "ETUDIANTS"}}
+                    component={ServicesStackComponent}
+                    options={{title: "SERVICES"}}
                 />
 
                 <Tab.Screen
@@ -360,9 +350,9 @@ export default class TabNavigator extends React.Component<Props> {
                     options={{title: i18n.t('screens.home')}}
                 />
                 <Tab.Screen
-                    name="insa"
-                    component={InsaStackComponent}
-                    options={{title: "INSA"}}
+                    name="planning"
+                    component={PlanningStackComponent}
+                    options={{title: "EVENTS"}}
                 />
 
                 <Tab.Screen

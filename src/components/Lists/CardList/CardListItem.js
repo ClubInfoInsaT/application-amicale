@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Caption, Card, Paragraph} from 'react-native-paper';
-import type {cardItem} from "../../../screens/Insa/InsaHomeScreen";
+import type {cardItem} from "./CardList";
 
 type Props = {
     width: string | number,

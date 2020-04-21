@@ -2,12 +2,21 @@
 
 import * as React from 'react';
 import {Animated, View} from "react-native";
-import type {cardItem, cards} from "../../../screens/Insa/InsaHomeScreen";
 import CardListItem from "./CardListItem";
 
 type Props = {
     dataset: Array<cards>
 }
+
+export type cardItem = {
+    title: string,
+    subtitle: string,
+    image: string | number,
+    onPress: () => void,
+};
+
+export type cards = Array<cardItem>;
+
 
 export default class CardList extends React.Component<Props> {
 

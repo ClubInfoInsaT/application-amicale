@@ -8,6 +8,7 @@ import DebugScreen from '../screens/About/DebugScreen';
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
 import i18n from "i18n-js";
 import TabNavigator from "./MainTabNavigator";
+import TetrisScreen from "../screens/Tetris/TetrisScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -57,6 +58,13 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 component={DebugScreen}
                 options={{
                     title: i18n.t('aboutScreen.debug')
+                }}
+            />
+            <MainStack.Screen
+                name="tetris"
+                component={TetrisScreen}
+                options={{
+                    title: i18n.t("game.title"),
                 }}
             />
         </MainStack.Navigator>

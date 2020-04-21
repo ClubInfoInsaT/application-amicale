@@ -161,12 +161,16 @@ class HomeScreen extends React.Component<Props> {
     };
 
     onProximoClick = () => {
-        this.props.navigation.navigate("proximo");
+        this.props.navigation.navigate('services', {screen: "index"});
     };
 
-    onTutorInsaClick = () => this.props.navigation.navigate('tutorinsa');
+    onTutorInsaClick = () => {
+        this.props.navigation.navigate('services', {screen: "index"});
+    };
 
-    onMenuClick = () => this.props.navigation.navigate('self-menu');
+    onMenuClick = () => {
+        this.props.navigation.navigate('services', {screen: "index"});
+    };
 
     /**
      * Creates the dataset to be used in the FlatList
@@ -407,8 +411,11 @@ class HomeScreen extends React.Component<Props> {
     getDashboardEvent(content: Array<event>) {
         let futureEvents = this.getFutureEvents(content);
         let displayEvent = this.getDisplayEvent(futureEvents);
-        const clickPreviewAction = () =>
-            this.props.navigation.navigate('home-planning-information', {data: displayEvent});
+        // const clickPreviewAction = () =>
+        //     this.props.navigation.navigate('students', {
+        //         screen: 'planning-information',
+        //         params: {data: displayEvent}
+        //     });
         return (
             <DashboardItem
                 eventNumber={futureEvents.length}
@@ -416,7 +423,7 @@ class HomeScreen extends React.Component<Props> {
             >
                 <PreviewEventDashboardItem
                     event={displayEvent != null ? displayEvent : undefined}
-                    clickAction={clickPreviewAction}
+                    clickAction={this.onEventContainerClick}
                 />
             </DashboardItem>
         );
