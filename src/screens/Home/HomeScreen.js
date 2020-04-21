@@ -169,7 +169,7 @@ class HomeScreen extends React.Component<Props> {
     };
 
     onMenuClick = () => {
-        this.props.navigation.navigate('services', {screen: "index"});
+        this.props.navigation.navigate('self-menu');
     };
 
     /**
@@ -248,7 +248,7 @@ class HomeScreen extends React.Component<Props> {
                     },
                     {
                         id: 'today_menu',
-                        data: dashboardData == null ? 0 : dashboardData.today_menu,
+                        data: dashboardData == null ? [] : dashboardData.today_menu,
                         icon: 'silverware-fork-knife',
                         color: this.colors.menuColor,
                         onPress: this.onMenuClick,

@@ -235,6 +235,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                     ...modalTransition,
                 }}
             />
+            {createScreenCollapsibleStack("self-menu", PlanningStack, SelfMenuScreen, i18n.t('screens.menuSelf'), true, {...modalTransition})}
 
             <HomeStack.Screen
                 name="login"
