@@ -1,11 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Button, Card, withTheme} from 'react-native-paper';
-import {Platform, StyleSheet} from "react-native";
-import i18n from 'i18n-js';
+import {Avatar, Card, List, withTheme} from 'react-native-paper';
+import {StyleSheet} from "react-native";
 import {DrawerNavigationProp} from "@react-navigation/drawer";
 import type {CustomTheme} from "../../managers/ThemeManager";
+
+const ICON_AMICALE = require("../../../assets/amicale.png");
 
 type Props = {
     navigation: DrawerNavigationProp,
@@ -18,45 +19,37 @@ class ActionsDashBoardItem extends React.Component<Props> {
         return (nextProps.theme.dark !== this.props.theme.dark)
     }
 
-    openDrawer = () => this.props.navigation.openDrawer();
-
-    gotToSettings = () => this.props.navigation.navigate("settings");
-
     render() {
         return (
             <Card style={{
                 ...styles.card,
                 borderColor: this.props.theme.colors.primary,
             }}>
-                <Card.Content style={styles.content}>
-                    <Button
-                        icon="information"
-                        mode="contained"
-                        onPress={this.openDrawer}
-                        style={styles.servicesButton}
-                    >
-                        {i18n.t("homeScreen.servicesButton")}
-                    </Button>
-                    {
-                        // Leave space to fix ios icon position
-                        Platform.OS === 'ios'
-                            ? <Button
-                                icon="settings"
-                                mode="contained"
-                                onPress={this.gotToSettings}
-                                style={styles.settingsButton}
-                                compact
-                            > </Button>
-                            : <Button
-                                icon="settings"
-                                mode="contained"
-                                onPress={this.gotToSettings}
-                                style={styles.settingsButton}
-                                compact
-                            />
-                    }
-
-                </Card.Content>
+                <List.Item
+                    title={"AMICALE"}
+                    description={"VOTRE COMPTE"}
+                    left={props => <Avatar.Image
+                        {...props}
+                        size={54}
+                        source={ICON_AMICALE}
+                        style={styles.avatar}/>}
+                    right={props => <List.Icon {...props} icon="chevron-right"/>}
+                    onPress={() => this.props.navigation.navigate("amicale-home")}
+                />
+                <List.Item
+                    title={"STUDENT WEBSITES"}
+                    description={"TROP COOL"}
+                    left={props => <List.Icon {...props} icon="web"/>}
+                    right={props => <List.Icon {...props} icon="chevron-right"/>}
+                    onPress={() => this.props.navigation.navigate("websites-home")}
+                />
+                <List.Item
+                    title={"SERVICES INSA"}
+                    description={"TROP BIEN"}
+                    left={props => <List.Icon {...props} icon="star"/>}
+                    right={props => <List.Icon {...props} icon="chevron-right"/>}
+                    onPress={() => this.props.navigation.navigate("insa-home")}
+                />
             </Card>
         );
     }
@@ -68,25 +61,12 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         marginTop: 10,
-        overflow: 'hidden',
         elevation: 4,
         borderWidth: 1,
     },
     avatar: {
         backgroundColor: 'transparent'
     },
-    content: {
-        flex: 1,
-        flexDirection: 'row',
-    },
-    servicesButton: {
-        marginLeft: 'auto',
-        marginRight: 5,
-    },
-    settingsButton: {
-        marginLeft: 5,
-        marginRight: 'auto',
-    }
 });
 
 export default withTheme(ActionsDashBoardItem);

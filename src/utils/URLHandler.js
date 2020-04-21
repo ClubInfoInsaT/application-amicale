@@ -7,7 +7,7 @@ export default class URLHandler {
     static CLUB_INFO_URL_PATH = "club";
     static EVENT_INFO_URL_PATH = "event";
 
-    static CLUB_INFO_ROUTE = "home-club-information";
+    static CLUB_INFO_ROUTE = "club-information";
     static EVENT_INFO_ROUTE = "home-planning-information";
 
     onInitialURLParsed: Function;

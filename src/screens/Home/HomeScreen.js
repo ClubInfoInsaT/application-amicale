@@ -11,7 +11,6 @@ import SquareDashboardItem from "../../components/Home/SmallDashboardItem";
 import PreviewEventDashboardItem from "../../components/Home/PreviewEventDashboardItem";
 import {stringToDate} from "../../utils/Planning";
 import ActionsDashBoardItem from "../../components/Home/ActionsDashboardItem";
-import ConnectionManager from "../../managers/ConnectionManager";
 import {CommonActions} from '@react-navigation/native';
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 import AnimatedFAB from "../../components/Animations/AnimatedFAB";
@@ -103,14 +102,11 @@ class HomeScreen extends React.Component<Props> {
 
     colors: Object;
 
-    isLoggedIn: boolean | null;
-
     fabRef: { current: null | AnimatedFAB };
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
-        this.isLoggedIn = null;
         this.fabRef = React.createRef();
     }
 
@@ -132,12 +128,9 @@ class HomeScreen extends React.Component<Props> {
     }
 
     onScreenFocus = () => {
-        if (this.isLoggedIn !== ConnectionManager.getInstance().isLoggedIn()) {
-            this.isLoggedIn = ConnectionManager.getInstance().isLoggedIn();
-            this.props.navigation.setOptions({
-                headerRight: this.getHeaderButton,
-            });
-        }
+        this.props.navigation.setOptions({
+            headerRight: this.getHeaderButton,
+        });
         // handle link open when home is not focused or created
         this.handleNavigationParams();
     };
@@ -153,15 +146,11 @@ class HomeScreen extends React.Component<Props> {
     };
 
     getHeaderButton = () => {
-        const screen = this.isLoggedIn
-            ? "profile"
-            : "login";
-        const icon = this.isLoggedIn
-            ? "account"
-            : "login";
-        const onPress = () => this.props.navigation.navigate(screen);
+        const onPressSettings = () => this.props.navigation.navigate("settings");
+        const onPressAbout = () => this.props.navigation.navigate("about");
         return <MaterialHeaderButtons>
-            <Item title="main" iconName={icon} onPress={onPress}/>
+            <Item title="settings" iconName={"settings"} onPress={onPressSettings}/>
+            <Item title="information" iconName={"information"} onPress={onPressAbout}/>
         </MaterialHeaderButtons>;
     };
 

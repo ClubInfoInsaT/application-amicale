@@ -13,82 +13,97 @@ import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Planex/PlanexScreen';
 import AsyncStorageManager from "../managers/AsyncStorageManager";
 import {useTheme} from 'react-native-paper';
+import {Platform} from 'react-native';
 import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import ScannerScreen from "../screens/Home/ScannerScreen";
-import MaterialHeaderButtons, {Item} from "../components/Overrides/CustomHeaderButton";
 import FeedItemScreen from "../screens/Home/FeedItemScreen";
 import {createCollapsibleStack} from "react-navigation-collapsible";
 import GroupSelectionScreen from "../screens/Planex/GroupSelectionScreen";
 import CustomTabBar from "../components/Tabbar/CustomTabBar";
-import {DrawerNavigationProp} from "@react-navigation/drawer";
+import SelfMenuScreen from "../screens/Other/SelfMenuScreen";
+import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
+import BibScreen from "../screens/Websites/BibScreen";
+import {AmicaleWebsiteScreen} from "../screens/Websites/AmicaleWebsiteScreen";
+import {ElusEtudiantsWebsiteScreen} from "../screens/Websites/ElusEtudiantsWebsiteScreen";
+import {WiketudWebsiteScreen} from "../screens/Websites/WiketudWebsiteScreen";
+import {TutorInsaWebsiteScreen} from "../screens/Websites/TutorInsaWebsiteScreen";
+import TetrisScreen from "../screens/Tetris/TetrisScreen";
+import LoginScreen from "../screens/Amicale/LoginScreen";
+import ProfileScreen from "../screens/Amicale/ProfileScreen";
+import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
+import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
+import VoteScreen from "../screens/Amicale/VoteScreen";
+import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
+import AmicaleHomeScreen from "../screens/Amicale/AmicaleHomeScreen";
+import WebsitesHomeScreen from "../screens/Websites/WebsitesHomeScreen";
+import InsaHomeScreen from "../screens/Insa/InsaHomeScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
     cardOverlayEnabled: true,
-    ...TransitionPresets.SlideFromRightIOS,
+    ...TransitionPresets.ScaleFromCenterAndroid,
 };
 
-function getDrawerButton(navigation: DrawerNavigationProp) {
-    return (
-        <MaterialHeaderButtons left={true}>
-            <Item title="menu" iconName="menu" onPress={navigation.openDrawer}/>
-        </MaterialHeaderButtons>
-    );
+const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
+
+const screenTransition = Platform.OS === 'ios' ? TransitionPresets.SlideFromRightIOS : TransitionPresets.ScaleFromCenterAndroid;
+
+function createScreenCollapsibleStack(
+    name: string,
+    component: any,
+    title: string,
+    useNativeDriver?: boolean,
+    options?: { [key: string]: any }) {
+    const {colors} = useTheme();
+    const screenOptions = options != null ? options : {};
+    return createCollapsibleStack(
+        <HomeStack.Screen
+            name={name}
+            component={component}
+            options={{
+                title: title,
+                headerStyle: {
+                    backgroundColor: colors.surface,
+                },
+                ...screenOptions,
+            }}
+        />,
+        {
+            collapsedColor: 'transparent',
+            useNativeDriver: useNativeDriver != null ? useNativeDriver : true, // native driver does not work with webview
+        }
+    )
 }
+
+function getWebsiteStack(name: string, component: any, title: string) {
+    return createScreenCollapsibleStack(name, component, title, false);
+}
+
 
 const ProximoStack = createStackNavigator();
 
 function ProximoStackComponent() {
-    const {colors} = useTheme();
     return (
         <ProximoStack.Navigator
             initialRouteName="index"
-            headerMode="float"
+            headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {createCollapsibleStack(
-                <ProximoStack.Screen
-                    name="index"
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: 'Proximo',
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
-                    }}
-                    component={ProximoMainScreen}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: true,
-                }
-            )}
-            {createCollapsibleStack(
-                <ProximoStack.Screen
-                    name="proximo-list"
-                    options={{
-                        title: i18n.t('screens.proximoArticles'),
-                        headerStyle: {
-                            backgroundColor: colors.surface,
-                        }
-                    }}
-                    component={ProximoListScreen}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: true,
-                }
+            {createScreenCollapsibleStack("index", ProximoMainScreen, "Proximo")}
+            {createScreenCollapsibleStack(
+                "proximo-list",
+                ProximoListScreen,
+                i18n.t('screens.proximoArticles'),
+                true,
+                {...screenTransition},
             )}
             <ProximoStack.Screen
                 name="proximo-about"
                 component={ProximoAboutScreen}
                 options={{
                     title: i18n.t('screens.proximo'),
-                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                    ...modalTransition,
                 }}
             />
         </ProximoStack.Navigator>
@@ -98,39 +113,19 @@ function ProximoStackComponent() {
 const ProxiwashStack = createStackNavigator();
 
 function ProxiwashStackComponent() {
-    const {colors} = useTheme();
     return (
         <ProxiwashStack.Navigator
             initialRouteName="index"
-            headerMode='float'
+            headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {createCollapsibleStack(
-                <ProxiwashStack.Screen
-                    name="index"
-                    component={ProxiwashScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: i18n.t('screens.proxiwash'),
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
-                    }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: true,
-                }
-            )}
+            {createScreenCollapsibleStack("index", ProxiwashScreen, i18n.t('screens.proxiwash'))}
             <ProxiwashStack.Screen
                 name="proxiwash-about"
                 component={ProxiwashAboutScreen}
                 options={{
                     title: i18n.t('screens.proxiwash'),
-                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                    ...modalTransition,
                 }}
             />
         </ProxiwashStack.Navigator>
@@ -143,18 +138,14 @@ function PlanningStackComponent() {
     return (
         <PlanningStack.Navigator
             initialRouteName="index"
-            headerMode='float'
+            headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
             <PlanningStack.Screen
                 name="index"
                 component={PlanningScreen}
-                options={({navigation}) => {
-                    const openDrawer = getDrawerButton.bind(this, navigation);
-                    return {
-                        title: i18n.t('screens.planning'),
-                        headerLeft: openDrawer
-                    };
+                options={{
+                    title: i18n.t('screens.planning'),
                 }}
             />
             <PlanningStack.Screen
@@ -162,7 +153,7 @@ function PlanningStackComponent() {
                 component={PlanningDisplayScreen}
                 options={{
                     title: i18n.t('screens.planningDisplayScreen'),
-                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                    ...modalTransition,
                 }}
             />
         </PlanningStack.Navigator>
@@ -179,22 +170,18 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
     return (
         <HomeStack.Navigator
             initialRouteName={"index"}
-            headerMode="float"
+            headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
             {createCollapsibleStack(
                 <HomeStack.Screen
                     name="index"
                     component={HomeScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: i18n.t('screens.home'),
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
+                    options={{
+                        title: i18n.t('screens.home'),
+                        headerStyle: {
+                            backgroundColor: colors.surface,
+                        },
                     }}
                     initialParams={params}
                 />,
@@ -208,15 +195,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                 component={PlanningDisplayScreen}
                 options={{
                     title: i18n.t('screens.planningDisplayScreen'),
-                    ...TransitionPresets.ModalSlideFromBottomIOS,
-                }}
-            />
-            <HomeStack.Screen
-                name="home-club-information"
-                component={ClubDisplayScreen}
-                options={{
-                    title: i18n.t('screens.clubDisplayScreen'),
-                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                    ...modalTransition,
                 }}
             />
             <HomeStack.Screen
@@ -224,7 +203,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                 component={FeedItemScreen}
                 options={{
                     title: i18n.t('screens.feedDisplayScreen'),
-                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                    ...modalTransition,
                 }}
             />
             <HomeStack.Screen
@@ -232,7 +211,89 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                 component={ScannerScreen}
                 options={{
                     title: i18n.t('screens.scanner'),
-                    ...TransitionPresets.ModalSlideFromBottomIOS,
+                    ...modalTransition,
+                }}
+            />
+
+
+            {createScreenCollapsibleStack("self-menu", SelfMenuScreen, i18n.t('screens.menuSelf'))}
+            {getWebsiteStack("available-rooms", AvailableRoomScreen, i18n.t('screens.availableRooms'))}
+            {getWebsiteStack("bib", BibScreen, i18n.t('screens.bib'))}
+            {getWebsiteStack("amicale-website", AmicaleWebsiteScreen, "Amicale")}
+            {getWebsiteStack("elus-etudiants", ElusEtudiantsWebsiteScreen, "Élus Étudiants")}
+            {getWebsiteStack("wiketud", WiketudWebsiteScreen, "Wiketud")}
+            {getWebsiteStack("tutorinsa", TutorInsaWebsiteScreen, "Tutor'INSA")}
+            <HomeStack.Screen
+                name="tetris"
+                component={TetrisScreen}
+                options={{
+                    title: i18n.t("game.title"),
+                }}
+            />
+            <HomeStack.Screen
+                name="login"
+                component={LoginScreen}
+                options={{
+                    title: i18n.t('screens.login'),
+                }}
+            />
+            <HomeStack.Screen
+                name="profile"
+                component={ProfileScreen}
+                options={{
+                    title: i18n.t('screens.profile'),
+                }}
+            />
+            {createScreenCollapsibleStack("club-list", ClubListScreen, i18n.t('clubs.clubList'))}
+            <HomeStack.Screen
+                name="club-information"
+                component={ClubDisplayScreen}
+                options={{
+                    title: i18n.t('screens.clubDisplayScreen'),
+                    ...modalTransition,
+                }}
+            />
+            <HomeStack.Screen
+                name="club-about"
+                component={ClubAboutScreen}
+                options={{
+                    title: i18n.t('screens.clubsAbout'),
+                    ...modalTransition,
+                }}
+            />
+            <HomeStack.Screen
+                name="vote"
+                component={VoteScreen}
+                options={{
+                    title: i18n.t('screens.vote'),
+                }}
+            />
+            <HomeStack.Screen
+                name="amicale-contact"
+                component={AmicaleContactScreen}
+                options={{
+                    title: i18n.t('screens.amicaleAbout'),
+                }}
+            />
+            <HomeStack.Screen
+                name="amicale-home"
+                component={AmicaleHomeScreen}
+                options={{
+                    title: "AMICALE HOME",
+                }}
+            />
+            <HomeStack.Screen
+                name="websites-home"
+                component={WebsitesHomeScreen}
+                options={{
+                    title: "WEBSITES HOME",
+                }}
+            />
+            <HomeStack.Screen
+                name="insa-home"
+                component={InsaHomeScreen}
+                options={{
+                    title: "INSA HOME",
                 }}
             />
         </HomeStack.Navigator>
@@ -242,50 +303,19 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
 const PlanexStack = createStackNavigator();
 
 function PlanexStackComponent() {
-    const {colors} = useTheme();
     return (
         <PlanexStack.Navigator
             initialRouteName="index"
-            headerMode="float"
+            headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {createCollapsibleStack(
-                <PlanexStack.Screen
-                    name="index"
-                    component={PlanexScreen}
-                    options={({navigation}) => {
-                        const openDrawer = getDrawerButton.bind(this, navigation);
-                        return {
-                            title: 'Planex',
-                            headerLeft: openDrawer,
-                            headerStyle: {
-                                backgroundColor: colors.surface,
-                            },
-                        };
-                    }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: false, // native driver does not work with webview
-                }
-            )}
-            {createCollapsibleStack(
-                <PlanexStack.Screen
-                    name="group-select"
-                    component={GroupSelectionScreen}
-                    options={{
-                        title: 'GroupSelectionScreen',
-                        headerStyle: {
-                            backgroundColor: colors.surface,
-                        },
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
-                    }}
-                />,
-                {
-                    collapsedColor: 'transparent',
-                    useNativeDriver: true,
-                }
-            )}
+            {getWebsiteStack("index", PlanexScreen, "Planex")}
+            {createScreenCollapsibleStack(
+                "group-select",
+                GroupSelectionScreen,
+                "GROUP SELECT",
+                true,
+                {...modalTransition})}
         </PlanexStack.Navigator>
     );
 }
