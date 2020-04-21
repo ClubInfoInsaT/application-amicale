@@ -22,6 +22,7 @@ type Props = {
     onScroll: (event: SyntheticEvent<EventTarget>) => void,
     collapsibleStack: Collapsible,
 
+    showError: boolean,
     itemHeight?: number,
     updateData?: number,
     renderSectionHeader?: (data: { [key: string]: any }) => React.Node,
@@ -49,6 +50,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
     static defaultProps = {
         stickyHeader: false,
         updateData: 0,
+        showError: true,
     };
 
     scrollRef: { current: null | Animated.SectionList };
@@ -202,8 +204,12 @@ class WebSectionList extends React.PureComponent<Props, State> {
 
     render() {
         let dataset = [];
-        if (this.state.fetchedData != null)
-            dataset = this.props.createDataset(this.state.fetchedData);
+        if (this.state.fetchedData != null || (this.state.fetchedData == null && !this.props.showError)) {
+            if (this.state.fetchedData == null)
+                dataset = this.props.createDataset({});
+            else
+                dataset = this.props.createDataset(this.state.fetchedData);
+        }
         const {containerPaddingTop, scrollIndicatorInsetTop, onScrollWithListener} = this.props.collapsibleStack;
         return (
             <View>

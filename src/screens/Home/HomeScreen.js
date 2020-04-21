@@ -178,8 +178,12 @@ class HomeScreen extends React.Component<Props> {
         let dashboardData = [];
         if (fetchedData.news_feed != null)
             newsData = fetchedData.news_feed.data;
+        else
+            newsData = [];
         if (fetchedData.dashboard != null)
             dashboardData = this.generateDashboardDataset(fetchedData.dashboard);
+        else
+            dashboardData = this.generateDashboardDataset(null);
         return [
             {
                 title: '',
@@ -200,7 +204,7 @@ class HomeScreen extends React.Component<Props> {
      * @param dashboardData
      * @return {Array<dashboardItem>}
      */
-    generateDashboardDataset(dashboardData: fullDashboard): Array<dashboardItem> {
+    generateDashboardDataset(dashboardData: fullDashboard | null): Array<dashboardItem> {
         return [
             {id: 'actions', content: []},
             {
@@ -208,49 +212,49 @@ class HomeScreen extends React.Component<Props> {
                 content: [
                     {
                         id: 'washers',
-                        data: dashboardData.available_machines.washers,
+                        data: dashboardData == null ? 0 : dashboardData.available_machines.washers,
                         icon: 'washing-machine',
                         color: this.colors.proxiwashColor,
                         onPress: this.onProxiwashClick,
-                        isAvailable: dashboardData.available_machines.washers > 0
+                        isAvailable: dashboardData == null ? false : dashboardData.available_machines.washers > 0
                     },
                     {
                         id: 'dryers',
-                        data: dashboardData.available_machines.dryers,
+                        data: dashboardData == null ? 0 : dashboardData.available_machines.dryers,
                         icon: 'tumble-dryer',
                         color: this.colors.proxiwashColor,
                         onPress: this.onProxiwashClick,
-                        isAvailable: dashboardData.available_machines.dryers > 0
+                        isAvailable: dashboardData == null ? false : dashboardData.available_machines.dryers > 0
                     },
                     {
                         id: 'available_tutorials',
-                        data: dashboardData.available_tutorials,
+                        data: dashboardData == null ? 0 : dashboardData.available_tutorials,
                         icon: 'school',
                         color: this.colors.tutorinsaColor,
                         onPress: this.onTutorInsaClick,
-                        isAvailable: dashboardData.available_tutorials > 0
+                        isAvailable: dashboardData == null ? false : dashboardData.available_tutorials > 0
                     },
                     {
                         id: 'proximo_articles',
-                        data: dashboardData.proximo_articles,
+                        data: dashboardData == null ? 0 : dashboardData.proximo_articles,
                         icon: 'shopping',
                         color: this.colors.proximoColor,
                         onPress: this.onProximoClick,
-                        isAvailable: dashboardData.proximo_articles > 0
+                        isAvailable: dashboardData == null ? false : dashboardData.proximo_articles > 0
                     },
                     {
                         id: 'today_menu',
-                        data: dashboardData.today_menu,
+                        data: dashboardData == null ? 0 : dashboardData.today_menu,
                         icon: 'silverware-fork-knife',
                         color: this.colors.menuColor,
                         onPress: this.onMenuClick,
-                        isAvailable: dashboardData.today_menu.length > 0
+                        isAvailable: dashboardData == null ? false : dashboardData.today_menu.length > 0
                     },
                 ]
             },
             {
                 id: 'event',
-                content: dashboardData.today_events
+                content: dashboardData == null ? [] : dashboardData.today_events
             },
         ];
     }
@@ -509,6 +513,7 @@ class HomeScreen extends React.Component<Props> {
                     renderItem={this.getRenderItem}
                     itemHeight={FEED_ITEM_HEIGHT}
                     onScroll={this.onScroll}
+                    showError={false}
                 />
                 <AnimatedFAB
                     {...this.props}
