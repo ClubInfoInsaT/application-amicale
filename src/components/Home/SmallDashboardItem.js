@@ -4,7 +4,7 @@ import * as React from 'react';
 import {Badge, IconButton, withTheme} from 'react-native-paper';
 import {View} from "react-native";
 import type {CustomTheme} from "../../managers/ThemeManager";
-
+import * as Animatable from "react-native-animatable";
 
 type Props = {
     color: string,
@@ -14,6 +14,9 @@ type Props = {
     badgeNumber: number,
     theme: CustomTheme,
 };
+
+const AnimatableBadge = Animatable.createAnimatableComponent(Badge);
+const AnimatableIconButton = Animatable.createAnimatableComponent(IconButton);
 
 /**
  * Component used to render a small dashboard item
@@ -31,7 +34,7 @@ class SmallDashboardItem extends React.Component<Props> {
         const colors = props.theme.colors;
         return (
             <View>
-                <IconButton
+                <AnimatableIconButton
                     icon={props.icon}
                     color={
                         props.isAvailable
@@ -43,14 +46,17 @@ class SmallDashboardItem extends React.Component<Props> {
                 />
                 {
                     props.badgeNumber > 0 ?
-                        <Badge
+                        <AnimatableBadge
+                            animation={"zoomIn"}
+                            duration={300}
+                            useNativeDriver
                             style={{
                                 position: 'absolute',
                                 top: 5,
                                 right: 5
                             }}>
                             {props.badgeNumber}
-                        </Badge> : null
+                        </AnimatableBadge> : null
                 }
             </View>
         );
