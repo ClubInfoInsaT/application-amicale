@@ -1,16 +1,20 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, StyleSheet, View} from "react-native";
+import {Animated, FlatList, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import i18n from 'i18n-js';
 import LogoutDialog from "../../components/Amicale/LogoutDialog";
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
+import CustomTabBar from "../../components/Tabbar/CustomTabBar";
+import {Collapsible} from "react-navigation-collapsible";
+import {withCollapsible} from "../../utils/withCollapsible";
 
 type Props = {
     navigation: Object,
     theme: Object,
+    collapsibleStack: Collapsible,
 }
 
 type State = {
@@ -52,12 +56,20 @@ class ProfileScreen extends React.Component<Props, State> {
 
     getScreen = (data: Object) => {
         this.data = data[0];
+        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
-            <View>
-                {/*$FlowFixMe*/}
-                <FlatList
+            <View style={{flex: 1}}>
+                <Animated.FlatList
                     renderItem={this.getRenderItem}
                     data={this.flatListData}
+                    // Animations
+                    onScroll={onScroll}
+                    contentContainerStyle={{
+                        paddingTop: containerPaddingTop,
+                        paddingBottom: CustomTabBar.TAB_BAR_HEIGHT,
+                        minHeight: '100%'
+                    }}
+                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
                 />
                 <LogoutDialog
                     {...this.props}
@@ -323,4 +335,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default withTheme(ProfileScreen);
+export default withCollapsible(withTheme(ProfileScreen));

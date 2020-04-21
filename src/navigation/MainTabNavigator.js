@@ -246,13 +246,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                     title: i18n.t('screens.login'),
                 }}
             />
-            <HomeStack.Screen
-                name="profile"
-                component={ProfileScreen}
-                options={{
-                    title: i18n.t('screens.profile'),
-                }}
-            />
+            {createScreenCollapsibleStack("profile", HomeStack, ProfileScreen, i18n.t('screens.profile'))}
             {createScreenCollapsibleStack("club-list", HomeStack, ClubListScreen, i18n.t('clubs.clubList'))}
             <HomeStack.Screen
                 name="club-about"
