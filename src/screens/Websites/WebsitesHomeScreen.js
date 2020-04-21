@@ -51,6 +51,18 @@ class WebsitesHomeScreen extends React.Component<Props, State> {
                 >
                     WIKETUD
                 </Button>
+                <Button
+                    icon={"information"}
+                    onPress={() => nav.navigate("proximo")}
+                >
+                    PROXIMO
+                </Button>
+                <Button
+                    icon={"information"}
+                    onPress={() => nav.navigate("planning")}
+                >
+                    PLANNING
+                </Button>
             </ScrollView>
         );
     }

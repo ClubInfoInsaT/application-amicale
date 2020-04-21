@@ -37,22 +37,6 @@ class ActionsDashBoardItem extends React.Component<Props> {
                     onPress={() => this.props.navigation.navigate("amicale-home")}
                     style={styles.list}
                 />
-                <List.Item
-                    title={"STUDENT WEBSITES"}
-                    description={"TROP COOL"}
-                    left={props => <List.Icon {...props} icon="web"/>}
-                    right={props => <List.Icon {...props} icon="chevron-right"/>}
-                    onPress={() => this.props.navigation.navigate("websites-home")}
-                    style={styles.list}
-                />
-                <List.Item
-                    title={"SERVICES INSA"}
-                    description={"TROP BIEN"}
-                    left={props => <List.Icon {...props} icon="star"/>}
-                    right={props => <List.Icon {...props} icon="chevron-right"/>}
-                    onPress={() => this.props.navigation.navigate("insa-home")}
-                    style={styles.list}
-                />
             </Card>
         );
     }

@@ -18,9 +18,9 @@ type State = {
 }
 
 const TAB_ICONS = {
-    planning: 'calendar-range',
     proxiwash: 'tshirt-crew',
-    proximo: 'cart',
+    students: 'account-circle',
+    insa: 'book',
     planex: 'clock',
 };
 

@@ -103,11 +103,13 @@ class HomeScreen extends React.Component<Props> {
     colors: Object;
 
     fabRef: { current: null | AnimatedFAB };
+    currentNewFeed: Array<feedItem>;
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
         this.fabRef = React.createRef();
+        this.currentNewFeed = [];
     }
 
     /**
@@ -174,12 +176,10 @@ class HomeScreen extends React.Component<Props> {
      */
     createDataset = (fetchedData: rawDashboard) => {
         // fetchedData = DATA;
-        let newsData = [];
-        let dashboardData = [];
-        if (fetchedData.news_feed != null)
-            newsData = fetchedData.news_feed.data;
-        else
-            newsData = [];
+        let dashboardData;
+        if (fetchedData.news_feed != null) {
+            this.currentNewFeed = fetchedData.news_feed.data;
+        }
         if (fetchedData.dashboard != null)
             dashboardData = this.generateDashboardDataset(fetchedData.dashboard);
         else
@@ -192,7 +192,7 @@ class HomeScreen extends React.Component<Props> {
             },
             {
                 title: i18n.t('homeScreen.newsFeed'),
-                data: newsData,
+                data: this.currentNewFeed,
                 id: SECTIONS_ID[1]
             }
         ];
@@ -256,6 +256,7 @@ class HomeScreen extends React.Component<Props> {
                 id: 'event',
                 content: dashboardData == null ? [] : dashboardData.today_events
             },
+
         ];
     }
 
