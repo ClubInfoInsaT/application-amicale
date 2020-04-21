@@ -21,7 +21,7 @@ import FeedItemScreen from "../screens/Home/FeedItemScreen";
 import {createCollapsibleStack} from "react-navigation-collapsible";
 import GroupSelectionScreen from "../screens/Planex/GroupSelectionScreen";
 import CustomTabBar from "../components/Tabbar/CustomTabBar";
-import SelfMenuScreen from "../screens/Other/SelfMenuScreen";
+import SelfMenuScreen from "../screens/Services/SelfMenuScreen";
 import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
 import BibScreen from "../screens/Websites/BibScreen";
 import {AmicaleWebsiteScreen} from "../screens/Websites/AmicaleWebsiteScreen";
@@ -37,7 +37,7 @@ import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import VoteScreen from "../screens/Amicale/VoteScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
 import AmicaleHomeScreen from "../screens/Amicale/AmicaleHomeScreen";
-import WebsitesHomeScreen from "../screens/Websites/WebsitesHomeScreen";
+import WebsitesHomeScreen from "../screens/Services/ServicesScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,

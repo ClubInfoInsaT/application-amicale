@@ -25,7 +25,7 @@ const AMICALE_IMAGE = require("../../../assets/amicale.png");
 const EE_IMAGE = "https://etud.insa-toulouse.fr/~eeinsat/wp-content/uploads/2019/09/logo-blanc.png";
 const TUTORINSA_IMAGE = "https://www.etud.insa-toulouse.fr/~tutorinsa/public/images/logo-gray.png";
 
-class WebsitesHomeScreen extends React.Component<Props> {
+class ServicesScreen extends React.Component<Props> {
 
     dataset: Array<cards>;
 
@@ -137,4 +137,4 @@ class WebsitesHomeScreen extends React.Component<Props> {
     }
 }
 
-export default withCollapsible(WebsitesHomeScreen);
+export default withCollapsible(ServicesScreen);
