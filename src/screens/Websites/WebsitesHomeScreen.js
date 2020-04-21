@@ -66,13 +66,13 @@ class WebsitesHomeScreen extends React.Component<Props> {
                     title: "EMAIL",
                     subtitle: "EMAIL",
                     image: EMAIL_IMAGE,
-                    onPress: () => nav.navigate("available-rooms"),
+                    onPress: () => nav.navigate("bluemind"),
                 },
                 {
                     title: "ENT",
                     subtitle: "ENT",
                     image: ENT_IMAGE,
-                    onPress: () => nav.navigate("bib"),
+                    onPress: () => nav.navigate("ent"),
                 },
             ],
             [

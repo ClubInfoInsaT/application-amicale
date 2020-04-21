@@ -28,6 +28,8 @@ import {AmicaleWebsiteScreen} from "../screens/Websites/AmicaleWebsiteScreen";
 import {ElusEtudiantsWebsiteScreen} from "../screens/Websites/ElusEtudiantsWebsiteScreen";
 import {WiketudWebsiteScreen} from "../screens/Websites/WiketudWebsiteScreen";
 import {TutorInsaWebsiteScreen} from "../screens/Websites/TutorInsaWebsiteScreen";
+import {ENTWebsiteScreen} from "../screens/Websites/ENTWebsiteScreen.js";
+import {BlueMindWebsiteScreen} from "../screens/Websites/BlueMindWebsiteScreen.js";
 import LoginScreen from "../screens/Amicale/LoginScreen";
 import ProfileScreen from "../screens/Amicale/ProfileScreen";
 import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
@@ -119,6 +121,8 @@ function ServicesStackComponent() {
             {getWebsiteStack("elus-etudiants", ServicesStack, ElusEtudiantsWebsiteScreen, "Élus Étudiants")}
             {getWebsiteStack("wiketud", ServicesStack, WiketudWebsiteScreen, "Wiketud")}
             {getWebsiteStack("tutorinsa", ServicesStack, TutorInsaWebsiteScreen, "Tutor'INSA")}
+            {getWebsiteStack("ent", ServicesStack, ENTWebsiteScreen, "ENT INSA")}
+            {getWebsiteStack("bluemind", ServicesStack, BlueMindWebsiteScreen, "BlueMind")}
         </ServicesStack.Navigator>
     );
 }
