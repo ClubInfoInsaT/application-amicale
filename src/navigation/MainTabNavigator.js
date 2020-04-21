@@ -169,13 +169,7 @@ function InsaStackComponent() {
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            <InsaStack.Screen
-                name="index"
-                component={InsaHomeScreen}
-                options={{
-                    title: "INSA HOME",
-                }}
-            />
+            {createScreenCollapsibleStack("index", InsaStack, InsaHomeScreen, "INSA HOME")}
             {getWebsiteStack("available-rooms", InsaStack, AvailableRoomScreen, i18n.t('screens.availableRooms'))}
             {getWebsiteStack("bib", InsaStack, BibScreen, i18n.t('screens.bib'))}
             {createScreenCollapsibleStack("self-menu", InsaStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
