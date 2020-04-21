@@ -30,11 +30,12 @@ class ActionsDashBoardItem extends React.Component<Props> {
                     description={"VOTRE COMPTE"}
                     left={props => <Avatar.Image
                         {...props}
-                        size={54}
+                        size={40}
                         source={ICON_AMICALE}
                         style={styles.avatar}/>}
                     right={props => <List.Icon {...props} icon="chevron-right"/>}
                     onPress={() => this.props.navigation.navigate("amicale-home")}
+                    style={styles.list}
                 />
                 <List.Item
                     title={"STUDENT WEBSITES"}
@@ -42,6 +43,7 @@ class ActionsDashBoardItem extends React.Component<Props> {
                     left={props => <List.Icon {...props} icon="web"/>}
                     right={props => <List.Icon {...props} icon="chevron-right"/>}
                     onPress={() => this.props.navigation.navigate("websites-home")}
+                    style={styles.list}
                 />
                 <List.Item
                     title={"SERVICES INSA"}
@@ -49,6 +51,7 @@ class ActionsDashBoardItem extends React.Component<Props> {
                     left={props => <List.Icon {...props} icon="star"/>}
                     right={props => <List.Icon {...props} icon="chevron-right"/>}
                     onPress={() => this.props.navigation.navigate("insa-home")}
+                    style={styles.list}
                 />
             </Card>
         );
@@ -61,12 +64,16 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         marginTop: 10,
-        elevation: 4,
         borderWidth: 1,
     },
     avatar: {
         backgroundColor: 'transparent'
     },
+    list: {
+        // height: 50,
+        paddingTop:0,
+        paddingBottom:0,
+    }
 });
 
 export default withTheme(ActionsDashBoardItem);

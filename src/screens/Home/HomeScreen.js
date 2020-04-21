@@ -202,6 +202,7 @@ class HomeScreen extends React.Component<Props> {
      */
     generateDashboardDataset(dashboardData: fullDashboard): Array<dashboardItem> {
         return [
+            {id: 'actions', content: []},
             {
                 id: 'top',
                 content: [
@@ -247,7 +248,6 @@ class HomeScreen extends React.Component<Props> {
                     },
                 ]
             },
-            {id: 'actions', content: []},
             {
                 id: 'event',
                 content: dashboardData.today_events
@@ -445,6 +445,7 @@ class HomeScreen extends React.Component<Props> {
                 contentContainerStyle={{
                     marginLeft: 'auto',
                     marginRight: 'auto',
+                    marginTop: 5,
                 }}
             />);
     }
