@@ -16,7 +16,6 @@ type Props = {
 };
 
 const AnimatableBadge = Animatable.createAnimatableComponent(Badge);
-const AnimatableIconButton = Animatable.createAnimatableComponent(IconButton);
 
 /**
  * Component used to render a small dashboard item
@@ -34,7 +33,7 @@ class SmallDashboardItem extends React.Component<Props> {
         const colors = props.theme.colors;
         return (
             <View>
-                <AnimatableIconButton
+                <IconButton
                     icon={props.icon}
                     color={
                         props.isAvailable
