@@ -11,15 +11,18 @@ const ICON_AMICALE = require("../../../assets/amicale.png");
 type Props = {
     navigation: DrawerNavigationProp,
     theme: CustomTheme,
+    isLoggedIn: boolean,
 }
 
 class ActionsDashBoardItem extends React.Component<Props> {
 
     shouldComponentUpdate(nextProps: Props): boolean {
         return (nextProps.theme.dark !== this.props.theme.dark)
+        || (nextProps.isLoggedIn !== this.props.isLoggedIn);
     }
 
     render() {
+        const isLoggedIn = this.props.isLoggedIn;
         return (
             <Card style={{
                 ...styles.card,
@@ -27,14 +30,18 @@ class ActionsDashBoardItem extends React.Component<Props> {
             }}>
                 <List.Item
                     title={"AMICALE"}
-                    description={"VOTRE COMPTE"}
+                    description={isLoggedIn ? "VOTRE ESPACE" : "SE CONNECTER"}
                     left={props => <Avatar.Image
                         {...props}
                         size={40}
                         source={ICON_AMICALE}
                         style={styles.avatar}/>}
-                    right={props => <List.Icon {...props} icon="chevron-right"/>}
-                    onPress={() => this.props.navigation.navigate("amicale-home")}
+                    right={props => <List.Icon {...props} icon={isLoggedIn
+                        ? "chevron-right"
+                        : "login"}/>}
+                    onPress={isLoggedIn
+                        ? () => this.props.navigation.navigate("services")
+                        : () => this.props.navigation.navigate("login")}
                     style={styles.list}
                 />
             </Card>
@@ -55,8 +62,8 @@ const styles = StyleSheet.create({
     },
     list: {
         // height: 50,
-        paddingTop:0,
-        paddingBottom:0,
+        paddingTop: 0,
+        paddingBottom: 0,
     }
 });
 

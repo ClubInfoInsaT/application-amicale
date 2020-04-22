@@ -312,7 +312,7 @@ class HomeScreen extends React.Component<Props, State> {
     }
 
     getDashboardActions() {
-        return <ActionsDashBoardItem {...this.props}/>;
+        return <ActionsDashBoardItem {...this.props} isLoggedIn={this.isLoggedIn}/>;
     }
 
     /**
