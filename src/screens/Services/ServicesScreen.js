@@ -203,13 +203,13 @@ class ServicesScreen extends React.Component<Props> {
             <TouchableRipple
                 style={{
                     margin: 5,
+                    marginBottom: 20,
                 }}
                 onPress={() => this.props.navigation.navigate("services-section", {data: item})}
             >
                 <View>
                     <Card.Title
                         title={item.title}
-                        subtitle={item.description}
                         left={(props) => this.getAvatar(props, item.image)}
                         right={(props) => <List.Icon {...props} icon="chevron-right"/>}
                     />
