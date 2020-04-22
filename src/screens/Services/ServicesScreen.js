@@ -45,68 +45,68 @@ class ServicesScreen extends React.Component<Props> {
         super(props);
         const nav = props.navigation;
         this.studentsDataset = [
-                {
-                    title: "proximo",
-                    subtitle: "proximo",
-                    image: PROXIMO_IMAGE,
-                    onPress: () => nav.navigate("proximo"),
-                },
-                {
-                    title: "AMICALE",
-                    subtitle: "AMICALE",
-                    image: AMICALE_IMAGE,
-                    onPress: () => nav.navigate("amicale-website"),
-                },
-                {
-                    title: "wiketud",
-                    subtitle: "wiketud",
-                    image: WIKETUD_LINK,
-                    onPress: () => nav.navigate("wiketud"),
-                },
-                {
-                    title: "ELUS ETUDIANTS",
-                    subtitle: "ELUS ETUDIANTS",
-                    image: EE_IMAGE,
-                    onPress: () => nav.navigate("elus-etudiants"),
-                },
-                {
-                    title: "TUTOR INSA",
-                    subtitle: "TUTOR INSA",
-                    image: TUTORINSA_IMAGE,
-                    onPress: () => nav.navigate("tutorinsa"),
-                },
+            {
+                title: "proximo",
+                subtitle: "proximo",
+                image: PROXIMO_IMAGE,
+                onPress: () => nav.navigate("proximo"),
+            },
+            {
+                title: "AMICALE",
+                subtitle: "AMICALE",
+                image: AMICALE_IMAGE,
+                onPress: () => nav.navigate("amicale-website"),
+            },
+            {
+                title: "wiketud",
+                subtitle: "wiketud",
+                image: WIKETUD_LINK,
+                onPress: () => nav.navigate("wiketud"),
+            },
+            {
+                title: "ELUS ETUDIANTS",
+                subtitle: "ELUS ETUDIANTS",
+                image: EE_IMAGE,
+                onPress: () => nav.navigate("elus-etudiants"),
+            },
+            {
+                title: "TUTOR INSA",
+                subtitle: "TUTOR INSA",
+                image: TUTORINSA_IMAGE,
+                onPress: () => nav.navigate("tutorinsa"),
+            },
         ];
         this.insaDataset = [
-                {
-                    title: "RU",
-                    subtitle: "the ru",
-                    image: RU_IMAGE,
-                    onPress: () => nav.navigate("self-menu"),
-                },
-                {
-                    title: "AVAILABLE ROOMS",
-                    subtitle: "ROOMS",
-                    image: ROOM_IMAGE,
-                    onPress: () => nav.navigate("available-rooms"),
-                },
-                {
-                    title: "BIB",
-                    subtitle: "BIB",
-                    image: BIB_IMAGE,
-                    onPress: () => nav.navigate("bib"),
-                },
-                {
-                    title: "EMAIL",
-                    subtitle: "EMAIL",
-                    image: EMAIL_IMAGE,
-                    onPress: () => nav.navigate("bluemind"),
-                },
-                {
-                    title: "ENT",
-                    subtitle: "ENT",
-                    image: ENT_IMAGE,
-                    onPress: () => nav.navigate("ent"),
-                },
+            {
+                title: "RU",
+                subtitle: "the ru",
+                image: RU_IMAGE,
+                onPress: () => nav.navigate("self-menu"),
+            },
+            {
+                title: "AVAILABLE ROOMS",
+                subtitle: "ROOMS",
+                image: ROOM_IMAGE,
+                onPress: () => nav.navigate("available-rooms"),
+            },
+            {
+                title: "BIB",
+                subtitle: "BIB",
+                image: BIB_IMAGE,
+                onPress: () => nav.navigate("bib"),
+            },
+            {
+                title: "EMAIL",
+                subtitle: "EMAIL",
+                image: EMAIL_IMAGE,
+                onPress: () => nav.navigate("bluemind"),
+            },
+            {
+                title: "ENT",
+                subtitle: "ENT",
+                image: ENT_IMAGE,
+                onPress: () => nav.navigate("ent"),
+            },
         ];
         this.finalDataset = [
             {
@@ -141,15 +141,15 @@ class ServicesScreen extends React.Component<Props> {
 
     getAvatar(props, source: string | number) {
         if (typeof source === "number")
-        return <Avatar.Image
-            size={48}
-            source={AMICALE_IMAGE}
-            style={{backgroundColor: 'transparent'}}/>
+            return <Avatar.Image
+                size={48}
+                source={AMICALE_IMAGE}
+                style={{backgroundColor: 'transparent'}}/>
         else
-            return <List.Icon {...props} icon={source} />
+            return <List.Icon {...props} icon={source}/>
     }
 
-    renderItem = ({item} : {item: listItem}) => {
+    renderItem = ({item}: { item: listItem }) => {
         return (
             <Card
                 style={{
@@ -161,7 +161,7 @@ class ServicesScreen extends React.Component<Props> {
                     title={item.title}
                     subtitle={item.description}
                     left={(props) => this.getAvatar(props, item.image)}
-                    right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                    right={(props) => <List.Icon {...props} icon="chevron-right"/>}
                 />
                 <CardList
                     dataset={item.content}
