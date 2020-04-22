@@ -8,8 +8,9 @@ import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import {CommonActions} from "@react-navigation/native";
 import {Animated, View} from "react-native";
-import {Avatar, Card, Divider, List, TouchableRipple, withTheme} from "react-native-paper";
+import {Avatar, Button, Card, Divider, List, Title, TouchableRipple, withTheme} from "react-native-paper";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import ConnectionManager from "../../managers/ConnectionManager";
 
 type Props = {
     navigation: Object,
@@ -29,14 +30,19 @@ const AMICALE_IMAGE = require("../../../assets/amicale.png");
 const EE_IMAGE = "https://etud.insa-toulouse.fr/~eeinsat/wp-content/uploads/2019/09/logo-blanc.png";
 const TUTORINSA_IMAGE = "https://www.etud.insa-toulouse.fr/~tutorinsa/public/images/logo-gray.png";
 
-type listItem = {
+export type listItem = {
     title: string,
     description: string,
     image: string | number,
+    shouldLogin: boolean,
     content: cardList,
 }
 
-class ServicesScreen extends React.Component<Props> {
+type State = {
+    isLoggedIn: boolean,
+}
+
+class ServicesScreen extends React.Component<Props, State> {
 
     amicaleDataset: cardList;
     studentsDataset: cardList;
@@ -148,29 +154,40 @@ class ServicesScreen extends React.Component<Props> {
                 title: "AMICALE",
                 description: "LOGIN",
                 image: AMICALE_IMAGE,
+                shouldLogin: true,
                 content: this.amicaleDataset
             },
             {
                 title: "STUDENTS",
                 description: "SERVICES OFFERED BY STUDENTS",
                 image: 'account-group',
+                shouldLogin: false,
                 content: this.studentsDataset
             },
             {
                 title: "INSA",
                 description: "SERVICES OFFERED BY INSA",
                 image: 'school',
+                shouldLogin: false,
                 content: this.insaDataset
             },
-        ]
+        ];
+        this.state = {
+            isLoggedIn: ConnectionManager.getInstance().isLoggedIn()
+        }
     }
 
     componentDidMount() {
-        this.props.navigation.addListener('focus', this.handleNavigationParams);
+        this.props.navigation.addListener('focus', this.onFocus);
 
     }
 
-    handleNavigationParams = () => {
+    onFocus = () => {
+        this.handleNavigationParams();
+        this.setState({isLoggedIn: ConnectionManager.getInstance().isLoggedIn()})
+    }
+
+    handleNavigationParams() {
         if (this.props.route.params != null) {
             if (this.props.route.params.nextScreen != null) {
                 this.props.navigation.navigate(this.props.route.params.nextScreen);
@@ -198,25 +215,57 @@ class ServicesScreen extends React.Component<Props> {
             />
     }
 
+    getLoginMessage() {
+        return (
+            <View>
+                <Title style={{
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                }}>
+                    NOT LOGGED IN
+                </Title>
+                <Button
+                    icon="login"
+                    mode="contained"
+                    onPress={() => this.props.navigation.navigate("login")}
+                    style={{
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                    }}>
+                    LOGIN
+                </Button>
+            </View>
+        )
+    }
+
     renderItem = ({item}: { item: listItem }) => {
+        const shouldShowLogin = !this.state.isLoggedIn && item.shouldLogin;
         return (
             <TouchableRipple
                 style={{
                     margin: 5,
                     marginBottom: 20,
                 }}
-                onPress={() => this.props.navigation.navigate("services-section", {data: item})}
+                onPress={shouldShowLogin
+                    ? undefined
+                    : () => this.props.navigation.navigate("services-section", {data: item})}
             >
                 <View>
                     <Card.Title
                         title={item.title}
                         left={(props) => this.getAvatar(props, item.image)}
-                        right={(props) => <List.Icon {...props} icon="chevron-right"/>}
+                        right={shouldShowLogin
+                            ? undefined
+                            : (props) => <List.Icon {...props} icon="chevron-right"/>}
                     />
-                    <CardList
-                        dataset={item.content}
-                        isHorizontal={true}
-                    />
+                    {
+                        shouldShowLogin
+                            ? this.getLoginMessage()
+                            : <CardList
+                                dataset={item.content}
+                                isHorizontal={true}
+                            />
+                    }
                 </View>
             </TouchableRipple>
 
