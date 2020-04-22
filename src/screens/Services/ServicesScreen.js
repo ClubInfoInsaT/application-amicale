@@ -7,8 +7,8 @@ import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import {CommonActions} from "@react-navigation/native";
-import {Animated} from "react-native";
-import {Avatar, Card, List} from "react-native-paper";
+import {Animated, View} from "react-native";
+import {Avatar, Card, List, TouchableRipple} from "react-native-paper";
 
 type Props = {
     navigation: Object,
@@ -36,6 +36,7 @@ type listItem = {
 
 class ServicesScreen extends React.Component<Props> {
 
+    amicaleDataset: cardList;
     studentsDataset: cardList;
     insaDataset: cardList;
 
@@ -44,6 +45,38 @@ class ServicesScreen extends React.Component<Props> {
     constructor(props) {
         super(props);
         const nav = props.navigation;
+        this.amicaleDataset = [
+            {
+                title: "AMICALE",
+                subtitle: "AMICALE",
+                image: AMICALE_IMAGE,
+                onPress: () => nav.navigate("amicale-website"),
+            },
+            {
+                title: "CLUBS",
+                subtitle: "CLUB LIST",
+                image: AMICALE_IMAGE,
+                onPress: () => nav.navigate("club-list"),
+            },
+            {
+                title: "PROFIL",
+                subtitle: "PROFIL",
+                image: AMICALE_IMAGE,
+                onPress: () => nav.navigate("profile"),
+            },
+            {
+                title: "CONTACT",
+                subtitle: "CONTACT",
+                image: AMICALE_IMAGE,
+                onPress: () => nav.navigate("amicale-contact"),
+            },
+            {
+                title: "ELECTIONS",
+                subtitle: "ELECTIONS",
+                image: AMICALE_IMAGE,
+                onPress: () => nav.navigate("vote"),
+            },
+        ];
         this.studentsDataset = [
             {
                 title: "proximo",
@@ -111,13 +144,19 @@ class ServicesScreen extends React.Component<Props> {
         this.finalDataset = [
             {
                 title: "AMICALE",
-                description: "youhou",
+                description: "LOGIN",
+                image: AMICALE_IMAGE,
+                content: this.amicaleDataset
+            },
+            {
+                title: "STUDENTS",
+                description: "SERVICES OFFERED BY STUDENTS",
                 image: AMICALE_IMAGE,
                 content: this.studentsDataset
             },
             {
                 title: "INSA",
-                description: "youhou",
+                description: "SERVICES OFFERED BY INSA",
                 image: AMICALE_IMAGE,
                 content: this.insaDataset
             },
@@ -151,23 +190,25 @@ class ServicesScreen extends React.Component<Props> {
 
     renderItem = ({item}: { item: listItem }) => {
         return (
-            <Card
+            <TouchableRipple
                 style={{
                     margin: 5,
                 }}
                 onPress={() => this.props.navigation.navigate("services-section", {data: item})}
             >
-                <Card.Title
-                    title={item.title}
-                    subtitle={item.description}
-                    left={(props) => this.getAvatar(props, item.image)}
-                    right={(props) => <List.Icon {...props} icon="chevron-right"/>}
-                />
-                <CardList
-                    dataset={item.content}
-                    isHorizontal={true}
-                />
-            </Card>
+                <View>
+                    <Card.Title
+                        title={item.title}
+                        subtitle={item.description}
+                        left={(props) => this.getAvatar(props, item.image)}
+                        right={(props) => <List.Icon {...props} icon="chevron-right"/>}
+                    />
+                    <CardList
+                        dataset={item.content}
+                        isHorizontal={true}
+                    />
+                </View>
+            </TouchableRipple>
 
         );
     };

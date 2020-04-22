@@ -36,7 +36,6 @@ import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
 import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import VoteScreen from "../screens/Amicale/VoteScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
-import AmicaleHomeScreen from "../screens/Amicale/AmicaleHomeScreen";
 import WebsitesHomeScreen from "../screens/Services/ServicesScreen";
 import ServicesSectionScreen from "../screens/Services/ServicesSectionScreen";
 
@@ -95,6 +94,12 @@ function ServicesStackComponent() {
             {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, i18n.t('screens.services'))}
             {createScreenCollapsibleStack("services-section", ServicesStack, ServicesSectionScreen, "SECTION")}
 
+            {/*     INSA        */}
+            {getWebsiteStack("available-rooms", ServicesStack, AvailableRoomScreen, i18n.t('screens.availableRooms'))}
+            {getWebsiteStack("bib", ServicesStack, BibScreen, i18n.t('screens.bib'))}
+            {createScreenCollapsibleStack("self-menu", ServicesStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
+
+            {/*     STUDENTS     */}
             {createScreenCollapsibleStack("proximo", ServicesStack, ProximoMainScreen, "Proximo")}
             {createScreenCollapsibleStack(
                 "proximo-list",
@@ -112,17 +117,46 @@ function ServicesStackComponent() {
                     ...modalTransition,
                 }}
             />
-
-            {getWebsiteStack("available-rooms", ServicesStack, AvailableRoomScreen, i18n.t('screens.availableRooms'))}
-            {getWebsiteStack("bib", ServicesStack, BibScreen, i18n.t('screens.bib'))}
-            {createScreenCollapsibleStack("self-menu", ServicesStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
-
             {getWebsiteStack("amicale-website", ServicesStack, AmicaleWebsiteScreen, "Amicale")}
             {getWebsiteStack("elus-etudiants", ServicesStack, ElusEtudiantsWebsiteScreen, "Élus Étudiants")}
             {getWebsiteStack("wiketud", ServicesStack, WiketudWebsiteScreen, "Wiketud")}
             {getWebsiteStack("tutorinsa", ServicesStack, TutorInsaWebsiteScreen, "Tutor'INSA")}
             {getWebsiteStack("ent", ServicesStack, ENTWebsiteScreen, "ENT INSA")}
             {getWebsiteStack("bluemind", ServicesStack, BlueMindWebsiteScreen, "BlueMind")}
+
+
+            {/*     AMICALE     */}
+            <ServicesStack.Screen
+                name="login"
+                component={LoginScreen}
+                options={{
+                    title: i18n.t('screens.login'),
+                }}
+            />
+            {createScreenCollapsibleStack("profile", ServicesStack, ProfileScreen, i18n.t('screens.profile'))}
+            {createScreenCollapsibleStack("club-list", ServicesStack, ClubListScreen, i18n.t('clubs.clubList'))}
+            <ServicesStack.Screen
+                name="club-about"
+                component={ClubAboutScreen}
+                options={{
+                    title: i18n.t('screens.clubsAbout'),
+                    ...modalTransition,
+                }}
+            />
+            <ServicesStack.Screen
+                name="vote"
+                component={VoteScreen}
+                options={{
+                    title: i18n.t('screens.vote'),
+                }}
+            />
+            <ServicesStack.Screen
+                name="amicale-contact"
+                component={AmicaleContactScreen}
+                options={{
+                    title: i18n.t('screens.amicaleAbout'),
+                }}
+            />
         </ServicesStack.Navigator>
     );
 }
@@ -246,37 +280,6 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                 component={LoginScreen}
                 options={{
                     title: i18n.t('screens.login'),
-                }}
-            />
-            {createScreenCollapsibleStack("profile", HomeStack, ProfileScreen, i18n.t('screens.profile'))}
-            {createScreenCollapsibleStack("club-list", HomeStack, ClubListScreen, i18n.t('clubs.clubList'))}
-            <HomeStack.Screen
-                name="club-about"
-                component={ClubAboutScreen}
-                options={{
-                    title: i18n.t('screens.clubsAbout'),
-                    ...modalTransition,
-                }}
-            />
-            <HomeStack.Screen
-                name="vote"
-                component={VoteScreen}
-                options={{
-                    title: i18n.t('screens.vote'),
-                }}
-            />
-            <HomeStack.Screen
-                name="amicale-contact"
-                component={AmicaleContactScreen}
-                options={{
-                    title: i18n.t('screens.amicaleAbout'),
-                }}
-            />
-            <HomeStack.Screen
-                name="amicale-home"
-                component={AmicaleHomeScreen}
-                options={{
-                    title: "AMICALE HOME",
                 }}
             />
         </HomeStack.Navigator>
