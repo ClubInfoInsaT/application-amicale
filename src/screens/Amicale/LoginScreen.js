@@ -10,6 +10,7 @@ import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import {Linking} from "expo";
 
 type Props = {
     navigation: Object,
@@ -30,7 +31,7 @@ type State = {
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
 
-const RESET_PASSWORD_PATH = "password/reset";
+const RESET_PASSWORD_PATH = "https://www.amicale-insat.fr//password/reset";
 
 const emailRegex = /^.+@.+\..+$/;
 
@@ -67,10 +68,7 @@ class LoginScreen extends React.Component<Props, State> {
 
     handleSuccess = () => this.props.navigation.goBack();
 
-    onResetPasswordClick = () => this.props.navigation.navigate('amicale-website', {
-        screen: 'amicale-website',
-        params: {path: RESET_PASSWORD_PATH}
-    });
+    onResetPasswordClick = () => Linking.openURL(RESET_PASSWORD_PATH);
 
     validateEmail = () => this.setState({isEmailValidated: true});
 
