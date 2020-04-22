@@ -44,6 +44,7 @@ export default class ImageListItem extends React.Component<Props> {
                         marginTop: 5,
                         marginLeft: 'auto',
                         marginRight: 'auto',
+                        textAlign: 'center'
                     }}>{item.title}</Text>
                 </View>
             </TouchableRipple>
