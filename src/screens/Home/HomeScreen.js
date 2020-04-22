@@ -192,11 +192,11 @@ class HomeScreen extends React.Component<Props, State> {
     };
 
     onProximoClick = () => {
-        this.props.navigation.navigate('services', {screen: "index"});
+        this.props.navigation.navigate("proximo");
     };
 
     onTutorInsaClick = () => {
-        this.props.navigation.navigate('services', {screen: "index"});
+        this.props.navigation.navigate("tutorinsa");
     };
 
     onMenuClick = () => {

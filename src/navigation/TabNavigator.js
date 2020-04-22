@@ -7,9 +7,6 @@ import PlanningScreen from '../screens/Planning/PlanningScreen';
 import PlanningDisplayScreen from '../screens/Planning/PlanningDisplayScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
 import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
-import ProximoMainScreen from '../screens/Proximo/ProximoMainScreen';
-import ProximoListScreen from "../screens/Proximo/ProximoListScreen";
-import ProximoAboutScreen from "../screens/Proximo/ProximoAboutScreen";
 import PlanexScreen from '../screens/Planex/PlanexScreen';
 import AsyncStorageManager from "../managers/AsyncStorageManager";
 import {useTheme} from 'react-native-paper';
@@ -21,21 +18,6 @@ import FeedItemScreen from "../screens/Home/FeedItemScreen";
 import {createCollapsibleStack} from "react-navigation-collapsible";
 import GroupSelectionScreen from "../screens/Planex/GroupSelectionScreen";
 import CustomTabBar from "../components/Tabbar/CustomTabBar";
-import SelfMenuScreen from "../screens/Services/SelfMenuScreen";
-import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
-import BibScreen from "../screens/Websites/BibScreen";
-import {AmicaleWebsiteScreen} from "../screens/Websites/AmicaleWebsiteScreen";
-import {ElusEtudiantsWebsiteScreen} from "../screens/Websites/ElusEtudiantsWebsiteScreen";
-import {WiketudWebsiteScreen} from "../screens/Websites/WiketudWebsiteScreen";
-import {TutorInsaWebsiteScreen} from "../screens/Websites/TutorInsaWebsiteScreen";
-import {ENTWebsiteScreen} from "../screens/Websites/ENTWebsiteScreen";
-import {BlueMindWebsiteScreen} from "../screens/Websites/BlueMindWebsiteScreen";
-import LoginScreen from "../screens/Amicale/LoginScreen";
-import ProfileScreen from "../screens/Amicale/ProfileScreen";
-import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
-import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
-import VoteScreen from "../screens/Amicale/VoteScreen";
-import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
 import WebsitesHomeScreen from "../screens/Services/ServicesScreen";
 import ServicesSectionScreen from "../screens/Services/ServicesSectionScreen";
 
@@ -46,8 +28,6 @@ const defaultScreenOptions = {
 };
 
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
-
-const screenTransition = Platform.OS === 'ios' ? TransitionPresets.SlideFromRightIOS : TransitionPresets.ScaleFromCenterAndroid;
 
 function createScreenCollapsibleStack(
     name: string,
@@ -93,64 +73,6 @@ function ServicesStackComponent() {
         >
             {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, i18n.t('screens.services'))}
             {createScreenCollapsibleStack("services-section", ServicesStack, ServicesSectionScreen, "SECTION")}
-
-            {/*     INSA        */}
-            {getWebsiteStack("available-rooms", ServicesStack, AvailableRoomScreen, i18n.t('screens.availableRooms'))}
-            {getWebsiteStack("bib", ServicesStack, BibScreen, i18n.t('screens.bib'))}
-            {createScreenCollapsibleStack("self-menu", ServicesStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
-
-            {/*     STUDENTS     */}
-            {createScreenCollapsibleStack("proximo", ServicesStack, ProximoMainScreen, i18n.t('screens.proximo'))}
-            {createScreenCollapsibleStack(
-                "proximo-list",
-                ServicesStack,
-                ProximoListScreen,
-                i18n.t('screens.proximoArticles'),
-                true,
-                {...screenTransition},
-            )}
-            <ServicesStack.Screen
-                name="proximo-about"
-                component={ProximoAboutScreen}
-                options={{
-                    title: i18n.t('screens.proximo'),
-                    ...modalTransition,
-                }}
-            />
-            {getWebsiteStack("amicale-website", ServicesStack, AmicaleWebsiteScreen, i18n.t('screens.amicaleWebsite'))}
-            {getWebsiteStack("elus-etudiants", ServicesStack, ElusEtudiantsWebsiteScreen, "Élus Étudiants")}
-            {getWebsiteStack("wiketud", ServicesStack, WiketudWebsiteScreen, "Wiketud")}
-            {getWebsiteStack("tutorinsa", ServicesStack, TutorInsaWebsiteScreen, "Tutor'INSA")}
-            {getWebsiteStack("ent", ServicesStack, ENTWebsiteScreen, i18n.t('screens.ent'))}
-            {getWebsiteStack("bluemind", ServicesStack, BlueMindWebsiteScreen, i18n.t('screens.bluemind'))}
-
-
-            {/*     AMICALE     */}
-            {createScreenCollapsibleStack("login", ServicesStack, LoginScreen, i18n.t('screens.login'))}
-            {createScreenCollapsibleStack("profile", ServicesStack, ProfileScreen, i18n.t('screens.profile'))}
-            {createScreenCollapsibleStack("club-list", ServicesStack, ClubListScreen, i18n.t('clubs.clubList'))}
-            <ServicesStack.Screen
-                name="club-about"
-                component={ClubAboutScreen}
-                options={{
-                    title: i18n.t('screens.clubsAbout'),
-                    ...modalTransition,
-                }}
-            />
-            <ServicesStack.Screen
-                name="vote"
-                component={VoteScreen}
-                options={{
-                    title: i18n.t('screens.vote'),
-                }}
-            />
-            <ServicesStack.Screen
-                name="amicale-contact"
-                component={AmicaleContactScreen}
-                options={{
-                    title: i18n.t('screens.amicaleAbout'),
-                }}
-            />
         </ServicesStack.Navigator>
     );
 }
@@ -267,8 +189,6 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                     ...modalTransition,
                 }}
             />
-            {createScreenCollapsibleStack("self-menu", HomeStack, SelfMenuScreen, i18n.t('screens.menuSelf'), true, {...modalTransition})}
-            {createScreenCollapsibleStack("login", HomeStack, LoginScreen, i18n.t('screens.login'))}
         </HomeStack.Navigator>
     );
 }
