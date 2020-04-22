@@ -18,6 +18,7 @@ import ConnectionManager from "./src/managers/ConnectionManager";
 import URLHandler from "./src/utils/URLHandler";
 import {setSafeBounceHeight} from "react-navigation-collapsible";
 import {enableScreens} from 'react-native-screens';
+import {View} from "react-native-animatable";
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 enableScreens();
@@ -190,12 +191,14 @@ export default class App extends React.Component<Props, State> {
         } else {
             return (
                 <PaperProvider theme={this.state.currentTheme}>
-                    <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
-                        <MainNavigator
-                            defaultHomeRoute={this.defaultHomeRoute}
-                            defaultHomeData={this.defaultHomeData}
-                        />
-                    </NavigationContainer>
+                    <View style={{backgroundColor: ThemeManager.getCurrentTheme().colors.background, flex: 1}}>
+                        <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
+                            <MainNavigator
+                                defaultHomeRoute={this.defaultHomeRoute}
+                                defaultHomeData={this.defaultHomeData}
+                            />
+                        </NavigationContainer>
+                    </View>
                 </PaperProvider>
             );
         }
