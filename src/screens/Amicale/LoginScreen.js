@@ -6,15 +6,16 @@ import {Avatar, Button, Card, HelperText, Paragraph, TextInput, withTheme} from 
 import ConnectionManager from "../../managers/ConnectionManager";
 import i18n from 'i18n-js';
 import ErrorDialog from "../../components/Dialogs/ErrorDialog";
-import {CommonActions} from "@react-navigation/native";
 import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
+import type {CustomTheme} from "../../managers/ThemeManager";
 
 type Props = {
     navigation: Object,
     route: Object,
     collapsibleStack: Collapsible,
+    theme: CustomTheme
 }
 
 type State = {
@@ -45,31 +46,16 @@ class LoginScreen extends React.Component<Props, State> {
         dialogError: 0,
     };
 
-    colors: Object;
-
     onEmailChange: Function;
     onPasswordChange: Function;
     passwordInputRef: Object;
 
-    nextScreen: string;
 
     constructor(props) {
         super(props);
         this.onEmailChange = this.onInputChange.bind(this, true);
         this.onPasswordChange = this.onInputChange.bind(this, false);
-
-        this.colors = props.theme.colors;
-
-        this.props.navigation.addListener('focus', this.onScreenFocus);
     }
-
-    onScreenFocus = () => {
-        if (this.props.route.params !== undefined && this.props.route.params.nextScreen !== undefined) {
-            this.nextScreen = this.props.route.params.nextScreen;
-            this.props.navigation.dispatch(CommonActions.setParams({nextScreen: 'profile'}));
-        } else
-            this.nextScreen = 'profile';
-    };
 
     showErrorDialog = (error: number) =>
         this.setState({
@@ -79,7 +65,7 @@ class LoginScreen extends React.Component<Props, State> {
 
     hideErrorDialog = () => this.setState({dialogVisible: false});
 
-    handleSuccess = () => this.props.navigation.replace(this.nextScreen);
+    handleSuccess = () => this.props.navigation.goBack();
 
     onResetPasswordClick = () => this.props.navigation.navigate('amicale-website', {
         screen: 'amicale-website',
@@ -239,7 +225,7 @@ class LoginScreen extends React.Component<Props, State> {
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon={"help"}
-                        color={this.colors.primary}
+                        color={this.props.theme.colors.primary}
                         style={{backgroundColor: 'transparent'}}/>}
                 />
                 <Card.Content>
