@@ -1,12 +1,17 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, Image, View} from 'react-native';
+import {Animated, FlatList, Image, View} from 'react-native';
 import {Card, List, Text, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
 import {Linking} from "expo";
+import {Collapsible} from "react-navigation-collapsible";
+import CustomTabBar from "../../components/Tabbar/CustomTabBar";
+import {withCollapsible} from "../../utils/withCollapsible";
 
-type Props = {};
+type Props = {
+    collapsibleStack: Collapsible
+};
 
 type State = {};
 
@@ -123,14 +128,22 @@ class AmicaleContactScreen extends React.Component<Props, State> {
     };
 
     render() {
+        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
-            //$FlowFixMe
-            <FlatList
+            <Animated.FlatList
                 data={[{key: "1"}]}
                 renderItem={this.getScreen}
+                // Animations
+                onScroll={onScroll}
+                contentContainerStyle={{
+                    paddingTop: containerPaddingTop,
+                    paddingBottom: CustomTabBar.TAB_BAR_HEIGHT,
+                    minHeight: '100%'
+                }}
+                scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
             />
         );
     }
 }
 
-export default withTheme(AmicaleContactScreen);
+export default withCollapsible(withTheme(AmicaleContactScreen));

@@ -12,6 +12,7 @@ import {Avatar, Button, Card, Divider, List, Title, TouchableRipple, withTheme} 
 import type {CustomTheme} from "../../managers/ThemeManager";
 import ConnectionManager from "../../managers/ConnectionManager";
 import i18n from 'i18n-js';
+import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 
 type Props = {
     navigation: Object,
@@ -66,12 +67,6 @@ class ServicesScreen extends React.Component<Props, State> {
                 subtitle: "PROFIL",
                 image: AMICALE_IMAGE,
                 onPress: () => nav.navigate("profile"),
-            },
-            {
-                title: i18n.t('screens.amicaleAbout'),
-                subtitle: "CONTACT",
-                image: AMICALE_IMAGE,
-                onPress: () => nav.navigate("amicale-contact"),
             },
             {
                 title: i18n.t('screens.vote'),
@@ -174,8 +169,17 @@ class ServicesScreen extends React.Component<Props, State> {
 
     componentDidMount() {
         this.props.navigation.addListener('focus', this.onFocus);
-
+        this.props.navigation.setOptions({
+            headerRight: this.getAboutButton,
+        });
     }
+
+    getAboutButton = () =>
+        <MaterialHeaderButtons>
+            <Item title="information" iconName="information" onPress={this.onAboutPress}/>
+        </MaterialHeaderButtons>;
+
+    onAboutPress = () => this.props.navigation.navigate('amicale-contact');
 
     onFocus = () => {
         this.handleNavigationParams();

@@ -29,7 +29,6 @@ import {BlueMindWebsiteScreen} from "../screens/Websites/BlueMindWebsiteScreen";
 import ProfileScreen from "../screens/Amicale/ProfileScreen";
 import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
 import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
-import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 
 const defaultScreenOptions = {
@@ -188,13 +187,6 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 component={VoteScreen}
                 options={{
                     title: i18n.t('screens.vote'),
-                }}
-            />
-            <MainStack.Screen
-                name="amicale-contact"
-                component={AmicaleContactScreen}
-                options={{
-                    title: i18n.t('screens.amicaleAbout'),
                 }}
             />
         </MainStack.Navigator>

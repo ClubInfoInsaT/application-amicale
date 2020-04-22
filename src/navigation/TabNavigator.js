@@ -20,6 +20,7 @@ import GroupSelectionScreen from "../screens/Planex/GroupSelectionScreen";
 import CustomTabBar from "../components/Tabbar/CustomTabBar";
 import WebsitesHomeScreen from "../screens/Services/ServicesScreen";
 import ServicesSectionScreen from "../screens/Services/ServicesSectionScreen";
+import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -73,6 +74,7 @@ function ServicesStackComponent() {
         >
             {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, i18n.t('screens.services'))}
             {createScreenCollapsibleStack("services-section", ServicesStack, ServicesSectionScreen, "SECTION")}
+            {createScreenCollapsibleStack("amicale-contact", ServicesStack, AmicaleContactScreen, i18n.t('screens.amicaleAbout'), true, {...modalTransition})}
         </ServicesStack.Navigator>
     );
 }
