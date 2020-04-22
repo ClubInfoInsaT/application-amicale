@@ -33,17 +33,8 @@ export default class SettingsScreen extends React.Component<Props, State> {
         startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
     };
 
-    onProxiwashNotifPickerValueChange: Function;
-    onStartScreenPickerValueChange: Function;
-    onToggleNightMode: Function;
-    onToggleNightModeFollowSystem: Function;
-
     constructor() {
         super();
-        this.onProxiwashNotifPickerValueChange = this.onProxiwashNotifPickerValueChange.bind(this);
-        this.onStartScreenPickerValueChange = this.onStartScreenPickerValueChange.bind(this);
-        this.onToggleNightMode = this.onToggleNightMode.bind(this);
-        this.onToggleNightModeFollowSystem = this.onToggleNightModeFollowSystem.bind(this);
     }
 
     /**
@@ -51,7 +42,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
      *
      * @param value The value to store
      */
-    onProxiwashNotifPickerValueChange(value: string) {
+    onProxiwashNotifPickerValueChange = (value: string) => {
         if (value != null) {
             let key = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.key;
             AsyncStorageManager.getInstance().savePref(key, value);
@@ -63,14 +54,14 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 intVal = parseInt(value);
             setMachineReminderNotificationTime(intVal);
         }
-    }
+    };
 
     /**
      * Saves the value for the proxiwash reminder notification time
      *
      * @param value The value to store
      */
-    onStartScreenPickerValueChange(value: string) {
+    onStartScreenPickerValueChange = (value: string) => {
         if (value != null) {
             let key = AsyncStorageManager.getInstance().preferences.defaultStartScreen.key;
             AsyncStorageManager.getInstance().savePref(key, value);
@@ -78,7 +69,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 startScreenPickerSelected: value
             });
         }
-    }
+    };
 
     /**
      * Returns a picker allowing the user to select the proxiwash reminder notification time
@@ -111,11 +102,11 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 value={this.state.startScreenPickerSelected}
                 style={{marginLeft: 'auto', marginRight: 'auto'}}
             >
-                <ToggleButton icon="shopping" value="proximo"/>
-                <ToggleButton icon="calendar-range" value="planning"/>
+                <ToggleButton icon="account-circle" value="services"/>
+                <ToggleButton icon="tshirt-crew" value="proxiwash"/>
                 <ToggleButton icon="triangle" value="home"/>
-                <ToggleButton icon="washing-machine" value="proxiwash"/>
-                <ToggleButton icon="timetable" value="planex"/>
+                <ToggleButton icon="calendar-range" value="planning"/>
+                <ToggleButton icon="clock" value="planex"/>
             </ToggleButton.Row>
         );
     }
@@ -123,12 +114,12 @@ export default class SettingsScreen extends React.Component<Props, State> {
     /**
      * Toggles night mode and saves it to preferences
      */
-    onToggleNightMode() {
+    onToggleNightMode = () => {
         ThemeManager.getInstance().setNightMode(!this.state.nightMode);
         this.setState({nightMode: !this.state.nightMode});
-    }
+    };
 
-    onToggleNightModeFollowSystem() {
+    onToggleNightModeFollowSystem = () => {
         const value = !this.state.nightModeFollowSystem;
         this.setState({nightModeFollowSystem: value});
         let key = AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.key;
@@ -138,7 +129,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
             ThemeManager.getInstance().setNightMode(nightMode);
             this.setState({nightMode: nightMode});
         }
-    }
+    };
 
     /**
      * Gets a list item using a checkbox control
