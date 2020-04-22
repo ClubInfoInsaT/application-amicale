@@ -25,7 +25,7 @@ const ROOM_IMAGE = "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-9/47041013_20435
 const EMAIL_IMAGE = "https://etud-mel.insa-toulouse.fr/webmail/images/logo-bluemind.png";
 const ENT_IMAGE = "https://ent.insa-toulouse.fr/media/org/jasig/portal/layout/tab-column/xhtml-theme/insa/institutional/LogoInsa.png";
 
-const PROXIMO_IMAGE = require("../../../assets/proximo-logo.png");
+const PROXIMO_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/proximo-logo.png"
 const WIKETUD_LINK = "https://wiki.etud.insa-toulouse.fr/resources/assets/wiketud.png?ff051";
 const AMICALE_IMAGE = require("../../../assets/amicale.png");
 const EE_IMAGE = "https://etud.insa-toulouse.fr/~eeinsat/wp-content/uploads/2019/09/logo-blanc.png";

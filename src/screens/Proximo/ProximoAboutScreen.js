@@ -10,6 +10,8 @@ type Props = {
     navigation: Object,
 };
 
+const LOGO = "https://etud.insa-toulouse.fr/~amicale_app/images/proximo-logo.png";
+
 /**
  * Class defining the proximo about screen.
  */
@@ -27,9 +29,8 @@ export default class ProximoAboutScreen extends React.Component<Props> {
                     alignItems: 'center'
                 }}>
                     <Image
-                        source={require('../../../assets/proximo-logo.png')}
-                        style={{flex: 1, resizeMode: "contain"}}
-                        resizeMode="contain"/>
+                        source={{uri: LOGO}}
+                        style={{height: '100%', width: '100%', resizeMode: "contain"}}/>
                 </View>
                 <Text>{i18n.t('proximoScreen.description')}</Text>
                 <Card style={{margin: 5}}>
