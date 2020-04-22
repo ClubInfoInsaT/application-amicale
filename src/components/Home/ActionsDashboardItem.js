@@ -58,7 +58,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     avatar: {
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        marginTop: 'auto',
+        marginBottom: 'auto',
     },
     list: {
         // height: 50,
