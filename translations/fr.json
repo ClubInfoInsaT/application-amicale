@@ -6,7 +6,8 @@
     "clubDisplayScreen": "Détails",
     "feedDisplayScreen": "Détails",
     "clubsAbout": "Les Clubs",
-    "amicaleAbout": "L' Amicale",
+    "amicaleAbout": "Contact",
+    "amicaleWebsite": "Site de l'Amicale",
     "proxiwash": "Proxiwash",
     "services": "Services",
     "proximo": "Proximo",
@@ -96,27 +97,10 @@
       "todayEventsSubtitleNA": "Pas d'événement",
       "todayEventsSubtitle": " événement aujourd'hui",
       "todayEventsSubtitlePlural": " événements aujourd'hui",
-      "proximoTitle": "Proximo",
-      "proximoSubtitleNA": "pas d'article en vente",
-      "proximoSubtitle": " article disponible",
-      "proximoSubtitlePlural": " articles disponibles",
-      "tutorinsaSubtitleNA": "Aucun tutorat disponible",
-      "tutorinsaSubtitle": " tutorat disponible",
-      "tutorinsaSubtitlePlural": " tutorats disponibles",
-      "proxiwashTitle": "Machines disponibles",
-      "proxiwashSubtitleNA": "Pas de machine disponible",
-      "proxiwashSubtitle1": " sèche-linge",
-      "proxiwashSubtitle1Plural": " sèche-linges",
-      "proxiwashSubtitle2": " lave-linge",
-      "proxiwashSubtitle2Plural": " lave-linges",
-      "menuTitle": "Menu d'aujourd'hui",
-      "menuSubtitleNA": "Pas de menu disponible",
-      "menuSubtitle": "Cliquez ici pour voir le menu"
+      "amicaleTitle": "L'Amicale",
+      "amicaleConnect": "Se connecter",
+      "amicaleConnected": "Voir les services disponibles"
     }
-  },
-  "planningScreen": {
-    "wipTitle": "WORK IN PROGRESS",
-    "wipSubtitle": "Bientôt, tous les évènements de l'INSA Toulouse en un seul endroit !"
   },
   "aboutScreen": {
     "appstore": "Voir sur l'Appstore",
@@ -294,7 +278,7 @@
       "animation": "Animation",
       "clubs": "Clubs",
       "event": "Événements",
-      "tech" : "Technique",
+      "tech": "Technique",
       "communication": "Communication",
       "intraSchools": "Alumni / IAT",
       "publicRelations": "Relations Publiques"
@@ -312,28 +296,28 @@
     "tease": {
       "title": "Les élections arrivent",
       "subtitle": "Préparez vous à voter !",
-      "message" : "Début des votes :"
+      "message": "Début des votes :"
     },
     "wait": {
       "titleSubmitted": "Vote envoyé !",
       "titleEnded": "Votes fermés",
-      "subtitle" : "Attente des résultats...",
-      "messageSubmitted" : "Votre vote a bien été envoyé.",
-      "messageVoted" : "Merci pour votre participation.",
-      "messageDate" : "Disponibilité des résultats :",
-      "messageDateUndefined" : "les résultats seront disponibles sous peu."
+      "subtitle": "Attente des résultats...",
+      "messageSubmitted": "Votre vote a bien été envoyé.",
+      "messageVoted": "Merci pour votre participation.",
+      "messageDate": "Disponibilité des résultats :",
+      "messageDateUndefined": "les résultats seront disponibles sous peu."
     },
     "results": {
       "title": "Résultats",
       "subtitle": "Disponibles jusqu'à :",
-      "totalVotes" : "Nombre total de votes :",
-      "votes" : "votes"
+      "totalVotes": "Nombre total de votes :",
+      "votes": "votes"
     },
     "title": {
       "title": "Les Élections",
       "subtitle": "Pourquoi votre vote est important",
-      "paragraph1" : "Les élections de l'amicale, c'est le moment pour vous de choisir la prochaine équipe qui portera les différents projets du campus, qui soutiendra les organisations de vos événements favoris, qui vous proposera des animations tout au long de l'année, et qui poussera vos idées à l’administration pour que la vie de campus soit des plus riches !\nAlors à vous de jouer ! \uD83D\uDE09",
-      "paragraph2" : "NB : Si par cas il n'y a qu'une liste qui se présente, il est important que tout le monde vote, afin qui la liste puisse montrer à l’administration que les INSAiens la soutiennent ! Ça compte toujours pour les décisions difficiles ! \uD83D\uDE09"
+      "paragraph1": "Les élections de l'amicale, c'est le moment pour vous de choisir la prochaine équipe qui portera les différents projets du campus, qui soutiendra les organisations de vos événements favoris, qui vous proposera des animations tout au long de l'année, et qui poussera vos idées à l’administration pour que la vie de campus soit des plus riches !\nAlors à vous de jouer ! \uD83D\uDE09",
+      "paragraph2": "NB : Si par cas il n'y a qu'une liste qui se présente, il est important que tout le monde vote, afin qui la liste puisse montrer à l’administration que les INSAiens la soutiennent ! Ça compte toujours pour les décisions difficiles ! \uD83D\uDE09"
     }
   },
   "dialog": {
@@ -398,5 +382,10 @@
       "time": "Temps: ",
       "exit": "Quitter"
     }
+  },
+  "servicesScreen": {
+    "amicale": "L'Amicale",
+    "students": "Services étudiants",
+    "insa": "Services de l'INSA"
   }
 }

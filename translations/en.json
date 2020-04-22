@@ -6,7 +6,8 @@
     "clubDisplayScreen": "Club details",
     "feedDisplayScreen": "Details",
     "clubsAbout": "Clubs",
-    "amicaleAbout": "The Amicale",
+    "amicaleAbout": "Contact",
+    "amicaleWebsite": "Amicale's website",
     "proxiwash": "Proxiwash",
     "services": "Services",
     "proximo": "Proximo",
@@ -96,27 +97,10 @@
       "todayEventsSubtitleNA": "No events today",
       "todayEventsSubtitle": " event coming today",
       "todayEventsSubtitlePlural": " events coming today",
-      "proximoTitle": "Proximo",
-      "proximoSubtitleNA": "No articles available",
-      "proximoSubtitle": " article available",
-      "proximoSubtitlePlural": " articles available",
-      "tutorinsaSubtitleNA": "No tutorial available",
-      "tutorinsaSubtitle": " tutorial available",
-      "tutorinsaSubtitlePlural": " tutorials available",
-      "proxiwashTitle": "Available machines",
-      "proxiwashSubtitleNA": "No machines available",
-      "proxiwashSubtitle1": " dryer",
-      "proxiwashSubtitle1Plural": " dryers",
-      "proxiwashSubtitle2": " washer",
-      "proxiwashSubtitle2Plural": " washers",
-      "menuTitle": "Today's menu",
-      "menuSubtitleNA": "No menu available",
-      "menuSubtitle": "Click here to see the menu"
+      "amicaleTitle": "The Amicale",
+      "amicaleConnect": "Login",
+      "amicaleConnected": "See available services"
     }
-  },
-  "planningScreen": {
-    "wipTitle": "WORK IN PROGRESS",
-    "wipSubtitle": "Soon, every event at the INSA Toulouse in one place !"
   },
   "aboutScreen": {
     "appstore": "See on the Appstore",
@@ -294,7 +278,7 @@
       "animation": "Animation",
       "clubs": "Clubs",
       "event": "Events",
-      "tech" : "Technique",
+      "tech": "Technique",
       "communication": "Communication",
       "intraSchools": "Alumni / IAT",
       "publicRelations": "Public Relations"
@@ -312,28 +296,28 @@
     "tease": {
       "title": "Elections incoming",
       "subtitle": "Be ready to vote!",
-      "message" : "Vote start:"
+      "message": "Vote start:"
     },
     "wait": {
       "titleSubmitted": "Vote submitted!",
       "titleEnded": "Votes closed",
-      "subtitle" : "Waiting for results...",
-      "messageSubmitted" : "Vote submitted successfully.",
-      "messageVoted" : "Thank you for your participation.",
-      "messageDate" : "Results available:",
-      "messageDateUndefined" : "Results will be available shortly"
+      "subtitle": "Waiting for results...",
+      "messageSubmitted": "Vote submitted successfully.",
+      "messageVoted": "Thank you for your participation.",
+      "messageDate": "Results available:",
+      "messageDateUndefined": "Results will be available shortly"
     },
     "results": {
       "title": "Results",
       "subtitle": "Available until:",
-      "totalVotes" : "Total votes:",
-      "votes" : "votes"
+      "totalVotes": "Total votes:",
+      "votes": "votes"
     },
     "title": {
       "title": "The Elections",
       "subtitle": "Why your vote is important",
-      "paragraph1" : "The Amicale's elections is the right moment for you to choose the next team, which will handle different projects on the campus, help organizing your favorite events, animate the campus life during the whole year, and relay your ideas to the administration, so that your campus life is the most enjoyable possible!\nYour turn to make a change!\uD83D\uDE09",
-      "paragraph2" : "Note: If there is only one list, it is still important to vote to show your support, so that the administration knows the current list is supported by students. It is always a plus when taking difficult decisions! \uD83D\uDE09"
+      "paragraph1": "The Amicale's elections is the right moment for you to choose the next team, which will handle different projects on the campus, help organizing your favorite events, animate the campus life during the whole year, and relay your ideas to the administration, so that your campus life is the most enjoyable possible!\nYour turn to make a change!\uD83D\uDE09",
+      "paragraph2": "Note: If there is only one list, it is still important to vote to show your support, so that the administration knows the current list is supported by students. It is always a plus when taking difficult decisions! \uD83D\uDE09"
     }
   },
   "dialog": {
@@ -398,5 +382,10 @@
       "time": "Time: ",
       "exit": "leave Game"
     }
+  },
+  "servicesScreen": {
+    "amicale": "The Amicale",
+    "students": "Student services",
+    "insa": "INSA services"
   }
 }

@@ -100,7 +100,7 @@ function ServicesStackComponent() {
             {createScreenCollapsibleStack("self-menu", ServicesStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
 
             {/*     STUDENTS     */}
-            {createScreenCollapsibleStack("proximo", ServicesStack, ProximoMainScreen, "Proximo")}
+            {createScreenCollapsibleStack("proximo", ServicesStack, ProximoMainScreen, i18n.t('screens.proximo'))}
             {createScreenCollapsibleStack(
                 "proximo-list",
                 ServicesStack,
@@ -117,12 +117,12 @@ function ServicesStackComponent() {
                     ...modalTransition,
                 }}
             />
-            {getWebsiteStack("amicale-website", ServicesStack, AmicaleWebsiteScreen, "Amicale")}
+            {getWebsiteStack("amicale-website", ServicesStack, AmicaleWebsiteScreen, i18n.t('screens.amicaleWebsite'))}
             {getWebsiteStack("elus-etudiants", ServicesStack, ElusEtudiantsWebsiteScreen, "Élus Étudiants")}
             {getWebsiteStack("wiketud", ServicesStack, WiketudWebsiteScreen, "Wiketud")}
             {getWebsiteStack("tutorinsa", ServicesStack, TutorInsaWebsiteScreen, "Tutor'INSA")}
-            {getWebsiteStack("ent", ServicesStack, ENTWebsiteScreen, "ENT INSA")}
-            {getWebsiteStack("bluemind", ServicesStack, BlueMindWebsiteScreen, "BlueMind")}
+            {getWebsiteStack("ent", ServicesStack, ENTWebsiteScreen, i18n.t('screens.ent'))}
+            {getWebsiteStack("bluemind", ServicesStack, BlueMindWebsiteScreen, i18n.t('screens.bluemind'))}
 
 
             {/*     AMICALE     */}

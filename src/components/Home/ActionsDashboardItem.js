@@ -5,6 +5,7 @@ import {Avatar, Card, List, withTheme} from 'react-native-paper';
 import {StyleSheet} from "react-native";
 import {DrawerNavigationProp} from "@react-navigation/drawer";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import i18n from 'i18n-js';
 
 const ICON_AMICALE = require("../../../assets/amicale.png");
 
@@ -29,8 +30,10 @@ class ActionsDashBoardItem extends React.Component<Props> {
                 borderColor: this.props.theme.colors.primary,
             }}>
                 <List.Item
-                    title={"AMICALE"}
-                    description={isLoggedIn ? "VOTRE ESPACE" : "SE CONNECTER"}
+                    title={i18n.t("homeScreen.dashboard.amicaleTitle")}
+                    description={isLoggedIn
+                        ? i18n.t("homeScreen.dashboard.amicaleConnected")
+                        : i18n.t("homeScreen.dashboard.amicaleConnect")}
                     left={props => <Avatar.Image
                         {...props}
                         size={40}

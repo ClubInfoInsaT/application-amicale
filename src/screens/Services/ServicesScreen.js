@@ -11,6 +11,7 @@ import {Animated, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, Title, TouchableRipple, withTheme} from "react-native-paper";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import ConnectionManager from "../../managers/ConnectionManager";
+import i18n from 'i18n-js';
 
 type Props = {
     navigation: Object,
@@ -55,31 +56,25 @@ class ServicesScreen extends React.Component<Props, State> {
         const nav = props.navigation;
         this.amicaleDataset = [
             {
-                title: "AMICALE",
-                subtitle: "AMICALE",
-                image: AMICALE_IMAGE,
-                onPress: () => nav.navigate("amicale-website"),
-            },
-            {
-                title: "CLUBS",
+                title: i18n.t('screens.clubsAbout'),
                 subtitle: "CLUB LIST",
                 image: AMICALE_IMAGE,
                 onPress: () => nav.navigate("club-list"),
             },
             {
-                title: "PROFIL",
+                title: i18n.t('screens.profile'),
                 subtitle: "PROFIL",
                 image: AMICALE_IMAGE,
                 onPress: () => nav.navigate("profile"),
             },
             {
-                title: "CONTACT",
+                title: i18n.t('screens.amicaleAbout'),
                 subtitle: "CONTACT",
                 image: AMICALE_IMAGE,
                 onPress: () => nav.navigate("amicale-contact"),
             },
             {
-                title: "ELECTIONS",
+                title: i18n.t('screens.vote'),
                 subtitle: "ELECTIONS",
                 image: AMICALE_IMAGE,
                 onPress: () => nav.navigate("vote"),
@@ -87,31 +82,31 @@ class ServicesScreen extends React.Component<Props, State> {
         ];
         this.studentsDataset = [
             {
-                title: "proximo",
+                title: i18n.t('screens.proximo'),
                 subtitle: "proximo",
                 image: PROXIMO_IMAGE,
                 onPress: () => nav.navigate("proximo"),
             },
             {
-                title: "AMICALE",
+                title: i18n.t('screens.amicaleWebsite'),
                 subtitle: "AMICALE",
                 image: AMICALE_IMAGE,
                 onPress: () => nav.navigate("amicale-website"),
             },
             {
-                title: "wiketud",
+                title: "Wiketud",
                 subtitle: "wiketud",
                 image: WIKETUD_LINK,
                 onPress: () => nav.navigate("wiketud"),
             },
             {
-                title: "ELUS ETUDIANTS",
+                title: "Élus Étudiants",
                 subtitle: "ELUS ETUDIANTS",
                 image: EE_IMAGE,
                 onPress: () => nav.navigate("elus-etudiants"),
             },
             {
-                title: "TUTOR INSA",
+                title: "Tutor'INSA",
                 subtitle: "TUTOR INSA",
                 image: TUTORINSA_IMAGE,
                 onPress: () => nav.navigate("tutorinsa"),
@@ -119,31 +114,31 @@ class ServicesScreen extends React.Component<Props, State> {
         ];
         this.insaDataset = [
             {
-                title: "RU",
+                title: i18n.t('screens.menuSelf'),
                 subtitle: "the ru",
                 image: RU_IMAGE,
                 onPress: () => nav.navigate("self-menu"),
             },
             {
-                title: "AVAILABLE ROOMS",
+                title: i18n.t('screens.availableRooms'),
                 subtitle: "ROOMS",
                 image: ROOM_IMAGE,
                 onPress: () => nav.navigate("available-rooms"),
             },
             {
-                title: "BIB",
+                title: i18n.t('screens.bib'),
                 subtitle: "BIB",
                 image: BIB_IMAGE,
                 onPress: () => nav.navigate("bib"),
             },
             {
-                title: "EMAIL",
+                title: i18n.t('screens.bluemind'),
                 subtitle: "EMAIL",
                 image: EMAIL_IMAGE,
                 onPress: () => nav.navigate("bluemind"),
             },
             {
-                title: "ENT",
+                title: i18n.t('screens.ent'),
                 subtitle: "ENT",
                 image: ENT_IMAGE,
                 onPress: () => nav.navigate("ent"),
@@ -151,21 +146,21 @@ class ServicesScreen extends React.Component<Props, State> {
         ];
         this.finalDataset = [
             {
-                title: "AMICALE",
+                title: i18n.t("servicesScreen.amicale"),
                 description: "LOGIN",
                 image: AMICALE_IMAGE,
                 shouldLogin: true,
                 content: this.amicaleDataset
             },
             {
-                title: "STUDENTS",
+                title: i18n.t("servicesScreen.students"),
                 description: "SERVICES OFFERED BY STUDENTS",
                 image: 'account-group',
                 shouldLogin: false,
                 content: this.studentsDataset
             },
             {
-                title: "INSA",
+                title: i18n.t("servicesScreen.insa"),
                 description: "SERVICES OFFERED BY INSA",
                 image: 'school',
                 shouldLogin: false,
