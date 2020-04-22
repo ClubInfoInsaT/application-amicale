@@ -6,15 +6,13 @@ import {HeaderButton, HeaderButtons} from 'react-navigation-header-buttons';
 import {withTheme} from "react-native-paper";
 import * as Touchable from "react-native/Libraries/Components/Touchable/TouchableNativeFeedback.android";
 
-const MaterialHeaderButton = (props: Object) => (
-    <HeaderButton
+const MaterialHeaderButton = (props: Object) => <HeaderButton
         IconComponent={MaterialCommunityIcons}
         iconSize={26}
-        color={props.theme.colors.text}
+        color={props.color != null ? props.color : props.theme.colors.text}
         background={Touchable.Ripple(props.theme.colors.ripple, true)}
         {...props}
-    />
-);
+    />;
 
 const MaterialHeaderButtons = (props: Object) => {
     return (

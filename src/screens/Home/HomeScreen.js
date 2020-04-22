@@ -17,6 +17,9 @@ import AnimatedFAB from "../../components/Animations/AnimatedFAB";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import {View} from "react-native-animatable";
+import {HiddenItem} from "react-navigation-header-buttons";
+import ConnectionManager from "../../managers/ConnectionManager";
+import LogoutDialog from "../../components/Amicale/LogoutDialog";
 // import DATA from "../dashboard_data.json";
 
 
@@ -95,21 +98,32 @@ type Props = {
     theme: CustomTheme,
 }
 
+type State = {
+    dialogVisible: boolean,
+}
+
 /**
  * Class defining the app's home screen
  */
-class HomeScreen extends React.Component<Props> {
+class HomeScreen extends React.Component<Props, State> {
 
     colors: Object;
 
+    isLoggedIn: boolean | null;
+
     fabRef: { current: null | AnimatedFAB };
     currentNewFeed: Array<feedItem>;
+
+    state = {
+        dialogVisible: false,
+    }
 
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
         this.fabRef = React.createRef();
         this.currentNewFeed = [];
+        this.isLoggedIn = null;
     }
 
     /**
@@ -130,9 +144,12 @@ class HomeScreen extends React.Component<Props> {
     }
 
     onScreenFocus = () => {
-        this.props.navigation.setOptions({
-            headerRight: this.getHeaderButton,
-        });
+        if (ConnectionManager.getInstance().isLoggedIn() !== this.isLoggedIn) {
+            this.isLoggedIn = ConnectionManager.getInstance().isLoggedIn();
+            this.props.navigation.setOptions({
+                headerRight: this.getHeaderButton,
+            });
+        }
         // handle link open when home is not focused or created
         this.handleNavigationParams();
     };
@@ -148,13 +165,27 @@ class HomeScreen extends React.Component<Props> {
     };
 
     getHeaderButton = () => {
+        let onPressLog = () => this.props.navigation.navigate("login");
+        let logIcon = "login";
+        let logColor = this.props.theme.colors.primary;
+        if (this.isLoggedIn) {
+            onPressLog = () => this.showDisconnectDialog();
+            logIcon = "logout";
+            logColor = this.props.theme.colors.text;
+        }
+
         const onPressSettings = () => this.props.navigation.navigate("settings");
         const onPressAbout = () => this.props.navigation.navigate("about");
         return <MaterialHeaderButtons>
-            <Item title="settings" iconName={"settings"} onPress={onPressSettings}/>
-            <Item title="information" iconName={"information"} onPress={onPressAbout}/>
+            <Item title="log" iconName={logIcon} color={logColor} onPress={onPressLog}/>
+            <HiddenItem title={i18n.t("screens.settings")} iconName={"settings"} onPress={onPressSettings}/>
+            <HiddenItem title={i18n.t("screens.about")} iconName={"information"} onPress={onPressAbout}/>
         </MaterialHeaderButtons>;
     };
+
+    showDisconnectDialog = () => this.setState({dialogVisible: true});
+
+    hideDisconnectDialog = () => this.setState({dialogVisible: false});
 
     onProxiwashClick = () => {
         this.props.navigation.navigate("proxiwash");
@@ -528,6 +559,11 @@ class HomeScreen extends React.Component<Props> {
                     ref={this.fabRef}
                     icon="qrcode-scan"
                     onPress={this.openScanner}
+                />
+                <LogoutDialog
+                    {...this.props}
+                    visible={this.state.dialogVisible}
+                    onDismiss={this.hideDisconnectDialog}
                 />
             </View>
         );
