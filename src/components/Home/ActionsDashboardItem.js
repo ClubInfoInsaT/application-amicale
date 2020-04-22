@@ -40,7 +40,9 @@ class ActionsDashBoardItem extends React.Component<Props> {
                         ? "chevron-right"
                         : "login"}/>}
                     onPress={isLoggedIn
-                        ? () => this.props.navigation.navigate("services")
+                        ? () => this.props.navigation.navigate("services", {
+                            screen: 'index'
+                        })
                         : () => this.props.navigation.navigate("login")}
                     style={styles.list}
                 />
