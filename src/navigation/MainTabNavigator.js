@@ -330,17 +330,16 @@ export default class TabNavigator extends React.Component<Props> {
                 tabBar={props => <CustomTabBar {...props} />}
             >
                 <Tab.Screen
-                    name="proxiwash"
-                    component={ProxiwashStackComponent}
-                    options={{title: i18n.t('screens.proxiwash')}}
-                />
-                <Tab.Screen
                     name="services"
                     option
                     component={ServicesStackComponent}
                     options={{title: i18n.t('screens.services')}}
                 />
-
+                <Tab.Screen
+                    name="proxiwash"
+                    component={ProxiwashStackComponent}
+                    options={{title: i18n.t('screens.proxiwash')}}
+                />
                 <Tab.Screen
                     name="home"
                     component={this.createHomeStackComponent}
