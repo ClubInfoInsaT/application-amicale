@@ -126,13 +126,7 @@ function ServicesStackComponent() {
 
 
             {/*     AMICALE     */}
-            <ServicesStack.Screen
-                name="login"
-                component={LoginScreen}
-                options={{
-                    title: i18n.t('screens.login'),
-                }}
-            />
+            {createScreenCollapsibleStack("login", ServicesStack, LoginScreen, i18n.t('screens.login'))}
             {createScreenCollapsibleStack("profile", ServicesStack, ProfileScreen, i18n.t('screens.profile'))}
             {createScreenCollapsibleStack("club-list", ServicesStack, ClubListScreen, i18n.t('clubs.clubList'))}
             <ServicesStack.Screen
@@ -274,14 +268,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                 }}
             />
             {createScreenCollapsibleStack("self-menu", HomeStack, SelfMenuScreen, i18n.t('screens.menuSelf'), true, {...modalTransition})}
-
-            <HomeStack.Screen
-                name="login"
-                component={LoginScreen}
-                options={{
-                    title: i18n.t('screens.login'),
-                }}
-            />
+            {createScreenCollapsibleStack("login", HomeStack, LoginScreen, i18n.t('screens.login'))}
         </HomeStack.Navigator>
     );
 }
