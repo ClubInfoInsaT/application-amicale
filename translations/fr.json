@@ -386,6 +386,7 @@
   "servicesScreen": {
     "amicale": "L'Amicale",
     "students": "Services étudiants",
-    "insa": "Services de l'INSA"
+    "insa": "Services de l'INSA",
+    "notLoggedIn": "Non connecté"
   }
 }

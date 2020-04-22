@@ -217,7 +217,7 @@ class ServicesScreen extends React.Component<Props, State> {
                     marginLeft: 'auto',
                     marginRight: 'auto',
                 }}>
-                    NOT LOGGED IN
+                    {i18n.t("servicesScreen.notLoggedIn")}
                 </Title>
                 <Button
                     icon="login"
@@ -227,7 +227,7 @@ class ServicesScreen extends React.Component<Props, State> {
                         marginLeft: 'auto',
                         marginRight: 'auto',
                     }}>
-                    LOGIN
+                    {i18n.t("screens.login")}
                 </Button>
             </View>
         )
