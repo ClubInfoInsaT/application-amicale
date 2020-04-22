@@ -33,8 +33,8 @@ export default class ImageListItem extends React.Component<Props> {
                 <View>
                     <Image
                         style={{
-                            width: 100,
-                            height: 100,
+                            width: 80,
+                            height: 80,
                             marginLeft: 'auto',
                             marginRight: 'auto',
                         }}
