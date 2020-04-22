@@ -9,7 +9,7 @@ import {AppLoading} from 'expo';
 import type {CustomTheme} from "./src/managers/ThemeManager";
 import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
-import DrawerNavigator from './src/navigation/DrawerNavigator';
+import MainNavigator from './src/navigation/MainNavigator';
 import {initExpoToken} from "./src/utils/Notifications";
 import {Provider as PaperProvider} from 'react-native-paper';
 import AprilFoolsManager from "./src/managers/AprilFoolsManager";
@@ -156,7 +156,7 @@ export default class App extends React.Component<Props, State> {
      */
     onLoadFinished() {
         // Only show intro if this is the first time starting the app
-        this.createDrawerNavigator = () => <DrawerNavigator
+        this.createDrawerNavigator = () => <MainNavigator
             defaultHomeRoute={this.defaultHomeRoute}
             defaultHomeData={this.defaultHomeData}
         />;
@@ -191,7 +191,7 @@ export default class App extends React.Component<Props, State> {
             return (
                 <PaperProvider theme={this.state.currentTheme}>
                     <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
-                        <DrawerNavigator
+                        <MainNavigator
                             defaultHomeRoute={this.defaultHomeRoute}
                             defaultHomeData={this.defaultHomeData}
                         />

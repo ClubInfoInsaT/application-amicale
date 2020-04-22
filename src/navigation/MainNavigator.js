@@ -7,7 +7,7 @@ import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 import DebugScreen from '../screens/About/DebugScreen';
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
 import i18n from "i18n-js";
-import TabNavigator from "./MainTabNavigator";
+import TabNavigator from "./TabNavigator";
 import TetrisScreen from "../screens/Tetris/TetrisScreen";
 
 const defaultScreenOptions = {
@@ -76,7 +76,7 @@ type Props = {
     defaultHomeData: { [key: string]: any }
 }
 
-export default class DrawerNavigator extends React.Component<Props> {
+export default class MainNavigator extends React.Component<Props> {
 
     createTabNavigator: () => React.Node;
 
