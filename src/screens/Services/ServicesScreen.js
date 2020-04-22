@@ -8,12 +8,14 @@ import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import {CommonActions} from "@react-navigation/native";
 import {Animated, View} from "react-native";
-import {Avatar, Card, Divider, List, TouchableRipple} from "react-native-paper";
+import {Avatar, Card, Divider, List, TouchableRipple, withTheme} from "react-native-paper";
+import type {CustomTheme} from "../../managers/ThemeManager";
 
 type Props = {
     navigation: Object,
     route: Object,
     collapsibleStack: Collapsible,
+    theme: CustomTheme,
 }
 const BIB_IMAGE = "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/50695561_2124263197597162_2325349608210825216_n.jpg?_nc_cat=109&_nc_sid=8bfeb9&_nc_ohc=tmcV6FWO7_kAX9vfWHU&_nc_ht=scontent-cdg2-1.xx&oh=3b81c76e46b49f7c3a033ea3b07ec212&oe=5EC59B4D";
 const RU_IMAGE = "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/47123773_2041883702501779_5289372776166064128_o.jpg?_nc_cat=100&_nc_sid=cdbe9c&_nc_ohc=dpuBGlIIy_EAX8CyC0l&_nc_ht=scontent-cdg2-1.xx&oh=5c5bb4f0c7f12b554246f7c9b620a5f3&oe=5EC4DB31";
@@ -151,13 +153,13 @@ class ServicesScreen extends React.Component<Props> {
             {
                 title: "STUDENTS",
                 description: "SERVICES OFFERED BY STUDENTS",
-                image: AMICALE_IMAGE,
+                image: 'account-group',
                 content: this.studentsDataset
             },
             {
                 title: "INSA",
                 description: "SERVICES OFFERED BY INSA",
-                image: AMICALE_IMAGE,
+                image: 'school',
                 content: this.insaDataset
             },
         ]
@@ -181,11 +183,19 @@ class ServicesScreen extends React.Component<Props> {
     getAvatar(props, source: string | number) {
         if (typeof source === "number")
             return <Avatar.Image
+                {...props}
                 size={48}
                 source={AMICALE_IMAGE}
-                style={{backgroundColor: 'transparent'}}/>
+                style={{backgroundColor: 'transparent'}}
+            />
         else
-            return <List.Icon {...props} icon={source}/>
+            return <Avatar.Icon
+                {...props}
+                size={48}
+                icon={source}
+                color={this.props.theme.colors.primary}
+                style={{backgroundColor: 'transparent'}}
+            />
     }
 
     renderItem = ({item}: { item: listItem }) => {
@@ -234,4 +244,4 @@ class ServicesScreen extends React.Component<Props> {
     }
 }
 
-export default withCollapsible(ServicesScreen);
+export default withCollapsible(withTheme(ServicesScreen));
