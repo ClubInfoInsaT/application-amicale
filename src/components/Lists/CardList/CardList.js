@@ -57,6 +57,7 @@ export default class CardList extends React.Component<Props> {
                 numColumns={this.props.isHorizontal ? undefined : 2}
                 horizontal={this.props.isHorizontal}
                 contentContainerStyle={containerStyle}
+                pagingEnabled={this.props.isHorizontal}
             />
         );
     }
