@@ -8,7 +8,7 @@ import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import {CommonActions} from "@react-navigation/native";
 import {Animated, View} from "react-native";
-import {Avatar, Card, List, TouchableRipple} from "react-native-paper";
+import {Avatar, Card, Divider, List, TouchableRipple} from "react-native-paper";
 
 type Props = {
     navigation: Object,
@@ -229,6 +229,7 @@ class ServicesScreen extends React.Component<Props> {
                 paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20
             }}
             scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+            ItemSeparatorComponent={() => <Divider/>}
         />
     }
 }

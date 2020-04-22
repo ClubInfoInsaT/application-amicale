@@ -27,7 +27,7 @@ export default class CardList extends React.Component<Props> {
 
     renderItem = ({item}: { item: cardItem }) => {
         return (
-            <CardListItem width={150} item={item} key={item.title}/>
+            <CardListItem item={item} key={item.title}/>
         );
     };
 
@@ -36,7 +36,7 @@ export default class CardList extends React.Component<Props> {
     render() {
         let containerStyle = {
             ...this.props.contentContainerStyle,
-            height: 200,
+            height: 150,
             justifyContent: 'space-around',
         };
         if (!this.props.isHorizontal) {
@@ -53,7 +53,7 @@ export default class CardList extends React.Component<Props> {
                 data={this.props.dataset}
                 renderItem={this.renderItem}
                 keyExtractor={this.keyExtractor}
-                numColumns={this.props.isHorizontal ? undefined : 2}
+                numColumns={this.props.isHorizontal ? undefined : 3}
                 horizontal={this.props.isHorizontal}
                 contentContainerStyle={containerStyle}
             />

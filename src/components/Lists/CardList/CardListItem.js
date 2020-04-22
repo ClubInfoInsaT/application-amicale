@@ -1,11 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {Caption, Card, Paragraph} from 'react-native-paper';
+import {Text, TouchableRipple} from 'react-native-paper';
+import {Image, View} from 'react-native';
 import type {cardItem} from "./CardList";
 
 type Props = {
-    width: string | number,
     item: cardItem,
 }
 
@@ -22,22 +22,31 @@ export default class CardListItem extends React.Component<Props> {
             ? item.image
             : {uri: item.image};
         return (
-            <Card
+            <TouchableRipple
                 style={{
-                    width: props.width,
+                    width: 100,
+                    height: 150,
                     margin: 5,
                 }}
                 onPress={item.onPress}
             >
-                <Card.Cover
-                    style={{height: 80}}
-                    source={source}
-                />
-                <Card.Content>
-                    <Paragraph>{item.title}</Paragraph>
-                    <Caption>{item.subtitle}</Caption>
-                </Card.Content>
-            </Card>
+                <View>
+                    <Image
+                        style={{
+                            width: 100,
+                            height: 100,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                        }}
+                        source={source}
+                    />
+                    <Text style={{
+                        marginTop: 5,
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                    }}>{item.title}</Text>
+                </View>
+            </TouchableRipple>
         );
     }
 }
