@@ -1,11 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, View} from "react-native";
+import {Animated} from "react-native";
 import CardListItem from "./CardListItem";
 
 type Props = {
-    dataset: Array<cards>
+    dataset: Array<cardItem>,
+    isHorizontal: boolean,
 }
 
 export type cardItem = {
@@ -15,41 +16,46 @@ export type cardItem = {
     onPress: () => void,
 };
 
-export type cards = Array<cardItem>;
+export type cardList = Array<cardItem>;
 
 
 export default class CardList extends React.Component<Props> {
 
-    renderItem = ({item}: { item: cards }) => {
-        let width = '80%';
-        if (item.length > 1) {
-            width = '40%';
-        }
+    static defaultProps = {
+        isHorizontal: false,
+    }
+
+    renderItem = ({item}: { item: cardItem }) => {
         return (
-            <View style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: "space-evenly",
-                marginTop: 10,
-            }}>
-                {item.map((card: cardItem, index: number) => {
-                    return (
-                        <CardListItem width={width} item={card} key={index.toString()}/>
-                    );
-                })}
-            </View>
+            <CardListItem width={150} item={item} key={item.title}/>
         );
     };
 
-    keyExtractor = (item: cards) => item[0].title;
+    keyExtractor = (item: cardItem) => item.title;
 
     render() {
+        let containerStyle = {
+            ...this.props.contentContainerStyle,
+            height: 200,
+            justifyContent: 'space-around',
+        };
+        if (!this.props.isHorizontal) {
+            containerStyle = {
+                ...containerStyle,
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                height: 'auto',
+            }
+        }
         return (
             <Animated.FlatList
                 {...this.props}
                 data={this.props.dataset}
                 renderItem={this.renderItem}
                 keyExtractor={this.keyExtractor}
+                numColumns={this.props.isHorizontal ? undefined : 2}
+                horizontal={this.props.isHorizontal}
+                contentContainerStyle={containerStyle}
             />
         );
     }

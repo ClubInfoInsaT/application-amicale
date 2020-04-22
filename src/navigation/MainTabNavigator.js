@@ -38,6 +38,7 @@ import VoteScreen from "../screens/Amicale/VoteScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
 import AmicaleHomeScreen from "../screens/Amicale/AmicaleHomeScreen";
 import WebsitesHomeScreen from "../screens/Services/ServicesScreen";
+import ServicesSectionScreen from "../screens/Services/ServicesSectionScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -92,6 +93,7 @@ function ServicesStackComponent() {
             screenOptions={defaultScreenOptions}
         >
             {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, i18n.t('screens.services'))}
+            {createScreenCollapsibleStack("services-section", ServicesStack, ServicesSectionScreen, "SECTION")}
 
             {createScreenCollapsibleStack("proximo", ServicesStack, ProximoMainScreen, "Proximo")}
             {createScreenCollapsibleStack(

@@ -1,12 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import type {cards} from "../../components/Lists/CardList/CardList";
+import type {cardList} from "../../components/Lists/CardList/CardList";
 import CardList from "../../components/Lists/CardList/CardList";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import {CommonActions} from "@react-navigation/native";
+import {Animated} from "react-native";
+import {Avatar, Card, List} from "react-native-paper";
 
 type Props = {
     navigation: Object,
@@ -25,57 +27,30 @@ const AMICALE_IMAGE = require("../../../assets/amicale.png");
 const EE_IMAGE = "https://etud.insa-toulouse.fr/~eeinsat/wp-content/uploads/2019/09/logo-blanc.png";
 const TUTORINSA_IMAGE = "https://www.etud.insa-toulouse.fr/~tutorinsa/public/images/logo-gray.png";
 
+type listItem = {
+    title: string,
+    description: string,
+    image: string | number,
+    content: cardList,
+}
+
 class ServicesScreen extends React.Component<Props> {
 
-    dataset: Array<cards>;
+    studentsDataset: cardList;
+    insaDataset: cardList;
+
+    finalDataset: Array<listItem>
 
     constructor(props) {
         super(props);
         const nav = props.navigation;
-        this.dataset = [
-            [
-                {
-                    title: "RU",
-                    subtitle: "the ru",
-                    image: RU_IMAGE,
-                    onPress: () => nav.navigate("self-menu"),
-                },
+        this.studentsDataset = [
                 {
                     title: "proximo",
                     subtitle: "proximo",
                     image: PROXIMO_IMAGE,
                     onPress: () => nav.navigate("proximo"),
                 },
-            ],
-            [
-                {
-                    title: "AVAILABLE ROOMS",
-                    subtitle: "ROOMS",
-                    image: ROOM_IMAGE,
-                    onPress: () => nav.navigate("available-rooms"),
-                },
-                {
-                    title: "BIB",
-                    subtitle: "BIB",
-                    image: BIB_IMAGE,
-                    onPress: () => nav.navigate("bib"),
-                },
-            ],
-            [
-                {
-                    title: "EMAIL",
-                    subtitle: "EMAIL",
-                    image: EMAIL_IMAGE,
-                    onPress: () => nav.navigate("bluemind"),
-                },
-                {
-                    title: "ENT",
-                    subtitle: "ENT",
-                    image: ENT_IMAGE,
-                    onPress: () => nav.navigate("ent"),
-                },
-            ],
-            [
                 {
                     title: "AMICALE",
                     subtitle: "AMICALE",
@@ -88,8 +63,6 @@ class ServicesScreen extends React.Component<Props> {
                     image: WIKETUD_LINK,
                     onPress: () => nav.navigate("wiketud"),
                 },
-            ],
-            [
                 {
                     title: "ELUS ETUDIANTS",
                     subtitle: "ELUS ETUDIANTS",
@@ -102,8 +75,53 @@ class ServicesScreen extends React.Component<Props> {
                     image: TUTORINSA_IMAGE,
                     onPress: () => nav.navigate("tutorinsa"),
                 },
-            ],
         ];
+        this.insaDataset = [
+                {
+                    title: "RU",
+                    subtitle: "the ru",
+                    image: RU_IMAGE,
+                    onPress: () => nav.navigate("self-menu"),
+                },
+                {
+                    title: "AVAILABLE ROOMS",
+                    subtitle: "ROOMS",
+                    image: ROOM_IMAGE,
+                    onPress: () => nav.navigate("available-rooms"),
+                },
+                {
+                    title: "BIB",
+                    subtitle: "BIB",
+                    image: BIB_IMAGE,
+                    onPress: () => nav.navigate("bib"),
+                },
+                {
+                    title: "EMAIL",
+                    subtitle: "EMAIL",
+                    image: EMAIL_IMAGE,
+                    onPress: () => nav.navigate("bluemind"),
+                },
+                {
+                    title: "ENT",
+                    subtitle: "ENT",
+                    image: ENT_IMAGE,
+                    onPress: () => nav.navigate("ent"),
+                },
+        ];
+        this.finalDataset = [
+            {
+                title: "AMICALE",
+                description: "youhou",
+                image: AMICALE_IMAGE,
+                content: this.studentsDataset
+            },
+            {
+                title: "INSA",
+                description: "youhou",
+                image: AMICALE_IMAGE,
+                content: this.insaDataset
+            },
+        ]
     }
 
     componentDidMount() {
@@ -121,19 +139,56 @@ class ServicesScreen extends React.Component<Props> {
         }
     };
 
+    getAvatar(props, source: string | number) {
+        if (typeof source === "number")
+        return <Avatar.Image
+            size={48}
+            source={AMICALE_IMAGE}
+            style={{backgroundColor: 'transparent'}}/>
+        else
+            return <List.Icon {...props} icon={source} />
+    }
+
+    renderItem = ({item} : {item: listItem}) => {
+        return (
+            <Card
+                style={{
+                    margin: 5,
+                }}
+                onPress={() => this.props.navigation.navigate("services-section", {data: item})}
+            >
+                <Card.Title
+                    title={item.title}
+                    subtitle={item.description}
+                    left={(props) => this.getAvatar(props, item.image)}
+                    right={(props) => <List.Icon {...props} icon="chevron-right" />}
+                />
+                <CardList
+                    dataset={item.content}
+                    isHorizontal={true}
+                />
+            </Card>
+
+        );
+    };
+
+    keyExtractor = (item: listItem) => {
+        return item.title;
+    }
+
     render() {
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
-        return (
-            <CardList
-                dataset={this.dataset}
-                onScroll={onScroll}
-                contentContainerStyle={{
-                    paddingTop: containerPaddingTop,
-                    paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20
-                }}
-                scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
-            />
-        );
+        return <Animated.FlatList
+            data={this.finalDataset}
+            renderItem={this.renderItem}
+            keyExtractor={this.keyExtractor}
+            onScroll={onScroll}
+            contentContainerStyle={{
+                paddingTop: containerPaddingTop,
+                paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20
+            }}
+            scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+        />
     }
 }
 

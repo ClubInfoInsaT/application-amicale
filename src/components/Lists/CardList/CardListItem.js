@@ -25,6 +25,8 @@ export default class CardListItem extends React.Component<Props> {
             <Card
                 style={{
                     width: props.width,
+                    margin: 5,
+                    elevation: 3,
                 }}
                 onPress={item.onPress}
             >
