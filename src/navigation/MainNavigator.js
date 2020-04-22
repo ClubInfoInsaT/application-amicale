@@ -30,6 +30,7 @@ import ProfileScreen from "../screens/Amicale/ProfileScreen";
 import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
 import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
+import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -166,6 +167,14 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
             {/*     AMICALE     */}
             {createScreenCollapsibleStack("profile", MainStack, ProfileScreen, i18n.t('screens.profile'))}
             {createScreenCollapsibleStack("club-list", MainStack, ClubListScreen, i18n.t('clubs.clubList'))}
+            <MainStack.Screen
+                name="club-information"
+                component={ClubDisplayScreen}
+                options={{
+                    title: i18n.t('screens.clubDisplayScreen'),
+                    ...modalTransition,
+                }}
+            />
             <MainStack.Screen
                 name="club-about"
                 component={ClubAboutScreen}
