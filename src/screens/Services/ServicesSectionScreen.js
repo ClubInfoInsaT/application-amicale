@@ -36,6 +36,9 @@ class ServicesSectionScreen extends React.Component<Props> {
                 this.finalDataset = this.props.route.params.data;
                 // reset params to prevent infinite loop
                 this.props.navigation.dispatch(CommonActions.setParams({data: null}));
+                this.props.navigation.setOptions({
+                    headerTitle: this.finalDataset.title,
+                });
             }
         }
     }
