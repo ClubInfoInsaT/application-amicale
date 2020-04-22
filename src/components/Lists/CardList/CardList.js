@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import {Animated} from "react-native";
+import ImageListItem from "./ImageListItem";
 import CardListItem from "./CardListItem";
 
 type Props = {
@@ -26,25 +27,25 @@ export default class CardList extends React.Component<Props> {
     }
 
     renderItem = ({item}: { item: cardItem }) => {
-        return (
-            <CardListItem item={item} key={item.title}/>
-        );
+        if (this.props.isHorizontal)
+            return <ImageListItem item={item} key={item.title}/>;
+        else
+            return <CardListItem item={item} key={item.title}/>;
     };
 
     keyExtractor = (item: cardItem) => item.title;
 
     render() {
-        let containerStyle = {
-            ...this.props.contentContainerStyle,
-            height: 150,
-            justifyContent: 'space-around',
-        };
-        if (!this.props.isHorizontal) {
+        let containerStyle;
+        if (this.props.isHorizontal) {
             containerStyle = {
-                ...containerStyle,
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                height: 'auto',
+                ...this.props.contentContainerStyle,
+                height: 150,
+                justifyContent: 'space-around',
+            };
+        } else {
+            containerStyle = {
+                ...this.props.contentContainerStyle,
             }
         }
         return (
@@ -53,7 +54,7 @@ export default class CardList extends React.Component<Props> {
                 data={this.props.dataset}
                 renderItem={this.renderItem}
                 keyExtractor={this.keyExtractor}
-                numColumns={this.props.isHorizontal ? undefined : 3}
+                numColumns={this.props.isHorizontal ? undefined : 2}
                 horizontal={this.props.isHorizontal}
                 contentContainerStyle={containerStyle}
             />
