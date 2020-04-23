@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import WebViewScreen from "../../components/Screens/WebViewScreen";
+import WebViewScreen from "../../../components/Screens/WebViewScreen";
 import {CommonActions} from "@react-navigation/native";
 
 const URL = 'https://www.amicale-insat.fr/';

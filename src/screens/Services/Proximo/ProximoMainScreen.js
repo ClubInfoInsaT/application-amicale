@@ -3,9 +3,9 @@
 import * as React from 'react';
 import {View} from 'react-native'
 import i18n from "i18n-js";
-import WebSectionList from "../../components/Screens/WebSectionList";
+import WebSectionList from "../../../components/Screens/WebSectionList";
 import {List, withTheme} from 'react-native-paper';
-import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
+import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 const LIST_ITEM_HEIGHT = 84;

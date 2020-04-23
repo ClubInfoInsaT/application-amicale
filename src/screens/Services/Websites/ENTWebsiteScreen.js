@@ -1,14 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import WebViewScreen from "../../components/Screens/WebViewScreen";
+import WebViewScreen from "../../../components/Screens/WebViewScreen";
 
-const URL = 'https://www.etud.insa-toulouse.fr/~tutorinsa/';
+const URL = 'https://ent.insa-toulouse.fr/';
 /**
  * Class defining the app's available rooms screen.
  * This screen uses a webview to render the page
  */
-export const TutorInsaWebsiteScreen = (props: Object) => {
+export const ENTWebsiteScreen = (props: Object) => {
     return (
         <WebViewScreen
             {...props}

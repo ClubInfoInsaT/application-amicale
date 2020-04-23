@@ -3,13 +3,13 @@
 import * as React from 'react';
 import {Animated, Image, Platform, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
-import CustomModal from "../../components/Overrides/CustomModal";
+import CustomModal from "../../../components/Overrides/CustomModal";
 import {RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
-import {stringMatchQuery} from "../../utils/Search";
-import ProximoListItem from "../../components/Lists/Proximo/ProximoListItem";
-import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
-import {withCollapsible} from "../../utils/withCollapsible";
-import CustomTabBar from "../../components/Tabbar/CustomTabBar";
+import {stringMatchQuery} from "../../../utils/Search";
+import ProximoListItem from "../../../components/Lists/Proximo/ProximoListItem";
+import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
+import {withCollapsible} from "../../../utils/withCollapsible";
+import CustomTabBar from "../../../components/Tabbar/CustomTabBar";
 
 function sortPrice(a, b) {
     return a.price - b.price;

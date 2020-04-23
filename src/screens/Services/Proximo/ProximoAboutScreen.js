@@ -4,7 +4,7 @@ import * as React from 'react';
 import {Image, ScrollView, View} from 'react-native';
 import i18n from "i18n-js";
 import {Card, List, Paragraph, Text} from 'react-native-paper';
-import CustomTabBar from "../../components/Tabbar/CustomTabBar";
+import CustomTabBar from "../../../components/Tabbar/CustomTabBar";
 
 type Props = {
     navigation: Object,
