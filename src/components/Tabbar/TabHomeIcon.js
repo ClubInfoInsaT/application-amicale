@@ -4,13 +4,13 @@ import * as React from 'react';
 import {Image, Platform, View} from "react-native";
 import {FAB, TouchableRipple, withTheme} from 'react-native-paper';
 import * as Animatable from "react-native-animatable";
-import CustomTabBar from "./CustomTabBar";
 
 type Props = {
     focused: boolean,
     onPress: Function,
     onLongPress: Function,
     theme: Object,
+    tabBarHeight: number,
 }
 
 const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
@@ -81,7 +81,7 @@ class TabHomeIcon extends React.Component<Props> {
                         bottom: 0,
                         left: 0,
                         width: '100%',
-                        height: CustomTabBar.TAB_BAR_HEIGHT + 30,
+                        height: this.props.tabBarHeight + 30,
                         marginBottom: -15,
                     }}
                 >

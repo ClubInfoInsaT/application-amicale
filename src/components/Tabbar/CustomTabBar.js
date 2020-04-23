@@ -137,6 +137,7 @@ class CustomTabBar extends React.Component<Props, State> {
                 onLongPress={onLongPress}
                 focused={isFocused}
                 key={route.key}
+                tabBarHeight={CustomTabBar.TAB_BAR_HEIGHT}
             />
     };
 
