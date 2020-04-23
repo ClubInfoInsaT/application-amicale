@@ -107,11 +107,12 @@
     "license": "License",
     "debug": "Debug",
     "team": "Team",
-    "author": "Author",
+    "author": "Author and maintainer",
     "authorMail": "Send an email",
-    "additionalDev": "Additional developer",
+    "additionalDev": "Development help",
     "technologies": "Technologies",
     "reactNative": "Made with React Native",
+    "expo": "Built with Expo",
     "libs": "Libraries used"
   },
   "proximoScreen": {

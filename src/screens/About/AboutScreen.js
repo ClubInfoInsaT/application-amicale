@@ -37,6 +37,7 @@ const links = {
         "Coucou !\n\n",
     yohanLinkedin: 'https://www.linkedin.com/in/yohan-simard',
     react: 'https://facebook.github.io/react-native/',
+    expo: 'https://expo.io/',
 };
 
 type Props = {
@@ -162,6 +163,12 @@ class AboutScreen extends React.Component<Props, State> {
             onPressCallback: () => openWebLink(links.react),
             icon: 'react',
             text: i18n.t('aboutScreen.reactNative'),
+            showChevron: true
+        },
+        {
+            onPressCallback: () => openWebLink(links.react),
+            icon: 'language-javascript',
+            text: i18n.t('aboutScreen.expo'),
             showChevron: true
         },
         {
