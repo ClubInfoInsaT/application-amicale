@@ -11,8 +11,6 @@ import TabNavigator from "./TabNavigator";
 import TetrisScreen from "../screens/Tetris/TetrisScreen";
 import VoteScreen from "../screens/Amicale/VoteScreen";
 import LoginScreen from "../screens/Amicale/LoginScreen";
-import {useTheme} from "react-native-paper";
-import {createCollapsibleStack} from "react-navigation-collapsible";
 import {Platform} from "react-native";
 import AvailableRoomScreen from "../screens/Websites/AvailableRoomScreen";
 import BibScreen from "../screens/Websites/BibScreen";
@@ -30,6 +28,7 @@ import ProfileScreen from "../screens/Amicale/ProfileScreen";
 import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
 import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
+import {createScreenCollapsibleStack, getWebsiteStack} from "../utils/CollapsibleUtils";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -40,38 +39,6 @@ const defaultScreenOptions = {
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
 
 const screenTransition = Platform.OS === 'ios' ? TransitionPresets.SlideFromRightIOS : TransitionPresets.ScaleFromCenterAndroid;
-
-function createScreenCollapsibleStack(
-    name: string,
-    Stack: any,
-    component: any,
-    title: string,
-    useNativeDriver?: boolean,
-    options?: { [key: string]: any }) {
-    const {colors} = useTheme();
-    const screenOptions = options != null ? options : {};
-    return createCollapsibleStack(
-        <Stack.Screen
-            name={name}
-            component={component}
-            options={{
-                title: title,
-                headerStyle: {
-                    backgroundColor: colors.surface,
-                },
-                ...screenOptions,
-            }}
-        />,
-        {
-            collapsedColor: 'transparent',
-            useNativeDriver: useNativeDriver != null ? useNativeDriver : true, // native driver does not work with webview
-        }
-    )
-}
-
-function getWebsiteStack(name: string, Stack: any, component: any, title: string) {
-    return createScreenCollapsibleStack(name, Stack, component, title, false);
-}
 
 const MainStack = createStackNavigator();
 

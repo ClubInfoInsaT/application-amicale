@@ -21,6 +21,7 @@ import CustomTabBar from "../components/Tabbar/CustomTabBar";
 import WebsitesHomeScreen from "../screens/Services/ServicesScreen";
 import ServicesSectionScreen from "../screens/Services/ServicesSectionScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
+import {createScreenCollapsibleStack, getWebsiteStack} from "../utils/CollapsibleUtils";
 
 const defaultScreenOptions = {
     gestureEnabled: true,
@@ -29,39 +30,6 @@ const defaultScreenOptions = {
 };
 
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
-
-function createScreenCollapsibleStack(
-    name: string,
-    Stack: any,
-    component: any,
-    title: string,
-    useNativeDriver?: boolean,
-    options?: { [key: string]: any }) {
-    const {colors} = useTheme();
-    const screenOptions = options != null ? options : {};
-    return createCollapsibleStack(
-        <Stack.Screen
-            name={name}
-            component={component}
-            options={{
-                title: title,
-                headerStyle: {
-                    backgroundColor: colors.surface,
-                },
-                ...screenOptions,
-            }}
-        />,
-        {
-            collapsedColor: 'transparent',
-            useNativeDriver: useNativeDriver != null ? useNativeDriver : true, // native driver does not work with webview
-        }
-    )
-}
-
-function getWebsiteStack(name: string, Stack: any, component: any, title: string) {
-    return createScreenCollapsibleStack(name, Stack, component, title, false);
-}
-
 
 const ServicesStack = createStackNavigator();
 
