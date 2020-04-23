@@ -1,10 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {Image, View} from "react-native";
-import {FAB, withTheme} from 'react-native-paper';
+import {Image, Platform, View} from "react-native";
+import {FAB, TouchableRipple, withTheme} from 'react-native-paper';
 import * as Animatable from "react-native-animatable";
-import TouchableRipple from "react-native-paper/src/components/TouchableRipple/index";
 import CustomTabBar from "./CustomTabBar";
 
 type Props = {
@@ -76,8 +75,7 @@ class TabHomeIcon extends React.Component<Props> {
                     onPress={props.onPress}
                     onLongPress={props.onLongPress}
                     borderless={true}
-                    rippleColor={this.props.theme.colors.primary}
-                    underlayColor={this.props.theme.colors.primary}
+                    rippleColor={Platform.OS === 'android' ? this.props.theme.colors.primary : 'transparent'}
                     style={{
                         position: 'absolute',
                         bottom: 0,

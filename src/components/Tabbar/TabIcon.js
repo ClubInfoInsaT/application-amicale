@@ -71,7 +71,6 @@ class TabIcon extends React.Component<Props> {
                 onLongPress={props.onLongPress}
                 borderless={true}
                 rippleColor={this.props.theme.colors.primary}
-                underlayColor={this.props.theme.colors.primary}
                 style={{
                     flex: 1,
                     justifyContent: 'center',
