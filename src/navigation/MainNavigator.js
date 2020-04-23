@@ -30,15 +30,16 @@ import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import {createScreenCollapsibleStack, getWebsiteStack} from "../utils/CollapsibleUtils";
 
+const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
+
+const screenTransition = TransitionPresets.SlideFromRightIOS;
+
 const defaultScreenOptions = {
     gestureEnabled: true,
     cardOverlayEnabled: true,
-    ...TransitionPresets.SlideFromRightIOS,
+    ...screenTransition,
 };
 
-const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
-
-const screenTransition = Platform.OS === 'ios' ? TransitionPresets.SlideFromRightIOS : TransitionPresets.ScaleFromCenterAndroid;
 
 const MainStack = createStackNavigator();
 
