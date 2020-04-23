@@ -15,6 +15,12 @@ type Props = {
         mandatory: boolean
     }>,
     renderFunction: (Array<{ [key: string]: any } | null>) => React.Node,
+    errorViewOverride?: Array<{
+        errorCode: number,
+        message: string,
+        icon: string,
+        showRetryButton: boolean
+    }>,
 }
 
 type State = {
@@ -158,13 +164,38 @@ class AuthenticatedScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getErrorRender() {
-        return (
-            <ErrorView
-                {...this.props}
-                errorCode={this.getError()}
-                onRefresh={this.fetchData}
-            />
-        );
+        const errorCode = this.getError();
+        let shouldOverride = false;
+        let override = null;
+        const overrideList = this.props.errorViewOverride;
+        if (overrideList != null) {
+            for (let i = 0; i < overrideList.length; i++) {
+                if (overrideList[i].errorCode === errorCode) {
+                    shouldOverride = true;
+                    override = overrideList[i];
+                    break;
+                }
+            }
+        }
+        if (shouldOverride && override != null) {
+            return (
+                <ErrorView
+                    {...this.props}
+                    icon={override.icon}
+                    message={override.message}
+                    showRetryButton={override.showRetryButton}
+                />
+            );
+        } else {
+            return (
+                <ErrorView
+                    {...this.props}
+                    errorCode={errorCode}
+                    onRefresh={this.fetchData}
+                />
+            );
+        }
+
     }
 
     /**

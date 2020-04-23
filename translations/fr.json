@@ -26,12 +26,6 @@
     "vote": "Élections",
     "scanner": "Scanotron 3000"
   },
-  "sidenav": {
-    "divider1": "Sites étudiants",
-    "divider2": "Services",
-    "divider3": "Personnalisation",
-    "divider4": "Amicale"
-  },
   "intro": {
     "slide1": {
       "title": "Bienvenue sur CAMPUS",
@@ -263,6 +257,7 @@
     "categoriesFilterMessage": "Cliquez sur une catégorie pour filtrer la liste",
     "clubContact": "Contacter le club",
     "amicaleContact": "Contacter l'Amicale",
+    "invalidClub": "Impossible de trouver le club. Merci de vérifier que le club que vous voulez voir est valide.",
     "about": {
       "text": "Les clubs, c'est ce qui fait vivre le campus au quotidien, plus d'une soixantaine de clubs qui proposent des activités diverses et variées ! Du club Philosophie au PABI (Production Artisanale de Bière Insaienne), en passant par les multiples clubs de musique et de danse, vous trouverez forcément une activité qui vous permettra de vous épanouir sur le campus !",
       "title": "Une question ?",
@@ -390,5 +385,8 @@
     "students": "Services étudiants",
     "insa": "Services de l'INSA",
     "notLoggedIn": "Non connecté"
+  },
+  "planningScreen": {
+    "invalidEvent": "Impossible de trouver l'événement. Merci de vérifier que l'événement que vous voulez voir est valide."
   }
 }

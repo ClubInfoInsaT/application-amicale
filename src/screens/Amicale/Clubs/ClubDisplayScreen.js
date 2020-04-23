@@ -12,6 +12,7 @@ import type {category, club} from "./ClubListScreen";
 import type {CustomTheme} from "../../../managers/ThemeManager";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {Linking} from "expo";
+import {ERROR_TYPE} from "../../../utils/WebData";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -179,7 +180,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                         </Card.Content>
                         : <View/>}
                     {this.getManagersRender(data.responsibles, data.email)}
-                </ScrollView>
+q                </ScrollView>
             );
         } else
             return null;
@@ -198,6 +199,14 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                     }
                 ]}
                 renderFunction={this.getScreen}
+                errorViewOverride={[
+                    {
+                        errorCode: ERROR_TYPE.BAD_INPUT,
+                        message: i18n.t("clubs.invalidClub"),
+                        icon: "account-question",
+                        showRetryButton: false
+                    }
+                ]}
             />;
         else
             return this.getScreen([this.displayData]);

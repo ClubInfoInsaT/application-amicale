@@ -26,12 +26,6 @@
     "vote": "Elections",
     "scanner": "Scanotron 3000"
   },
-  "sidenav": {
-    "divider1": "Student websites",
-    "divider2": "Services",
-    "divider3": "Personalisation",
-    "divider4": "Amicale"
-  },
   "intro": {
     "slide1": {
       "title": "Welcome to CAMPUS",
@@ -263,6 +257,7 @@
     "categoriesFilterMessage": "Click on a category to filter the list",
     "clubContact": "Contact the club",
     "amicaleContact": "Contact the Amicale",
+    "invalidClub": "Could not find the club. Please make sure the club you are trying to access is valid.",
     "about": {
       "text": "The clubs, making the campus live, with more than sixty clubs offering various activities! From the philosophy club to the PABI (Production Artisanale de Bière Insaienne), without forgetting the multiple music and dance clubs, you will surely find an activity that suits you!",
       "title": "A question ?",
@@ -390,5 +385,8 @@
     "students": "Student services",
     "insa": "INSA services",
     "notLoggedIn": "Not logged in"
+  },
+  "planningScreen": {
+    "invalidEvent": "Could not find the event. Please make sure the event you are trying to access is valid."
   }
 }

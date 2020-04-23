@@ -7,10 +7,11 @@ import {Card, withTheme} from 'react-native-paper';
 import DateManager from "../../managers/DateManager";
 import ImageModal from 'react-native-image-modal';
 import BasicLoadingScreen from "../../components/Screens/BasicLoadingScreen";
-import {apiRequest} from "../../utils/WebData";
+import {apiRequest, ERROR_TYPE} from "../../utils/WebData";
 import ErrorView from "../../components/Screens/ErrorView";
 import CustomHTML from "../../components/Overrides/CustomHTML";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
+import i18n from 'i18n-js';
 
 type Props = {
     navigation: Object,
@@ -113,13 +114,20 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
         );
     }
 
+    getErrorView() {
+        if (this.errorCode === ERROR_TYPE.BAD_INPUT)
+            return <ErrorView {...this.props} showRetryButton={false} message={i18n.t("planningScreen.invalidEvent")} icon={"calendar-remove"}/>;
+        else
+            return <ErrorView {...this.props} errorCode={this.errorCode} onRefresh={this.fetchData}/>;
+    }
+
     render() {
         if (this.state.loading)
             return <BasicLoadingScreen/>;
         else if (this.errorCode === 0)
             return this.getContent();
         else
-            return <ErrorView {...this.props} errorCode={this.errorCode} onRefresh={this.fetchData}/>;
+            return this.getErrorView();
     }
 }
 
