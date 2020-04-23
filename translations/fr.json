@@ -394,7 +394,8 @@
     "feedback": "Feedback",
     "feedbackSubtitle": "Did nous ce que vous pensez!",
     "feedbackDescription": "Vous voulez voir une fonctionnalité ajoutée/modifiée/supprimée ?, vous voulez donner votre opinion sur l'appli ou simplement discuter avec les devs ? Utilisez un des liens ci-dessous !",
-    "contactMeans": "L'utilisation de Git est recommandée, pour l'utiliser, connectez vous avec vos identifiants INSA."
-
+    "contactMeans": "L'utilisation de Gitea est recommandée, pour l'utiliser, connectez vous avec vos identifiants INSA.",
+    "homeButtonTitle": "Feedback/Bugs",
+    "homeButtonSubtitle": "Contacter les devs"
   }
 }

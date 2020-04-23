@@ -69,7 +69,7 @@ class AboutScreen extends React.Component<Props, State> {
         {
             onPressCallback: () => this.props.navigation.navigate("feedback"),
             icon: 'bug',
-            text: i18n.t('screens.feedback'),
+            text: i18n.t("feedbackScreen.homeButtonTitle"),
             showChevron: true
         },
         {

@@ -31,12 +31,16 @@ class FeedbackScreen extends React.Component<Props> {
 
     getButtons(isBug: boolean) {
         return (
-            <Card.Actions>
+            <Card.Actions style={{
+                flex: 1,
+                flexWrap: 'wrap',
+            }}>
                 <Button
                     icon="email"
                     mode="contained"
                     style={{
                         marginLeft: 'auto',
+                        marginTop: 5,
                     }}
                     onPress={() => Linking.openURL(isBug ? links.bugsMail : links.feedbackMail)}>
                     MAIL
@@ -45,16 +49,18 @@ class FeedbackScreen extends React.Component<Props> {
                     icon="git"
                     mode="contained"
                     style={{
-                        marginLeft: 10,
+                        marginLeft: 'auto',
+                        marginTop: 5,
                     }}
                     onPress={() => Linking.openURL(isBug ? links.bugsGit : links.feedbackGit)}>
-                    GIT
+                    GITEA
                 </Button>
                 <Button
                     icon="facebook"
                     mode="contained"
                     style={{
-                        marginLeft: 10,
+                        marginLeft: 'auto',
+                        marginTop: 5,
                     }}
                     onPress={() => Linking.openURL(links.facebook)}>
                     Facebook
