@@ -55,6 +55,7 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 component={props.createTabNavigator}
                 options={{
                     headerShown: false,
+                    title: i18n.t('screens.home'),
                 }}
             />
             <MainStack.Screen
