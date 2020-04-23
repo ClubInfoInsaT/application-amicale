@@ -121,7 +121,8 @@ export default class App extends React.Component<Props, State> {
         } else {
             StatusBar.setBarStyle('dark-content', true);
         }
-        StatusBar.setBackgroundColor(ThemeManager.getCurrentTheme().colors.surface, true);
+        if (Platform.OS === "android")
+            StatusBar.setBackgroundColor(ThemeManager.getCurrentTheme().colors.surface, true);
     }
 
     /**

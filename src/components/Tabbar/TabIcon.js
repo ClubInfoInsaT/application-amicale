@@ -74,7 +74,6 @@ class TabIcon extends React.Component<Props> {
                 style={{
                     flex: 1,
                     justifyContent: 'center',
-                    alignItem: 'center',
                 }}
             >
                 <View>
