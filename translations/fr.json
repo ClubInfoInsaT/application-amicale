@@ -261,6 +261,8 @@
     "managersUnavailable": "Ce club est tout seul :(",
     "categories": "Catégories",
     "categoriesFilterMessage": "Cliquez sur une catégorie pour filtrer la liste",
+    "clubContact": "Contacter le club",
+    "amicaleContact": "Contacter l'Amicale",
     "about": {
       "text": "Les clubs, c'est ce qui fait vivre le campus au quotidien, plus d'une soixantaine de clubs qui proposent des activités diverses et variées ! Du club Philosophie au PABI (Production Artisanale de Bière Insaienne), en passant par les multiples clubs de musique et de danse, vous trouverez forcément une activité qui vous permettra de vous épanouir sur le campus !",
       "title": "Une question ?",

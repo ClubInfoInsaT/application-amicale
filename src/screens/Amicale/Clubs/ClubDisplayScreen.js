@@ -2,21 +2,34 @@
 
 import * as React from 'react';
 import {ScrollView, View} from 'react-native';
-import {Avatar, Card, Chip, Paragraph, withTheme} from 'react-native-paper';
+import {Avatar, Button, Card, Chip, Paragraph, withTheme} from 'react-native-paper';
 import ImageModal from 'react-native-image-modal';
 import i18n from "i18n-js";
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import CustomHTML from "../../../components/Overrides/CustomHTML";
 import CustomTabBar from "../../../components/Tabbar/CustomTabBar";
+import type {category, club} from "./ClubListScreen";
+import type {CustomTheme} from "../../../managers/ThemeManager";
+import {StackNavigationProp} from "@react-navigation/stack";
+import {Linking} from "expo";
 
 type Props = {
-    navigation: Object,
-    route: Object
+    navigation: StackNavigationProp,
+    route: {
+        params?: {
+            data?: club,
+            categories?: Array<category>,
+            clubId?: number,
+        }, ...
+    },
+    theme: CustomTheme
 };
 
 type State = {
     imageModalVisible: boolean,
 };
+
+const AMICALE_MAIL = "clubs@amicale-insat.fr";
 
 /**
  * Class defining a club event information page.
@@ -25,13 +38,11 @@ type State = {
  */
 class ClubDisplayScreen extends React.Component<Props, State> {
 
-    displayData: Object;
-    categories: Object | null;
+    displayData: club | null;
+    categories: Array<category> | null;
     clubId: number;
 
     shouldFetchData: boolean;
-
-    colors: Object;
 
     state = {
         imageModalVisible: false,
@@ -39,18 +50,18 @@ class ClubDisplayScreen extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
-        this.colors = props.theme.colors;
-
-        if (this.props.route.params.data !== undefined && this.props.route.params.categories !== undefined) {
-            this.displayData = this.props.route.params.data;
-            this.categories = this.props.route.params.categories;
-            this.clubId = this.props.route.params.data.id;
-            this.shouldFetchData = false;
-        } else {
-            this.displayData = null;
-            this.categories = null;
-            this.clubId = this.props.route.params.clubId;
-            this.shouldFetchData = true;
+        if (this.props.route.params != null) {
+            if (this.props.route.params.data != null && this.props.route.params.categories != null) {
+                this.displayData = this.props.route.params.data;
+                this.categories = this.props.route.params.categories;
+                this.clubId = this.props.route.params.data.id;
+                this.shouldFetchData = false;
+            } else if (this.props.route.params.clubId != null) {
+                this.displayData = null;
+                this.categories = null;
+                this.clubId = this.props.route.params.clubId;
+                this.shouldFetchData = true;
+            }
         }
     }
 
@@ -64,7 +75,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         return "";
     }
 
-    getCategoriesRender(categories: Array<number | null>) {
+    getCategoriesRender(categories: [number, number]) {
         if (this.categories === null)
             return null;
 
@@ -84,7 +95,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         return <View style={{flexDirection: 'row', marginTop: 5}}>{final}</View>;
     }
 
-    getManagersRender(resp: Array<string>) {
+    getManagersRender(resp: Array<string>, email: string | null) {
         let final = [];
         for (let i = 0; i < resp.length; i++) {
             final.push(<Paragraph key={i.toString()}>{resp[i]}</Paragraph>)
@@ -98,13 +109,35 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                     left={(props) => <Avatar.Icon
                         {...props}
                         style={{backgroundColor: 'transparent'}}
-                        color={hasManagers ? this.colors.success : this.colors.primary}
+                        color={hasManagers ? this.props.theme.colors.success : this.props.theme.colors.primary}
                         icon="account-tie"/>}
                 />
                 <Card.Content>
                     {final}
+                    {this.getEmailButton(email, hasManagers)}
                 </Card.Content>
             </Card>
+        );
+    }
+
+    getEmailButton(email: string | null, hasManagers: boolean) {
+        const destinationEmail = email != null && hasManagers
+            ? email
+            : AMICALE_MAIL;
+        const text = email != null && hasManagers
+            ? i18n.t("clubs.clubContact")
+            : i18n.t("clubs.amicaleContact");
+        return (
+            <Card.Actions>
+                <Button
+                    icon="email"
+                    mode="contained"
+                    onPress={() => Linking.openURL('mailto:' + destinationEmail)}
+                    style={{marginLeft: 'auto'}}
+                >
+                    {text}
+                </Button>
+            </Card.Actions>
         );
     }
 
@@ -113,41 +146,44 @@ class ClubDisplayScreen extends React.Component<Props, State> {
     }
 
     getScreen = (response: Array<Object>) => {
-        let data = response[0];
+        let data: club = response[0];
         this.updateHeaderTitle(data);
+        if (data != null) {
+            return (
+                <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
+                    {this.getCategoriesRender(data.category)}
+                    {data.logo !== null ?
+                        <View style={{
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                            marginTop: 10,
+                            marginBottom: 10,
+                        }}>
+                            <ImageModal
+                                resizeMode="contain"
+                                imageBackgroundColor={this.props.theme.colors.background}
+                                style={{
+                                    width: 300,
+                                    height: 300,
+                                }}
+                                source={{
+                                    uri: data.logo,
+                                }}
+                            /></View>
+                        : <View/>}
 
-        return (
-            <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
-                {this.getCategoriesRender(data.category)}
-                {data.logo !== null ?
-                    <View style={{
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                        marginTop: 10,
-                        marginBottom: 10,
-                    }}>
-                        <ImageModal
-                            resizeMode="contain"
-                            imageBackgroundColor={this.colors.background}
-                            style={{
-                                width: 300,
-                                height: 300,
-                            }}
-                            source={{
-                                uri: data.logo,
-                            }}
-                        /></View>
-                    : <View/>}
+                    {data.description !== null ?
+                        // Surround description with div to allow text styling if the description is not html
+                        <Card.Content>
+                            <CustomHTML html={data.description}/>
+                        </Card.Content>
+                        : <View/>}
+                    {this.getManagersRender(data.responsibles, data.email)}
+                </ScrollView>
+            );
+        } else
+            return null;
 
-                {data.description !== null ?
-                    // Surround description with div to allow text styling if the description is not html
-                    <Card.Content>
-                        <CustomHTML html={data.description}/>
-                    </Card.Content>
-                    : <View/>}
-                {this.getManagersRender(data.responsibles)}
-            </ScrollView>
-        );
     };
 
     render() {

@@ -24,7 +24,7 @@ export type club = {
     name: string,
     description: string,
     logo: string,
-    email:string,
+    email: string | null,
     category: [number, number],
     responsibles: Array<string>,
 };
