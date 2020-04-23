@@ -123,7 +123,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                     initialParams={params}
                 />,
                 {
-                    collapsedColor: 'transparent',
+                    collapsedColor: colors.surface,
                     useNativeDriver: true,
                 }
             )}
