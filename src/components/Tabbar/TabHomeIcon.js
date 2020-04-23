@@ -4,6 +4,8 @@ import * as React from 'react';
 import {Image, View} from "react-native";
 import {FAB, withTheme} from 'react-native-paper';
 import * as Animatable from "react-native-animatable";
+import TouchableRipple from "react-native-paper/src/components/TouchableRipple/index";
+import CustomTabBar from "./CustomTabBar";
 
 type Props = {
     focused: boolean,
@@ -65,23 +67,39 @@ class TabHomeIcon extends React.Component<Props> {
     render(): React$Node {
         const props = this.props;
         return (
-            <View style={{
-                flex: 1,
-                justifyContent: 'center',
-            }}>
-                <AnimatedFAB
-                    duration={200}
-                    easing={"ease-out"}
-                    animation={props.focused ? "fabFocusIn" : "fabFocusOut"}
-                    useNativeDriver
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                }}>
+                <TouchableRipple
                     onPress={props.onPress}
                     onLongPress={props.onLongPress}
-                    icon={this.iconRender}
+                    borderless={true}
+                    rippleColor={this.props.theme.colors.primary}
+                    underlayColor={this.props.theme.colors.primary}
                     style={{
-                        marginLeft: 'auto',
-                        marginRight: 'auto'
-                    }}/>
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        width: '100%',
+                        height: CustomTabBar.TAB_BAR_HEIGHT + 30,
+                        marginBottom: -15,
+                    }}
+                >
+                    <AnimatedFAB
+                        duration={200}
+                        easing={"ease-out"}
+                        animation={props.focused ? "fabFocusIn" : "fabFocusOut"}
+                        icon={this.iconRender}
+                        style={{
+                            marginTop: 15,
+                            marginLeft: 'auto',
+                            marginRight: 'auto'
+                        }}/>
+                </TouchableRipple>
             </View>
+
         );
     }
 

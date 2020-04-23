@@ -65,6 +65,17 @@ class CustomTabBar extends React.Component<Props, State> {
         }
     }
 
+    onItemLongPress(route: Object) {
+        const event = this.props.navigation.emit({
+            type: 'tabLongPress',
+            target: route.key,
+            canPreventDefault: true,
+        });
+        if (route.name === "home" && !event.defaultPrevented) {
+            this.props.navigation.navigate('tetris');
+        }
+    }
+
     tabBarIcon = (route, focused) => {
     let icon = TAB_ICONS[route.name];
     icon = focused ? icon : icon + ('-outline');
@@ -93,12 +104,8 @@ class CustomTabBar extends React.Component<Props, State> {
 
         const onPress = () => this.onItemPress(route, state.index, index);
 
-        const onLongPress = () => {
-            this.props.navigation.emit({
-                type: 'tabLongPress',
-                target: route.key,
-            });
-        };
+        const onLongPress = () => this.onItemLongPress(route);
+
         if (isFocused) {
             const stackState = route.state;
             const stackRoute = route.state ? stackState.routes[stackState.index] : undefined;
