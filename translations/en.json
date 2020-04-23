@@ -24,7 +24,8 @@
     "logout": "Logout",
     "profile": "Profile",
     "vote": "Elections",
-    "scanner": "Scanotron 3000"
+    "scanner": "Scanotron 3000",
+    "feedback": "Feedback"
   },
   "intro": {
     "slide1": {
@@ -99,10 +100,6 @@
   "aboutScreen": {
     "appstore": "See on the Appstore",
     "playstore": "See on the Playstore",
-    "bugs": "Report Bugs",
-    "bugsDescription": "Reporting bugs helps us make the app better. Please be as precise as possible when describing your problem!",
-    "bugsMail": "Send a Mail",
-    "bugsGit": "Open an issue on Git",
     "changelog": "Changelog",
     "license": "License",
     "debug": "Debug",
@@ -389,5 +386,14 @@
   },
   "planningScreen": {
     "invalidEvent": "Could not find the event. Please make sure the event you are trying to access is valid."
+  },
+  "feedbackScreen": {
+    "bugs": "Report Bugs",
+    "bugsSubtitle": "Did you find a bug? Let us know!",
+    "bugsDescription": "Reporting bugs helps us make the app better. To do so, use one of the buttons below and be as precise as possible when describing your problem!",
+    "feedback": "Feedback",
+    "feedbackSubtitle": "Let us know what you think!",
+    "feedbackDescription": "Do you have a feature you want to be added/changed/removed, want to give your opinion on the app or simply chat with the dev? Use one of the links below!",
+    "contactMeans": "Using Git is recommended, to use it simply login with your INSA account."
   }
 }

@@ -5,23 +5,12 @@ import {FlatList, Linking, Platform, View} from 'react-native';
 import i18n from "i18n-js";
 import appJson from '../../../app';
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import CustomModal from "../../components/Overrides/CustomModal";
-import {Avatar, Button, Card, List, Text, Title, withTheme} from 'react-native-paper';
+import {Avatar, Card, List, Title, withTheme} from 'react-native-paper';
 
 const links = {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
     playstore: 'https://play.google.com/store/apps/details?id=fr.amicaleinsat.application',
     git: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/README.md',
-    bugsMail: 'mailto:vergnet@etud.insa-toulouse.fr?' +
-        'subject=' +
-        '[BUG] Application Amicale INSA Toulouse' +
-        '&body=' +
-        'Coucou Arnaud ça bug c\'est nul,\n\n' +
-        'Informations sur ton système si tu sais (iOS ou Android, modèle du tel, version):\n\n\n' +
-        'Nature du problème :\n\n\n' +
-        'Étapes pour reproduire ce pb :\n\n\n\n' +
-        'Stp corrige le pb, bien cordialement.',
-    bugsGit: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues',
     changelog: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
     license: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
     authorMail: "mailto:vergnet@etud.insa-toulouse.fr?" +
@@ -78,9 +67,9 @@ class AboutScreen extends React.Component<Props, State> {
             showChevron: true
         },
         {
-            onPressCallback: () => this.openBugReportModal(),
+            onPressCallback: () => this.props.navigation.navigate("feedback"),
             icon: 'bug',
-            text: i18n.t('aboutScreen.bugs'),
+            text: i18n.t('screens.feedback'),
             showChevron: true
         },
         {
@@ -193,21 +182,11 @@ class AboutScreen extends React.Component<Props, State> {
         },
     ];
 
-    getCardItem: Function;
-    getMainCard: Function;
-    onModalRef: Function;
-    onPressMail: Function;
-    onPressGit: Function;
 
     colors: Object;
 
     constructor(props) {
         super(props);
-        this.getCardItem = this.getCardItem.bind(this);
-        this.getMainCard = this.getMainCard.bind(this);
-        this.onModalRef = this.onModalRef.bind(this);
-        this.onPressMail = openWebLink.bind(this, links.bugsMail);
-        this.onPressGit = openWebLink.bind(this, links.bugsGit);
         this.colors = props.theme.colors;
     }
 
@@ -340,7 +319,7 @@ class AboutScreen extends React.Component<Props, State> {
      *
      * @returns {*}
      */
-    getCardItem({item}: Object) {
+    getCardItem = ({item}: Object) => {
         let shouldShow = item === undefined
             || !item.showOnlyInDebug
             || (item.showOnlyInDebug && this.state.isDebugUnlocked);
@@ -366,7 +345,7 @@ class AboutScreen extends React.Component<Props, State> {
             }
         } else
             return null;
-    }
+    };
 
     /**
      * Tries to unlock debug mode
@@ -388,62 +367,12 @@ class AboutScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Gets the bug report modal's content
-     *
-     * @return {*}
-     */
-    getBugReportModal() {
-        return (
-            <View style={{
-                flex: 1,
-                padding: 20
-            }}>
-                <Title>{i18n.t('aboutScreen.bugs')}</Title>
-                <Text>
-                    {i18n.t('aboutScreen.bugsDescription')}
-                </Text>
-                <Button
-                    icon="email"
-                    mode="contained"
-                    style={{
-                        marginTop: 20,
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                    }}
-                    onPress={this.onPressMail}>
-                    {i18n.t('aboutScreen.bugsMail')}
-                </Button>
-                <Button
-                    icon="git"
-                    mode="contained"
-                    style={{
-                        marginTop: 20,
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                    }}
-                    onPress={this.onPressGit}>
-                    {i18n.t('aboutScreen.bugsGit')}
-                </Button>
-            </View>
-        );
-    }
-
-    /**
-     * opens the bug report modal
-     */
-    openBugReportModal() {
-        if (this.modalRef) {
-            this.modalRef.open();
-        }
-    }
-
-    /**
      * Gets a card, depending on the given item's id
      *
      * @param item The item to show
      * @return {*}
      */
-    getMainCard({item}: Object) {
+    getMainCard = ({item}: Object) => {
         switch (item.id) {
             case 'app':
                 return this.getAppCard();
@@ -453,29 +382,15 @@ class AboutScreen extends React.Component<Props, State> {
                 return this.getTechnoCard();
         }
         return <View/>;
-    }
-
-    /**
-     * Callback used when receiving the modal ref
-     *
-     * @param ref
-     */
-    onModalRef(ref: Object) {
-        this.modalRef = ref;
-    }
+    };
 
     render() {
         return (
-            <View style={{padding: 5}}>
-                <CustomModal onRef={this.onModalRef}>
-                    {this.getBugReportModal()}
-                </CustomModal>
-                <FlatList
-                    style={{padding: 5}}
-                    data={this.dataOrder}
-                    renderItem={this.getMainCard}
-                />
-            </View>
+            <FlatList
+                style={{padding: 5}}
+                data={this.dataOrder}
+                renderItem={this.getMainCard}
+            />
         );
     }
 }

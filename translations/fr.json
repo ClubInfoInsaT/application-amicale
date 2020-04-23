@@ -24,7 +24,8 @@
     "logout": "Se Déconnecter",
     "profile": "Profil",
     "vote": "Élections",
-    "scanner": "Scanotron 3000"
+    "scanner": "Scanotron 3000",
+    "feedback": "Votre avis"
   },
   "intro": {
     "slide1": {
@@ -99,10 +100,6 @@
   "aboutScreen": {
     "appstore": "Voir sur l'Appstore",
     "playstore": "Voir sur le Playstore",
-    "bugs": "Rapporter des Bugs",
-    "bugsDescription": "Rapporter les bugs nous aide à améliorer l'appli. Merci de décrire votre problème le plus précisément possible !",
-    "bugsMail": "Envoyer un Mail",
-    "bugsGit": "Ouvrir un ticket sur Git",
     "changelog": "Historique des modifications",
     "license": "Licence",
     "debug": "Debug",
@@ -389,5 +386,15 @@
   },
   "planningScreen": {
     "invalidEvent": "Impossible de trouver l'événement. Merci de vérifier que l'événement que vous voulez voir est valide."
+  },
+  "feedbackScreen": {
+    "bugs": "Rapporter des Bugs",
+    "bugsSubtitle": "Vous avez trouvé un bug ?",
+    "bugsDescription": "Rapporter les bugs nous aide à améliorer l'appli. Pour cela, merci d'utiliser un des boutons ci-dessous et de décrire votre problème le plus précisément possible !",
+    "feedback": "Feedback",
+    "feedbackSubtitle": "Did nous ce que vous pensez!",
+    "feedbackDescription": "Vous voulez voir une fonctionnalité ajoutée/modifiée/supprimée ?, vous voulez donner votre opinion sur l'appli ou simplement discuter avec les devs ? Utilisez un des liens ci-dessous !",
+    "contactMeans": "L'utilisation de Git est recommandée, pour l'utiliser, connectez vous avec vos identifiants INSA."
+
   }
 }

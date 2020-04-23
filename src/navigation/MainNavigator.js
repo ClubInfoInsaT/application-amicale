@@ -29,6 +29,7 @@ import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
 import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import {createScreenCollapsibleStack, getWebsiteStack} from "../utils/CollapsibleUtils";
+import BugReportScreen from "../screens/Other/FeedbackScreen";
 
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
 
@@ -156,6 +157,14 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 component={VoteScreen}
                 options={{
                     title: i18n.t('screens.vote'),
+                }}
+            />
+
+            <MainStack.Screen
+                name="feedback"
+                component={BugReportScreen}
+                options={{
+                    title: i18n.t('screens.feedback'),
                 }}
             />
         </MainStack.Navigator>
