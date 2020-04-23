@@ -8,7 +8,7 @@ export default class URLHandler {
     static EVENT_INFO_URL_PATH = "event";
 
     static CLUB_INFO_ROUTE = "club-information";
-    static EVENT_INFO_ROUTE = "home-planning-information";
+    static EVENT_INFO_ROUTE = "planning-information";
 
     onInitialURLParsed: Function;
     onDetectURL: Function;

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, StatusBar, YellowBox} from 'react-native';
+import {Platform, StatusBar, View, YellowBox} from 'react-native';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
 import CustomIntroSlider from "./src/components/Overrides/CustomIntroSlider";
@@ -18,10 +18,9 @@ import ConnectionManager from "./src/managers/ConnectionManager";
 import URLHandler from "./src/utils/URLHandler";
 import {setSafeBounceHeight} from "react-navigation-collapsible";
 import {enableScreens} from 'react-native-screens';
-import {View} from "react-native-animatable";
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
-enableScreens();
+enableScreens(true);
 
 
 YellowBox.ignoreWarnings([ // collapsible headers cause this warning, just ignore as it is not an issue
@@ -72,6 +71,7 @@ export default class App extends React.Component<Props, State> {
         this.loadAssetsAsync().then(() => {
             this.onLoadFinished();
         });
+        // console.log(Linking.makeUrl('path/into/app', { hello: 'world', goodbye: 'now' }))
     }
 
     /**

@@ -11,6 +11,7 @@ type Props = {
     title: string,
     titleLoading: string,
     message: string,
+    startLoading: boolean,
 }
 
 type State = {
@@ -19,8 +20,16 @@ type State = {
 
 class LoadingConfirmDialog extends React.PureComponent<Props, State> {
 
+    static defaultProps = {
+        title: '',
+        message: '',
+        onDismiss: () => {},
+        onAccept: () => {return Promise.resolve()},
+        startLoading: false,
+    }
+
     state = {
-        loading: false,
+        loading: this.props.startLoading,
     };
 
     /**

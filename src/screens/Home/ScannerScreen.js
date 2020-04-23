@@ -10,6 +10,7 @@ import {Linking} from "expo";
 import AlertDialog from "../../components/Dialogs/AlertDialog";
 import i18n from 'i18n-js';
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
+import LoadingConfirmDialog from "../../components/Dialogs/LoadingConfirmDialog";
 
 type Props = {};
 type State = {
@@ -18,6 +19,7 @@ type State = {
     dialogVisible: boolean,
     dialogTitle: string,
     dialogMessage: string,
+    loading: boolean,
 };
 
 class ScannerScreen extends React.Component<Props, State> {
@@ -28,6 +30,7 @@ class ScannerScreen extends React.Component<Props, State> {
         dialogVisible: false,
         dialogTitle: "",
         dialogMessage: "",
+        loading: false,
     };
 
     constructor() {
@@ -46,7 +49,7 @@ class ScannerScreen extends React.Component<Props, State> {
         if (!URLHandler.isUrlValid(data))
             this.showErrorDialog();
         else {
-            this.setState({scanned: true});
+            this.showOpeningDialog();
             Linking.openURL(data);
         }
     };
@@ -108,6 +111,13 @@ class ScannerScreen extends React.Component<Props, State> {
         });
     };
 
+    showOpeningDialog = () => {
+        this.setState({
+            loading: true,
+            scanned: true,
+        });
+    };
+
     showErrorDialog() {
         this.setState({
             dialogVisible: true,
@@ -165,6 +175,11 @@ class ScannerScreen extends React.Component<Props, State> {
                     onDismiss={this.onDialogDismiss}
                     title={this.state.dialogTitle}
                     message={this.state.dialogMessage}
+                />
+                <LoadingConfirmDialog
+                    visible={this.state.loading}
+                    titleLoading={i18n.t("general.loading")}
+                    startLoading={true}
                 />
             </View>
         );
