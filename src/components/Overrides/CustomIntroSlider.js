@@ -120,7 +120,13 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 end={{x: 0.1, y: 1}}
             >
                 {item.image !== undefined ?
-                    <Image source={item.image} style={styles.image}/>
+                    <View style={styles.image}>
+                        <Image
+                            source={item.image}
+                            resizeMode={"contain"}
+                            style={{width: '100%', height: '100%'}}
+                            />
+                    </View>
                     : <MaterialCommunityIcons
                         name={item.icon}
                         color={'#fff'}
