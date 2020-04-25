@@ -115,7 +115,6 @@ class ClubListScreen extends React.Component<Props, State> {
         this.categories = categoryList;
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
-            //$FlowFixMe
             <Animated.FlatList
                 data={clubList}
                 keyExtractor={this.keyExtractor}

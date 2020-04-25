@@ -170,7 +170,8 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                                 source={{
                                     uri: data.logo,
                                 }}
-                            /></View>
+                            />
+                        </View>
                         : <View/>}
 
                     {data.description !== null ?
@@ -180,7 +181,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                         </Card.Content>
                         : <View/>}
                     {this.getManagersRender(data.responsibles, data.email)}
-q                </ScrollView>
+                </ScrollView>
             );
         } else
             return null;
