@@ -3,7 +3,6 @@
 import * as React from 'react';
 import {FlatList, Linking, Platform, View} from 'react-native';
 import i18n from "i18n-js";
-import appJson from '../../../app';
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import {Avatar, Card, List, Title, withTheme} from 'react-native-paper';
 
@@ -224,8 +223,8 @@ class AboutScreen extends React.Component<Props, State> {
         return (
             <Card style={{marginBottom: 10}}>
                 <Card.Title
-                    title={appJson.expo.name}
-                    subtitle={appJson.expo.version}
+                    title={"Campus"}
+                    subtitle={"2.0.0"}
                     left={this.getAppIcon}/>
                 <Card.Content>
                     <FlatList
