@@ -19,8 +19,8 @@ export const withCollapsible = (Component: any) => {
             collapsibleStack={{
                 onScroll,
                 onScrollWithListener,
-                containerPaddingTop: containerPaddingTop - statusbarHeight,
-                scrollIndicatorInsetTop: scrollIndicatorInsetTop - statusbarHeight,
+                containerPaddingTop: containerPaddingTop,
+                scrollIndicatorInsetTop: scrollIndicatorInsetTop,
                 translateY,
                 progress,
                 opacity,

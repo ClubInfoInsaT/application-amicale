@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<resources>
+  <color name="activityBackground">#ffffff</color>
+  <color name="navigationBarColor">#121212</color>
+  <color name="colorPrimaryDark">#be1522</color>
+  <color name="colorPrimary">#be1522</color>
+</resources>

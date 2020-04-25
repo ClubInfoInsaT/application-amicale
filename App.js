@@ -5,7 +5,6 @@ import {Platform, StatusBar, View, YellowBox} from 'react-native';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
 import CustomIntroSlider from "./src/components/Overrides/CustomIntroSlider";
-import {AppLoading} from 'expo';
 import type {CustomTheme} from "./src/managers/ThemeManager";
 import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
@@ -72,6 +71,7 @@ export default class App extends React.Component<Props, State> {
             this.onLoadFinished();
         });
         // console.log(Linking.makeUrl('path/into/app', { hello: 'world', goodbye: 'now' }))
+        console.log(global.HermesInternal !== null);
     }
 
     /**
@@ -182,7 +182,7 @@ export default class App extends React.Component<Props, State> {
      */
     render() {
         if (this.state.isLoading) {
-            return <AppLoading/>;
+            return null;
         } else if (this.state.showIntro || this.state.showUpdate || this.state.showAprilFools) {
             return <CustomIntroSlider
                 onDone={this.onIntroDone}
