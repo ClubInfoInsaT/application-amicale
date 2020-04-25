@@ -2,12 +2,13 @@
 
 import * as React from 'react';
 import {LinearGradient} from "expo-linear-gradient";
-import {Image, StyleSheet, View} from "react-native";
+import {Image, Platform, StatusBar, StyleSheet, View} from "react-native";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {Text} from "react-native-paper";
 import i18n from 'i18n-js';
 import AppIntroSlider from "react-native-app-intro-slider";
 import Update from "../../constants/Update";
+import ThemeManager from "../../managers/ThemeManager";
 
 type Props = {
     onDone: Function,
@@ -20,15 +21,19 @@ type Props = {
  */
 export default class CustomIntroSlider extends React.Component<Props> {
 
+    sliderRef: {current: null | AppIntroSlider};
+
     introSlides: Array<Object>;
     updateSlides: Array<Object>;
     aprilFoolsSlides: Array<Object>;
+    currentSlides: Array<Object>;
 
     /**
      * Generates intro slides
      */
     constructor() {
         super();
+        this.sliderRef = React.createRef();
         this.introSlides = [
             {
                 key: '1',
@@ -108,7 +113,6 @@ export default class CustomIntroSlider extends React.Component<Props> {
      * @param dimensions Dimensions of the item
      */
     static getIntroRenderItem({item, dimensions}: Object) {
-
         return (
             <LinearGradient
                 style={[
@@ -139,19 +143,43 @@ export default class CustomIntroSlider extends React.Component<Props> {
         );
     }
 
+    setStatusBarColor(color: string) {
+        if (Platform.OS === 'android')
+            StatusBar.setBackgroundColor(color, true);
+    }
+
+    onSlideChange = (index: number, lastIndex: number) => {
+        this.setStatusBarColor(this.currentSlides[index].colors[0]);
+    };
+
+    onSkip = () => {
+        this.setStatusBarColor(this.currentSlides[this.currentSlides.length-1].colors[0]);
+        if (this.sliderRef.current != null)
+            this.sliderRef.current.goToSlide(this.currentSlides.length-1);
+    }
+
+    onDone = () => {
+        this.setStatusBarColor(ThemeManager.getCurrentTheme().colors.surface);
+        this.props.onDone();
+    }
+
     render() {
-        let slides = this.introSlides;
+        this.currentSlides = this.introSlides;
         if (this.props.isUpdate)
-            slides = this.updateSlides;
+            this.currentSlides = this.updateSlides;
         else if (this.props.isAprilFools)
-            slides = this.aprilFoolsSlides;
+            this.currentSlides = this.aprilFoolsSlides;
+        this.setStatusBarColor(this.currentSlides[0].colors[0]);
         return (
             <AppIntroSlider
+                ref={this.sliderRef}
                 renderItem={CustomIntroSlider.getIntroRenderItem}
-                data={slides}
-                onDone={this.props.onDone}
+                data={this.currentSlides}
+                onDone={this.onDone}
                 bottomButton
                 showSkipButton
+                onSlideChange={this.onSlideChange}
+                onSkip={this.onSkip}
                 skipLabel={i18n.t('intro.buttons.skip')}
                 doneLabel={i18n.t('intro.buttons.done')}
                 nextLabel={i18n.t('intro.buttons.next')}
