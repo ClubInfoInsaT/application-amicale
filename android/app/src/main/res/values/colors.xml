@@ -4,4 +4,5 @@
   <color name="navigationBarColor">#121212</color>
   <color name="colorPrimaryDark">#be1522</color>
   <color name="colorPrimary">#be1522</color>
+  <color name="primary_dark">#be1522</color>
 </resources>

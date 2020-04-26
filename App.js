@@ -17,6 +17,7 @@ import ConnectionManager from "./src/managers/ConnectionManager";
 import URLHandler from "./src/utils/URLHandler";
 import {setSafeBounceHeight} from "react-navigation-collapsible";
 import {enableScreens} from 'react-native-screens';
+import SplashScreen from 'react-native-splash-screen'
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 enableScreens(true);
@@ -175,6 +176,7 @@ export default class App extends React.Component<Props, State> {
             showUpdate: this.storageManager.preferences.updateNumber.current !== Update.number.toString(),
             showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && this.storageManager.preferences.showAprilFoolsStart.current === '1',
         });
+        SplashScreen.hide();
     }
 
     /**
