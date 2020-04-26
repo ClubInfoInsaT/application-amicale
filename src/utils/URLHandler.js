@@ -1,8 +1,10 @@
 // @flow
 
-import {Linking} from 'expo';
+import {Linking} from 'react-native';
 
 export default class URLHandler {
+
+    static SCHEME = "campus-insat://";
 
     static CLUB_INFO_URL_PATH = "club";
     static EVENT_INFO_URL_PATH = "event";
@@ -20,20 +22,46 @@ export default class URLHandler {
 
     listen() {
         Linking.addEventListener('url', this.onUrl);
-        Linking.parseInitialURLAsync().then(this.onInitialUrl);
+        Linking.getInitialURL().then(this.onInitialUrl);
     }
 
-    onUrl = ({url}: Object) => {
-        let data = URLHandler.getUrlData(Linking.parse(url));
-        if (data !== null)
-            this.onDetectURL(data);
+    onUrl = ({url}: { url: string }) => {
+        if (url != null) {
+            let data = URLHandler.getUrlData(URLHandler.parseUrl(url));
+            if (data !== null)
+                this.onDetectURL(data);
+        }
     };
 
-    onInitialUrl = ({path, queryParams}: Object) => {
-        let data = URLHandler.getUrlData({path, queryParams});
-        if (data !== null)
-            this.onInitialURLParsed(data);
+    onInitialUrl = (url: ?string) => {
+        if (url != null) {
+            let data = URLHandler.getUrlData(URLHandler.parseUrl(url));
+            if (data !== null)
+                this.onInitialURLParsed(data);
+        }
     };
+
+    static parseUrl(url: string) {
+        let params = {};
+        let path = "";
+        let temp = url.replace(URLHandler.SCHEME, "");
+        if (temp != null) {
+            let array = temp.split("?");
+            if (array != null && array.length > 0) {
+                path = array[0];
+            }
+            if (array != null && array.length > 1) {
+                let tempParams = array[1].split("&");
+                for (let i = 0; i < tempParams.length; i++) {
+                    let paramsArray = tempParams[i].split("=");
+                    if (paramsArray.length > 1) {
+                        params[paramsArray[0]] = paramsArray[1];
+                    }
+                }
+            }
+        }
+        return {path: path, queryParams: params};
+    }
 
     static getUrlData({path, queryParams}: Object) {
         let data = null;
@@ -47,7 +75,7 @@ export default class URLHandler {
     }
 
     static isUrlValid(url: string) {
-        return this.getUrlData(Linking.parse(url)) !== null;
+        return this.getUrlData(URLHandler.parseUrl(url)) !== null;
     }
 
     static isClubInformationLink(path: string) {
