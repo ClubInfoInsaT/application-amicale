@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0731D3B824204D62009CAE85 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0731D3B524204D62009CAE85 /* Expo.plist */; };
 		074F4BDC2432833400BDB9FE /* app.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 07C2E6E4243282B30028AF0A /* app.bundle */; };
 		074F4BDD2432833400BDB9FE /* app.manifest in Resources */ = {isa = PBXBuildFile; fileRef = 07C2E6E3243282B30028AF0A /* app.manifest */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -19,10 +18,9 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		0731D3B524204D62009CAE85 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Expo.plist; path = Campus/Supporting/Expo.plist; sourceTree = "<group>"; };
 		07C2E6E3243282B30028AF0A /* app.manifest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = app.manifest; path = Campus/Supporting/app.manifest; sourceTree = "<group>"; };
 		07C2E6E4243282B30028AF0A /* app.bundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = app.bundle; path = Campus/Supporting/app.bundle; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* Campus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Campus.app; path = application.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = application.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Campus/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Campus/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -59,7 +57,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				0731D3B524204D62009CAE85 /* Expo.plist */,
 				07C2E6E4243282B30028AF0A /* app.bundle */,
 				07C2E6E3243282B30028AF0A /* app.manifest */,
 			);
@@ -110,7 +107,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Campus.app */,
+				13B07F961A680F5B00A75B9A /* application.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,7 +132,7 @@
 			);
 			name = Campus;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* Campus.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* application.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -146,6 +143,12 @@
 			attributes = {
 				LastUpgradeCheck = 940;
 				ORGANIZATIONNAME = Facebook;
+				TargetAttributes = {
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 6JA7CLNUV6;
+						ProvisioningStyle = Manual;
+					};
+				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Campus" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -173,7 +176,6 @@
 			files = (
 				074F4BDC2432833400BDB9FE /* app.bundle in Resources */,
 				074F4BDD2432833400BDB9FE /* app.manifest in Resources */,
-				0731D3B824204D62009CAE85 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -270,8 +272,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Campus/application.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = 6JA7CLNUV6;
 				INFOPLIST_FILE = Campus/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -281,6 +286,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fr.amicaleinsat.application;
 				PRODUCT_NAME = application;
+				PROVISIONING_PROFILE_SPECIFIER = "fr.amicaleinsat.application AppStore";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -291,7 +297,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Campus/application.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6JA7CLNUV6;
 				INFOPLIST_FILE = Campus/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -301,6 +310,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fr.amicaleinsat.application;
 				PRODUCT_NAME = application;
+				PROVISIONING_PROFILE_SPECIFIER = "fr.amicaleinsat.application AppStore";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
