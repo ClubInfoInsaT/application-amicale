@@ -3,8 +3,7 @@
 import * as React from 'react';
 import {Avatar, Button, Card, Paragraph, withTheme} from "react-native-paper";
 import i18n from "i18n-js";
-import {ScrollView} from "react-native";
-import {Linking} from "expo";
+import {Linking, ScrollView} from "react-native";
 import type {CustomTheme} from "../../managers/ThemeManager";
 
 type Props = {

@@ -1,10 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, FlatList, Image, View} from 'react-native';
+import {Animated, FlatList, Image, Linking, View} from 'react-native';
 import {Card, List, Text, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
-import {Linking} from "expo";
 import {Collapsible} from "react-navigation-collapsible";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import {withCollapsible} from "../../utils/withCollapsible";

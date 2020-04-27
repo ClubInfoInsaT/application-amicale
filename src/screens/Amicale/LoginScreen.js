@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, KeyboardAvoidingView, StyleSheet, View} from "react-native";
+import {Animated, KeyboardAvoidingView, Linking, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, HelperText, Paragraph, TextInput, withTheme} from 'react-native-paper';
 import ConnectionManager from "../../managers/ConnectionManager";
 import i18n from 'i18n-js';
@@ -10,7 +10,6 @@ import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import type {CustomTheme} from "../../managers/ThemeManager";
-import {Linking} from "expo";
 
 type Props = {
     navigation: Object,

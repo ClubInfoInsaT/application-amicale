@@ -7,9 +7,8 @@ import ErrorView from "./ErrorView";
 import {ERROR_TYPE} from "../../utils/WebData";
 import MaterialHeaderButtons, {Item} from '../Overrides/CustomHeaderButton';
 import {HiddenItem} from "react-navigation-header-buttons";
-import {Linking} from "expo";
 import i18n from 'i18n-js';
-import {Animated, BackHandler} from "react-native";
+import {Animated, BackHandler, Linking} from "react-native";
 import {withCollapsible} from "../../utils/withCollapsible";
 
 type Props = {

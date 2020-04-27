@@ -1,12 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {StyleSheet, View} from "react-native";
+import {Linking, StyleSheet, View} from "react-native";
 import {Button, Text, withTheme} from 'react-native-paper';
 import {BarCodeScanner} from "expo-barcode-scanner";
 import {Camera} from 'expo-camera';
 import URLHandler from "../../utils/URLHandler";
-import {Linking} from "expo";
 import AlertDialog from "../../components/Dialogs/AlertDialog";
 import i18n from 'i18n-js';
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";

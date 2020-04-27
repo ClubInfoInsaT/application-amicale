@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {ScrollView, View} from 'react-native';
+import {Linking, ScrollView, View} from 'react-native';
 import {Avatar, Button, Card, Chip, Paragraph, withTheme} from 'react-native-paper';
 import ImageModal from 'react-native-image-modal';
 import i18n from "i18n-js";
@@ -11,7 +11,6 @@ import CustomTabBar from "../../../components/Tabbar/CustomTabBar";
 import type {category, club} from "./ClubListScreen";
 import type {CustomTheme} from "../../../managers/ThemeManager";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {Linking} from "expo";
 import {ERROR_TYPE} from "../../../utils/WebData";
 
 type Props = {
