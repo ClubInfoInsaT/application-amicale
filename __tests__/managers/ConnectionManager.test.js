@@ -1,7 +1,8 @@
+jest.mock('react-native-keychain');
+
 import React from 'react';
 import ConnectionManager from "../../src/managers/ConnectionManager";
 import {ERROR_TYPE} from "../../src/utils/WebData";
-import * as SecureStore from 'expo-secure-store';
 
 let fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS but in react-native
 
@@ -23,45 +24,6 @@ test('isLoggedIn no', () => {
         return null;
     });
     return expect(c.isLoggedIn()).toBe(false);
-});
-
-test('recoverLogin error crypto', () => {
-    jest.spyOn(SecureStore, 'getItemAsync').mockImplementationOnce(() => {
-        return Promise.reject();
-    });
-    return expect(c.recoverLogin()).rejects.toBe(false);
-});
-
-test('recoverLogin success crypto', () => {
-    jest.spyOn(SecureStore, 'getItemAsync').mockImplementationOnce(() => {
-        return Promise.resolve('token1');
-    });
-    return expect(c.recoverLogin()).resolves.toBe('token1');
-});
-
-test('saveLogin success', () => {
-    jest.spyOn(SecureStore, 'setItemAsync').mockImplementationOnce(() => {
-        return Promise.resolve();
-    });
-    return expect(c.saveLogin('email', 'token2')).resolves.toBeTruthy();
-});
-
-test('saveLogin error', () => {
-    jest.spyOn(SecureStore, 'setItemAsync').mockImplementationOnce(() => {
-        return Promise.reject();
-    });
-    return expect(c.saveLogin('email', 'token3')).rejects.toBeFalsy();
-});
-
-test('recoverLogin error crypto with saved token', () => {
-    jest.spyOn(SecureStore, 'getItemAsync').mockImplementationOnce(() => {
-        return Promise.reject();
-    });
-    return expect(c.recoverLogin()).resolves.toBe('token2');
-});
-
-test('recoverLogin success saved', () => {
-    return expect(c.recoverLogin()).resolves.toBe('token2');
 });
 
 test("isConnectionResponseValid", () => {
