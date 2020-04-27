@@ -1,6 +1,6 @@
 // @flow
 
-import * as Permissions from 'expo-permissions';
+import {checkNotifications, requestNotifications, RESULTS} from 'react-native-permissions';
 import {Notifications} from 'expo';
 import AsyncStorageManager from "../managers/AsyncStorageManager";
 import LocaleManager from "../managers/LocaleManager";
@@ -14,13 +14,22 @@ const EXPO_TOKEN_SERVER = 'https://etud.insa-toulouse.fr/~amicale_app/expo_notif
  * @returns {Promise}
  */
 export async function askPermissions() {
-    const {status: existingStatus} = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-    let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-        const {status} = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        finalStatus = status;
-    }
-    return finalStatus === 'granted';
+    return new Promise(((resolve, reject) => {
+        checkNotifications().then(({status, settings}) => {
+            if (status === RESULTS.GRANTED)
+                resolve();
+            else if (status === RESULTS.BLOCKED)
+                reject()
+            else {
+                requestNotifications().then(({status, settings}) => {
+                    if (status === RESULTS.GRANTED)
+                        resolve();
+                    else
+                        reject();
+                });
+            }
+        });
+    }));
 }
 
 /**
@@ -33,12 +42,12 @@ export async function askPermissions() {
 export async function initExpoToken() {
     let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
     if (token === '') {
-        try {
-            await askPermissions();
-            let expoToken = await Notifications.getExpoPushTokenAsync();
-            // Save token for instant use later on
-            AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.expoToken.key, expoToken);
-        } catch (e) {}
+        askPermissions().then(() => {
+            Notifications.getExpoPushTokenAsync().then((token) => {
+                // Save token for instant use later on
+                AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.expoToken.key, token);
+            });
+        });
     }
 }
 
