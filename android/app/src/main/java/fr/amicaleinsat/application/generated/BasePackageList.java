@@ -21,7 +21,6 @@ public class BasePackageList {
         new expo.modules.permissions.PermissionsPackage(),
         new expo.modules.securestore.SecureStorePackage(),
         new expo.modules.sqlite.SQLitePackage(),
-        new expo.modules.updates.UpdatesPackage(),
         new expo.modules.webbrowser.WebBrowserPackage()
     );
   }
