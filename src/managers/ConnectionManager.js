@@ -1,6 +1,6 @@
 // @flow
 
-import * as SecureStore from 'expo-secure-store';
+import * as Keychain from 'react-native-keychain';
 import {apiRequest, ERROR_TYPE, isResponseValid} from "../utils/WebData";
 
 /**
@@ -14,7 +14,7 @@ import {apiRequest, ERROR_TYPE, isResponseValid} from "../utils/WebData";
  * 500 : SERVER_ERROR -> pb coté serveur
  */
 
-
+const SERVER_NAME = "amicale-insat.fr";
 const AUTH_PATH = "password";
 
 export default class ConnectionManager {
@@ -60,16 +60,16 @@ export default class ConnectionManager {
             if (this.getToken() !== null)
                 resolve(this.getToken());
             else {
-                SecureStore.getItemAsync('token')
-                    .then((token) => {
-                        this.#token = token;
-                        if (token !== null) {
+                Keychain.getInternetCredentials(SERVER_NAME)
+                    .then((data) => {
+                        if (data) {
+                            this.#token = data.password;
                             this.onLoginStateChange(true);
-                            resolve(token);
+                            resolve(this.#token);
                         } else
                             reject(false);
                     })
-                    .catch(error => {
+                    .catch(() => {
                         reject(false);
                     });
             }
@@ -82,14 +82,14 @@ export default class ConnectionManager {
 
     async saveLogin(email: string, token: string) {
         return new Promise((resolve, reject) => {
-            SecureStore.setItemAsync('token', token)
+            Keychain.setInternetCredentials(SERVER_NAME, 'token', token)
                 .then(() => {
                     this.#token = token;
                     this.#email = email;
                     this.onLoginStateChange(true);
                     resolve(true);
                 })
-                .catch(error => {
+                .catch(() => {
                     reject(false);
                 });
         });
@@ -97,13 +97,13 @@ export default class ConnectionManager {
 
     async disconnect() {
         return new Promise((resolve, reject) => {
-            SecureStore.deleteItemAsync('token')
+            Keychain.resetInternetCredentials(SERVER_NAME)
                 .then(() => {
                     this.#token = null;
                     this.onLoginStateChange(false);
                     resolve(true);
                 })
-                .catch((error) => {
+                .catch(() => {
                     reject(false);
                 });
         });
@@ -143,7 +143,6 @@ export default class ConnectionManager {
     async authenticatedRequest(path: string, params: Object) {
         return new Promise((resolve, reject) => {
             if (this.getToken() !== null) {
-                // console.log(data);
                 let data = {
                     token: this.getToken(),
                     ...params

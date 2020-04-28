@@ -228,7 +228,6 @@ class PlanningScreen extends React.Component<Props, State> {
     }
 
     render() {
-        // console.log("rendering PlanningScreen");
         return (
             <CustomAgenda
                 {...this.props}

@@ -1,7 +1,7 @@
 // @flow
 
 import i18n from 'i18n-js';
-import * as Localization from 'expo-localization';
+import * as RNLocalize from "react-native-localize";
 
 import en from '../../translations/en';
 import fr from '../../translations/fr';
@@ -17,10 +17,10 @@ export default class LocaleManager {
     static initTranslations() {
         i18n.fallbacks = true;
         i18n.translations = {fr, en};
-        i18n.locale = Localization.locale;
+        i18n.locale = RNLocalize.findBestAvailableLanguage(["en", "fr"]).languageTag;
     }
 
     static getCurrentLocale() {
-        return Localization.locale;
+        return RNLocalize.findBestAvailableLanguage(["en", "fr"]).languageTag;
     }
 }

@@ -16,5 +16,3 @@ echo "Installing dependencies..."
 npm install
 echo -e "Done\n"
 
-echo "Starting expo with clear cache..."
-expo r -c

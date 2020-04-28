@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Text, withTheme} from 'react-native-paper';
 import HTML from "react-native-render-html";
-import {Linking} from "expo";
+import {Linking} from "react-native";
 
 type Props = {
     theme: Object,
@@ -18,7 +18,6 @@ class CustomHTML extends React.Component<Props> {
     };
 
     getBasicText = (htmlAttribs, children, convertedCSSStyles, passProps) => {
-        // console.log(convertedCSSStyles);
         return <Text {...passProps}>{children}</Text>;
     };
 

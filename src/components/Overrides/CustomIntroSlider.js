@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react';
-import {LinearGradient} from "expo-linear-gradient";
 import {Image, Platform, StatusBar, StyleSheet, View} from "react-native";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {Text} from "react-native-paper";
@@ -9,6 +8,7 @@ import i18n from 'i18n-js';
 import AppIntroSlider from "react-native-app-intro-slider";
 import Update from "../../constants/Update";
 import ThemeManager from "../../managers/ThemeManager";
+import LinearGradient from 'react-native-linear-gradient';
 
 type Props = {
     onDone: Function,
@@ -40,49 +40,49 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 title: i18n.t('intro.slide1.title'),
                 text: i18n.t('intro.slide1.text'),
                 image: require('../../../assets/splash.png'),
-                colors: ['#e01928', '#be1522'],
+                colors: ['#dc2634', '#be1522'],
             },
             {
                 key: '2',
                 title: i18n.t('intro.slide2.title'),
                 text: i18n.t('intro.slide2.text'),
                 icon: 'calendar-range',
-                colors: ['#d99e09', '#c28d08'],
+                colors: ['#d99e09', '#9e7205'],
             },
             {
                 key: '3',
                 title: i18n.t('intro.slide3.title'),
                 text: i18n.t('intro.slide3.text'),
                 icon: 'washing-machine',
-                colors: ['#1fa5ee', '#1c97da'],
+                colors: ['#1fa5ee', '#0976b1'],
             },
             {
                 key: '4',
                 title: i18n.t('intro.slide4.title'),
                 text: i18n.t('intro.slide4.text'),
                 icon: 'shopping',
-                colors: ['#ec5904', '#da5204'],
+                colors: ['#ec5904', '#b64300'],
             },
             {
                 key: '5',
                 title: i18n.t('intro.slide5.title'),
                 text: i18n.t('intro.slide5.text'),
                 icon: 'timetable',
-                colors: ['#7c33ec', '#732fda'],
+                colors: ['#7c33ec', '#5e11d1'],
             },
             {
                 key: '6',
                 title: i18n.t('intro.slide6.title'),
                 text: i18n.t('intro.slide6.text'),
                 icon: 'silverware-fork-knife',
-                colors: ['#ec1213', '#ff372f'],
+                colors: ['#ec1213', '#970902'],
             },
             {
                 key: '7',
                 title: i18n.t('intro.slide7.title'),
                 text: i18n.t('intro.slide7.text'),
                 icon: 'cogs',
-                colors: ['#37c13e', '#26852b'],
+                colors: ['#37c13e', '#1a5a1d'],
             },
         ];
         this.updateSlides = [
