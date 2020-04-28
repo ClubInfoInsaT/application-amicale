@@ -19,27 +19,16 @@ type Props = {
     theme: CustomTheme,
 }
 
-type State = {
-    expanded: boolean,
-}
-
 const LIST_ITEM_HEIGHT = 64;
 
-class GroupListAccordion extends React.Component<Props, State> {
+class GroupListAccordion extends React.Component<Props> {
 
     constructor(props) {
         super(props);
-        this.state = {
-            expanded: props.item.id === "0",
-        }
     }
 
-    shouldComponentUpdate(nextProps: Props, nextSate: State) {
-        if (nextProps.currentSearchString !== this.props.currentSearchString)
-            this.state.expanded = nextProps.currentSearchString.length > 0;
-
+    shouldComponentUpdate(nextProps: Props) {
         return (nextProps.currentSearchString !== this.props.currentSearchString)
-            || (nextSate.expanded !== this.state.expanded)
             || (nextProps.favoriteNumber !== this.props.favoriteNumber)
             || (nextProps.item.content.length !== this.props.item.content.length);
     }
@@ -61,8 +50,6 @@ class GroupListAccordion extends React.Component<Props, State> {
             return null;
     }
 
-    itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
-
     render() {
         const item = this.props.item;
         return (
@@ -82,6 +69,7 @@ class GroupListAccordion extends React.Component<Props, State> {
                             />
                             : null}
                     unmountWhenCollapsed={true}// Only render list if expanded for increased performance
+                    opened={this.props.item.id === 0 || this.props.currentSearchString.length > 0}
                 >
                     {/*$FlowFixMe*/}
                     <FlatList
@@ -91,8 +79,8 @@ class GroupListAccordion extends React.Component<Props, State> {
                         keyExtractor={this.keyExtractor}
                         listKey={item.id.toString()}
                         // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-                        getItemLayout={this.itemLayout} // Broken with search
-                        removeClippedSubviews={true}
+                        // getItemLayout={this.itemLayout} // Broken with search
+                        // removeClippedSubviews={true}
                     />
                 </AnimatedAccordion>
             </View>

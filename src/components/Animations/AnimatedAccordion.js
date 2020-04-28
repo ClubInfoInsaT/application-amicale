@@ -12,8 +12,7 @@ type Props = {
     title: string,
     subtitle?: string,
     left?: (props: { [keys: string]: any }) =>  React.Node,
-    startOpen: boolean,
-    keepOpen: boolean,
+    opened: boolean,
     unmountWhenCollapsed: boolean,
     children?: React.Node,
 }
@@ -24,35 +23,50 @@ type State = {
 
 const AnimatedListIcon = Animatable.createAnimatableComponent(List.Icon);
 
-class AnimatedAccordion extends React.PureComponent<Props, State> {
+class AnimatedAccordion extends React.Component<Props, State> {
 
     static defaultProps = {
-        startOpen: false,
-        keepOpen: false,
+        opened: false,
         unmountWhenCollapsed: false,
     }
     chevronRef: { current: null | AnimatedListIcon };
+    chevronIcon: string;
+    animStart: string;
+    animEnd: string;
+
     state = {
-        expanded: false,
+        expanded: this.props.opened,
     }
 
     constructor(props) {
         super(props);
         this.chevronRef = React.createRef();
+        this.setupChevron();
     }
 
-    componentDidMount() {
-        if (this.props.startOpen)
-            this.toggleAccordion();
+    setupChevron() {
+        if (this.state.expanded) {
+            this.chevronIcon = "chevron-up";
+            this.animStart = "180deg";
+            this.animEnd = "0deg";
+        } else {
+            this.chevronIcon = "chevron-down";
+            this.animStart = "0deg";
+            this.animEnd = "180deg";
+        }
     }
 
     toggleAccordion = () => {
-        if (!this.props.keepOpen) {
-            if (this.chevronRef.current != null)
-                this.chevronRef.current.transitionTo({rotate: this.state.expanded ? '0deg' : '180deg'});
-            this.setState({expanded: !this.state.expanded})
-        }
+        if (this.chevronRef.current != null)
+            this.chevronRef.current.transitionTo({rotate: this.state.expanded ? this.animStart : this.animEnd});
+        this.setState({expanded: !this.state.expanded})
     };
+
+    shouldComponentUpdate(nextProps: Props) {
+        this.state.expanded = nextProps.opened;
+        this.setupChevron();
+        return true;
+    }
 
     render() {
         const colors = this.props.theme.colors;
@@ -67,13 +81,13 @@ class AnimatedAccordion extends React.PureComponent<Props, State> {
                     right={(props) => <AnimatedListIcon
                         ref={this.chevronRef}
                         {...props}
-                        icon={"chevron-down"}
+                        icon={this.chevronIcon}
                         color={this.state.expanded ? colors.primary : undefined}
                         useNativeDriver
                     />}
                     left={this.props.left}
                 />
-                <Collapsible collapsed={!this.props.keepOpen && !this.state.expanded}>
+                <Collapsible collapsed={!this.state.expanded}>
                     {!this.props.unmountWhenCollapsed || (this.props.unmountWhenCollapsed && this.state.expanded)
                         ? this.props.children
                         : null}

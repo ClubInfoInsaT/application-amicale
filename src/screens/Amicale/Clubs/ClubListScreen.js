@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Animated, Platform} from "react-native";
-import {Chip, Searchbar} from 'react-native-paper';
+import {Searchbar} from 'react-native-paper';
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import i18n from "i18n-js";
 import ClubListItem from "../../../components/Lists/Clubs/ClubListItem";
@@ -36,7 +36,7 @@ type Props = {
 }
 
 type State = {
-    currentlySelectedCategories: Array<string>,
+    currentlySelectedCategories: Array<number>,
     currentSearchString: string,
 }
 
@@ -99,13 +99,11 @@ class ClubListScreen extends React.Component<Props, State> {
         this.updateFilteredData(str, null);
     };
 
-    keyExtractor = (item: club) => {
-        return item.id.toString();
-    };
+    keyExtractor = (item: club) => item.id.toString();
 
     itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
 
-    getScreen = (data: Array<{categories: Array<category>, clubs: Array<club>} | null>) => {
+    getScreen = (data: Array<{ categories: Array<category>, clubs: Array<club> } | null>) => {
         let categoryList = [];
         let clubList = [];
         if (data[0] != null) {
@@ -131,11 +129,9 @@ class ClubListScreen extends React.Component<Props, State> {
         )
     };
 
-    onChipSelect(id: string) {
-        this.updateFilteredData(null, id);
-    }
+    onChipSelect = (id: number) => this.updateFilteredData(null, id);
 
-    updateFilteredData(filterStr: string | null, categoryId: string | null) {
+    updateFilteredData(filterStr: string | null, categoryId: number | null) {
         let newCategoriesState = [...this.state.currentlySelectedCategories];
         let newStrState = this.state.currentSearchString;
         if (filterStr !== null)
@@ -154,23 +150,11 @@ class ClubListScreen extends React.Component<Props, State> {
             })
     }
 
-    getChipRender = (category: category, key: string) => {
-        const onPress = this.onChipSelect.bind(this, category.id);
-        return <Chip
-            selected={isItemInCategoryFilter(this.state.currentlySelectedCategories, [category.id])}
-            mode={'outlined'}
-            onPress={onPress}
-            style={{marginRight: 5, marginBottom: 5}}
-            key={key}
-        >
-            {category.name}
-        </Chip>;
-    };
-
     getListHeader() {
         return <ClubListHeader
             categories={this.categories}
-            categoryRender={this.getChipRender}
+            selectedCategories={this.state.currentlySelectedCategories}
+            onChipSelect={this.onChipSelect}
         />;
     }
 
@@ -189,7 +173,7 @@ class ClubListScreen extends React.Component<Props, State> {
         return shouldRender;
     }
 
-    getRenderItem = ({item}: {item: club}) => {
+    getRenderItem = ({item}: { item: club }) => {
         const onPress = this.onListItemPress.bind(this, item);
         if (this.shouldRenderItem(item)) {
             return (
