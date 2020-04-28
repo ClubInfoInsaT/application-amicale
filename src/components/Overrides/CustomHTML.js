@@ -18,7 +18,6 @@ class CustomHTML extends React.Component<Props> {
     };
 
     getBasicText = (htmlAttribs, children, convertedCSSStyles, passProps) => {
-        // console.log(convertedCSSStyles);
         return <Text {...passProps}>{children}</Text>;
     };
 

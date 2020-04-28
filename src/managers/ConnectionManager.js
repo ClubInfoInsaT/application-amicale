@@ -143,7 +143,6 @@ export default class ConnectionManager {
     async authenticatedRequest(path: string, params: Object) {
         return new Promise((resolve, reject) => {
             if (this.getToken() !== null) {
-                // console.log(data);
                 let data = {
                     token: this.getToken(),
                     ...params

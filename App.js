@@ -60,7 +60,6 @@ export default class App extends React.Component<Props, State> {
     constructor() {
         super();
         LocaleManager.initTranslations();
-        // SplashScreen.preventAutoHide();
         this.navigatorRef = React.createRef();
         this.defaultHomeRoute = null;
         this.defaultHomeData = {};
@@ -71,8 +70,7 @@ export default class App extends React.Component<Props, State> {
         this.loadAssetsAsync().then(() => {
             this.onLoadFinished();
         });
-        // console.log(Linking.makeUrl('path/into/app', { hello: 'world', goodbye: 'now' }))
-        console.log(global.HermesInternal !== null);
+        console.log("USING HERMES:" + global.HermesInternal !== null);
     }
 
     /**
@@ -176,6 +174,7 @@ export default class App extends React.Component<Props, State> {
             showUpdate: this.storageManager.preferences.updateNumber.current !== Update.number.toString(),
             showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && this.storageManager.preferences.showAprilFoolsStart.current === '1',
         });
+        console.log('hiding splash');
         SplashScreen.hide();
     }
 
