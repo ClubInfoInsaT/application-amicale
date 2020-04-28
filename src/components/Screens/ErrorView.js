@@ -160,7 +160,7 @@ class ErrorView extends React.PureComponent<Props, State> {
 
 const styles = StyleSheet.create({
     outer: {
-        height: '100%',
+        height: '99%', // using 100% crashes planex screen for some reason on android 9+
     },
     inner: {
         marginTop: 'auto',
