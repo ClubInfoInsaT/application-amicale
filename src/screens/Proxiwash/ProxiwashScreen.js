@@ -424,10 +424,23 @@ class ProxiwashScreen extends React.Component<Props, State> {
             <View
                 style={{flex: 1}}
             >
+                <View style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                }}>
+                    <WebSectionList
+                        createDataset={this.createDataset}
+                        navigation={nav}
+                        fetchUrl={DATA_URL}
+                        renderItem={this.getRenderItem}
+                        renderSectionHeader={this.getRenderSectionHeader}
+                        autoRefreshTime={REFRESH_TIME}
+                        refreshOnFocus={true}
+                        updateData={this.state.machinesWatched.length}/>
+                </View>
                 <Banner
-                    style={{
-                        marginTop: this.state.bannerVisible ? containerPaddingTop : 0,
-                    }}
+                    style={{marginTop: containerPaddingTop,}}
                     visible={this.state.bannerVisible}
                     actions={[
                         {
@@ -445,15 +458,6 @@ class ProxiwashScreen extends React.Component<Props, State> {
                 <CustomModal onRef={this.onModalRef}>
                     {this.state.modalCurrentDisplayItem}
                 </CustomModal>
-                <WebSectionList
-                    createDataset={this.createDataset}
-                    navigation={nav}
-                    fetchUrl={DATA_URL}
-                    renderItem={this.getRenderItem}
-                    renderSectionHeader={this.getRenderSectionHeader}
-                    autoRefreshTime={REFRESH_TIME}
-                    refreshOnFocus={true}
-                    updateData={this.state.machinesWatched.length}/>
             </View>
         );
     }

@@ -302,10 +302,18 @@ class PlanexScreen extends React.Component<Props, State> {
             <View
                 style={{flex: 1}}
             >
+                {/*Allow to draw webview bellow banner*/}
+                <View style={{
+                    position: 'absolute',
+                    height: '100%',
+                    width: '100%',
+                }}>
+                    {this.props.theme.dark // Force component theme update
+                        ? this.getWebView()
+                        : <View style={{height: '100%'}}>{this.getWebView()}</View>}
+                </View>
                 <Banner
-                    style={{
-                        marginTop: this.state.bannerVisible ? containerPaddingTop : 0,
-                    }}
+                    style={{marginTop: containerPaddingTop,}}
                     visible={this.state.bannerVisible}
                     actions={[
                         {
@@ -330,9 +338,6 @@ class PlanexScreen extends React.Component<Props, State> {
                     onDismiss={this.hideDialog}
                     title={this.state.dialogTitle}
                     message={this.state.dialogMessage}/>
-                {this.props.theme.dark // Force component theme update
-                    ? this.getWebView()
-                    : <View style={{height: '100%'}}>{this.getWebView()}</View>}
                 <AnimatedBottomBar
                     {...this.props}
                     ref={this.barRef}
