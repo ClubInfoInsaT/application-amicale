@@ -23,13 +23,15 @@ import ServicesSectionScreen from "../screens/Services/ServicesSectionScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
 import {createScreenCollapsibleStack, getWebsiteStack} from "../utils/CollapsibleUtils";
 
+const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
+
+
 const defaultScreenOptions = {
     gestureEnabled: true,
     cardOverlayEnabled: true,
-    ...TransitionPresets.ScaleFromCenterAndroid,
+    ...modalTransition,
 };
 
-const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
 
 const ServicesStack = createStackNavigator();
 
@@ -42,7 +44,7 @@ function ServicesStackComponent() {
         >
             {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, i18n.t('screens.services'))}
             {createScreenCollapsibleStack("services-section", ServicesStack, ServicesSectionScreen, "SECTION")}
-            {createScreenCollapsibleStack("amicale-contact", ServicesStack, AmicaleContactScreen, i18n.t('screens.amicaleAbout'), true, {...modalTransition})}
+            {createScreenCollapsibleStack("amicale-contact", ServicesStack, AmicaleContactScreen, i18n.t('screens.amicaleAbout'))}
         </ServicesStack.Navigator>
     );
 }
@@ -60,10 +62,7 @@ function ProxiwashStackComponent() {
             <ProxiwashStack.Screen
                 name="proxiwash-about"
                 component={ProxiwashAboutScreen}
-                options={{
-                    title: i18n.t('screens.proxiwash'),
-                    ...modalTransition,
-                }}
+                options={{title: i18n.t('screens.proxiwash'),}}
             />
         </ProxiwashStack.Navigator>
     );
@@ -79,19 +78,14 @@ function PlanningStackComponent() {
             screenOptions={defaultScreenOptions}
         >
             <PlanningStack.Screen
-                name="planning"
+                name="index"
                 component={PlanningScreen}
-                options={{
-                    title: i18n.t('screens.planning'),
-                }}
+                options={{title: i18n.t('screens.planning'),}}
             />
             <PlanningStack.Screen
                 name="planning-information"
                 component={PlanningDisplayScreen}
-                options={{
-                    title: i18n.t('screens.planningDisplayScreen'),
-                    ...modalTransition,
-                }}
+                options={{title: i18n.t('screens.planningDisplayScreen'),}}
             />
         </PlanningStack.Navigator>
     );
@@ -130,34 +124,22 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
             <HomeStack.Screen
                 name="scanner"
                 component={ScannerScreen}
-                options={{
-                    title: i18n.t('screens.scanner'),
-                    ...modalTransition,
-                }}
+                options={{title: i18n.t('screens.scanner'),}}
             />
             <HomeStack.Screen
                 name="club-information"
                 component={ClubDisplayScreen}
-                options={{
-                    title: i18n.t('screens.clubDisplayScreen'),
-                    ...modalTransition,
-                }}
+                options={{title: i18n.t('screens.clubDisplayScreen'),}}
             />
             <HomeStack.Screen
                 name="feed-information"
                 component={FeedItemScreen}
-                options={{
-                    title: i18n.t('screens.feedDisplayScreen'),
-                    ...modalTransition,
-                }}
+                options={{title: i18n.t('screens.feedDisplayScreen'),}}
             />
             <HomeStack.Screen
                 name="planning-information"
                 component={PlanningDisplayScreen}
-                options={{
-                    title: i18n.t('screens.planningDisplayScreen'),
-                    ...modalTransition,
-                }}
+                options={{title: i18n.t('screens.planningDisplayScreen'),}}
             />
         </HomeStack.Navigator>
     );
@@ -173,13 +155,7 @@ function PlanexStackComponent() {
             screenOptions={defaultScreenOptions}
         >
             {getWebsiteStack("index", PlanexStack, PlanexScreen, "Planex")}
-            {createScreenCollapsibleStack(
-                "group-select",
-                PlanexStack,
-                GroupSelectionScreen,
-                "GROUP SELECT",
-                true,
-                {...modalTransition})}
+            {createScreenCollapsibleStack("group-select", PlanexStack, GroupSelectionScreen, "GROUP SELECT")}
         </PlanexStack.Navigator>
     );
 }
