@@ -37,8 +37,8 @@ const emailRegex = /^.+@.+\..+$/;
 class LoginScreen extends React.Component<Props, State> {
 
     state = {
-        email: 'vergnet@etud.insa-toulouse.fr',
-        password: 'LHSdf32ù43',
+        email: '',
+        password: '',
         isEmailValidated: false,
         isPasswordValidated: false,
         loading: false,
