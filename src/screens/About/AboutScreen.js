@@ -229,6 +229,7 @@ class AboutScreen extends React.Component<Props, State> {
                 <Card.Content>
                     <FlatList
                         data={this.appData}
+                        extraData={this.state.isDebugUnlocked}
                         keyExtractor={this.keyExtractor}
                         renderItem={this.getCardItem}
                     />
