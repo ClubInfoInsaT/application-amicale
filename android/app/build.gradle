@@ -80,10 +80,7 @@ project.ext.react = [
     enableHermes: true,
 ]
 
-apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
 apply from: "../../node_modules/react-native/react.gradle"
-
-
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 /**
@@ -194,18 +191,6 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    addUnimodulesDependencies([exclude: [
-    'expo-camera',
-    'expo-barcode-scanner',
-    'expo-error-recovery',
-    'expo-image-loader',
-    'expo-keep-awake',
-    'expo-linear-gradient',
-    'expo-location',
-    'expo-web-browser',
-    'expo-sqlite',
-    'expo-image-loader',
-     ]])
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

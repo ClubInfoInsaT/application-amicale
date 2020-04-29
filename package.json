@@ -1,12 +1,13 @@
 {
+  "name": "campus",
+  "version": "2.0.0",
+  "private": true,
   "scripts": {
     "start": "react-native start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "web": "expo start --web",
     "test": "jest",
-    "testw": "jest --watch",
-    "testc": "jest --coverage"
+    "lint": "eslint ."
   },
   "jest": {
     "preset": "react-native",
@@ -24,7 +25,6 @@
     "@react-navigation/drawer": "^5.1.1",
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
-    "expo": "^37.0.0",
     "i18n-js": "^3.3.0",
     "react": "~16.9.0",
     "react-dom": "16.9.0",
@@ -49,7 +49,6 @@
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "~2.2.0",
     "react-native-splash-screen": "^3.2.0",
-    "react-native-unimodules": "~0.9.0",
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "~0.11.7",
     "react-native-webview": "8.1.1",
@@ -57,15 +56,14 @@
     "react-navigation-header-buttons": "^3.0.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "babel-jest": "~25.2.6",
-    "jest": "^25.1.0",
-    "react-test-renderer": "^16.13.1",
-    "@babel/cli": "^7.8.4",
-    "@babel/preset-flow": "^7.9.0",
-    "babel-preset-expo": "^8.1.0",
-    "flow-bin": "^0.122.0",
-    "jest-extended": "^0.11.5"
-  },
-  "private": true
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.58.0",
+    "react-test-renderer": "16.9.0",
+    "flow-bin": "^0.122.0"
+  }
 }
