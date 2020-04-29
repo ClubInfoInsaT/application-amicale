@@ -46,7 +46,4 @@ target 'Campus' do
   pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
 
-  # Vector Icons
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-
 end
