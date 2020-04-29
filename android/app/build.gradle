@@ -83,9 +83,6 @@ project.ext.react = [
 apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
 apply from: "../../node_modules/react-native/react.gradle"
 
-project.ext.vectoricons = [
-    iconFontNames: [ 'MaterialCommunityIcons.ttf'] // Name of the font files you want to copy
-]
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
@@ -196,7 +193,16 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    addUnimodulesDependencies()
+    addUnimodulesDependencies([exclude: [
+    'expo-error-recovery',
+    'expo-image-loader',
+    'expo-keep-awake',
+    'expo-linear-gradient',
+    'expo-location',
+    'expo-web-browser',
+    'expo-sqlite',
+    'expo-image-loader',
+     ]])
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

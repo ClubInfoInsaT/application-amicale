@@ -1,12 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Alert, Platform, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import i18n from "i18n-js";
 import WebSectionList from "../../components/Screens/WebSectionList";
 import * as Notifications from "../../utils/Notifications";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import * as Expo from "expo";
+// import * as Expo from "expo";
 import {Avatar, Banner, Button, Card, Text, withTheme} from 'react-native-paper';
 import ProxiwashListItem from "../../components/Lists/Proxiwash/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
@@ -92,18 +92,18 @@ class ProxiwashScreen extends React.Component<Props, State> {
                 this.setState({machinesWatched: fetchedList})
             });
             // Get updated watchlist after received notification
-            Expo.Notifications.addListener(() => {
-                Notifications.getMachineNotificationWatchlist((fetchedList) => {
-                    this.setState({machinesWatched: fetchedList})
-                });
-            });
-            if (Platform.OS === 'android') {
-                Expo.Notifications.createChannelAndroidAsync('reminders', {
-                    name: 'Reminders',
-                    priority: 'max',
-                    vibrate: [0, 250, 250, 250],
-                });
-            }
+            // Expo.Notifications.addListener(() => {
+            //     Notifications.getMachineNotificationWatchlist((fetchedList) => {
+            //         this.setState({machinesWatched: fetchedList})
+            //     });
+            // });
+            // if (Platform.OS === 'android') {
+            //     Expo.Notifications.createChannelAndroidAsync('reminders', {
+            //         name: 'Reminders',
+            //         priority: 'max',
+            //         vibrate: [0, 250, 250, 250],
+            //     });
+            // }
         }
     }
 

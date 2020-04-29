@@ -1,7 +1,7 @@
 // @flow
 
 import {checkNotifications, requestNotifications, RESULTS} from 'react-native-permissions';
-import {Notifications} from 'expo';
+// import {Notifications} from 'expo';
 import AsyncStorageManager from "../managers/AsyncStorageManager";
 import LocaleManager from "../managers/LocaleManager";
 import passwords from "../../passwords";
@@ -40,15 +40,15 @@ export async function askPermissions() {
  * @return {Promise<void>}
  */
 export async function initExpoToken() {
-    let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-    if (token === '') {
-        askPermissions().then(() => {
-            Notifications.getExpoPushTokenAsync().then((token) => {
-                // Save token for instant use later on
-                AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.expoToken.key, token);
-            });
-        });
-    }
+    // let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
+    // if (token === '') {
+    //     askPermissions().then(() => {
+    //         Notifications.getExpoPushTokenAsync().then((token) => {
+    //             // Save token for instant use later on
+    //             AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.expoToken.key, token);
+    //         });
+    //     });
+    // }
 }
 
 /**
