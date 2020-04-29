@@ -1,15 +1,16 @@
 // @flow
 
 import * as React from 'react';
-import {Linking, StyleSheet, View} from "react-native";
+import {Linking, Platform, StyleSheet, View} from "react-native";
 import {Button, Text, withTheme} from 'react-native-paper';
-import {BarCodeScanner} from "expo-barcode-scanner";
-import {Camera} from 'expo-camera';
+import {RNCamera} from 'react-native-camera';
+import {BarcodeMask} from '@nartc/react-native-barcode-mask';
 import URLHandler from "../../utils/URLHandler";
 import AlertDialog from "../../components/Dialogs/AlertDialog";
 import i18n from 'i18n-js';
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import LoadingConfirmDialog from "../../components/Dialogs/LoadingConfirmDialog";
+import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 
 type Props = {};
 type State = {
@@ -40,9 +41,14 @@ class ScannerScreen extends React.Component<Props, State> {
         this.requestPermissions();
     }
 
-    requestPermissions = () => Camera.requestPermissionsAsync().then(this.updatePermissionStatus);
+    requestPermissions = () => {
+        if (Platform.OS === 'android')
+            request(PERMISSIONS.ANDROID.CAMERA).then(this.updatePermissionStatus)
+        else
+            request(PERMISSIONS.IOS.CAMERA).then(this.updatePermissionStatus)
+    };
 
-    updatePermissionStatus = ({status}) => this.setState({hasPermission: status === "granted"});
+    updatePermissionStatus = (result) => this.setState({hasPermission: result === RESULTS.GRANTED});
 
     handleCodeScanned = ({type, data}) => {
         if (!URLHandler.isUrlValid(data))
@@ -69,36 +75,6 @@ class ScannerScreen extends React.Component<Props, State> {
                 {i18n.t("scannerScreen.buttonPermission")}
             </Button>
         </View>
-    }
-
-    getOverlay() {
-        return (
-            <View style={{flex: 1}}>
-                <View style={{flex: 1}}>
-                    <View style={{...overlayBackground, top: 0, height: '10%', width: '80%', left: '10%'}}/>
-                    <View style={{...overlayBackground, left: 0, width: '10%', height: '100%'}}/>
-                    <View style={{...overlayBackground, right: 0, width: '10%', height: '100%'}}/>
-                    <View style={{...overlayBackground, bottom: 0, height: '10%', width: '80%', left: '10%'}}/>
-                </View>
-
-                <View style={styles.overlayTopLeft}>
-                    <View style={{...overlayHorizontalLineStyle, top: 0}}/>
-                    <View style={{...overlayVerticalLineStyle, left: 0}}/>
-                </View>
-                <View style={styles.overlayTopRight}>
-                    <View style={{...overlayHorizontalLineStyle, top: 0}}/>
-                    <View style={{...overlayVerticalLineStyle, right: 0}}/>
-                </View>
-                <View style={styles.overlayBottomLeft}>
-                    <View style={{...overlayHorizontalLineStyle, bottom: 0}}/>
-                    <View style={{...overlayVerticalLineStyle, left: 0}}/>
-                </View>
-                <View style={styles.overlayBottomRight}>
-                    <View style={{...overlayHorizontalLineStyle, bottom: 0}}/>
-                    <View style={{...overlayVerticalLineStyle, right: 0}}/>
-                </View>
-            </View>
-        );
     }
 
     showHelpDialog = () => {
@@ -133,19 +109,22 @@ class ScannerScreen extends React.Component<Props, State> {
 
     getScanner() {
         return (
-            <View style={styles.cameraContainer}>
-                <Camera
-                    onBarCodeScanned={this.state.scanned ? undefined : this.handleCodeScanned}
-                    type={Camera.Constants.Type.back}
-                    barCodeScannerSettings={{
-                        barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
-                    }}
-                    style={StyleSheet.absoluteFill}
-                    ratio={'1:1'}
-                >
-                    {this.getOverlay()}
-                </Camera>
-            </View>
+            <RNCamera
+                onBarCodeRead={this.state.scanned ? undefined : this.handleCodeScanned}
+                type={RNCamera.Constants.Type.back}
+                barCodeScannerSettings={{
+                    barCodeTypes: [RNCamera.Constants.BarCodeType.qr],
+                }}
+                style={StyleSheet.absoluteFill}
+                captureAudio={false}
+            >
+                <BarcodeMask
+                    backgroundColor={"#000"}
+                    maskOpacity={0.5}
+                    animatedLineThickness={1}
+                    animationDuration={1000}
+                />
+            </RNCamera>
         );
     }
 
@@ -153,22 +132,20 @@ class ScannerScreen extends React.Component<Props, State> {
         return (
             <View style={{
                 ...styles.container,
-                marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20
+                marginBottom: CustomTabBar.TAB_BAR_HEIGHT
             }}>
-                    {this.state.hasPermission
-                        ? this.getScanner()
-                        : this.getPermissionScreen()
-                    }
-                <View style={{height: 50}}>
-                    <Button
-                        icon="information"
-                        mode="contained"
-                        onPress={this.showHelpDialog}
-                        style={styles.button}
-                    >
-                        {i18n.t("scannerScreen.helpButton")}
-                    </Button>
-                </View>
+                {this.state.hasPermission
+                    ? this.getScanner()
+                    : this.getPermissionScreen()
+                }
+                <Button
+                    icon="information"
+                    mode="contained"
+                    onPress={this.showHelpDialog}
+                    style={styles.button}
+                >
+                    {i18n.t("scannerScreen.helpButton")}
+                </Button>
                 <AlertDialog
                     visible={this.state.dialogVisible}
                     onDismiss={this.onDialogDismiss}
@@ -185,73 +162,16 @@ class ScannerScreen extends React.Component<Props, State> {
     }
 }
 
-const borderOffset = '10%';
-
-const overlayBoxStyle = {
-    position: 'absolute',
-    width: 25,
-    height: 25,
-};
-
-const overlayLineStyle = {
-    position: 'absolute',
-    backgroundColor: "#fff",
-    borderRadius: 2,
-};
-
-const overlayHorizontalLineStyle = {
-    ...overlayLineStyle,
-    width: '100%',
-    height: 5,
-};
-
-const overlayVerticalLineStyle = {
-    ...overlayLineStyle,
-    height: '100%',
-    width: 5,
-};
-
-const overlayBackground = {
-    backgroundColor: "rgba(0,0,0,0.47)",
-    position: "absolute",
-};
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
     },
-    cameraContainer: {
-        marginTop: 'auto',
-        marginBottom: 'auto',
-        aspectRatio: 1,
-        width: '100%',
-    },
     button: {
         position: 'absolute',
-        bottom: 5,
+        bottom: 20,
         width: '80%',
         left: '10%'
-    },
-    overlayTopLeft: {
-        ...overlayBoxStyle,
-        top: borderOffset,
-        left: borderOffset,
-    },
-    overlayTopRight: {
-        ...overlayBoxStyle,
-        top: borderOffset,
-        right: borderOffset,
-    },
-    overlayBottomLeft: {
-        ...overlayBoxStyle,
-        bottom: borderOffset,
-        left: borderOffset,
-    },
-    overlayBottomRight: {
-        ...overlayBoxStyle,
-        bottom: borderOffset,
-        right: borderOffset,
     },
 });
 

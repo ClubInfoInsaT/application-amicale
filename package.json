@@ -18,14 +18,13 @@
     ]
   },
   "dependencies": {
+    "@nartc/react-native-barcode-mask": "^1.1.9",
     "@react-native-community/masked-view": "0.1.6",
     "@react-navigation/bottom-tabs": "^5.1.1",
     "@react-navigation/drawer": "^5.1.1",
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
     "expo": "^37.0.0",
-    "expo-barcode-scanner": "~8.1.0",
-    "expo-camera": "latest",
     "i18n-js": "^3.3.0",
     "react": "~16.9.0",
     "react-dom": "16.9.0",
@@ -35,6 +34,7 @@
     "react-native-appearance": "~0.3.3",
     "react-native-autolink": "^3.0.0",
     "react-native-calendars": "^1.260.0",
+    "react-native-camera": "^3.23.1",
     "react-native-collapsible": "^1.5.2",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-image-modal": "^1.0.6",
