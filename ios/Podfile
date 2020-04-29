@@ -1,6 +1,5 @@
-platform :ios, '10.0'
+platform :ios, '9.0'
 
-require_relative '../node_modules/react-native-unimodules/cocoapods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'Campus' do
@@ -37,9 +36,6 @@ target 'Campus' do
   pod 'Folly', :podspec => "#{rnPrefix}/third-party-podspecs/Folly.podspec"
 
   # Other native modules
-
-  # Automatically detect installed unimodules
-  use_unimodules!
 
   # react-native-cli autolinking
   use_native_modules!
