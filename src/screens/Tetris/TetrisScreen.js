@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Alert, View} from 'react-native';
 import {IconButton, Text, withTheme} from 'react-native-paper';
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import GameLogic from "./GameLogic";
 import Grid from "./components/Grid";
 import Preview from "./components/Preview";

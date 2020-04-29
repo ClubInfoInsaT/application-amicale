@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Button, Subheading, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import i18n from 'i18n-js';
 import {ERROR_TYPE} from "../../utils/WebData";
 import * as Animatable from 'react-native-animatable';

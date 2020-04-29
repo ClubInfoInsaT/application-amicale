@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {View} from "react-native";
 import {TouchableRipple, withTheme} from 'react-native-paper';
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import * as Animatable from "react-native-animatable";
 
 type Props = {

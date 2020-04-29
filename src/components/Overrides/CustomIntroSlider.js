@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Image, Platform, StatusBar, StyleSheet, View} from "react-native";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import {Text} from "react-native-paper";
 import i18n from 'i18n-js';
 import AppIntroSlider from "react-native-app-intro-slider";

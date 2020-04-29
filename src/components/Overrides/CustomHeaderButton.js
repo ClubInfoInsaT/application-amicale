@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import {HeaderButton, HeaderButtons} from 'react-navigation-header-buttons';
 import {withTheme} from "react-native-paper";
 import * as Touchable from "react-native/Libraries/Components/Touchable/TouchableNativeFeedback.android";
