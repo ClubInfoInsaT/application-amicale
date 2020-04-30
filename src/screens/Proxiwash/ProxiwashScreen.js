@@ -18,6 +18,7 @@ import type {CustomTheme} from "../../managers/ThemeManager";
 import {Collapsible} from "react-navigation-collapsible";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {getCleanedMachineWatched, getMachineEndDate, isMachineWatched} from "../../utils/Proxiwash";
+import {Modalize} from "react-native-modalize";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -55,9 +56,12 @@ type State = {
  */
 class ProxiwashScreen extends React.Component<Props, State> {
 
-    modalRef: Object;
+    modalRef: null | Modalize;
 
-    fetchedData: Object;
+    fetchedData: {
+        dryers: Array<Machine>,
+        washers: Array<Machine>,
+    };
 
     state = {
         refreshing: false,
@@ -95,7 +99,10 @@ class ProxiwashScreen extends React.Component<Props, State> {
      */
     componentDidMount() {
         this.props.navigation.setOptions({
-            headerRight: this.getAboutButton,
+            headerRight:
+                <MaterialHeaderButtons>
+                    <Item title="information" iconName="information" onPress={this.onAboutPress}/>
+                </MaterialHeaderButtons>,
         });
     }
 
@@ -106,23 +113,12 @@ class ProxiwashScreen extends React.Component<Props, State> {
     onAboutPress = () => this.props.navigation.navigate('proxiwash-about');
 
     /**
-     * Gets the about header button
-     *
-     * @return {*}
-     */
-    getAboutButton = () =>
-        <MaterialHeaderButtons>
-            <Item title="information" iconName="information" onPress={this.onAboutPress}/>
-        </MaterialHeaderButtons>;
-
-    /**
      * Extracts the key for the given item
      *
      * @param item The item to extract the key from
      * @return {*} The extracted key
      */
     getKeyExtractor = (item: Machine) => item.number;
-
 
     /**
      * Setups notifications for the machine with the given ID.
@@ -141,7 +137,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
                     this.showNotificationsDisabledWarning();
                 });
         } else {
-            Notifications.setupMachineNotification(machine.number, false)
+            Notifications.setupMachineNotification(machine.number, false, null)
                 .then(() => {
                     this.removeNotificationFromState(machine);
                 });

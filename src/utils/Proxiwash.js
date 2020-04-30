@@ -4,18 +4,31 @@ import type {Machine} from "../screens/Proxiwash/ProxiwashScreen";
 
 /**
  * Gets the machine end Date object.
- * If the time is before the current time, it will be considered as tomorrow
+ * If the end time is at least 12 hours before the current time,
+ * it will be considered as happening the day after.
+ * If it is before but less than 12 hours, it will be considered invalid (to fix proxiwash delay)
  *
  * @param machine The machine to get the date from
  * @returns {Date} The date object representing the end time.
  */
-export function getMachineEndDate(machine: Machine) {
+export function getMachineEndDate(machine: Machine): Date | null {
     const array = machine.endTime.split(":");
-    let date = new Date(Date.now());
-    date.setHours(parseInt(array[0]), parseInt(array[1]));
-    if (date < new Date(Date.now()))
-        date.setDate(date.getDate() + 1);
-    return date;
+    let endDate = new Date(Date.now());
+    endDate.setHours(parseInt(array[0]), parseInt(array[1]));
+
+    let limit = new Date(Date.now());
+    if (endDate < limit) {
+        if (limit.getHours() > 12) {
+            limit.setHours(limit.getHours() - 12);
+            if (endDate < limit)
+                endDate.setDate(endDate.getDate() + 1);
+            else
+                endDate = null;
+        } else
+            endDate = null;
+    }
+
+    return endDate;
 }
 
 /**

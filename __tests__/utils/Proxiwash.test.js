@@ -4,21 +4,29 @@ import {getCleanedMachineWatched, getMachineEndDate, getMachineOfId, isMachineWa
 test('getMachineEndDate', () => {
     jest.spyOn(Date, 'now')
         .mockImplementation(() =>
-            new Date('2020-01-14T00:00:00.000Z').getTime()
+            new Date('2020-01-14T15:00:00.000Z').getTime()
         );
-    let expectDate = new Date('2020-01-14T00:00:00.000Z');
+    let expectDate = new Date('2020-01-14T15:00:00.000Z');
     expectDate.setHours(23);
     expectDate.setMinutes(10);
     expect(getMachineEndDate({endTime: "23:10"}).getTime()).toBe(expectDate.getTime());
 
-    expectDate.setHours(15);
+    expectDate.setHours(16);
     expectDate.setMinutes(30);
-    expect(getMachineEndDate({endTime: "15:30"}).getTime()).toBe(expectDate.getTime());
+    expect(getMachineEndDate({endTime: "16:30"}).getTime()).toBe(expectDate.getTime());
 
+    expect(getMachineEndDate({endTime: "15:30"})).toBeNull();
+
+    expect(getMachineEndDate({endTime: "13:10"})).toBeNull();
+
+    jest.spyOn(Date, 'now')
+        .mockImplementation(() =>
+            new Date('2020-01-14T23:00:00.000Z').getTime()
+        );
+    expectDate = new Date('2020-01-14T23:00:00.000Z');
     expectDate.setHours(0);
-    expectDate.setMinutes(10);
-    expectDate.setDate(expectDate.getDate() + 1);
-    expect(getMachineEndDate({endTime: "00:10"}).getTime()).toBe(expectDate.getTime());
+    expectDate.setMinutes(30);
+    expect(getMachineEndDate({endTime: "00:30"}).getTime()).toBe(expectDate.getTime());
 });
 
 test('isMachineWatched', () => {

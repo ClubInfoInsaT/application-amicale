@@ -62,7 +62,7 @@ function createNotifications(machineID: string, date: Date) {
  * @param isEnabled True to enable notifications, false to disable
  * @param endDate
  */
-export async function setupMachineNotification(machineID: string, isEnabled: boolean, endDate?: Date) {
+export async function setupMachineNotification(machineID: string, isEnabled: boolean, endDate: Date | null) {
     return new Promise((resolve, reject) => {
         if (isEnabled && endDate != null) {
             askPermissions()
