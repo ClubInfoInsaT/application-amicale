@@ -14,13 +14,13 @@ const reminderIdMultiplicator = 100;
  */
 export async function askPermissions() {
     return new Promise(((resolve, reject) => {
-        checkNotifications().then(({status, settings}) => {
+        checkNotifications().then(({status}) => {
             if (status === RESULTS.GRANTED)
                 resolve();
             else if (status === RESULTS.BLOCKED)
                 reject()
             else {
-                requestNotifications().then(({status, settings}) => {
+                requestNotifications().then(({status}) => {
                     if (status === RESULTS.GRANTED)
                         resolve();
                     else
