@@ -21,6 +21,7 @@
   "dependencies": {
     "@nartc/react-native-barcode-mask": "^1.1.9",
     "@react-native-community/masked-view": "0.1.6",
+    "@react-native-community/push-notification-ios": "^1.1.1",
     "@react-navigation/bottom-tabs": "^5.1.1",
     "@react-navigation/drawer": "^5.1.1",
     "@react-navigation/native": "^5.0.9",
