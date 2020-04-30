@@ -9,7 +9,6 @@ import type {CustomTheme} from "./src/managers/ThemeManager";
 import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
 import MainNavigator from './src/navigation/MainNavigator';
-import {initExpoToken} from "./src/utils/Notifications";
 import {Provider as PaperProvider} from 'react-native-paper';
 import AprilFoolsManager from "./src/managers/AprilFoolsManager";
 import Update from "./src/constants/Update";
@@ -145,7 +144,6 @@ export default class App extends React.Component<Props, State> {
      */
     loadAssetsAsync = async () => {
         await this.storageManager.loadPreferences();
-        await initExpoToken();
         try {
             await ConnectionManager.getInstance().recoverLogin();
         } catch (e) {

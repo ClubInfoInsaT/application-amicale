@@ -10,7 +10,6 @@ web-build/
 web-report/
 /.expo-shared/
 /package-lock.json
-/passwords.json
 
 !/.idea/
 /.idea/*

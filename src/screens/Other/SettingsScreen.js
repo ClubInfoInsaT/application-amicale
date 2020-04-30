@@ -5,7 +5,6 @@ import {ScrollView} from "react-native";
 import ThemeManager from '../../managers/ThemeManager';
 import i18n from "i18n-js";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import {setMachineReminderNotificationTime} from "../../utils/Notifications";
 import {Card, List, Switch, ToggleButton} from 'react-native-paper';
 import {Appearance} from "react-native-appearance";
 import AnimatedAccordion from "../../components/Animations/AnimatedAccordion";
@@ -49,10 +48,6 @@ export default class SettingsScreen extends React.Component<Props, State> {
             this.setState({
                 proxiwashNotifPickerSelected: value
             });
-            let intVal = 0;
-            if (value !== 'never')
-                intVal = parseInt(value);
-            setMachineReminderNotificationTime(intVal);
         }
     };
 

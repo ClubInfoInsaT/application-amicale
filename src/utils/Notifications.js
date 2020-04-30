@@ -1,12 +1,8 @@
 // @flow
 
 import {checkNotifications, requestNotifications, RESULTS} from 'react-native-permissions';
-// import {Notifications} from 'expo';
-import AsyncStorageManager from "../managers/AsyncStorageManager";
-import LocaleManager from "../managers/LocaleManager";
-import passwords from "../../passwords";
 
-const EXPO_TOKEN_SERVER = 'https://etud.insa-toulouse.fr/~amicale_app/expo_notifications/save_token.php';
+const PushNotification = require("react-native-push-notification");
 
 /**
  * Async function asking permission to send notifications to the user
@@ -32,50 +28,13 @@ export async function askPermissions() {
     }));
 }
 
-/**
- * Save expo token to allow sending notifications to this device.
- * This token is unique for each device and won't change.
- * It only needs to be fetched once, then it will be saved in storage.
- *
- * @return {Promise<void>}
- */
-export async function initExpoToken() {
-    // let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-    // if (token === '') {
-    //     askPermissions().then(() => {
-    //         Notifications.getExpoPushTokenAsync().then((token) => {
-    //             // Save token for instant use later on
-    //             AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.expoToken.key, token);
-    //         });
-    //     });
-    // }
-}
-
-/**
- * Gets the machines watched from the server
- *
- * @param callback Function to execute with the fetched data
- */
-export function getMachineNotificationWatchlist(callback: Function) {
-    let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-    if (token !== '') {
-        let data = {
-            function: 'get_machine_watchlist',
-            password: passwords.expoNotifications,
-            token: token,
-        };
-        fetch(EXPO_TOKEN_SERVER, {
-            method: 'POST',
-            headers: new Headers({
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }),
-            body: JSON.stringify(data) // <-- Post parameters
-        }).then((response) => response.json())
-            .then((responseJson) => {
-                callback(responseJson);
-            });
-    }
+function createNotifications(machineID: string, date: Date) {
+    PushNotification.localNotificationSchedule({
+        title: "Title",
+        message: "Message",
+        id: machineID,
+        date: date,
+    });
 }
 
 /**
@@ -83,50 +42,22 @@ export function getMachineNotificationWatchlist(callback: Function) {
  *
  * @param machineID The machine ID
  * @param isEnabled True to enable notifications, false to disable
+ * @param endDate
  */
-export function setupMachineNotification(machineID: string, isEnabled: boolean) {
-    let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-    if (token !== '') {
-        let data = {
-            function: 'setup_machine_notification',
-            password: passwords.expoNotifications,
-            locale: LocaleManager.getCurrentLocale(),
-            token: token,
-            machine_id: machineID,
-            enabled: isEnabled
-        };
-        fetch(EXPO_TOKEN_SERVER, {
-            method: 'POST',
-            headers: new Headers({
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }),
-            body: JSON.stringify(data) // <-- Post parameters
-        });
-    }
-}
-
-/**
- * Sends the selected reminder time for notifications to the server
- *
- * @param time The reminder time to use
- */
-export function setMachineReminderNotificationTime(time: number) {
-    let token = AsyncStorageManager.getInstance().preferences.expoToken.current;
-    if (token !== '') {
-        let data = {
-            function: 'set_machine_reminder',
-            password: passwords.expoNotifications,
-            token: token,
-            time: time,
-        };
-        fetch(EXPO_TOKEN_SERVER, {
-            method: 'POST',
-            headers: new Headers({
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }),
-            body: JSON.stringify(data) // <-- Post parameters
-        });
-    }
+export async function setupMachineNotification(machineID: string, isEnabled: boolean, endDate?: Date) {
+    return new Promise((resolve, reject) => {
+        if (isEnabled && endDate != null) {
+            askPermissions()
+                .then(() => {
+                    createNotifications(machineID, endDate);
+                    resolve();
+                })
+                .catch(() => {
+                    reject();
+                });
+        } else {
+            PushNotification.cancelLocalNotifications({id: machineID});
+            resolve();
+        }
+    });
 }

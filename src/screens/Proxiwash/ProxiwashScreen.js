@@ -6,7 +6,6 @@ import i18n from "i18n-js";
 import WebSectionList from "../../components/Screens/WebSectionList";
 import * as Notifications from "../../utils/Notifications";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-// import * as Expo from "expo";
 import {Avatar, Banner, Button, Card, Text, withTheme} from 'react-native-paper';
 import ProxiwashListItem from "../../components/Lists/Proxiwash/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
@@ -15,6 +14,11 @@ import AprilFoolsManager from "../../managers/AprilFoolsManager";
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 import ProxiwashSectionHeader from "../../components/Lists/Proxiwash/ProxiwashSectionHeader";
 import {withCollapsible} from "../../utils/withCollapsible";
+import type {CustomTheme} from "../../managers/ThemeManager";
+import {Collapsible} from "react-navigation-collapsible";
+import {StackNavigationProp} from "@react-navigation/stack";
+
+const PushNotification = require("react-native-push-notification");
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
 
@@ -23,17 +27,25 @@ let modalStateStrings = {};
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
 
+type machine = {
+    number: string,
+    state: string,
+    startTime: string,
+    endTime: string,
+    donePercent: string,
+    remainingTime: string,
+}
+
 type Props = {
-    navigation: Object,
-    route: Object,
-    theme: Object,
-    collapsibleStack: Object,
+    navigation: StackNavigationProp,
+    theme: CustomTheme,
+    collapsibleStack: Collapsible,
 }
 
 type State = {
     refreshing: boolean,
     modalCurrentDisplayItem: React.Node,
-    machinesWatched: Array<string>,
+    machinesWatched: Array<machine>,
     bannerVisible: boolean,
 };
 
@@ -47,11 +59,12 @@ class ProxiwashScreen extends React.Component<Props, State> {
     modalRef: Object;
 
     fetchedData: Object;
+    allMachines: Array<machine>;
 
     state = {
         refreshing: false,
         modalCurrentDisplayItem: null,
-        machinesWatched: [],
+        machinesWatched: JSON.parse(AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current),
         bannerVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === '1',
     };
 
@@ -65,6 +78,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
         modalStateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.modal.running');
         modalStateStrings[ProxiwashConstants.machineStates.HS] = i18n.t('proxiwashScreen.modal.broken');
         modalStateStrings[ProxiwashConstants.machineStates.ERREUR] = i18n.t('proxiwashScreen.modal.error');
+        this.allMachines = [];
     }
 
     /**
@@ -86,25 +100,6 @@ class ProxiwashScreen extends React.Component<Props, State> {
         this.props.navigation.setOptions({
             headerRight: this.getAboutButton,
         });
-        if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
-            // Get latest watchlist from server
-            Notifications.getMachineNotificationWatchlist((fetchedList) => {
-                this.setState({machinesWatched: fetchedList})
-            });
-            // Get updated watchlist after received notification
-            // Expo.Notifications.addListener(() => {
-            //     Notifications.getMachineNotificationWatchlist((fetchedList) => {
-            //         this.setState({machinesWatched: fetchedList})
-            //     });
-            // });
-            // if (Platform.OS === 'android') {
-            //     Expo.Notifications.createChannelAndroidAsync('reminders', {
-            //         name: 'Reminders',
-            //         priority: 'max',
-            //         vibrate: [0, 250, 250, 250],
-            //     });
-            // }
-        }
     }
 
     /**
@@ -129,8 +124,16 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * @param item The item to extract the key from
      * @return {*} The extracted key
      */
-    getKeyExtractor(item: Object) {
-        return item !== undefined ? item.number : undefined;
+    getKeyExtractor = (item: machine) => item.number;
+
+
+    getMachineEndDate(machine: machine) {
+        const array = machine.endTime.split(":");
+        let date = new Date();
+        date.setHours(parseInt(array[0]), parseInt(array[1]));
+        if (date < new Date())
+            date.setDate(date.getDate() + 1);
+        return date;
     }
 
     /**
@@ -138,18 +141,23 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * One notification will be sent at the end of the program.
      * Another will be send a few minutes before the end, based on the value of reminderNotifTime
      *
-     * @param machineId The machine's ID
+     * @param machine The machine to watch
      * @returns {Promise<void>}
      */
-    setupNotifications(machineId: string) {
-        if (AsyncStorageManager.getInstance().preferences.expoToken.current !== '') {
-            if (!this.isMachineWatched(machineId)) {
-                Notifications.setupMachineNotification(machineId, true);
-                this.saveNotificationToState(machineId);
-            } else
-                this.disableNotification(machineId);
+    setupNotifications(machine: machine) {
+        if (!this.isMachineWatched(machine)) {
+            Notifications.setupMachineNotification(machine.number, true, this.getMachineEndDate(machine))
+                .then(() => {
+                    this.saveNotificationToState(machine);
+                })
+                .catch(() => {
+                    this.showNotificationsDisabledWarning();
+                });
         } else {
-            this.showNotificationsDisabledWarning();
+            Notifications.setupMachineNotification(machine.number, false)
+                .then(() => {
+                    this.removeNotificationFromState(machine);
+                });
         }
     }
 
@@ -164,61 +172,78 @@ class ProxiwashScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Stops scheduled notifications for the machine of the given ID.
-     * This will also remove the notification if it was already shown.
-     *
-     * @param machineId The machine's ID
-     */
-    disableNotification(machineId: string) {
-        let data = this.state.machinesWatched;
-        if (data.length > 0) {
-            let arrayIndex = data.indexOf(machineId);
-            if (arrayIndex !== -1) {
-                Notifications.setupMachineNotification(machineId, false);
-                this.removeNotificationFroState(arrayIndex);
-            }
-        }
-    }
-
-    /**
      * Adds the given notifications associated to a machine ID to the watchlist, and saves the array to the preferences
      *
-     * @param machineId
+     * @param machine
      */
-    saveNotificationToState(machineId: string) {
+    saveNotificationToState(machine: machine) {
         let data = this.state.machinesWatched;
-        data.push(machineId);
-        this.updateNotificationState(data);
+        data.push(machine);
+        this.saveNewWatchedList(data);
     }
 
     /**
      * Removes the given index from the watchlist array and saves it to preferences
      *
-     * @param index
+     * @param machine
      */
-    removeNotificationFroState(index: number) {
+    removeNotificationFromState(machine: machine) {
         let data = this.state.machinesWatched;
-        data.splice(index, 1);
-        this.updateNotificationState(data);
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].number === machine.number && data[i].endTime === machine.endTime) {
+                data.splice(i, 1);
+                break;
+            }
+        }
+        this.saveNewWatchedList(data);
     }
 
-    /**
-     * Sets the given fetchedData as the watchlist
-     *
-     * @param data
-     */
-    updateNotificationState(data: Array<Object>) {
-        this.setState({machinesWatched: data});
+    saveNewWatchedList(list: Array<machine>) {
+        this.setState({machinesWatched: list});
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.key,
+            JSON.stringify(list),
+        );
     }
 
     /**
      * Checks whether the machine of the given ID has scheduled notifications
      *
-     * @param machineID The machine's ID
+     * @param machine
      * @returns {boolean}
      */
-    isMachineWatched(machineID: string) {
-        return this.state.machinesWatched.indexOf(machineID) !== -1;
+    isMachineWatched(machine: machine) {
+        let watched = false;
+        const list = this.state.machinesWatched;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].number === machine.number && list[i].endTime === machine.endTime) {
+                watched = true;
+                break;
+            }
+        }
+        return watched;
+    }
+
+    getMachineOfId(id: string) {
+        for (let i = 0; i < this.allMachines.length; i++) {
+            if (this.allMachines[i].number === id)
+                return this.allMachines[i];
+        }
+        return null;
+    }
+
+    getCleanedMachineWatched() {
+        const list = this.state.machinesWatched;
+        let newList = [];
+        for (let i = 0; i < list.length; i++) {
+            let machine = this.getMachineOfId(list[i].number);
+            if (machine !== null
+                && list[i].number === machine.number && list[i].endTime === machine.endTime
+                && ProxiwashConstants.machineStates[list[i].state] === ProxiwashConstants.machineStates["EN COURS"]) {
+                newList.push(machine);
+            }
+        }
+        return newList;
     }
 
     /**
@@ -234,8 +259,9 @@ class ProxiwashScreen extends React.Component<Props, State> {
             AprilFoolsManager.getNewProxiwashDryerOrderedList(data.dryers);
             AprilFoolsManager.getNewProxiwashWasherOrderedList(data.washers);
         }
-        this.fetchedData = fetchedData;
-
+        this.fetchedData = data;
+        this.allMachines = [...data.dryers, ...data.washers];
+        this.state.machinesWatched = this.getCleanedMachineWatched();
         return [
             {
                 title: i18n.t('proxiwashScreen.dryers'),
@@ -271,13 +297,13 @@ class ProxiwashScreen extends React.Component<Props, State> {
     /**
      * Callback used when the user clicks on enable notifications for a machine
      *
-     * @param machineId The machine's id to set notifications for
+     * @param machine The machine to set notifications for
      */
-    onSetupNotificationsPress(machineId: string) {
+    onSetupNotificationsPress(machine: machine) {
         if (this.modalRef) {
             this.modalRef.close();
         }
-        this.setupNotifications(machineId)
+        this.setupNotifications(machine);
     }
 
     /**
@@ -296,7 +322,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
             onPress: undefined
         };
         let message = modalStateStrings[ProxiwashConstants.machineStates[item.state]];
-        const onPress = this.onSetupNotificationsPress.bind(this, item.number);
+        const onPress = this.onSetupNotificationsPress.bind(this, item);
         if (ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"]) {
             button =
                 {
@@ -409,8 +435,8 @@ class ProxiwashScreen extends React.Component<Props, State> {
         return (
             <ProxiwashListItem
                 item={item}
-                onPress={this.showModal}
-                isWatched={this.isMachineWatched(item.number)}
+                onPress={() => this.onSetupNotificationsPress(item)}
+                isWatched={this.isMachineWatched(item)}
                 isDryer={isDryer}
                 height={LIST_ITEM_HEIGHT}
             />

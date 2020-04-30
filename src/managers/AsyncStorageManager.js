@@ -69,6 +69,11 @@ export default class AsyncStorageManager {
             default: '1',
             current: '',
         },
+        proxiwashWatchedMachines: {
+            key: 'proxiwashWatchedMachines',
+            default: '[]',
+            current: '',
+        },
         planexShowBanner: {
             key: 'planexShowBanner',
             default: '1',
