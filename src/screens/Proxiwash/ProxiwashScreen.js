@@ -99,7 +99,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
      */
     componentDidMount() {
         this.props.navigation.setOptions({
-            headerRight:
+            headerRight: () =>
                 <MaterialHeaderButtons>
                     <Item title="information" iconName="information" onPress={this.onAboutPress}/>
                 </MaterialHeaderButtons>,
