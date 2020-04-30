@@ -2,6 +2,7 @@
 
 import {checkNotifications, requestNotifications, RESULTS} from 'react-native-permissions';
 import AsyncStorageManager from "../managers/AsyncStorageManager";
+import i18n from "i18n-js";
 
 const PushNotification = require("react-native-push-notification");
 
@@ -38,8 +39,8 @@ function createNotifications(machineID: string, date: Date) {
         let reminderDate = new Date(date);
         reminderDate.setMinutes(reminderDate.getMinutes() - reminder);
         PushNotification.localNotificationSchedule({
-            title: "Title",
-            message: "Message",
+            title: i18n.t("proxiwashScreen.notifications.machineRunningTitle", {time: reminder}),
+            message: i18n.t("proxiwashScreen.notifications.machineRunningBody", {number: machineID}),
             id: id.toString(),
             date: reminderDate,
         });
@@ -48,8 +49,8 @@ function createNotifications(machineID: string, date: Date) {
         console.log("Setting up notifications for ", date);
 
     PushNotification.localNotificationSchedule({
-        title: "Title",
-        message: "Message",
+        title: i18n.t("proxiwashScreen.notifications.machineFinishedTitle"),
+        message: i18n.t("proxiwashScreen.notifications.machineFinishedBody", {number: machineID}),
         id: machineID,
         date: date,
     });
