@@ -1,39 +1,47 @@
 // @flow
 
 import * as React from 'react';
-import {ScrollView} from "react-native";
+import {ScrollView, View} from "react-native";
+import type {CustomTheme} from "../../managers/ThemeManager";
 import ThemeManager from '../../managers/ThemeManager';
 import i18n from "i18n-js";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import {Card, List, Switch, ToggleButton} from 'react-native-paper';
+import {Card, List, Switch, ToggleButton, withTheme} from 'react-native-paper';
 import {Appearance} from "react-native-appearance";
-import AnimatedAccordion from "../../components/Animations/AnimatedAccordion";
+import CustomSlider from "../../components/Overrides/CustomSlider";
 
 type Props = {
-    navigation: Object,
+    theme: CustomTheme,
 };
 
 type State = {
     nightMode: boolean,
     nightModeFollowSystem: boolean,
-    proxiwashNotifPickerSelected: string,
+    notificationReminderSelected: number,
     startScreenPickerSelected: string,
 };
 
 /**
  * Class defining the Settings screen. This screen shows controls to modify app preferences.
  */
-export default class SettingsScreen extends React.Component<Props, State> {
-    state = {
-        nightMode: ThemeManager.getNightMode(),
-        nightModeFollowSystem: AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current === '1' &&
-            Appearance.getColorScheme() !== 'no-preference',
-        proxiwashNotifPickerSelected: AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current,
-        startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
-    };
+class SettingsScreen extends React.Component<Props, State> {
+
+    savedNotificationReminder: number;
 
     constructor() {
         super();
+        let notifReminder = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current;
+        this.savedNotificationReminder = parseInt(notifReminder);
+        if (isNaN(this.savedNotificationReminder))
+            this.savedNotificationReminder = 0;
+
+        this.state = {
+            nightMode: ThemeManager.getNightMode(),
+            nightModeFollowSystem: AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current === '1' &&
+                Appearance.getColorScheme() !== 'no-preference',
+            notificationReminderSelected: this.savedNotificationReminder,
+            startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
+        };
     }
 
     /**
@@ -41,14 +49,10 @@ export default class SettingsScreen extends React.Component<Props, State> {
      *
      * @param value The value to store
      */
-    onProxiwashNotifPickerValueChange = (value: string) => {
-        if (value != null) {
-            let key = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.key;
-            AsyncStorageManager.getInstance().savePref(key, value);
-            this.setState({
-                proxiwashNotifPickerSelected: value
-            });
-        }
+    onProxiwashNotifPickerValueChange = (value: number) => {
+        let key = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.key;
+        AsyncStorageManager.getInstance().savePref(key, value.toString());
+        this.setState({notificationReminderSelected: value})
     };
 
     /**
@@ -73,15 +77,16 @@ export default class SettingsScreen extends React.Component<Props, State> {
      */
     getProxiwashNotifPicker() {
         return (
-            <ToggleButton.Row
+            <CustomSlider
+                style={{flex: 1, marginHorizontal: 10, height: 50}}
+                minimumValue={0}
+                maximumValue={10}
+                step={1}
+                value={this.savedNotificationReminder}
                 onValueChange={this.onProxiwashNotifPickerValueChange}
-                value={this.state.proxiwashNotifPickerSelected}
-                style={{marginLeft: 'auto', marginRight: 'auto'}}
-            >
-                <ToggleButton icon="close" value="never"/>
-                <ToggleButton icon="numeric-2" value="2"/>
-                <ToggleButton icon="numeric-5" value="5"/>
-            </ToggleButton.Row>
+                thumbTintColor={this.props.theme.colors.primary}
+                minimumTrackTintColor={this.props.theme.colors.primary}
+            />
         );
     }
 
@@ -133,6 +138,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
      * @param icon The icon name to display on the list item
      * @param title The text to display as this list item title
      * @param subtitle The text to display as this list item subtitle
+     * @param state The current state of the switch
      * @returns {React.Node}
      */
     getToggleItem(onPressCallback: Function, icon: string, title: string, subtitle: string, state: boolean) {
@@ -141,7 +147,7 @@ export default class SettingsScreen extends React.Component<Props, State> {
                 title={title}
                 description={subtitle}
                 left={props => <List.Icon {...props} icon={icon}/>}
-                right={props =>
+                right={() =>
                     <Switch
                         value={state}
                         onValueChange={onPressCallback}
@@ -177,28 +183,31 @@ export default class SettingsScreen extends React.Component<Props, State> {
                                     this.state.nightMode
                                 ) : null
                         }
-                        <AnimatedAccordion
+                        <List.Item
                             title={i18n.t('settingsScreen.startScreen')}
                             subtitle={i18n.t('settingsScreen.startScreenSub')}
                             left={props => <List.Icon {...props} icon="power"/>}
-                        >
-                            {this.getStartScreenPicker()}
-                        </AnimatedAccordion>
+                        />
+                        {this.getStartScreenPicker()}
                     </List.Section>
                 </Card>
                 <Card style={{margin: 5}}>
                     <Card.Title title="Proxiwash"/>
                     <List.Section>
-                        <AnimatedAccordion
+                        <List.Item
                             title={i18n.t('settingsScreen.proxiwashNotifReminder')}
                             description={i18n.t('settingsScreen.proxiwashNotifReminderSub')}
                             left={props => <List.Icon {...props} icon="washing-machine"/>}
-                        >
+                            opened={true}
+                        />
+                        <View style={{marginLeft: 30}}>
                             {this.getProxiwashNotifPicker()}
-                        </AnimatedAccordion>
+                        </View>
                     </List.Section>
                 </Card>
             </ScrollView>
         );
     }
 }
+
+export default withTheme(SettingsScreen);

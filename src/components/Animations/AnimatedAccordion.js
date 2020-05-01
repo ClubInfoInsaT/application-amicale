@@ -18,7 +18,7 @@ type Props = {
 }
 
 type State = {
-    expanded: boolean
+    expanded: boolean,
 }
 
 const AnimatedListIcon = Animatable.createAnimatableComponent(List.Icon);
@@ -56,16 +56,14 @@ class AnimatedAccordion extends React.Component<Props, State> {
     }
 
     toggleAccordion = () => {
-        if (this.chevronRef.current != null)
+        if (this.chevronRef.current != null) {
             this.chevronRef.current.transitionTo({rotate: this.state.expanded ? this.animStart : this.animEnd});
-        this.setState({expanded: !this.state.expanded})
+            this.setState({expanded: !this.state.expanded})
+        }
     };
 
-    shouldComponentUpdate(nextProps: Props) {
-        if (nextProps.opened != null)
-            this.state.expanded = nextProps.opened;
-        this.setupChevron();
-        return true;
+    shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+        return nextState.expanded !== this.state.expanded;
     }
 
     render() {
