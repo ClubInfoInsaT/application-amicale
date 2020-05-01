@@ -18,6 +18,7 @@ type Props = {
     collapsibleStack: Object,
     onMessage: Function,
     onScroll: Function,
+    showAdvancedControls: boolean,
 }
 
 const AnimatedWebView = Animated.createAnimatedComponent(WebView);
@@ -29,6 +30,7 @@ class WebViewScreen extends React.PureComponent<Props> {
 
     static defaultProps = {
         customJS: '',
+        showAdvancedControls: true,
     };
 
     webviewRef: Object;
@@ -45,9 +47,10 @@ class WebViewScreen extends React.PureComponent<Props> {
      * Creates refresh button after mounting
      */
     componentDidMount() {
-        const rightButton = this.getRefreshButton.bind(this);
         this.props.navigation.setOptions({
-            headerRight: rightButton,
+            headerRight: this.props.showAdvancedControls
+                ? this.getAdvancedButtons
+                : this.getBasicButton,
         });
         this.props.navigation.addListener(
             'focus',
@@ -80,7 +83,22 @@ class WebViewScreen extends React.PureComponent<Props> {
      *
      * @return {*}
      */
-    getRefreshButton() {
+    getBasicButton = () => {
+        return (
+            <MaterialHeaderButtons>
+                <Item
+                    title="refresh"
+                    iconName="refresh"
+                    onPress={this.onRefreshClicked}/>
+                <Item
+                    title={i18n.t("general.openInBrowser")}
+                    iconName="open-in-new"
+                    onPress={this.onOpenClicked}/>
+            </MaterialHeaderButtons>
+        );
+    };
+
+    getAdvancedButtons = () => {
         return (
             <MaterialHeaderButtons>
                 <Item
@@ -101,7 +119,7 @@ class WebViewScreen extends React.PureComponent<Props> {
                     onPress={this.onOpenClicked}/>
             </MaterialHeaderButtons>
         );
-    };
+    }
 
     /**
      * Callback to use when refresh button is clicked. Reloads the webview.

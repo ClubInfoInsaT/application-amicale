@@ -207,10 +207,11 @@ class PlanexScreen extends React.Component<Props, State> {
             + 'true;'; // Prevents crash on ios
     }
 
-    // componentWillUpdate(prevProps: Props) {
-    //     if (prevProps.theme.dark !== this.props.theme.dark)
-    //         this.generateInjectedCSS();
-    // }
+    shouldComponentUpdate(nextProps: Props): boolean {
+        if (nextProps.theme.dark !== this.props.theme.dark)
+            this.generateInjectedJS(this.state.currentGroup.id);
+        return true;
+    }
 
     /**
      * Callback used when closing the banner.
@@ -291,6 +292,7 @@ class PlanexScreen extends React.Component<Props, State> {
                     customJS={this.customInjectedJS}
                     onMessage={this.onMessage}
                     onScroll={this.onScroll}
+                    showAdvancedControls={false}
                 />
             </View>
         );
