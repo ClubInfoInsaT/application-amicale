@@ -23,10 +23,6 @@ const LIST_ITEM_HEIGHT = 64;
 
 class GroupListAccordion extends React.Component<Props> {
 
-    constructor(props) {
-        super(props);
-    }
-
     shouldComponentUpdate(nextProps: Props) {
         return (nextProps.currentSearchString !== this.props.currentSearchString)
             || (nextProps.favoriteNumber !== this.props.favoriteNumber)
@@ -35,19 +31,26 @@ class GroupListAccordion extends React.Component<Props> {
 
     keyExtractor = (item: group) => item.id.toString();
 
-    renderItem = ({item}: {item: group}) => {
-        if (stringMatchQuery(item.name, this.props.currentSearchString)) {
-            const onPress = () => this.props.onGroupPress(item);
-            const onStarPress = () => this.props.onFavoritePress(item);
-            return (
-                <GroupListItem
-                    height={LIST_ITEM_HEIGHT}
-                    item={item}
-                    onPress={onPress}
-                    onStarPress={onStarPress}/>
-            );
-        } else
-            return null;
+    renderItem = ({item}: { item: group }) => {
+        const onPress = () => this.props.onGroupPress(item);
+        const onStarPress = () => this.props.onFavoritePress(item);
+        return (
+            <GroupListItem
+                height={LIST_ITEM_HEIGHT}
+                item={item}
+                onPress={onPress}
+                onStarPress={onStarPress}/>
+        );
+    }
+
+    getData() {
+        const originalData = this.props.item.content;
+        let displayData = [];
+        for (let i = 0; i < originalData.length; i++) {
+            if (stringMatchQuery(originalData[i].name, this.props.currentSearchString))
+                displayData.push(originalData[i]);
+        }
+        return displayData;
     }
 
     render() {
@@ -73,7 +76,7 @@ class GroupListAccordion extends React.Component<Props> {
                 >
                     {/*$FlowFixMe*/}
                     <FlatList
-                        data={item.content}
+                        data={this.getData()}
                         extraData={this.props.currentSearchString}
                         renderItem={this.renderItem}
                         keyExtractor={this.keyExtractor}

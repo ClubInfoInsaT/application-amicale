@@ -63,7 +63,9 @@ class AnimatedAccordion extends React.Component<Props, State> {
     };
 
     shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-        return nextState.expanded !== this.state.expanded;
+        if (nextProps.opened != null && nextProps.opened !== this.props.opened)
+            this.state.expanded = nextProps.opened;
+        return true;
     }
 
     render() {
