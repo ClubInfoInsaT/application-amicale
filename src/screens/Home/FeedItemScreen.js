@@ -44,7 +44,7 @@ class FeedItemScreen extends React.Component<Props> {
 
     getHeaderButton = () => {
         return <MaterialHeaderButtons>
-            <Item title="main" iconName={'facebook'} onPress={this.onOutLinkPress}/>
+            <Item title="main" iconName={'facebook'} color={"#2e88fe"} onPress={this.onOutLinkPress}/>
         </MaterialHeaderButtons>;
     };
 

@@ -36,6 +36,7 @@ class FeedbackScreen extends React.Component<Props> {
             }}>
                 <Button
                     icon="email"
+                    mode={"contained"}
                     style={{
                         marginLeft: 'auto',
                         marginTop: 5,
@@ -45,6 +46,8 @@ class FeedbackScreen extends React.Component<Props> {
                 </Button>
                 <Button
                     icon="git"
+                    mode={"contained"}
+                    color={"#609927"}
                     style={{
                         marginLeft: 'auto',
                         marginTop: 5,
@@ -54,6 +57,8 @@ class FeedbackScreen extends React.Component<Props> {
                 </Button>
                 <Button
                     icon="facebook"
+                    mode={"contained"}
+                    color={"#2e88fe"}
                     style={{
                         marginLeft: 'auto',
                         marginTop: 5,
