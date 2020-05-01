@@ -31,26 +31,16 @@ class CustomTabBar extends React.Component<Props, State> {
 
     static TAB_BAR_HEIGHT = 48;
 
-    activeColor: string;
-    inactiveColor: string;
-
     state = {
         translateY: new Animated.Value(0),
         barSynced: false,// Is the bar synced with the header for animations?
     }
-
-    // shouldComponentUpdate(nextProps: Props): boolean {
-    //     return (nextProps.theme.dark !== this.props.theme.dark)
-    //         || (nextProps.state.index !== this.props.state.index);
-    // }
 
     tabRef: Object;
 
     constructor(props) {
         super(props);
         this.tabRef = React.createRef();
-        this.activeColor = props.theme.colors.primary;
-        this.inactiveColor = props.theme.colors.tabIcon;
     }
 
     onItemPress(route: Object, currentIndex: number, destIndex: number) {
@@ -119,7 +109,7 @@ class CustomTabBar extends React.Component<Props, State> {
             }
         }
 
-        const color = isFocused ? this.activeColor : this.inactiveColor;
+        const color = isFocused ? this.props.theme.colors.primary : this.props.theme.colors.tabIcon;
         if (route.name !== "home") {
             return <TabIcon
                 onPress={onPress}
