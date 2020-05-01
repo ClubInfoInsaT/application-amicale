@@ -17,7 +17,6 @@ import AnimatedFAB from "../../components/Animations/AnimatedFAB";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import {View} from "react-native-animatable";
-import {HiddenItem} from "react-navigation-header-buttons";
 import ConnectionManager from "../../managers/ConnectionManager";
 import LogoutDialog from "../../components/Amicale/LogoutDialog";
 // import DATA from "../dashboard_data.json";
@@ -178,8 +177,8 @@ class HomeScreen extends React.Component<Props, State> {
         const onPressAbout = () => this.props.navigation.navigate("about");
         return <MaterialHeaderButtons>
             <Item title="log" iconName={logIcon} color={logColor} onPress={onPressLog}/>
-            <HiddenItem title={i18n.t("screens.settings")} iconName={"settings"} onPress={onPressSettings}/>
-            <HiddenItem title={i18n.t("screens.about")} iconName={"information"} onPress={onPressAbout}/>
+            <Item title={i18n.t("screens.settings")} iconName={"settings"} onPress={onPressSettings}/>
+            <Item title={i18n.t("screens.about")} iconName={"information"} onPress={onPressAbout}/>
         </MaterialHeaderButtons>;
     };
 
