@@ -53,6 +53,9 @@ class GroupListAccordion extends React.Component<Props> {
         return displayData;
     }
 
+    itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
+
+
     render() {
         const item = this.props.item;
         return (
@@ -82,8 +85,8 @@ class GroupListAccordion extends React.Component<Props> {
                         keyExtractor={this.keyExtractor}
                         listKey={item.id.toString()}
                         // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-                        // getItemLayout={this.itemLayout} // Broken with search
-                        // removeClippedSubviews={true}
+                        getItemLayout={this.itemLayout}
+                        removeClippedSubviews={true}
                     />
                 </AnimatedAccordion>
             </View>
