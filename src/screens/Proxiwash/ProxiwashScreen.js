@@ -267,6 +267,10 @@ class ProxiwashScreen extends React.Component<Props, State> {
         let message = modalStateStrings[ProxiwashConstants.machineStates[item.state]];
         const onPress = this.onSetupNotificationsPress.bind(this, item);
         if (ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"]) {
+            let remainingTime = parseInt(item.remainingTime)
+            if (remainingTime < 0)
+                remainingTime = 0;
+
             button =
                 {
                     text: isMachineWatched(item, this.state.machinesWatched) ?
@@ -280,7 +284,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
                 {
                     start: item.startTime,
                     end: item.endTime,
-                    remaining: item.remainingTime
+                    remaining: remainingTime
                 });
         } else if (ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates.DISPONIBLE) {
             if (isDryer)
