@@ -3,14 +3,14 @@
 import * as React from 'react';
 import {Avatar, Card, List, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
-import {DrawerNavigationProp} from "@react-navigation/drawer";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import i18n from 'i18n-js';
+import {StackNavigationProp} from "@react-navigation/stack";
 
 const ICON_AMICALE = require("../../../assets/amicale.png");
 
 type Props = {
-    navigation: DrawerNavigationProp,
+    navigation: StackNavigationProp,
     theme: CustomTheme,
     isLoggedIn: boolean,
 }
