@@ -20,17 +20,22 @@ type Props = {
     collapsibleStack: Collapsible,
     theme: CustomTheme,
 }
-const BIB_IMAGE = "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/50695561_2124263197597162_2325349608210825216_n.jpg?_nc_cat=109&_nc_sid=8bfeb9&_nc_ohc=tmcV6FWO7_kAX9vfWHU&_nc_ht=scontent-cdg2-1.xx&oh=3b81c76e46b49f7c3a033ea3b07ec212&oe=5EC59B4D";
-const RU_IMAGE = "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/47123773_2041883702501779_5289372776166064128_o.jpg?_nc_cat=100&_nc_sid=cdbe9c&_nc_ohc=dpuBGlIIy_EAX8CyC0l&_nc_ht=scontent-cdg2-1.xx&oh=5c5bb4f0c7f12b554246f7c9b620a5f3&oe=5EC4DB31";
-const ROOM_IMAGE = "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-9/47041013_2043521689004647_316124496522117120_n.jpg?_nc_cat=103&_nc_sid=8bfeb9&_nc_ohc=bIp8OVJvvSEAX8mKnDZ&_nc_ht=scontent-cdt1-1.xx&oh=b4fef72a645804a849ad30e9e20fca12&oe=5EC29309";
-const EMAIL_IMAGE = "https://etud-mel.insa-toulouse.fr/webmail/images/logo-bluemind.png";
-const ENT_IMAGE = "https://ent.insa-toulouse.fr/media/org/jasig/portal/layout/tab-column/xhtml-theme/insa/institutional/LogoInsa.png";
 
-const PROXIMO_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/proximo-logo.png"
-const WIKETUD_LINK = "https://wiki.etud.insa-toulouse.fr/resources/assets/wiketud.png?ff051";
+const CLUBS_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Clubs.png";
+const PROFILE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ProfilAmicaliste.png";
+const VOTE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/";
 const AMICALE_IMAGE = require("../../../assets/amicale.png");
-const EE_IMAGE = "https://etud.insa-toulouse.fr/~eeinsat/wp-content/uploads/2019/09/logo-blanc.png";
-const TUTORINSA_IMAGE = "https://www.etud.insa-toulouse.fr/~tutorinsa/public/images/logo-gray.png";
+
+const PROXIMO_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png"
+const WIKETUD_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Wiketud.png";
+const EE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/EEC.png";
+const TUTORINSA_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/TutorINSA.png";
+
+const BIB_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Bib.png";
+const RU_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/RU.png";
+const ROOM_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Salles.png";
+const EMAIL_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Bluemind.png";
+const ENT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ENT.png";
 
 export type listItem = {
     title: string,
@@ -59,19 +64,25 @@ class ServicesScreen extends React.Component<Props, State> {
             {
                 title: i18n.t('screens.clubsAbout'),
                 subtitle: "CLUB LIST",
-                image: AMICALE_IMAGE,
+                image: CLUBS_IMAGE,
                 onPress: () => nav.navigate("club-list"),
             },
             {
                 title: i18n.t('screens.profile'),
                 subtitle: "PROFIL",
-                image: AMICALE_IMAGE,
+                image: PROFILE_IMAGE,
                 onPress: () => nav.navigate("profile"),
+            },
+            {
+                title: i18n.t('screens.amicaleWebsite'),
+                subtitle: "AMICALE",
+                image: AMICALE_IMAGE,
+                onPress: () => nav.navigate("amicale-website"),
             },
             {
                 title: i18n.t('screens.vote'),
                 subtitle: "ELECTIONS",
-                image: AMICALE_IMAGE,
+                image: VOTE_IMAGE,
                 onPress: () => nav.navigate("vote"),
             },
         ];
@@ -83,15 +94,9 @@ class ServicesScreen extends React.Component<Props, State> {
                 onPress: () => nav.navigate("proximo"),
             },
             {
-                title: i18n.t('screens.amicaleWebsite'),
-                subtitle: "AMICALE",
-                image: AMICALE_IMAGE,
-                onPress: () => nav.navigate("amicale-website"),
-            },
-            {
                 title: "Wiketud",
                 subtitle: "wiketud",
-                image: WIKETUD_LINK,
+                image: WIKETUD_IMAGE,
                 onPress: () => nav.navigate("wiketud"),
             },
             {
@@ -201,7 +206,7 @@ class ServicesScreen extends React.Component<Props, State> {
             return <Avatar.Image
                 {...props}
                 size={48}
-                source={AMICALE_IMAGE}
+                source={source}
                 style={{backgroundColor: 'transparent'}}
             />
         else

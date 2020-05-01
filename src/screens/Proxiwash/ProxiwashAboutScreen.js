@@ -10,7 +10,7 @@ type Props = {
     navigation: Object,
 };
 
-const LOGO = "https://etud.insa-toulouse.fr/~amicale_app/images/proxiwash-logo.png";
+const LOGO = "https://etud.insa-toulouse.fr/~amicale_app/images/Proxiwash.png";
 
 /**
  * Class defining the proxiwash about screen.

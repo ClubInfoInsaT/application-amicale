@@ -10,7 +10,7 @@ type Props = {
     navigation: Object,
 };
 
-const LOGO = "https://etud.insa-toulouse.fr/~amicale_app/images/proximo-logo.png";
+const LOGO = "https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png";
 
 /**
  * Class defining the proximo about screen.
