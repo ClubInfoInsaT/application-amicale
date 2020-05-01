@@ -12,7 +12,7 @@ type Props = {
     title: string,
     subtitle?: string,
     left?: (props: { [keys: string]: any }) =>  React.Node,
-    opened: boolean,
+    opened?: boolean,
     unmountWhenCollapsed: boolean,
     children?: React.Node,
 }
@@ -26,7 +26,6 @@ const AnimatedListIcon = Animatable.createAnimatableComponent(List.Icon);
 class AnimatedAccordion extends React.Component<Props, State> {
 
     static defaultProps = {
-        opened: false,
         unmountWhenCollapsed: false,
     }
     chevronRef: { current: null | AnimatedListIcon };
@@ -35,7 +34,7 @@ class AnimatedAccordion extends React.Component<Props, State> {
     animEnd: string;
 
     state = {
-        expanded: this.props.opened,
+        expanded: this.props.opened != null ? this.props.opened : false,
     }
 
     constructor(props) {
@@ -63,7 +62,8 @@ class AnimatedAccordion extends React.Component<Props, State> {
     };
 
     shouldComponentUpdate(nextProps: Props) {
-        this.state.expanded = nextProps.opened;
+        if (nextProps.opened != null)
+            this.state.expanded = nextProps.opened;
         this.setupChevron();
         return true;
     }
