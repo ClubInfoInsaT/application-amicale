@@ -69,7 +69,6 @@ export default class App extends React.Component<Props, State> {
         this.loadAssetsAsync().then(() => {
             this.onLoadFinished();
         });
-        console.log("USING HERMES:" + global.HermesInternal !== null);
     }
 
     /**
@@ -172,7 +171,6 @@ export default class App extends React.Component<Props, State> {
             showUpdate: this.storageManager.preferences.updateNumber.current !== Update.number.toString(),
             showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && this.storageManager.preferences.showAprilFoolsStart.current === '1',
         });
-        console.log('hiding splash');
         SplashScreen.hide();
     }
 
