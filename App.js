@@ -15,11 +15,11 @@ import Update from "./src/constants/Update";
 import ConnectionManager from "./src/managers/ConnectionManager";
 import URLHandler from "./src/utils/URLHandler";
 import {setSafeBounceHeight} from "react-navigation-collapsible";
-import {enableScreens} from 'react-native-screens';
 import SplashScreen from 'react-native-splash-screen'
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
-enableScreens(true);
+// Crashes app when navigating away from webview on android 9+
+// enableScreens(true);
 
 
 YellowBox.ignoreWarnings([ // collapsible headers cause this warning, just ignore as it is not an issue
