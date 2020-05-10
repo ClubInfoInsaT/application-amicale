@@ -23,7 +23,7 @@ type Props = {
 
 const CLUBS_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Clubs.png";
 const PROFILE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ProfilAmicaliste.png";
-const VOTE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/";
+const VOTE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Vote.png";
 const AMICALE_IMAGE = require("../../../assets/amicale.png");
 
 const PROXIMO_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png"
