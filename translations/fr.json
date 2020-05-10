@@ -56,9 +56,21 @@
       "title": "Plus à venir...",
       "text": "D'autres fonctionnalités arrivent bientôt, n'hésitez pas à nous donner votre avis pour améliorer l'appli"
     },
-    "updateSlide": {
+    "updateSlide0": {
       "title": "Nouveau dans cette mise à jour !",
-      "text": "L'appli fait peau neuve ! Avec une interface plus rapide, plus jolie et moderne, nous espérons que vous allez l'apprécier !"
+      "text": "Plus rapide que jamais et plus simple à utiliser !\nCette mise à jour contient de nombreux changements pour améliorer votre expérience.\nUtilisez le tout nouveau bouton de Feedback pour parler directement au développeur!"
+    },
+    "updateSlide1": {
+      "title": "Planex tout beau !",
+      "text": "Vous avez maintenant accès à de nouveaux contrôles, un affichage amélioré, et vous pouvez marquer des groupes en favoris."
+    },
+    "updateSlide2": {
+      "title": "Scanotron 3000 !",
+      "text": "Dites bonjour à Scanotron 3000 !\nDisponible depuis le bouton Qr-Code sur le menu principal, il vous aidera à avoir des informations sur les clubs et les événements du campus.\n(Inutile tout de suite mais on verra l'année pro)"
+    },
+    "updateSlide3": {
+      "title": "Compte Amicale !",
+      "text": "Vous pouvez maintenant vous connecter à votre compte Amicale depuis l'appli ! Accédez à la liste des clubs et plus à venir !\nCliquez sur le bouton Se Connecter dans le menu principal."
     },
     "aprilFoolsSlide": {
       "title": "Nouveau dans cette mise à jour !",

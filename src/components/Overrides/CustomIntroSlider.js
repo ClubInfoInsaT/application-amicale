@@ -85,15 +85,19 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 colors: ['#37c13e', '#1a5a1d'],
             },
         ];
-        this.updateSlides = [
-            {
-                key: '1',
-                title: Update.getInstance().title,
-                text: Update.getInstance().description,
-                icon: Update.icon,
-                colors: ['#e01928', '#be1522'],
-            },
-        ];
+        this.updateSlides = [];
+        for (let i = 0; i < Update.slidesNumber; i++) {
+            this.updateSlides.push(
+                {
+                    key: i.toString(),
+                    title: Update.getInstance().titleList[i],
+                    text: Update.getInstance().descriptionList[i],
+                    icon: Update.iconList[i],
+                    colors: Update.colorsList[i],
+                },
+            );
+        }
+
         this.aprilFoolsSlides = [
             {
                 key: '1',
