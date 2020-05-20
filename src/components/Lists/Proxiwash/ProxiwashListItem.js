@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ActivityIndicator, Avatar, List, ProgressBar, Surface, Text, withTheme} from 'react-native-paper';
+import {Avatar, List, ProgressBar, Surface, Text, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
 import ProxiwashConstants from "../../../constants/ProxiwashConstants";
 import i18n from "i18n-js";
@@ -147,20 +147,12 @@ class ProxiwashListItem extends React.Component<Props> {
                                 </Text>
                             </View>
                             <View style={{justifyContent: 'center',}}>
-                                {
-                                    isRunning
-                                        ? <ActivityIndicator
-                                            animating={true}
-                                            size={'small'}
-                                            style={{marginLeft: 10}}/>
-                                        : <Avatar.Icon
-                                            icon={stateIcon}
-                                            color={colors.text}
-                                            size={30}
-                                            style={styles.icon}
-                                        />
-                                }
-
+                                <Avatar.Icon
+                                    icon={stateIcon}
+                                    color={colors.text}
+                                    size={30}
+                                    style={styles.icon}
+                                />
                             </View>
                         </View>)}
                 />
