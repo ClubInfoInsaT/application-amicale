@@ -5,6 +5,7 @@ import {FlatList, Linking, Platform, View} from 'react-native';
 import i18n from "i18n-js";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import {Avatar, Card, List, Title, withTheme} from 'react-native-paper';
+import packageJson from "../../../package.json";
 
 const links = {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
@@ -217,7 +218,7 @@ class AboutScreen extends React.Component<Props, State> {
             <Card style={{marginBottom: 10}}>
                 <Card.Title
                     title={"Campus"}
-                    subtitle={"2.0.0"}
+                    subtitle={packageJson.version}
                     left={this.getAppIcon}/>
                 <Card.Content>
                     <FlatList
