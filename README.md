@@ -10,20 +10,22 @@ Créée pendant l'été 2019, cette application compatible Android et iOS permet
  - Disponibilité des salles libre accès
  - Réservation des Bib'Box
  
-Ce dépot contient la source de cette application, modifiable par les étudiants de l'INSA Toulouse, sous licence GPLv3.
+Ce dépot contient la source de cette application, sous licence GPLv3.
 
 ## Contribuer
 
 Vous voulez influencer le développement ? C'est très simple !
 
-Pas besoin de connaissance, il est possible d'aider simplement en proposant des améliorations ou en rapportant des bugs par mail (vergnet@etud.insa-toulouse.fr) ou sur [cette page](https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues), en vous connectant avec vos login INSA.
+Pas besoin de connaissance, il est possible d'aider simplement en proposant des améliorations ou en rapportant des bugs par mail ([app@amicale-insat.fr](mailto:app@amicale-insat.fr)) ou sur [cette page](https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues), en vous connectant avec vos login INSA.
 
-Si vous avez assez de connaissances et vous souhaitez proposer des modification dans le code, installez l'application sur votre machine, réalisez votre modification et créez une 'pull request'.
+Si vous avez assez de connaissances et vous souhaitez proposer des modifications dans le code, [installez l'application](INSTALL.md) sur votre machine, réalisez votre modification et créez une 'pull request'. Si vous avez des problèmes ou des questions, n'hésitez pas à me contacter par mail ([app@amicale-insat.fr](mailto:app@amicale-insat.fr)).
 
 ## Technologies Utilisées
-Cette application est faite en JavaScript avec React Native (framework Open Source créé par Facebook), combinée avec Expo.
+Cette application est faite en JavaScript avec React Native (framework Open Source créé par Facebook).
 
-Cette combinaison permet de n'avoir qu'un seul code JavaScript à écrire pour Android et iOS. Pour compiler pour la plateforme souhaitée, il suffit d'effectuer une commande, qui envoie le code sur les serveurs d'Expo pour compilation (voir section Installer). Plus besoin de Mac pour développer une application iOS ! (Mais toujours besoin d'un pour publier sur l'App store...)
+React Native permet de n'avoir qu'un seul code JavaScript à écrire pour Android et iOS. Pour compiler pour la plateforme souhaitée, il suffit d'effectuer une simple commande. Plus besoin de Mac pour développer une application iOS ! (Mais toujours besoin d'un pour compiler et publier sur l'App store...)
+
+Cette application utilisait initialement Expo, permettant de simplifier grandement le développement et le déploiement, mais il a été abandonné à cause de ses limitations et de son impact sur les performances. Revenir sur Expo n'est pas possible sans un gros travail et une suppression de fonctionnalités non compatibles.
 
 ## [Installer l'application depuis ce dépot](INSTALL.md)
 
