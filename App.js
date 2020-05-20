@@ -16,6 +16,7 @@ import ConnectionManager from "./src/managers/ConnectionManager";
 import URLHandler from "./src/utils/URLHandler";
 import {setSafeBounceHeight} from "react-navigation-collapsible";
 import SplashScreen from 'react-native-splash-screen'
+import {OverflowMenuProvider} from "react-navigation-header-buttons";
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 // Crashes app when navigating away from webview on android 9+
@@ -189,14 +190,16 @@ export default class App extends React.Component<Props, State> {
         } else {
             return (
                 <PaperProvider theme={this.state.currentTheme}>
-                    <View style={{backgroundColor: ThemeManager.getCurrentTheme().colors.background, flex: 1}}>
-                        <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
-                            <MainNavigator
-                                defaultHomeRoute={this.defaultHomeRoute}
-                                defaultHomeData={this.defaultHomeData}
-                            />
-                        </NavigationContainer>
-                    </View>
+                    <OverflowMenuProvider>
+                        <View style={{backgroundColor: ThemeManager.getCurrentTheme().colors.background, flex: 1}}>
+                            <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
+                                <MainNavigator
+                                    defaultHomeRoute={this.defaultHomeRoute}
+                                    defaultHomeData={this.defaultHomeData}
+                                />
+                            </NavigationContainer>
+                        </View>
+                    </OverflowMenuProvider>
                 </PaperProvider>
             );
         }

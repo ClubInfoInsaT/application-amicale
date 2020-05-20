@@ -6,16 +6,22 @@ import BasicLoadingScreen from "./BasicLoadingScreen";
 import ErrorView from "./ErrorView";
 import {ERROR_TYPE} from "../../utils/WebData";
 import MaterialHeaderButtons, {Item} from '../Overrides/CustomHeaderButton';
-import {HiddenItem} from "react-navigation-header-buttons";
+import {Divider, HiddenItem, OverflowMenu} from "react-navigation-header-buttons";
 import i18n from 'i18n-js';
 import {Animated, BackHandler, Linking} from "react-native";
 import {withCollapsible} from "../../utils/withCollapsible";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import {withTheme} from "react-native-paper";
+import type {CustomTheme} from "../../managers/ThemeManager";
+import {StackNavigationProp} from "@react-navigation/stack";
+import {Collapsible} from "react-navigation-collapsible";
 
 type Props = {
-    navigation: Object,
+    navigation: StackNavigationProp,
+    theme: CustomTheme,
     url: string,
     customJS: string,
-    collapsibleStack: Object,
+    collapsibleStack: Collapsible,
     onMessage: Function,
     onScroll: Function,
     showAdvancedControls: boolean,
@@ -104,19 +110,28 @@ class WebViewScreen extends React.PureComponent<Props> {
                 <Item
                     title="refresh"
                     iconName="refresh"
-                    onPress={this.onRefreshClicked}/>
-                <HiddenItem
-                    title={i18n.t("general.goBack")}
-                    iconName="arrow-left"
-                    onPress={this.onGoBackClicked}/>
-                <HiddenItem
-                    title={i18n.t("general.goForward")}
-                    iconName="arrow-right"
-                    onPress={this.onGoForwardClicked}/>
-                <HiddenItem
-                    title={i18n.t("general.openInBrowser")}
-                    iconName="web"
-                    onPress={this.onOpenClicked}/>
+                    onPress={this.onRefreshClicked}
+                />
+                <OverflowMenu
+                    style={{marginHorizontal: 10}}
+                    OverflowIcon={
+                        <MaterialCommunityIcons
+                            name="dots-vertical"
+                            size={26}
+                            color={this.props.theme.colors.text}
+                        />}
+                >
+                    <HiddenItem
+                        title={i18n.t("general.goBack")}
+                        onPress={this.onGoBackClicked}/>
+                    <HiddenItem
+                        title={i18n.t("general.goForward")}
+                        onPress={this.onGoForwardClicked}/>
+                    <Divider/>
+                    <HiddenItem
+                        title={i18n.t("general.openInBrowser")}
+                        onPress={this.onOpenClicked}/>
+                </OverflowMenu>
             </MaterialHeaderButtons>
         );
     }
@@ -179,4 +194,4 @@ class WebViewScreen extends React.PureComponent<Props> {
     }
 }
 
-export default withCollapsible(WebViewScreen);
+export default withCollapsible(withTheme(WebViewScreen));
