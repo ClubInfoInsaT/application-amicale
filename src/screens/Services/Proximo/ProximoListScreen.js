@@ -9,7 +9,6 @@ import {stringMatchQuery} from "../../../utils/Search";
 import ProximoListItem from "../../../components/Lists/Proximo/ProximoListItem";
 import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
 import {withCollapsible} from "../../../utils/withCollapsible";
-import CustomTabBar from "../../../components/Tabbar/CustomTabBar";
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -306,7 +305,6 @@ class ProximoListScreen extends React.Component<Props, State> {
                 <CustomModal onRef={this.onModalRef}>
                     {this.state.modalCurrentDisplayItem}
                 </CustomModal>
-                {/*$FlowFixMe*/}
                 <Animated.FlatList
                     data={this.listData}
                     extraData={this.state.currentSearchString + this.state.currentSortMode}
@@ -320,7 +318,6 @@ class ProximoListScreen extends React.Component<Props, State> {
                     onScroll={onScroll}
                     contentContainerStyle={{
                         paddingTop: containerPaddingTop,
-                        paddingBottom: CustomTabBar.TAB_BAR_HEIGHT
                     }}
                     scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
                 />
