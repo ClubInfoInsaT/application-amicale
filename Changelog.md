@@ -4,6 +4,7 @@ Pensez à garder l'appli à jour pour profiter des dernières fonctionnalités !
 
  - **v3.0.0** - 26/05/2020
     - Nouvelle barre de navigation !
+    - Nouveau planex tout beau tout neuf !
     - Suppression du menu déroulant gauche
     - Création d'une nouvelle catégorie dans la barre de navigation pour regrouper tous les services
     - Ajout d'animations un peu partout parce que c'est joli et j'ai compris comment faire :D
