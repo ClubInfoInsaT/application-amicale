@@ -139,14 +139,14 @@ class WebViewScreen extends React.PureComponent<Props> {
     /**
      * Callback to use when refresh button is clicked. Reloads the webview.
      */
-    onRefreshClicked = () => this.webviewRef.current.getNode().reload(); // Need to call getNode() as we are working with animated components
-    onGoBackClicked = () => this.webviewRef.current.getNode().goBack();
-    onGoForwardClicked = () => this.webviewRef.current.getNode().goForward();
+    onRefreshClicked = () => this.webviewRef.current.reload();
+    onGoBackClicked = () => this.webviewRef.current.goBack();
+    onGoForwardClicked = () => this.webviewRef.current.goForward();
 
     onOpenClicked = () => Linking.openURL(this.props.url);
 
     injectJavaScript = (script: string) => {
-        this.webviewRef.current.getNode().injectJavaScript(script);
+        this.webviewRef.current.injectJavaScript(script);
     }
 
     /**
