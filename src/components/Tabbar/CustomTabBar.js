@@ -3,6 +3,7 @@ import {withTheme} from 'react-native-paper';
 import TabIcon from "./TabIcon";
 import TabHomeIcon from "./TabHomeIcon";
 import {Animated} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type Props = {
     state: Object,
@@ -67,13 +68,13 @@ class CustomTabBar extends React.Component<Props, State> {
     }
 
     tabBarIcon = (route, focused) => {
-    let icon = TAB_ICONS[route.name];
-    icon = focused ? icon : icon + ('-outline');
-    if (route.name !== "home")
-    return icon;
-    else
-    return null;
-};
+        let icon = TAB_ICONS[route.name];
+        icon = focused ? icon : icon + ('-outline');
+        if (route.name !== "home")
+            return icon;
+        else
+            return null;
+    };
 
 
     onRouteChange = () => {
@@ -134,24 +135,26 @@ class CustomTabBar extends React.Component<Props, State> {
     render() {
         this.props.navigation.addListener('state', this.onRouteChange);
         return (
-            <Animated.View
-                ref={this.tabRef}
-                // animation={"fadeInUp"}
-                // duration={500}
-                // useNativeDriver
-                style={{
-                    flexDirection: 'row',
-                    height: CustomTabBar.TAB_BAR_HEIGHT,
-                    width: '100%',
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    backgroundColor: this.props.theme.colors.surface,
-                    transform: [{translateY: this.state.translateY}]
-                }}
-            >
-                {this.props.state.routes.map(this.renderIcon)}
-            </Animated.View>
+            <SafeAreaView>
+                <Animated.View
+                    ref={this.tabRef}
+                    // animation={"fadeInUp"}
+                    // duration={500}
+                    // useNativeDriver
+                    style={{
+                        flexDirection: 'row',
+                        height: CustomTabBar.TAB_BAR_HEIGHT,
+                        width: '100%',
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        backgroundColor: this.props.theme.colors.surface,
+                        transform: [{translateY: this.state.translateY}]
+                    }}
+                >
+                    {this.props.state.routes.map(this.renderIcon)}
+                </Animated.View>
+            </SafeAreaView>
         );
     }
 }
