@@ -11,8 +11,7 @@ type Props = {
 };
 
 const links = {
-    bugsMail: `mailto:app@amicale-insat.fr
-?subject=[BUG] Application CAMPUS
+    bugsMail: `mailto:app@amicale-insat.fr?subject=[BUG] Application CAMPUS
 &body=Coucou Arnaud ça bug c'est nul,\n\n
 Informations sur ton système si tu sais (iOS ou Android, modèle du tel, version):\n\n\n
 Nature du problème :\n\n\n
@@ -20,8 +19,7 @@ Nature du problème :\n\n\n
 Stp corrige le pb, bien cordialement.`,
     bugsGit: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues/new',
     facebook: "https://www.facebook.com/campus.insat",
-    feedbackMail: `mailto:app@amicale-insat.fr
-?subject=[FEEDBACK] Application CAMPUS
+    feedbackMail: `mailto:app@amicale-insat.fr?subject=[FEEDBACK] Application CAMPUS
 &body=Coucou Arnaud j'ai du feedback\n\n\n\nBien cordialement.`,
     feedbackGit: "https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues/new",
 }
