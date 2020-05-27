@@ -1,19 +1,31 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, StatusBar} from 'react-native';
-import LocaleManager from './utils/LocaleManager';
-import AsyncStorageManager from "./utils/AsyncStorageManager";
-import CustomIntroSlider from "./components/CustomIntroSlider";
-import {SplashScreen} from 'expo';
-import ThemeManager from './utils/ThemeManager';
+import {Platform, StatusBar, View, YellowBox} from 'react-native';
+import LocaleManager from './src/managers/LocaleManager';
+import AsyncStorageManager from "./src/managers/AsyncStorageManager";
+import CustomIntroSlider from "./src/components/Overrides/CustomIntroSlider";
+import type {CustomTheme} from "./src/managers/ThemeManager";
+import ThemeManager from './src/managers/ThemeManager';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import DrawerNavigator from './navigation/DrawerNavigator';
-import NotificationsManager from "./utils/NotificationsManager";
+import MainNavigator from './src/navigation/MainNavigator';
 import {Provider as PaperProvider} from 'react-native-paper';
-import AprilFoolsManager from "./utils/AprilFoolsManager";
-import Update from "./constants/Update";
+import AprilFoolsManager from "./src/managers/AprilFoolsManager";
+import Update from "./src/constants/Update";
+import ConnectionManager from "./src/managers/ConnectionManager";
+import URLHandler from "./src/utils/URLHandler";
+import {setSafeBounceHeight} from "react-navigation-collapsible";
+import SplashScreen from 'react-native-splash-screen'
+import {OverflowMenuProvider} from "react-navigation-header-buttons";
+
+// Native optimizations https://reactnavigation.org/docs/react-native-screens
+// Crashes app when navigating away from webview on android 9+
+// enableScreens(true);
+
+
+YellowBox.ignoreWarnings([ // collapsible headers cause this warning, just ignore as it is not an issue
+    'Non-serializable values were found in the navigation state',
+]);
 
 type Props = {};
 
@@ -22,10 +34,8 @@ type State = {
     showIntro: boolean,
     showUpdate: boolean,
     showAprilFools: boolean,
-    currentTheme: ?Object,
+    currentTheme: CustomTheme | null,
 };
-
-const Stack = createStackNavigator();
 
 export default class App extends React.Component<Props, State> {
 
@@ -37,75 +47,131 @@ export default class App extends React.Component<Props, State> {
         currentTheme: null,
     };
 
-    onIntroDone: Function;
-    onUpdateTheme: Function;
+    navigatorRef: { current: null | NavigationContainer };
+
+    defaultHomeRoute: string | null;
+    defaultHomeData: { [key: string]: any }
+
+    createDrawerNavigator: () => React.Node;
+
+    urlHandler: URLHandler;
+    storageManager: AsyncStorageManager;
 
     constructor() {
         super();
         LocaleManager.initTranslations();
-        this.onIntroDone = this.onIntroDone.bind(this);
-        this.onUpdateTheme = this.onUpdateTheme.bind(this);
-        SplashScreen.preventAutoHide();
+        this.navigatorRef = React.createRef();
+        this.defaultHomeRoute = null;
+        this.defaultHomeData = {};
+        this.storageManager = AsyncStorageManager.getInstance();
+        this.urlHandler = new URLHandler(this.onInitialURLParsed, this.onDetectURL);
+        this.urlHandler.listen();
+        setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 20);
+        this.loadAssetsAsync().then(() => {
+            this.onLoadFinished();
+        });
     }
 
     /**
-     * Updates the theme
+     * THe app has been started by an url, and it has been parsed.
+     * Set a new default start route based on the data parsed.
+     *
+     * @param parsedData The data parsed from the url
      */
-    onUpdateTheme() {
+    onInitialURLParsed = (parsedData: { route: string, data: { [key: string]: any } }) => {
+        this.defaultHomeRoute = parsedData.route;
+        this.defaultHomeData = parsedData.data;
+    };
+
+    /**
+     * An url has been opened and parsed while the app was active.
+     * Redirect the user to the screen according to parsed data.
+     *
+     * @param parsedData The data parsed from the url
+     */
+    onDetectURL = (parsedData: { route: string, data: { [key: string]: any } }) => {
+        // Navigate to nested navigator and pass data to the index screen
+        if (this.navigatorRef.current != null) {
+            this.navigatorRef.current.navigate('home', {
+                screen: 'index',
+                params: {nextScreen: parsedData.route, data: parsedData.data}
+            });
+        }
+    };
+
+    /**
+     * Updates the current theme
+     */
+    onUpdateTheme = () => {
         this.setState({
             currentTheme: ThemeManager.getCurrentTheme()
         });
         this.setupStatusBar();
-    }
+    };
 
+    /**
+     * Updates status bar content color if on iOS only,
+     * as the android status bar is always set to black.
+     */
     setupStatusBar() {
-        if (Platform.OS === 'ios') {
-            if (ThemeManager.getNightMode()) {
-                StatusBar.setBarStyle('light-content', true);
-            } else {
-                StatusBar.setBarStyle('dark-content', true);
-            }
+        if (ThemeManager.getNightMode()) {
+            StatusBar.setBarStyle('light-content', true);
+        } else {
+            StatusBar.setBarStyle('dark-content', true);
         }
+        if (Platform.OS === "android")
+            StatusBar.setBackgroundColor(ThemeManager.getCurrentTheme().colors.surface, true);
     }
 
     /**
-     * Callback when user ends the intro. Save in preferences to avaoid showing back the introSlides
+     * Callback when user ends the intro. Save in preferences to avoid showing back the introSlides
      */
-    onIntroDone() {
+    onIntroDone = () => {
         this.setState({
             showIntro: false,
             showUpdate: false,
             showAprilFools: false,
         });
-        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showIntro.key, '0');
-        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.updateNumber.key, Update.number.toString());
-        AsyncStorageManager.getInstance().savePref(AsyncStorageManager.getInstance().preferences.showAprilFoolsStart.key, '0');
+        this.storageManager.savePref(this.storageManager.preferences.showIntro.key, '0');
+        this.storageManager.savePref(this.storageManager.preferences.updateNumber.key, Update.number.toString());
+        this.storageManager.savePref(this.storageManager.preferences.showAprilFoolsStart.key, '0');
+    };
+
+    /**
+     * Loads every async data
+     *
+     * @returns {Promise<void>}
+     */
+    loadAssetsAsync = async () => {
+        await this.storageManager.loadPreferences();
+        try {
+            await ConnectionManager.getInstance().recoverLogin();
+        } catch (e) {
+        }
     }
 
-    async componentDidMount() {
-        await this.loadAssetsAsync();
-    }
-
-    async loadAssetsAsync() {
-        // Wait for custom fonts to be loaded before showing the app
-        await AsyncStorageManager.getInstance().loadPreferences();
-        ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
-        await NotificationsManager.initExpoToken();
-        this.onLoadFinished();
-    }
-
+    /**
+     * Async loading is done, finish processing startup data
+     */
     onLoadFinished() {
-        // console.log("finished");
         // Only show intro if this is the first time starting the app
+        this.createDrawerNavigator = () => <MainNavigator
+            defaultHomeRoute={this.defaultHomeRoute}
+            defaultHomeData={this.defaultHomeData}
+        />;
+        ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
+        // Status bar goes dark if set too fast on ios
+        if (Platform.OS === 'ios')
+            setTimeout(this.setupStatusBar, 1000);
+        else
+            this.setupStatusBar();
         this.setState({
             isLoading: false,
             currentTheme: ThemeManager.getCurrentTheme(),
-            showIntro: AsyncStorageManager.getInstance().preferences.showIntro.current === '1',
-            showUpdate: AsyncStorageManager.getInstance().preferences.updateNumber.current !== Update.number.toString(),
-            showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && AsyncStorageManager.getInstance().preferences.showAprilFoolsStart.current === '1',
+            showIntro: this.storageManager.preferences.showIntro.current === '1',
+            showUpdate: this.storageManager.preferences.updateNumber.current !== Update.number.toString(),
+            showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && this.storageManager.preferences.showAprilFoolsStart.current === '1',
         });
-        // Status bar goes dark if set too fast
-        setTimeout(this.setupStatusBar, 1000);
         SplashScreen.hide();
     }
 
@@ -124,11 +190,16 @@ export default class App extends React.Component<Props, State> {
         } else {
             return (
                 <PaperProvider theme={this.state.currentTheme}>
-                    <NavigationContainer theme={this.state.currentTheme}>
-                        <Stack.Navigator headerMode="none">
-                            <Stack.Screen name="Root" component={DrawerNavigator}/>
-                        </Stack.Navigator>
-                    </NavigationContainer>
+                    <OverflowMenuProvider>
+                        <View style={{backgroundColor: ThemeManager.getCurrentTheme().colors.background, flex: 1}}>
+                            <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
+                                <MainNavigator
+                                    defaultHomeRoute={this.defaultHomeRoute}
+                                    defaultHomeData={this.defaultHomeData}
+                                />
+                            </NavigationContainer>
+                        </View>
+                    </OverflowMenuProvider>
                 </PaperProvider>
             );
         }

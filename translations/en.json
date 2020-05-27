@@ -1,10 +1,17 @@
 {
   "screens": {
     "home": "Home",
-    "planning": "Planning",
-    "planningDisplayScreen": "Event Details",
+    "planning": "Events",
+    "planningDisplayScreen": "Event details",
+    "clubDisplayScreen": "Club details",
+    "feedDisplayScreen": "Details",
+    "clubsAbout": "Clubs",
+    "amicaleAbout": "Contact",
+    "amicaleWebsite": "Amicale's website",
     "proxiwash": "Proxiwash",
+    "services": "Services",
     "proximo": "Proximo",
+    "proximoArticles": "Articles",
     "menuSelf": "RU Menu",
     "settings": "Settings",
     "availableRooms": "Available rooms",
@@ -12,12 +19,13 @@
     "bluemind": "INSA Mails",
     "ent": "INSA ENT",
     "about": "About",
-    "debug": "Debug"
-  },
-  "sidenav": {
-    "divider1": "Student websites",
-    "divider2": "Services",
-    "divider3": "Personalisation"
+    "debug": "Debug",
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile",
+    "vote": "Elections",
+    "scanner": "Scanotron 3000",
+    "feedback": "Feedback"
   },
   "intro": {
     "slide1": {
@@ -48,9 +56,21 @@
       "title": "More to come...",
       "text": "New features are coming soon, do not hesitate to give us feedback to improve the app"
     },
-    "updateSlide": {
+    "updateSlide0": {
       "title": "New in this update!",
-      "text": "The app got a new UI ! Faster, prettier and more modern, we hope you'll love it!"
+      "text": "Faster than ever and easier to use!\nThis update includes lots of changes to improve your experience.\nUse the brand new feedback button on the home screen to talk to the developer!"
+    },
+    "updateSlide1": {
+      "title": "Improved Planex!",
+      "text": "You now have access to new controls, improved display, and you can also mark groups as favorites."
+    },
+    "updateSlide2": {
+      "title": "Scanotron 3000!",
+      "text": "Say hello to Scanotron 3000!\nAvailable from the Qr-Code button on the home screen, it will help you get information about clubs and events around the campus.\n(Useless right now but we have hope for next year)"
+    },
+    "updateSlide3": {
+      "title": "Amicale Account!",
+      "text": "You can now connect to your Amicale INSAT account from within the app! See all available clubs and more to come!\nClick on the login button from the home screen."
     },
     "aprilFoolsSlide": {
       "title": "New in this update!",
@@ -76,6 +96,7 @@
   "homeScreen": {
     "listUpdated": "List updated!",
     "listUpdateFail": "Error while updating list",
+    "servicesButton": "More services",
     "newsFeed": "Campus News",
     "dashboard": {
       "seeMore": "Click to see more",
@@ -83,44 +104,24 @@
       "todayEventsSubtitleNA": "No events today",
       "todayEventsSubtitle": " event coming today",
       "todayEventsSubtitlePlural": " events coming today",
-      "proximoTitle": "Proximo",
-      "proximoSubtitleNA": "No articles available",
-      "proximoSubtitle": " article available",
-      "proximoSubtitlePlural": " articles available",
-      "tutorinsaSubtitleNA": "No tutorial available",
-      "tutorinsaSubtitle": " tutorial available",
-      "tutorinsaSubtitlePlural": " tutorials available",
-      "proxiwashTitle": "Available machines",
-      "proxiwashSubtitleNA": "No machines available",
-      "proxiwashSubtitle1": " dryer",
-      "proxiwashSubtitle1Plural": " dryers",
-      "proxiwashSubtitle2": " washer",
-      "proxiwashSubtitle2Plural": " washers",
-      "menuTitle": "Today's menu",
-      "menuSubtitleNA": "No menu available",
-      "menuSubtitle": "Click here to see the menu"
+      "amicaleTitle": "The Amicale",
+      "amicaleConnect": "Login",
+      "amicaleConnected": "See available services"
     }
-  },
-  "planningScreen": {
-    "wipTitle": "WORK IN PROGRESS",
-    "wipSubtitle": "Soon, every event at the INSA Toulouse in one place !"
   },
   "aboutScreen": {
     "appstore": "See on the Appstore",
     "playstore": "See on the Playstore",
-    "bugs": "Report Bugs",
-    "bugsDescription": "Reporting bugs helps us make the app better. Please be as precise as possible when describing your problem!",
-    "bugsMail": "Send a Mail",
-    "bugsGit": "Open an issue on Git",
     "changelog": "Changelog",
     "license": "License",
     "debug": "Debug",
     "team": "Team",
-    "author": "Author",
+    "author": "Author and maintainer",
     "authorMail": "Send an email",
-    "additionalDev": "Additional developer",
+    "additionalDev": "Development help",
     "technologies": "Technologies",
     "reactNative": "Made with React Native",
+    "expo": "Built with Expo",
     "libs": "Libraries used"
   },
   "proximoScreen": {
@@ -200,16 +201,149 @@
   "planexScreen": {
     "enableStartScreen": "Come here often? Set it as default screen!",
     "enableStartOK": "Yes please!",
-    "enableStartCancel": "Later"
+    "enableStartCancel": "Later",
+    "noGroupSelected": "No group selected. Please select your group using the big beautiful red button bellow.",
+    "favorites": "Favorites"
   },
   "availableRoomScreen": {
     "normalRoom": "Work",
     "computerRoom": "Computer",
     "bibRoom": "Bib'Box"
   },
+  "profileScreen": {
+    "personalInformation": "Personal information",
+    "noData": "No data",
+    "editInformation": "Edit Information",
+    "clubs": "Your clubs",
+    "clubsSubtitle": "Click on a club to show its information",
+    "isMember": "Member",
+    "isManager": "Manager",
+    "membership": "Membership Fee",
+    "membershipSubtitle": "Allows you to take part in various activities",
+    "membershipPayed": "Payed",
+    "membershipNotPayed": "Not payed"
+  },
+  "scannerScreen": {
+    "errorPermission": "Scanotron 3000 needs access to the camera in order to scan QR codes.\nThe camera will never be used for any other purpose.",
+    "buttonPermission": "Grant camera access",
+    "errorTitle": "QR code invalid",
+    "errorMessage": "The QR code scanned could not be recognised, please make sure it is valid.",
+    "helpButton": "What can I scan?",
+    "helpTitle": "How to use Scanotron 3000",
+    "helpMessage": "Find Campus QR codes posted by clubs and events, scan them and get instant access to detailed information!"
+  },
+  "loginScreen": {
+    "title": "Amicale account",
+    "subtitle": "Please enter your credentials",
+    "email": "Email",
+    "emailError": "Please enter a valid email",
+    "password": "Password",
+    "passwordError": "Please enter a password",
+    "login": "Login",
+    "resetPassword": "Forgot Password",
+    "whyAccountTitle": "Why have an account?",
+    "whyAccountSub": "What can you do wth an account",
+    "whyAccountParagraph": "An Amicale account allows you to take part in several activities around campus. You can join a club, or even create your own!",
+    "whyAccountParagraph2": "Logging into your Amicale account on the app will allow you to see all available clubs on the campus, vote for the upcoming elections, and more to come!",
+    "noAccount": "No Account? Go to the Amicale's building during open hours to create one."
+  },
+  "errors": {
+    "title": "Error!",
+    "badCredentials": "Email or password invalid.",
+    "badToken": "You are not logged in. Please login and try again.",
+    "noConsent": "You did not give your consent for data processing to the Amicale.",
+    "badInput": "Invalid input. Please try again.",
+    "forbidden": "You do not have access to this data.",
+    "connectionError": "Network error. Please check your internet connection.",
+    "serverError": "Server error. Please contact support.",
+    "unknown": "Unknown error. Please contact support."
+  },
+  "clubs": {
+    "clubList": "Club list",
+    "managers": "Managers",
+    "managersSubtitle": "These people make the club live",
+    "managersUnavailable": "This club has no one :(",
+    "categories": "Categories",
+    "categoriesFilterMessage": "Click on a category to filter the list",
+    "clubContact": "Contact the club",
+    "amicaleContact": "Contact the Amicale",
+    "invalidClub": "Could not find the club. Please make sure the club you are trying to access is valid.",
+    "about": {
+      "text": "The clubs, making the campus live, with more than sixty clubs offering various activities! From the philosophy club to the PABI (Production Artisanale de Bière Insaienne), without forgetting the multiple music and dance clubs, you will surely find an activity that suits you!",
+      "title": "A question ?",
+      "subtitle": "Ask the Amicale",
+      "message": "You have a question concerning the clubs?\nYou want to revive or create a club?\nContact the Amicale at the following address:"
+    }
+  },
+  "amicaleAbout": {
+    "title": "A question ?",
+    "subtitle": "Ask the Amicale",
+    "message": "You want to revive a club?\nYou want to start a new project?\nHere are al the contacts you need! Do not hesitate to write a mail or send a message to the Amicale's Facebook page!",
+    "roles": {
+      "interSchools": "Inter Schools",
+      "culture": "Culture",
+      "animation": "Animation",
+      "clubs": "Clubs",
+      "event": "Events",
+      "tech": "Technique",
+      "communication": "Communication",
+      "intraSchools": "Alumni / IAT",
+      "publicRelations": "Public Relations"
+    }
+  },
+  "voteScreen": {
+    "select": {
+      "title": "Elections open",
+      "subtitle": "Vote now!",
+      "sendButton": "Send Vote",
+      "dialogTitle": "Send Vote?",
+      "dialogTitleLoading": "Sending vote...",
+      "dialogMessage": "Are you sure you want to send your vote? You will not be able to change it."
+    },
+    "tease": {
+      "title": "Elections incoming",
+      "subtitle": "Be ready to vote!",
+      "message": "Vote start:"
+    },
+    "wait": {
+      "titleSubmitted": "Vote submitted!",
+      "titleEnded": "Votes closed",
+      "subtitle": "Waiting for results...",
+      "messageSubmitted": "Vote submitted successfully.",
+      "messageVoted": "Thank you for your participation.",
+      "messageDate": "Results available:",
+      "messageDateUndefined": "Results will be available shortly"
+    },
+    "results": {
+      "title": "Results",
+      "subtitle": "Available until:",
+      "totalVotes": "Total votes:",
+      "votes": "votes"
+    },
+    "title": {
+      "title": "The Elections",
+      "subtitle": "Why your vote is important",
+      "paragraph1": "The Amicale's elections is the right moment for you to choose the next team, which will handle different projects on the campus, help organizing your favorite events, animate the campus life during the whole year, and relay your ideas to the administration, so that your campus life is the most enjoyable possible!\nYour turn to make a change!\uD83D\uDE09",
+      "paragraph2": "Note: If there is only one list, it is still important to vote to show your support, so that the administration knows the current list is supported by students. It is always a plus when taking difficult decisions! \uD83D\uDE09"
+    }
+  },
+  "dialog": {
+    "ok": "OK",
+    "yes": "Yes",
+    "cancel": "Cancel",
+    "disconnect": {
+      "title": "Disconnect",
+      "titleLoading": "Disconnecting...",
+      "message": "Are you sure you want to disconnect from your Amicale account?"
+    }
+  },
   "general": {
     "loading": "Loading...",
-    "networkError": "Unable to contact servers. Make sure you are connected to Internet."
+    "retry": "Retry",
+    "networkError": "Unable to contact servers. Make sure you are connected to Internet.",
+    "goBack": "Go Back",
+    "goForward": "Go Forward",
+    "openInBrowser": "Open in Browser"
   },
   "date": {
     "daysOfWeek": {
@@ -235,5 +369,45 @@
       "november": "November",
       "december": "December"
     }
+  },
+  "game": {
+    "title": "Game",
+    "pause": "Game Paused",
+    "pauseMessage": "The game is paused",
+    "resume": "Resume",
+    "restart": {
+      "text": "Restart",
+      "confirm": "Are you sure you want to restart?",
+      "confirmMessage": "You will lose you progress, continue?",
+      "confirmYes": "Yes",
+      "confirmNo": "No"
+    },
+    "gameOver": {
+      "text": "Game Over",
+      "score": "Score: ",
+      "level": "Level: ",
+      "time": "Time: ",
+      "exit": "leave Game"
+    }
+  },
+  "servicesScreen": {
+    "amicale": "The Amicale",
+    "students": "Student services",
+    "insa": "INSA services",
+    "notLoggedIn": "Not logged in"
+  },
+  "planningScreen": {
+    "invalidEvent": "Could not find the event. Please make sure the event you are trying to access is valid."
+  },
+  "feedbackScreen": {
+    "bugs": "Report Bugs",
+    "bugsSubtitle": "Did you find a bug? Let us know!",
+    "bugsDescription": "Reporting bugs helps us make the app better. To do so, use one of the buttons below and be as precise as possible when describing your problem!",
+    "feedback": "Feedback",
+    "feedbackSubtitle": "Let us know what you think!",
+    "feedbackDescription": "Do you have a feature you want to be added/changed/removed, want to give your opinion on the app or simply chat with the dev? Use one of the links below!",
+    "contactMeans": "Using Gitea is recommended, to use it simply login with your INSA account.",
+    "homeButtonTitle": "Feedback/Bug report",
+    "homeButtonSubtitle": "Contact the devs"
   }
 }

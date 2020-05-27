@@ -2,6 +2,32 @@
 
 Pensez à garder l'appli à jour pour profiter des dernières fonctionnalités !
 
+ - **v3.0.0** - _TBA_
+    - Nouvelle barre de navigation !
+    - Suppression du menu déroulant gauche
+    - Création d'une nouvelle catégorie dans la barre de navigation pour regrouper tous les services
+    - Ajout d'animations un peu partout parce que c'est joli et j'ai compris comment faire :D
+    - Ajout de la connexion au compte Amicale
+    - Ajout de la liste des clubs, des élections et du profil utilisateur à travers son compte Amicale
+    - Amélioration importante de la vitesse de démarrage et des performances sur Android
+    - Réduction importante de la taille de l'application à télécharger et une fois installée
+    - _Notes de développement :_
+        - Migration de Expo Managed Workflow à React Native Bare Workflow     
+
+ - **v2.0.0** - _12/03/2020_
+    - Nouvelle interface !
+    - Amélioration des performances
+    - Amélioration de la vitesse de démarrage
+    - _Notes de développement :_
+        - Utilisation de react-native-paper à la place de native base
+
+ - **v1.5.2** - _25/02/2020_
+    - Correction d'un problème d'affichage des détail du Proximo
+
+ - **v1.5.1** - _24/02/2020_
+    - Amélioration des performances
+    - Utilisation d'un tri des catégories du Proximo plus cohérent
+
  - **v1.5.0** - _05/02/2020_
     - Amélioration des performances de l'application
     - Amélioration du menu gauche
