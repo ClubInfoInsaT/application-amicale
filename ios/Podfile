@@ -2,10 +2,51 @@ platform :ios, '9.0'
 
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'Campus' do
-  rnPrefix = "../node_modules/react-native"
+def add_flipper_pods!(versions = {})
+  versions['Flipper'] ||= '~> 0.33.1'
+  versions['DoubleConversion'] ||= '1.1.7'
+  versions['Flipper-Folly'] ||= '~> 2.1'
+  versions['Flipper-Glog'] ||= '0.3.6'
+  versions['Flipper-PeerTalk'] ||= '~> 0.0.4'
+  versions['Flipper-RSocket'] ||= '~> 1.0'
+  pod 'FlipperKit', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/FlipperKitLayoutPlugin', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/SKIOSNetworkPlugin', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/FlipperKitUserDefaultsPlugin', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/FlipperKitReactPlugin', versions['Flipper'], :configuration => 'Debug'
+  # List all transitive dependencies for FlipperKit pods
+  # to avoid them being linked in Release builds
+  pod 'Flipper', versions['Flipper'], :configuration => 'Debug'
+  pod 'Flipper-DoubleConversion', versions['DoubleConversion'], :configuration => 'Debug'
+  pod 'Flipper-Folly', versions['Flipper-Folly'], :configuration => 'Debug'
+  pod 'Flipper-Glog', versions['Flipper-Glog'], :configuration => 'Debug'
+  pod 'Flipper-PeerTalk', versions['Flipper-PeerTalk'], :configuration => 'Debug'
+  pod 'Flipper-RSocket', versions['Flipper-RSocket'], :configuration => 'Debug'
+  pod 'FlipperKit/Core', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/CppBridge', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/FBCxxFollyDynamicConvert', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/FBDefines', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/FKPortForwarding', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/FlipperKitHighlightOverlay', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/FlipperKitLayoutTextSearchable', versions['Flipper'], :configuration => 'Debug'
+  pod 'FlipperKit/FlipperKitNetworkPlugin', versions['Flipper'], :configuration => 'Debug'
+end
+# Post Install processing for Flipper
+def flipper_post_install(installer)
+  installer.pods_project.targets.each do |target|
+    if target.name == 'YogaKit'
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = '4.1'
+      end
+    end
+  end
+end
 
-  # React Native and its dependencies
+
+
+target 'Campus' do
+  # Pods for Campus
+  rnPrefix = "../node_modules/react-native"
   pod 'FBLazyVector', :path => "#{rnPrefix}/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "#{rnPrefix}/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "#{rnPrefix}/Libraries/RCTRequired"
@@ -28,14 +69,14 @@ target 'Campus' do
   pod 'React-jsi', :path => "#{rnPrefix}/ReactCommon/jsi"
   pod 'React-jsiexecutor', :path => "#{rnPrefix}/ReactCommon/jsiexecutor"
   pod 'React-jsinspector', :path => "#{rnPrefix}/ReactCommon/jsinspector"
-  pod 'ReactCommon/jscallinvoker', :path => "#{rnPrefix}/ReactCommon"
+  pod 'ReactCommon/callinvoker', :path => "../node_modules/react-native/ReactCommon"
   pod 'ReactCommon/turbomodule/core', :path => "#{rnPrefix}/ReactCommon"
-  pod 'Yoga', :path => "#{rnPrefix}/ReactCommon/yoga"
+  pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga', :modular_headers => true
+
   pod 'DoubleConversion', :podspec => "#{rnPrefix}/third-party-podspecs/DoubleConversion.podspec"
   pod 'glog', :podspec => "#{rnPrefix}/third-party-podspecs/glog.podspec"
   pod 'Folly', :podspec => "#{rnPrefix}/third-party-podspecs/Folly.podspec"
 
-  # Other native modules
 
   # react-native-cli autolinking
   use_native_modules!
@@ -45,5 +86,14 @@ target 'Campus' do
 
   pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable these next few lines.
+  add_flipper_pods!
+  post_install do |installer|
+    flipper_post_install(installer)
+  end
 
 end
