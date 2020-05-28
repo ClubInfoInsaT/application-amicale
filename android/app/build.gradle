@@ -136,8 +136,8 @@ android {
         applicationId 'fr.amicaleinsat.application'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 21
-        versionName "3.0.4"
+        versionCode 22
+        versionName "3.0.5"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     splits {

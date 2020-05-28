@@ -111,6 +111,12 @@ class ServicesScreen extends React.Component<Props, State> {
                 image: TUTORINSA_IMAGE,
                 onPress: () => nav.navigate("tutorinsa"),
             },
+            {
+                title: i18n.t('screens.amicaleWebsite'),
+                subtitle: "AMICALE",
+                image: AMICALE_IMAGE,
+                onPress: () => nav.navigate("amicale-website"),
+            },
         ];
         this.insaDataset = [
             {
