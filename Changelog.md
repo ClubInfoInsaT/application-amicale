@@ -2,6 +2,13 @@
 
 Pensez à garder l'appli à jour pour profiter des dernières fonctionnalités !
 
+ - **v3.0.5** - 28/05/2020
+    - Importante amélioration de la vitesse de démarrage et des performances
+    - Nouvelle réduction importante de la taille de l'application à télécharger et une fois installée
+    - _Notes de développement :_
+        - Passage de React Native 61.5 à 62.2
+        - Utilisation du moteur JS Hermes et proguard
+
  - **v3.0.0** - 26/05/2020
     - Nouvelle barre de navigation !
     - Nouveau planex tout beau tout neuf !
