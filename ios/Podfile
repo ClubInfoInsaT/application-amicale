@@ -1,5 +1,4 @@
 platform :ios, '9.0'
-
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 def add_flipper_pods!(versions = {})
@@ -31,6 +30,7 @@ def add_flipper_pods!(versions = {})
   pod 'FlipperKit/FlipperKitLayoutTextSearchable', versions['Flipper'], :configuration => 'Debug'
   pod 'FlipperKit/FlipperKitNetworkPlugin', versions['Flipper'], :configuration => 'Debug'
 end
+
 # Post Install processing for Flipper
 def flipper_post_install(installer)
   installer.pods_project.targets.each do |target|
@@ -41,8 +41,6 @@ def flipper_post_install(installer)
     end
   end
 end
-
-
 
 target 'Campus' do
   # Pods for Campus
@@ -64,20 +62,24 @@ target 'Campus' do
   pod 'React-RCTText', :path => "#{rnPrefix}/Libraries/Text"
   pod 'React-RCTVibration', :path => "#{rnPrefix}/Libraries/Vibration"
   pod 'React-Core/RCTWebSocket', :path => "#{rnPrefix}/"
-  pod 'React-Core/DevSupport', :path => "#{rnPrefix}/"
+  
   pod 'React-cxxreact', :path => "#{rnPrefix}/ReactCommon/cxxreact"
   pod 'React-jsi', :path => "#{rnPrefix}/ReactCommon/jsi"
   pod 'React-jsiexecutor', :path => "#{rnPrefix}/ReactCommon/jsiexecutor"
   pod 'React-jsinspector', :path => "#{rnPrefix}/ReactCommon/jsinspector"
-  pod 'ReactCommon/callinvoker', :path => "../node_modules/react-native/ReactCommon"
+  pod 'ReactCommon/callinvoker', :path => "#{rnPrefix}/ReactCommon"
   pod 'ReactCommon/turbomodule/core', :path => "#{rnPrefix}/ReactCommon"
-  pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga', :modular_headers => true
+  pod 'Yoga', :path => '#{rnPrefix}/ReactCommon/yoga', :modular_headers => true
 
   pod 'DoubleConversion', :podspec => "#{rnPrefix}/third-party-podspecs/DoubleConversion.podspec"
   pod 'glog', :podspec => "#{rnPrefix}/third-party-podspecs/glog.podspec"
   pod 'Folly', :podspec => "#{rnPrefix}/third-party-podspecs/Folly.podspec"
 
-
+  target 'CampusTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+  
   # react-native-cli autolinking
   use_native_modules!
 
@@ -91,9 +93,9 @@ target 'Campus' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-  add_flipper_pods!
-  post_install do |installer|
-    flipper_post_install(installer)
-  end
+  #add_flipper_pods!
+  #post_install do |installer|
+  #  flipper_post_install(installer)
+  #end
 
 end
