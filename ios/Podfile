@@ -69,7 +69,7 @@ target 'Campus' do
   pod 'React-jsinspector', :path => "#{rnPrefix}/ReactCommon/jsinspector"
   pod 'ReactCommon/callinvoker', :path => "#{rnPrefix}/ReactCommon"
   pod 'ReactCommon/turbomodule/core', :path => "#{rnPrefix}/ReactCommon"
-  pod 'Yoga', :path => '#{rnPrefix}/ReactCommon/yoga', :modular_headers => true
+  pod 'Yoga', :path => "#{rnPrefix}/ReactCommon/yoga", :modular_headers => true
 
   pod 'DoubleConversion', :podspec => "#{rnPrefix}/third-party-podspecs/DoubleConversion.podspec"
   pod 'glog', :podspec => "#{rnPrefix}/third-party-podspecs/glog.podspec"
