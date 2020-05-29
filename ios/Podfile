@@ -75,11 +75,6 @@ target 'Campus' do
   pod 'glog', :podspec => "#{rnPrefix}/third-party-podspecs/glog.podspec"
   pod 'Folly', :podspec => "#{rnPrefix}/third-party-podspecs/Folly.podspec"
 
-  target 'CampusTests' do
-    inherit! :complete
-    # Pods for testing
-  end
-  
   # react-native-cli autolinking
   use_native_modules!
 
