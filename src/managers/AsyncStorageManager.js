@@ -46,7 +46,7 @@ export default class AsyncStorageManager {
         },
         nightMode: {
             key: 'nightMode',
-            default: '0',
+            default: '1',
             current: '',
         },
         expoToken: {
