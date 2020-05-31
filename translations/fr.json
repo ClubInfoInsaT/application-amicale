@@ -343,7 +343,8 @@
     "networkError": "Impossible de contacter les serveurs. Assurez-vous d'être connecté à internet.",
     "goBack": "Suivant",
     "goForward": "Précédent",
-    "openInBrowser": "Ouvrir dans le navigateur"
+    "openInBrowser": "Ouvrir dans le navigateur",
+    "notAvailable": "Non disponible"
   },
   "date": {
     "daysOfWeek": {

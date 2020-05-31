@@ -6,31 +6,21 @@ import DateManager from "../../managers/DateManager";
 import WebSectionList from "../../components/Screens/WebSectionList";
 import {Card, Text, withTheme} from 'react-native-paper';
 import AprilFoolsManager from "../../managers/AprilFoolsManager";
+import {StackNavigationProp} from "@react-navigation/stack";
+import type {CustomTheme} from "../../managers/ThemeManager";
+import i18n from 'i18n-js';
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json";
 
 type Props = {
-    navigation: Object,
+    navigation: StackNavigationProp,
+    theme: CustomTheme,
 }
 
 /**
  * Class defining the app's menu screen.
  */
 class SelfMenuScreen extends React.Component<Props> {
-
-    getRenderItem: Function;
-    getRenderSectionHeader: Function;
-    createDataset: Function;
-    colors: Object;
-
-    constructor(props) {
-        super(props);
-
-        this.getRenderItem = this.getRenderItem.bind(this);
-        this.getRenderSectionHeader = this.getRenderSectionHeader.bind(this);
-        this.createDataset = this.createDataset.bind(this);
-        this.colors = props.theme.colors;
-    }
 
     /**
      * Extract a key for the given item
@@ -48,32 +38,32 @@ class SelfMenuScreen extends React.Component<Props> {
      * @param fetchedData
      * @return {[]}
      */
-    createDataset(fetchedData: Object) {
+    createDataset = (fetchedData: Object) => {
         let result = [];
-        // Prevent crash by giving a default value when fetchedData is empty (not yet available)
-        if (Object.keys(fetchedData).length === 0) {
+        if (fetchedData == null || Object.keys(fetchedData).length === 0) {
             result = [
                 {
-                    title: '',
+                    title: i18n.t("general.notAvailable"),
                     data: [],
                     keyExtractor: this.getKeyExtractor
                 }
             ];
-        }
-        if (AprilFoolsManager.getInstance().isAprilFoolsEnabled() && fetchedData.length > 0)
-            fetchedData[0].meal[0].foodcategory = AprilFoolsManager.getFakeMenuItem(fetchedData[0].meal[0].foodcategory);
-        // fetched data is an array here
-        for (let i = 0; i < fetchedData.length; i++) {
-            result.push(
-                {
-                    title: DateManager.getInstance().getTranslatedDate(fetchedData[i].date),
-                    data: fetchedData[i].meal[0].foodcategory,
-                    keyExtractor: this.getKeyExtractor,
-                }
-            );
+        } else {
+            if (AprilFoolsManager.getInstance().isAprilFoolsEnabled() && fetchedData.length > 0)
+                fetchedData[0].meal[0].foodcategory = AprilFoolsManager.getFakeMenuItem(fetchedData[0].meal[0].foodcategory);
+            // fetched data is an array here
+            for (let i = 0; i < fetchedData.length; i++) {
+                result.push(
+                    {
+                        title: DateManager.getInstance().getTranslatedDate(fetchedData[i].date),
+                        data: fetchedData[i].meal[0].foodcategory,
+                        keyExtractor: this.getKeyExtractor,
+                    }
+                );
+            }
         }
         return result
-    }
+    };
 
     /**
      * Gets the render section header
@@ -81,7 +71,7 @@ class SelfMenuScreen extends React.Component<Props> {
      * @param section The section to render the header from
      * @return {*}
      */
-    getRenderSectionHeader({section}: Object) {
+    getRenderSectionHeader = ({section}: Object) => {
         return (
             <Card style={{
                 width: '95%',
@@ -105,7 +95,7 @@ class SelfMenuScreen extends React.Component<Props> {
                 />
             </Card>
         );
-    }
+    };
 
     /**
      * Gets a FlatList render item
@@ -113,7 +103,7 @@ class SelfMenuScreen extends React.Component<Props> {
      * @param item The item to render
      * @return {*}
      */
-    getRenderItem({item}: Object) {
+    getRenderItem = ({item}: Object) => {
         return (
             <Card style={{
                 flex: 0,
@@ -129,7 +119,7 @@ class SelfMenuScreen extends React.Component<Props> {
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     borderBottomWidth: 1,
-                    borderBottomColor: this.colors.primary,
+                    borderBottomColor: this.theme.colors.primary,
                     marginTop: 5,
                     marginBottom: 5,
                 }}/>
@@ -147,7 +137,7 @@ class SelfMenuScreen extends React.Component<Props> {
                 </Card.Content>
             </Card>
         );
-    }
+    };
 
     /**
      * Formats the given string to make sure it starts with a capital letter
