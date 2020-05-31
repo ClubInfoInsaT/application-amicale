@@ -3,8 +3,6 @@ import {withTheme} from 'react-native-paper';
 import TabIcon from "./TabIcon";
 import TabHomeIcon from "./TabHomeIcon";
 import {Animated} from 'react-native';
-import {withSafeArea} from "../../utils/withSafeArea";
-import {EdgeInsets} from "react-native-safe-area-context";
 
 type Props = {
     state: Object,
@@ -12,7 +10,6 @@ type Props = {
     navigation: Object,
     theme: Object,
     collapsibleStack: Object,
-    safeArea: EdgeInsets
 }
 
 type State = {
@@ -130,24 +127,23 @@ class CustomTabBar extends React.Component<Props, State> {
     render() {
         this.props.navigation.addListener('state', this.onRouteChange);
         return (
-                <Animated.View
-                    useNativeDriver
-                    style={{
-                        flexDirection: 'row',
-                        height: CustomTabBar.TAB_BAR_HEIGHT + this.props.safeArea.bottom,
-                        width: '100%',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        backgroundColor: this.props.theme.colors.surface,
-                        transform: [{translateY: this.state.translateY}],
-                        paddingBottom: this.props.safeArea.bottom,
-                    }}
-                >
-                    {this.props.state.routes.map(this.renderIcon)}
-                </Animated.View>
+            <Animated.View
+                useNativeDriver
+                style={{
+                    flexDirection: 'row',
+                    height: CustomTabBar.TAB_BAR_HEIGHT,
+                    width: '100%',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    backgroundColor: this.props.theme.colors.surface,
+                    transform: [{translateY: this.state.translateY}],
+                }}
+            >
+                {this.props.state.routes.map(this.renderIcon)}
+            </Animated.View>
         );
     }
 }
 
-export default withSafeArea(withTheme(CustomTabBar));
+export default withTheme(CustomTabBar);

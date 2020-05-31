@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, StatusBar, View, YellowBox} from 'react-native';
+import {Platform, SafeAreaView, StatusBar, View, YellowBox} from 'react-native';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
 import CustomIntroSlider from "./src/components/Overrides/CustomIntroSlider";
@@ -17,7 +17,6 @@ import URLHandler from "./src/utils/URLHandler";
 import {setSafeBounceHeight} from "react-navigation-collapsible";
 import SplashScreen from 'react-native-splash-screen'
 import {OverflowMenuProvider} from "react-navigation-header-buttons";
-import {SafeAreaProvider} from "react-native-safe-area-context";
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 // Crashes app when navigating away from webview on android 9+
@@ -193,16 +192,14 @@ export default class App extends React.Component<Props, State> {
                 <PaperProvider theme={this.state.currentTheme}>
                     <OverflowMenuProvider>
                         <View style={{backgroundColor: ThemeManager.getCurrentTheme().colors.background, flex: 1}}>
-                            <SafeAreaProvider
-                                edges={['bottom']}
-                            >
+                            <SafeAreaView style={{flex: 1}}>
                                 <NavigationContainer theme={this.state.currentTheme} ref={this.navigatorRef}>
                                     <MainNavigator
                                         defaultHomeRoute={this.defaultHomeRoute}
                                         defaultHomeData={this.defaultHomeData}
                                     />
                                 </NavigationContainer>
-                            </SafeAreaProvider>
+                            </SafeAreaView>
                         </View>
                     </OverflowMenuProvider>
                 </PaperProvider>
