@@ -3,7 +3,8 @@ import {withTheme} from 'react-native-paper';
 import TabIcon from "./TabIcon";
 import TabHomeIcon from "./TabHomeIcon";
 import {Animated} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {withSafeArea} from "../../utils/withSafeArea";
+import {EdgeInsets} from "react-native-safe-area-context";
 
 type Props = {
     state: Object,
@@ -11,6 +12,7 @@ type Props = {
     navigation: Object,
     theme: Object,
     collapsibleStack: Object,
+    safeArea: EdgeInsets
 }
 
 type State = {
@@ -35,13 +37,6 @@ class CustomTabBar extends React.Component<Props, State> {
     state = {
         translateY: new Animated.Value(0),
         barSynced: false,// Is the bar synced with the header for animations?
-    }
-
-    tabRef: Object;
-
-    constructor(props) {
-        super(props);
-        this.tabRef = React.createRef();
     }
 
     onItemPress(route: Object, currentIndex: number, destIndex: number) {
@@ -135,28 +130,24 @@ class CustomTabBar extends React.Component<Props, State> {
     render() {
         this.props.navigation.addListener('state', this.onRouteChange);
         return (
-            <SafeAreaView>
                 <Animated.View
-                    ref={this.tabRef}
-                    // animation={"fadeInUp"}
-                    // duration={500}
-                    // useNativeDriver
+                    useNativeDriver
                     style={{
                         flexDirection: 'row',
-                        height: CustomTabBar.TAB_BAR_HEIGHT,
+                        height: CustomTabBar.TAB_BAR_HEIGHT + this.props.safeArea.bottom,
                         width: '100%',
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
                         backgroundColor: this.props.theme.colors.surface,
-                        transform: [{translateY: this.state.translateY}]
+                        transform: [{translateY: this.state.translateY}],
+                        paddingBottom: this.props.safeArea.bottom,
                     }}
                 >
                     {this.props.state.routes.map(this.renderIcon)}
                 </Animated.View>
-            </SafeAreaView>
         );
     }
 }
 
-export default withTheme(CustomTabBar);
+export default withSafeArea(withTheme(CustomTabBar));
