@@ -28,33 +28,33 @@
     "feedback": "Votre avis"
   },
   "intro": {
-    "slide1": {
+    "slideMain": {
       "title": "Bienvenue sur CAMPUS",
-      "text": "La nouvelle app à consulter pendant la pause café pour être au courant de la vie du campus !"
+      "text": "La nouvelle appli à consulter pendant la pause café pour être au courant de la vie du campus !"
     },
-    "slide2": {
+    "slideEvents": {
       "title": "Restez informés",
       "text": "CAMPUS vous permet d'être au courant de tous les événements qui ont lieu sur le campus, de la vente de crêpes jusqu'aux concerts enfoiros !"
     },
-    "slide3": {
+    "slideProxiwash": {
       "title": "N'oubliez plus votre linge !",
       "text": "CAMPUS vous informe de la disponibilité des machines et vous permet d'être notifié lorsque la vôtre se termine bientôt !"
     },
-    "slide4": {
-      "title": "Proximo",
-      "text": "Il vous manque des pâtes ? Ou un petit creux au goûter, regardez les stocks de votre supérette insaienne en temps réel"
-    },
-    "slide5": {
+    "slidePlanex": {
       "title": "Planex",
-      "text": "Consultez votre emploi du temps sur CAMPUS"
+      "text": "Vérifiez votre prochain cours sur CAMPUS avec un emploi du temps adapté mobile"
     },
-    "slide6": {
+    "slideRU": {
       "title": "Menu du RU",
       "text": "Pour ceux qui ont faim, vérifiez le menu du RU de la semaine !"
     },
-    "slide7": {
-      "title": "Plus à venir...",
-      "text": "D'autres fonctionnalités arrivent bientôt, n'hésitez pas à nous donner votre avis pour améliorer l'appli"
+    "slideServices": {
+      "title": "Encore plus de services !",
+      "text": "CAMPUS vous permet de faire bien plus, explorez l'appli pour savoir quoi"
+    },
+    "slideDone": {
+      "title": "Fait par un étudiant",
+      "text": "Cette appli à été réalisée par un seul étudiant (avec un peu d'aide par-ci par-là), donc tous les retours sont les bienvenus !"
     },
     "updateSlide0": {
       "title": "Nouveau dans cette mise à jour !",
@@ -405,10 +405,10 @@
     "bugsSubtitle": "Vous avez trouvé un bug ?",
     "bugsDescription": "Rapporter les bugs nous aide à améliorer l'appli. Pour cela, merci d'utiliser un des boutons ci-dessous et de décrire votre problème le plus précisément possible !",
     "feedback": "Feedback",
-    "feedbackSubtitle": "Did nous ce que vous pensez!",
-    "feedbackDescription": "Vous voulez voir une fonctionnalité ajoutée/modifiée/supprimée ?, vous voulez donner votre opinion sur l'appli ou simplement discuter avec les devs ? Utilisez un des liens ci-dessous !",
+    "feedbackSubtitle": "Dites nous ce que vous pensez !",
+    "feedbackDescription": "Vous voulez voir une fonctionnalité ajoutée/modifiée/supprimée ? Vous voulez donner votre opinion sur l'appli ou simplement discuter avec le développeur ? Utilisez un des liens ci-dessous !",
     "contactMeans": "L'utilisation de Gitea est recommandée, pour l'utiliser, connectez vous avec vos identifiants INSA.",
     "homeButtonTitle": "Feedback/Bugs",
-    "homeButtonSubtitle": "Contacter les devs"
+    "homeButtonSubtitle": "Contacter le développeur"
   }
 }
