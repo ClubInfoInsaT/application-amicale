@@ -2,6 +2,12 @@
 
 Pensez à garder l'appli à jour pour profiter des dernières fonctionnalités !
 
+ - **v3.0.6** - TBA
+    - Correction de crash au démarrage sur certains appareils
+    - Mise à jour des écrans d'intro pour mieux refléter l'appli actuelle
+    - _Notes de développement :_
+        - Force soloader 0.8.2
+
  - **v3.0.5** - 28/05/2020
     - Importante amélioration de la vitesse de démarrage et des performances
     - Nouvelle réduction importante de la taille de l'application à télécharger et une fois installée
