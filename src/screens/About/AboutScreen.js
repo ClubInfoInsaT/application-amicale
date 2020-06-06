@@ -3,7 +3,6 @@
 import * as React from 'react';
 import {FlatList, Linking, Platform, View} from 'react-native';
 import i18n from "i18n-js";
-import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import {Avatar, Card, List, Title, withTheme} from 'react-native-paper';
 import packageJson from "../../../package.json";
 
@@ -32,10 +31,6 @@ type Props = {
     navigation: Object,
 };
 
-type State = {
-    isDebugUnlocked: boolean,
-};
-
 /**
  * Opens a link in the device's browser
  * @param link The link to open
@@ -47,14 +42,8 @@ function openWebLink(link) {
 /**
  * Class defining an about screen. This screen shows the user information about the app and it's author.
  */
-class AboutScreen extends React.Component<Props, State> {
+class AboutScreen extends React.Component<Props> {
 
-    debugTapCounter = 0;
-    modalRef: Object;
-
-    state = {
-        isDebugUnlocked: AsyncStorageManager.getInstance().preferences.debugUnlocked.current === '1'
-    };
     /**
      * Data to be displayed in the app card
      */
@@ -89,20 +78,13 @@ class AboutScreen extends React.Component<Props, State> {
             text: i18n.t('aboutScreen.license'),
             showChevron: true
         },
-        {
-            onPressCallback: () => this.props.navigation.navigate('debug'),
-            icon: 'bug-check',
-            text: i18n.t('aboutScreen.debug'),
-            showChevron: true,
-            showOnlyInDebug: true
-        },
     ];
     /**
      * Data to be displayed in the author card
      */
     authorData: Array<Object> = [
         {
-            onPressCallback: () => this.tryUnlockDebugMode(),
+            onPressCallback: () => console.log('cc'),
             icon: 'account-circle',
             text: 'Arnaud VERGNET',
             showChevron: false
@@ -223,7 +205,6 @@ class AboutScreen extends React.Component<Props, State> {
                 <Card.Content>
                     <FlatList
                         data={this.appData}
-                        extraData={this.state.isDebugUnlocked}
                         keyExtractor={this.keyExtractor}
                         renderItem={this.getCardItem}
                     />
@@ -314,51 +295,26 @@ class AboutScreen extends React.Component<Props, State> {
      * @returns {*}
      */
     getCardItem = ({item}: Object) => {
-        let shouldShow = item === undefined
-            || !item.showOnlyInDebug
-            || (item.showOnlyInDebug && this.state.isDebugUnlocked);
         const getItemIcon = this.getItemIcon.bind(this, item);
-        if (shouldShow) {
-            if (item.showChevron) {
-                return (
-                    <List.Item
-                        title={item.text}
-                        left={getItemIcon}
-                        right={this.getChevronIcon}
-                        onPress={item.onPressCallback}
-                    />
-                );
-            } else {
-                return (
-                    <List.Item
-                        title={item.text}
-                        left={getItemIcon}
-                        onPress={item.onPressCallback}
-                    />
-                );
-            }
-        } else
-            return null;
-    };
-
-    /**
-     * Tries to unlock debug mode
-     */
-    tryUnlockDebugMode() {
-        this.debugTapCounter = this.debugTapCounter + 1;
-        if (this.debugTapCounter >= 4) {
-            this.unlockDebugMode();
+        if (item.showChevron) {
+            return (
+                <List.Item
+                    title={item.text}
+                    left={getItemIcon}
+                    right={this.getChevronIcon}
+                    onPress={item.onPressCallback}
+                />
+            );
+        } else {
+            return (
+                <List.Item
+                    title={item.text}
+                    left={getItemIcon}
+                    onPress={item.onPressCallback}
+                />
+            );
         }
-    }
-
-    /**
-     * Unlocks debug mode
-     */
-    unlockDebugMode() {
-        this.setState({isDebugUnlocked: true});
-        let key = AsyncStorageManager.getInstance().preferences.debugUnlocked.key;
-        AsyncStorageManager.getInstance().savePref(key, '1');
-    }
+    };
 
     /**
      * Gets a card, depending on the given item's id

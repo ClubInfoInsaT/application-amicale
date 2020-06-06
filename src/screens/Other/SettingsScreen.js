@@ -9,8 +9,10 @@ import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import {Card, List, Switch, ToggleButton, withTheme} from 'react-native-paper';
 import {Appearance} from "react-native-appearance";
 import CustomSlider from "../../components/Overrides/CustomSlider";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
+    navigation: StackNavigationProp,
     theme: CustomTheme,
 };
 
@@ -19,6 +21,7 @@ type State = {
     nightModeFollowSystem: boolean,
     notificationReminderSelected: number,
     startScreenPickerSelected: string,
+    isDebugUnlocked: boolean,
 };
 
 /**
@@ -41,7 +44,17 @@ class SettingsScreen extends React.Component<Props, State> {
                 Appearance.getColorScheme() !== 'no-preference',
             notificationReminderSelected: this.savedNotificationReminder,
             startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
+            isDebugUnlocked: AsyncStorageManager.getInstance().preferences.debugUnlocked.current === '1'
         };
+    }
+
+    /**
+     * Unlocks debug mode
+     */
+    unlockDebugMode = () => {
+        this.setState({isDebugUnlocked: true});
+        let key = AsyncStorageManager.getInstance().preferences.debugUnlocked.key;
+        AsyncStorageManager.getInstance().savePref(key, '1');
     }
 
     /**
@@ -203,6 +216,31 @@ class SettingsScreen extends React.Component<Props, State> {
                         <View style={{marginLeft: 30}}>
                             {this.getProxiwashNotifPicker()}
                         </View>
+                    </List.Section>
+                </Card>
+                <Card style={{margin: 5}}>
+                    <Card.Title title={i18n.t('settingsScreen.information')}/>
+                    <List.Section>
+                        {this.state.isDebugUnlocked
+                            ? <List.Item
+                                title={i18n.t('screens.debug')}
+                                left={props => <List.Icon {...props} icon="bug-check"/>}
+                                onPress={() => this.props.navigation.navigate("debug")}
+                            />
+                        :null}
+                        <List.Item
+                            title={i18n.t('screens.about')}
+                            description={i18n.t('aboutScreen.buttonDesc')}
+                            left={props => <List.Icon {...props} icon="information"/>}
+                            onPress={() => this.props.navigation.navigate("about")}
+                            onLongPress={this.unlockDebugMode}
+                        />
+                        <List.Item
+                            title={i18n.t('feedbackScreen.homeButtonTitle')}
+                            description={i18n.t('feedbackScreen.homeButtonSubtitle')}
+                            left={props => <List.Icon {...props} icon="bug"/>}
+                            onPress={() => this.props.navigation.navigate("feedback")}
+                        />
                     </List.Section>
                 </Card>
             </ScrollView>

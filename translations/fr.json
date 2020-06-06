@@ -91,7 +91,8 @@
     "startScreen": "Écran de démarrage",
     "startScreenSub": "Choisissez l'écran utilisé au démarrage",
     "proxiwashNotifReminder": "Rappel de machine en cours",
-    "proxiwashNotifReminderSub": "Combien de minutes avant"
+    "proxiwashNotifReminderSub": "Combien de minutes avant",
+    "information": "Informations"
   },
   "homeScreen": {
     "listUpdated": "List mise à jour!",
@@ -110,6 +111,7 @@
     }
   },
   "aboutScreen": {
+    "buttonDesc": "Informations sur l'appli et son créateur",
     "appstore": "Voir sur l'Appstore",
     "playstore": "Voir sur le Playstore",
     "changelog": "Historique des modifications",
