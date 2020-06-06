@@ -24,6 +24,11 @@ export default class AsyncStorageManager {
 
     // Object storing preferences keys, default and current values for use in the app
     preferences = {
+        debugUnlocked: {
+            key: 'debugUnlocked',
+            default: '0',
+            current: '',
+        },
         showIntro: {
             key: 'showIntro',
             default: '1',
@@ -47,16 +52,6 @@ export default class AsyncStorageManager {
         nightMode: {
             key: 'nightMode',
             default: '1',
-            current: '',
-        },
-        expoToken: {
-            key: 'expoToken',
-            default: '',
-            current: '',
-        },
-        debugUnlocked: {
-            key: 'debugUnlocked',
-            default: '0',
             current: '',
         },
         defaultStartScreen: {
