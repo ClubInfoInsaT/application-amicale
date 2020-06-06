@@ -21,6 +21,7 @@ type Props = {
     theme: CustomTheme,
     url: string,
     customJS: string,
+    customPaddingFunction: null | (padding: number) => string,
     collapsibleStack: Collapsible,
     onMessage: Function,
     onScroll: Function,
@@ -37,6 +38,7 @@ class WebViewScreen extends React.PureComponent<Props> {
     static defaultProps = {
         customJS: '',
         showAdvancedControls: true,
+        customPaddingFunction: null,
     };
 
     webviewRef: Object;
@@ -157,8 +159,10 @@ class WebViewScreen extends React.PureComponent<Props> {
     getRenderLoading = () => <BasicLoadingScreen isAbsolute={true}/>;
 
     getJavascriptPadding(padding: number) {
+        const customPadding = this.props.customPaddingFunction != null ? this.props.customPaddingFunction(padding) : "";
         return (
             "document.getElementsByTagName('body')[0].style.paddingTop = '" + padding + "px';" +
+            customPadding +
             "true;"
         );
     }
