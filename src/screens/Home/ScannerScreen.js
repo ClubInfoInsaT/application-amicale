@@ -123,6 +123,8 @@ class ScannerScreen extends React.Component<Props, State> {
                     maskOpacity={0.5}
                     animatedLineThickness={1}
                     animationDuration={1000}
+                    width={250}
+                    height={250}
                 />
             </RNCamera>
         );
