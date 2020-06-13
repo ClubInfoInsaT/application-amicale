@@ -2,9 +2,12 @@
 
 Pensez à garder l'appli à jour pour profiter des dernières fonctionnalités !
 
- - **v3.0.6** - TBA
+ - **v3.0.7** - 13/06/2020
     - Correction de crash au démarrage sur certains appareils
     - Mise à jour des écrans d'intro pour mieux refléter l'appli actuelle
+    - Déplacement du bouton *À propos* dans les paramètres
+    - Mode sombre par défaut parce que voilà
+    - Correction de l'affichage de certains sites web
     - _Notes de développement :_
         - Force soloader 0.8.2
 
