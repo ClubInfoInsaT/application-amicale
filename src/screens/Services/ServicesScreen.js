@@ -49,6 +49,8 @@ type State = {
     isLoggedIn: boolean,
 }
 
+// TODO translate subtitles
+
 class ServicesScreen extends React.Component<Props, State> {
 
     amicaleDataset: cardList;
@@ -119,6 +121,12 @@ class ServicesScreen extends React.Component<Props, State> {
             },
         ];
         this.insaDataset = [
+            {
+                title: "MAP", // TODO translate
+                subtitle: "MAP",
+                image: RU_IMAGE,
+                onPress: () => nav.navigate("map"),
+            },
             {
                 title: i18n.t('screens.menuSelf'),
                 subtitle: "the ru",
