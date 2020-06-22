@@ -30,6 +30,7 @@ import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import {createScreenCollapsibleStack, getWebsiteStack} from "../utils/CollapsibleUtils";
 import BugReportScreen from "../screens/Other/FeedbackScreen";
+import MapScreen from "../screens/Services/MapScreen";
 
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
 
@@ -106,6 +107,13 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
             {getWebsiteStack("available-rooms", MainStack, AvailableRoomScreen, i18n.t('screens.availableRooms'))}
             {getWebsiteStack("bib", MainStack, BibScreen, i18n.t('screens.bib'))}
             {createScreenCollapsibleStack("self-menu", MainStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
+            <MainStack.Screen
+                name="map"
+                component={MapScreen}
+                options={{
+                    title: i18n.t('screens.map'),
+                }}
+            />
 
             {/*     STUDENTS     */}
             {createScreenCollapsibleStack("proximo", MainStack, ProximoMainScreen, i18n.t('screens.proximo'))}
