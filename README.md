@@ -10,7 +10,7 @@ Créée pendant l'été 2019, cette application compatible Android et iOS permet
  - Disponibilité des salles libre accès
  - Réservation des Bib'Box
  
-Ce dépot contient la source de cette application, sous licence GPLv3.
+Ce dépôt contient la source de cette application, sous licence GPLv3.
 
 ## Contribuer
 
@@ -30,9 +30,8 @@ Cette application utilisait initialement Expo, permettant de simplifier grandeme
 ## [Installer l'application depuis ce dépot](INSTALL.md)
 
 ## Liens utiles
-* [Documentation React Native](https://reactnative.dev/docs/getting-started)
-* [Documentation Expo](https://docs.expo.io/versions/latest/)
-* [Documentation React Native Paper](https://callstack.github.io/react-native-paper/)
-* [Documentation React navigation](https://reactnavigation.org/docs/getting-started)
-* [Documentation Jest](https://jestjs.io/docs/en/getting-started)
-* [Documentation Flow](https://flow.org/en/docs/react/)
+* [Documentation React Native](https://reactnative.dev/docs/getting-started) (La techno de base)
+* [Documentation React Native Paper](https://callstack.github.io/react-native-paper/) (Le framework d'UI)
+* [Documentation React navigation](https://reactnavigation.org/docs/getting-started) (Le framework de navigation entre écrans)
+* [Documentation Jest](https://jestjs.io/docs/en/getting-started) (Tests unitaires JavaScript)
+* [Documentation Flow](https://flow.org/en/docs/react/) (Utilitaire de typage statique pour JavaScript)

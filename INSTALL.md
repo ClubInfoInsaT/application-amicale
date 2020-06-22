@@ -4,6 +4,9 @@
 
 Tout est expliqué dans ce guide, si vous avez un problème ou une question, merci de me contacter par mail : app@amicale-insat.fr
 
+Ce guide à été testé sur Linux (Ubuntu 18.04).
+Si vous utilisez Windows, débrouillez-vous ou installez Linux j'ai la flemme de tester.
+
 ## Table des matières
 * [Installation de Git](#installation-de-git)
 * [Installation de node](#installation-de-node)
@@ -76,6 +79,9 @@ Pour lancer le *Bundler*, assurez vous d'être dans le dossier de l'application,
 npx react-native start
 ````
 
+**Ne stoppez pas le Metro Bundler dans la console à chaque changement !** Toutes les modifications sont appliquées automatiquement, pas besoin de stopper et de redémarrer pour des petits changements ! Il est seulement nécessaire de redémarrer le Metro Bundler quand vous changez des librairies ou des fichiers.
+
+
 ### Android
 Dans la deuxième console, lancez la commande suivante :
 ````shell script
@@ -87,8 +93,6 @@ Dans la deuxième console, lancez la commande suivante (valable que sur Mac) :
 ````shell script
 npx react-native run-ios
 ````
-
-**Ne stoppez pas le Metro Bundler dans la console à chaque changement !** Toutes les modifications sont appliquées automatiquement, pas besoin de stopper et de redémarrer pour des petits changements ! Il est seulement nécessaire de redémarrer le Metro Bundler quand vous changez des librairies ou des fichiers.
 
 ## Tester sur un appareil
 
@@ -118,6 +122,4 @@ En remplaçant `NOM DU SIMULATEUR` par le simulateur que vous voulez.
 
 #### Appareil Physique
 
-Aucune idée je suis pauvre je n'ai pas de Mac.
-
-[reference]: ##Installation de Git
+Aucune idée je suis pauvre je n'ai ni Mac ni iPhone.
