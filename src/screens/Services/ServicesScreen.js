@@ -122,7 +122,7 @@ class ServicesScreen extends React.Component<Props, State> {
         ];
         this.insaDataset = [
             {
-                title: "MAP", // TODO translate
+                title: i18n.t('screens.map'),
                 subtitle: "MAP",
                 image: RU_IMAGE,
                 onPress: () => nav.navigate("map"),

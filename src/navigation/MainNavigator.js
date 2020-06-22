@@ -111,7 +111,7 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 name="map"
                 component={MapScreen}
                 options={{
-                    title: "MAP", // TODO translate
+                    title: i18n.t('screens.map'),
                 }}
             />
 
