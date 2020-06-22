@@ -398,7 +398,23 @@
     "amicale": "L'Amicale",
     "students": "Services étudiants",
     "insa": "Services de l'INSA",
-    "notLoggedIn": "Non connecté"
+    "notLoggedIn": "Non connecté",
+    "descriptions": {
+      "clubs": "Voir les informations sur les clubs",
+      "profile": "Voir vos informations personnelles",
+      "amicaleWebsite": "Plus d'informations sur le site",
+      "vote": "Votez pour les prochaines élections",
+      "proximo": "Regardez le stock du Proximo",
+      "wiketud": "Trouvez des informations utiles sur les cours et la vie du campus",
+      "elusEtudiants": "Les étudiants en contact avec l'administration",
+      "tutorInsa": "Donnez et bénéficiez de tutorats par d'autres étudiants",
+      "map": "Trouvez votre chemin sur le campus",
+      "self": "Regardez le menu du RU",
+      "availableRooms": "Vérifiez les salles disponibles",
+      "bib": "Réservez une Bib'Box pour les travaux de groupe",
+      "mails": "Vérifiez vos mails INSA",
+      "ent": "Retrouvez vos notes"
+    }
   },
   "planningScreen": {
     "invalidEvent": "Impossible de trouver l'événement. Merci de vérifier que l'événement que vous voulez voir est valide."

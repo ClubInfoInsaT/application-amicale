@@ -398,7 +398,23 @@
     "amicale": "The Amicale",
     "students": "Student services",
     "insa": "INSA services",
-    "notLoggedIn": "Not logged in"
+    "notLoggedIn": "Not logged in",
+    "descriptions": {
+      "clubs": "See info about your favorite club and discover new ones",
+      "profile": "See your personal information",
+      "amicaleWebsite": "See more information on the website",
+      "vote": "Vote for the upcoming elections",
+      "proximo": "Check the store's stock",
+      "wiketud": "Read useful info about classes and campus life",
+      "elusEtudiants": "The students in contact with the administration",
+      "tutorInsa": "Give and take part in tutorials by students",
+      "map": "Find your way around the campus",
+      "self": "Check the RU menu",
+      "availableRooms": "See how many rooms are free",
+      "bib": "Book a Bib'Box for project work",
+      "mails": "Check your INSA mails",
+      "ent": "See your grades"
+    }
   },
   "planningScreen": {
     "invalidEvent": "Could not find the event. Please make sure the event you are trying to access is valid."
