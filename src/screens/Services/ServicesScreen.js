@@ -31,6 +31,7 @@ const WIKETUD_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Wiketud
 const EE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/EEC.png";
 const TUTORINSA_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/TutorINSA.png";
 
+const MAP_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Map.png";
 const BIB_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Bib.png";
 const RU_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/RU.png";
 const ROOM_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Salles.png";
@@ -124,7 +125,7 @@ class ServicesScreen extends React.Component<Props, State> {
             {
                 title: i18n.t('screens.map'),
                 subtitle: "MAP",
-                image: RU_IMAGE,
+                image: MAP_IMAGE,
                 onPress: () => nav.navigate("map"),
             },
             {
