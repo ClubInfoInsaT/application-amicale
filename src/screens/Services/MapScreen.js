@@ -6,7 +6,6 @@ import {withTheme} from 'react-native-paper';
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import MapboxGL from "@react-native-mapbox-gl/maps";
-import exampleIcon from '../../../assets/icon-notification.png';
 
 type Props = {
     navigation: StackNavigationProp,
@@ -17,22 +16,22 @@ type State = {
     featureCollection: Array<Object>,
 }
 
-MapboxGL.setAccessToken("sk.eyJ1IjoiYW1pY2FsZS1pbnNhdCIsImEiOiJja2JpM212Z3QwYmxmMnhsc3RxZWYza2Q5In0.og84RKRa6-vr3qRA1qU9Aw");
+MapboxGL.setAccessToken("pk.eyJ1IjoiYW1pY2FsZS1pbnNhdCIsImEiOiJja2JpM2d5OHYwYmdiMndxdnV4bmh6bGFwIn0.qiOwbs2_HRaQGUOpBDjbsQ");
 
-const styles = {
-    icon: {
-        iconImage: exampleIcon,
-        iconAllowOverlap: true,
-    },
-};
+// const styles = {
+//     icon: {
+//         iconImage: exampleIcon,
+//         iconAllowOverlap: true,
+//     },
+// };
 
-const FEATURES = [{
-    type: 'Feature',
-    geometry: {
-        type: 'Point',
-        coordinates: [1.4669608, 43.5698867],
-    }
-}]
+// const FEATURES = [{
+//     type: 'Feature',
+//     geometry: {
+//         type: 'Point',
+//         coordinates: [1.4669608, 43.5698867],
+//     }
+// }]
 
 /**
  * Class defining the app's map screen.
@@ -55,19 +54,19 @@ class MapScreen extends React.Component<Props, State> {
 
     }
 
-    onSymbolPress = (feature) => {
-        console.log("coucou");
-    }
-
-
-    onSourceLayerPress = ({features, coordinates, point}) => {
-        console.log(
-            'You pressed a layer here are your features:',
-            features,
-            coordinates,
-            point,
-        );
-    }
+    // onSymbolPress = (feature) => {
+    //     console.log("coucou");
+    // }
+    //
+    //
+    // onSourceLayerPress = ({features, coordinates, point}) => {
+    //     console.log(
+    //         'You pressed a layer here are your features:',
+    //         features,
+    //         coordinates,
+    //         point,
+    //     );
+    // }
 
     render() {
         return (
