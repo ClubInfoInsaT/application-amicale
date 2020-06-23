@@ -29,6 +29,8 @@ Cette application utilisait initialement Expo, permettant de simplifier grandeme
 
 ## [Installer l'application depuis ce dépot](INSTALL.md)
 
+## [Notes sur l'état actuel du projet](NOTES.md)
+
 ## Liens utiles
 * [Documentation React Native](https://reactnative.dev/docs/getting-started) (La techno de base)
 * [Documentation React Native Paper](https://callstack.github.io/react-native-paper/) (Le framework d'UI)
