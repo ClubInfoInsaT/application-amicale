@@ -119,7 +119,7 @@ class SelfMenuScreen extends React.Component<Props> {
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     borderBottomWidth: 1,
-                    borderBottomColor: this.theme.colors.primary,
+                    borderBottomColor: this.props.theme.colors.primary,
                     marginTop: 5,
                     marginBottom: 5,
                 }}/>
