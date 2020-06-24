@@ -20,7 +20,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {getCleanedMachineWatched, getMachineEndDate, isMachineWatched} from "../../utils/Proxiwash";
 import {Modalize} from "react-native-modalize";
 
-const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/washinsa/washinsa.json";
+const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/washinsa_data.json";
 
 let modalStateStrings = {};
 
@@ -34,6 +34,7 @@ export type Machine = {
     endTime: string,
     donePercent: string,
     remainingTime: string,
+    program: string,
 }
 
 type Props = {
@@ -75,11 +76,13 @@ class ProxiwashScreen extends React.Component<Props, State> {
      */
     constructor(props) {
         super(props);
-        modalStateStrings[ProxiwashConstants.machineStates.TERMINE] = i18n.t('proxiwashScreen.modal.finished');
-        modalStateStrings[ProxiwashConstants.machineStates.DISPONIBLE] = i18n.t('proxiwashScreen.modal.ready');
-        modalStateStrings[ProxiwashConstants.machineStates["EN COURS"]] = i18n.t('proxiwashScreen.modal.running');
-        modalStateStrings[ProxiwashConstants.machineStates.HS] = i18n.t('proxiwashScreen.modal.broken');
-        modalStateStrings[ProxiwashConstants.machineStates.ERREUR] = i18n.t('proxiwashScreen.modal.error');
+        modalStateStrings[ProxiwashConstants.machineStates.AVAILABLE] = i18n.t('proxiwashScreen.modal.ready');
+        modalStateStrings[ProxiwashConstants.machineStates.RUNNING] = i18n.t('proxiwashScreen.modal.running');
+        modalStateStrings[ProxiwashConstants.machineStates.RUNNING_NOT_STARTED] = i18n.t('proxiwashScreen.modal.runningNotStarted');
+        modalStateStrings[ProxiwashConstants.machineStates.FINISHED] = i18n.t('proxiwashScreen.modal.finished');
+        modalStateStrings[ProxiwashConstants.machineStates.UNAVAILABLE] = i18n.t('proxiwashScreen.modal.broken');
+        modalStateStrings[ProxiwashConstants.machineStates.ERROR] = i18n.t('proxiwashScreen.modal.error');
+        modalStateStrings[ProxiwashConstants.machineStates.UNKNOWN] = i18n.t('proxiwashScreen.modal.unknown');
     }
 
     /**
@@ -264,9 +267,9 @@ class ProxiwashScreen extends React.Component<Props, State> {
             icon: '',
             onPress: undefined
         };
-        let message = modalStateStrings[ProxiwashConstants.machineStates[item.state]];
+        let message = modalStateStrings[item.state];
         const onPress = this.onSetupNotificationsPress.bind(this, item);
-        if (ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates["EN COURS"]) {
+        if (item.state === ProxiwashConstants.machineStates.RUNNING) {
             let remainingTime = parseInt(item.remainingTime)
             if (remainingTime < 0)
                 remainingTime = 0;
@@ -286,7 +289,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
                     end: item.endTime,
                     remaining: remainingTime
                 });
-        } else if (ProxiwashConstants.machineStates[item.state] === ProxiwashConstants.machineStates.DISPONIBLE) {
+        } else if (item.state === ProxiwashConstants.machineStates.AVAILABLE) {
             if (isDryer)
                 message += '\n' + i18n.t('proxiwashScreen.dryersTariff');
             else
@@ -347,7 +350,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
             data = this.fetchedData.washers;
         let count = 0;
         for (let i = 0; i < data.length; i++) {
-            if (ProxiwashConstants.machineStates[data[i].state] === ProxiwashConstants.machineStates["DISPONIBLE"])
+            if (data[i].state === ProxiwashConstants.machineStates.AVAILABLE)
                 count += 1;
         }
         return count;

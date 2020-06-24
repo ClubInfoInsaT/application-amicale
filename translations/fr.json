@@ -182,8 +182,10 @@
       "finished": "Cette machine est terminée. Si vous l'avez démarrée, vous pouvez récupérer votre linge.",
       "ready": "Cette machine est vide et prête à être utilisée.",
       "running": "Cette machine a démarré à %{start} et terminera à %{end}.\nTemps restant : %{remaining} min",
+      "runningNotStarted": "Cette machine est prête mais n'est pas démarrée. Assurez vous de bien avoir appuyé sur le bouton start.",
       "broken": "Cette machine est hors service. Merci pour votre compréhension.",
       "error": "Il y a eu une erreur et il est impossible de récupérer les informations de cette machine. Veuillez nous excuser pour le gène occasionnée.",
+      "unknown": "Cette machine est dans un état inconnu. Veuillez nous excuser pour ce problème.",
       "notificationErrorTitle": "Erreur",
       "notificationErrorDescription": "Impossible de créer les notifications. Merci de vérifier que vous avez activé les notifications puis redémarrez l'appli."
     },
@@ -191,8 +193,10 @@
       "finished": "TERMINÉ",
       "ready": "DISPONIBLE",
       "running": "EN COURS",
+      "runningNotStarted": "NON DÉMARRÉE",
       "broken": "HORS SERVICE",
-      "error": "ERREUR"
+      "error": "ERREUR",
+      "unknown": "INCONNU"
     },
     "notifications": {
       "machineFinishedTitle": "Linge prêt",

@@ -182,8 +182,10 @@
       "finished": "This machine is finished. If you started it, you can get back your laundry.",
       "ready": "This machine is empty and ready to use.",
       "running": "This machine has been started at %{start} and will end at %{end}.\nRemaining time: %{remaining} min",
+      "runningNotStarted": "This machine is ready but not started. Please make sure you pressed the start button.",
       "broken": "This machine is broken and cannot be used. Thank you for your comprehension.",
       "error": "There has been an error and we are unable to get information from this machine. Sorry for the inconvenience.",
+      "unknown": "This machine is in an unknown state. Sorry for the inconvenience.",
       "notificationErrorTitle": "Error",
       "notificationErrorDescription": "Impossible to create notifications. Please make sure you enabled notifications then restart the app."
     },
@@ -191,8 +193,10 @@
       "finished": "FINISHED",
       "ready": "READY",
       "running": "RUNNING",
+      "runningNotStarted": "NOT STARTED",
       "broken": "BROKEN",
-      "error": "ERROR"
+      "error": "ERROR",
+      "unknown": "UNKNOWN"
     },
     "notifications": {
       "machineFinishedTitle": "Laundry Ready",

@@ -1,16 +1,20 @@
 export default {
     machineStates: {
-        "TERMINE": "0",
-        "DISPONIBLE": "1",
-        "EN COURS": "2",
-        "HS": "3",
-        "ERREUR": "4"
+        "AVAILABLE": 0,
+        "RUNNING": 1,
+        "RUNNING_NOT_STARTED": 2,
+        "FINISHED": 3,
+        "UNAVAILABLE": 4,
+        "ERROR": 5,
+        "UNKNOWN": 6,
     },
     stateIcons: {
-        "TERMINE": 'check-circle',
-        "DISPONIBLE": 'radiobox-blank',
-        "EN COURS": 'progress-check',
-        "HS": 'alert-octagram-outline',
-        "ERREUR": 'alert'
+        0: 'radiobox-blank',
+        1: 'progress-check',
+        2: 'alert-circle-outline',
+        3: 'check-circle',
+        4: 'alert-octagram-outline',
+        5: 'alert',
+        6: 'help-circle-outline',
     }
 };

@@ -31,9 +31,11 @@ export type CustomTheme = {
         proxiwashFinishedColor: string,
         proxiwashReadyColor: string,
         proxiwashRunningColor: string,
+        proxiwashRunningNotStartedColor: string,
         proxiwashRunningBgColor: string,
         proxiwashBrokenColor: string,
         proxiwashErrorColor: string,
+        proxiwashUnknownColor: string,
 
         // Screens
         planningColor: string,
@@ -100,9 +102,11 @@ export default class ThemeManager {
                 proxiwashFinishedColor: "#a5dc9d",
                 proxiwashReadyColor: "transparent",
                 proxiwashRunningColor: "#a0ceff",
+                proxiwashRunningNotStartedColor: "#c9e0ff",
                 proxiwashRunningBgColor: "#c7e3ff",
-                proxiwashBrokenColor: "#8e8e8e",
-                proxiwashErrorColor: "rgba(204,7,0,0.31)#e35f57",
+                proxiwashBrokenColor: "#ffa8a2",
+                proxiwashErrorColor: "#ffa8a2",
+                proxiwashUnknownColor: "#b6b6b6",
 
                 // Screens
                 planningColor: '#d9b10a',
@@ -158,9 +162,11 @@ export default class ThemeManager {
                 proxiwashFinishedColor: "#31682c",
                 proxiwashReadyColor: "transparent",
                 proxiwashRunningColor: "#213c79",
+                proxiwashRunningNotStartedColor: "#1e263e",
                 proxiwashRunningBgColor: "#1a2033",
-                proxiwashBrokenColor: "#656565",
+                proxiwashBrokenColor: "#7e2e2f",
                 proxiwashErrorColor: "#7e2e2f",
+                proxiwashUnknownColor: "#535353",
 
                 // Screens
                 planningColor: '#d99e09',
