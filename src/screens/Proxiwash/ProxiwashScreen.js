@@ -261,7 +261,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * @param isDryer True if the given item is a dryer
      * @return {*}
      */
-    getModalContent(title: string, item: Object, isDryer: boolean) {
+    getModalContent(title: string, item: Machine, isDryer: boolean) {
         let button = {
             text: i18n.t("proxiwashScreen.modal.ok"),
             icon: '',
@@ -287,7 +287,8 @@ class ProxiwashScreen extends React.Component<Props, State> {
                 {
                     start: item.startTime,
                     end: item.endTime,
-                    remaining: remainingTime
+                    remaining: remainingTime,
+                    program: item.program
                 });
         } else if (item.state === ProxiwashConstants.machineStates.AVAILABLE) {
             if (isDryer)

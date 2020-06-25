@@ -1,14 +1,15 @@
 import * as React from 'react';
-import {Avatar, List, ProgressBar, Surface, Text, withTheme} from 'react-native-paper';
+import {Avatar, Caption, List, ProgressBar, Surface, Text, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
 import ProxiwashConstants from "../../../constants/ProxiwashConstants";
 import i18n from "i18n-js";
 import AprilFoolsManager from "../../../managers/AprilFoolsManager";
 import * as Animatable from "react-native-animatable";
 import type {CustomTheme} from "../../../managers/ThemeManager";
+import type {Machine} from "../../../screens/Proxiwash/ProxiwashScreen";
 
 type Props = {
-    item: Object,
+    item: Machine,
     theme: CustomTheme,
     onPress: Function,
     isWatched: boolean,
@@ -147,10 +148,17 @@ class ProxiwashListItem extends React.Component<Props> {
                             <View style={{justifyContent: 'center',}}>
                                 <Text style={
                                     machineState === ProxiwashConstants.machineStates.FINISHED ?
-                                        {fontWeight: 'bold',} : {}}
+                                        {fontWeight: 'bold',} : {}
+                                }
                                 >
                                     {stateString}
                                 </Text>
+                                {
+                                    machineState === ProxiwashConstants.machineStates.RUNNING
+                                        ? <Caption>{props.item.remainingTime} min</Caption>
+                                        : null
+                                }
+
                             </View>
                             <View style={{justifyContent: 'center',}}>
                                 <Avatar.Icon

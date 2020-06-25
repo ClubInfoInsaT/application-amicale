@@ -181,7 +181,7 @@
       "cancel": "Annuler",
       "finished": "Cette machine est terminée. Si vous l'avez démarrée, vous pouvez récupérer votre linge.",
       "ready": "Cette machine est vide et prête à être utilisée.",
-      "running": "Cette machine a démarré à %{start} et terminera à %{end}.\nTemps restant : %{remaining} min",
+      "running": "Cette machine a démarré à %{start} et terminera à %{end}.\n\nTemps restant : %{remaining} min.\nProgramme: %{program}",
       "runningNotStarted": "Cette machine est prête mais n'est pas démarrée. Assurez vous de bien avoir appuyé sur le bouton start.",
       "broken": "Cette machine est hors service. Merci pour votre compréhension.",
       "error": "Il y a eu une erreur et il est impossible de récupérer les informations de cette machine. Veuillez nous excuser pour le gène occasionnée.",
