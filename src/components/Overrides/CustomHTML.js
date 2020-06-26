@@ -21,15 +21,25 @@ class CustomHTML extends React.Component<Props> {
         return <Text {...passProps}>{children}</Text>;
     };
 
+    getListBullet = (htmlAttribs, children, convertedCSSStyles, passProps) => {
+        return (
+            <Text>- </Text>
+        );
+    };
+
     render() {
         // Surround description with p to allow text styling if the description is not html
         return <HTML
             html={"<p>" + this.props.html + "</p>"}
             renderers={{
                 p: this.getBasicText,
+                li: this.getBasicText,
             }}
+            listsPrefixesRenderers={{
+                ul: this.getListBullet
+            }}
+            ignoredTags={['img']}
             ignoredStyles={['color', 'background-color']}
-
             onLinkPress={this.openWebLink}/>;
     }
 }
