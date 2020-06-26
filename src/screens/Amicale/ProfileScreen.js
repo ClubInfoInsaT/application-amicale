@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Animated, FlatList, StyleSheet, View} from "react-native";
-import {Avatar, Button, Card, Divider, List, withTheme} from 'react-native-paper';
+import {Avatar, Button, Card, Divider, List, Paragraph, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import i18n from 'i18n-js';
 import LogoutDialog from "../../components/Amicale/LogoutDialog";
@@ -10,6 +10,8 @@ import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHead
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import {Collapsible} from "react-navigation-collapsible";
 import {withCollapsible} from "../../utils/withCollapsible";
+import type {cardList} from "../../components/Lists/CardList/CardList";
+import CardList from "../../components/Lists/CardList/CardList";
 
 type Props = {
     navigation: Object,
@@ -21,6 +23,11 @@ type State = {
     dialogVisible: boolean,
 }
 
+const CLUBS_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Clubs.png";
+const VOTE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Vote.png";
+
+const ICON_AMICALE = require('../../../assets/amicale.png');
+
 class ProfileScreen extends React.Component<Props, State> {
 
     state = {
@@ -30,6 +37,7 @@ class ProfileScreen extends React.Component<Props, State> {
     data: Object;
 
     flatListData: Array<Object>;
+    amicaleDataset: cardList;
 
     constructor() {
         super();
@@ -37,7 +45,28 @@ class ProfileScreen extends React.Component<Props, State> {
             {id: '0'},
             {id: '1'},
             {id: '2'},
+            {id: '3'},
         ]
+        this.amicaleDataset = [
+            {
+                title: i18n.t('screens.clubsAbout'),
+                subtitle: i18n.t('servicesScreen.descriptions.clubs'),
+                image: CLUBS_IMAGE,
+                onPress: () => this.props.navigation.navigate("club-list"),
+            },
+            {
+                title: i18n.t('screens.vote'),
+                subtitle: i18n.t('servicesScreen.descriptions.vote'),
+                image: VOTE_IMAGE,
+                onPress: () => this.props.navigation.navigate("vote"),
+            },
+            {
+                title: i18n.t('screens.amicaleWebsite'),
+                subtitle: i18n.t('servicesScreen.descriptions.amicaleWebsite'),
+                image: ICON_AMICALE,
+                onPress: () => this.props.navigation.navigate("amicale-website"),
+            },
+        ];
     }
 
     componentDidMount() {
@@ -83,13 +112,60 @@ class ProfileScreen extends React.Component<Props, State> {
     getRenderItem = ({item}: Object) => {
         switch (item.id) {
             case '0':
-                return this.getPersonalCard();
+                return this.getWelcomeCard();
             case '1':
+                return this.getPersonalCard();
+            case '2':
                 return this.getClubCard();
             default:
                 return this.getMembershipCar();
         }
     };
+
+    getServicesList() {
+        return (
+            <CardList
+                dataset={this.amicaleDataset}
+                isHorizontal={true}
+            />
+        );
+    }
+
+    getWelcomeCard() {
+        return (
+            <Card style={styles.card}>
+                <Card.Title
+                    title={i18n.t("profileScreen.welcomeTitle", {name: this.data.first_name})}
+                    left={(props) => <Avatar.Image
+                        size={64}
+                        source={ICON_AMICALE}
+                        style={{backgroundColor: 'transparent',}}
+                    />}
+                    titleStyle={{marginLeft: 10}}
+                />
+                <Card.Content>
+                    <Divider/>
+                    <Paragraph>
+                        {i18n.t("profileScreen.welcomeDescription")}
+                    </Paragraph>
+                    {this.getServicesList()}
+                    <Paragraph>
+                        {i18n.t("profileScreen.welcomeFeedback")}
+                    </Paragraph>
+                    <Divider/>
+                    <Card.Actions>
+                        <Button
+                            icon="bug"
+                            mode="contained"
+                            onPress={() => this.props.navigation.navigate('feedback')}
+                            style={styles.editButton}>
+                            {i18n.t("feedbackScreen.homeButtonTitle")}
+                        </Button>
+                    </Card.Actions>
+                </Card.Content>
+            </Card>
+        );
+    }
 
     /**
      * Checks if the given field is available

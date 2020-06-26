@@ -228,7 +228,11 @@
     "membership": "Cotisation",
     "membershipSubtitle": "Permet de participer à diverses activités",
     "membershipPayed": "Payée",
-    "membershipNotPayed": "Non payée"
+    "membershipNotPayed": "Non payée",
+    "welcomeTitle": "Bonjour %{name} !",
+    "welcomeDescription": "Ceci est votre espace personnel Amicale INSA Toulouse. Vous trouverez ci-dessous les services disponibles avec votre compte. Un peu vide ? Vous avez raison et nous allons essayer de corriger ça, donc restez à jour !",
+    "welcomeFeedback": "Nous allons essayer de proposer plus de services ! Si vous avez des suggestions, ou avez trouvé des bugs, merci de nous contacter avec le bouton ci-dessous."
+
   },
   "scannerScreen": {
     "errorPermission": "Scanotron 3000 a besoin d'accéder à la caméra pour scanner des QR codes.\nLa caméra ne sera jamais utilisée autrement.",

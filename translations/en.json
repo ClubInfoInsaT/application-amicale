@@ -228,7 +228,10 @@
     "membership": "Membership Fee",
     "membershipSubtitle": "Allows you to take part in various activities",
     "membershipPayed": "Payed",
-    "membershipNotPayed": "Not payed"
+    "membershipNotPayed": "Not payed",
+    "welcomeTitle": "Welcome %{name}!",
+    "welcomeDescription": "This is your Amicale INSA Toulouse personal space. Bellow are the current services you can access thanks to your account. Feels empty? You're right and we plan on fixing that, so stay tuned!",
+    "welcomeFeedback": "We plan on doing more! If you have any suggestions or found bugs, please tell us by clicking the button bellow."
   },
   "scannerScreen": {
     "errorPermission": "Scanotron 3000 needs access to the camera in order to scan QR codes.\nThe camera will never be used for any other purpose.",
