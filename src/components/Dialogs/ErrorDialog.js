@@ -28,6 +28,12 @@ class ErrorDialog extends React.PureComponent<Props> {
             case ERROR_TYPE.NO_CONSENT:
                 this.message = i18n.t("errors.noConsent");
                 break;
+            case ERROR_TYPE.TOKEN_SAVE:
+                this.message = i18n.t("errors.tokenSave");
+                break;
+            case ERROR_TYPE.TOKEN_RETRIEVE:
+                this.message = i18n.t("errors.unknown");
+                break;
             case ERROR_TYPE.BAD_INPUT:
                 this.message = i18n.t("errors.badInput");
                 break;
@@ -44,6 +50,7 @@ class ErrorDialog extends React.PureComponent<Props> {
                 this.message = i18n.t("errors.unknown");
                 break;
         }
+        this.message += "\n\nCode " + this.props.errorCode;
     }
 
     render() {

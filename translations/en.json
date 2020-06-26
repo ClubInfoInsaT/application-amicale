@@ -259,6 +259,7 @@
     "badCredentials": "Email or password invalid.",
     "badToken": "You are not logged in. Please login and try again.",
     "noConsent": "You did not give your consent for data processing to the Amicale.",
+    "tokenSave": "Could not save session token. Please contact support.",
     "badInput": "Invalid input. Please try again.",
     "forbidden": "You do not have access to this data.",
     "connectionError": "Network error. Please check your internet connection.",

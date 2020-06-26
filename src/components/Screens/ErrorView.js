@@ -45,6 +45,7 @@ class ErrorView extends React.PureComponent<Props, State> {
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
+        this.icon = "";
     }
 
     generateMessage() {
@@ -63,6 +64,10 @@ class ErrorView extends React.PureComponent<Props, State> {
                 case ERROR_TYPE.NO_CONSENT:
                     this.message = i18n.t("errors.noConsent");
                     this.icon = "account-remove-outline";
+                    break;
+                case ERROR_TYPE.TOKEN_SAVE:
+                    this.message = i18n.t("errors.tokenSave");
+                    this.icon = "alert-circle-outline";
                     break;
                 case ERROR_TYPE.BAD_INPUT:
                     this.message = i18n.t("errors.badInput");
@@ -85,6 +90,7 @@ class ErrorView extends React.PureComponent<Props, State> {
                     this.icon = "alert-circle-outline";
                     break;
             }
+            this.message += "\n\nCode " + this.props.errorCode;
         } else {
             this.message = this.props.message;
             this.icon = this.props.icon;

@@ -259,6 +259,7 @@
     "badCredentials": "Email ou mot de passe invalide.",
     "badToken": "Vous n'êtes pas connecté. Merci de vous connecter puis réessayez.",
     "noConsent": "Vous n'avez pas donné votre consentement pour l'utilisation de vos données personnelles.",
+    "tokenSave": "Impossible de sauvegarder le token de session. Merci de contacter le support.",
     "badInput": "Entrée invalide. Merci de réessayer.",
     "forbidden": "Vous n'avez pas accès à cette information.",
     "connectionError": "Erreur de réseau. Merci de vérifier votre connexion Internet.",

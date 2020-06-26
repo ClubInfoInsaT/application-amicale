@@ -122,7 +122,7 @@ export default class ConnectionManager {
                             resolve(true);
                         })
                         .catch(() => {
-                            reject(ERROR_TYPE.UNKNOWN);
+                            reject(ERROR_TYPE.TOKEN_SAVE);
                         });
                 })
                 .catch((error) => reject(error));
@@ -151,7 +151,7 @@ export default class ConnectionManager {
                     .then((response) => resolve(response))
                     .catch((error) => reject(error));
             } else
-                reject(ERROR_TYPE.UNKNOWN);
+                reject(ERROR_TYPE.TOKEN_RETRIEVE);
         });
     }
 }

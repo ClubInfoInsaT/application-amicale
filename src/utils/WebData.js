@@ -5,6 +5,8 @@ export const ERROR_TYPE = {
     BAD_CREDENTIALS: 1,
     BAD_TOKEN: 2,
     NO_CONSENT: 3,
+    TOKEN_SAVE: 4,
+    TOKEN_RETRIEVE: 5,
     BAD_INPUT: 400,
     FORBIDDEN: 403,
     CONNECTION_ERROR: 404,
@@ -41,7 +43,7 @@ export async function apiRequest(path: string, method: string, params: ?Object) 
                     else
                         reject(response.error);
                 } else
-                    reject(ERROR_TYPE.CONNECTION_ERROR);
+                    reject(ERROR_TYPE.SERVER_ERROR);
             })
             .catch(() => {
                 reject(ERROR_TYPE.CONNECTION_ERROR);
