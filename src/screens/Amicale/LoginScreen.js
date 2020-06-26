@@ -10,6 +10,7 @@ import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import AsyncStorageManager from "../../managers/AsyncStorageManager";
 
 type Props = {
     navigation: Object,
@@ -81,6 +82,11 @@ class LoginScreen extends React.Component<Props, State> {
     hideErrorDialog = () => this.setState({dialogVisible: false});
 
     handleSuccess = () => {
+        // Do not show the login banner again
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.homeShowBanner.key,
+            '0'
+        );
         if (this.nextScreen == null)
             this.props.navigation.goBack();
         else

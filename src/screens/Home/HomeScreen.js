@@ -150,7 +150,9 @@ class HomeScreen extends React.Component<Props, State> {
     }
 
     onBannerTimeout = () => {
-        this.setState({bannerVisible: AsyncStorageManager.getInstance().preferences.homeShowBanner.current === "1"})
+        this.setState({
+            bannerVisible: AsyncStorageManager.getInstance().preferences.homeShowBanner.current === "1"
+        })
     }
 
     onScreenFocus = () => {
@@ -159,6 +161,9 @@ class HomeScreen extends React.Component<Props, State> {
             this.props.navigation.setOptions({
                 headerRight: this.getHeaderButton,
             });
+        }
+        if (this.isLoggedIn) {
+            this.setState({bannerVisible: false})
         }
         // handle link open when home is not focused or created
         this.handleNavigationParams();
