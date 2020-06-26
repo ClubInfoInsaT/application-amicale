@@ -6,11 +6,9 @@ import CardList from "../../components/Lists/CardList/CardList";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
-import {CommonActions} from "@react-navigation/native";
 import {Animated, View} from "react-native";
-import {Avatar, Button, Card, Divider, List, Title, TouchableRipple, withTheme} from "react-native-paper";
+import {Avatar, Card, Divider, List, TouchableRipple, withTheme} from "react-native-paper";
 import type {CustomTheme} from "../../managers/ThemeManager";
-import ConnectionManager from "../../managers/ConnectionManager";
 import i18n from 'i18n-js';
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 
@@ -45,9 +43,7 @@ export type listItem = {
     content: cardList,
 }
 
-type State = {
-    isLoggedIn: boolean,
-}
+type State = {}
 
 class ServicesScreen extends React.Component<Props, State> {
 
@@ -111,12 +107,6 @@ class ServicesScreen extends React.Component<Props, State> {
                 image: TUTORINSA_IMAGE,
                 onPress: () => nav.navigate("tutorinsa"),
             },
-            {
-                title: i18n.t('screens.amicaleWebsite'),
-                subtitle: i18n.t('servicesScreen.descriptions.amicaleWebsite'),
-                image: AMICALE_IMAGE,
-                onPress: () => nav.navigate("amicale-website"),
-            },
         ];
         this.insaDataset = [
             {
@@ -173,13 +163,9 @@ class ServicesScreen extends React.Component<Props, State> {
                 content: this.insaDataset
             },
         ];
-        this.state = {
-            isLoggedIn: ConnectionManager.getInstance().isLoggedIn()
-        }
     }
 
     componentDidMount() {
-        this.props.navigation.addListener('focus', this.onFocus);
         this.props.navigation.setOptions({
             headerRight: this.getAboutButton,
         });
@@ -191,21 +177,6 @@ class ServicesScreen extends React.Component<Props, State> {
         </MaterialHeaderButtons>;
 
     onAboutPress = () => this.props.navigation.navigate('amicale-contact');
-
-    onFocus = () => {
-        this.handleNavigationParams();
-        this.setState({isLoggedIn: ConnectionManager.getInstance().isLoggedIn()})
-    }
-
-    handleNavigationParams() {
-        if (this.props.route.params != null) {
-            if (this.props.route.params.nextScreen != null) {
-                this.props.navigation.navigate(this.props.route.params.nextScreen);
-                // reset params to prevent infinite loop
-                this.props.navigation.dispatch(CommonActions.setParams({nextScreen: null}));
-            }
-        }
-    };
 
     getAvatar(props, source: string | number) {
         if (typeof source === "number")
@@ -225,57 +196,25 @@ class ServicesScreen extends React.Component<Props, State> {
             />
     }
 
-    getLoginMessage() {
-        return (
-            <View>
-                <Title style={{
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                }}>
-                    {i18n.t("servicesScreen.notLoggedIn")}
-                </Title>
-                <Button
-                    icon="login"
-                    mode="contained"
-                    onPress={() => this.props.navigation.navigate("login")}
-                    style={{
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                    }}>
-                    {i18n.t("screens.login")}
-                </Button>
-            </View>
-        )
-    }
-
     renderItem = ({item}: { item: listItem }) => {
-        const shouldShowLogin = !this.state.isLoggedIn && item.shouldLogin;
         return (
             <TouchableRipple
                 style={{
                     margin: 5,
                     marginBottom: 20,
                 }}
-                onPress={shouldShowLogin
-                    ? undefined
-                    : () => this.props.navigation.navigate("services-section", {data: item})}
+                onPress={() => this.props.navigation.navigate("services-section", {data: item})}
             >
                 <View>
                     <Card.Title
                         title={item.title}
                         left={(props) => this.getAvatar(props, item.image)}
-                        right={shouldShowLogin
-                            ? undefined
-                            : (props) => <List.Icon {...props} icon="chevron-right"/>}
+                        right={(props) => <List.Icon {...props} icon="chevron-right"/>}
                     />
-                    {
-                        shouldShowLogin
-                            ? this.getLoginMessage()
-                            : <CardList
-                                dataset={item.content}
-                                isHorizontal={true}
-                            />
-                    }
+                    <CardList
+                        dataset={item.content}
+                        isHorizontal={true}
+                    />
                 </View>
             </TouchableRipple>
 
