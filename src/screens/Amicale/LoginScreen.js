@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, KeyboardAvoidingView, Linking, StyleSheet, View} from "react-native";
+import {Animated, KeyboardAvoidingView, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, HelperText, Paragraph, TextInput, withTheme} from 'react-native-paper';
 import ConnectionManager from "../../managers/ConnectionManager";
 import i18n from 'i18n-js';
@@ -30,7 +30,7 @@ type State = {
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
 
-const RESET_PASSWORD_PATH = "https://www.amicale-insat.fr//password/reset";
+const RESET_PASSWORD_PATH = "https://www.amicale-insat.fr/password/reset";
 
 const emailRegex = /^.+@.+\..+$/;
 
@@ -70,7 +70,6 @@ class LoginScreen extends React.Component<Props, State> {
             else
                 this.nextScreen = null;
         }
-        console.log(this.nextScreen);
     }
 
     showErrorDialog = (error: number) =>
@@ -88,7 +87,7 @@ class LoginScreen extends React.Component<Props, State> {
             this.props.navigation.replace(this.nextScreen);
     };
 
-    onResetPasswordClick = () => Linking.openURL(RESET_PASSWORD_PATH);
+    onResetPasswordClick = () => this.props.navigation.navigate('amicale-website', {path: RESET_PASSWORD_PATH});
 
     validateEmail = () => this.setState({isEmailValidated: true});
 
