@@ -245,10 +245,7 @@ class ProfileScreen extends React.Component<Props, State> {
                         <Button
                             icon="account-edit"
                             mode="contained"
-                            onPress={() => this.props.navigation.navigate('amicale-website', {
-                                screen: 'amicale-website',
-                                params: {path: this.data.link}
-                            })}
+                            onPress={() => this.props.navigation.navigate('amicale-website', {path: this.data.link})}
                             style={styles.editButton}>
                             {i18n.t("profileScreen.editInformation")}
                         </Button>
