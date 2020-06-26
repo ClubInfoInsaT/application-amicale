@@ -11,6 +11,7 @@ import {Avatar, Card, Divider, List, TouchableRipple, withTheme} from "react-nat
 import type {CustomTheme} from "../../managers/ThemeManager";
 import i18n from 'i18n-js';
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
+import ConnectionManager from "../../managers/ConnectionManager";
 
 type Props = {
     navigation: Object,
@@ -61,13 +62,13 @@ class ServicesScreen extends React.Component<Props, State> {
                 title: i18n.t('screens.clubsAbout'),
                 subtitle: i18n.t('servicesScreen.descriptions.clubs'),
                 image: CLUBS_IMAGE,
-                onPress: () => nav.navigate("club-list"),
+                onPress: () => this.onAmicaleServicePress("club-list"),
             },
             {
                 title: i18n.t('screens.profile'),
                 subtitle: i18n.t('servicesScreen.descriptions.profile'),
                 image: PROFILE_IMAGE,
-                onPress: () => nav.navigate("profile"),
+                onPress: () => this.onAmicaleServicePress("profile"),
             },
             {
                 title: i18n.t('screens.amicaleWebsite'),
@@ -79,7 +80,7 @@ class ServicesScreen extends React.Component<Props, State> {
                 title: i18n.t('screens.vote'),
                 subtitle: i18n.t('servicesScreen.descriptions.vote'),
                 image: VOTE_IMAGE,
-                onPress: () => nav.navigate("vote"),
+                onPress: () => this.onAmicaleServicePress("vote"),
             },
         ];
         this.studentsDataset = [
@@ -194,6 +195,13 @@ class ServicesScreen extends React.Component<Props, State> {
                 color={this.props.theme.colors.primary}
                 style={{backgroundColor: 'transparent'}}
             />
+    }
+
+    onAmicaleServicePress(route: string) {
+        if (ConnectionManager.getInstance().isLoggedIn())
+            this.props.navigation.navigate(route);
+        else
+            this.props.navigation.navigate("login", {nextScreen: route});
     }
 
     renderItem = ({item}: { item: listItem }) => {
