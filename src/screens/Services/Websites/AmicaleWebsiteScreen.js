@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import WebViewScreen from "../../../components/Screens/WebViewScreen";
-import {CommonActions} from "@react-navigation/native";
 
 const URL = 'https://www.amicale-insat.fr/';
 /**
@@ -15,10 +14,9 @@ export const AmicaleWebsiteScreen = (props: Object) => {
         if (props.route.params.path !== undefined && props.route.params.path !== null) {
             path = props.route.params.path;
             path = path.replace(URL, '');
-            // reset params to prevent infinite loop
-            props.navigation.dispatch(CommonActions.setParams({path: null}));
         }
     }
+    console.log(URL + path);
     return (
         <WebViewScreen
             {...props}
