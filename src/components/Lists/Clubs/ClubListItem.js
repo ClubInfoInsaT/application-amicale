@@ -55,7 +55,11 @@ class ClubListItem extends React.Component<Props> {
                 onPress={this.props.onPress}
                 left={(props) => <Avatar.Image
                     {...props}
-                    style={{backgroundColor: 'transparent'}}
+                    style={{
+                        backgroundColor: 'transparent',
+                        marginLeft: 10,
+                        marginRight: 10,
+                    }}
                     size={64}
                     source={{uri: this.props.item.logo}}/>}
                 right={(props) => <Avatar.Icon

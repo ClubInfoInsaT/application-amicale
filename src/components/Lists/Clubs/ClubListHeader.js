@@ -26,7 +26,7 @@ class ClubListHeader extends React.Component<Props> {
             selected={isItemInCategoryFilter(this.props.selectedCategories, [category.id])}
             mode={'outlined'}
             onPress={onPress}
-            style={{marginRight: 5, marginBottom: 5}}
+            style={{marginRight: 5, marginLeft: 5, marginBottom: 5}}
             key={key}
         >
             {category.name}
