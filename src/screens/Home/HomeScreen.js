@@ -164,7 +164,7 @@ class HomeScreen extends React.Component<Props, State> {
     };
 
     getHeaderButton = () => {
-        let onPressLog = () => this.props.navigation.navigate("login");
+        let onPressLog = () => this.props.navigation.navigate("login", {nextScreen: "profile"});
         let logIcon = "login";
         let logColor = this.props.theme.colors.primary;
         if (this.isLoggedIn) {
