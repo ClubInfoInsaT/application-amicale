@@ -59,6 +59,11 @@ export default class AsyncStorageManager {
             default: 'home',
             current: '',
         },
+        homeShowBanner: {
+            key: 'homeShowBanner',
+            default: '1',
+            current: '',
+        },
         proxiwashShowBanner: {
             key: 'proxiwashShowBanner',
             default: '1',

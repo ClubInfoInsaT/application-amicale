@@ -109,6 +109,11 @@
       "amicaleTitle": "The Amicale",
       "amicaleConnect": "Login",
       "amicaleConnected": "See available services"
+    },
+    "loginBanner": {
+      "login": "Login",
+      "later": "Later",
+      "message": "Login to your Amicale account to get access to more services!"
     }
   },
   "aboutScreen": {
@@ -174,6 +179,7 @@
     "enableNotificationsTip": "Click on a running machine to enable notifications",
     "numAvailable": "available",
     "numAvailablePlural": "available",
+    "bannerButton": "Got it!",
     "modal": {
       "enableNotifications": "Notify me",
       "disableNotifications": "Stop notifications",

@@ -150,9 +150,7 @@ class PlanexScreen extends React.Component<Props, State> {
             props.navigation.setOptions({title: currentGroup.name})
         }
         this.state = {
-            bannerVisible:
-                AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
-                AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex',
+            bannerVisible: false,
             dialogVisible: false,
             dialogTitle: "",
             dialogMessage: "",
@@ -163,6 +161,15 @@ class PlanexScreen extends React.Component<Props, State> {
 
     componentDidMount() {
         this.props.navigation.addListener('focus', this.onScreenFocus);
+        setTimeout(this.onBannerTimeout, 2000);
+    }
+
+    onBannerTimeout = () => {
+        this.setState({
+            bannerVisible:
+                AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
+                AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex'
+        })
     }
 
     onScreenFocus = () => {
@@ -315,7 +322,10 @@ class PlanexScreen extends React.Component<Props, State> {
                         : <View style={{height: '100%'}}>{this.getWebView()}</View>}
                 </View>
                 <Banner
-                    style={{marginTop: containerPaddingTop,}}
+                    style={{
+                        marginTop: containerPaddingTop,
+                        backgroundColor: this.props.theme.colors.surface
+                    }}
                     visible={this.state.bannerVisible}
                     actions={[
                         {
@@ -329,7 +339,7 @@ class PlanexScreen extends React.Component<Props, State> {
 
                     ]}
                     icon={() => <Avatar.Icon
-                        icon={'information'}
+                        icon={'power'}
                         size={40}
                     />}
                 >

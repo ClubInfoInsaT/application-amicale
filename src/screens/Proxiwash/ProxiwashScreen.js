@@ -68,7 +68,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
         refreshing: false,
         modalCurrentDisplayItem: null,
         machinesWatched: JSON.parse(AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current),
-        bannerVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === '1',
+        bannerVisible: false,
     };
 
     /**
@@ -107,6 +107,11 @@ class ProxiwashScreen extends React.Component<Props, State> {
                     <Item title="information" iconName="information" onPress={this.onAboutPress}/>
                 </MaterialHeaderButtons>,
         });
+        setTimeout(this.onBannerTimeout, 2000);
+    }
+
+    onBannerTimeout = () => {
+        this.setState({bannerVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === "1"})
     }
 
     /**
@@ -417,16 +422,19 @@ class ProxiwashScreen extends React.Component<Props, State> {
                         updateData={this.state.machinesWatched.length}/>
                 </View>
                 <Banner
-                    style={{marginTop: containerPaddingTop,}}
+                    style={{
+                        marginTop: containerPaddingTop,
+                        backgroundColor: this.props.theme.colors.surface
+                    }}
                     visible={this.state.bannerVisible}
                     actions={[
                         {
-                            label: 'OK',
+                            label: i18n.t('proxiwashScreen.bannerButton'),
                             onPress: this.onHideBanner,
                         },
                     ]}
                     icon={() => <Avatar.Icon
-                        icon={'information'}
+                        icon={'bell'}
                         size={40}
                     />}
                 >

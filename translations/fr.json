@@ -109,7 +109,13 @@
       "amicaleTitle": "L'Amicale",
       "amicaleConnect": "Se connecter",
       "amicaleConnected": "Voir les services disponibles"
+    },
+    "loginBanner": {
+      "login": "Se Connecter",
+      "later": "Plus Tard",
+      "message": "Connectez-vous à votre compte Amicale pour profiter de plus de services !"
     }
+
   },
   "aboutScreen": {
     "buttonDesc": "Informations sur l'appli et son créateur",
@@ -174,6 +180,7 @@
     "enableNotificationsTip": "Cliquez sur une machine en cours pour activer les notifications",
     "numAvailable": "disponible",
     "numAvailablePlural": "disponibles",
+    "bannerButton": "Compris !",
     "modal": {
       "enableNotifications": "Me Notifier",
       "disableNotifications": "Désactiver les  notifications",
