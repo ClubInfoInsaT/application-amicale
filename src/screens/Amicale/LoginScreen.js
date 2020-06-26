@@ -50,11 +50,27 @@ class LoginScreen extends React.Component<Props, State> {
     onPasswordChange: Function;
     passwordInputRef: Object;
 
+    nextScreen: string | null;
 
     constructor(props) {
         super(props);
         this.onEmailChange = this.onInputChange.bind(this, true);
         this.onPasswordChange = this.onInputChange.bind(this, false);
+        this.props.navigation.addListener('focus', this.onScreenFocus);
+    }
+
+    onScreenFocus = () => {
+        this.handleNavigationParams();
+    };
+
+    handleNavigationParams () {
+        if (this.props.route.params != null) {
+            if (this.props.route.params.nextScreen != null)
+                this.nextScreen = this.props.route.params.nextScreen;
+            else
+                this.nextScreen = null;
+        }
+        console.log(this.nextScreen);
     }
 
     showErrorDialog = (error: number) =>
@@ -65,7 +81,12 @@ class LoginScreen extends React.Component<Props, State> {
 
     hideErrorDialog = () => this.setState({dialogVisible: false});
 
-    handleSuccess = () => this.props.navigation.goBack();
+    handleSuccess = () => {
+        if (this.nextScreen == null)
+            this.props.navigation.goBack();
+        else
+            this.props.navigation.replace(this.nextScreen);
+    };
 
     onResetPasswordClick = () => Linking.openURL(RESET_PASSWORD_PATH);
 
