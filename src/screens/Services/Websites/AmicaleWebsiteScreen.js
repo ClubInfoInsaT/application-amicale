@@ -16,7 +16,6 @@ export const AmicaleWebsiteScreen = (props: Object) => {
             path = path.replace(URL, '');
         }
     }
-    console.log(URL + path);
     return (
         <WebViewScreen
             {...props}

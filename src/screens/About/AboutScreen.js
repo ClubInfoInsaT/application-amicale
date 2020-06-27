@@ -25,6 +25,7 @@ const links = {
         "Coucou !\n\n",
     yohanLinkedin: 'https://www.linkedin.com/in/yohan-simard',
     react: 'https://facebook.github.io/react-native/',
+    meme: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 };
 
 type Props = {
@@ -84,7 +85,7 @@ class AboutScreen extends React.Component<Props> {
      */
     authorData: Array<Object> = [
         {
-            onPressCallback: () => console.log('cc'),
+            onPressCallback: () => openWebLink(links.meme),
             icon: 'account-circle',
             text: 'Arnaud VERGNET',
             showChevron: false
