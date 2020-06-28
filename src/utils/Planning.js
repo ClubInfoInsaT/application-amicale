@@ -22,7 +22,7 @@ const dateRegExp = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
  * @return {string} The string representation
  */
 export function getCurrentDateString(): string {
-    return dateToString(new Date(Date.now()));
+    return dateToString(new Date(Date.now()), false);
 }
 
 /**
@@ -117,6 +117,7 @@ export function stringToDate(dateString: string): Date | null {
  * YYYY-MM-DD HH-MM-SS
  *
  * @param date The date object to convert
+ * @param isUTC Whether to treat the date as UTC
  * @return {string} The converted string
  */
 export function dateToString(date: Date, isUTC: boolean): string {
@@ -198,7 +199,7 @@ export function generateEmptyCalendar(numberOfMonths: number): Object {
     let daysOfYear = {};
     for (let d = new Date(Date.now()); d <= end; d.setDate(d.getDate() + 1)) {
         const dateString = getDateOnlyString(
-            dateToString(new Date(d)));
+            dateToString(new Date(d), false));
         if (dateString !== null)
             daysOfYear[dateString] = []
     }

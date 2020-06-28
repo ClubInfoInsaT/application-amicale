@@ -21,7 +21,18 @@ type response_format = {
 
 const API_ENDPOINT = "https://www.amicale-insat.fr/api/";
 
-export async function apiRequest(path: string, method: string, params: ?Object) {
+/**
+ * Sends a request to the Amicale Website backend
+ *
+ * In case of failure, the promise will be rejected with the error code.
+ * In case of success, the promise will return the data object.
+ *
+ * @param path The API path from the API endpoint
+ * @param method The HTTP method to use (GET or POST)
+ * @param params The params to use for this request
+ * @returns {Promise<R>}
+ */
+export async function apiRequest(path: string, method: string, params: ?{ [key: string]: string }) {
     if (params === undefined || params === null)
         params = {};
 
@@ -51,6 +62,14 @@ export async function apiRequest(path: string, method: string, params: ?Object) 
     });
 }
 
+/**
+ * Checks if the given API response is valid.
+ *
+ * For a request to be valid, it must match the response_format as defined in this file.
+ *
+ * @param response
+ * @returns {boolean}
+ */
 export function isResponseValid(response: response_format) {
     let valid = response !== undefined
         && response.error !== undefined
@@ -63,7 +82,11 @@ export function isResponseValid(response: response_format) {
 }
 
 /**
- * Read data from FETCH_URL and return it.
+ * Reads data from the given url and returns it.
+ *
+ * Only use this function for non API calls.
+ * For Amicale API calls, please use the apiRequest function.
+ *
  * If no data was found, returns an empty object
  *
  * @param url The urls to fetch data from

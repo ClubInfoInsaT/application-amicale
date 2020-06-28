@@ -1,7 +1,19 @@
 import React from 'react';
-import {StatusBar} from 'react-native';
 import {useCollapsibleStack} from "react-navigation-collapsible";
 
+/**
+ * Function used to manipulate Collapsible Hooks from a class.
+ *
+ * Usage :
+ *
+ * export withCollapsible(Component)
+ *
+ * replacing Component with the one you want to use.
+ * This component will then receive the collapsibleStack prop.
+ *
+ * @param Component The component to use Collapsible with
+ * @returns {React.ComponentType<React.ClassAttributes<unknown>>}
+ */
 export const withCollapsible = (Component: any) => {
     return React.forwardRef((props: any, ref: any) => {
 
@@ -14,7 +26,6 @@ export const withCollapsible = (Component: any) => {
             progress,
             opacity,
         } = useCollapsibleStack();
-        const statusbarHeight = StatusBar.currentHeight != null ? StatusBar.currentHeight : 0;
         return <Component
             collapsibleStack={{
                 onScroll,
