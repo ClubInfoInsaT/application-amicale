@@ -73,7 +73,7 @@ export default class App extends React.Component<Props, State> {
     }
 
     /**
-     * THe app has been started by an url, and it has been parsed.
+     * The app has been started by an url, and it has been parsed.
      * Set a new default start route based on the data parsed.
      *
      * @param parsedData The data parsed from the url
