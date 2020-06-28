@@ -42,4 +42,4 @@ Rester en v10.1.1 car à partir de la v10.2.0, une erreur de compilation de la l
 Cette librairie permet d'améliorer les performances de la navigation en utilisant les optimisations natives.
 En revanche, activer le support pour screens fait crash l'appli sur android 9+ lors de la navigation pour sortir d'un écran avec une webview.
 
-[Dépot](https://github.com/react-native-community/react-native-webview) | [Référence](https://github.com/react-native-community/react-native-webview/issues/1437)
+[Dépot](https://github.com/software-mansion/react-native-screens) | [Référence](https://reactnavigation.org/docs/react-native-screens/)
