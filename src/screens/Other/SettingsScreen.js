@@ -31,6 +31,9 @@ class SettingsScreen extends React.Component<Props, State> {
 
     savedNotificationReminder: number;
 
+    /**
+     * Loads user preferences into state
+     */
     constructor() {
         super();
         let notifReminder = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current;
@@ -49,7 +52,7 @@ class SettingsScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Unlocks debug mode
+     * Unlocks debug mode and saves its state to user preferences
      */
     unlockDebugMode = () => {
         this.setState({isDebugUnlocked: true});
@@ -227,7 +230,7 @@ class SettingsScreen extends React.Component<Props, State> {
                                 left={props => <List.Icon {...props} icon="bug-check"/>}
                                 onPress={() => this.props.navigation.navigate("debug")}
                             />
-                        :null}
+                            : null}
                         <List.Item
                             title={i18n.t('screens.about')}
                             description={i18n.t('aboutScreen.buttonDesc')}

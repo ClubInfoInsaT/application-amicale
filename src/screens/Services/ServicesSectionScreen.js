@@ -7,10 +7,11 @@ import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import {CommonActions} from "@react-navigation/native";
 import type {listItem} from "./ServicesScreen";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
-    navigation: Object,
-    route: Object,
+    navigation: StackNavigationProp,
+    route: { params: { data: listItem | null } },
     collapsibleStack: Collapsible,
 }
 
@@ -23,6 +24,9 @@ class ServicesSectionScreen extends React.Component<Props> {
         this.handleNavigationParams();
     }
 
+    /**
+     * Recover the list to display from navigation parameters
+     */
     handleNavigationParams() {
         if (this.props.route.params != null) {
             if (this.props.route.params.data != null) {

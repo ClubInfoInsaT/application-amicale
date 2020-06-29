@@ -26,6 +26,12 @@ Stp corrige le pb, bien cordialement.`,
 
 class FeedbackScreen extends React.Component<Props> {
 
+    /**
+     * Gets link buttons
+     *
+     * @param isBug True if buttons should redirect to bug report methods
+     * @returns {*}
+     */
     getButtons(isBug: boolean) {
         return (
             <Card.Actions style={{

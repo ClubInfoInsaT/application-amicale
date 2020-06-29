@@ -41,7 +41,7 @@ class WebViewScreen extends React.PureComponent<Props> {
         customPaddingFunction: null,
     };
 
-    webviewRef: Object;
+    webviewRef: { current: null | WebView };
 
     canGoBack: boolean;
 
@@ -52,7 +52,7 @@ class WebViewScreen extends React.PureComponent<Props> {
     }
 
     /**
-     * Creates refresh button after mounting
+     * Creates header buttons and listens to events after mounting
      */
     componentDidMount() {
         this.props.navigation.setOptions({
@@ -78,6 +78,11 @@ class WebViewScreen extends React.PureComponent<Props> {
         );
     }
 
+    /**
+     * Goes back on the webview or on the navigation stack if we cannot go back anymore
+     *
+     * @returns {boolean}
+     */
     onBackButtonPressAndroid = () => {
         if (this.canGoBack) {
             this.onGoBackClicked();
@@ -87,7 +92,7 @@ class WebViewScreen extends React.PureComponent<Props> {
     };
 
     /**
-     * Gets a header refresh button
+     * Gets header refresh and open in browser buttons
      *
      * @return {*}
      */
@@ -106,6 +111,12 @@ class WebViewScreen extends React.PureComponent<Props> {
         );
     };
 
+    /**
+     * Creates advanced header control buttons.
+     * These buttons allows the user to refresh, go back, go forward and open in the browser.
+     *
+     * @returns {*}
+     */
     getAdvancedButtons = () => {
         return (
             <MaterialHeaderButtons>
@@ -141,14 +152,28 @@ class WebViewScreen extends React.PureComponent<Props> {
     /**
      * Callback to use when refresh button is clicked. Reloads the webview.
      */
-    onRefreshClicked = () => this.webviewRef.current.reload();
-    onGoBackClicked = () => this.webviewRef.current.goBack();
-    onGoForwardClicked = () => this.webviewRef.current.goForward();
-
+    onRefreshClicked = () => {
+        if (this.webviewRef.current != null)
+            this.webviewRef.current.reload();
+    }
+    onGoBackClicked = () => {
+        if (this.webviewRef.current != null)
+            this.webviewRef.current.goBack();
+    }
+    onGoForwardClicked = () => {
+        if (this.webviewRef.current != null)
+            this.webviewRef.current.goForward();
+    }
     onOpenClicked = () => Linking.openURL(this.props.url);
 
+    /**
+     * Injects the given javascript string into the web page
+     *
+     * @param script The script to inject
+     */
     injectJavaScript = (script: string) => {
-        this.webviewRef.current.injectJavaScript(script);
+        if (this.webviewRef.current != null)
+            this.webviewRef.current.injectJavaScript(script);
     }
 
     /**
@@ -158,6 +183,13 @@ class WebViewScreen extends React.PureComponent<Props> {
      */
     getRenderLoading = () => <BasicLoadingScreen isAbsolute={true}/>;
 
+    /**
+     * Gets the javascript needed to generate a padding on top of the page
+     * This adds padding to the body and runs the custom padding function given in props
+     *
+     * @param padding The padding to add in pixels
+     * @returns {string}
+     */
     getJavascriptPadding(padding: number) {
         const customPadding = this.props.customPaddingFunction != null ? this.props.customPaddingFunction(padding) : "";
         return (

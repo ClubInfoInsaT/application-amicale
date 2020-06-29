@@ -12,10 +12,13 @@ import ErrorView from "../../components/Screens/ErrorView";
 import CustomHTML from "../../components/Overrides/CustomHTML";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import i18n from 'i18n-js';
+import {StackNavigationProp} from "@react-navigation/stack";
+import type {CustomTheme} from "../../managers/ThemeManager";
 
 type Props = {
-    navigation: Object,
-    route: Object
+    navigation: StackNavigationProp,
+    route: { params: { data: Object, id: number, eventId: number } },
+    theme: CustomTheme
 };
 
 type State = {
@@ -34,13 +37,15 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
     eventId: number;
     errorCode: number;
 
-    colors: Object;
-
+    /**
+     * Generates data depending on whether the screen was opened from the planning or from a link
+     *
+     * @param props
+     */
     constructor(props) {
         super(props);
-        this.colors = props.theme.colors;
 
-        if (this.props.route.params.data !== undefined) {
+        if (this.props.route.params.data != null) {
             this.displayData = this.props.route.params.data;
             this.eventId = this.displayData.id;
             this.shouldFetchData = false;
@@ -61,6 +66,9 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Fetches data for the current event id from the API
+     */
     fetchData = () => {
         this.setState({loading: true});
         apiRequest(CLUB_INFO_PATH, 'POST', {id: this.eventId})
@@ -68,16 +76,31 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
             .catch(this.onFetchError);
     };
 
+    /**
+     * Hides loading and saves fetched data
+     *
+     * @param data Received data
+     */
     onFetchSuccess = (data: Object) => {
         this.displayData = data;
         this.setState({loading: false});
     };
 
+    /**
+     * Hides loading and saves the error code
+     *
+     * @param error
+     */
     onFetchError = (error: number) => {
         this.errorCode = error;
         this.setState({loading: false});
     };
 
+    /**
+     * Gets content to display
+     *
+     * @returns {*}
+     */
     getContent() {
         let subtitle = getFormattedEventTime(
             this.displayData["date_begin"], this.displayData["date_end"]);
@@ -94,7 +117,7 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
                     <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
                         <ImageModal
                             resizeMode="contain"
-                            imageBackgroundColor={this.colors.background}
+                            imageBackgroundColor={this.props.theme.colors.background}
                             style={{
                                 width: 300,
                                 height: 300,
@@ -114,9 +137,15 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Shows an error view and use a custom message if the event does not exist
+     *
+     * @returns {*}
+     */
     getErrorView() {
         if (this.errorCode === ERROR_TYPE.BAD_INPUT)
-            return <ErrorView {...this.props} showRetryButton={false} message={i18n.t("planningScreen.invalidEvent")} icon={"calendar-remove"}/>;
+            return <ErrorView {...this.props} showRetryButton={false} message={i18n.t("planningScreen.invalidEvent")}
+                              icon={"calendar-remove"}/>;
         else
             return <ErrorView {...this.props} errorCode={this.errorCode} onRefresh={this.fetchData}/>;
     }

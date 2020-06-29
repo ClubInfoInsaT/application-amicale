@@ -6,13 +6,15 @@ import i18n from "i18n-js";
 import WebSectionList from "../../../components/Screens/WebSectionList";
 import {List, withTheme} from 'react-native-paper';
 import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
+import {StackNavigationProp} from "@react-navigation/stack";
+import type {CustomTheme} from "../../../managers/ThemeManager";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json";
 const LIST_ITEM_HEIGHT = 84;
 
 type Props = {
-    navigation: Object,
-    route: Object,
+    navigation: StackNavigationProp,
+    theme: CustomTheme,
 }
 
 type State = {
@@ -26,22 +28,6 @@ type State = {
 class ProximoMainScreen extends React.Component<Props, State> {
 
     articles: Object;
-
-    onPressSearchBtn: Function;
-    onPressAboutBtn: Function;
-    getRenderItem: Function;
-    createDataset: Function;
-
-    colors: Object;
-
-    constructor(props) {
-        super(props);
-        this.onPressSearchBtn = this.onPressSearchBtn.bind(this);
-        this.onPressAboutBtn = this.onPressAboutBtn.bind(this);
-        this.getRenderItem = this.getRenderItem.bind(this);
-        this.createDataset = this.createDataset.bind(this);
-        this.colors = props.theme.colors;
-    }
 
     /**
      * Function used to sort items in the list.
@@ -83,7 +69,7 @@ class ProximoMainScreen extends React.Component<Props, State> {
      * Callback used when the search button is pressed.
      * This will open a new ProximoListScreen with all items displayed
      */
-    onPressSearchBtn() {
+    onPressSearchBtn = () => {
         let searchScreenData = {
             shouldFocusSearchBar: true,
             data: {
@@ -97,13 +83,13 @@ class ProximoMainScreen extends React.Component<Props, State> {
             },
         };
         this.props.navigation.navigate('proximo-list', searchScreenData);
-    }
+    };
 
     /**
      * Callback used when the about button is pressed.
      * This will open the ProximoAboutScreen
      */
-    onPressAboutBtn() {
+    onPressAboutBtn = () => {
         this.props.navigation.navigate('proximo-about');
     }
 
@@ -134,7 +120,7 @@ class ProximoMainScreen extends React.Component<Props, State> {
      * @param fetchedData
      * @return {*}
      * */
-    createDataset(fetchedData: Object) {
+    createDataset = (fetchedData: Object) => {
         return [
             {
                 title: '',
@@ -202,7 +188,7 @@ class ProximoMainScreen extends React.Component<Props, State> {
      * @param item The category to render
      * @return {*}
      */
-    getRenderItem({item}: Object) {
+    getRenderItem = ({item}: Object) => {
         let dataToSend = {
             shouldFocusSearchBar: false,
             data: item,
@@ -218,7 +204,7 @@ class ProximoMainScreen extends React.Component<Props, State> {
                     left={props => <List.Icon
                         {...props}
                         icon={item.type.icon}
-                        color={this.colors.primary}/>}
+                        color={this.props.theme.colors.primary}/>}
                     right={props => <List.Icon {...props} icon={'chevron-right'}/>}
                     style={{
                         height: LIST_ITEM_HEIGHT,

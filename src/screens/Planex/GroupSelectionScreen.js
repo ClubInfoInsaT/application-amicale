@@ -45,7 +45,7 @@ const GROUPS_URL = 'http://planex.insa-toulouse.fr/wsAdeGrp.php?projectId=1';
 const REPLACE_REGEX = /_/g;
 
 /**
- * Class defining proximo's article list of a certain category.
+ * Class defining planex group selection screen.
  */
 class GroupSelectionScreen extends React.Component<Props, State> {
 
@@ -106,10 +106,21 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         });
     };
 
+    /**
+     * Callback used when the user clicks on the favorite button
+     *
+     * @param item The item to add/remove from favorites
+     */
     onListFavoritePress = (item: group) => {
         this.updateGroupFavorites(item);
     };
 
+    /**
+     * Checks if the given group is in the favorites list
+     *
+     * @param group The group to check
+     * @returns {boolean}
+     */
     isGroupInFavorites(group: group) {
         let isFav = false;
         for (let i = 0; i < this.state.favoriteGroups.length; i++) {
@@ -121,6 +132,12 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         return isFav;
     }
 
+    /**
+     * Removes the given group from the given array
+     *
+     * @param favorites The array containing favorites groups
+     * @param group The group to remove from the array
+     */
     removeGroupFromFavorites(favorites: Array<group>, group: group) {
         for (let i = 0; i < favorites.length; i++) {
             if (group.id === favorites[i].id) {
@@ -130,12 +147,24 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Adds the given group to the given array
+     *
+     * @param favorites The array containing favorites groups
+     * @param group The group to add to the array
+     */
     addGroupToFavorites(favorites: Array<group>, group: group) {
         group.isFav = true;
         favorites.push(group);
         favorites.sort(sortName);
     }
 
+    /**
+     * Adds or removes the given group to the favorites list, depending on whether it is already in it or not.
+     * Favorites are then saved in user preferences
+     *
+     * @param group The group to add/remove to favorites
+     */
     updateGroupFavorites(group: group) {
         let newFavorites = [...this.state.favoriteGroups]
         if (this.isGroupInFavorites(group))
@@ -148,6 +177,12 @@ class GroupSelectionScreen extends React.Component<Props, State> {
             JSON.stringify(newFavorites));
     }
 
+    /**
+     * Checks whether to display the given group category, depending on user search query
+     *
+     * @param item The group category
+     * @returns {boolean}
+     */
     shouldDisplayAccordion(item: groupCategory) {
         let shouldDisplay = false;
         for (let i = 0; i < item.content.length; i++) {
@@ -181,6 +216,13 @@ class GroupSelectionScreen extends React.Component<Props, State> {
             return null;
     };
 
+    /**
+     * Generates the dataset to be used in the FlatList.
+     * This improves formatting of group names, sorts alphabetically the categories, and adds favorites at the top.
+     *
+     * @param fetchedData The raw data fetched from the server
+     * @returns {[]}
+     */
     generateData(fetchedData: { [key: string]: groupCategory }) {
         let data = [];
         for (let key in fetchedData) {
@@ -192,6 +234,11 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         return data;
     }
 
+    /**
+     * Replaces underscore by spaces and sets the favorite state of every group in the given category
+     *
+     * @param item The category containing groups to format
+     */
     formatGroups(item: groupCategory) {
         for (let i = 0; i < item.content.length; i++) {
             item.content[i].name = item.content[i].name.replace(REPLACE_REGEX, " ")

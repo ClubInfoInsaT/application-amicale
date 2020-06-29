@@ -12,12 +12,20 @@ import type {CustomTheme} from "../../managers/ThemeManager";
 import i18n from 'i18n-js';
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 import ConnectionManager from "../../managers/ConnectionManager";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
-    navigation: Object,
-    route: Object,
+    navigation: StackNavigationProp,
     collapsibleStack: Collapsible,
     theme: CustomTheme,
+}
+
+export type listItem = {
+    title: string,
+    description: string,
+    image: string | number,
+    shouldLogin: boolean,
+    content: cardList,
 }
 
 const CLUBS_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Clubs.png";
@@ -36,17 +44,7 @@ const ROOM_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Salles.png
 const EMAIL_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Bluemind.png";
 const ENT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ENT.png";
 
-export type listItem = {
-    title: string,
-    description: string,
-    image: string | number,
-    shouldLogin: boolean,
-    content: cardList,
-}
-
-type State = {}
-
-class ServicesScreen extends React.Component<Props, State> {
+class ServicesScreen extends React.Component<Props> {
 
     amicaleDataset: cardList;
     studentsDataset: cardList;
@@ -179,7 +177,17 @@ class ServicesScreen extends React.Component<Props, State> {
 
     onAboutPress = () => this.props.navigation.navigate('amicale-contact');
 
-    getAvatar(props, source: string | number) {
+    /**
+     * Gets the list title image for the list.
+     *
+     * If the source is a string, we are using an icon.
+     * If the source is a number, we are using an internal image.
+     *
+     * @param props Props to pass to the component
+     * @param source The source image to display. Can be a string for icons or a number for local images
+     * @returns {*}
+     */
+    getListTitleImage(props, source: string | number) {
         if (typeof source === "number")
             return <Avatar.Image
                 {...props}
@@ -197,6 +205,11 @@ class ServicesScreen extends React.Component<Props, State> {
             />
     }
 
+    /**
+     * Redirects to the given route or to the login screen if user is not logged in.
+     *
+     * @param route The route to navigate to
+     */
     onAmicaleServicePress(route: string) {
         if (ConnectionManager.getInstance().isLoggedIn())
             this.props.navigation.navigate(route);
@@ -204,6 +217,12 @@ class ServicesScreen extends React.Component<Props, State> {
             this.props.navigation.navigate("login", {nextScreen: route});
     }
 
+    /**
+     * A list item showing a list of available services for the current category
+     *
+     * @param item
+     * @returns {*}
+     */
     renderItem = ({item}: { item: listItem }) => {
         return (
             <TouchableRipple
@@ -216,7 +235,7 @@ class ServicesScreen extends React.Component<Props, State> {
                 <View>
                     <Card.Title
                         title={item.title}
-                        left={(props) => this.getAvatar(props, item.image)}
+                        left={(props) => this.getListTitleImage(props, item.image)}
                         right={(props) => <List.Icon {...props} icon="chevron-right"/>}
                     />
                     <CardList

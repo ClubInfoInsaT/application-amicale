@@ -14,6 +14,7 @@ import {
 } from '../../utils/Planning';
 import {Avatar, Divider, List} from 'react-native-paper';
 import CustomAgenda from "../../components/Overrides/CustomAgenda";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
@@ -25,8 +26,7 @@ LocaleConfig.locales['fr'] = {
 
 
 type Props = {
-    navigation: Object,
-    route: Object,
+    navigation: StackNavigationProp,
 }
 
 type State = {
@@ -48,22 +48,12 @@ class PlanningScreen extends React.Component<Props, State> {
     lastRefresh: Date;
     minTimeBetweenRefresh = 60;
 
-    didFocusSubscription: Function;
-    willBlurSubscription: Function;
-
     state = {
         refreshing: false,
         agendaItems: {},
         calendarShowing: false,
     };
 
-    onRefresh: Function;
-    onCalendarToggled: Function;
-    getRenderItem: Function;
-    getRenderEmptyDate: Function;
-    onAgendaRef: Function;
-    onCalendarToggled: Function;
-    onBackButtonPressAndroid: Function;
     currentDate = getDateOnlyString(getCurrentDateString());
 
     constructor(props: any) {
@@ -71,15 +61,6 @@ class PlanningScreen extends React.Component<Props, State> {
         if (i18n.currentLocale().startsWith("fr")) {
             LocaleConfig.defaultLocale = 'fr';
         }
-
-        // Create references for functions required in the render function
-        this.onRefresh = this.onRefresh.bind(this);
-        this.onCalendarToggled = this.onCalendarToggled.bind(this);
-        this.getRenderItem = this.getRenderItem.bind(this);
-        this.getRenderEmptyDate = this.getRenderEmptyDate.bind(this);
-        this.onAgendaRef = this.onAgendaRef.bind(this);
-        this.onCalendarToggled = this.onCalendarToggled.bind(this);
-        this.onBackButtonPressAndroid = this.onBackButtonPressAndroid.bind(this);
     }
 
     /**
@@ -87,7 +68,7 @@ class PlanningScreen extends React.Component<Props, State> {
      */
     componentDidMount() {
         this.onRefresh();
-        this.didFocusSubscription = this.props.navigation.addListener(
+        this.props.navigation.addListener(
             'focus',
             () =>
                 BackHandler.addEventListener(
@@ -95,7 +76,7 @@ class PlanningScreen extends React.Component<Props, State> {
                     this.onBackButtonPressAndroid
                 )
         );
-        this.willBlurSubscription = this.props.navigation.addListener(
+        this.props.navigation.addListener(
             'blur',
             () =>
                 BackHandler.removeEventListener(
@@ -110,7 +91,7 @@ class PlanningScreen extends React.Component<Props, State> {
      *
      * @return {boolean}
      */
-    onBackButtonPressAndroid() {
+    onBackButtonPressAndroid = () => {
         if (this.state.calendarShowing) {
             this.agendaRef.chooseDay(this.agendaRef.state.selectedDay);
             return true;
@@ -166,7 +147,7 @@ class PlanningScreen extends React.Component<Props, State> {
      *
      * @param ref
      */
-    onAgendaRef(ref: Object) {
+    onAgendaRef = (ref: Object) => {
         this.agendaRef = ref;
     }
 
@@ -175,7 +156,7 @@ class PlanningScreen extends React.Component<Props, State> {
      *
      * @param isCalendarOpened True is the calendar is already open, false otherwise
      */
-    onCalendarToggled(isCalendarOpened: boolean) {
+    onCalendarToggled = (isCalendarOpened: boolean) => {
         this.setState({calendarShowing: isCalendarOpened});
     }
 
@@ -185,7 +166,7 @@ class PlanningScreen extends React.Component<Props, State> {
      * @param item The current event to render
      * @return {*}
      */
-    getRenderItem(item: eventObject) {
+    getRenderItem = (item: eventObject) => {
         const onPress = this.props.navigation.navigate.bind(this, 'planning-information', {data: item});
         if (item.logo !== null) {
             return (
@@ -221,11 +202,7 @@ class PlanningScreen extends React.Component<Props, State> {
      *
      * @return {*}
      */
-    getRenderEmptyDate() {
-        return (
-            <Divider/>
-        );
-    }
+    getRenderEmptyDate = () => <Divider/>;
 
     render() {
         return (

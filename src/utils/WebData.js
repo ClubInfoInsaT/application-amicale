@@ -32,7 +32,7 @@ const API_ENDPOINT = "https://www.amicale-insat.fr/api/";
  * @param params The params to use for this request
  * @returns {Promise<R>}
  */
-export async function apiRequest(path: string, method: string, params: ?{ [key: string]: string }) {
+export async function apiRequest(path: string, method: string, params: ?{ [key: string]: string | number }) {
     if (params === undefined || params === null)
         params = {};
 

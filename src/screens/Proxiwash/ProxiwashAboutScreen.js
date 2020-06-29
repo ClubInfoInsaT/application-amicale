@@ -6,9 +6,7 @@ import i18n from "i18n-js";
 import {Card, List, Paragraph, Text, Title} from 'react-native-paper';
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 
-type Props = {
-    navigation: Object,
-};
+type Props = {};
 
 const LOGO = "https://etud.insa-toulouse.fr/~amicale_app/images/Proxiwash.png";
 

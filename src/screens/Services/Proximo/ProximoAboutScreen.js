@@ -5,9 +5,10 @@ import {Image, ScrollView, View} from 'react-native';
 import i18n from "i18n-js";
 import {Card, List, Paragraph, Text} from 'react-native-paper';
 import CustomTabBar from "../../../components/Tabbar/CustomTabBar";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
-    navigation: Object,
+    navigation: StackNavigationProp,
 };
 
 const LOGO = "https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png";

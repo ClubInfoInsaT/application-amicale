@@ -9,6 +9,9 @@ import {stringMatchQuery} from "../../../utils/Search";
 import ProximoListItem from "../../../components/Lists/Proximo/ProximoListItem";
 import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
 import {withCollapsible} from "../../../utils/withCollapsible";
+import {StackNavigationProp} from "@react-navigation/stack";
+import type {CustomTheme} from "../../../managers/ThemeManager";
+import {Collapsible} from "react-navigation-collapsible";
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -37,10 +40,10 @@ function sortNameReverse(a, b) {
 const LIST_ITEM_HEIGHT = 84;
 
 type Props = {
-    navigation: Object,
-    route: Object,
-    theme: Object,
-    collapsibleStack: Object,
+    navigation: StackNavigationProp,
+    route: { params: { data: { data: Object }, shouldFocusSearchBar: boolean } },
+    theme: CustomTheme,
+    collapsibleStack: Collapsible,
 }
 
 type State = {
