@@ -56,6 +56,7 @@ class LoginScreen extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
+        this.passwordInputRef = React.createRef();
         this.onEmailChange = this.onInputChange.bind(this, true);
         this.onPasswordChange = this.onInputChange.bind(this, false);
         this.props.navigation.addListener('focus', this.onScreenFocus);
