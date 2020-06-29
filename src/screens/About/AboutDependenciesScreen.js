@@ -4,6 +4,7 @@ import * as React from 'react';
 import {FlatList} from "react-native";
 import packageJson from '../../../package';
 import {List} from 'react-native-paper';
+import {StackNavigationProp} from "@react-navigation/stack";
 
 type listItem = {
     name: string,
@@ -16,7 +17,7 @@ type listItem = {
  * @param object The raw json
  * @return {Array<listItem>}
  */
-function generateListFromObject(object: { [string]: string }): Array<listItem> {
+function generateListFromObject(object: { [key: string]: string }): Array<listItem> {
     let list = [];
     let keys = Object.keys(object);
     let values = Object.values(object);
@@ -28,8 +29,7 @@ function generateListFromObject(object: { [string]: string }): Array<listItem> {
 }
 
 type Props = {
-    navigation: Object,
-    route: Object
+    navigation: StackNavigationProp,
 }
 
 const LIST_ITEM_HEIGHT = 64;
@@ -39,23 +39,23 @@ const LIST_ITEM_HEIGHT = 64;
  */
 export default class AboutDependenciesScreen extends React.Component<Props> {
 
-    data: Array<Object>;
+    data: Array<listItem>;
 
     constructor() {
         super();
         this.data = generateListFromObject(packageJson.dependencies);
     }
 
-    keyExtractor = (item: Object) => item.name;
+    keyExtractor = (item: listItem) => item.name;
 
-    renderItem = ({item}: Object) =>
+    renderItem = ({item}: { item: listItem }) =>
         <List.Item
             title={item.name}
             description={item.version.replace('^', '').replace('~', '')}
             style={{height: LIST_ITEM_HEIGHT}}
         />;
 
-    itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
+    itemLayout = (data: any, index: number) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
 
     render() {
         return (

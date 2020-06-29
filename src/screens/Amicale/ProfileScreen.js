@@ -12,15 +12,34 @@ import {Collapsible} from "react-navigation-collapsible";
 import {withCollapsible} from "../../utils/withCollapsible";
 import type {cardList} from "../../components/Lists/CardList/CardList";
 import CardList from "../../components/Lists/CardList/CardList";
+import {StackNavigationProp} from "@react-navigation/stack";
+import type {CustomTheme} from "../../managers/ThemeManager";
 
 type Props = {
-    navigation: Object,
-    theme: Object,
+    navigation: StackNavigationProp,
+    theme: CustomTheme,
     collapsibleStack: Collapsible,
 }
 
 type State = {
     dialogVisible: boolean,
+}
+
+type ProfileData = {
+    first_name: string,
+    last_name: string,
+    email: string,
+    birthday: string,
+    phone: string,
+    branch: string,
+    link: string,
+    validity: boolean,
+    clubs: Array<Club>,
+}
+type Club = {
+    id: number,
+    name: string,
+    is_manager: boolean,
 }
 
 const CLUBS_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Clubs.png";
@@ -34,9 +53,9 @@ class ProfileScreen extends React.Component<Props, State> {
         dialogVisible: false,
     };
 
-    data: Object;
+    data: ProfileData;
 
-    flatListData: Array<Object>;
+    flatListData: Array<{ id: string }>;
     amicaleDataset: cardList;
 
     constructor() {
@@ -79,12 +98,25 @@ class ProfileScreen extends React.Component<Props, State> {
 
     hideDisconnectDialog = () => this.setState({dialogVisible: false});
 
+    /**
+     * Gets the logout header button
+     *
+     * @returns {*}
+     */
     getHeaderButton = () => <MaterialHeaderButtons>
         <Item title="logout" iconName="logout" onPress={this.showDisconnectDialog}/>
     </MaterialHeaderButtons>;
 
-    getScreen = (data: Object) => {
-        this.data = data[0];
+    /**
+     * Gets the main screen component with the fetched data
+     *
+     * @param data The data fetched from the server
+     * @returns {*}
+     */
+    getScreen = (data: Array<{ [key: string]: any } | null>) => {
+        if (data[0] != null) {
+            this.data = data[0];
+        }
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
             <View style={{flex: 1}}>
@@ -109,7 +141,7 @@ class ProfileScreen extends React.Component<Props, State> {
         )
     };
 
-    getRenderItem = ({item}: Object) => {
+    getRenderItem = ({item}: { item: { id: string } }) => {
         switch (item.id) {
             case '0':
                 return this.getWelcomeCard();
@@ -122,6 +154,11 @@ class ProfileScreen extends React.Component<Props, State> {
         }
     };
 
+    /**
+     * Gets the list of services available with the Amicale account
+     *
+     * @returns {*}
+     */
     getServicesList() {
         return (
             <CardList
@@ -131,12 +168,17 @@ class ProfileScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Gets a card welcoming the user to his account
+     *
+     * @returns {*}
+     */
     getWelcomeCard() {
         return (
             <Card style={styles.card}>
                 <Card.Title
                     title={i18n.t("profileScreen.welcomeTitle", {name: this.data.first_name})}
-                    left={(props) => <Avatar.Image
+                    left={() => <Avatar.Image
                         size={64}
                         source={ICON_AMICALE}
                         style={{backgroundColor: 'transparent',}}
@@ -340,7 +382,7 @@ class ProfileScreen extends React.Component<Props, State> {
      * @param item The club to render
      * @return {*}
      */
-    clubListItem = ({item}: Object) => {
+    clubListItem = ({item}: { item: Club }) => {
         const onPress = () => this.openClubDetailsScreen(item.id);
         let description = i18n.t("profileScreen.isMember");
         let icon = (props) => <List.Icon {...props} icon="chevron-right"/>;
@@ -356,9 +398,9 @@ class ProfileScreen extends React.Component<Props, State> {
         />;
     };
 
-    clubKeyExtractor = (item: Object) => item.name;
+    clubKeyExtractor = (item: Club) => item.name;
 
-    sortClubList = (a: Object, b: Object) => a.is_manager ? -1 : 1;
+    sortClubList = (a: Club, b: Club) => a.is_manager ? -1 : 1;
 
     /**
      * Renders the list of clubs the user is part of
@@ -366,7 +408,7 @@ class ProfileScreen extends React.Component<Props, State> {
      * @param list The club list
      * @return {*}
      */
-    getClubList(list: Array<Object>) {
+    getClubList(list: Array<Club>) {
         list.sort(this.sortClubList);
         return (
             //$FlowFixMe

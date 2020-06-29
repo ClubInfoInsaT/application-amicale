@@ -7,29 +7,29 @@ import ImageModal from 'react-native-image-modal';
 import Autolink from "react-native-autolink";
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
+import {StackNavigationProp} from "@react-navigation/stack";
+import type {feedItem} from "./HomeScreen";
 
 type Props = {
-    navigation: Object,
-    route: Object
+    navigation: StackNavigationProp,
+    route: { params: { data: feedItem, date: string } }
 };
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
 const NAME_AMICALE = 'Amicale INSA Toulouse';
+
 /**
- * Class defining a planning event information page.
+ * Class defining a feed item page.
  */
 class FeedItemScreen extends React.Component<Props> {
 
-    displayData: Object;
+    displayData: feedItem;
     date: string;
-
-    colors: Object;
 
     constructor(props) {
         super(props);
-        this.colors = props.theme.colors;
-        this.displayData = this.props.route.params.data;
-        this.date = this.props.route.params.date;
+        this.displayData = props.route.params.data;
+        this.date = props.route.params.date;
     }
 
     componentDidMount() {
@@ -38,16 +38,29 @@ class FeedItemScreen extends React.Component<Props> {
         });
     }
 
+    /**
+     * Opens the feed item out link in browser or compatible app
+     */
     onOutLinkPress = () => {
         Linking.openURL(this.displayData.permalink_url);
     };
 
+    /**
+     * Gets the out link header button
+     *
+     * @returns {*}
+     */
     getHeaderButton = () => {
         return <MaterialHeaderButtons>
             <Item title="main" iconName={'facebook'} color={"#2e88fe"} onPress={this.onOutLinkPress}/>
         </MaterialHeaderButtons>;
     };
 
+    /**
+     * Gets the Amicale INSA avatar
+     *
+     * @returns {*}
+     */
     getAvatar() {
         return (
             <Avatar.Image size={48} source={ICON_AMICALE}
@@ -55,8 +68,8 @@ class FeedItemScreen extends React.Component<Props> {
         );
     }
 
-    getContent() {
-        const hasImage = this.displayData.full_picture !== '' && this.displayData.full_picture !== undefined;
+    render() {
+        const hasImage = this.displayData.full_picture !== '' && this.displayData.full_picture != null;
         return (
             <ScrollView style={{margin: 5,}}>
                 <Card.Title
@@ -88,10 +101,6 @@ class FeedItemScreen extends React.Component<Props> {
                 </Card.Content>
             </ScrollView>
         );
-    }
-
-    render() {
-        return this.getContent();
     }
 }
 

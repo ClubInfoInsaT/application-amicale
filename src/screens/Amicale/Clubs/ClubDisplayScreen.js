@@ -65,6 +65,12 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Gets the name of the category with the given ID
+     *
+     * @param id The category's ID
+     * @returns {string|*}
+     */
     getCategoryName(id: number) {
         if (this.categories !== null) {
             for (let i = 0; i < this.categories.length; i++) {
@@ -75,6 +81,12 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         return "";
     }
 
+    /**
+     * Gets the view for rendering categories
+     *
+     * @param categories The categories to display (max 2)
+     * @returns {null|*}
+     */
     getCategoriesRender(categories: [number, number]) {
         if (this.categories === null)
             return null;
@@ -95,12 +107,19 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         return <View style={{flexDirection: 'row', marginTop: 5}}>{final}</View>;
     }
 
-    getManagersRender(resp: Array<string>, email: string | null) {
-        let final = [];
-        for (let i = 0; i < resp.length; i++) {
-            final.push(<Paragraph key={i.toString()}>{resp[i]}</Paragraph>)
+    /**
+     * Gets the view for rendering club managers if any
+     *
+     * @param managers The list of manager names
+     * @param email The club contact email
+     * @returns {*}
+     */
+    getManagersRender(managers: Array<string>, email: string | null) {
+        let managersListView = [];
+        for (let i = 0; i < managers.length; i++) {
+            managersListView.push(<Paragraph key={i.toString()}>{managers[i]}</Paragraph>)
         }
-        const hasManagers = resp.length > 0;
+        const hasManagers = managers.length > 0;
         return (
             <Card style={{marginTop: 10, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
                 <Card.Title
@@ -113,13 +132,20 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                         icon="account-tie"/>}
                 />
                 <Card.Content>
-                    {final}
+                    {managersListView}
                     {this.getEmailButton(email, hasManagers)}
                 </Card.Content>
             </Card>
         );
     }
 
+    /**
+     * Gets the email button to contact the club, or the amicale if the club does not have any managers
+     *
+     * @param email The club contact email
+     * @param hasManagers True if the club has managers
+     * @returns {*}
+     */
     getEmailButton(email: string | null, hasManagers: boolean) {
         const destinationEmail = email != null && hasManagers
             ? email
@@ -141,13 +167,21 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         );
     }
 
-    updateHeaderTitle(data: Object) {
+    /**
+     * Updates the header title to match the given club
+     *
+     * @param data The club data
+     */
+    updateHeaderTitle(data: club) {
         this.props.navigation.setOptions({title: data.name})
     }
 
-    getScreen = (response: Array<Object>) => {
-        let data: club = response[0];
-        this.updateHeaderTitle(data);
+    getScreen = (response: Array<{ [key: string]: any } | null>) => {
+        let data: club | null = null;
+        if (response[0] != null) {
+            data = response[0];
+            this.updateHeaderTitle(data);
+        }
         if (data != null) {
             return (
                 <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
@@ -184,7 +218,6 @@ class ClubDisplayScreen extends React.Component<Props, State> {
             );
         } else
             return null;
-
     };
 
     render() {

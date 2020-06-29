@@ -6,25 +6,11 @@ import {Card, List, Text, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
 import Autolink from "react-native-autolink";
 
-type Props = {
-};
-
-type State = {
-};
+type Props = {};
 
 const CONTACT_LINK = 'clubs@amicale-insat.fr';
 
-/**
- * Class defining a planning event information page.
- */
-class ClubAboutScreen extends React.Component<Props, State> {
-
-    colors: Object;
-
-    constructor(props) {
-        super(props);
-        this.colors = props.theme.colors;
-    }
+class ClubAboutScreen extends React.Component<Props> {
 
     render() {
         return (

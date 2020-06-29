@@ -5,6 +5,14 @@ import {FlatList, Linking, Platform, View} from 'react-native';
 import i18n from "i18n-js";
 import {Avatar, Card, List, Title, withTheme} from 'react-native-paper';
 import packageJson from "../../../package.json";
+import {StackNavigationProp} from "@react-navigation/stack";
+
+type ListItem = {
+    onPressCallback: () => void,
+    icon: string,
+    text: string,
+    showChevron: boolean
+};
 
 const links = {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
@@ -29,7 +37,7 @@ const links = {
 };
 
 type Props = {
-    navigation: Object,
+    navigation: StackNavigationProp,
 };
 
 /**
@@ -48,7 +56,7 @@ class AboutScreen extends React.Component<Props> {
     /**
      * Data to be displayed in the app card
      */
-    appData: Array<Object> = [
+    appData = [
         {
             onPressCallback: () => openWebLink(Platform.OS === "ios" ? links.appstore : links.playstore),
             icon: Platform.OS === "ios" ? 'apple' : 'google-play',
@@ -83,7 +91,7 @@ class AboutScreen extends React.Component<Props> {
     /**
      * Data to be displayed in the author card
      */
-    authorData: Array<Object> = [
+    authorData = [
         {
             onPressCallback: () => openWebLink(links.meme),
             icon: 'account-circle',
@@ -106,7 +114,7 @@ class AboutScreen extends React.Component<Props> {
     /**
      * Data to be displayed in the additional developer card
      */
-    additionalDevData: Array<Object> = [
+    additionalDevData = [
         {
             onPressCallback: () => console.log('Meme this'),
             icon: 'account',
@@ -129,7 +137,7 @@ class AboutScreen extends React.Component<Props> {
     /**
      * Data to be displayed in the technologies card
      */
-    technoData: Array<Object> = [
+    technoData = [
         {
             onPressCallback: () => openWebLink(links.react),
             icon: 'react',
@@ -146,7 +154,7 @@ class AboutScreen extends React.Component<Props> {
     /**
      * Order of information cards
      */
-    dataOrder: Array<Object> = [
+    dataOrder = [
         {
             id: 'app',
         },
@@ -158,16 +166,9 @@ class AboutScreen extends React.Component<Props> {
         },
     ];
 
-
-    colors: Object;
-
-    constructor(props) {
-        super(props);
-        this.colors = props.theme.colors;
-    }
-
     /**
      * Gets the app icon
+     *
      * @param props
      * @return {*}
      */
@@ -187,7 +188,7 @@ class AboutScreen extends React.Component<Props> {
      * @param item The item to extract the key from
      * @return {string} The extracted key
      */
-    keyExtractor(item: Object): string {
+    keyExtractor(item: ListItem): string {
         return item.icon;
     }
 
@@ -271,7 +272,7 @@ class AboutScreen extends React.Component<Props> {
      * @param props
      * @return {*}
      */
-    getChevronIcon(props: Object) {
+    getChevronIcon(props) {
         return (
             <List.Icon {...props} icon={'chevron-right'}/>
         );
@@ -284,18 +285,18 @@ class AboutScreen extends React.Component<Props> {
      * @param props
      * @return {*}
      */
-    getItemIcon(item: Object, props: Object) {
+    getItemIcon(item: ListItem, props) {
         return (
             <List.Icon {...props} icon={item.icon}/>
         );
     }
 
     /**
-     * Get a clickable card item to be rendered inside a card.
+     * Gets a clickable card item to be rendered inside a card.
      *
      * @returns {*}
      */
-    getCardItem = ({item}: Object) => {
+    getCardItem = ({item}: { item: ListItem }) => {
         const getItemIcon = this.getItemIcon.bind(this, item);
         if (item.showChevron) {
             return (
@@ -323,7 +324,7 @@ class AboutScreen extends React.Component<Props> {
      * @param item The item to show
      * @return {*}
      */
-    getMainCard = ({item}: Object) => {
+    getMainCard = ({item}: { item: { id: string } }) => {
         switch (item.id) {
             case 'app':
                 return this.getAppCard();

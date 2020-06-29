@@ -32,10 +32,10 @@ export function stringMatchQuery(str: string, query: string) {
  * Checks if the given arrays have an item in common
  *
  * @param filter The filter array
- * @param categories The item's categories array
+ * @param categories The item's categories tuple
  * @returns {boolean} True if at least one entry is in both arrays
  */
-export function isItemInCategoryFilter(filter: Array<string>, categories: Array<string>) {
+export function isItemInCategoryFilter(filter: Array<number>, categories: [number, number]) {
     for (const category of categories) {
         if (filter.indexOf(category) !== -1)
             return true;

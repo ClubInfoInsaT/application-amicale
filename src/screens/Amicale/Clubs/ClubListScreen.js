@@ -131,6 +131,15 @@ class ClubListScreen extends React.Component<Props, State> {
 
     onChipSelect = (id: number) => this.updateFilteredData(null, id);
 
+    /**
+     * Updates the search string and category filter, saving them to the State.
+     *
+     * If the given category is already in the filter, it removes it.
+     * Otherwise it adds it to the filter.
+     *
+     * @param filterStr The new filter string to use
+     * @param categoryId The category to add/remove from the filter
+     */
     updateFilteredData(filterStr: string | null, categoryId: number | null) {
         let newCategoriesState = [...this.state.currentlySelectedCategories];
         let newStrState = this.state.currentSearchString;
@@ -150,6 +159,11 @@ class ClubListScreen extends React.Component<Props, State> {
             })
     }
 
+    /**
+     * Gets the list header, with controls to change the categories filter
+     *
+     * @returns {*}
+     */
     getListHeader() {
         return <ClubListHeader
             categories={this.categories}
@@ -158,6 +172,12 @@ class ClubListScreen extends React.Component<Props, State> {
         />;
     }
 
+    /**
+     * Gets the category object of the given ID
+     *
+     * @param id The ID of the category to find
+     * @returns {*}
+     */
     getCategoryOfId = (id: number) => {
         for (let i = 0; i < this.categories.length; i++) {
             if (id === this.categories[i].id)
@@ -165,6 +185,12 @@ class ClubListScreen extends React.Component<Props, State> {
         }
     };
 
+    /**
+     * Checks if the given item should be rendered according to current name and category filters
+     *
+     * @param item The club to check
+     * @returns {boolean}
+     */
     shouldRenderItem(item: club) {
         let shouldRender = this.state.currentlySelectedCategories.length === 0
             || isItemInCategoryFilter(this.state.currentlySelectedCategories, item.category);

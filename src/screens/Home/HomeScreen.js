@@ -111,8 +111,6 @@ type State = {
  */
 class HomeScreen extends React.Component<Props, State> {
 
-    colors: Object;
-
     isLoggedIn: boolean | null;
 
     fabRef: { current: null | AnimatedFAB };
@@ -125,7 +123,6 @@ class HomeScreen extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
-        this.colors = props.theme.colors;
         this.fabRef = React.createRef();
         this.currentNewFeed = [];
         this.isLoggedIn = null;
@@ -155,6 +152,9 @@ class HomeScreen extends React.Component<Props, State> {
         })
     }
 
+    /**
+     * Updates login state and navigation parameters on screen focus
+     */
     onScreenFocus = () => {
         if (ConnectionManager.getInstance().isLoggedIn() !== this.isLoggedIn) {
             this.isLoggedIn = ConnectionManager.getInstance().isLoggedIn();
@@ -169,6 +169,9 @@ class HomeScreen extends React.Component<Props, State> {
         this.handleNavigationParams();
     };
 
+    /**
+     * Navigates to the a new screen if navigation parameters specify one
+     */
     handleNavigationParams = () => {
         if (this.props.route.params != null) {
             if (this.props.route.params.nextScreen != null) {
@@ -179,6 +182,11 @@ class HomeScreen extends React.Component<Props, State> {
         }
     };
 
+    /**
+     * Gets header buttons based on login state
+     *
+     * @returns {*}
+     */
     getHeaderButton = () => {
         let onPressLog = () => this.props.navigation.navigate("login", {nextScreen: "profile"});
         let logIcon = "login";
@@ -262,7 +270,7 @@ class HomeScreen extends React.Component<Props, State> {
                         id: 'washers',
                         data: dashboardData == null ? 0 : dashboardData.available_machines.washers,
                         icon: 'washing-machine',
-                        color: this.colors.proxiwashColor,
+                        color: this.props.theme.colors.proxiwashColor,
                         onPress: this.onProxiwashClick,
                         isAvailable: dashboardData == null ? false : dashboardData.available_machines.washers > 0
                     },
@@ -270,7 +278,7 @@ class HomeScreen extends React.Component<Props, State> {
                         id: 'dryers',
                         data: dashboardData == null ? 0 : dashboardData.available_machines.dryers,
                         icon: 'tumble-dryer',
-                        color: this.colors.proxiwashColor,
+                        color: this.props.theme.colors.proxiwashColor,
                         onPress: this.onProxiwashClick,
                         isAvailable: dashboardData == null ? false : dashboardData.available_machines.dryers > 0
                     },
@@ -278,7 +286,7 @@ class HomeScreen extends React.Component<Props, State> {
                         id: 'available_tutorials',
                         data: dashboardData == null ? 0 : dashboardData.available_tutorials,
                         icon: 'school',
-                        color: this.colors.tutorinsaColor,
+                        color: this.props.theme.colors.tutorinsaColor,
                         onPress: this.onTutorInsaClick,
                         isAvailable: dashboardData == null ? false : dashboardData.available_tutorials > 0
                     },
@@ -286,7 +294,7 @@ class HomeScreen extends React.Component<Props, State> {
                         id: 'proximo_articles',
                         data: dashboardData == null ? 0 : dashboardData.proximo_articles,
                         icon: 'shopping',
-                        color: this.colors.proximoColor,
+                        color: this.props.theme.colors.proximoColor,
                         onPress: this.onProximoClick,
                         isAvailable: dashboardData == null ? false : dashboardData.proximo_articles > 0
                     },
@@ -294,7 +302,7 @@ class HomeScreen extends React.Component<Props, State> {
                         id: 'today_menu',
                         data: dashboardData == null ? [] : dashboardData.today_menu,
                         icon: 'silverware-fork-knife',
-                        color: this.colors.menuColor,
+                        color: this.props.theme.colors.menuColor,
                         onPress: this.onMenuClick,
                         isAvailable: dashboardData == null ? false : dashboardData.today_menu.length > 0
                     },
@@ -324,6 +332,11 @@ class HomeScreen extends React.Component<Props, State> {
             return this.getDashboardActions();
     }
 
+    /**
+     * Gets a dashboard item with action buttons
+     *
+     * @returns {*}
+     */
     getDashboardActions() {
         return <ActionsDashBoardItem {...this.props} isLoggedIn={this.isLoggedIn}/>;
     }
@@ -446,7 +459,7 @@ class HomeScreen extends React.Component<Props, State> {
     onEventContainerClick = () => this.props.navigation.navigate('planning');
 
     /**
-     * Gets the event render item.
+     * Gets the event dashboard render item.
      * If a preview is available, it will be rendered inside
      *
      * @param content
@@ -473,6 +486,12 @@ class HomeScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Gets a dashboard shortcut item
+     *
+     * @param item
+     * @returns {*}
+     */
     dashboardRowRenderItem = ({item}: { item: dashboardSmallItem }) => {
         return (
             <SquareDashboardItem
@@ -486,7 +505,7 @@ class HomeScreen extends React.Component<Props, State> {
     };
 
     /**
-     * Gets a classic dashboard item.
+     * Gets a dashboard item with a row of shortcut buttons.
      *
      * @param content
      * @return {*}
@@ -553,7 +572,7 @@ class HomeScreen extends React.Component<Props, State> {
 
     /**
      * Callback used when closing the banner.
-     * This hides the banner and saves to preferences to prevent it from reopening
+     * This hides the banner and saves to preferences to prevent it from reopening.
      */
     onHideBanner = () => {
         this.setState({bannerVisible: false});
@@ -563,6 +582,10 @@ class HomeScreen extends React.Component<Props, State> {
         );
     };
 
+    /**
+     * Callback when pressing the login button on the banner.
+     * This hides the banner and takes the user to the login page.
+     */
     onLoginBanner = () => {
         this.onHideBanner();
         this.props.navigation.navigate("login", {nextScreen: "profile"});

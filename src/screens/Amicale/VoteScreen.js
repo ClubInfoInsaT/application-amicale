@@ -9,6 +9,7 @@ import VoteTease from "../../components/Amicale/Vote/VoteTease";
 import VoteSelect from "../../components/Amicale/Vote/VoteSelect";
 import VoteResults from "../../components/Amicale/Vote/VoteResults";
 import VoteWait from "../../components/Amicale/Vote/VoteWait";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 export type team = {
     id: number,
@@ -86,13 +87,16 @@ type objectVoteDates = {
 const MIN_REFRESH_TIME = 5 * 1000;
 
 type Props = {
-    navigation: Object
+    navigation: StackNavigationProp
 }
 
 type State = {
     hasVoted: boolean,
 }
 
+/**
+ * Screen displaying vote information and controls
+ */
 export default class VoteScreen extends React.Component<Props, State> {
 
     state = {
@@ -107,7 +111,7 @@ export default class VoteScreen extends React.Component<Props, State> {
     today: Date;
 
     mainFlatListData: Array<{ key: string }>;
-    lastRefresh: Date;
+    lastRefresh: Date | null;
 
     authRef: { current: null | AuthenticatedScreen };
 
@@ -116,22 +120,30 @@ export default class VoteScreen extends React.Component<Props, State> {
         this.hasVoted = false;
         this.today = new Date();
         this.authRef = React.createRef();
+        this.lastRefresh = null;
         this.mainFlatListData = [
             {key: 'main'},
             {key: 'info'},
         ]
     }
 
+    /**
+     * Reloads vote data if last refresh delta is smaller than the minimum refresh time
+     */
     reloadData = () => {
         let canRefresh;
-        if (this.lastRefresh !== undefined)
-            canRefresh = (new Date().getTime() - this.lastRefresh.getTime()) > MIN_REFRESH_TIME;
+        const lastRefresh = this.lastRefresh;
+        if (lastRefresh != null)
+            canRefresh = (new Date().getTime() - lastRefresh.getTime()) > MIN_REFRESH_TIME;
         else
             canRefresh = true;
         if (canRefresh && this.authRef.current != null)
             this.authRef.current.reload()
     };
 
+    /**
+     * Generates the objects containing string and Date representations of key vote dates
+     */
     generateDateObject() {
         const strings = this.datesString;
         if (strings != null) {
@@ -152,6 +164,16 @@ export default class VoteScreen extends React.Component<Props, State> {
             this.dates = null;
     }
 
+    /**
+     * Gets the string representation of the given date.
+     *
+     * If the given date is the same day as today, only return the tile.
+     * Otherwise, return the full date.
+     *
+     * @param date The Date object representation of the wanted date
+     * @param dateString The string representation of the wanted date
+     * @returns {string}
+     */
     getDateString(date: Date, dateString: string): string {
         if (this.today.getDate() === date.getDate()) {
             const str = getTimeOnlyString(dateString);
@@ -176,7 +198,7 @@ export default class VoteScreen extends React.Component<Props, State> {
         return this.dates != null && this.today > this.dates.date_result_begin;
     }
 
-    mainRenderItem = ({item}: Object) => {
+    mainRenderItem = ({item}: { item: { key: string } }) => {
         if (item.key === 'info')
             return <VoteTitle/>;
         else if (item.key === 'main' && this.dates != null)
@@ -190,8 +212,8 @@ export default class VoteScreen extends React.Component<Props, State> {
         // data[1] = FAKE_DATE;
         this.lastRefresh = new Date();
 
-        const teams : teamResponse | null = data[0];
-        const dateStrings : stringVoteDates | null = data[1];
+        const teams: teamResponse | null = data[0];
+        const dateStrings: stringVoteDates | null = data[1];
 
         if (dateStrings != null && dateStrings.date_begin == null)
             this.datesString = null;
@@ -282,6 +304,13 @@ export default class VoteScreen extends React.Component<Props, State> {
                          isVoteRunning={this.isVoteRunning()}/>;
     }
 
+    /**
+     * Renders the authenticated screen.
+     *
+     * Teams and dates are not mandatory to allow showing the information box even if api requests fail
+     *
+     * @returns {*}
+     */
     render() {
         return (
             <AuthenticatedScreen

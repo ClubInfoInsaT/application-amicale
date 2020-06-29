@@ -5,14 +5,24 @@ import {FlatList, View} from "react-native";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import CustomModal from "../../components/Overrides/CustomModal";
 import {Button, List, Subheading, TextInput, Title, withTheme} from 'react-native-paper';
+import {StackNavigationProp} from "@react-navigation/stack";
+import {Modalize} from "react-native-modalize";
+import type {CustomTheme} from "../../managers/ThemeManager";
+
+type PreferenceItem = {
+    key: string,
+    default: string,
+    current: string,
+}
 
 type Props = {
-    navigation: Object,
+    navigation: StackNavigationProp,
+    theme: CustomTheme
 };
 
 type State = {
-    modalCurrentDisplayItem: Object,
-    currentPreferences: Array<Object>,
+    modalCurrentDisplayItem: PreferenceItem,
+    currentPreferences: Array<PreferenceItem>,
 }
 
 /**
@@ -21,20 +31,20 @@ type State = {
  */
 class DebugScreen extends React.Component<Props, State> {
 
-    modalRef: Object;
-    modalInputValue = '';
+    modalRef: Modalize;
+    modalInputValue: string;
 
-    onModalRef: Function;
-
-    colors: Object;
-
+    /**
+     * Copies user preferences to state for easier manipulation
+     *
+     * @param props
+     */
     constructor(props) {
         super(props);
-        this.onModalRef = this.onModalRef.bind(this);
-        this.colors = props.theme.colors;
+        this.modalInputValue = "";
         let copy = {...AsyncStorageManager.getInstance().preferences};
-        let currentPreferences = [];
-        Object.values(copy).map((object) => {
+        let currentPreferences : Array<PreferenceItem> = [];
+        Object.values(copy).map((object: any) => {
             currentPreferences.push(object);
         });
         this.state = {
@@ -44,10 +54,11 @@ class DebugScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Show the edit modal
+     * Shows the edit modal
+     *
      * @param item
      */
-    showEditModal(item: Object) {
+    showEditModal(item: PreferenceItem) {
         this.setState({
             modalCurrentDisplayItem: item
         });
@@ -81,14 +92,14 @@ class DebugScreen extends React.Component<Props, State> {
                     <Button
                         mode="contained"
                         dark={true}
-                        color={this.colors.success}
+                        color={this.props.theme.colors.success}
                         onPress={() => this.saveNewPrefs(this.state.modalCurrentDisplayItem.key, this.modalInputValue)}>
                         Save new value
                     </Button>
                     <Button
                         mode="contained"
                         dark={true}
-                        color={this.colors.danger}
+                        color={this.props.theme.colors.danger}
                         onPress={() => this.saveNewPrefs(this.state.modalCurrentDisplayItem.key, this.state.modalCurrentDisplayItem.default)}>
                         Reset to default
                     </Button>
@@ -98,6 +109,12 @@ class DebugScreen extends React.Component<Props, State> {
         );
     }
 
+    /**
+     * Finds the index of the given key in the preferences array
+     *
+     * @param key THe key to find the index of
+     * @returns {number}
+     */
     findIndexOfKey(key: string) {
         let index = -1;
         for (let i = 0; i < this.state.currentPreferences.length; i++) {
@@ -130,11 +147,11 @@ class DebugScreen extends React.Component<Props, State> {
      *
      * @param ref
      */
-    onModalRef(ref: Object) {
+    onModalRef = (ref: Modalize) => {
         this.modalRef = ref;
     }
 
-    renderItem = ({item}: Object) => {
+    renderItem = ({item}: {item: PreferenceItem}) => {
         return (
             <List.Item
                 title={item.key}

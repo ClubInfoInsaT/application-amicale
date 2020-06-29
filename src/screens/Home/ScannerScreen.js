@@ -41,6 +41,9 @@ class ScannerScreen extends React.Component<Props, State> {
         this.requestPermissions();
     }
 
+    /**
+     * Requests permission to use the camera
+     */
     requestPermissions = () => {
         if (Platform.OS === 'android')
             request(PERMISSIONS.ANDROID.CAMERA).then(this.updatePermissionStatus)
@@ -48,8 +51,19 @@ class ScannerScreen extends React.Component<Props, State> {
             request(PERMISSIONS.IOS.CAMERA).then(this.updatePermissionStatus)
     };
 
+    /**
+     * Updates the state permission status
+     *
+     * @param result
+     */
     updatePermissionStatus = (result) => this.setState({hasPermission: result === RESULTS.GRANTED});
 
+    /**
+     * Opens scanned link if it is a valid app link or shows and error dialog
+     *
+     * @param type The barcode type
+     * @param data The scanned value
+     */
     handleCodeScanned = ({type, data}) => {
         if (!URLHandler.isUrlValid(data))
             this.showErrorDialog();
@@ -59,6 +73,11 @@ class ScannerScreen extends React.Component<Props, State> {
         }
     };
 
+    /**
+     * Gets a view asking user for permission to use the camera
+     *
+     * @returns {*}
+     */
     getPermissionScreen() {
         return <View style={{marginLeft: 10, marginRight: 10}}>
             <Text>{i18n.t("scannerScreen.errorPermission")}</Text>
@@ -77,6 +96,9 @@ class ScannerScreen extends React.Component<Props, State> {
         </View>
     }
 
+    /**
+     * Shows a dialog indicating how to use the scanner
+     */
     showHelpDialog = () => {
         this.setState({
             dialogVisible: true,
@@ -86,6 +108,9 @@ class ScannerScreen extends React.Component<Props, State> {
         });
     };
 
+    /**
+     * Shows a loading dialog
+     */
     showOpeningDialog = () => {
         this.setState({
             loading: true,
@@ -93,6 +118,9 @@ class ScannerScreen extends React.Component<Props, State> {
         });
     };
 
+    /**
+     * Shows a dialog indicating the user the scanned code was invalid
+     */
     showErrorDialog() {
         this.setState({
             dialogVisible: true,
@@ -102,11 +130,21 @@ class ScannerScreen extends React.Component<Props, State> {
         });
     }
 
+    /**
+     * Hide any dialog
+     */
     onDialogDismiss = () => this.setState({
         dialogVisible: false,
         scanned: false,
     });
 
+    /**
+     * Gets a view with the scanner.
+     * This scanner uses the back camera, can only scan qr codes and has a square mask on the center.
+     * The mask is only for design purposes as a code is scanned as soon as it enters the camera view
+     *
+     * @returns {*}
+     */
     getScanner() {
         return (
             <RNCamera

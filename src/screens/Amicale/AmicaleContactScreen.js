@@ -12,14 +12,18 @@ type Props = {
     collapsibleStack: Collapsible
 };
 
-type State = {};
+type DatasetItem = {
+    name: string,
+    email: string,
+    icon: string,
+}
 
 /**
  * Class defining a planning event information page.
  */
-class AmicaleContactScreen extends React.Component<Props, State> {
+class AmicaleContactScreen extends React.Component<Props> {
 
-
+    // Dataset containing information about contacts
     CONTACT_DATASET = [
         {
             name: i18n.t("amicaleAbout.roles.interSchools"),
@@ -68,18 +72,11 @@ class AmicaleContactScreen extends React.Component<Props, State> {
         },
     ];
 
-    colors: Object;
+    keyExtractor = (item: DatasetItem) => item.email;
 
-    constructor(props) {
-        super(props);
-        this.colors = props.theme.colors;
-    }
+    getChevronIcon = (props) => <List.Icon {...props} icon={'chevron-right'}/>;
 
-    keyExtractor = (item: Object) => item.email;
-
-    getChevronIcon = (props: Object) => <List.Icon {...props} icon={'chevron-right'}/>;
-
-    renderItem = ({item}: Object) => {
+    renderItem = ({item}: { item: DatasetItem }) => {
         const onPress = () => Linking.openURL('mailto:' + item.email);
         return <List.Item
             title={item.name}
