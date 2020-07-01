@@ -1,7 +1,7 @@
 // @flow
 
 import * as Keychain from 'react-native-keychain';
-import {apiRequest, ERROR_TYPE, isResponseValid} from "../utils/WebData";
+import {apiRequest, ERROR_TYPE} from "../utils/WebData";
 
 /**
  * champ: error
@@ -138,36 +138,16 @@ export default class ConnectionManager {
             };
             apiRequest(AUTH_PATH, 'POST', data)
                 .then((response) => {
-                    if (this.isConnectionResponseValid(response)) {
-                        this.saveLogin(email, response.token)
-                            .then(() => {
-                                resolve(true);
-                            })
-                            .catch(() => {
-                                reject(ERROR_TYPE.TOKEN_SAVE);
-                            });
-                    } else
-                        reject(ERROR_TYPE.SERVER_ERROR);
+                    this.saveLogin(email, response.token)
+                        .then(() => {
+                            resolve(true);
+                        })
+                        .catch(() => {
+                            reject(ERROR_TYPE.TOKEN_SAVE);
+                        });
                 })
                 .catch((error) => reject(error));
         });
-    }
-
-    /**
-     * Checks if the API connection response is correctly formatted
-     *
-     * @param response
-     * @returns {boolean}
-     */
-    isConnectionResponseValid(response: { [key: string]: any }) {
-        let valid = isResponseValid(response);
-
-        if (valid && response.error === ERROR_TYPE.SUCCESS)
-            valid = valid
-                && response.data.token !== undefined
-                && response.data.token !== ''
-                && typeof response.data.token === "string";
-        return valid;
     }
 
     /**
