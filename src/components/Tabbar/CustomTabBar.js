@@ -3,6 +3,7 @@ import {withTheme} from 'react-native-paper';
 import TabIcon from "./TabIcon";
 import TabHomeIcon from "./TabHomeIcon";
 import {Animated} from 'react-native';
+import {Collapsible} from "react-navigation-collapsible";
 
 type Props = {
     state: Object,
@@ -24,41 +25,69 @@ const TAB_ICONS = {
     planex: 'clock',
 };
 
-/**
- * Abstraction layer for Agenda component, using custom configuration
- */
 class CustomTabBar extends React.Component<Props, State> {
 
     static TAB_BAR_HEIGHT = 48;
 
     state = {
         translateY: new Animated.Value(0),
-        barSynced: false,// Is the bar synced with the header for animations?
     }
 
+    syncTabBar = (route, index) => {
+        const state = this.props.state;
+        const isFocused = state.index === index;
+        if (isFocused) {
+            const stackState = route.state;
+            const stackRoute = stackState ? stackState.routes[stackState.index] : undefined;
+            const params: { collapsible: Collapsible } = stackRoute ? stackRoute.params : undefined;
+            const collapsible = params ? params.collapsible : undefined;
+            if (collapsible) {
+                this.setState({
+                    translateY: Animated.multiply(-1.5, collapsible.translateY), // Hide tab bar faster than header bar
+                });
+            }
+        }
+    };
+
+    /**
+     * Navigates to the given route if it is different from the current one
+     *
+     * @param route Destination route
+     * @param currentIndex The current route index
+     * @param destIndex The destination route index
+     */
     onItemPress(route: Object, currentIndex: number, destIndex: number) {
         const event = this.props.navigation.emit({
             type: 'tabPress',
             target: route.key,
             canPreventDefault: true,
         });
-        if (currentIndex !== destIndex && !event.defaultPrevented) {
-            this.state.translateY = new Animated.Value(0);
+        if (currentIndex !== destIndex && !event.defaultPrevented)
             this.props.navigation.navigate(route.name);
-        }
     }
 
+    /**
+     * Navigates to tetris screen on home button long press
+     *
+     * @param route
+     */
     onItemLongPress(route: Object) {
         const event = this.props.navigation.emit({
             type: 'tabLongPress',
             target: route.key,
             canPreventDefault: true,
         });
-        if (route.name === "home" && !event.defaultPrevented) {
+        if (route.name === "home" && !event.defaultPrevented)
             this.props.navigation.navigate('tetris');
-        }
     }
 
+    /**
+     * Gets an icon for the given route if it is not the home one as it uses a custom button
+     *
+     * @param route
+     * @param focused
+     * @returns {null}
+     */
     tabBarIcon = (route, focused) => {
         let icon = TAB_ICONS[route.name];
         icon = focused ? icon : icon + ('-outline');
@@ -68,39 +97,34 @@ class CustomTabBar extends React.Component<Props, State> {
             return null;
     };
 
-
+    /**
+     * Finds the active route and syncs the tab bar animation with the header bar
+     */
     onRouteChange = () => {
-        this.setState({barSynced: false});
+        this.props.state.routes.map(this.syncTabBar)
     }
 
+    /**
+     * Gets a tab icon render.
+     * If the given route is focused, it syncs the tab bar and header bar animations together
+     *
+     * @param route The route for the icon
+     * @param index The index of the current route
+     * @returns {*}
+     */
     renderIcon = (route, index) => {
         const state = this.props.state;
         const {options} = this.props.descriptors[route.key];
         const label =
-            options.tabBarLabel !== undefined
+            options.tabBarLabel != null
                 ? options.tabBarLabel
-                : options.title !== undefined
+                : options.title != null
                 ? options.title
                 : route.name;
 
-        const isFocused = state.index === index;
-
         const onPress = () => this.onItemPress(route, state.index, index);
-
         const onLongPress = () => this.onItemLongPress(route);
-
-        if (isFocused) {
-            const stackState = route.state;
-            const stackRoute = route.state ? stackState.routes[stackState.index] : undefined;
-            const params = stackRoute ? stackRoute.params : undefined;
-            const collapsible = params ? params.collapsible : undefined;
-            if (collapsible && !this.state.barSynced) {
-                this.setState({
-                    translateY: Animated.multiply(-1.5, collapsible.translateY),
-                    barSynced: true,
-                });
-            }
-        }
+        const isFocused = state.index === index;
 
         const color = isFocused ? this.props.theme.colors.primary : this.props.theme.colors.tabIcon;
         if (route.name !== "home") {
@@ -124,8 +148,13 @@ class CustomTabBar extends React.Component<Props, State> {
             />
     };
 
+    getIcons() {
+        return this.props.state.routes.map(this.renderIcon);
+    }
+
     render() {
         this.props.navigation.addListener('state', this.onRouteChange);
+        const icons = this.getIcons();
         return (
             <Animated.View
                 useNativeDriver
@@ -140,7 +169,7 @@ class CustomTabBar extends React.Component<Props, State> {
                     transform: [{translateY: this.state.translateY}],
                 }}
             >
-                {this.props.state.routes.map(this.renderIcon)}
+                {icons}
             </Animated.View>
         );
     }
