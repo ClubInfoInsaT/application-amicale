@@ -26,7 +26,7 @@
     "vote": "Elections",
     "scanner": "Scanotron 3000",
     "feedback": "Feedback",
-    "map": "Campus Map"
+    "insaAccount": "INSA Account"
   },
   "intro": {
     "slideMain": {
@@ -427,7 +427,8 @@
       "availableRooms": "See how many rooms are free",
       "bib": "Book a Bib'Box for project work",
       "mails": "Check your INSA mails",
-      "ent": "See your grades"
+      "ent": "See your grades",
+      "insaAccount": "See your information and change your password"
     }
   },
   "planningScreen": {

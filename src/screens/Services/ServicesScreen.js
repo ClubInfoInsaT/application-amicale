@@ -13,6 +13,7 @@ import i18n from 'i18n-js';
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 import ConnectionManager from "../../managers/ConnectionManager";
 import {StackNavigationProp} from "@react-navigation/stack";
+import AvailableWebsites from "../../constants/AvailableWebsites";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -43,6 +44,7 @@ const RU_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/RU.png";
 const ROOM_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Salles.png";
 const EMAIL_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Bluemind.png";
 const ENT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ENT.png";
+const ACCOUNT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Account.png";
 
 class ServicesScreen extends React.Component<Props> {
 
@@ -72,7 +74,7 @@ class ServicesScreen extends React.Component<Props> {
                 title: i18n.t('screens.amicaleWebsite'),
                 subtitle: i18n.t('servicesScreen.descriptions.amicaleWebsite'),
                 image: AMICALE_IMAGE,
-                onPress: () => nav.navigate("amicale-website"),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.AMICALE, title: i18n.t('screens.amicaleWebsite')}),
             },
             {
                 title: i18n.t('screens.vote'),
@@ -92,19 +94,19 @@ class ServicesScreen extends React.Component<Props> {
                 title: "Wiketud",
                 subtitle: i18n.t('servicesScreen.descriptions.wiketud'),
                 image: WIKETUD_IMAGE,
-                onPress: () => nav.navigate("wiketud"),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.WIKETUD, title: "Wiketud"}),
             },
             {
                 title: "Élus Étudiants",
                 subtitle: i18n.t('servicesScreen.descriptions.elusEtudiants'),
                 image: EE_IMAGE,
-                onPress: () => nav.navigate("elus-etudiants"),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.ELUS_ETUDIANTS, title: "Élus Étudiants"}),
             },
             {
                 title: "Tutor'INSA",
                 subtitle: i18n.t('servicesScreen.descriptions.tutorInsa'),
                 image: TUTORINSA_IMAGE,
-                onPress: () => nav.navigate("tutorinsa"),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.TUTOR_INSA, title: "Tutor'INSA"})
             },
         ];
         this.insaDataset = [
@@ -118,25 +120,31 @@ class ServicesScreen extends React.Component<Props> {
                 title: i18n.t('screens.availableRooms'),
                 subtitle: i18n.t('servicesScreen.descriptions.availableRooms'),
                 image: ROOM_IMAGE,
-                onPress: () => nav.navigate("available-rooms"),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.AVAILABLE_ROOMS, title: i18n.t('screens.availableRooms')}),
             },
             {
                 title: i18n.t('screens.bib'),
                 subtitle: i18n.t('servicesScreen.descriptions.bib'),
                 image: BIB_IMAGE,
-                onPress: () => nav.navigate("bib"),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.BIB, title: i18n.t('screens.bib')}),
             },
             {
                 title: i18n.t('screens.bluemind'),
                 subtitle: i18n.t('servicesScreen.descriptions.mails'),
                 image: EMAIL_IMAGE,
-                onPress: () => nav.navigate("bluemind"),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.BLUEMIND, title: i18n.t('screens.bluemind')}),
             },
             {
                 title: i18n.t('screens.ent'),
                 subtitle: i18n.t('servicesScreen.descriptions.ent'),
                 image: ENT_IMAGE,
-                onPress: () => nav.navigate("ent"),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.ENT, title: i18n.t('screens.ent')}),
+            },
+            {
+                title: i18n.t('screens.insaAccount'),
+                subtitle: i18n.t('servicesScreen.descriptions.insaAccount'),
+                image: ACCOUNT_IMAGE,
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.INSA_ACCOUNT, title: i18n.t('screens.insaAccount')}),
             },
         ];
         this.finalDataset = [

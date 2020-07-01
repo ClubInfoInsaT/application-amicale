@@ -26,7 +26,7 @@
     "vote": "Élections",
     "scanner": "Scanotron 3000",
     "feedback": "Votre avis",
-    "map": "Carte du campus"
+    "insaAccount": "Compte INSA"
   },
   "intro": {
     "slideMain": {
@@ -429,7 +429,8 @@
       "availableRooms": "Vérifiez les salles disponibles",
       "bib": "Réservez une Bib'Box pour les travaux de groupe",
       "mails": "Vérifiez vos mails INSA",
-      "ent": "Retrouvez vos notes"
+      "ent": "Retrouvez vos notes",
+      "insaAccount": "Accédez à vos informations et modifiez votre mot de passe"
     }
   },
   "planningScreen": {

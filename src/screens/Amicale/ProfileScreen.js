@@ -14,6 +14,7 @@ import type {cardList} from "../../components/Lists/CardList/CardList";
 import CardList from "../../components/Lists/CardList/CardList";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import AvailableWebsites from "../../constants/AvailableWebsites";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -83,7 +84,7 @@ class ProfileScreen extends React.Component<Props, State> {
                 title: i18n.t('screens.amicaleWebsite'),
                 subtitle: i18n.t('servicesScreen.descriptions.amicaleWebsite'),
                 image: ICON_AMICALE,
-                onPress: () => this.props.navigation.navigate("amicale-website"),
+                onPress: () => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, title: i18n.t('screens.amicaleWebsite')}),
             },
         ];
     }
@@ -287,7 +288,7 @@ class ProfileScreen extends React.Component<Props, State> {
                         <Button
                             icon="account-edit"
                             mode="contained"
-                            onPress={() => this.props.navigation.navigate('amicale-website', {path: this.data.link})}
+                            onPress={() => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, path: this.data.link, title: i18n.t('screens.amicaleWebsite')})}
                             style={styles.editButton}>
                             {i18n.t("profileScreen.editInformation")}
                         </Button>

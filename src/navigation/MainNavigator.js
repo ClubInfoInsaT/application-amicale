@@ -12,24 +12,17 @@ import TetrisScreen from "../screens/Tetris/TetrisScreen";
 import VoteScreen from "../screens/Amicale/VoteScreen";
 import LoginScreen from "../screens/Amicale/LoginScreen";
 import {Platform} from "react-native";
-import AvailableRoomScreen from "../screens/Services/Websites/AvailableRoomScreen";
-import BibScreen from "../screens/Services/Websites/BibScreen";
 import SelfMenuScreen from "../screens/Services/SelfMenuScreen";
 import ProximoMainScreen from "../screens/Services/Proximo/ProximoMainScreen";
 import ProximoListScreen from "../screens/Services/Proximo/ProximoListScreen";
 import ProximoAboutScreen from "../screens/Services/Proximo/ProximoAboutScreen";
-import {AmicaleWebsiteScreen} from "../screens/Services/Websites/AmicaleWebsiteScreen";
-import {ElusEtudiantsWebsiteScreen} from "../screens/Services/Websites/ElusEtudiantsWebsiteScreen";
-import {WiketudWebsiteScreen} from "../screens/Services/Websites/WiketudWebsiteScreen";
-import {TutorInsaWebsiteScreen} from "../screens/Services/Websites/TutorInsaWebsiteScreen";
-import {ENTWebsiteScreen} from "../screens/Services/Websites/ENTWebsiteScreen";
-import {BlueMindWebsiteScreen} from "../screens/Services/Websites/BlueMindWebsiteScreen";
 import ProfileScreen from "../screens/Amicale/ProfileScreen";
 import ClubListScreen from "../screens/Amicale/Clubs/ClubListScreen";
 import ClubAboutScreen from "../screens/Amicale/Clubs/ClubAboutScreen";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
 import {createScreenCollapsibleStack, getWebsiteStack} from "../utils/CollapsibleUtils";
 import BugReportScreen from "../screens/Other/FeedbackScreen";
+import WebsiteScreen from "../screens/Services/WebsiteScreen";
 
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
 
@@ -102,12 +95,10 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 }}
             />
 
-            {/*     INSA        */}
-            {getWebsiteStack("available-rooms", MainStack, AvailableRoomScreen, i18n.t('screens.availableRooms'))}
-            {getWebsiteStack("bib", MainStack, BibScreen, i18n.t('screens.bib'))}
-            {createScreenCollapsibleStack("self-menu", MainStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
+            {getWebsiteStack("website", MainStack, WebsiteScreen, "")}
 
-            {/*     STUDENTS     */}
+
+            {createScreenCollapsibleStack("self-menu", MainStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
             {createScreenCollapsibleStack("proximo", MainStack, ProximoMainScreen, i18n.t('screens.proximo'))}
             {createScreenCollapsibleStack(
                 "proximo-list",
@@ -125,15 +116,7 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                     ...modalTransition,
                 }}
             />
-            {getWebsiteStack("amicale-website", MainStack, AmicaleWebsiteScreen, i18n.t('screens.amicaleWebsite'))}
-            {getWebsiteStack("elus-etudiants", MainStack, ElusEtudiantsWebsiteScreen, "Élus Étudiants")}
-            {getWebsiteStack("wiketud", MainStack, WiketudWebsiteScreen, "Wiketud")}
-            {getWebsiteStack("tutorinsa", MainStack, TutorInsaWebsiteScreen, "Tutor'INSA")}
-            {getWebsiteStack("ent", MainStack, ENTWebsiteScreen, i18n.t('screens.ent'))}
-            {getWebsiteStack("bluemind", MainStack, BlueMindWebsiteScreen, i18n.t('screens.bluemind'))}
 
-
-            {/*     AMICALE     */}
             {createScreenCollapsibleStack("profile", MainStack, ProfileScreen, i18n.t('screens.profile'))}
             {createScreenCollapsibleStack("club-list", MainStack, ClubListScreen, i18n.t('clubs.clubList'))}
             <MainStack.Screen

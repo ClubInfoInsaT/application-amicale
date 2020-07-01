@@ -22,6 +22,7 @@ import LogoutDialog from "../../components/Amicale/LogoutDialog";
 import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
+import AvailableWebsites from "../../constants/AvailableWebsites";
 // import DATA from "../dashboard_data.json";
 
 
@@ -217,7 +218,7 @@ class HomeScreen extends React.Component<Props, State> {
     };
 
     onTutorInsaClick = () => {
-        this.props.navigation.navigate("tutorinsa");
+        this.props.navigation.navigate("website", {host: AvailableWebsites.websites.TUTOR_INSA, title: "Tutor'INSA"});
     };
 
     onMenuClick = () => {

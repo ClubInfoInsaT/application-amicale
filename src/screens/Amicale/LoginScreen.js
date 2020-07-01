@@ -12,6 +12,7 @@ import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import {StackNavigationProp} from "@react-navigation/stack";
+import AvailableWebsites from "../../constants/AvailableWebsites";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -110,7 +111,7 @@ class LoginScreen extends React.Component<Props, State> {
     /**
      * Navigates to the Amicale website screen with the reset password link as navigation parameters
      */
-    onResetPasswordClick = () => this.props.navigation.navigate('amicale-website', {path: RESET_PASSWORD_PATH});
+    onResetPasswordClick = () => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, path: RESET_PASSWORD_PATH, title: i18n.t('screens.amicaleWebsite')});
 
     /**
      * The user has unfocused the input, his email is ready to be validated
