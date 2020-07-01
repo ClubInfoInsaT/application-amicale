@@ -46,15 +46,15 @@ export type CustomTheme = {
 
         // Tetris
         tetrisBackground: string,
-        tetrisBorder:string,
-        tetrisScore:string,
-        tetrisI : string,
-        tetrisO : string,
-        tetrisT : string,
-        tetrisS : string,
-        tetrisZ : string,
-        tetrisJ : string,
-        tetrisL : string,
+        tetrisBorder: string,
+        tetrisScore: string,
+        tetrisI: string,
+        tetrisO: string,
+        tetrisT: string,
+        tetrisS: string,
+        tetrisZ: string,
+        tetrisJ: string,
+        tetrisL: string,
     },
 }
 
@@ -116,16 +116,16 @@ export default class ThemeManager {
                 tutorinsaColor: '#f93943',
 
                 // Tetris
-                tetrisBackground:'#e6e6e6',
-                tetrisBorder:'#2f2f2f',
-                tetrisScore:'#e2bd33',
-                tetrisI : '#3cd9e6',
-                tetrisO : '#ffdd00',
-                tetrisT : '#a716e5',
-                tetrisS : '#09c528',
-                tetrisZ : '#ff0009',
-                tetrisJ : '#2a67e3',
-                tetrisL : '#da742d',
+                tetrisBackground: '#e6e6e6',
+                tetrisBorder: '#2f2f2f',
+                tetrisScore: '#e2bd33',
+                tetrisI: '#3cd9e6',
+                tetrisO: '#ffdd00',
+                tetrisT: '#a716e5',
+                tetrisS: '#09c528',
+                tetrisZ: '#ff0009',
+                tetrisJ: '#2a67e3',
+                tetrisL: '#da742d',
             },
         };
     }
@@ -176,16 +176,16 @@ export default class ThemeManager {
                 tutorinsaColor: '#f93943',
 
                 // Tetris
-                tetrisBackground:'#2c2c2c',
-                tetrisBorder:'#1b1b1b',
-                tetrisScore:'#e2d707',
-                tetrisI : '#30b3be',
-                tetrisO : '#c1a700',
-                tetrisT : '#9114c7',
-                tetrisS : '#08a121',
-                tetrisZ : '#b50008',
-                tetrisJ : '#0f37b9',
-                tetrisL : '#b96226',
+                tetrisBackground: '#2c2c2c',
+                tetrisBorder: '#1b1b1b',
+                tetrisScore: '#e2d707',
+                tetrisI: '#30b3be',
+                tetrisO: '#c1a700',
+                tetrisT: '#9114c7',
+                tetrisS: '#08a121',
+                tetrisZ: '#b50008',
+                tetrisJ: '#0f37b9',
+                tetrisL: '#b96226',
             },
         };
     }

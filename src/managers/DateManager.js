@@ -45,6 +45,10 @@ export default class DateManager {
             DateManager.instance;
     }
 
+    static isWeekend(date: Date) {
+        return date.getDay() === 6 || date.getDay() === 0;
+    }
+
     /**
      * Gets a translated string representing the given date.
      *
@@ -56,10 +60,6 @@ export default class DateManager {
         let date = new Date();
         date.setFullYear(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]));
         return this.daysOfWeek[date.getDay()] + " " + date.getDate() + " " + this.monthsOfYear[date.getMonth()] + " " + date.getFullYear();
-    }
-
-    static isWeekend(date: Date) {
-        return date.getDay() === 6 || date.getDay() === 0;
     }
 
 }

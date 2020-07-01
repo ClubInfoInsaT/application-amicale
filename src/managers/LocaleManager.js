@@ -19,8 +19,4 @@ export default class LocaleManager {
         i18n.translations = {fr, en};
         i18n.locale = RNLocalize.findBestAvailableLanguage(["en", "fr"]).languageTag;
     }
-
-    static getCurrentLocale() {
-        return RNLocalize.findBestAvailableLanguage(["en", "fr"]).languageTag;
-    }
 }

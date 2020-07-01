@@ -1,14 +1,13 @@
 // @flow
 
+import type {Machine} from "../screens/Proxiwash/ProxiwashScreen";
+
 /**
- * Singleton class used to manage themes
+ * Singleton class used to manage april fools
  */
 export default class AprilFoolsManager {
 
     static instance: AprilFoolsManager | null = null;
-
-    aprilFoolsEnabled: boolean;
-
     static fakeMachineNumber = [
         "",
         "cos(ln(1))",
@@ -24,6 +23,7 @@ export default class AprilFoolsManager {
         "1×10¹+1×10⁰",
         "Re(√192e^(iπ/6))",
     ];
+    aprilFoolsEnabled: boolean;
 
     constructor() {
         let today = new Date();
@@ -40,7 +40,13 @@ export default class AprilFoolsManager {
             AprilFoolsManager.instance;
     }
 
-    static getFakeMenuItem(menu: Object) {
+    /**
+     * Adds fake menu entries
+     *
+     * @param menu
+     * @returns {Object}
+     */
+    static getFakeMenuItem(menu: Array<{dishes: Array<{name: string}>}>) {
         menu[1]["dishes"].splice(4, 0, {name: "Coq au vin"});
         menu[1]["dishes"].splice(2, 0, {name: "Bat'Soupe"});
         menu[1]["dishes"].splice(1, 0, {name: "Pave de loup"});
@@ -49,16 +55,26 @@ export default class AprilFoolsManager {
         return menu;
     }
 
-    static getNewProxiwashDryerOrderedList(dryers: Array<Object>) {
-        if (dryers !== undefined) {
+    /**
+     * Changes proxiwash dryers order
+     *
+     * @param dryers
+     */
+    static getNewProxiwashDryerOrderedList(dryers: Array<Machine> | null) {
+        if (dryers != null) {
             let second = dryers[1];
             dryers.splice(1, 1);
             dryers.push(second);
         }
     }
 
-    static getNewProxiwashWasherOrderedList(washers: Array<Object>) {
-        if (washers !== undefined) {
+    /**
+     * Changes proxiwash washers order
+     *
+     * @param washers
+     */
+    static getNewProxiwashWasherOrderedList(washers: Array<Machine> | null) {
+        if (washers != null) {
             let first = washers[0];
             let second = washers[1];
             let fifth = washers[4];
@@ -67,14 +83,25 @@ export default class AprilFoolsManager {
             washers.splice(4, 1, ninth);
             washers.splice(1, 1, first);
             washers.splice(0, 1, fifth);
-            // washers.push(fifth);
         }
     }
 
+    /**
+     * Gets the new display number for the given machine number
+     *
+     * @param number
+     * @returns {string}
+     */
     static getProxiwashMachineDisplayNumber(number: number) {
         return AprilFoolsManager.fakeMachineNumber[number];
     }
 
+    /**
+     * Gets the new and ugly april fools theme
+     *
+     * @param currentTheme
+     * @returns {{colors: {textDisabled: string, agendaDayTextColor: string, surface: string, background: string, dividerBackground: string, accent: string, agendaBackgroundColor: string, tabIcon: string, card: string, primary: string}}}
+     */
     static getAprilFoolsTheme(currentTheme: Object) {
         return {
             ...currentTheme,

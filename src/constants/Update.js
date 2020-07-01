@@ -1,3 +1,5 @@
+// @flow
+
 import i18n from "i18n-js";
 
 /**
@@ -43,8 +45,8 @@ export default class Update {
         this.titleList = [];
         this.descriptionList = [];
         for (let i = 0; i < Update.slidesNumber; i++) {
-            this.titleList.push(i18n.t('intro.updateSlide'+ i + '.title'))
-            this.descriptionList.push(i18n.t('intro.updateSlide'+ i + '.text'))
+            this.titleList.push(i18n.t('intro.updateSlide' + i + '.title'))
+            this.descriptionList.push(i18n.t('intro.updateSlide' + i + '.text'))
         }
     }
 

@@ -23,15 +23,13 @@ export default class ConnectionManager {
     #email: string;
     #token: string | null;
 
-    listeners: Array<Function>;
-
     constructor() {
         this.#token = null;
-        this.listeners = [];
     }
 
     /**
-     * Get this class instance or create one if none is found
+     * Gets this class instance or create one if none is found
+     *
      * @returns {ConnectionManager}
      */
     static getInstance(): ConnectionManager {
@@ -40,21 +38,20 @@ export default class ConnectionManager {
             ConnectionManager.instance;
     }
 
-    getToken() {
+    /**
+     * Gets the current token
+     *
+     * @returns {string | null}
+     */
+    getToken(): string | null {
         return this.#token;
     }
 
-    onLoginStateChange(newState: boolean) {
-        for (let i = 0; i < this.listeners.length; i++) {
-            if (this.listeners[i] !== undefined)
-                this.listeners[i](newState);
-        }
-    }
-
-    addLoginStateListener(listener: Function) {
-        this.listeners.push(listener);
-    }
-
+    /**
+     * Tries to recover login token from the secure keychain
+     *
+     * @returns {Promise<R>}
+     */
     async recoverLogin() {
         return new Promise((resolve, reject) => {
             if (this.getToken() !== null)
@@ -64,7 +61,6 @@ export default class ConnectionManager {
                     .then((data) => {
                         if (data) {
                             this.#token = data.password;
-                            this.onLoginStateChange(true);
                             resolve(this.#token);
                         } else
                             reject(false);
@@ -76,17 +72,28 @@ export default class ConnectionManager {
         });
     }
 
+    /**
+     * Check if the user has a valid token
+     *
+     * @returns {boolean}
+     */
     isLoggedIn() {
         return this.getToken() !== null;
     }
 
+    /**
+     * Saves the login token in the secure keychain
+     *
+     * @param email
+     * @param token
+     * @returns {Promise<R>}
+     */
     async saveLogin(email: string, token: string) {
         return new Promise((resolve, reject) => {
             Keychain.setInternetCredentials(SERVER_NAME, 'token', token)
                 .then(() => {
                     this.#token = token;
                     this.#email = email;
-                    this.onLoginStateChange(true);
                     resolve(true);
                 })
                 .catch(() => {
@@ -95,12 +102,16 @@ export default class ConnectionManager {
         });
     }
 
+    /**
+     * Deletes the login token from the keychain
+     *
+     * @returns {Promise<R>}
+     */
     async disconnect() {
         return new Promise((resolve, reject) => {
             Keychain.resetInternetCredentials(SERVER_NAME)
                 .then(() => {
                     this.#token = null;
-                    this.onLoginStateChange(false);
                     resolve(true);
                 })
                 .catch(() => {
@@ -109,6 +120,16 @@ export default class ConnectionManager {
         });
     }
 
+
+    /**
+     * Sends the given login and password to the api.
+     * If the combination is valid, the login token is received and saved in the secure keychain.
+     * If not, the promise is rejected with the corresponding error code.
+     *
+     * @param email
+     * @param password
+     * @returns {Promise<R>}
+     */
     async connect(email: string, password: string) {
         return new Promise((resolve, reject) => {
             const data = {
@@ -117,19 +138,28 @@ export default class ConnectionManager {
             };
             apiRequest(AUTH_PATH, 'POST', data)
                 .then((response) => {
-                    this.saveLogin(email, response.token)
-                        .then(() => {
-                            resolve(true);
-                        })
-                        .catch(() => {
-                            reject(ERROR_TYPE.TOKEN_SAVE);
-                        });
+                    if (this.isConnectionResponseValid(response)) {
+                        this.saveLogin(email, response.token)
+                            .then(() => {
+                                resolve(true);
+                            })
+                            .catch(() => {
+                                reject(ERROR_TYPE.TOKEN_SAVE);
+                            });
+                    } else
+                        reject(ERROR_TYPE.SERVER_ERROR);
                 })
                 .catch((error) => reject(error));
         });
     }
 
-    isConnectionResponseValid(response: Object) {
+    /**
+     * Checks if the API connection response is correctly formatted
+     *
+     * @param response
+     * @returns {boolean}
+     */
+    isConnectionResponseValid(response: { [key: string]: any }) {
         let valid = isResponseValid(response);
 
         if (valid && response.error === ERROR_TYPE.SUCCESS)
@@ -140,6 +170,13 @@ export default class ConnectionManager {
         return valid;
     }
 
+    /**
+     * Sends an authenticated request with the login token to the API
+     *
+     * @param path
+     * @param params
+     * @returns {Promise<R>}
+     */
     async authenticatedRequest(path: string, params: Object) {
         return new Promise((resolve, reject) => {
             if (this.getToken() !== null) {
