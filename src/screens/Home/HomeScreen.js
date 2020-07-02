@@ -27,7 +27,7 @@ import AvailableWebsites from "../../constants/AvailableWebsites";
 
 
 const NAME_AMICALE = 'Amicale INSA Toulouse';
-const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/dashboard/dashboard_data.json";
+const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/v2/dashboard/dashboard_data.json";
 const FEED_ITEM_HEIGHT = 500;
 
 const SECTIONS_ID = [
@@ -55,10 +55,8 @@ export type feedItem = {
 type fullDashboard = {
     today_menu: Array<{ [key: string]: any }>,
     proximo_articles: number,
-    available_machines: {
-        dryers: number,
-        washers: number,
-    },
+    available_dryers: number,
+    available_washers: number,
     today_events: Array<{ [key: string]: any }>,
     available_tutorials: number,
 }
@@ -269,19 +267,19 @@ class HomeScreen extends React.Component<Props, State> {
                 content: [
                     {
                         id: 'washers',
-                        data: dashboardData == null ? 0 : dashboardData.available_machines.washers,
+                        data: dashboardData == null ? 0 : dashboardData.available_washers,
                         icon: 'washing-machine',
                         color: this.props.theme.colors.proxiwashColor,
                         onPress: this.onProxiwashClick,
-                        isAvailable: dashboardData == null ? false : dashboardData.available_machines.washers > 0
+                        isAvailable: dashboardData == null ? false : dashboardData.available_washers > 0
                     },
                     {
                         id: 'dryers',
-                        data: dashboardData == null ? 0 : dashboardData.available_machines.dryers,
+                        data: dashboardData == null ? 0 : dashboardData.available_dryers,
                         icon: 'tumble-dryer',
                         color: this.props.theme.colors.proxiwashColor,
                         onPress: this.onProxiwashClick,
-                        isAvailable: dashboardData == null ? false : dashboardData.available_machines.dryers > 0
+                        isAvailable: dashboardData == null ? false : dashboardData.available_dryers > 0
                     },
                     {
                         id: 'available_tutorials',
