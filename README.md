@@ -9,6 +9,7 @@ Créée pendant l'été 2019, cette application compatible Android et iOS permet
  - Menu du RU
  - Disponibilité des salles libre accès
  - Réservation des Bib'Box
+ - Et d'autres services de l'INSA
  
 Ce dépôt contient la source de cette application, sous licence GPLv3.
 
@@ -32,8 +33,10 @@ Cette application utilisait initialement Expo, permettant de simplifier grandeme
 ## [Notes sur l'état actuel du projet](NOTES.md)
 
 ## Liens utiles
+* [Tutoriel JavaScript](https://www.w3schools.com/js) (Un minimum de connaissances en JavaScript est nécessaire)
 * [Documentation React Native](https://reactnative.dev/docs/getting-started) (La techno de base)
 * [Documentation React Native Paper](https://callstack.github.io/react-native-paper/) (Le framework d'UI)
-* [Documentation React navigation](https://reactnavigation.org/docs/getting-started) (Le framework de navigation entre écrans)
+* [Documentation React Navigation](https://reactnavigation.org/docs/getting-started) (Le framework de navigation entre écrans)
 * [Documentation Jest](https://jestjs.io/docs/en/getting-started) (Tests unitaires JavaScript)
 * [Documentation Flow](https://flow.org/en/docs/react/) (Utilitaire de typage statique pour JavaScript)
+* [Webstorm](https://www.jetbrains.com/webstorm/buy/#discounts?billing=yearly) (Un logiciel pas mal que j'utilise et gratuit pour les étudiants/projets open-source)
