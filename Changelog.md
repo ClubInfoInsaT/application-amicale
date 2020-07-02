@@ -2,6 +2,13 @@
 
 Pensez à garder l'appli à jour pour profiter des dernières fonctionnalités !
 
+ - **v3.1.4** - TBA
+    - Correction d'un problème de connexion sur certains appareils android
+    - Amélioration des traductions
+    - Amélioration des informations données par proxiwash
+    - Amélioration de la visibilité des services Amicale sans compte
+    - Correction de bugs
+        
  - **v3.0.7** - 13/06/2020
     - Correction de crash au démarrage sur certains appareils
     - Mise à jour des écrans d'intro pour mieux refléter l'appli actuelle
