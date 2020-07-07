@@ -97,10 +97,10 @@ const OBSERVE_MUTATIONS_INJECTED =
 
 // Overrides default settings to send a message to the webview when clicking on an event
 const FULL_CALENDAR_SETTINGS = `
-var calendar = $('#calendar').fullCalendar('getCalendar');
+let calendar = $('#calendar').fullCalendar('getCalendar');
 calendar.option({
   eventClick: function (data, event, view) {
-      var message = {
+      let message = {
       title: data.title,
       color: data.color,
       start: data.start._d,
@@ -110,11 +110,10 @@ calendar.option({
   }
 });`;
 
-const CUSTOM_CSS = "body>.container{padding-top:20px; padding-bottom: 50px}header,#entite,#groupe_visibility,#calendar .fc-left,#calendar .fc-right{display:none}.fc-toolbar .fc-center{width:100%}.fc-toolbar .fc-center>*{float:none;width:100%;margin:0}#entite{margin-bottom:5px!important}#entite,#groupe{width:calc(100% - 20px);margin:0 10px}#groupe_visibility{width:100%}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-time{font-size:.5rem}#calendar .fc-month-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-month-view .fc-content-skeleton .fc-time{font-size:.7rem}.fc-axis{font-size:.8rem;width:15px!important}.fc-day-header{font-size:.8rem}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}";
+const CUSTOM_CSS = "body>.container{padding-top:20px; padding-bottom: 50px}header,#entite,#groupe_visibility,#calendar .fc-left,#calendar .fc-right{display:none}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-time{font-size:.5rem}#calendar .fc-month-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-month-view .fc-content-skeleton .fc-time{font-size:.7rem}.fc-axis{font-size:.8rem;width:15px!important}.fc-day-header{font-size:.8rem}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}";
 const CUSTOM_CSS_DARK = "body{background-color:#121212}.fc-unthemed .fc-content,.fc-unthemed .fc-divider,.fc-unthemed .fc-list-heading td,.fc-unthemed .fc-list-view,.fc-unthemed .fc-popover,.fc-unthemed .fc-row,.fc-unthemed tbody,.fc-unthemed td,.fc-unthemed th,.fc-unthemed thead{border-color:#222}.fc-toolbar .fc-center>*,h2,table{color:#fff}.fc-event-container{color:#121212}.fc-event-container .fc-bg{opacity:0.2;background-color:#000}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}";
 
 const INJECT_STYLE = `
-$('head').append('<meta name="viewport" content="width=device-width, initial-scale=0.9">');
 $('head').append('<style>` + CUSTOM_CSS + `</style>');
 `;
 
@@ -288,7 +287,7 @@ class PlanexScreen extends React.Component<Props, State> {
 
         let msg = DateManager.getInstance().getTranslatedDate(startDate) + "\n";
         if (startString != null && endString != null)
-            msg += startString + ' - ' + endDate;
+            msg += startString + ' - ' + endString;
         this.showDialog(data.title, msg)
     };
 
