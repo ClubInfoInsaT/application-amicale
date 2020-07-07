@@ -24,7 +24,7 @@ type Props = {
 export type listItem = {
     title: string,
     description: string,
-    image: string | number,
+    image: string,
     shouldLogin: boolean,
     content: cardList,
 }
@@ -32,7 +32,7 @@ export type listItem = {
 const CLUBS_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Clubs.png";
 const PROFILE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ProfilAmicaliste.png";
 const VOTE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Vote.png";
-const AMICALE_IMAGE = require("../../../assets/amicale.png");
+const AMICALE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/WebsiteAmicale.png";
 
 const PROXIMO_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png"
 const WIKETUD_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Wiketud.png";
@@ -188,27 +188,15 @@ class ServicesScreen extends React.Component<Props> {
     /**
      * Gets the list title image for the list.
      *
-     * If the source is a string, we are using an icon.
-     * If the source is a number, we are using an internal image.
-     *
      * @param props Props to pass to the component
-     * @param source The source image to display. Can be a string for icons or a number for local images
+     * @param source The source image to display
      * @returns {*}
      */
-    getListTitleImage(props, source: string | number) {
-        if (typeof source === "number")
+    getListTitleImage(props, source: string) {
             return <Avatar.Image
                 {...props}
                 size={48}
                 source={source}
-                style={{backgroundColor: 'transparent'}}
-            />
-        else
-            return <Avatar.Icon
-                {...props}
-                size={48}
-                icon={source}
-                color={this.props.theme.colors.primary}
                 style={{backgroundColor: 'transparent'}}
             />
     }
