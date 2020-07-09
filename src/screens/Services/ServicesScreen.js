@@ -33,6 +33,7 @@ const AMICALE_LOGO = require("../../../assets/amicale.png");
 
 const CLUBS_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Clubs.png";
 const PROFILE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ProfilAmicaliste.png";
+const EQUIPMENT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Materiel.png";
 const VOTE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Vote.png";
 const AMICALE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/WebsiteAmicale.png";
 
@@ -71,6 +72,12 @@ class ServicesScreen extends React.Component<Props> {
                 subtitle: i18n.t('servicesScreen.descriptions.profile'),
                 image: PROFILE_IMAGE,
                 onPress: () => this.onAmicaleServicePress("profile"),
+            },
+            {
+                title: i18n.t('screens.equipmentList'),
+                subtitle: i18n.t('servicesScreen.descriptions.equipment'),
+                image: EQUIPMENT_IMAGE,
+                onPress: () => this.onAmicaleServicePress("equipment-list"),
             },
             {
                 title: i18n.t('screens.amicaleWebsite'),

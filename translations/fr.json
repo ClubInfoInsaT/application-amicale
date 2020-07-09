@@ -26,7 +26,9 @@
     "vote": "Élections",
     "scanner": "Scanotron 3000",
     "feedback": "Votre avis",
-    "insaAccount": "Compte INSA"
+    "insaAccount": "Compte INSA",
+    "equipmentList": "Réservation Matériel",
+    "equipmentLend": "Réserver"
   },
   "intro": {
     "slideMain": {
@@ -430,7 +432,8 @@
       "bib": "Réservez une Bib'Box pour les travaux de groupe",
       "mails": "Vérifiez vos mails INSA",
       "ent": "Retrouvez vos notes",
-      "insaAccount": "Accédez à vos informations et modifiez votre mot de passe"
+      "insaAccount": "Accédez à vos informations et modifiez votre mot de passe",
+      "equipment": "Réservez un BBQ ou d'autre matériel"
     }
   },
   "planningScreen": {
@@ -446,5 +449,20 @@
     "contactMeans": "L'utilisation de Gitea est recommandée, pour l'utiliser, connectez vous avec vos identifiants INSA.",
     "homeButtonTitle": "Feedback/Bugs",
     "homeButtonSubtitle": "Contacter le développeur"
+  },
+  "equipmentScreen": {
+    "title": "Réservation de Matériel",
+    "message": "L'Amicale mets à disposition des étudiants du matériel comme des BBQ, des appareils à raclette et autres. Pour réserver l'un de ces formidables appareils, cliquez sur celui de votre choix dans la liste, indiquez les dates du prêt, puis passez à l'Amicale pour le récupérer et donner votre caution.",
+    "bail": "Caution : %{cost}€",
+    "availableAt": "Disponible à : %{date}",
+    "available": "Disponible !",
+    "booking": "Cliquez sur le calendrier pour choisir les dates de début et de fin de la réservation",
+    "startDate": "Début: ",
+    "endDate": "Fin: ",
+    "notSet": "Non défini",
+    "bookButton": "Choisir ces dates",
+    "dialogTitle": "Confirmer la réservation ?",
+    "dialogTitleLoading": "Envoi de la réservation...",
+    "dialogMessage": "Êtes vous sûr de vouloir confirmer cette réservation?\n\nVous pourrez ensuite récupérer le matériel à l'Amicale pour la durée de votre reservation en échange d'une caution."
   }
 }

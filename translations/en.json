@@ -26,7 +26,9 @@
     "vote": "Elections",
     "scanner": "Scanotron 3000",
     "feedback": "Feedback",
-    "insaAccount": "INSA Account"
+    "insaAccount": "INSA Account",
+    "equipmentList": "Equipment Booking",
+    "equipmentLend": "Book"
   },
   "intro": {
     "slideMain": {
@@ -428,7 +430,8 @@
       "bib": "Book a Bib'Box for project work",
       "mails": "Check your INSA mails",
       "ent": "See your grades",
-      "insaAccount": "See your information and change your password"
+      "insaAccount": "See your information and change your password",
+      "equipment": "Book a BBQ or other equipment"
     }
   },
   "planningScreen": {
@@ -444,5 +447,20 @@
     "contactMeans": "Using Gitea is recommended, to use it simply login with your INSA account.",
     "homeButtonTitle": "Feedback/Bug report",
     "homeButtonSubtitle": "Contact the devs"
+  },
+  "equipmentScreen": {
+    "title": "Equipment booking",
+    "message": "Thanks to the Amicale, students have access to some equipment like BBQs and others. To book one of those items, click the equipment of your choice in the list bellow, enter your lend dates, then come around the Amicale to claim it and give your bail.",
+    "bail": "Bail: %{cost}€",
+    "availableAt": "Available at: %{date}",
+    "available": "Available!",
+    "booking": "Click on the calendar to set the start and end dates",
+    "startDate": "Start: ",
+    "endDate": "End: ",
+    "notSet": "Not set",
+    "bookButton": "Book selected dates",
+    "dialogTitle": "Confirm booking?",
+    "dialogTitleLoading": "Sending your booking...",
+    "dialogMessage": "Are you sure you want to confirm your booking?\n\nYou will then be able to claim the selected equipment at the Amicale for the duration of your booking in exchange of a bail."
   }
 }
