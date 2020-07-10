@@ -49,6 +49,10 @@ export default class DateManager {
         return date.getDay() === 6 || date.getDay() === 0;
     }
 
+    getMonthsOfYear() {
+        return this.monthsOfYear;
+    }
+
     /**
      * Gets a translated string representing the given date.
      *

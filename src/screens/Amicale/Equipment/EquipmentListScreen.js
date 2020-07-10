@@ -22,35 +22,8 @@ export type Device = {
     id: number,
     name: string,
     caution: number,
-    available_at: string,
+    booked_at: Array<{begin: string, end: string}>,
 };
-
-const TEST_DATASET = [
-    {
-        id: 1,
-        name: "Petit barbecue",
-        caution: 100,
-        available_at: "2020-07-07 21:12"
-    },
-    {
-        id: 2,
-        name: "Grand barbecue",
-        caution: 100,
-        available_at: "2020-07-08 21:12"
-    },
-    {
-        id: 3,
-        name: "Appareil à fondue",
-        caution: 100,
-        available_at: "2020-07-09 14:12"
-    },
-    {
-        id: 4,
-        name: "Appareil à croque-monsieur",
-        caution: 100,
-        available_at: "2020-07-10 12:12"
-    }
-]
 
 const ICON_AMICALE = require('../../../../assets/amicale.png');
 const LIST_ITEM_HEIGHT = 64;
@@ -104,8 +77,6 @@ class EquipmentListScreen extends React.Component<Props> {
             const fetchedData = data[0];
             if (fetchedData != null)
                 this.data = fetchedData["devices"];
-
-            this.data = TEST_DATASET; // TODO remove in prod
         }
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
@@ -131,9 +102,9 @@ class EquipmentListScreen extends React.Component<Props> {
                 {...this.props}
                 requests={[
                     {
-                        link: 'user/profile',
+                        link: 'location/all',
                         params: {},
-                        mandatory: false,
+                        mandatory: true,
                     }
                 ]}
                 renderFunction={this.getScreen}

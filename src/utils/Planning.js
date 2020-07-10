@@ -114,7 +114,7 @@ export function stringToDate(dateString: string): Date | null {
 
 /**
  * Converts a date object to a string in the format
- * YYYY-MM-DD HH-MM-SS
+ * YYYY-MM-DD HH-MM
  *
  * @param date The date object to convert
  * @param isUTC Whether to treat the date as UTC

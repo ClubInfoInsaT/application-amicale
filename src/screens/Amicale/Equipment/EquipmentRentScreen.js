@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Button, Caption, Card, Headline, Subheading, Text, withTheme} from 'react-native-paper';
+import {Button, Caption, Card, Headline, Subheading, withTheme} from 'react-native-paper';
 import {Collapsible} from "react-navigation-collapsible";
 import {withCollapsible} from "../../../utils/withCollapsible";
 import {StackNavigationProp} from "@react-navigation/stack";
@@ -11,12 +11,18 @@ import {Animated, BackHandler} from "react-native";
 import * as Animatable from "react-native-animatable";
 import {View} from "react-native-animatable";
 import i18n from "i18n-js";
-import {dateToString, getTimeOnlyString, stringToDate} from "../../../utils/Planning";
 import {CalendarList} from "react-native-calendars";
-import DateTimePicker from '@react-native-community/datetimepicker';
 import LoadingConfirmDialog from "../../../components/Dialogs/LoadingConfirmDialog";
 import ConnectionManager from "../../../managers/ConnectionManager";
 import ErrorDialog from "../../../components/Dialogs/ErrorDialog";
+import {
+    generateMarkedDates,
+    getFirstEquipmentAvailability,
+    getISODate,
+    getRelativeDateString,
+    getValidRange,
+    isEquipmentAvailable
+} from "../../../utils/EquipmentBooking";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -33,7 +39,6 @@ type State = {
     dialogVisible: boolean,
     errorDialogVisible: boolean,
     markedDates: { [key: string]: { startingDay: boolean, endingDay: boolean, color: string } },
-    timePickerVisible: boolean,
     currentError: number,
 }
 
@@ -43,32 +48,45 @@ class EquipmentRentScreen extends React.Component<Props, State> {
         dialogVisible: false,
         errorDialogVisible: false,
         markedDates: {},
-        timePickerVisible: false,
         currentError: 0,
     }
 
     item: Device | null;
-    selectedDates: {
-        start: Date | null,
-        end: Date | null,
-    };
-
-    currentlySelectedDate: Date | null;
+    bookedDates: Array<string>;
 
     bookRef: { current: null | Animatable.View }
     canBookEquipment: boolean;
+
+    lockedDates: { [key: string]: { startingDay: boolean, endingDay: boolean, color: string } }
 
     constructor(props: Props) {
         super(props);
         this.resetSelection();
         this.bookRef = React.createRef();
         this.canBookEquipment = false;
+        this.bookedDates = [];
         if (this.props.route.params != null) {
             if (this.props.route.params.item != null)
                 this.item = this.props.route.params.item;
             else
                 this.item = null;
         }
+        const item = this.item;
+        if (item != null) {
+            this.lockedDates = {};
+            for (let i = 0; i < item.booked_at.length; i++) {
+                const range = getValidRange(new Date(item.booked_at[i].begin), new Date(item.booked_at[i].end), null);
+                this.lockedDates = {
+                    ...this.lockedDates,
+                    ...generateMarkedDates(
+                        false,
+                        this.props.theme,
+                        range
+                    )
+                };
+            }
+        }
+
     }
 
     /**
@@ -99,56 +117,13 @@ class EquipmentRentScreen extends React.Component<Props, State> {
      * @return {boolean}
      */
     onBackButtonPressAndroid = () => {
-        if (this.currentlySelectedDate != null) {
+        if (this.bookedDates.length > 0) {
             this.resetSelection();
-            this.setState({
-                markedDates: this.generateMarkedDates(),
-            });
+            this.updateMarkedSelection();
             return true;
         } else
             return false;
     };
-
-    isAvailable(item: Device) {
-        const availableDate = stringToDate(item.available_at);
-        return availableDate != null && availableDate < new Date();
-    }
-
-    /**
-     * Gets the string representation of the given date.
-     *
-     * If the given date is the same day as today, only return the tile.
-     * Otherwise, return the full date.
-     *
-     * @param dateString The string representation of the wanted date
-     * @returns {string}
-     */
-    getDateString(dateString: string): string {
-        const today = new Date();
-        const date = stringToDate(dateString);
-        if (date != null && today.getDate() === date.getDate()) {
-            const str = getTimeOnlyString(dateString);
-            return str != null ? str : "";
-        } else
-            return dateString;
-    }
-
-    /**
-     * Gets the minimum date for renting equipment
-     *
-     * @param item The item to rent
-     * @param isAvailable True is it is available right now
-     * @returns {Date}
-     */
-    getMinDate(item: Device, isAvailable: boolean) {
-        let date = new Date();
-        if (isAvailable)
-            return date;
-        else {
-            const limit = stringToDate(item.available_at)
-            return limit != null ? limit : date;
-        }
-    }
 
     /**
      * Selects a new date on the calendar.
@@ -157,29 +132,42 @@ class EquipmentRentScreen extends React.Component<Props, State> {
      * @param day The day selected
      */
     selectNewDate = (day: { dateString: string, day: number, month: number, timestamp: number, year: number }) => {
-        this.currentlySelectedDate = new Date(day.dateString);
+        const selected = new Date(day.dateString);
+        const start = this.getBookStartDate();
 
-        if (!this.canBookEquipment) {
-            const start = this.selectedDates.start;
-            if (start == null)
-                this.selectedDates.start = this.currentlySelectedDate;
-            else if (this.currentlySelectedDate < start) {
-                this.selectedDates.end = start;
-                this.selectedDates.start = this.currentlySelectedDate;
+        if (!(this.lockedDates.hasOwnProperty(day.dateString))) {
+            if (start === null) {
+                this.updateSelectionRange(selected, selected);
+                this.enableBooking();
+            } else if (start.getTime() === selected.getTime()) {
+                this.resetSelection();
+            } else if (this.bookedDates.length === 1) {
+                this.updateSelectionRange(start, selected);
+                this.enableBooking();
             } else
-                this.selectedDates.end = this.currentlySelectedDate;
-        } else
-            this.resetSelection();
+                this.resetSelection();
+            this.updateMarkedSelection();
+        }
+    }
 
-        if (this.selectedDates.start != null) {
-            this.setState({
-                markedDates: this.generateMarkedDates(),
-                timePickerVisible: true,
-            });
-        } else {
-            this.setState({
-                markedDates: this.generateMarkedDates(),
-            });
+    updateSelectionRange(start: Date, end: Date) {
+        this.bookedDates = getValidRange(start, end, this.item);
+    }
+
+    updateMarkedSelection() {
+        this.setState({
+            markedDates: generateMarkedDates(
+                true,
+                this.props.theme,
+                this.bookedDates
+            ),
+        });
+    }
+
+    enableBooking() {
+        if (!this.canBookEquipment) {
+            this.showBookButton();
+            this.canBookEquipment = true;
         }
     }
 
@@ -187,119 +175,7 @@ class EquipmentRentScreen extends React.Component<Props, State> {
         if (this.canBookEquipment)
             this.hideBookButton();
         this.canBookEquipment = false;
-        this.selectedDates = {start: null, end: null};
-        this.currentlySelectedDate = null;
-    }
-
-    /**
-     * Deselect the currently selected date
-     */
-    deselectCurrentDate() {
-        let currentlySelectedDate = this.currentlySelectedDate;
-        const start = this.selectedDates.start;
-        const end = this.selectedDates.end;
-        if (currentlySelectedDate != null && start != null) {
-            if (currentlySelectedDate === start && end === null)
-                this.resetSelection();
-            else if (end != null && currentlySelectedDate === end) {
-                this.currentlySelectedDate = start;
-                this.selectedDates.end = null;
-            } else if (currentlySelectedDate === start) {
-                this.currentlySelectedDate = end;
-                this.selectedDates.start = this.selectedDates.end;
-                this.selectedDates.end = null;
-            }
-        }
-    }
-
-    /**
-     * Saves the selected time to the currently selected date.
-     * If no the time selection was canceled, cancels the current selecction
-     *
-     * @param event The click event
-     * @param date The date selected
-     */
-    onTimeChange = (event: { nativeEvent: { timestamp: number }, type: string }, date: Date) => {
-        let currentDate = this.currentlySelectedDate;
-        const item = this.item;
-        if (item != null && event.type === "set" && currentDate != null) {
-            currentDate.setHours(date.getHours());
-            currentDate.setMinutes(date.getMinutes());
-
-            const isAvailable = this.isAvailable(item);
-            let limit = this.getMinDate(item, isAvailable);
-            // Prevent selecting a date before now
-            if (this.getISODate(currentDate) === this.getISODate(limit) && currentDate < limit) {
-                currentDate.setHours(limit.getHours());
-                currentDate.setMinutes(limit.getMinutes());
-            }
-
-            if (this.selectedDates.start != null && this.selectedDates.end != null) {
-                if (this.selectedDates.start > this.selectedDates.end) {
-                    const temp = this.selectedDates.start;
-                    this.selectedDates.start = this.selectedDates.end;
-                    this.selectedDates.end = temp;
-                }
-                this.canBookEquipment = true;
-                this.showBookButton();
-            }
-        } else
-            this.deselectCurrentDate();
-
-        this.setState({
-            timePickerVisible: false,
-            markedDates: this.generateMarkedDates(),
-        });
-    }
-
-    /**
-     * Returns the ISO date format (without the time)
-     *
-     * @param date The date to recover the ISO format from
-     * @returns {*}
-     */
-    getISODate(date: Date) {
-        return date.toISOString().split("T")[0];
-    }
-
-    /**
-     * Generates the object containing all marked dates between the start and end dates selected
-     *
-     * @returns {{}}
-     */
-    generateMarkedDates() {
-        let markedDates = {}
-        const start = this.selectedDates.start;
-        const end = this.selectedDates.end;
-        if (start != null) {
-            const startISODate = this.getISODate(start);
-            if (end != null && this.getISODate(end) !== startISODate) {
-                markedDates[startISODate] = {
-                    startingDay: true,
-                    endingDay: false,
-                    color: this.props.theme.colors.primary
-                };
-                markedDates[this.getISODate(end)] = {
-                    startingDay: false,
-                    endingDay: true,
-                    color: this.props.theme.colors.primary
-                };
-                let date = new Date(start);
-                date.setDate(date.getDate() + 1);
-                while (date < end && this.getISODate(date) !== this.getISODate(end)) {
-                    markedDates[this.getISODate(date)] =
-                        {startingDay: false, endingDay: false, color: this.props.theme.colors.danger};
-                    date.setDate(date.getDate() + 1);
-                }
-            } else {
-                markedDates[startISODate] = {
-                    startingDay: true,
-                    endingDay: true,
-                    color: this.props.theme.colors.primary
-                };
-            }
-        }
-        return markedDates;
+        this.bookedDates = [];
     }
 
     /**
@@ -349,15 +225,15 @@ class EquipmentRentScreen extends React.Component<Props, State> {
     onDialogAccept = () => {
         return new Promise((resolve) => {
             const item = this.item;
-            const start = this.selectedDates.start;
-            const end = this.selectedDates.end;
+            const start = this.getBookStartDate();
+            const end = this.getBookEndDate();
             if (item != null && start != null && end != null) {
                 ConnectionManager.getInstance().authenticatedRequest(
-                    "", // TODO set path
+                    "location/booking",
                     {
-                        "id": item.id,
-                        "start": dateToString(start, false),
-                        "end": dateToString(end, false),
+                        "device": item.id,
+                        "begin": getISODate(start),
+                        "end": getISODate(end),
                     })
                     .then(() => {
                         console.log("Success, replace screen");
@@ -373,20 +249,25 @@ class EquipmentRentScreen extends React.Component<Props, State> {
         });
     }
 
+    getBookStartDate() {
+        return this.bookedDates.length > 0 ? new Date(this.bookedDates[0]) : null;
+    }
+
+    getBookEndDate() {
+        const length = this.bookedDates.length;
+        return length > 0 ? new Date(this.bookedDates[length - 1]) : null;
+    }
+
     render() {
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
-        let startString = <Caption>{i18n.t('equipmentScreen.notSet')}</Caption>;
-        let endString = <Caption>{i18n.t('equipmentScreen.notSet')}</Caption>;
-        const start = this.selectedDates.start;
-        const end = this.selectedDates.end;
-        if (start != null)
-            startString = dateToString(start, false);
-        if (end != null)
-            endString = dateToString(end, false);
 
         const item = this.item;
+        const start = this.getBookStartDate();
+        const end = this.getBookEndDate();
+
         if (item != null) {
-            const isAvailable = this.isAvailable(item);
+            const isAvailable = isEquipmentAvailable(item);
+            const firstAvailability = getFirstEquipmentAvailability(item);
             return (
                 <View style={{flex: 1}}>
                     <Animated.ScrollView
@@ -424,40 +305,32 @@ class EquipmentRentScreen extends React.Component<Props, State> {
                                     color={isAvailable ? this.props.theme.colors.success : this.props.theme.colors.primary}
                                     mode="text"
                                 >
-                                    {
-                                        isAvailable
-                                            ? i18n.t('equipmentScreen.available')
-                                            : i18n.t('equipmentScreen.availableAt', {date: this.getDateString(item.available_at)})
-                                    }
+                                    {i18n.t('equipmentScreen.available', {date: getRelativeDateString(firstAvailability)})}
                                 </Button>
-                                <Text style={{
+                                <Subheading style={{
                                     textAlign: "center",
-                                    marginBottom: 10
+                                    marginBottom: 10,
+                                    minHeight: 50
                                 }}>
-                                    {i18n.t('equipmentScreen.booking')}
-                                </Text>
-                                <Subheading style={{textAlign: "center"}}>
-                                    {i18n.t('equipmentScreen.startDate')}
-                                    {startString}
-                                </Subheading>
-                                <Subheading style={{textAlign: "center"}}>
-                                    {i18n.t('equipmentScreen.endDate')}
-                                    {endString}
+                                    {
+                                        start == null
+                                            ? i18n.t('equipmentScreen.booking')
+                                            : end != null && start.getTime() !== end.getTime()
+                                            ? i18n.t('equipmentScreen.bookingPeriod', {
+                                                begin: getRelativeDateString(start),
+                                                end: getRelativeDateString(end)
+                                            })
+                                            : i18n.t('equipmentScreen.bookingDay', {
+                                                date: getRelativeDateString(start)
+                                            })
+                                    }
+
                                 </Subheading>
                             </Card.Content>
                         </Card>
-                        {this.state.timePickerVisible
-                            ? <DateTimePicker
-                                value={new Date()}
-                                mode={"time"}
-                                display={"clock"}
-                                is24Hour={true}
-                                onChange={this.onTimeChange}
-                            />
-                            : null}
                         <CalendarList
                             // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-                            minDate={this.getMinDate(item, isAvailable)}
+                            minDate={new Date()}
                             // Max amount of months allowed to scroll to the past. Default = 50
                             pastScrollRange={0}
                             // Max amount of months allowed to scroll to the future. Default = 50
@@ -476,7 +349,7 @@ class EquipmentRentScreen extends React.Component<Props, State> {
                             hideArrows={false}
                             // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
                             markingType={'period'}
-                            markedDates={this.state.markedDates}
+                            markedDates={{...this.lockedDates, ...this.state.markedDates}}
 
                             theme={{
                                 backgroundColor: this.props.theme.colors.agendaBackgroundColor,
