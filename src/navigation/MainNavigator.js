@@ -25,6 +25,7 @@ import BugReportScreen from "../screens/Other/FeedbackScreen";
 import WebsiteScreen from "../screens/Services/WebsiteScreen";
 import EquipmentScreen from "../screens/Amicale/Equipment/EquipmentListScreen";
 import EquipmentLendScreen from "../screens/Amicale/Equipment/EquipmentRentScreen";
+import EquipmentConfirmScreen from "../screens/Amicale/Equipment/EquipmentConfirmScreen";
 
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
 
@@ -122,7 +123,8 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
             {createScreenCollapsibleStack("profile", MainStack, ProfileScreen, i18n.t('screens.profile'))}
             {createScreenCollapsibleStack("club-list", MainStack, ClubListScreen, i18n.t('clubs.clubList'))}
             {createScreenCollapsibleStack("equipment-list", MainStack, EquipmentScreen, i18n.t('screens.equipmentList'))}
-            {createScreenCollapsibleStack("equipment-lend", MainStack, EquipmentLendScreen, i18n.t('screens.equipmentLend'))}
+            {createScreenCollapsibleStack("equipment-rent", MainStack, EquipmentLendScreen, i18n.t('screens.equipmentLend'))}
+            {createScreenCollapsibleStack("equipment-confirm", MainStack, EquipmentConfirmScreen, i18n.t('screens.equipmentConfirm'))}
             <MainStack.Screen
                 name="club-information"
                 component={ClubDisplayScreen}

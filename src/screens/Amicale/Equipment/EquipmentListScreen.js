@@ -25,21 +25,58 @@ export type Device = {
     booked_at: Array<{begin: string, end: string}>,
 };
 
+export type RentedDevice = {
+    device_id: number,
+    device_name: string,
+    begin: string,
+    end: string,
+}
+
 const ICON_AMICALE = require('../../../../assets/amicale.png');
 const LIST_ITEM_HEIGHT = 64;
 
 class EquipmentListScreen extends React.Component<Props> {
 
     data: Array<Device>;
+    userRents: Array<RentedDevice>;
+
+    authRef: { current: null | AuthenticatedScreen };
+    canRefresh: boolean;
+
+    constructor(props: Props) {
+        super(props);
+        this.canRefresh = false;
+        this.authRef = React.createRef();
+        this.props.navigation.addListener('focus', this.onScreenFocus);
+    }
+
+    onScreenFocus = () => {
+        if (this.canRefresh && this.authRef.current != null)
+            this.authRef.current.reload();
+        this.canRefresh = true;
+    };
 
     getRenderItem = ({item}: { item: Device }) => {
         return (
             <EquipmentListItem
-                onPress={() => this.props.navigation.navigate('equipment-lend', {item: item})}
+                navigation={this.props.navigation}
                 item={item}
+                userDeviceRentDates={this.getUserDeviceRentDates(item)}
                 height={LIST_ITEM_HEIGHT}/>
         );
     };
+
+    getUserDeviceRentDates(item: Device) {
+        let dates = null;
+        for (let i = 0; i < this.userRents.length; i++) {
+            let device = this.userRents[i];
+            if (item.id === device.device_id) {
+                dates = [device.begin, device.end];
+                break;
+            }
+        }
+        return dates;
+    }
 
     /**
      * Gets the list header, with explains this screen's purpose
@@ -78,6 +115,11 @@ class EquipmentListScreen extends React.Component<Props> {
             if (fetchedData != null)
                 this.data = fetchedData["devices"];
         }
+        if (data[1] != null) {
+            const fetchedData = data[1];
+            if (fetchedData != null)
+                this.userRents = fetchedData["locations"];
+        }
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
             <Animated.FlatList
@@ -100,11 +142,17 @@ class EquipmentListScreen extends React.Component<Props> {
         return (
             <AuthenticatedScreen
                 {...this.props}
+                ref={this.authRef}
                 requests={[
                     {
                         link: 'location/all',
                         params: {},
                         mandatory: true,
+                    },
+                    {
+                        link: 'location/my',
+                        params: {},
+                        mandatory: false,
                     }
                 ]}
                 renderFunction={this.getScreen}

@@ -28,7 +28,8 @@
     "feedback": "Feedback",
     "insaAccount": "INSA Account",
     "equipmentList": "Equipment Booking",
-    "equipmentLend": "Book"
+    "equipmentLend": "Book",
+    "equipmentConfirm": "Confirmation"
   },
   "intro": {
     "slideMain": {
@@ -464,6 +465,7 @@
     "bookButton": "Book selected dates",
     "dialogTitle": "Confirm booking?",
     "dialogTitleLoading": "Sending your booking...",
-    "dialogMessage": "Are you sure you want to confirm your booking?\n\nYou will then be able to claim the selected equipment at the Amicale for the duration of your booking in exchange of a bail."
+    "dialogMessage": "Are you sure you want to confirm your booking?\n\nYou will then be able to claim the selected equipment at the Amicale for the duration of your booking in exchange of a bail.",
+    "bookingConfirmedMessage": "Do not forget to come by the Amicale to give your bail in exchange of the equipment."
   }
 }

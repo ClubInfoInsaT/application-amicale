@@ -7,13 +7,11 @@ import {withCollapsible} from "../../../utils/withCollapsible";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../../managers/ThemeManager";
 import type {Device} from "./EquipmentListScreen";
-import {Animated, BackHandler} from "react-native";
+import {Animated, BackHandler, View} from "react-native";
 import * as Animatable from "react-native-animatable";
-import {View} from "react-native-animatable";
 import i18n from "i18n-js";
 import {CalendarList} from "react-native-calendars";
 import LoadingConfirmDialog from "../../../components/Dialogs/LoadingConfirmDialog";
-import ConnectionManager from "../../../managers/ConnectionManager";
 import ErrorDialog from "../../../components/Dialogs/ErrorDialog";
 import {
     generateMarkedDates,
@@ -23,6 +21,7 @@ import {
     getValidRange,
     isEquipmentAvailable
 } from "../../../utils/EquipmentBooking";
+import ConnectionManager from "../../../managers/ConnectionManager";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -228,6 +227,11 @@ class EquipmentRentScreen extends React.Component<Props, State> {
             const start = this.getBookStartDate();
             const end = this.getBookEndDate();
             if (item != null && start != null && end != null) {
+                console.log({
+                    "device": item.id,
+                    "begin": getISODate(start),
+                    "end": getISODate(end),
+                })
                 ConnectionManager.getInstance().authenticatedRequest(
                     "location/booking",
                     {
@@ -236,7 +240,11 @@ class EquipmentRentScreen extends React.Component<Props, State> {
                         "end": getISODate(end),
                     })
                     .then(() => {
-                        console.log("Success, replace screen");
+                        this.onDialogDismiss();
+                        this.props.navigation.replace("equipment-confirm", {
+                            item: this.item,
+                            dates: [getISODate(start), getISODate(end)]
+                        });
                         resolve();
                     })
                     .catch((error: number) => {
@@ -244,8 +252,10 @@ class EquipmentRentScreen extends React.Component<Props, State> {
                         this.showErrorDialog(error);
                         resolve();
                     });
-            } else
+            } else {
+                this.onDialogDismiss();
                 resolve();
+            }
         });
     }
 
