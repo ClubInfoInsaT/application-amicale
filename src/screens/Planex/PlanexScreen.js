@@ -4,30 +4,29 @@ import * as React from 'react';
 import type {CustomTheme} from "../../managers/ThemeManager";
 import ThemeManager from "../../managers/ThemeManager";
 import WebViewScreen from "../../components/Screens/WebViewScreen";
-import {Avatar, Banner, withTheme} from "react-native-paper";
+import {withTheme} from "react-native-paper";
 import i18n from "i18n-js";
 import {View} from "react-native";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import AlertDialog from "../../components/Dialogs/AlertDialog";
-import {withCollapsible} from "../../utils/withCollapsible";
 import {dateToString, getTimeOnlyString} from "../../utils/Planning";
 import DateManager from "../../managers/DateManager";
 import AnimatedBottomBar from "../../components/Animations/AnimatedBottomBar";
 import {CommonActions} from "@react-navigation/native";
 import ErrorView from "../../components/Screens/ErrorView";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {Collapsible} from "react-navigation-collapsible";
 import type {group} from "./GroupSelectionScreen";
+import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
+import MascotPopup from "../../components/Mascot/MascotPopup";
 
 type Props = {
     navigation: StackNavigationProp,
     route: { params: { group: group } },
     theme: CustomTheme,
-    collapsibleStack: Collapsible,
 }
 
 type State = {
-    bannerVisible: boolean,
+    mascotDialogVisible: boolean,
     dialogVisible: boolean,
     dialogTitle: string,
     dialogMessage: string,
@@ -144,7 +143,9 @@ class PlanexScreen extends React.Component<Props, State> {
             props.navigation.setOptions({title: currentGroup.name})
         }
         this.state = {
-            bannerVisible: false,
+            mascotDialogVisible:
+                AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
+                AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex',
             dialogVisible: false,
             dialogTitle: "",
             dialogMessage: "",
@@ -158,23 +159,14 @@ class PlanexScreen extends React.Component<Props, State> {
      */
     componentDidMount() {
         this.props.navigation.addListener('focus', this.onScreenFocus);
-        setTimeout(this.onBannerTimeout, 2000);
-    }
-
-    onBannerTimeout = () => {
-        this.setState({
-            bannerVisible:
-                AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
-                AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex'
-        })
     }
 
     /**
      * Callback used when closing the banner.
      * This hides the banner and saves to preferences to prevent it from reopening
      */
-    onHideBanner = () => {
-        this.setState({bannerVisible: false});
+    onMascotDialogCancel = () => {
+        this.setState({mascotDialogVisible: false});
         AsyncStorageManager.getInstance().savePref(
             AsyncStorageManager.getInstance().preferences.planexShowBanner.key,
             '0'
@@ -187,7 +179,7 @@ class PlanexScreen extends React.Component<Props, State> {
      * This will hide the banner and open the SettingsScreen
      */
     onGoToSettings = () => {
-        this.onHideBanner();
+        this.onMascotDialogCancel();
         this.props.navigation.navigate('settings');
     };
 
@@ -356,7 +348,6 @@ class PlanexScreen extends React.Component<Props, State> {
     }
 
     render() {
-        const {containerPaddingTop} = this.props.collapsibleStack;
         return (
             <View
                 style={{flex: 1}}
@@ -371,30 +362,26 @@ class PlanexScreen extends React.Component<Props, State> {
                         ? this.getWebView()
                         : <View style={{height: '100%'}}>{this.getWebView()}</View>}
                 </View>
-                <Banner
-                    style={{
-                        marginTop: containerPaddingTop,
-                        backgroundColor: this.props.theme.colors.surface
-                    }}
-                    visible={this.state.bannerVisible}
-                    actions={[
-                        {
-                            label: i18n.t('planexScreen.enableStartOK'),
+                <MascotPopup
+                    visible={this.state.mascotDialogVisible}
+                    title={i18n.t("planexScreen.enableStartScreenTitle")}
+                    message={i18n.t("planexScreen.enableStartScreenMessage")}
+                    icon={"power"}
+                    buttons={{
+                        action: {
+                            message: i18n.t("planexScreen.enableStartOK"),
+                            icon: "settings",
                             onPress: this.onGoToSettings,
                         },
-                        {
-                            label: i18n.t('planexScreen.enableStartCancel'),
-                            onPress: this.onHideBanner,
-                        },
-
-                    ]}
-                    icon={() => <Avatar.Icon
-                        icon={'power'}
-                        size={40}
-                    />}
-                >
-                    {i18n.t('planexScreen.enableStartScreen')}
-                </Banner>
+                        cancel: {
+                            message: i18n.t("planexScreen.enableStartCancel"),
+                            icon: "close",
+                            color: this.props.theme.colors.warning,
+                            onPress: this.onMascotDialogCancel,
+                        }
+                    }}
+                    emotion={MASCOT_STYLE.INTELLO}
+                />
                 <AlertDialog
                     visible={this.state.dialogVisible}
                     onDismiss={this.hideDialog}
@@ -411,4 +398,4 @@ class PlanexScreen extends React.Component<Props, State> {
     }
 }
 
-export default withCollapsible(withTheme(PlanexScreen));
+export default withTheme(PlanexScreen);

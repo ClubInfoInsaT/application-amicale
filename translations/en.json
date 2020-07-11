@@ -116,7 +116,8 @@
     "loginBanner": {
       "login": "Login",
       "later": "Later",
-      "message": "Login to your Amicale account to get access to more services!"
+      "title": "Welcome, you!",
+      "message": "Login to your Amicale account to get access to more services!\n\nYou will still be able to login later."
     }
   },
   "aboutScreen": {
@@ -179,9 +180,10 @@
     "dryerTips": "The advised dryer length is 35 minutes for 14 kg of laundry. You can choose a shorter length if the dryer is not fully charged.",
     "procedure": "Procedure",
     "tips": "Tips",
-    "enableNotificationsTip": "Click on a running machine to enable notifications",
+    "enableNotificationsTip": "Click on a running machine to enable notifications!\n\nYou will never forget your laundry again.",
     "numAvailable": "available",
     "numAvailablePlural": "available",
+    "bannerTitle": "Notifications!",
     "bannerButton": "Got it!",
     "modal": {
       "enableNotifications": "Notify me",
@@ -215,7 +217,8 @@
     }
   },
   "planexScreen": {
-    "enableStartScreen": "Come here often? Set it as default screen!",
+    "enableStartScreenTitle": "Come here often?",
+    "enableStartScreenMessage": "Set it as default screen!\n\nCampus will start on Planex so you never miss a class. Click on the button bellow to navigate to the settings page.",
     "enableStartOK": "Yes please!",
     "enableStartCancel": "Later",
     "noGroupSelected": "No group selected. Please select your group using the big beautiful red button bellow.",

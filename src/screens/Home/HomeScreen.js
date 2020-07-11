@@ -5,7 +5,7 @@ import {FlatList} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../../components/Home/EventDashboardItem";
 import WebSectionList from "../../components/Screens/WebSectionList";
-import {Avatar, Banner, withTheme} from 'react-native-paper';
+import {withTheme} from 'react-native-paper';
 import FeedItem from "../../components/Home/FeedItem";
 import SquareDashboardItem from "../../components/Home/SmallDashboardItem";
 import PreviewEventDashboardItem from "../../components/Home/PreviewEventDashboardItem";
@@ -19,10 +19,10 @@ import type {CustomTheme} from "../../managers/ThemeManager";
 import {View} from "react-native-animatable";
 import ConnectionManager from "../../managers/ConnectionManager";
 import LogoutDialog from "../../components/Amicale/LogoutDialog";
-import {withCollapsible} from "../../utils/withCollapsible";
-import {Collapsible} from "react-navigation-collapsible";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import AvailableWebsites from "../../constants/AvailableWebsites";
+import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
+import MascotPopup from "../../components/Mascot/MascotPopup";
 // import DATA from "../dashboard_data.json";
 
 
@@ -97,12 +97,11 @@ type Props = {
     navigation: StackNavigationProp,
     route: { params: any, ... },
     theme: CustomTheme,
-    collapsibleStack: Collapsible,
 }
 
 type State = {
     dialogVisible: boolean,
-    bannerVisible: boolean,
+    mascotDialogVisible: boolean,
 }
 
 /**
@@ -115,16 +114,19 @@ class HomeScreen extends React.Component<Props, State> {
     fabRef: { current: null | AnimatedFAB };
     currentNewFeed: Array<feedItem>;
 
-    state = {
-        dialogVisible: false,
-        bannerVisible: false,
-    }
-
     constructor(props) {
         super(props);
         this.fabRef = React.createRef();
         this.currentNewFeed = [];
-        this.isLoggedIn = null;
+        this.isLoggedIn = ConnectionManager.getInstance().isLoggedIn();
+        this.props.navigation.setOptions({
+            headerRight: this.getHeaderButton,
+        });
+        this.state = {
+            dialogVisible: false,
+            mascotDialogVisible: AsyncStorageManager.getInstance().preferences.homeShowBanner.current === "1"
+                && !this.isLoggedIn,
+        }
     }
 
     /**
@@ -142,13 +144,6 @@ class HomeScreen extends React.Component<Props, State> {
         this.props.navigation.addListener('focus', this.onScreenFocus);
         // Handle link open when home is focused
         this.props.navigation.addListener('state', this.handleNavigationParams);
-        setTimeout(this.onBannerTimeout, 2000);
-    }
-
-    onBannerTimeout = () => {
-        this.setState({
-            bannerVisible: AsyncStorageManager.getInstance().preferences.homeShowBanner.current === "1"
-        })
     }
 
     /**
@@ -160,9 +155,6 @@ class HomeScreen extends React.Component<Props, State> {
             this.props.navigation.setOptions({
                 headerRight: this.getHeaderButton,
             });
-        }
-        if (this.isLoggedIn) {
-            this.setState({bannerVisible: false})
         }
         // handle link open when home is not focused or created
         this.handleNavigationParams();
@@ -201,6 +193,14 @@ class HomeScreen extends React.Component<Props, State> {
             <Item title="log" iconName={logIcon} color={logColor} onPress={onPressLog}/>
             <Item title={i18n.t("screens.settings")} iconName={"settings"} onPress={onPressSettings}/>
         </MaterialHeaderButtons>;
+    };
+
+    hideMascotDialog = () => {
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.homeShowBanner.key,
+            '0'
+        );
+        this.setState({mascotDialogVisible: false})
     };
 
     showDisconnectDialog = () => this.setState({dialogVisible: true});
@@ -570,28 +570,15 @@ class HomeScreen extends React.Component<Props, State> {
     };
 
     /**
-     * Callback used when closing the banner.
-     * This hides the banner and saves to preferences to prevent it from reopening.
-     */
-    onHideBanner = () => {
-        this.setState({bannerVisible: false});
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.homeShowBanner.key,
-            '0'
-        );
-    };
-
-    /**
      * Callback when pressing the login button on the banner.
      * This hides the banner and takes the user to the login page.
      */
-    onLoginBanner = () => {
-        this.onHideBanner();
+    onLogin = () => {
+        this.hideMascotDialog();
         this.props.navigation.navigate("login", {nextScreen: "profile"});
     }
 
     render() {
-        const {containerPaddingTop} = this.props.collapsibleStack;
         return (
             <View
                 style={{flex: 1}}
@@ -613,6 +600,26 @@ class HomeScreen extends React.Component<Props, State> {
                         showError={false}
                     />
                 </View>
+                <MascotPopup
+                    visible={this.state.mascotDialogVisible}
+                    title={i18n.t("homeScreen.loginBanner.title")}
+                    message={i18n.t("homeScreen.loginBanner.message")}
+                    icon={"check"}
+                    buttons={{
+                        action: {
+                            message: i18n.t("homeScreen.loginBanner.login"),
+                            icon: "login",
+                            onPress: this.onLogin,
+                        },
+                        cancel: {
+                            message: i18n.t("homeScreen.loginBanner.later"),
+                            icon: "close",
+                            color: this.props.theme.colors.warning,
+                            onPress: this.hideMascotDialog,
+                        }
+                    }}
+                    emotion={MASCOT_STYLE.CUTE}
+                />
                 <AnimatedFAB
                     {...this.props}
                     ref={this.fabRef}
@@ -624,32 +631,9 @@ class HomeScreen extends React.Component<Props, State> {
                     visible={this.state.dialogVisible}
                     onDismiss={this.hideDisconnectDialog}
                 />
-                <Banner
-                    style={{
-                        marginTop: containerPaddingTop,
-                        backgroundColor: this.props.theme.colors.surface
-                    }}
-                    visible={this.state.bannerVisible}
-                    actions={[
-                        {
-                            label: i18n.t('homeScreen.loginBanner.login'),
-                            onPress: this.onLoginBanner,
-                        },
-                        {
-                            label: i18n.t('homeScreen.loginBanner.later'),
-                            onPress: this.onHideBanner,
-                        },
-                    ]}
-                    icon={() => <Avatar.Icon
-                        icon={'login'}
-                        size={50}
-                    />}
-                >
-                    {i18n.t('homeScreen.loginBanner.message')}
-                </Banner>
             </View>
         );
     }
 }
 
-export default withCollapsible(withTheme(HomeScreen));
+export default withTheme(HomeScreen);

@@ -55,6 +55,9 @@ export type CustomTheme = {
         tetrisZ: string,
         tetrisJ: string,
         tetrisL: string,
+
+        // Mascot Popup
+        mascotMessageArrow: string,
     },
 }
 
@@ -83,7 +86,7 @@ export default class ThemeManager {
                 primary: '#be1522',
                 accent: '#be1522',
                 tabIcon: "#929292",
-                card: "rgb(255, 255, 255)",
+                card: "#fff",
                 dividerBackground: '#e2e2e2',
                 ripple: "rgba(0,0,0,0.2)",
                 textDisabled: '#c1c1c1',
@@ -126,6 +129,9 @@ export default class ThemeManager {
                 tetrisZ: '#ff0009',
                 tetrisJ: '#2a67e3',
                 tetrisL: '#da742d',
+
+                // Mascot Popup
+                mascotMessageArrow: "#dedede",
             },
         };
     }
@@ -144,7 +150,7 @@ export default class ThemeManager {
                 accent: '#be1522',
                 tabBackground: "#181818",
                 tabIcon: "#6d6d6d",
-                card: "rgb(18, 18, 18)",
+                card: "rgb(18,18,18)",
                 dividerBackground: '#222222',
                 ripple: "rgba(255,255,255,0.2)",
                 textDisabled: '#5b5b5b',
@@ -186,6 +192,9 @@ export default class ThemeManager {
                 tetrisZ: '#b50008',
                 tetrisJ: '#0f37b9',
                 tetrisL: '#b96226',
+
+                // Mascot Popup
+                mascotMessageArrow: "#323232",
             },
         };
     }

@@ -6,19 +6,19 @@ import i18n from "i18n-js";
 import WebSectionList from "../../components/Screens/WebSectionList";
 import * as Notifications from "../../utils/Notifications";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import {Avatar, Banner, Button, Card, Text, withTheme} from 'react-native-paper';
+import {Avatar, Button, Card, Text, withTheme} from 'react-native-paper';
 import ProxiwashListItem from "../../components/Lists/Proxiwash/ProxiwashListItem";
 import ProxiwashConstants from "../../constants/ProxiwashConstants";
 import CustomModal from "../../components/Overrides/CustomModal";
 import AprilFoolsManager from "../../managers/AprilFoolsManager";
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 import ProxiwashSectionHeader from "../../components/Lists/Proxiwash/ProxiwashSectionHeader";
-import {withCollapsible} from "../../utils/withCollapsible";
 import type {CustomTheme} from "../../managers/ThemeManager";
-import {Collapsible} from "react-navigation-collapsible";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {getCleanedMachineWatched, getMachineEndDate, isMachineWatched} from "../../utils/Proxiwash";
 import {Modalize} from "react-native-modalize";
+import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
+import MascotPopup from "../../components/Mascot/MascotPopup";
 
 const DATA_URL = "https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/washinsa_data.json";
 
@@ -40,14 +40,13 @@ export type Machine = {
 type Props = {
     navigation: StackNavigationProp,
     theme: CustomTheme,
-    collapsibleStack: Collapsible,
 }
 
 type State = {
     refreshing: boolean,
     modalCurrentDisplayItem: React.Node,
     machinesWatched: Array<Machine>,
-    bannerVisible: boolean,
+    mascotDialogVisible: boolean,
 };
 
 
@@ -68,7 +67,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
         refreshing: false,
         modalCurrentDisplayItem: null,
         machinesWatched: JSON.parse(AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current),
-        bannerVisible: false,
+        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === "1",
     };
 
     /**
@@ -89,8 +88,8 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * Callback used when closing the banner.
      * This hides the banner and saves to preferences to prevent it from reopening
      */
-    onHideBanner = () => {
-        this.setState({bannerVisible: false});
+    onHideMascotDialog = () => {
+        this.setState({mascotDialogVisible: false});
         AsyncStorageManager.getInstance().savePref(
             AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.key,
             '0'
@@ -107,11 +106,6 @@ class ProxiwashScreen extends React.Component<Props, State> {
                     <Item title="information" iconName="information" onPress={this.onAboutPress}/>
                 </MaterialHeaderButtons>,
         });
-        setTimeout(this.onBannerTimeout, 2000);
-    }
-
-    onBannerTimeout = () => {
-        this.setState({bannerVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === "1"})
     }
 
     /**
@@ -401,7 +395,6 @@ class ProxiwashScreen extends React.Component<Props, State> {
 
     render() {
         const nav = this.props.navigation;
-        const {containerPaddingTop} = this.props.collapsibleStack;
         return (
             <View
                 style={{flex: 1}}
@@ -421,25 +414,21 @@ class ProxiwashScreen extends React.Component<Props, State> {
                         refreshOnFocus={true}
                         updateData={this.state.machinesWatched.length}/>
                 </View>
-                <Banner
-                    style={{
-                        marginTop: containerPaddingTop,
-                        backgroundColor: this.props.theme.colors.surface
+                <MascotPopup
+                    visible={this.state.mascotDialogVisible}
+                    title={i18n.t("proxiwashScreen.bannerTitle")}
+                    message={i18n.t("proxiwashScreen.enableNotificationsTip")}
+                    icon={"bell"}
+                    buttons={{
+                        action: null,
+                        cancel: {
+                            message: i18n.t("proxiwashScreen.bannerButton"),
+                            icon: "check",
+                            onPress: this.onHideMascotDialog,
+                        }
                     }}
-                    visible={this.state.bannerVisible}
-                    actions={[
-                        {
-                            label: i18n.t('proxiwashScreen.bannerButton'),
-                            onPress: this.onHideBanner,
-                        },
-                    ]}
-                    icon={() => <Avatar.Icon
-                        icon={'bell'}
-                        size={40}
-                    />}
-                >
-                    {i18n.t('proxiwashScreen.enableNotificationsTip')}
-                </Banner>
+                    emotion={MASCOT_STYLE.NORMAL}
+                />
                 <CustomModal onRef={this.onModalRef}>
                     {this.state.modalCurrentDisplayItem}
                 </CustomModal>
@@ -448,4 +437,4 @@ class ProxiwashScreen extends React.Component<Props, State> {
     }
 }
 
-export default withCollapsible(withTheme(ProxiwashScreen));
+export default withTheme(ProxiwashScreen);
