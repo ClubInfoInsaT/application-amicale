@@ -182,9 +182,7 @@ class SettingsScreen extends React.Component<Props, State> {
                             this.onToggleNightModeFollowSystem,
                             'theme-light-dark',
                             i18n.t('screens.settings.nightModeAuto'),
-                            this.state.nightMode ?
-                                i18n.t('screens.settings.nightModeSubOn') :
-                                i18n.t('screens.settings.nightModeSubOff'),
+                            i18n.t('screens.settings.nightModeAutoSub'),
                             this.state.nightModeFollowSystem
                         ) : null}
                         {
@@ -201,7 +199,7 @@ class SettingsScreen extends React.Component<Props, State> {
                         }
                         <List.Item
                             title={i18n.t('screens.settings.startScreen')}
-                            subtitle={i18n.t('screens.settings.startScreenSub')}
+                            description={i18n.t('screens.settings.startScreenSub')}
                             left={props => <List.Icon {...props} icon="power"/>}
                         />
                         {this.getStartScreenPicker()}

@@ -2,6 +2,7 @@
   "screens": {
     "services": {
       "title": "Services",
+      "more": "Click to see more",
       "categories": {
         "amicale": "The Amicale",
         "students": "Student services",
@@ -16,7 +17,6 @@
         "wiketud": "Read useful info about classes and campus life",
         "elusEtudiants": "The students in contact with the administration",
         "tutorInsa": "Give and take part in tutorials by students",
-        "map": "Find your way around the campus",
         "self": "Check the RU menu",
         "availableRooms": "See how many rooms are free",
         "bib": "Book a Bib'Box for project work",
@@ -38,10 +38,6 @@
       "washer": "Washer",
       "washers": "Washers",
       "min": "min",
-      "listUpdated": "Machines state updated",
-      "listUpdateFail": "Error while updating machines state",
-      "error": "Could not update machines state. Pull down to retry.",
-      "loading": "Loading...",
       "description": "This is the washing service operated by Promologis for INSA's residences (We don't mind if you do not live on the campus and you do your laundry here). The room is right next to the R2, with 3 dryers and 9 washers, is open 7d/7 24h/24 ! Here you can check their availability ! You can bring your own detergent, use the one given on site or buy it at the Proximo (cheaper than the one given by the machines ). You can pay by credit card or cash.",
       "informationTab": "Information",
       "paymentTab": "Payment",
@@ -95,11 +91,8 @@
       }
     },
     "home": {
-      "title": "Home",
+      "title": "Campus",
       "feed": "Details",
-      "listUpdated": "List updated!",
-      "listUpdateFail": "Error while updating list",
-      "servicesButton": "More services",
       "dashboard": {
         "seeMore": "Click to see more",
         "todayEventsTitle": "Today's events",
@@ -163,9 +156,6 @@
       "sortNameReverse": "Name (reverse)",
       "sortPrice": "Price",
       "sortPriceReverse": "Price (reverse)",
-      "listUpdated": "Article list updated!",
-      "listUpdateFail": "Error while updating article list",
-      "loading": "Loading...",
       "inStock": "in stock",
       "description": "The Proximo is your small grocery store maintained by students directly on the campus. Open every day from 18h30 to 19h30, we welcome you when you are short on pastas or sodas ! Different products for different problems, everything at cost price. You can pay by Lydia or cash.",
       "openingHours": "Openning Hours",
@@ -322,6 +312,7 @@
       "nightModeSubOn": "Your eyes are at peace",
       "nightModeSubOff": "Your eyes are burning",
       "nightModeAuto": "Follow system dark mode",
+      "nightModeAutoSub": "Follows the mode chosen by your system",
       "startScreen": "Start Screen",
       "startScreenSub": "Select which screen to start the app on",
       "proxiwashNotifReminder": "Machine running reminder",
@@ -339,10 +330,9 @@
       "team": "Team",
       "author": "Author and maintainer",
       "authorMail": "Send an email",
-      "additionalDev": "Development help",
+      "additionalDev": "Thanks",
       "technologies": "Technologies",
       "reactNative": "Made with React Native",
-      "expo": "Built with Expo",
       "libs": "Libraries used"
     },
     "feedback": {
@@ -464,7 +454,8 @@
     "goBack": "Go Back",
     "goForward": "Go Forward",
     "openInBrowser": "Open in Browser",
-    "notAvailable": "Not available"
+    "notAvailable": "Not available",
+    "listUpdateFail": "Error while updating list"
   },
   "date": {
     "daysOfWeek": {

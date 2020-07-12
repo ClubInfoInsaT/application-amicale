@@ -33,7 +33,6 @@ export type listItem = {
     title: string,
     description: string,
     image: string | number,
-    shouldLogin: boolean,
     content: cardList,
 }
 
@@ -163,7 +162,7 @@ class ServicesScreen extends React.Component<Props, State> {
             },
             {
                 title: i18n.t('screens.insaAccount.title'),
-                subtitle: i18n.t('screens.services.descriptions.insaAccount.title'),
+                subtitle: i18n.t('screens.services.descriptions.insaAccount'),
                 image: ACCOUNT_IMAGE,
                 onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.INSA_ACCOUNT, title: i18n.t('screens.insaAccount.title')}),
             },
@@ -171,23 +170,20 @@ class ServicesScreen extends React.Component<Props, State> {
         this.finalDataset = [
             {
                 title: i18n.t("screens.services.categories.amicale"),
-                description: "LOGIN",
+                description: i18n.t("screens.services.more"),
                 image: AMICALE_LOGO,
-                shouldLogin: true,
                 content: this.amicaleDataset
             },
             {
                 title: i18n.t("screens.services.categories.students"),
-                description: "SERVICES OFFERED BY STUDENTS",
+                description: i18n.t("screens.services.more"),
                 image: 'account-group',
-                shouldLogin: false,
                 content: this.studentsDataset
             },
             {
                 title: i18n.t("screens.services.categories.insa"),
-                description: "SERVICES OFFERED BY INSA",
+                description: i18n.t("screens.services.more"),
                 image: 'school',
-                shouldLogin: false,
                 content: this.insaDataset
             },
         ];
@@ -277,6 +273,7 @@ class ServicesScreen extends React.Component<Props, State> {
                 <View>
                     <Card.Title
                         title={item.title}
+                        subtitle={item.description}
                         left={(props) => this.getListTitleImage(props, item.image)}
                         right={(props) => <List.Icon {...props} icon="chevron-right"/>}
                     />

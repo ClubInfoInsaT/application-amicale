@@ -258,7 +258,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
                         bottom: CustomTabBar.TAB_BAR_HEIGHT
                     }}
                 >
-                    {i18n.t("screens.home.listUpdateFail")}
+                    {i18n.t("general.listUpdateFail")}
                 </Snackbar>
             </View>
         );
