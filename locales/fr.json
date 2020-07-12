@@ -26,9 +26,9 @@
         "equipment": "Réservez un BBQ ou d'autre matériel"
       },
       "mascotDialog": {
-        "title": "",
-        "message": "",
-        "button": ""
+        "title": "Un peu perdu ?",
+        "message": "Ici c'est le méli-mélo de services trop utiles ! Entre les services des étudiants, et ceux de l'INSA, tu trouveras forcément quelque chose pour toi.\n\nSi en plus tu as un compte Amicale, tu auras encore plus de choix !",
+        "button": "Capish"
       }
     },
     "proxiwash": {
@@ -89,9 +89,9 @@
         "machineRunningBody": "La machine n°{{number}} n'est pas encore terminée"
       },
       "mascotDialog": {
-        "title": "",
-        "message": "",
-        "ok": ""
+        "title": "Pour info",
+        "message": "Plus besoin de faire la queue, tu seras informé des machines disponibles !\n\nSi tu es tête en l'air, tu peux activer les notifications pour ta machine en cliquant dessus.",
+        "ok": "Mercé"
       }
     },
     "home": {
@@ -108,8 +108,8 @@
         "todayEventsSubtitlePlural": " événements aujourd'hui"
       },
       "mascotDialog": {
-        "title": "Welcome, you!",
-        "message": "Connectez-vous à votre compte Amicale pour profiter de plus de services !",
+        "title": "Coucou toi !",
+        "message": "Connecte toi à ton compte Amicale pour profiter de plus de services !\n\nSi tu n'as pas le temps, tu pourras toujours t'y connecter plus tard.",
         "login": "Se Connecter",
         "later": "Plus Tard"
       }
@@ -119,9 +119,9 @@
       "eventDetails": "Détails",
       "invalidEvent": "Impossible de trouver l'événement. Merci de vérifier que l'événement que vous voulez voir est valide.",
       "mascotDialog": {
-        "title": "",
-        "message": "",
-        "button": ""
+        "title": "Yay des soirées !",
+        "message": "Et pas que ! Ici tu pourras voir tous les évents du campus.\n\nDe la vente de crêpes à la soirée du Gala, tu ne manqueras rien !",
+        "button": "Zé parti !"
       }
     },
     "planex": {
@@ -129,10 +129,10 @@
       "noGroupSelected": "Pas de groupe sélectionné. Merci de choisir un groupe avec le beau bouton rouge ci-dessous.",
       "favorites": "Favoris",
       "mascotDialog": {
-        "title": "",
-        "message": "",
-        "ok": "",
-        "cancel": ""
+        "title": "Sécher c'est mal",
+        "message": "Ici c'est Planex ! Tu peux mettre en favoris ta classe et celle de ton crush pour l'espio... les retrouver facilement !\n\nSi tu utilises Campus surtout pour Planex, vas dans les paramètres pour faire démarrer l'appli direct dessus !",
+        "ok": "Paramètres",
+        "cancel": "Plus tard"
       }
     },
 
@@ -307,9 +307,12 @@
         "message": "Le QR code scannée n'a pas été reconnu. Merci de vérifier sa validité."
       },
       "help": {
-        "button": "Quoi scanner ?",
-        "title": "Comment utiliser Scanotron 3000",
-        "message": "Trouvez des QR codes Campus affichés par des clubs ou des respo d'évenements, scannez les et accédez à des informations détaillées !"
+        "button": "Quoi scanner ?"
+      },
+      "mascotDialog": {
+        "title": "Scano...quoi ?",
+        "message": "Scanotron 3000 te permettra de scanner des QR codes Campus affichés par des clubs ou des respo d'évenements pour avoir plus d'infos !\n\nL'appareil photo ne sera jamais utilisé pour d'autres raisons.",
+        "button": "Oké"
       }
     },
     "settings": {

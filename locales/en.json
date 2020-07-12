@@ -307,9 +307,12 @@
         "message": "The QR code scanned could not be recognised, please make sure it is valid."
       },
       "help": {
-        "button": "What can I scan?",
+        "button": "What can I scan?"
+      },
+      "mascotDialog": {
         "title": "How to use Scanotron 3000",
-        "message": "Find Campus QR codes posted by clubs and events, scan them and get instant access to detailed information!"
+        "message": "Find Campus QR codes posted by clubs and events, scan them and get instant access to detailed information!",
+        "button": "ok"
       }
     },
     "settings": {

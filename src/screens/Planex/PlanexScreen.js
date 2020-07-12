@@ -366,7 +366,7 @@ class PlanexScreen extends React.Component<Props, State> {
                     visible={this.state.mascotDialogVisible}
                     title={i18n.t("screens.planex.mascotDialog.title")}
                     message={i18n.t("screens.planex.mascotDialog.message")}
-                    icon={"power"}
+                    icon={"emoticon-kiss"}
                     buttons={{
                         action: {
                             message: i18n.t("screens.planex.mascotDialog.ok"),

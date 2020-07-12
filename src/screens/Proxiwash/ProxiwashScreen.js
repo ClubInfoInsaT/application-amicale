@@ -418,7 +418,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
                     visible={this.state.mascotDialogVisible}
                     title={i18n.t("screens.proxiwash.mascotDialog.title")}
                     message={i18n.t("screens.proxiwash.mascotDialog.message")}
-                    icon={"bell"}
+                    icon={"information"}
                     buttons={{
                         action: null,
                         cancel: {

@@ -11,12 +11,15 @@ import i18n from 'i18n-js';
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import LoadingConfirmDialog from "../../components/Dialogs/LoadingConfirmDialog";
 import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
+import MascotPopup from "../../components/Mascot/MascotPopup";
 
 type Props = {};
 type State = {
     hasPermission: boolean,
     scanned: boolean,
     dialogVisible: boolean,
+    mascotDialogVisible: boolean,
     dialogTitle: string,
     dialogMessage: string,
     loading: boolean,
@@ -27,6 +30,7 @@ class ScannerScreen extends React.Component<Props, State> {
     state = {
         hasPermission: false,
         scanned: false,
+        mascotDialogVisible: false,
         dialogVisible: false,
         dialogTitle: "",
         dialogMessage: "",
@@ -101,10 +105,8 @@ class ScannerScreen extends React.Component<Props, State> {
      */
     showHelpDialog = () => {
         this.setState({
-            dialogVisible: true,
+            mascotDialogVisible: true,
             scanned: true,
-            dialogTitle: i18n.t("screens.scanner.help.title"),
-            dialogMessage: i18n.t("screens.scanner.help.message"),
         });
     };
 
@@ -125,8 +127,6 @@ class ScannerScreen extends React.Component<Props, State> {
         this.setState({
             dialogVisible: true,
             scanned: true,
-            dialogTitle: i18n.t("screens.scanner.error.title"),
-            dialogMessage: i18n.t("screens.scanner.error.message"),
         });
     }
 
@@ -135,6 +135,11 @@ class ScannerScreen extends React.Component<Props, State> {
      */
     onDialogDismiss = () => this.setState({
         dialogVisible: false,
+        scanned: false,
+    });
+
+    onMascotDialogDismiss = () => this.setState({
+        mascotDialogVisible: false,
         scanned: false,
     });
 
@@ -186,11 +191,26 @@ class ScannerScreen extends React.Component<Props, State> {
                 >
                     {i18n.t("screens.scanner.help.button")}
                 </Button>
+                <MascotPopup
+                    visible={this.state.mascotDialogVisible}
+                    title={i18n.t("screens.scanner.mascotDialog.title")}
+                    message={i18n.t("screens.scanner.mascotDialog.message")}
+                    icon={"camera-iris"}
+                    buttons={{
+                        action: null,
+                        cancel: {
+                            message: i18n.t("screens.scanner.mascotDialog.button"),
+                            icon: "check",
+                            onPress: this.onMascotDialogDismiss,
+                        }
+                    }}
+                    emotion={MASCOT_STYLE.NORMAL}
+                />
                 <AlertDialog
                     visible={this.state.dialogVisible}
                     onDismiss={this.onDialogDismiss}
-                    title={this.state.dialogTitle}
-                    message={this.state.dialogMessage}
+                    title={i18n.t("screens.scanner.error.title")}
+                    message={i18n.t("screens.scanner.error.message")}
                 />
                 <LoadingConfirmDialog
                     visible={this.state.loading}

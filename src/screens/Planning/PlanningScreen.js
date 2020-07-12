@@ -256,7 +256,7 @@ class PlanningScreen extends React.Component<Props, State> {
                     visible={this.state.mascotDialogVisible}
                     title={i18n.t("screens.planning.mascotDialog.title")}
                     message={i18n.t("screens.planning.mascotDialog.message")}
-                    icon={"calendar-range"}
+                    icon={"glass-cocktail"}
                     buttons={{
                         action: null,
                         cancel: {

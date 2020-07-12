@@ -314,7 +314,7 @@ class ServicesScreen extends React.Component<Props, State> {
                     visible={this.state.mascotDialogVisible}
                     title={i18n.t("screens.services.mascotDialog.title")}
                     message={i18n.t("screens.services.mascotDialog.message")}
-                    icon={"calendar-range"}
+                    icon={"cloud-question"}
                     buttons={{
                         action: null,
                         cancel: {

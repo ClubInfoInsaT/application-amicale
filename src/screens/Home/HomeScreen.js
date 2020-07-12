@@ -604,7 +604,7 @@ class HomeScreen extends React.Component<Props, State> {
                     visible={this.state.mascotDialogVisible}
                     title={i18n.t("screens.home.mascotDialog.title")}
                     message={i18n.t("screens.home.mascotDialog.message")}
-                    icon={"check"}
+                    icon={"human-greeting"}
                     buttons={{
                         action: {
                             message: i18n.t("screens.home.mascotDialog.login"),

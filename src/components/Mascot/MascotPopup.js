@@ -125,6 +125,7 @@ class MascotPopup extends React.Component<Props, State> {
                         left={this.props.icon != null ?
                             (props) => <Avatar.Icon
                                 {...props}
+                                size={48}
                                 style={{backgroundColor: "transparent"}}
                                 color={this.props.theme.colors.primary}
                                 icon={this.props.icon}
