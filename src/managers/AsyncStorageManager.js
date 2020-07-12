@@ -59,8 +59,8 @@ export default class AsyncStorageManager {
             default: 'home',
             current: '',
         },
-        homeShowBanner: {
-            key: 'homeShowBanner',
+        servicesShowBanner: {
+            key: 'servicesShowBanner',
             default: '1',
             current: '',
         },
@@ -69,14 +69,24 @@ export default class AsyncStorageManager {
             default: '1',
             current: '',
         },
-        proxiwashWatchedMachines: {
-            key: 'proxiwashWatchedMachines',
-            default: '[]',
+        homeShowBanner: {
+            key: 'homeShowBanner',
+            default: '1',
+            current: '',
+        },
+        eventsShowBanner: {
+            key: 'eventsShowBanner',
+            default: '1',
             current: '',
         },
         planexShowBanner: {
             key: 'planexShowBanner',
             default: '1',
+            current: '',
+        },
+        proxiwashWatchedMachines: {
+            key: 'proxiwashWatchedMachines',
+            default: '[]',
             current: '',
         },
         showAprilFoolsStart: {

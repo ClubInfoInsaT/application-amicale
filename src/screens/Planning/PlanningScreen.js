@@ -15,6 +15,9 @@ import {
 import {Avatar, Divider, List} from 'react-native-paper';
 import CustomAgenda from "../../components/Overrides/CustomAgenda";
 import {StackNavigationProp} from "@react-navigation/stack";
+import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
+import MascotPopup from "../../components/Mascot/MascotPopup";
+import AsyncStorageManager from "../../managers/AsyncStorageManager";
 
 LocaleConfig.locales['fr'] = {
     monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
@@ -33,6 +36,7 @@ type State = {
     refreshing: boolean,
     agendaItems: Object,
     calendarShowing: boolean,
+    mascotDialogVisible: boolean,
 };
 
 const FETCH_URL = "https://www.amicale-insat.fr/api/event/list";
@@ -52,6 +56,7 @@ class PlanningScreen extends React.Component<Props, State> {
         refreshing: false,
         agendaItems: {},
         calendarShowing: false,
+        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.eventsShowBanner.current === "1"
     };
 
     currentDate = getDateOnlyString(getCurrentDateString());
@@ -98,6 +103,18 @@ class PlanningScreen extends React.Component<Props, State> {
         } else {
             return false;
         }
+    };
+
+    /**
+     * Callback used when closing the banner.
+     * This hides the banner and saves to preferences to prevent it from reopening
+     */
+    onHideMascotDialog = () => {
+        this.setState({mascotDialogVisible: false});
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.eventsShowBanner.key,
+            '0'
+        );
     };
 
     /**
@@ -206,34 +223,51 @@ class PlanningScreen extends React.Component<Props, State> {
 
     render() {
         return (
-            <CustomAgenda
-                {...this.props}
-                // the list of items that have to be displayed in agenda. If you want to render item as empty date
-                // the value of date key kas to be an empty array []. If there exists no value for date key it is
-                // considered that the date in question is not yet loaded
-                items={this.state.agendaItems}
-                // initially selected day
-                selected={this.currentDate}
-                // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-                minDate={this.currentDate}
-                // Max amount of months allowed to scroll to the past. Default = 50
-                pastScrollRange={1}
-                // Max amount of months allowed to scroll to the future. Default = 50
-                futureScrollRange={AGENDA_MONTH_SPAN}
-                // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
-                onRefresh={this.onRefresh}
-                // callback that fires when the calendar is opened or closed
-                onCalendarToggled={this.onCalendarToggled}
-                // Set this true while waiting for new data from a refresh
-                refreshing={this.state.refreshing}
-                renderItem={this.getRenderItem}
-                renderEmptyDate={this.getRenderEmptyDate}
-                rowHasChanged={this.rowHasChanged}
-                // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-                firstDay={1}
-                // ref to this agenda in order to handle back button event
-                onRef={this.onAgendaRef}
-            />
+            <View style={{flex: 1}}>
+                <CustomAgenda
+                    {...this.props}
+                    // the list of items that have to be displayed in agenda. If you want to render item as empty date
+                    // the value of date key kas to be an empty array []. If there exists no value for date key it is
+                    // considered that the date in question is not yet loaded
+                    items={this.state.agendaItems}
+                    // initially selected day
+                    selected={this.currentDate}
+                    // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+                    minDate={this.currentDate}
+                    // Max amount of months allowed to scroll to the past. Default = 50
+                    pastScrollRange={1}
+                    // Max amount of months allowed to scroll to the future. Default = 50
+                    futureScrollRange={AGENDA_MONTH_SPAN}
+                    // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
+                    onRefresh={this.onRefresh}
+                    // callback that fires when the calendar is opened or closed
+                    onCalendarToggled={this.onCalendarToggled}
+                    // Set this true while waiting for new data from a refresh
+                    refreshing={this.state.refreshing}
+                    renderItem={this.getRenderItem}
+                    renderEmptyDate={this.getRenderEmptyDate}
+                    rowHasChanged={this.rowHasChanged}
+                    // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+                    firstDay={1}
+                    // ref to this agenda in order to handle back button event
+                    onRef={this.onAgendaRef}
+                />
+                <MascotPopup
+                    visible={this.state.mascotDialogVisible}
+                    title={i18n.t("planningScreen.mascotTitle")}
+                    message={i18n.t("planningScreen.mascotMessage")}
+                    icon={"calendar-range"}
+                    buttons={{
+                        action: null,
+                        cancel: {
+                            message: i18n.t("planningScreen.mascotButton"),
+                            icon: "check",
+                            onPress: this.onHideMascotDialog,
+                        }
+                    }}
+                    emotion={MASCOT_STYLE.HAPPY}
+                />
+            </View>
         );
     }
 }

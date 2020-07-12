@@ -4,7 +4,7 @@ import * as React from 'react';
 import {Avatar, Button, Card, Paragraph, Portal, withTheme} from 'react-native-paper';
 import Mascot from "./Mascot";
 import * as Animatable from "react-native-animatable";
-import {Dimensions, ScrollView, TouchableWithoutFeedback, View} from "react-native";
+import {BackHandler, Dimensions, ScrollView, TouchableWithoutFeedback, View} from "react-native";
 import type {CustomTheme} from "../../managers/ThemeManager";
 
 type Props = {
@@ -62,12 +62,34 @@ class MascotPopup extends React.Component<Props, State> {
     }
 
     shouldComponentUpdate(nextProps: Props): boolean {
-        if (nextProps.visible)
+        if (nextProps.visible) {
             this.state.shouldShowDialog = true;
-        else if (nextProps.visible !== this.props.visible)
+        }else if (nextProps.visible !== this.props.visible) {
             setTimeout(this.onAnimationEnd, 300);
+        }
         return true;
     }
+
+    componentDidMount(): * {
+        BackHandler.addEventListener(
+            'hardwareBackPress',
+            this.onBackButtonPressAndroid
+        )
+    }
+
+    onBackButtonPressAndroid = () => {
+        if (this.state.shouldShowDialog) {
+            const cancel = this.props.buttons.cancel;
+            const action = this.props.buttons.action;
+            if (cancel != null)
+                cancel.onPress();
+            else
+                action.onPress();
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     getSpeechBubble() {
         return (

@@ -14,12 +14,20 @@ import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHead
 import ConnectionManager from "../../managers/ConnectionManager";
 import {StackNavigationProp} from "@react-navigation/stack";
 import AvailableWebsites from "../../constants/AvailableWebsites";
+import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
+import MascotPopup from "../../components/Mascot/MascotPopup";
+import AsyncStorageManager from "../../managers/AsyncStorageManager";
 
 type Props = {
     navigation: StackNavigationProp,
     collapsibleStack: Collapsible,
     theme: CustomTheme,
 }
+
+type State = {
+    mascotDialogVisible: boolean,
+}
+
 
 export type listItem = {
     title: string,
@@ -49,13 +57,17 @@ const EMAIL_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Bluemind.
 const ENT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ENT.png";
 const ACCOUNT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Account.png";
 
-class ServicesScreen extends React.Component<Props> {
+class ServicesScreen extends React.Component<Props, State> {
 
     amicaleDataset: cardList;
     studentsDataset: cardList;
     insaDataset: cardList;
 
     finalDataset: Array<listItem>
+
+    state = {
+        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.servicesShowBanner.current === "1"
+    }
 
     constructor(props) {
         super(props);
@@ -187,6 +199,19 @@ class ServicesScreen extends React.Component<Props> {
         });
     }
 
+
+    /**
+     * Callback used when closing the banner.
+     * This hides the banner and saves to preferences to prevent it from reopening
+     */
+    onHideMascotDialog = () => {
+        this.setState({mascotDialogVisible: false});
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.servicesShowBanner.key,
+            '0'
+        );
+    };
+
     getAboutButton = () =>
         <MaterialHeaderButtons>
             <Item title="information" iconName="information" onPress={this.onAboutPress}/>
@@ -271,18 +296,37 @@ class ServicesScreen extends React.Component<Props> {
 
     render() {
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
-        return <Animated.FlatList
-            data={this.finalDataset}
-            renderItem={this.renderItem}
-            keyExtractor={this.keyExtractor}
-            onScroll={onScroll}
-            contentContainerStyle={{
-                paddingTop: containerPaddingTop,
-                paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20
-            }}
-            scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
-            ItemSeparatorComponent={() => <Divider/>}
-        />
+        return (
+            <View>
+                <Animated.FlatList
+                    data={this.finalDataset}
+                    renderItem={this.renderItem}
+                    keyExtractor={this.keyExtractor}
+                    onScroll={onScroll}
+                    contentContainerStyle={{
+                        paddingTop: containerPaddingTop,
+                        paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20
+                    }}
+                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+                    ItemSeparatorComponent={() => <Divider/>}
+                />
+                <MascotPopup
+                    visible={this.state.mascotDialogVisible}
+                    title={i18n.t("servicesScreen.mascot.title")}
+                    message={i18n.t("servicesScreen.mascot.message")}
+                    icon={"calendar-range"}
+                    buttons={{
+                        action: null,
+                        cancel: {
+                            message: i18n.t("servicesScreen.mascot.button"),
+                            icon: "check",
+                            onPress: this.onHideMascotDialog,
+                        }
+                    }}
+                    emotion={MASCOT_STYLE.WINK}
+                />
+            </View>
+        );
     }
 }
 

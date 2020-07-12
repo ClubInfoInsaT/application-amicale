@@ -436,10 +436,18 @@
       "ent": "See your grades",
       "insaAccount": "See your information and change your password",
       "equipment": "Book a BBQ or other equipment"
+    },
+    "mascot": {
+      "title": "So handy!",
+      "message": "There a lot of thing you can do with Campus!\n\nHere is a list of every service provided by the app.",
+      "button": "Thx buddy"
     }
   },
   "planningScreen": {
-    "invalidEvent": "Could not find the event. Please make sure the event you are trying to access is valid."
+    "invalidEvent": "Could not find the event. Please make sure the event you are trying to access is valid.",
+    "mascotTitle": "Let's party!",
+    "mascotMessage": "At the INSA, it's not all about classes!\n\nIf you want to see new people, this page is just for you. Here you will find the list of every event organised by students!",
+    "mascotButton": "Thx!"
   },
   "feedbackScreen": {
     "bugs": "Report Bugs",
