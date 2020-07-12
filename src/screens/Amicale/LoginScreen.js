@@ -111,7 +111,7 @@ class LoginScreen extends React.Component<Props, State> {
     /**
      * Navigates to the Amicale website screen with the reset password link as navigation parameters
      */
-    onResetPasswordClick = () => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, path: RESET_PASSWORD_PATH, title: i18n.t('screens.amicaleWebsite')});
+    onResetPasswordClick = () => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, path: RESET_PASSWORD_PATH, title: i18n.t('screens.websites.amicale')});
 
     /**
      * The user has unfocused the input, his email is ready to be validated
@@ -229,7 +229,7 @@ class LoginScreen extends React.Component<Props, State> {
         return (
             <View>
                 <TextInput
-                    label={i18n.t("loginScreen.email")}
+                    label={i18n.t("screens.login.email")}
                     mode='outlined'
                     value={this.state.email}
                     onChangeText={this.onEmailChange}
@@ -248,11 +248,11 @@ class LoginScreen extends React.Component<Props, State> {
                     type="error"
                     visible={this.shouldShowEmailError()}
                 >
-                    {i18n.t("loginScreen.emailError")}
+                    {i18n.t("screens.login.emailError")}
                 </HelperText>
                 <TextInput
                     ref={this.passwordInputRef}
-                    label={i18n.t("loginScreen.password")}
+                    label={i18n.t("screens.login.password")}
                     mode='outlined'
                     value={this.state.password}
                     onChangeText={this.onPasswordChange}
@@ -271,7 +271,7 @@ class LoginScreen extends React.Component<Props, State> {
                     type="error"
                     visible={this.shouldShowPasswordError()}
                 >
-                    {i18n.t("loginScreen.passwordError")}
+                    {i18n.t("screens.login.passwordError")}
                 </HelperText>
             </View>
         );
@@ -285,8 +285,8 @@ class LoginScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={i18n.t("loginScreen.title")}
-                    subtitle={i18n.t("loginScreen.subtitle")}
+                    title={i18n.t("screens.login.title")}
+                    subtitle={i18n.t("screens.login.subtitle")}
                     left={(props) => <Avatar.Image
                         {...props}
                         source={ICON_AMICALE}
@@ -302,7 +302,7 @@ class LoginScreen extends React.Component<Props, State> {
                             loading={this.state.loading}
                             onPress={this.onSubmit}
                             style={{marginLeft: 'auto'}}>
-                            {i18n.t("loginScreen.login")}
+                            {i18n.t("screens.login.title")}
                         </Button>
                     </Card.Actions>
                     <Card.Actions>
@@ -311,7 +311,7 @@ class LoginScreen extends React.Component<Props, State> {
                             mode="contained"
                             onPress={this.onResetPasswordClick}
                             style={{marginLeft: 'auto'}}>
-                            {i18n.t("loginScreen.resetPassword")}
+                            {i18n.t("screens.login.resetPassword")}
                         </Button>
                     </Card.Actions>
                 </Card.Content>
@@ -328,8 +328,8 @@ class LoginScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={i18n.t("loginScreen.whyAccountTitle")}
-                    subtitle={i18n.t("loginScreen.whyAccountSub")}
+                    title={i18n.t("screens.login.whyAccountTitle")}
+                    subtitle={i18n.t("screens.login.whyAccountSub")}
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon={"help"}
@@ -337,9 +337,9 @@ class LoginScreen extends React.Component<Props, State> {
                         style={{backgroundColor: 'transparent'}}/>}
                 />
                 <Card.Content>
-                    <Paragraph>{i18n.t("loginScreen.whyAccountParagraph")}</Paragraph>
-                    <Paragraph>{i18n.t("loginScreen.whyAccountParagraph2")}</Paragraph>
-                    <Paragraph>{i18n.t("loginScreen.noAccount")}</Paragraph>
+                    <Paragraph>{i18n.t("screens.login.whyAccountParagraph")}</Paragraph>
+                    <Paragraph>{i18n.t("screens.login.whyAccountParagraph2")}</Paragraph>
+                    <Paragraph>{i18n.t("screens.login.noAccount")}</Paragraph>
                 </Card.Content>
             </Card>
         );

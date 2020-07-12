@@ -58,7 +58,7 @@ class PreviewEventDashboardItem extends React.Component<Props> {
                         <Button
                             icon={'chevron-right'}
                         >
-                            {i18n.t("homeScreen.dashboard.seeMore")}
+                            {i18n.t("screens.home.dashboard.seeMore")}
                         </Button>
                     </Card.Actions>
                 </Card>

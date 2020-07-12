@@ -28,7 +28,7 @@ class ProximoListItem extends React.Component<Props> {
         return (
             <List.Item
                 title={this.props.item.name}
-                description={this.props.item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
+                description={this.props.item.quantity + ' ' + i18n.t('screens.proximo.inStock')}
                 descriptionStyle={{color: this.props.color}}
                 onPress={this.props.onPress}
                 left={() => <Avatar.Image style={{backgroundColor: 'transparent'}} size={64}

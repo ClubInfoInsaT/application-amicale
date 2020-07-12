@@ -60,13 +60,13 @@ class AboutScreen extends React.Component<Props> {
         {
             onPressCallback: () => openWebLink(Platform.OS === "ios" ? links.appstore : links.playstore),
             icon: Platform.OS === "ios" ? 'apple' : 'google-play',
-            text: Platform.OS === "ios" ? i18n.t('aboutScreen.appstore') : i18n.t('aboutScreen.playstore'),
+            text: Platform.OS === "ios" ? i18n.t('screens.about.appstore') : i18n.t('screens.about.playstore'),
             showChevron: true
         },
         {
             onPressCallback: () => this.props.navigation.navigate("feedback"),
             icon: 'bug',
-            text: i18n.t("feedbackScreen.homeButtonTitle"),
+            text: i18n.t("screens.feedback.homeButtonTitle"),
             showChevron: true
         },
         {
@@ -78,13 +78,13 @@ class AboutScreen extends React.Component<Props> {
         {
             onPressCallback: () => openWebLink(links.changelog),
             icon: 'refresh',
-            text: i18n.t('aboutScreen.changelog'),
+            text: i18n.t('screens.about.changelog'),
             showChevron: true
         },
         {
             onPressCallback: () => openWebLink(links.license),
             icon: 'file-document',
-            text: i18n.t('aboutScreen.license'),
+            text: i18n.t('screens.about.license'),
             showChevron: true
         },
     ];
@@ -101,7 +101,7 @@ class AboutScreen extends React.Component<Props> {
         {
             onPressCallback: () => openWebLink(links.authorMail),
             icon: 'email',
-            text: i18n.t('aboutScreen.authorMail'),
+            text: i18n.t('screens.about.authorMail'),
             showChevron: true
         },
         {
@@ -124,7 +124,7 @@ class AboutScreen extends React.Component<Props> {
         {
             onPressCallback: () => openWebLink(links.yohanMail),
             icon: 'email',
-            text: i18n.t('aboutScreen.authorMail'),
+            text: i18n.t('screens.about.authorMail'),
             showChevron: true
         },
         {
@@ -141,13 +141,13 @@ class AboutScreen extends React.Component<Props> {
         {
             onPressCallback: () => openWebLink(links.react),
             icon: 'react',
-            text: i18n.t('aboutScreen.reactNative'),
+            text: i18n.t('screens.about.reactNative'),
             showChevron: true
         },
         {
             onPressCallback: () => this.props.navigation.navigate('dependencies'),
             icon: 'developer-board',
-            text: i18n.t('aboutScreen.libs'),
+            text: i18n.t('screens.about.libs'),
             showChevron: true
         },
     ];
@@ -224,17 +224,17 @@ class AboutScreen extends React.Component<Props> {
         return (
             <Card style={{marginBottom: 10}}>
                 <Card.Title
-                    title={i18n.t('aboutScreen.team')}
+                    title={i18n.t('screens.about.team')}
                     left={(props) => <Avatar.Icon {...props} icon={'account-multiple'}/>}/>
                 <Card.Content>
-                    <Title>{i18n.t('aboutScreen.author')}</Title>
+                    <Title>{i18n.t('screens.about.author')}</Title>
                     <FlatList
                         data={this.authorData}
                         keyExtractor={this.keyExtractor}
                         listKey={"1"}
                         renderItem={this.getCardItem}
                     />
-                    <Title>{i18n.t('aboutScreen.additionalDev')}</Title>
+                    <Title>{i18n.t('screens.about.additionalDev')}</Title>
                     <FlatList
                         data={this.additionalDevData}
                         keyExtractor={this.keyExtractor}
@@ -255,7 +255,7 @@ class AboutScreen extends React.Component<Props> {
         return (
             <Card style={{marginBottom: 10}}>
                 <Card.Content>
-                    <Title>{i18n.t('aboutScreen.technologies')}</Title>
+                    <Title>{i18n.t('screens.about.technologies')}</Title>
                     <FlatList
                         data={this.technoData}
                         keyExtractor={this.keyExtractor}

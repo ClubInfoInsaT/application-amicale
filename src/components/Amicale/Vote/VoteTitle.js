@@ -17,8 +17,8 @@ export default class VoteTitle extends React.Component<{}> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={i18n.t('voteScreen.title.title')}
-                    subtitle={i18n.t('voteScreen.title.subtitle')}
+                    title={i18n.t('screens.vote.main.title')}
+                    subtitle={i18n.t('screens.vote.main.subtitle')}
                     left={(props) => <Avatar.Image
                         {...props}
                         source={ICON_AMICALE}
@@ -27,10 +27,10 @@ export default class VoteTitle extends React.Component<{}> {
                 />
                 <Card.Content>
                     <Paragraph>
-                        {i18n.t('voteScreen.title.paragraph1')}
+                        {i18n.t('screens.vote.main.paragraph1')}
                     </Paragraph>
                     <Paragraph>
-                        {i18n.t('voteScreen.title.paragraph2')}
+                        {i18n.t('screens.vote.main.paragraph2')}
                     </Paragraph>
                 </Card.Content>
             </Card>

@@ -46,11 +46,11 @@ class ClubListHeader extends React.Component<Props> {
         return (
             <Card style={styles.card}>
                 <AnimatedAccordion
-                    title={i18n.t("clubs.categories")}
+                    title={i18n.t("screens.clubs.categories")}
                     left={props => <List.Icon {...props} icon="star"/>}
                     opened={true}
                 >
-                    <Text style={styles.text}>{i18n.t("clubs.categoriesFilterMessage")}</Text>
+                    <Text style={styles.text}>{i18n.t("screens.clubs.categoriesFilterMessage")}</Text>
                     <View style={styles.chipContainer}>
                         {this.getCategoriesRender()}
                     </View>

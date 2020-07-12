@@ -69,22 +69,22 @@ class ProfileScreen extends React.Component<Props, State> {
         ]
         this.amicaleDataset = [
             {
-                title: i18n.t('screens.clubsAbout'),
-                subtitle: i18n.t('servicesScreen.descriptions.clubs'),
+                title: i18n.t('screens.clubs.title'),
+                subtitle: i18n.t('screens.services.descriptions.clubs'),
                 image: CLUBS_IMAGE,
                 onPress: () => this.props.navigation.navigate("club-list"),
             },
             {
-                title: i18n.t('screens.vote'),
-                subtitle: i18n.t('servicesScreen.descriptions.vote'),
+                title: i18n.t('screens.vote.title'),
+                subtitle: i18n.t('screens.services.descriptions.vote'),
                 image: VOTE_IMAGE,
                 onPress: () => this.props.navigation.navigate("vote"),
             },
             {
-                title: i18n.t('screens.amicaleWebsite'),
-                subtitle: i18n.t('servicesScreen.descriptions.amicaleWebsite'),
+                title: i18n.t('screens.websites.amicale'),
+                subtitle: i18n.t('screens.services.descriptions.amicaleWebsite'),
                 image: ICON_AMICALE,
-                onPress: () => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, title: i18n.t('screens.amicaleWebsite')}),
+                onPress: () => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, title: i18n.t('screens.websites.amicale')}),
             },
         ];
     }
@@ -178,7 +178,7 @@ class ProfileScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={i18n.t("profileScreen.welcomeTitle", {name: this.data.first_name})}
+                    title={i18n.t("screens.profile.welcomeTitle", {name: this.data.first_name})}
                     left={() => <Avatar.Image
                         size={64}
                         source={ICON_AMICALE}
@@ -189,11 +189,11 @@ class ProfileScreen extends React.Component<Props, State> {
                 <Card.Content>
                     <Divider/>
                     <Paragraph>
-                        {i18n.t("profileScreen.welcomeDescription")}
+                        {i18n.t("screens.profile.welcomeDescription")}
                     </Paragraph>
                     {this.getServicesList()}
                     <Paragraph>
-                        {i18n.t("profileScreen.welcomeFeedback")}
+                        {i18n.t("screens.profile.welcomeFeedback")}
                     </Paragraph>
                     <Divider/>
                     <Card.Actions>
@@ -202,7 +202,7 @@ class ProfileScreen extends React.Component<Props, State> {
                             mode="contained"
                             onPress={() => this.props.navigation.navigate('feedback')}
                             style={styles.editButton}>
-                            {i18n.t("feedbackScreen.homeButtonTitle")}
+                            {i18n.t("screens.feedback.homeButtonTitle")}
                         </Button>
                     </Card.Actions>
                 </Card.Content>
@@ -230,7 +230,7 @@ class ProfileScreen extends React.Component<Props, State> {
     getFieldValue(field: ?string) {
         return this.isFieldAvailable(field)
             ? field
-            : i18n.t("profileScreen.noData");
+            : i18n.t("screens.profile.noData");
     }
 
     /**
@@ -277,7 +277,7 @@ class ProfileScreen extends React.Component<Props, State> {
                 <Card.Content>
                     <Divider/>
                     <List.Section>
-                        <List.Subheader>{i18n.t("profileScreen.personalInformation")}</List.Subheader>
+                        <List.Subheader>{i18n.t("screens.profile.personalInformation")}</List.Subheader>
                         {this.getPersonalListItem(this.data.birthday, "cake-variant")}
                         {this.getPersonalListItem(this.data.phone, "phone")}
                         {this.getPersonalListItem(this.data.email, "email")}
@@ -288,9 +288,9 @@ class ProfileScreen extends React.Component<Props, State> {
                         <Button
                             icon="account-edit"
                             mode="contained"
-                            onPress={() => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, path: this.data.link, title: i18n.t('screens.amicaleWebsite')})}
+                            onPress={() => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, path: this.data.link, title: i18n.t('screens.websites.amicale')})}
                             style={styles.editButton}>
-                            {i18n.t("profileScreen.editInformation")}
+                            {i18n.t("screens.profile.editInformation")}
                         </Button>
                     </Card.Actions>
                 </Card.Content>
@@ -307,8 +307,8 @@ class ProfileScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={i18n.t("profileScreen.clubs")}
-                    subtitle={i18n.t("profileScreen.clubsSubtitle")}
+                    title={i18n.t("screens.profile.clubs")}
+                    subtitle={i18n.t("screens.profile.clubsSubtitle")}
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon="account-group"
@@ -333,8 +333,8 @@ class ProfileScreen extends React.Component<Props, State> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={i18n.t("profileScreen.membership")}
-                    subtitle={i18n.t("profileScreen.membershipSubtitle")}
+                    title={i18n.t("screens.profile.membership")}
+                    subtitle={i18n.t("screens.profile.membershipSubtitle")}
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon="credit-card"
@@ -359,7 +359,7 @@ class ProfileScreen extends React.Component<Props, State> {
     getMembershipItem(state: boolean) {
         return (
             <List.Item
-                title={state ? i18n.t("profileScreen.membershipPayed") : i18n.t("profileScreen.membershipNotPayed")}
+                title={state ? i18n.t("screens.profile.membershipPayed") : i18n.t("screens.profile.membershipNotPayed")}
                 left={props => <List.Icon
                     {...props}
                     color={state ? this.props.theme.colors.success : this.props.theme.colors.danger}
@@ -385,10 +385,10 @@ class ProfileScreen extends React.Component<Props, State> {
      */
     clubListItem = ({item}: { item: Club }) => {
         const onPress = () => this.openClubDetailsScreen(item.id);
-        let description = i18n.t("profileScreen.isMember");
+        let description = i18n.t("screens.profile.isMember");
         let icon = (props) => <List.Icon {...props} icon="chevron-right"/>;
         if (item.is_manager) {
-            description = i18n.t("profileScreen.isManager");
+            description = i18n.t("screens.profile.isManager");
             icon = (props) => <List.Icon {...props} icon="star" color={this.props.theme.colors.primary}/>;
         }
         return <List.Item

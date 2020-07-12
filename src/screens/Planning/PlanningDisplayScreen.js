@@ -144,7 +144,7 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
      */
     getErrorView() {
         if (this.errorCode === ERROR_TYPE.BAD_INPUT)
-            return <ErrorView {...this.props} showRetryButton={false} message={i18n.t("planningScreen.invalidEvent")}
+            return <ErrorView {...this.props} showRetryButton={false} message={i18n.t("screens.planning.invalidEvent")}
                               icon={"calendar-remove"}/>;
         else
             return <ErrorView {...this.props} errorCode={this.errorCode} onRefresh={this.fetchData}/>;

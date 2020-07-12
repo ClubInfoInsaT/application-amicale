@@ -75,7 +75,7 @@ class ProximoMainScreen extends React.Component<Props, State> {
             data: {
                 type: {
                     id: "0",
-                    name: i18n.t('proximoScreen.all'),
+                    name: i18n.t('screens.proximo.all'),
                     icon: 'star'
                 },
                 data: this.articles !== undefined ?
@@ -146,7 +146,7 @@ class ProximoMainScreen extends React.Component<Props, State> {
             finalData.push({
                 type: {
                     id: -1,
-                    name: i18n.t('proximoScreen.all'),
+                    name: i18n.t('screens.proximo.all'),
                     icon: 'star'
                 },
                 data: this.getAvailableArticles(this.articles, undefined)
@@ -193,7 +193,7 @@ class ProximoMainScreen extends React.Component<Props, State> {
             shouldFocusSearchBar: false,
             data: item,
         };
-        const subtitle = item.data.length + " " + (item.data.length > 1 ? i18n.t('proximoScreen.articles') : i18n.t('proximoScreen.article'));
+        const subtitle = item.data.length + " " + (item.data.length > 1 ? i18n.t('screens.proximo.articles') : i18n.t('screens.proximo.article'));
         const onPress = this.props.navigation.navigate.bind(this, 'proximo-list', dataToSend);
         if (item.data.length > 0) {
             return (

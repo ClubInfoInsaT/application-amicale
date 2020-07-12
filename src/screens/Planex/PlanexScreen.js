@@ -330,7 +330,7 @@ class PlanexScreen extends React.Component<Props, State> {
                     ? <ErrorView
                         {...this.props}
                         icon={'account-clock'}
-                        message={i18n.t("planexScreen.noGroupSelected")}
+                        message={i18n.t("screens.planex.noGroupSelected")}
                         showRetryButton={false}
                     />
                     : null}
@@ -364,17 +364,17 @@ class PlanexScreen extends React.Component<Props, State> {
                 </View>
                 <MascotPopup
                     visible={this.state.mascotDialogVisible}
-                    title={i18n.t("planexScreen.enableStartScreenTitle")}
-                    message={i18n.t("planexScreen.enableStartScreenMessage")}
+                    title={i18n.t("screens.planex.mascotDialog.title")}
+                    message={i18n.t("screens.planex.mascotDialog.message")}
                     icon={"power"}
                     buttons={{
                         action: {
-                            message: i18n.t("planexScreen.enableStartOK"),
+                            message: i18n.t("screens.planex.mascotDialog.ok"),
                             icon: "settings",
                             onPress: this.onGoToSettings,
                         },
                         cancel: {
-                            message: i18n.t("planexScreen.enableStartCancel"),
+                            message: i18n.t("screens.planex.mascotDialog.cancel"),
                             icon: "close",
                             color: this.props.theme.colors.warning,
                             onPress: this.onMascotDialogCancel,

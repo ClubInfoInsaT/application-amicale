@@ -123,8 +123,8 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         return (
             <Card style={{marginTop: 10, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
                 <Card.Title
-                    title={i18n.t('clubs.managers')}
-                    subtitle={hasManagers ? i18n.t('clubs.managersSubtitle') : i18n.t('clubs.managersUnavailable')}
+                    title={i18n.t('screens.clubs.managers')}
+                    subtitle={hasManagers ? i18n.t('screens.clubs.managersSubtitle') : i18n.t('screens.clubs.managersUnavailable')}
                     left={(props) => <Avatar.Icon
                         {...props}
                         style={{backgroundColor: 'transparent'}}
@@ -151,8 +151,8 @@ class ClubDisplayScreen extends React.Component<Props, State> {
             ? email
             : AMICALE_MAIL;
         const text = email != null && hasManagers
-            ? i18n.t("clubs.clubContact")
-            : i18n.t("clubs.amicaleContact");
+            ? i18n.t("screens.clubs.clubContact")
+            : i18n.t("screens.clubs.amicaleContact");
         return (
             <Card.Actions>
                 <Button
@@ -235,7 +235,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                 errorViewOverride={[
                     {
                         errorCode: ERROR_TYPE.BAD_INPUT,
-                        message: i18n.t("clubs.invalidClub"),
+                        message: i18n.t("screens.clubs.invalidClub"),
                         icon: "account-question",
                         showRetryButton: false
                     }

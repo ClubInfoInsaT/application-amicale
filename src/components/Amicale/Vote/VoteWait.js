@@ -27,32 +27,32 @@ class VoteWait extends React.Component<Props> {
             <Card style={styles.card}>
                 <Card.Title
                     title={this.props.isVoteRunning
-                        ? i18n.t('voteScreen.wait.titleSubmitted')
-                        : i18n.t('voteScreen.wait.titleEnded')}
-                    subtitle={i18n.t('voteScreen.wait.subtitle')}
+                        ? i18n.t('screens.vote.wait.titleSubmitted')
+                        : i18n.t('screens.vote.wait.titleEnded')}
+                    subtitle={i18n.t('screens.vote.wait.subtitle')}
                     left={(props) => <ActivityIndicator {...props}/>}
                 />
                 <Card.Content>
                     {
                         this.props.justVoted
                             ? <Paragraph style={{color: colors.success}}>
-                                {i18n.t('voteScreen.wait.messageSubmitted')}
+                                {i18n.t('screens.vote.wait.messageSubmitted')}
                             </Paragraph>
                             : null
                     }
                     {
                         this.props.hasVoted
                             ? <Paragraph style={{color: colors.success}}>
-                                {i18n.t('voteScreen.wait.messageVoted')}
+                                {i18n.t('screens.vote.wait.messageVoted')}
                             </Paragraph>
                             : null
                     }
                     {
                         startDate != null
                             ? <Paragraph>
-                                {i18n.t('voteScreen.wait.messageDate') + ' ' + startDate}
+                                {i18n.t('screens.vote.wait.messageDate') + ' ' + startDate}
                             </Paragraph>
-                            : <Paragraph>{i18n.t('voteScreen.wait.messageDateUndefined')}</Paragraph>
+                            : <Paragraph>{i18n.t('screens.vote.wait.messageDateUndefined')}</Paragraph>
                     }
                 </Card.Content>
             </Card>

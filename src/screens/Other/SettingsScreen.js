@@ -176,15 +176,15 @@ class SettingsScreen extends React.Component<Props, State> {
         return (
             <ScrollView>
                 <Card style={{margin: 5}}>
-                    <Card.Title title={i18n.t('settingsScreen.generalCard')}/>
+                    <Card.Title title={i18n.t('screens.settings.generalCard')}/>
                     <List.Section>
                         {Appearance.getColorScheme() !== 'no-preference' ? this.getToggleItem(
                             this.onToggleNightModeFollowSystem,
                             'theme-light-dark',
-                            i18n.t('settingsScreen.nightModeAuto'),
+                            i18n.t('screens.settings.nightModeAuto'),
                             this.state.nightMode ?
-                                i18n.t('settingsScreen.nightModeSubOn') :
-                                i18n.t('settingsScreen.nightModeSubOff'),
+                                i18n.t('screens.settings.nightModeSubOn') :
+                                i18n.t('screens.settings.nightModeSubOff'),
                             this.state.nightModeFollowSystem
                         ) : null}
                         {
@@ -192,16 +192,16 @@ class SettingsScreen extends React.Component<Props, State> {
                                 this.getToggleItem(
                                     this.onToggleNightMode,
                                     'theme-light-dark',
-                                    i18n.t('settingsScreen.nightMode'),
+                                    i18n.t('screens.settings.nightMode'),
                                     this.state.nightMode ?
-                                        i18n.t('settingsScreen.nightModeSubOn') :
-                                        i18n.t('settingsScreen.nightModeSubOff'),
+                                        i18n.t('screens.settings.nightModeSubOn') :
+                                        i18n.t('screens.settings.nightModeSubOff'),
                                     this.state.nightMode
                                 ) : null
                         }
                         <List.Item
-                            title={i18n.t('settingsScreen.startScreen')}
-                            subtitle={i18n.t('settingsScreen.startScreenSub')}
+                            title={i18n.t('screens.settings.startScreen')}
+                            subtitle={i18n.t('screens.settings.startScreenSub')}
                             left={props => <List.Icon {...props} icon="power"/>}
                         />
                         {this.getStartScreenPicker()}
@@ -211,8 +211,8 @@ class SettingsScreen extends React.Component<Props, State> {
                     <Card.Title title="Proxiwash"/>
                     <List.Section>
                         <List.Item
-                            title={i18n.t('settingsScreen.proxiwashNotifReminder')}
-                            description={i18n.t('settingsScreen.proxiwashNotifReminderSub')}
+                            title={i18n.t('screens.settings.proxiwashNotifReminder')}
+                            description={i18n.t('screens.settings.proxiwashNotifReminderSub')}
                             left={props => <List.Icon {...props} icon="washing-machine"/>}
                             opened={true}
                         />
@@ -222,25 +222,25 @@ class SettingsScreen extends React.Component<Props, State> {
                     </List.Section>
                 </Card>
                 <Card style={{margin: 5}}>
-                    <Card.Title title={i18n.t('settingsScreen.information')}/>
+                    <Card.Title title={i18n.t('screens.settings.information')}/>
                     <List.Section>
                         {this.state.isDebugUnlocked
                             ? <List.Item
-                                title={i18n.t('screens.debug')}
+                                title={i18n.t('screens.debug.title')}
                                 left={props => <List.Icon {...props} icon="bug-check"/>}
                                 onPress={() => this.props.navigation.navigate("debug")}
                             />
                             : null}
                         <List.Item
-                            title={i18n.t('screens.about')}
-                            description={i18n.t('aboutScreen.buttonDesc')}
+                            title={i18n.t('screens.about.title')}
+                            description={i18n.t('screens.about.buttonDesc')}
                             left={props => <List.Icon {...props} icon="information"/>}
                             onPress={() => this.props.navigation.navigate("about")}
                             onLongPress={this.unlockDebugMode}
                         />
                         <List.Item
-                            title={i18n.t('feedbackScreen.homeButtonTitle')}
-                            description={i18n.t('feedbackScreen.homeButtonSubtitle')}
+                            title={i18n.t('screens.feedback.homeButtonTitle')}
+                            description={i18n.t('screens.feedback.homeButtonSubtitle')}
                             left={props => <List.Icon {...props} icon="bug"/>}
                             onPress={() => this.props.navigation.navigate("feedback")}
                         />

@@ -3,8 +3,8 @@
 import i18n from 'i18n-js';
 import * as RNLocalize from "react-native-localize";
 
-import en from '../../translations/en';
-import fr from '../../translations/fr';
+import en from '../../locales/en';
+import fr from '../../locales/fr.json';
 
 /**
  * Static class used to manage locales

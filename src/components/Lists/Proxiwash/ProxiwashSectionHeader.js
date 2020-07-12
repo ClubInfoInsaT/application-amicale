@@ -27,8 +27,8 @@ class ProxiwashListItem extends React.Component<Props> {
         const props = this.props;
         const subtitle = props.nbAvailable + ' ' + (
             (props.nbAvailable <= 1)
-                ? i18n.t('proxiwashScreen.numAvailable')
-                : i18n.t('proxiwashScreen.numAvailablePlural'));
+                ? i18n.t('screens.proxiwash.numAvailable')
+                : i18n.t('screens.proxiwash.numAvailablePlural'));
         const iconColor = props.nbAvailable > 0
         ? this.props.theme.colors.success
         : this.props.theme.colors.primary;

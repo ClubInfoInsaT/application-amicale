@@ -74,117 +74,117 @@ class ServicesScreen extends React.Component<Props, State> {
         const nav = props.navigation;
         this.amicaleDataset = [
             {
-                title: i18n.t('screens.clubsAbout'),
-                subtitle: i18n.t('servicesScreen.descriptions.clubs'),
+                title: i18n.t('screens.clubs.title'),
+                subtitle: i18n.t('screens.services.descriptions.clubs'),
                 image: CLUBS_IMAGE,
                 onPress: () => this.onAmicaleServicePress("club-list"),
             },
             {
-                title: i18n.t('screens.profile'),
-                subtitle: i18n.t('servicesScreen.descriptions.profile'),
+                title: i18n.t('screens.profile.title'),
+                subtitle: i18n.t('screens.services.descriptions.profile'),
                 image: PROFILE_IMAGE,
                 onPress: () => this.onAmicaleServicePress("profile"),
             },
             {
-                title: i18n.t('screens.equipmentList'),
-                subtitle: i18n.t('servicesScreen.descriptions.equipment'),
+                title: i18n.t('screens.equipment.title'),
+                subtitle: i18n.t('screens.services.descriptions.equipment'),
                 image: EQUIPMENT_IMAGE,
                 onPress: () => this.onAmicaleServicePress("equipment-list"),
             },
             {
-                title: i18n.t('screens.amicaleWebsite'),
-                subtitle: i18n.t('servicesScreen.descriptions.amicaleWebsite'),
+                title: i18n.t('screens.websites.amicale'),
+                subtitle: i18n.t('screens.services.descriptions.amicaleWebsite'),
                 image: AMICALE_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.AMICALE, title: i18n.t('screens.amicaleWebsite')}),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.AMICALE, title: i18n.t('screens.websites.amicale')}),
             },
             {
-                title: i18n.t('screens.vote'),
-                subtitle: i18n.t('servicesScreen.descriptions.vote'),
+                title: i18n.t('screens.vote.title'),
+                subtitle: i18n.t('screens.services.descriptions.vote'),
                 image: VOTE_IMAGE,
                 onPress: () => this.onAmicaleServicePress("vote"),
             },
         ];
         this.studentsDataset = [
             {
-                title: i18n.t('screens.proximo'),
-                subtitle: i18n.t('servicesScreen.descriptions.proximo'),
+                title: i18n.t('screens.proximo.title'),
+                subtitle: i18n.t('screens.services.descriptions.proximo'),
                 image: PROXIMO_IMAGE,
                 onPress: () => nav.navigate("proximo"),
             },
             {
                 title: "Wiketud",
-                subtitle: i18n.t('servicesScreen.descriptions.wiketud'),
+                subtitle: i18n.t('screens.services.descriptions.wiketud'),
                 image: WIKETUD_IMAGE,
                 onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.WIKETUD, title: "Wiketud"}),
             },
             {
                 title: "Élus Étudiants",
-                subtitle: i18n.t('servicesScreen.descriptions.elusEtudiants'),
+                subtitle: i18n.t('screens.services.descriptions.elusEtudiants'),
                 image: EE_IMAGE,
                 onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.ELUS_ETUDIANTS, title: "Élus Étudiants"}),
             },
             {
                 title: "Tutor'INSA",
-                subtitle: i18n.t('servicesScreen.descriptions.tutorInsa'),
+                subtitle: i18n.t('screens.services.descriptions.tutorInsa'),
                 image: TUTORINSA_IMAGE,
                 onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.TUTOR_INSA, title: "Tutor'INSA"})
             },
         ];
         this.insaDataset = [
             {
-                title: i18n.t('screens.menuSelf'),
-                subtitle: i18n.t('servicesScreen.descriptions.self'),
+                title: i18n.t('screens.menu.title'),
+                subtitle: i18n.t('screens.services.descriptions.self'),
                 image: RU_IMAGE,
                 onPress: () => nav.navigate("self-menu"),
             },
             {
-                title: i18n.t('screens.availableRooms'),
-                subtitle: i18n.t('servicesScreen.descriptions.availableRooms'),
+                title: i18n.t('screens.websites.rooms'),
+                subtitle: i18n.t('screens.services.descriptions.availableRooms'),
                 image: ROOM_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.AVAILABLE_ROOMS, title: i18n.t('screens.availableRooms')}),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.AVAILABLE_ROOMS, title: i18n.t('screens.websites.rooms')}),
             },
             {
-                title: i18n.t('screens.bib'),
-                subtitle: i18n.t('servicesScreen.descriptions.bib'),
+                title: i18n.t('screens.websites.bib'),
+                subtitle: i18n.t('screens.services.descriptions.bib'),
                 image: BIB_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.BIB, title: i18n.t('screens.bib')}),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.BIB, title: i18n.t('screens.websites.bib')}),
             },
             {
-                title: i18n.t('screens.bluemind'),
-                subtitle: i18n.t('servicesScreen.descriptions.mails'),
+                title: i18n.t('screens.websites.mails'),
+                subtitle: i18n.t('screens.services.descriptions.mails'),
                 image: EMAIL_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.BLUEMIND, title: i18n.t('screens.bluemind')}),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.BLUEMIND, title: i18n.t('screens.websites.mails')}),
             },
             {
-                title: i18n.t('screens.ent'),
-                subtitle: i18n.t('servicesScreen.descriptions.ent'),
+                title: i18n.t('screens.websites.ent'),
+                subtitle: i18n.t('screens.services.descriptions.ent'),
                 image: ENT_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.ENT, title: i18n.t('screens.ent')}),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.ENT, title: i18n.t('screens.websites.ent')}),
             },
             {
-                title: i18n.t('screens.insaAccount'),
-                subtitle: i18n.t('servicesScreen.descriptions.insaAccount'),
+                title: i18n.t('screens.insaAccount.title'),
+                subtitle: i18n.t('screens.services.descriptions.insaAccount.title'),
                 image: ACCOUNT_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.INSA_ACCOUNT, title: i18n.t('screens.insaAccount')}),
+                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.INSA_ACCOUNT, title: i18n.t('screens.insaAccount.title')}),
             },
         ];
         this.finalDataset = [
             {
-                title: i18n.t("servicesScreen.amicale"),
+                title: i18n.t("screens.services.categories.amicale"),
                 description: "LOGIN",
                 image: AMICALE_LOGO,
                 shouldLogin: true,
                 content: this.amicaleDataset
             },
             {
-                title: i18n.t("servicesScreen.students"),
+                title: i18n.t("screens.services.categories.students"),
                 description: "SERVICES OFFERED BY STUDENTS",
                 image: 'account-group',
                 shouldLogin: false,
                 content: this.studentsDataset
             },
             {
-                title: i18n.t("servicesScreen.insa"),
+                title: i18n.t("screens.services.categories.insa"),
                 description: "SERVICES OFFERED BY INSA",
                 image: 'school',
                 shouldLogin: false,
@@ -312,13 +312,13 @@ class ServicesScreen extends React.Component<Props, State> {
                 />
                 <MascotPopup
                     visible={this.state.mascotDialogVisible}
-                    title={i18n.t("servicesScreen.mascot.title")}
-                    message={i18n.t("servicesScreen.mascot.message")}
+                    title={i18n.t("screens.services.mascotDialog.title")}
+                    message={i18n.t("screens.services.mascotDialog.message")}
                     icon={"calendar-range"}
                     buttons={{
                         action: null,
                         cancel: {
-                            message: i18n.t("servicesScreen.mascot.button"),
+                            message: i18n.t("screens.services.mascotDialog.button"),
                             icon: "check",
                             onPress: this.onHideMascotDialog,
                         }

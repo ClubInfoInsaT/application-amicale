@@ -191,7 +191,7 @@ class HomeScreen extends React.Component<Props, State> {
         const onPressSettings = () => this.props.navigation.navigate("settings");
         return <MaterialHeaderButtons>
             <Item title="log" iconName={logIcon} color={logColor} onPress={onPressLog}/>
-            <Item title={i18n.t("screens.settings")} iconName={"settings"} onPress={onPressSettings}/>
+            <Item title={i18n.t("screens.settings.title")} iconName={"settings"} onPress={onPressSettings}/>
         </MaterialHeaderButtons>;
     };
 
@@ -246,7 +246,7 @@ class HomeScreen extends React.Component<Props, State> {
                 id: SECTIONS_ID[0]
             },
             {
-                title: i18n.t('homeScreen.newsFeed'),
+                title: '',
                 data: this.currentNewFeed,
                 id: SECTIONS_ID[1]
             }
@@ -602,17 +602,17 @@ class HomeScreen extends React.Component<Props, State> {
                 </View>
                 <MascotPopup
                     visible={this.state.mascotDialogVisible}
-                    title={i18n.t("homeScreen.loginBanner.title")}
-                    message={i18n.t("homeScreen.loginBanner.message")}
+                    title={i18n.t("screens.home.mascotDialog.title")}
+                    message={i18n.t("screens.home.mascotDialog.message")}
                     icon={"check"}
                     buttons={{
                         action: {
-                            message: i18n.t("homeScreen.loginBanner.login"),
+                            message: i18n.t("screens.home.mascotDialog.login"),
                             icon: "login",
                             onPress: this.onLogin,
                         },
                         cancel: {
-                            message: i18n.t("homeScreen.loginBanner.later"),
+                            message: i18n.t("screens.home.mascotDialog.later"),
                             icon: "close",
                             color: this.props.theme.colors.warning,
                             onPress: this.hideMascotDialog,

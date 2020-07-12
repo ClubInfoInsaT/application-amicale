@@ -22,8 +22,8 @@ class ActionsDashBoardItem extends React.Component<Props> {
         return (
             <View>
                 <List.Item
-                    title={i18n.t("feedbackScreen.homeButtonTitle")}
-                    description={i18n.t("feedbackScreen.homeButtonSubtitle")}
+                    title={i18n.t("screens.feedback.homeButtonTitle")}
+                    description={i18n.t("screens.feedback.homeButtonSubtitle")}
                     left={props => <List.Icon {...props} icon={"bug"}/>}
                     right={props => <List.Icon {...props} icon={"chevron-right"}/>}
                     onPress={() => this.props.navigation.navigate("feedback")}

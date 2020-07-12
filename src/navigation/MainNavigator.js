@@ -52,62 +52,62 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 component={props.createTabNavigator}
                 options={{
                     headerShown: false,
-                    title: i18n.t('screens.home'),
+                    title: i18n.t('screens.home.title'),
                 }}
             />
             <MainStack.Screen
                 name="settings"
                 component={SettingsScreen}
                 options={{
-                    title: i18n.t('screens.settings'),
+                    title: i18n.t('screens.settings.title'),
                 }}
             />
             <MainStack.Screen
                 name="about"
                 component={AboutScreen}
                 options={{
-                    title: i18n.t('screens.about'),
+                    title: i18n.t('screens.about.title'),
                 }}
             />
             <MainStack.Screen
                 name="dependencies"
                 component={AboutDependenciesScreen}
                 options={{
-                    title: i18n.t('aboutScreen.libs')
+                    title: i18n.t('screens.about.libs')
                 }}
             />
             <MainStack.Screen
                 name="debug"
                 component={DebugScreen}
                 options={{
-                    title: i18n.t('aboutScreen.debug')
+                    title: i18n.t('screens.about.debug')
                 }}
             />
             <MainStack.Screen
                 name="tetris"
                 component={TetrisScreen}
                 options={{
-                    title: i18n.t("game.title"),
+                    title: i18n.t("screens.game.title"),
                 }}
             />
             <MainStack.Screen
                 name="login"
                 component={LoginScreen}
                 options={{
-                    title: i18n.t('screens.login'),
+                    title: i18n.t('screens.login.title'),
                 }}
             />
 
             {getWebsiteStack("website", MainStack, WebsiteScreen, "")}
 
 
-            {createScreenCollapsibleStack("self-menu", MainStack, SelfMenuScreen, i18n.t('screens.menuSelf'))}
-            {createScreenCollapsibleStack("proximo", MainStack, ProximoMainScreen, i18n.t('screens.proximo'))}
+            {createScreenCollapsibleStack("self-menu", MainStack, SelfMenuScreen, i18n.t('screens.menu.title'))}
+            {createScreenCollapsibleStack("proximo", MainStack, ProximoMainScreen, i18n.t('screens.proximo.title'))}
             {createScreenCollapsibleStack(
                 "proximo-list",
                 MainStack,
                 ProximoListScreen,
-                i18n.t('screens.proximoArticles'),
+                i18n.t('screens.proximo.articleList'),
                 true,
                 {...screenTransition},
             )}
@@ -115,21 +115,21 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 name="proximo-about"
                 component={ProximoAboutScreen}
                 options={{
-                    title: i18n.t('screens.proximo'),
+                    title: i18n.t('screens.proximo.title'),
                     ...modalTransition,
                 }}
             />
 
-            {createScreenCollapsibleStack("profile", MainStack, ProfileScreen, i18n.t('screens.profile'))}
-            {createScreenCollapsibleStack("club-list", MainStack, ClubListScreen, i18n.t('clubs.clubList'))}
-            {createScreenCollapsibleStack("equipment-list", MainStack, EquipmentScreen, i18n.t('screens.equipmentList'))}
-            {createScreenCollapsibleStack("equipment-rent", MainStack, EquipmentLendScreen, i18n.t('screens.equipmentLend'))}
-            {createScreenCollapsibleStack("equipment-confirm", MainStack, EquipmentConfirmScreen, i18n.t('screens.equipmentConfirm'))}
+            {createScreenCollapsibleStack("profile", MainStack, ProfileScreen, i18n.t('screens.profile.title'))}
+            {createScreenCollapsibleStack("club-list", MainStack, ClubListScreen, i18n.t('screens.clubs.title'))}
+            {createScreenCollapsibleStack("equipment-list", MainStack, EquipmentScreen, i18n.t('screens.equipment.title'))}
+            {createScreenCollapsibleStack("equipment-rent", MainStack, EquipmentLendScreen, i18n.t('screens.equipment.book'))}
+            {createScreenCollapsibleStack("equipment-confirm", MainStack, EquipmentConfirmScreen, i18n.t('screens.equipment.confirm'))}
             <MainStack.Screen
                 name="club-information"
                 component={ClubDisplayScreen}
                 options={{
-                    title: i18n.t('screens.clubDisplayScreen'),
+                    title: i18n.t('screens.clubs.details'),
                     ...modalTransition,
                 }}
             />
@@ -137,7 +137,7 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 name="club-about"
                 component={ClubAboutScreen}
                 options={{
-                    title: i18n.t('screens.clubsAbout'),
+                    title: i18n.t('screens.clubs.title'),
                     ...modalTransition,
                 }}
             />
@@ -145,7 +145,7 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 name="vote"
                 component={VoteScreen}
                 options={{
-                    title: i18n.t('screens.vote'),
+                    title: i18n.t('screens.vote.title'),
                 }}
             />
 
@@ -153,7 +153,7 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 name="feedback"
                 component={BugReportScreen}
                 options={{
-                    title: i18n.t('screens.feedback'),
+                    title: i18n.t('screens.feedback.title'),
                 }}
             />
         </MainStack.Navigator>

@@ -19,15 +19,15 @@ export default class VoteTease extends React.Component<Props> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={i18n.t('voteScreen.tease.title')}
-                    subtitle={i18n.t('voteScreen.tease.subtitle')}
+                    title={i18n.t('screens.vote.tease.title')}
+                    subtitle={i18n.t('screens.vote.tease.subtitle')}
                     left={props => <Avatar.Icon
                         {...props}
                         icon="vote"/>}
                 />
                 <Card.Content>
                     <Paragraph>
-                        {i18n.t('voteScreen.tease.message') + ' ' + this.props.startDate}
+                        {i18n.t('screens.vote.tease.message') + ' ' + this.props.startDate}
                     </Paragraph>
                 </Card.Content>
             </Card>

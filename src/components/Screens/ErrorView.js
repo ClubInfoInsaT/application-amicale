@@ -124,7 +124,7 @@ class ErrorView extends React.PureComponent<Props, State> {
             onPress={this.goToLogin}
             style={styles.button}
         >
-            {i18n.t("screens.login")}
+            {i18n.t("screens.login.title")}
         </Button>;
     }
 

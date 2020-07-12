@@ -42,8 +42,8 @@ class ProxiwashListItem extends React.Component<Props> {
             displayNumber = AprilFoolsManager.getProxiwashMachineDisplayNumber(parseInt(props.item.number));
 
         this.title = props.isDryer
-            ? i18n.t('proxiwashScreen.dryer')
-            : i18n.t('proxiwashScreen.washer');
+            ? i18n.t('screens.proxiwash.dryer')
+            : i18n.t('screens.proxiwash.washer');
         this.title += ' n°' + displayNumber;
     }
 
@@ -56,13 +56,13 @@ class ProxiwashListItem extends React.Component<Props> {
     }
 
     updateStateStrings() {
-        this.stateStrings[ProxiwashConstants.machineStates.AVAILABLE] = i18n.t('proxiwashScreen.states.ready');
-        this.stateStrings[ProxiwashConstants.machineStates.RUNNING] = i18n.t('proxiwashScreen.states.running');
-        this.stateStrings[ProxiwashConstants.machineStates.RUNNING_NOT_STARTED] = i18n.t('proxiwashScreen.states.runningNotStarted');
-        this.stateStrings[ProxiwashConstants.machineStates.FINISHED] = i18n.t('proxiwashScreen.states.finished');
-        this.stateStrings[ProxiwashConstants.machineStates.UNAVAILABLE] = i18n.t('proxiwashScreen.states.broken');
-        this.stateStrings[ProxiwashConstants.machineStates.ERROR] = i18n.t('proxiwashScreen.states.error');
-        this.stateStrings[ProxiwashConstants.machineStates.UNKNOWN] = i18n.t('proxiwashScreen.states.unknown');
+        this.stateStrings[ProxiwashConstants.machineStates.AVAILABLE] = i18n.t('screens.proxiwash.states.ready');
+        this.stateStrings[ProxiwashConstants.machineStates.RUNNING] = i18n.t('screens.proxiwash.states.running');
+        this.stateStrings[ProxiwashConstants.machineStates.RUNNING_NOT_STARTED] = i18n.t('screens.proxiwash.states.runningNotStarted');
+        this.stateStrings[ProxiwashConstants.machineStates.FINISHED] = i18n.t('screens.proxiwash.states.finished');
+        this.stateStrings[ProxiwashConstants.machineStates.UNAVAILABLE] = i18n.t('screens.proxiwash.states.broken');
+        this.stateStrings[ProxiwashConstants.machineStates.ERROR] = i18n.t('screens.proxiwash.states.error');
+        this.stateStrings[ProxiwashConstants.machineStates.UNKNOWN] = i18n.t('screens.proxiwash.states.unknown');
     }
 
     updateStateColors() {

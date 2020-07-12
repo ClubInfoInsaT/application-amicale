@@ -79,7 +79,7 @@ test('getRelativeDateString', () => {
         );
     jest.spyOn(i18n, 't')
         .mockImplementation((translationString: string) => {
-                const prefix = "equipmentScreen.";
+                const prefix = "screens.equipment.";
                 if (translationString === prefix + "otherYear")
                     return "0";
                 else if (translationString === prefix + "otherMonth")

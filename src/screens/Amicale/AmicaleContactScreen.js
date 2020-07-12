@@ -26,47 +26,47 @@ class AmicaleContactScreen extends React.Component<Props> {
     // Dataset containing information about contacts
     CONTACT_DATASET = [
         {
-            name: i18n.t("amicaleAbout.roles.interSchools"),
+            name: i18n.t("screens.amicaleAbout.roles.interSchools"),
             email: "inter.ecoles@amicale-insat.fr",
             icon: "share-variant"
         },
         {
-            name: i18n.t("amicaleAbout.roles.culture"),
+            name: i18n.t("screens.amicaleAbout.roles.culture"),
             email: "culture@amicale-insat.fr",
             icon: "book"
         },
         {
-            name: i18n.t("amicaleAbout.roles.animation"),
+            name: i18n.t("screens.amicaleAbout.roles.animation"),
             email: "animation@amicale-insat.fr",
             icon: "emoticon"
         },
         {
-            name: i18n.t("amicaleAbout.roles.clubs"),
+            name: i18n.t("screens.amicaleAbout.roles.clubs"),
             email: "clubs@amicale-insat.fr",
             icon: "account-group"
         },
         {
-            name: i18n.t("amicaleAbout.roles.event"),
+            name: i18n.t("screens.amicaleAbout.roles.event"),
             email: "evenements@amicale-insat.fr",
             icon: "calendar-range"
         },
         {
-            name: i18n.t("amicaleAbout.roles.tech"),
+            name: i18n.t("screens.amicaleAbout.roles.tech"),
             email: "technique@amicale-insat.fr",
             icon: "settings"
         },
         {
-            name: i18n.t("amicaleAbout.roles.communication"),
+            name: i18n.t("screens.amicaleAbout.roles.communication"),
             email: "amicale@amicale-insat.fr",
             icon: "comment-account"
         },
         {
-            name: i18n.t("amicaleAbout.roles.intraSchools"),
+            name: i18n.t("screens.amicaleAbout.roles.intraSchools"),
             email: "intra.ecoles@amicale-insat.fr",
             icon: "school"
         },
         {
-            name: i18n.t("amicaleAbout.roles.publicRelations"),
+            name: i18n.t("screens.amicaleAbout.roles.publicRelations"),
             email: "rp@amicale-insat.fr",
             icon: "account-tie"
         },
@@ -105,12 +105,12 @@ class AmicaleContactScreen extends React.Component<Props> {
                 </View>
                 <Card style={{margin: 5}}>
                     <Card.Title
-                        title={i18n.t("amicaleAbout.title")}
-                        subtitle={i18n.t("amicaleAbout.subtitle")}
+                        title={i18n.t("screens.amicaleAbout.title")}
+                        subtitle={i18n.t("screens.amicaleAbout.subtitle")}
                         left={props => <List.Icon {...props} icon={'information'}/>}
                     />
                     <Card.Content>
-                        <Text>{i18n.t("amicaleAbout.message")}</Text>
+                        <Text>{i18n.t("screens.amicaleAbout.message")}</Text>
                         {/*$FlowFixMe*/}
                         <FlatList
                             data={this.CONTACT_DATASET}

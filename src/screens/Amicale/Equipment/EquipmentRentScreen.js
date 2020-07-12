@@ -305,7 +305,7 @@ class EquipmentRentScreen extends React.Component<Props, State> {
                                             lineHeight: 35,
                                             marginLeft: 10,
                                         }}>
-                                            ({i18n.t('equipmentScreen.bail', {cost: item.caution})})
+                                            ({i18n.t('screens.equipment.bail', {cost: item.caution})})
                                         </Caption>
                                     </View>
                                 </View>
@@ -315,7 +315,7 @@ class EquipmentRentScreen extends React.Component<Props, State> {
                                     color={isAvailable ? this.props.theme.colors.success : this.props.theme.colors.primary}
                                     mode="text"
                                 >
-                                    {i18n.t('equipmentScreen.available', {date: getRelativeDateString(firstAvailability)})}
+                                    {i18n.t('screens.equipment.available', {date: getRelativeDateString(firstAvailability)})}
                                 </Button>
                                 <Subheading style={{
                                     textAlign: "center",
@@ -324,13 +324,13 @@ class EquipmentRentScreen extends React.Component<Props, State> {
                                 }}>
                                     {
                                         start == null
-                                            ? i18n.t('equipmentScreen.booking')
+                                            ? i18n.t('screens.equipment.booking')
                                             : end != null && start.getTime() !== end.getTime()
-                                            ? i18n.t('equipmentScreen.bookingPeriod', {
+                                            ? i18n.t('screens.equipment.bookingPeriod', {
                                                 begin: getRelativeDateString(start),
                                                 end: getRelativeDateString(end)
                                             })
-                                            : i18n.t('equipmentScreen.bookingDay', {
+                                            : i18n.t('screens.equipment.bookingDay', {
                                                 date: getRelativeDateString(start)
                                             })
                                     }
@@ -401,9 +401,9 @@ class EquipmentRentScreen extends React.Component<Props, State> {
                         visible={this.state.dialogVisible}
                         onDismiss={this.onDialogDismiss}
                         onAccept={this.onDialogAccept}
-                        title={i18n.t('equipmentScreen.dialogTitle')}
-                        titleLoading={i18n.t('equipmentScreen.dialogTitleLoading')}
-                        message={i18n.t('equipmentScreen.dialogMessage')}
+                        title={i18n.t('screens.equipment.dialogTitle')}
+                        titleLoading={i18n.t('screens.equipment.dialogTitleLoading')}
+                        message={i18n.t('screens.equipment.dialogMessage')}
                     />
 
                     <ErrorDialog
@@ -436,7 +436,7 @@ class EquipmentRentScreen extends React.Component<Props, State> {
                                 borderRadius: 10
                             }}
                         >
-                            {i18n.t('equipmentScreen.bookButton')}
+                            {i18n.t('screens.equipment.bookButton')}
                         </Button>
                     </Animatable.View>
 

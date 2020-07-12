@@ -40,18 +40,18 @@ class EventDashBoardItem extends React.Component<Props> {
                     <Text style={{fontWeight: "bold"}}>{props.eventNumber}</Text>
                     <Text>
                         {props.eventNumber > 1
-                            ? i18n.t('homeScreen.dashboard.todayEventsSubtitlePlural')
-                            : i18n.t('homeScreen.dashboard.todayEventsSubtitle')}
+                            ? i18n.t('screens.home.dashboard.todayEventsSubtitlePlural')
+                            : i18n.t('screens.home.dashboard.todayEventsSubtitle')}
                     </Text>
                 </Text>;
         } else
-            subtitle = i18n.t('homeScreen.dashboard.todayEventsSubtitleNA');
+            subtitle = i18n.t('screens.home.dashboard.todayEventsSubtitleNA');
         return (
             <Card
                 style={styles.card}
                 onPress={props.clickAction}>
                 <Card.Title
-                    title={i18n.t('homeScreen.dashboard.todayEventsTitle')}
+                    title={i18n.t('screens.home.dashboard.todayEventsTitle')}
                     titleStyle={{color: textColor}}
                     subtitle={subtitle}
                     subtitleStyle={{color: textColor}}

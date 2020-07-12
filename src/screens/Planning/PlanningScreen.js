@@ -254,13 +254,13 @@ class PlanningScreen extends React.Component<Props, State> {
                 />
                 <MascotPopup
                     visible={this.state.mascotDialogVisible}
-                    title={i18n.t("planningScreen.mascotTitle")}
-                    message={i18n.t("planningScreen.mascotMessage")}
+                    title={i18n.t("screens.planning.mascotDialog.title")}
+                    message={i18n.t("screens.planning.mascotDialog.message")}
                     icon={"calendar-range"}
                     buttons={{
                         action: null,
                         cancel: {
-                            message: i18n.t("planningScreen.mascotButton"),
+                            message: i18n.t("screens.planning.mascotDialog.button"),
                             icon: "check",
                             onPress: this.onHideMascotDialog,
                         }

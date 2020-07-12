@@ -30,50 +30,50 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                         source={{uri: LOGO}}
                         style={{height: '100%', width: '100%', resizeMode: "contain"}}/>
                 </View>
-                <Text>{i18n.t('proxiwashScreen.description')}</Text>
+                <Text>{i18n.t('screens.proxiwash.description')}</Text>
                 <Card style={{margin: 5}}>
                     <Card.Title
-                        title={i18n.t('proxiwashScreen.dryer')}
+                        title={i18n.t('screens.proxiwash.dryer')}
                         left={props => <List.Icon {...props} icon={'tumble-dryer'}/>}
                     />
                     <Card.Content>
-                        <Title>{i18n.t('proxiwashScreen.procedure')}</Title>
-                        <Paragraph>{i18n.t('proxiwashScreen.dryerProcedure')}</Paragraph>
-                        <Title>{i18n.t('proxiwashScreen.tips')}</Title>
-                        <Paragraph>{i18n.t('proxiwashScreen.dryerTips')}</Paragraph>
+                        <Title>{i18n.t('screens.proxiwash.procedure')}</Title>
+                        <Paragraph>{i18n.t('screens.proxiwash.dryerProcedure')}</Paragraph>
+                        <Title>{i18n.t('screens.proxiwash.tips')}</Title>
+                        <Paragraph>{i18n.t('screens.proxiwash.dryerTips')}</Paragraph>
                     </Card.Content>
                 </Card>
 
                 <Card style={{margin: 5}}>
                     <Card.Title
-                        title={i18n.t('proxiwashScreen.washer')}
+                        title={i18n.t('screens.proxiwash.washer')}
                         left={props => <List.Icon {...props} icon={'washing-machine'}/>}
                     />
                     <Card.Content>
-                        <Title>{i18n.t('proxiwashScreen.procedure')}</Title>
-                        <Paragraph>{i18n.t('proxiwashScreen.washerProcedure')}</Paragraph>
-                        <Title>{i18n.t('proxiwashScreen.tips')}</Title>
-                        <Paragraph>{i18n.t('proxiwashScreen.washerTips')}</Paragraph>
+                        <Title>{i18n.t('screens.proxiwash.procedure')}</Title>
+                        <Paragraph>{i18n.t('screens.proxiwash.washerProcedure')}</Paragraph>
+                        <Title>{i18n.t('screens.proxiwash.tips')}</Title>
+                        <Paragraph>{i18n.t('screens.proxiwash.washerTips')}</Paragraph>
                     </Card.Content>
                 </Card>
 
                 <Card style={{margin: 5}}>
                     <Card.Title
-                        title={i18n.t('proxiwashScreen.tariffs')}
+                        title={i18n.t('screens.proxiwash.tariffs')}
                         left={props => <List.Icon {...props} icon={'coins'}/>}
                     />
                     <Card.Content>
-                        <Paragraph>{i18n.t('proxiwashScreen.washersTariff')}</Paragraph>
-                        <Paragraph>{i18n.t('proxiwashScreen.dryersTariff')}</Paragraph>
+                        <Paragraph>{i18n.t('screens.proxiwash.washersTariff')}</Paragraph>
+                        <Paragraph>{i18n.t('screens.proxiwash.dryersTariff')}</Paragraph>
                     </Card.Content>
                 </Card>
                 <Card style={{margin: 5, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
                     <Card.Title
-                        title={i18n.t('proxiwashScreen.paymentMethods')}
+                        title={i18n.t('screens.proxiwash.paymentMethods')}
                         left={props => <List.Icon {...props} icon={'cash'}/>}
                     />
                     <Card.Content>
-                        <Paragraph>{i18n.t('proxiwashScreen.paymentMethodsDescription')}</Paragraph>
+                        <Paragraph>{i18n.t('screens.proxiwash.paymentMethodsDescription')}</Paragraph>
                     </Card.Content>
                 </Card>
             </ScrollView>

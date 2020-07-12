@@ -75,24 +75,24 @@ export function getRelativeDateString(date: Date) {
     const yearDelta = date.getUTCFullYear() - today.getUTCFullYear();
     const monthDelta = date.getUTCMonth() - today.getUTCMonth();
     const dayDelta = date.getUTCDate() - today.getUTCDate();
-    let translatedString = i18n.t('equipmentScreen.today');
+    let translatedString = i18n.t('screens.equipment.today');
     if (yearDelta > 0)
-        translatedString = i18n.t('equipmentScreen.otherYear', {
+        translatedString = i18n.t('screens.equipment.otherYear', {
             date: date.getDate(),
             month: DateManager.getInstance().getMonthsOfYear()[date.getMonth()],
             year: date.getFullYear()
         });
     else if (monthDelta > 0)
-        translatedString = i18n.t('equipmentScreen.otherMonth', {
+        translatedString = i18n.t('screens.equipment.otherMonth', {
             date: date.getDate(),
             month: DateManager.getInstance().getMonthsOfYear()[date.getMonth()],
         });
     else if (dayDelta > 1)
-        translatedString = i18n.t('equipmentScreen.thisMonth', {
+        translatedString = i18n.t('screens.equipment.thisMonth', {
             date: date.getDate(),
         });
     else if (dayDelta === 1)
-        translatedString = i18n.t('equipmentScreen.tomorrow');
+        translatedString = i18n.t('screens.equipment.tomorrow');
 
     return translatedString;
 }

@@ -28,15 +28,15 @@ class ClubAboutScreen extends React.Component<Props> {
                         style={{flex: 1, resizeMode: "contain"}}
                         resizeMode="contain"/>
                 </View>
-                <Text>{i18n.t("clubs.about.text")}</Text>
+                <Text>{i18n.t("screens.clubs.about.text")}</Text>
                 <Card style={{margin: 5}}>
                     <Card.Title
-                        title={i18n.t("clubs.about.title")}
-                        subtitle={i18n.t("clubs.about.subtitle")}
+                        title={i18n.t("screens.clubs.about.title")}
+                        subtitle={i18n.t("screens.clubs.about.subtitle")}
                         left={props => <List.Icon {...props} icon={'information'}/>}
                     />
                     <Card.Content>
-                        <Text>{i18n.t("clubs.about.message")}</Text>
+                        <Text>{i18n.t("screens.clubs.about.message")}</Text>
                         <Autolink
                             text={CONTACT_LINK}
                             component={Text}

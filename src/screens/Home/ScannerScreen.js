@@ -80,7 +80,7 @@ class ScannerScreen extends React.Component<Props, State> {
      */
     getPermissionScreen() {
         return <View style={{marginLeft: 10, marginRight: 10}}>
-            <Text>{i18n.t("scannerScreen.errorPermission")}</Text>
+            <Text>{i18n.t("screens.scanner.permissions.error")}</Text>
             <Button
                 icon="camera"
                 mode="contained"
@@ -91,7 +91,7 @@ class ScannerScreen extends React.Component<Props, State> {
                     marginRight: 'auto',
                 }}
             >
-                {i18n.t("scannerScreen.buttonPermission")}
+                {i18n.t("screens.scanner.permissions.button")}
             </Button>
         </View>
     }
@@ -103,8 +103,8 @@ class ScannerScreen extends React.Component<Props, State> {
         this.setState({
             dialogVisible: true,
             scanned: true,
-            dialogTitle: i18n.t("scannerScreen.helpTitle"),
-            dialogMessage: i18n.t("scannerScreen.helpMessage"),
+            dialogTitle: i18n.t("screens.scanner.help.title"),
+            dialogMessage: i18n.t("screens.scanner.help.message"),
         });
     };
 
@@ -125,8 +125,8 @@ class ScannerScreen extends React.Component<Props, State> {
         this.setState({
             dialogVisible: true,
             scanned: true,
-            dialogTitle: i18n.t("scannerScreen.errorTitle"),
-            dialogMessage: i18n.t("scannerScreen.errorMessage"),
+            dialogTitle: i18n.t("screens.scanner.error.title"),
+            dialogMessage: i18n.t("screens.scanner.error.message"),
         });
     }
 
@@ -184,7 +184,7 @@ class ScannerScreen extends React.Component<Props, State> {
                     onPress={this.showHelpDialog}
                     style={styles.button}
                 >
-                    {i18n.t("scannerScreen.helpButton")}
+                    {i18n.t("screens.scanner.help.button")}
                 </Button>
                 <AlertDialog
                     visible={this.state.dialogVisible}

@@ -75,8 +75,8 @@ export default class VoteSelect extends React.PureComponent<Props, State> {
             <View>
                 <Card style={styles.card}>
                     <Card.Title
-                        title={i18n.t('voteScreen.select.title')}
-                        subtitle={i18n.t('voteScreen.select.subtitle')}
+                        title={i18n.t('screens.vote.select.title')}
+                        subtitle={i18n.t('screens.vote.select.subtitle')}
                         left={(props) =>
                             <Avatar.Icon
                                 {...props}
@@ -105,7 +105,7 @@ export default class VoteSelect extends React.PureComponent<Props, State> {
                             style={{marginLeft: 'auto'}}
                             disabled={this.state.selectedTeam === "none"}
                         >
-                            {i18n.t('voteScreen.select.sendButton')}
+                            {i18n.t('screens.vote.select.sendButton')}
                         </Button>
                     </Card.Actions>
                 </Card>
@@ -113,9 +113,9 @@ export default class VoteSelect extends React.PureComponent<Props, State> {
                     visible={this.state.voteDialogVisible}
                     onDismiss={this.onVoteDialogDismiss}
                     onAccept={this.onVoteDialogAccept}
-                    title={i18n.t('voteScreen.select.dialogTitle')}
-                    titleLoading={i18n.t('voteScreen.select.dialogTitleLoading')}
-                    message={i18n.t('voteScreen.select.dialogMessage')}
+                    title={i18n.t('screens.vote.select.dialogTitle')}
+                    titleLoading={i18n.t('screens.vote.select.dialogTitleLoading')}
+                    message={i18n.t('screens.vote.select.dialogMessage')}
                 />
                 <ErrorDialog
                     visible={this.state.errorDialogVisible}

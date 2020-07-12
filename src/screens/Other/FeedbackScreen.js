@@ -79,16 +79,16 @@ class FeedbackScreen extends React.Component<Props> {
             <ScrollView style={{padding: 5}}>
                 <Card>
                     <Card.Title
-                        title={i18n.t('feedbackScreen.bugs')}
-                        subtitle={i18n.t('feedbackScreen.bugsSubtitle')}
+                        title={i18n.t('screens.feedback.bugs')}
+                        subtitle={i18n.t('screens.feedback.bugsSubtitle')}
                         left={(props) => <Avatar.Icon {...props} icon="bug"/>}
                     />
                     <Card.Content>
                         <Paragraph>
-                            {i18n.t('feedbackScreen.bugsDescription')}
+                            {i18n.t('screens.feedback.bugsDescription')}
                         </Paragraph>
                         <Paragraph style={{color: this.props.theme.colors.primary}}>
-                            {i18n.t('feedbackScreen.contactMeans')}
+                            {i18n.t('screens.feedback.contactMeans')}
                         </Paragraph>
                     </Card.Content>
                     {this.getButtons(true)}
@@ -96,13 +96,13 @@ class FeedbackScreen extends React.Component<Props> {
 
                 <Card style={{marginTop: 20, marginBottom: 10}}>
                     <Card.Title
-                        title={i18n.t('feedbackScreen.feedback')}
-                        subtitle={i18n.t('feedbackScreen.feedbackSubtitle')}
+                        title={i18n.t('screens.feedback.title')}
+                        subtitle={i18n.t('screens.feedback.feedbackSubtitle')}
                         left={(props) => <Avatar.Icon {...props} icon="comment"/>}
                     />
                     <Card.Content>
                         <Paragraph>
-                            {i18n.t('feedbackScreen.feedbackDescription')}
+                            {i18n.t('screens.feedback.feedbackDescription')}
                         </Paragraph>
                     </Card.Content>
                     {this.getButtons(false)}

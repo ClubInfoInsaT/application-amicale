@@ -33,10 +33,10 @@ export default class ProximoAboutScreen extends React.Component<Props> {
                         source={{uri: LOGO}}
                         style={{height: '100%', width: '100%', resizeMode: "contain"}}/>
                 </View>
-                <Text>{i18n.t('proximoScreen.description')}</Text>
+                <Text>{i18n.t('screens.proximo.description')}</Text>
                 <Card style={{margin: 5}}>
                     <Card.Title
-                        title={i18n.t('proximoScreen.openingHours')}
+                        title={i18n.t('screens.proximo.openingHours')}
                         left={props => <List.Icon {...props} icon={'clock-outline'}/>}
                     />
                     <Card.Content>
@@ -45,11 +45,11 @@ export default class ProximoAboutScreen extends React.Component<Props> {
                 </Card>
                 <Card style={{margin: 5, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
                     <Card.Title
-                        title={i18n.t('proximoScreen.paymentMethods')}
+                        title={i18n.t('screens.proximo.paymentMethods')}
                         left={props => <List.Icon {...props} icon={'cash'}/>}
                     />
                     <Card.Content>
-                        <Paragraph>{i18n.t('proximoScreen.paymentMethodsDescription')}</Paragraph>
+                        <Paragraph>{i18n.t('screens.proximo.paymentMethodsDescription')}</Paragraph>
                     </Card.Content>
                 </Card>
             </ScrollView>

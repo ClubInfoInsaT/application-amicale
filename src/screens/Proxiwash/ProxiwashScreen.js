@@ -75,13 +75,13 @@ class ProxiwashScreen extends React.Component<Props, State> {
      */
     constructor(props) {
         super(props);
-        modalStateStrings[ProxiwashConstants.machineStates.AVAILABLE] = i18n.t('proxiwashScreen.modal.ready');
-        modalStateStrings[ProxiwashConstants.machineStates.RUNNING] = i18n.t('proxiwashScreen.modal.running');
-        modalStateStrings[ProxiwashConstants.machineStates.RUNNING_NOT_STARTED] = i18n.t('proxiwashScreen.modal.runningNotStarted');
-        modalStateStrings[ProxiwashConstants.machineStates.FINISHED] = i18n.t('proxiwashScreen.modal.finished');
-        modalStateStrings[ProxiwashConstants.machineStates.UNAVAILABLE] = i18n.t('proxiwashScreen.modal.broken');
-        modalStateStrings[ProxiwashConstants.machineStates.ERROR] = i18n.t('proxiwashScreen.modal.error');
-        modalStateStrings[ProxiwashConstants.machineStates.UNKNOWN] = i18n.t('proxiwashScreen.modal.unknown');
+        modalStateStrings[ProxiwashConstants.machineStates.AVAILABLE] = i18n.t('screens.proxiwash.modal.ready');
+        modalStateStrings[ProxiwashConstants.machineStates.RUNNING] = i18n.t('screens.proxiwash.modal.running');
+        modalStateStrings[ProxiwashConstants.machineStates.RUNNING_NOT_STARTED] = i18n.t('screens.proxiwash.modal.runningNotStarted');
+        modalStateStrings[ProxiwashConstants.machineStates.FINISHED] = i18n.t('screens.proxiwash.modal.finished');
+        modalStateStrings[ProxiwashConstants.machineStates.UNAVAILABLE] = i18n.t('screens.proxiwash.modal.broken');
+        modalStateStrings[ProxiwashConstants.machineStates.ERROR] = i18n.t('screens.proxiwash.modal.error');
+        modalStateStrings[ProxiwashConstants.machineStates.UNKNOWN] = i18n.t('screens.proxiwash.modal.unknown');
     }
 
     /**
@@ -151,8 +151,8 @@ class ProxiwashScreen extends React.Component<Props, State> {
      */
     showNotificationsDisabledWarning() {
         Alert.alert(
-            i18n.t("proxiwashScreen.modal.notificationErrorTitle"),
-            i18n.t("proxiwashScreen.modal.notificationErrorDescription"),
+            i18n.t("screens.proxiwash.modal.notificationErrorTitle"),
+            i18n.t("screens.proxiwash.modal.notificationErrorDescription"),
         );
     }
 
@@ -209,13 +209,13 @@ class ProxiwashScreen extends React.Component<Props, State> {
             getCleanedMachineWatched(this.state.machinesWatched, [...data.dryers, ...data.washers]);
         return [
             {
-                title: i18n.t('proxiwashScreen.dryers'),
+                title: i18n.t('screens.proxiwash.dryers'),
                 icon: 'tumble-dryer',
                 data: data.dryers === undefined ? [] : data.dryers,
                 keyExtractor: this.getKeyExtractor
             },
             {
-                title: i18n.t('proxiwashScreen.washers'),
+                title: i18n.t('screens.proxiwash.washers'),
                 icon: 'washing-machine',
                 data: data.washers === undefined ? [] : data.washers,
                 keyExtractor: this.getKeyExtractor
@@ -262,7 +262,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
      */
     getModalContent(title: string, item: Machine, isDryer: boolean) {
         let button = {
-            text: i18n.t("proxiwashScreen.modal.ok"),
+            text: i18n.t("screens.proxiwash.modal.ok"),
             icon: '',
             onPress: undefined
         };
@@ -276,13 +276,13 @@ class ProxiwashScreen extends React.Component<Props, State> {
             button =
                 {
                     text: isMachineWatched(item, this.state.machinesWatched) ?
-                        i18n.t("proxiwashScreen.modal.disableNotifications") :
-                        i18n.t("proxiwashScreen.modal.enableNotifications"),
+                        i18n.t("screens.proxiwash.modal.disableNotifications") :
+                        i18n.t("screens.proxiwash.modal.enableNotifications"),
                     icon: '',
                     onPress: onPress
                 }
             ;
-            message = i18n.t('proxiwashScreen.modal.running',
+            message = i18n.t('screens.proxiwash.modal.running',
                 {
                     start: item.startTime,
                     end: item.endTime,
@@ -291,9 +291,9 @@ class ProxiwashScreen extends React.Component<Props, State> {
                 });
         } else if (item.state === ProxiwashConstants.machineStates.AVAILABLE) {
             if (isDryer)
-                message += '\n' + i18n.t('proxiwashScreen.dryersTariff');
+                message += '\n' + i18n.t('screens.proxiwash.dryersTariff');
             else
-                message += '\n' + i18n.t('proxiwashScreen.washersTariff');
+                message += '\n' + i18n.t('screens.proxiwash.washersTariff');
         }
         return (
             <View style={{
@@ -363,7 +363,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * @return {*}
      */
     getRenderSectionHeader = ({section}: Object) => {
-        const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
+        const isDryer = section.title === i18n.t('screens.proxiwash.dryers');
         const nbAvailable = this.getMachineAvailableNumber(isDryer);
         return (
             <ProxiwashSectionHeader
@@ -381,7 +381,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
      * @returns {React.Node}
      */
     getRenderItem = ({item, section}: Object) => {
-        const isDryer = section.title === i18n.t('proxiwashScreen.dryers');
+        const isDryer = section.title === i18n.t('screens.proxiwash.dryers');
         return (
             <ProxiwashListItem
                 item={item}
@@ -416,13 +416,13 @@ class ProxiwashScreen extends React.Component<Props, State> {
                 </View>
                 <MascotPopup
                     visible={this.state.mascotDialogVisible}
-                    title={i18n.t("proxiwashScreen.bannerTitle")}
-                    message={i18n.t("proxiwashScreen.enableNotificationsTip")}
+                    title={i18n.t("screens.proxiwash.mascotDialog.title")}
+                    message={i18n.t("screens.proxiwash.mascotDialog.message")}
                     icon={"bell"}
                     buttons={{
                         action: null,
                         cancel: {
-                            message: i18n.t("proxiwashScreen.bannerButton"),
+                            message: i18n.t("screens.proxiwash.mascotDialog.ok"),
                             icon: "check",
                             onPress: this.onHideMascotDialog,
                         }

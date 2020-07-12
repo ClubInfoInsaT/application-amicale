@@ -63,7 +63,7 @@ class VoteResults extends React.Component<Props> {
             }}>
                 <List.Item
                     title={item.name}
-                    description={item.votes + ' ' + i18n.t('voteScreen.results.votes')}
+                    description={item.votes + ' ' + i18n.t('screens.vote.results.votes')}
                     left={props => isWinner
                         ? <List.Icon {...props} icon={isDraw ? "trophy-outline" : "trophy"} color={colors.primary}/>
                         : null}
@@ -83,15 +83,15 @@ class VoteResults extends React.Component<Props> {
         return (
             <Card style={styles.card}>
                 <Card.Title
-                    title={i18n.t('voteScreen.results.title')}
-                    subtitle={i18n.t('voteScreen.results.subtitle') + ' ' + this.props.dateEnd}
+                    title={i18n.t('screens.vote.results.title')}
+                    subtitle={i18n.t('screens.vote.results.subtitle') + ' ' + this.props.dateEnd}
                     left={(props) => <Avatar.Icon
                         {...props}
                         icon={"podium-gold"}
                     />}
                 />
                 <Card.Content>
-                    <Subheading>{i18n.t('voteScreen.results.totalVotes') + ' ' + this.totalVotes}</Subheading>
+                    <Subheading>{i18n.t('screens.vote.results.totalVotes') + ' ' + this.totalVotes}</Subheading>
                     {/*$FlowFixMe*/}
                     <FlatList
                         data={this.props.teams}

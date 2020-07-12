@@ -48,18 +48,18 @@ class EquipmentListItem extends React.Component<Props> {
             const start = new Date(userDeviceRentDates[0]);
             const end = new Date(userDeviceRentDates[1]);
             if (start.getTime() !== end.getTime())
-                description = i18n.t('equipmentScreen.bookingPeriod', {
+                description = i18n.t('screens.equipment.bookingPeriod', {
                     begin: getRelativeDateString(start),
                     end: getRelativeDateString(end)
                 });
             else
-                description = i18n.t('equipmentScreen.bookingDay', {
+                description = i18n.t('screens.equipment.bookingDay', {
                     date: getRelativeDateString(start)
                 });
         } else if (isAvailable)
-            description = i18n.t('equipmentScreen.bail', {cost: item.caution});
+            description = i18n.t('screens.equipment.bail', {cost: item.caution});
         else
-            description = i18n.t('equipmentScreen.available', {date: getRelativeDateString(firstAvailability)});
+            description = i18n.t('screens.equipment.available', {date: getRelativeDateString(firstAvailability)});
 
         let icon;
         if (isRented)

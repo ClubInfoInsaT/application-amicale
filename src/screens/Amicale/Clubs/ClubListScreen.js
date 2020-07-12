@@ -73,7 +73,7 @@ class ClubListScreen extends React.Component<Props, State> {
     getSearchBar = () => {
         return (
             <Searchbar
-                placeholder={i18n.t('proximoScreen.search')}
+                placeholder={i18n.t('screens.proximo.search')}
                 onChangeText={this.onSearchStringChange}
             />
         );

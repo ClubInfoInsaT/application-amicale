@@ -42,9 +42,9 @@ function ServicesStackComponent() {
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, i18n.t('screens.services'))}
+            {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, i18n.t('screens.services.title'))}
             {createScreenCollapsibleStack("services-section", ServicesStack, ServicesSectionScreen, "SECTION")}
-            {createScreenCollapsibleStack("amicale-contact", ServicesStack, AmicaleContactScreen, i18n.t('screens.amicaleAbout'))}
+            {createScreenCollapsibleStack("amicale-contact", ServicesStack, AmicaleContactScreen, i18n.t('screens.amicaleAbout.title'))}
         </ServicesStack.Navigator>
     );
 }
@@ -58,11 +58,11 @@ function ProxiwashStackComponent() {
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {createScreenCollapsibleStack("index", ProxiwashStack, ProxiwashScreen, i18n.t('screens.proxiwash'))}
+            {createScreenCollapsibleStack("index", ProxiwashStack, ProxiwashScreen, i18n.t('screens.proxiwash.title'))}
             <ProxiwashStack.Screen
                 name="proxiwash-about"
                 component={ProxiwashAboutScreen}
-                options={{title: i18n.t('screens.proxiwash'),}}
+                options={{title: i18n.t('screens.proxiwash.title'),}}
             />
         </ProxiwashStack.Navigator>
     );
@@ -80,12 +80,12 @@ function PlanningStackComponent() {
             <PlanningStack.Screen
                 name="index"
                 component={PlanningScreen}
-                options={{title: i18n.t('screens.planning'),}}
+                options={{title: i18n.t('screens.planning.title'),}}
             />
             <PlanningStack.Screen
                 name="planning-information"
                 component={PlanningDisplayScreen}
-                options={{title: i18n.t('screens.planningDisplayScreen'),}}
+                options={{title: i18n.t('screens.planning.eventDetails'),}}
             />
         </PlanningStack.Navigator>
     );
@@ -109,7 +109,7 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                     name="index"
                     component={HomeScreen}
                     options={{
-                        title: i18n.t('screens.home'),
+                        title: i18n.t('screens.home.title'),
                         headerStyle: {
                             backgroundColor: colors.surface,
                         },
@@ -124,22 +124,22 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
             <HomeStack.Screen
                 name="scanner"
                 component={ScannerScreen}
-                options={{title: i18n.t('screens.scanner'),}}
+                options={{title: i18n.t('screens.scanner.title'),}}
             />
             <HomeStack.Screen
                 name="club-information"
                 component={ClubDisplayScreen}
-                options={{title: i18n.t('screens.clubDisplayScreen'),}}
+                options={{title: i18n.t('screens.clubs.details'),}}
             />
             <HomeStack.Screen
                 name="feed-information"
                 component={FeedItemScreen}
-                options={{title: i18n.t('screens.feedDisplayScreen'),}}
+                options={{title: i18n.t('screens.home.feed'),}}
             />
             <HomeStack.Screen
                 name="planning-information"
                 component={PlanningDisplayScreen}
-                options={{title: i18n.t('screens.planningDisplayScreen'),}}
+                options={{title: i18n.t('screens.planning.eventDetails'),}}
             />
         </HomeStack.Navigator>
     );
@@ -154,7 +154,7 @@ function PlanexStackComponent() {
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {getWebsiteStack("index", PlanexStack, PlanexScreen, "Planex")}
+            {getWebsiteStack("index", PlanexStack, PlanexScreen, i18n.t("screens.planex.title"))}
             {createScreenCollapsibleStack("group-select", PlanexStack, GroupSelectionScreen, "GROUP SELECT")}
         </PlanexStack.Navigator>
     );
@@ -191,28 +191,28 @@ export default class TabNavigator extends React.Component<Props> {
                     name="services"
                     option
                     component={ServicesStackComponent}
-                    options={{title: i18n.t('screens.services')}}
+                    options={{title: i18n.t('screens.services.title')}}
                 />
                 <Tab.Screen
                     name="proxiwash"
                     component={ProxiwashStackComponent}
-                    options={{title: i18n.t('screens.proxiwash')}}
+                    options={{title: i18n.t('screens.proxiwash.title')}}
                 />
                 <Tab.Screen
                     name="home"
                     component={this.createHomeStackComponent}
-                    options={{title: i18n.t('screens.home')}}
+                    options={{title: i18n.t('screens.home.title')}}
                 />
                 <Tab.Screen
                     name="planning"
                     component={PlanningStackComponent}
-                    options={{title: i18n.t('screens.planning')}}
+                    options={{title: i18n.t('screens.planning.title')}}
                 />
 
                 <Tab.Screen
                     name="planex"
                     component={PlanexStackComponent}
-                    options={{title: "Planex"}}
+                    options={{title: i18n.t("screens.planex.title")}}
                 />
             </Tab.Navigator>
         );

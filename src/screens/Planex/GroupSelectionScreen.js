@@ -78,7 +78,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
     getSearchBar = () => {
         return (
             <Searchbar
-                placeholder={i18n.t('proximoScreen.search')}
+                placeholder={i18n.t('screens.proximo.search')}
                 onChangeText={this.onSearchStringChange}
             />
         );
@@ -230,7 +230,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
             data.push(fetchedData[key]);
         }
         data.sort(sortName);
-        data.unshift({name: i18n.t("planexScreen.favorites"), id: 0, content: this.state.favoriteGroups});
+        data.unshift({name: i18n.t("screens.planex.favorites"), id: 0, content: this.state.favoriteGroups});
         return data;
     }
 

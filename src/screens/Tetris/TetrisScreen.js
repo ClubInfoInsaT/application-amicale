@@ -132,11 +132,11 @@ class TetrisScreen extends React.Component<Props, State> {
 
     showPausePopup() {
         Alert.alert(
-            i18n.t("game.pause"),
-            i18n.t("game.pauseMessage"),
+            i18n.t("screens.game.pause"),
+            i18n.t("screens.game.pauseMessage"),
             [
-                {text: i18n.t("game.restart.text"), onPress: () => this.showRestartConfirm()},
-                {text: i18n.t("game.resume"), onPress: () => this.togglePause()},
+                {text: i18n.t("screens.game.restart.text"), onPress: () => this.showRestartConfirm()},
+                {text: i18n.t("screens.game.resume"), onPress: () => this.togglePause()},
             ],
             {cancelable: false},
         );
@@ -144,26 +144,26 @@ class TetrisScreen extends React.Component<Props, State> {
 
     showRestartConfirm() {
         Alert.alert(
-            i18n.t("game.restart.confirm"),
-            i18n.t("game.restart.confirmMessage"),
+            i18n.t("screens.game.restart.confirm"),
+            i18n.t("screens.game.restart.confirmMessage"),
             [
-                {text: i18n.t("game.restart.confirmNo"), onPress: () => this.showPausePopup()},
-                {text: i18n.t("game.restart.confirmYes"), onPress: () => this.startGame()},
+                {text: i18n.t("screens.game.restart.confirmNo"), onPress: () => this.showPausePopup()},
+                {text: i18n.t("screens.game.restart.confirmYes"), onPress: () => this.startGame()},
             ],
             {cancelable: false},
         );
     }
 
     showGameOverConfirm() {
-        let message = i18n.t("game.gameOver.score") + this.state.gameScore + '\n';
-        message += i18n.t("game.gameOver.level") + this.state.gameLevel + '\n';
-        message += i18n.t("game.gameOver.time") + this.getFormattedTime(this.state.gameTime) + '\n';
+        let message = i18n.t("screens.game.gameOver.score") + this.state.gameScore + '\n';
+        message += i18n.t("screens.game.gameOver.level") + this.state.gameLevel + '\n';
+        message += i18n.t("screens.game.gameOver.time") + this.getFormattedTime(this.state.gameTime) + '\n';
         Alert.alert(
-            i18n.t("game.gameOver.text"),
+            i18n.t("screens.game.gameOver.text"),
             message,
             [
-                {text: i18n.t("game.gameOver.exit"), onPress: () => this.props.navigation.goBack()},
-                {text: i18n.t("game.restart.text"), onPress: () => this.startGame()},
+                {text: i18n.t("screens.game.gameOver.exit"), onPress: () => this.props.navigation.goBack()},
+                {text: i18n.t("screens.game.restart.text"), onPress: () => this.startGame()},
             ],
             {cancelable: false},
         );

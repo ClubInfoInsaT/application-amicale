@@ -76,7 +76,7 @@ class EquipmentConfirmScreen extends React.Component<Props> {
                                         lineHeight: 35,
                                         marginLeft: 10,
                                     }}>
-                                        ({i18n.t('equipmentScreen.bail', {cost: item.caution})})
+                                        ({i18n.t('screens.equipment.bail', {cost: item.caution})})
                                     </Caption>
                                 </View>
                             </View>
@@ -87,19 +87,19 @@ class EquipmentConfirmScreen extends React.Component<Props> {
                             >
                                 {
                                     start == null
-                                        ? i18n.t('equipmentScreen.booking')
+                                        ? i18n.t('screens.equipment.booking')
                                         : end != null && start.getTime() !== end.getTime()
-                                        ? i18n.t('equipmentScreen.bookingPeriod', {
+                                        ? i18n.t('screens.equipment.bookingPeriod', {
                                             begin: getRelativeDateString(start),
                                             end: getRelativeDateString(end)
                                         })
-                                        : i18n.t('equipmentScreen.bookingDay', {
+                                        : i18n.t('screens.equipment.bookingDay', {
                                             date: getRelativeDateString(start)
                                         })
                                 }
                             </Button>
                             <Paragraph style={{textAlign: "center"}}>
-                                {i18n.t("equipmentScreen.bookingConfirmedMessage")}
+                                {i18n.t("screens.equipment.bookingConfirmedMessage")}
                             </Paragraph>
                         </Card.Content>
                     </Card>

@@ -49,8 +49,8 @@ function createNotifications(machineID: string, date: Date) {
         let reminderDate = new Date(date);
         reminderDate.setMinutes(reminderDate.getMinutes() - reminder);
         PushNotification.localNotificationSchedule({
-            title: i18n.t("proxiwashScreen.notifications.machineRunningTitle", {time: reminder}),
-            message: i18n.t("proxiwashScreen.notifications.machineRunningBody", {number: machineID}),
+            title: i18n.t("screens.proxiwash.notifications.machineRunningTitle", {time: reminder}),
+            message: i18n.t("screens.proxiwash.notifications.machineRunningBody", {number: machineID}),
             id: id.toString(),
             date: reminderDate,
         });
@@ -59,8 +59,8 @@ function createNotifications(machineID: string, date: Date) {
         console.log("Setting up notifications for ", date);
 
     PushNotification.localNotificationSchedule({
-        title: i18n.t("proxiwashScreen.notifications.machineFinishedTitle"),
-        message: i18n.t("proxiwashScreen.notifications.machineFinishedBody", {number: machineID}),
+        title: i18n.t("screens.proxiwash.notifications.machineFinishedTitle"),
+        message: i18n.t("screens.proxiwash.notifications.machineFinishedBody", {number: machineID}),
         id: machineID,
         date: date,
     });

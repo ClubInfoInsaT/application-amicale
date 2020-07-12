@@ -86,7 +86,7 @@ class EquipmentListScreen extends React.Component<Props> {
     getListHeader() {
         return <Card style={{margin: 5}}>
             <Card.Title
-                title={i18n.t('equipmentScreen.title')}
+                title={i18n.t('screens.equipment.title')}
                 left={(props) => <Avatar.Image
                     {...props}
                     source={ICON_AMICALE}
@@ -95,7 +95,7 @@ class EquipmentListScreen extends React.Component<Props> {
             />
             <Card.Content>
                 <Paragraph>
-                    {i18n.t('equipmentScreen.message')}
+                    {i18n.t('screens.equipment.message')}
                 </Paragraph>
             </Card.Content>
         </Card>;

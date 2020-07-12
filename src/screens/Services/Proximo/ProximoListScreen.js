@@ -95,7 +95,7 @@ class ProximoListScreen extends React.Component<Props, State> {
     getSearchBar = () => {
         return (
             <Searchbar
-                placeholder={i18n.t('proximoScreen.search')}
+                placeholder={i18n.t('screens.proximo.search')}
                 onChangeText={this.onSearchStringChange}
             />
         );
@@ -200,7 +200,7 @@ class ProximoListScreen extends React.Component<Props, State> {
                     <Subheading style={{
                         color: this.getStockColor(parseInt(item.quantity)),
                     }}>
-                        {item.quantity + ' ' + i18n.t('proximoScreen.inStock')}
+                        {item.quantity + ' ' + i18n.t('screens.proximo.inStock')}
                     </Subheading>
                     <Subheading style={{marginLeft: 'auto'}}>{item.price}€</Subheading>
                 </View>
@@ -227,15 +227,15 @@ class ProximoListScreen extends React.Component<Props, State> {
                 flex: 1,
                 padding: 20
             }}>
-                <Title style={{marginBottom: 10}}>{i18n.t('proximoScreen.sortOrder')}</Title>
+                <Title style={{marginBottom: 10}}>{i18n.t('screens.proximo.sortOrder')}</Title>
                 <RadioButton.Group
                     onValueChange={value => this.setSortMode(value)}
                     value={this.state.currentSortMode}
                 >
-                    <RadioButton.Item label={i18n.t('proximoScreen.sortPrice')} value={1}/>
-                    <RadioButton.Item label={i18n.t('proximoScreen.sortPriceReverse')} value={2}/>
-                    <RadioButton.Item label={i18n.t('proximoScreen.sortName')} value={3}/>
-                    <RadioButton.Item label={i18n.t('proximoScreen.sortNameReverse')} value={4}/>
+                    <RadioButton.Item label={i18n.t('screens.proximo.sortPrice')} value={1}/>
+                    <RadioButton.Item label={i18n.t('screens.proximo.sortPriceReverse')} value={2}/>
+                    <RadioButton.Item label={i18n.t('screens.proximo.sortName')} value={3}/>
+                    <RadioButton.Item label={i18n.t('screens.proximo.sortNameReverse')} value={4}/>
                 </RadioButton.Group>
             </View>
         );

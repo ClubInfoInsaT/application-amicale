@@ -107,7 +107,7 @@ class FeedItem extends React.Component<Props> {
                         onPress={this.onPress}
                         icon={'plus'}
                         style={{marginLeft: 'auto'}}>
-                        {i18n.t('homeScreen.dashboard.seeMore')}
+                        {i18n.t('screens.home.dashboard.seeMore')}
                     </Button>
                 </Card.Actions>
             </Card>
