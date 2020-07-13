@@ -186,11 +186,11 @@
       "password": "Mot de passe",
       "passwordError": "Merci d'entrer un mot de passe",
       "resetPassword": "Mdp oublié",
-      "whyAccountTitle": "Un compte ?",
-      "whyAccountSub": "Ce qu'un compte t'apporte",
-      "whyAccountParagraph": "Un compte Amicale te donne la possibilité de participer à diverses activités sur le campus. tu peux rejoindre des clubs ou même créer le tiens !",
-      "whyAccountParagraph2": "Te connecter à ton compte Amicale sur l'appli te permettra de voir tous les clubs en activité, de réserver du matériel, de voter pour les prochaines élections, et plus à venir !",
-      "noAccount": "Pas de compte ? Passe à l'Amicale pendant une perm pour en créer un."
+      "mascotDialog": {
+        "title": "Un compte ?",
+        "message": "Un compte Amicale te donne la possibilité de participer à diverses activités sur le campus. tu peux rejoindre des clubs ou même créer le tiens !\n\nTe connecter à ton compte Amicale sur l'appli te permettra de voir tous les clubs en activité, de réserver du matériel, de voter pour les prochaines élections, et plus à venir !\n\nPas de compte ? Passe à l'Amicale pendant une perm pour en créer un.",
+        "button": "Dac"
+      }
     },
     "profile": {
       "title": "Profil",

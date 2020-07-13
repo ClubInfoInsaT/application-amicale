@@ -90,14 +90,8 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                     title: i18n.t("screens.game.title"),
                 }}
             />
-            <MainStack.Screen
-                name="login"
-                component={LoginScreen}
-                options={{
-                    title: i18n.t('screens.login.title'),
-                }}
-            />
-
+            {createScreenCollapsibleStack("login", MainStack, LoginScreen, i18n.t('screens.login.title'),
+                true, {headerTintColor: "#fff"}, 'transparent')}
             {getWebsiteStack("website", MainStack, WebsiteScreen, "")}
 
 

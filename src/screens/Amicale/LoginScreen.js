@@ -1,18 +1,20 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, KeyboardAvoidingView, StyleSheet, View} from "react-native";
-import {Avatar, Button, Card, HelperText, Paragraph, TextInput, withTheme} from 'react-native-paper';
+import {Animated, Dimensions, Image, KeyboardAvoidingView, StyleSheet, View} from "react-native";
+import {Button, Card, HelperText, TextInput, withTheme} from 'react-native-paper';
 import ConnectionManager from "../../managers/ConnectionManager";
 import i18n from 'i18n-js';
 import ErrorDialog from "../../components/Dialogs/ErrorDialog";
 import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
-import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import {StackNavigationProp} from "@react-navigation/stack";
 import AvailableWebsites from "../../constants/AvailableWebsites";
+import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
+import MascotPopup from "../../components/Mascot/MascotPopup";
+import LinearGradient from "react-native-linear-gradient";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -29,6 +31,7 @@ type State = {
     loading: boolean,
     dialogVisible: boolean,
     dialogError: number,
+    mascotDialogVisible: boolean,
 }
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
@@ -47,11 +50,13 @@ class LoginScreen extends React.Component<Props, State> {
         loading: false,
         dialogVisible: false,
         dialogError: 0,
+        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.loginShowBanner.current === "1"
     };
 
     onEmailChange: (value: string) => null;
     onPasswordChange: (value: string) => null;
     passwordInputRef: { current: null | TextInput };
+    windowHeight: number;
 
     nextScreen: string | null;
 
@@ -61,6 +66,7 @@ class LoginScreen extends React.Component<Props, State> {
         this.onEmailChange = this.onInputChange.bind(this, true);
         this.onPasswordChange = this.onInputChange.bind(this, false);
         this.props.navigation.addListener('focus', this.onScreenFocus);
+        this.windowHeight = Dimensions.get('window').height;
     }
 
     onScreenFocus = () => {
@@ -78,6 +84,18 @@ class LoginScreen extends React.Component<Props, State> {
                 this.nextScreen = null;
         }
     }
+
+    hideMascotDialog = () => {
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.loginShowBanner.key,
+            '0'
+        );
+        this.setState({mascotDialogVisible: false})
+    };
+
+    showMascotDialog = () => {
+        this.setState({mascotDialogVisible: true})
+    };
 
     /**
      * Shows an error dialog with the corresponding login error
@@ -111,7 +129,11 @@ class LoginScreen extends React.Component<Props, State> {
     /**
      * Navigates to the Amicale website screen with the reset password link as navigation parameters
      */
-    onResetPasswordClick = () => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, path: RESET_PASSWORD_PATH, title: i18n.t('screens.websites.amicale')});
+    onResetPasswordClick = () => this.props.navigation.navigate("website", {
+        host: AvailableWebsites.websites.AMICALE,
+        path: RESET_PASSWORD_PATH,
+        title: i18n.t('screens.websites.amicale')
+    });
 
     /**
      * The user has unfocused the input, his email is ready to be validated
@@ -283,18 +305,31 @@ class LoginScreen extends React.Component<Props, State> {
      */
     getMainCard() {
         return (
-            <Card style={styles.card}>
+            <View style={styles.card}>
                 <Card.Title
                     title={i18n.t("screens.login.title")}
+                    titleStyle={{color: "#fff"}}
                     subtitle={i18n.t("screens.login.subtitle")}
-                    left={(props) => <Avatar.Image
+                    subtitleStyle={{color: "#fff"}}
+                    left={(props) => <Image
                         {...props}
                         source={ICON_AMICALE}
-                        style={{backgroundColor: 'transparent'}}/>}
+                        style={{
+                            width: props.size,
+                            height: props.size,
+                        }}/>}
                 />
                 <Card.Content>
                     {this.getFormInput()}
-                    <Card.Actions>
+                    <Card.Actions style={{flexWrap: "wrap"}}>
+                        <Button
+                        icon="lock-question"
+                        mode="contained"
+                        onPress={this.onResetPasswordClick}
+                        color={this.props.theme.colors.warning}
+                        style={{marginRight: 'auto', marginBottom: 20}}>
+                        {i18n.t("screens.login.resetPassword")}
+                    </Button>
                         <Button
                             icon="send"
                             mode="contained"
@@ -304,76 +339,75 @@ class LoginScreen extends React.Component<Props, State> {
                             style={{marginLeft: 'auto'}}>
                             {i18n.t("screens.login.title")}
                         </Button>
+
                     </Card.Actions>
                     <Card.Actions>
                         <Button
                             icon="help-circle"
                             mode="contained"
-                            onPress={this.onResetPasswordClick}
-                            style={{marginLeft: 'auto'}}>
-                            {i18n.t("screens.login.resetPassword")}
+                            onPress={this.showMascotDialog}
+                            style={{
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                            }}>
+                            {i18n.t("screens.login.mascotDialog.title")}
                         </Button>
                     </Card.Actions>
                 </Card.Content>
-            </Card>
-        );
-    }
-
-    /**
-     * Gets the card containing the information about the Amicale account
-     *
-     * @returns {*}
-     */
-    getSecondaryCard() {
-        return (
-            <Card style={styles.card}>
-                <Card.Title
-                    title={i18n.t("screens.login.whyAccountTitle")}
-                    subtitle={i18n.t("screens.login.whyAccountSub")}
-                    left={(props) => <Avatar.Icon
-                        {...props}
-                        icon={"help"}
-                        color={this.props.theme.colors.primary}
-                        style={{backgroundColor: 'transparent'}}/>}
-                />
-                <Card.Content>
-                    <Paragraph>{i18n.t("screens.login.whyAccountParagraph")}</Paragraph>
-                    <Paragraph>{i18n.t("screens.login.whyAccountParagraph2")}</Paragraph>
-                    <Paragraph>{i18n.t("screens.login.noAccount")}</Paragraph>
-                </Card.Content>
-            </Card>
+            </View>
         );
     }
 
     render() {
         const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
-            <KeyboardAvoidingView
-                behavior={"height"}
-                contentContainerStyle={styles.container}
-                style={styles.container}
-                enabled
-                keyboardVerticalOffset={100}
-            >
-                <Animated.ScrollView
-                    onScroll={onScroll}
-                    contentContainerStyle={{
-                        paddingTop: containerPaddingTop,
-                        paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20
-                    }}
-                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+            <LinearGradient
+                style={{
+                    height: "100%"
+                }}
+                colors={['#9e0d18', '#530209']}
+                start={{x: 0, y: 0.1}}
+                end={{x: 0.1, y: 1}}>
+                <KeyboardAvoidingView
+                    behavior={"height"}
+                    contentContainerStyle={styles.container}
+                    style={styles.container}
+                    enabled
+                    keyboardVerticalOffset={100}
                 >
-                    <View>
-                        {this.getMainCard()}
-                        {this.getSecondaryCard()}
-                    </View>
-                    <ErrorDialog
-                        visible={this.state.dialogVisible}
-                        onDismiss={this.hideErrorDialog}
-                        errorCode={this.state.dialogError}
-                    />
-                </Animated.ScrollView>
-            </KeyboardAvoidingView>
+                    <Animated.ScrollView
+                        onScroll={onScroll}
+                        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+                        style={{flex: 1}}
+                    >
+                        <View style={{height: this.windowHeight - containerPaddingTop}}>
+                            {this.getMainCard()}
+                        </View>
+
+
+                        <MascotPopup
+                            visible={this.state.mascotDialogVisible}
+                            title={i18n.t("screens.login.mascotDialog.title")}
+                            message={i18n.t("screens.login.mascotDialog.message")}
+                            icon={"help"}
+                            buttons={{
+                                action: null,
+                                cancel: {
+                                    message: i18n.t("screens.login.mascotDialog.button"),
+                                    icon: "check",
+                                    onPress: this.hideMascotDialog,
+                                }
+                            }}
+                            emotion={MASCOT_STYLE.NORMAL}
+                        />
+                        <ErrorDialog
+                            visible={this.state.dialogVisible}
+                            onDismiss={this.hideErrorDialog}
+                            errorCode={this.state.dialogError}
+                        />
+                    </Animated.ScrollView>
+                </KeyboardAvoidingView>
+            </LinearGradient>
         );
     }
 }
@@ -381,11 +415,10 @@ class LoginScreen extends React.Component<Props, State> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
     },
     card: {
-        margin: 10,
+        marginTop: 'auto',
+        marginBottom: 'auto',
     },
     header: {
         fontSize: 36,

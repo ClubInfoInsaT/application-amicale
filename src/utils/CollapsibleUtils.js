@@ -18,6 +18,7 @@ import StackNavigator, {StackNavigationOptions} from "@react-navigation/stack";
  * Set to false if the screen uses a webview as this component does not support native driver.
  * In all other cases, set it to true for increase performance.
  * @param options Screen options to use, or null if no options are necessary.
+ * @param headerColor The color of the header. Uses default color if not specified
  * @returns {JSX.Element}
  */
 export function createScreenCollapsibleStack(
@@ -26,7 +27,8 @@ export function createScreenCollapsibleStack(
     component: React.Node,
     title: string,
     useNativeDriver?: boolean,
-    options?: StackNavigationOptions) {
+    options?: StackNavigationOptions,
+    headerColor?: string) {
     const {colors} = useTheme();
     const screenOptions = options != null ? options : {};
     return createCollapsibleStack(
@@ -36,13 +38,13 @@ export function createScreenCollapsibleStack(
             options={{
                 title: title,
                 headerStyle: {
-                    backgroundColor: colors.surface,
+                    backgroundColor: headerColor!=null ? headerColor :colors.surface,
                 },
                 ...screenOptions,
             }}
         />,
         {
-            collapsedColor: colors.surface,
+            collapsedColor: headerColor!=null ? headerColor :colors.surface,
             useNativeDriver: useNativeDriver != null ? useNativeDriver : true, // native driver does not work with webview
         }
     )
