@@ -370,7 +370,7 @@ class PlanexScreen extends React.Component<Props, State> {
                     buttons={{
                         action: {
                             message: i18n.t("screens.planex.mascotDialog.ok"),
-                            icon: "settings",
+                            icon: "cog",
                             onPress: this.onGoToSettings,
                         },
                         cancel: {

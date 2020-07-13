@@ -191,7 +191,7 @@ class HomeScreen extends React.Component<Props, State> {
         const onPressSettings = () => this.props.navigation.navigate("settings");
         return <MaterialHeaderButtons>
             <Item title="log" iconName={logIcon} color={logColor} onPress={onPressLog}/>
-            <Item title={i18n.t("screens.settings.title")} iconName={"settings"} onPress={onPressSettings}/>
+            <Item title={i18n.t("screens.settings.title")} iconName={"cog"} onPress={onPressSettings}/>
         </MaterialHeaderButtons>;
     };
 
