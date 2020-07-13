@@ -372,32 +372,24 @@
   },
   "intro": {
     "slideMain": {
-      "title": "Bienvenue sur CAMPUS",
-      "text": "La nouvelle appli à consulter pendant la pause café pour être au courant de la vie du campus !"
-    },
-    "slideEvents": {
-      "title": "Restez informés",
-      "text": "CAMPUS vous permet d'être au courant de tous les événements qui ont lieu sur le campus, de la vente de crêpes jusqu'aux concerts enfoiros !"
-    },
-    "slideProxiwash": {
-      "title": "N'oubliez plus votre linge !",
-      "text": "CAMPUS vous informe de la disponibilité des machines et vous permet d'être notifié lorsque la vôtre se termine bientôt !"
+      "title": "Bienvenue sur CAMPUS !",
+      "text": "L'appli du campus de l'INSA Toulouse ! Laisse toi guider pour comprendre tout ce que tu peux faire."
     },
     "slidePlanex": {
-      "title": "Planex",
-      "text": "Vérifiez votre prochain cours sur CAMPUS avec un emploi du temps adapté mobile"
+      "title": "Planex tout beau",
+      "text": "Regarde ton emploi du temps et celui de tes amis avec un Planex adapté mobile !"
     },
-    "slideRU": {
-      "title": "Menu du RU",
-      "text": "Pour ceux qui ont faim, vérifiez le menu du RU de la semaine !"
+    "slideEvents": {
+      "title": "Plein d'infos",
+      "text": "Sois au courant de tout ce qui se passe sur le campus, de la vente de crêpes jusqu'aux concerts Enfoiros !"
     },
     "slideServices": {
-      "title": "Encore plus de services !",
-      "text": "CAMPUS vous permet de faire bien plus, explorez l'appli pour savoir quoi"
+      "title": "Et plus encore !",
+      "text": "Tu peux faire bien plus avec CAMPUS, mais je n'ai pas le temps de tout dire ici. Balade toi sur l'appli pour tout découvrir !"
     },
     "slideDone": {
-      "title": "Fait par un étudiant",
-      "text": "Cette appli à été réalisée par un seul étudiant (avec un peu d'aide par-ci par-là), donc tous les retours sont les bienvenus !"
+      "title": "Réalisé par un étudiant",
+      "text": "Cette appli à été réalisée par un seul étudiant (avec un peu d'aide par-ci par-là), donc tes retours sont les bienvenus !"
     },
     "updateSlide0": {
       "title": "Nouveau dans cette mise à jour !",

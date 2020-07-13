@@ -1,14 +1,17 @@
 // @flow
 
 import * as React from 'react';
-import {Image, Platform, StatusBar, StyleSheet, View} from "react-native";
+import {Platform, StatusBar, StyleSheet, View} from "react-native";
+import type {MaterialCommunityIconsGlyphs} from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import {Text} from "react-native-paper";
 import i18n from 'i18n-js';
 import AppIntroSlider from "react-native-app-intro-slider";
 import Update from "../../constants/Update";
 import ThemeManager from "../../managers/ThemeManager";
 import LinearGradient from 'react-native-linear-gradient';
+import Mascot, {MASCOT_STYLE} from "../Mascot/Mascot";
+import * as Animatable from "react-native-animatable";
+import {Card} from "react-native-paper";
 
 type Props = {
     onDone: Function,
@@ -16,17 +19,34 @@ type Props = {
     isAprilFools: boolean,
 };
 
+type State = {
+    currentSlide: number,
+}
+
+type Slide = {
+    key: string,
+    title: string,
+    text: string,
+    view: () => React.Node,
+    mascotStyle: number,
+    colors: [string, string]
+};
+
 /**
  * Class used to create intro slides
  */
-export default class CustomIntroSlider extends React.Component<Props> {
+export default class CustomIntroSlider extends React.Component<Props, State> {
 
-    sliderRef: {current: null | AppIntroSlider};
+    state = {
+        currentSlide: 0,
+    }
 
-    introSlides: Array<Object>;
-    updateSlides: Array<Object>;
-    aprilFoolsSlides: Array<Object>;
-    currentSlides: Array<Object>;
+    sliderRef: { current: null | AppIntroSlider };
+
+    introSlides: Array<Slide>;
+    updateSlides: Array<Slide>;
+    aprilFoolsSlides: Array<Slide>;
+    currentSlides: Array<Slide>;
 
     /**
      * Generates intro slides
@@ -36,53 +56,44 @@ export default class CustomIntroSlider extends React.Component<Props> {
         this.sliderRef = React.createRef();
         this.introSlides = [
             {
-                key: 'main',
+                key: '0', // Mascot
                 title: i18n.t('intro.slideMain.title'),
                 text: i18n.t('intro.slideMain.text'),
-                image: require('../../../assets/splash.png'),
-                colors: ['#be1522', '#740d15'],
+                view: this.getWelcomeView,
+                mascotStyle: MASCOT_STYLE.NORMAL,
+                colors: ['#be1522', '#57080e'],
             },
             {
-                key: 'Planex',
+                key: '1',
                 title: i18n.t('intro.slidePlanex.title'),
                 text: i18n.t('intro.slidePlanex.text'),
-                icon: 'timetable',
-                colors: ['#e77020', '#803e12'],
+                view: () => this.getIconView("calendar-clock"),
+                mascotStyle: MASCOT_STYLE.INTELLO,
+                colors: ['#be1522', '#57080e'],
             },
             {
-                key: 'RU',
-                title: i18n.t('intro.slideRU.title'),
-                text: i18n.t('intro.slideRU.text'),
-                icon: 'silverware-fork-knife',
-                colors: ['#dcac18', '#8b6a15'],
-            },
-            {
-                key: 'events',
+                key: '2',
                 title: i18n.t('intro.slideEvents.title'),
                 text: i18n.t('intro.slideEvents.text'),
-                icon: 'calendar-range',
-                colors: ['#41a006', '#095c03'],
+                view: () => this.getIconView("calendar-star",),
+                mascotStyle: MASCOT_STYLE.HAPPY,
+                colors: ['#be1522', '#57080e'],
             },
             {
-                key: 'proxiwash',
-                title: i18n.t('intro.slideProxiwash.title'),
-                text: i18n.t('intro.slideProxiwash.text'),
-                icon: 'washing-machine',
-                colors: ['#1fa5ee', '#06537d'],
-            },
-            {
-                key: 'services',
+                key: '3',
                 title: i18n.t('intro.slideServices.title'),
                 text: i18n.t('intro.slideServices.text'),
-                icon: 'view-dashboard-variant',
-                colors: ['#6737c1', '#281a5a'],
+                view: () => this.getIconView("view-dashboard-variant",),
+                mascotStyle: MASCOT_STYLE.CUTE,
+                colors: ['#be1522', '#57080e'],
             },
             {
-                key: 'done',
+                key: '4',
                 title: i18n.t('intro.slideDone.title'),
                 text: i18n.t('intro.slideDone.text'),
-                icon: 'account-heart',
-                colors: ['#b837c1', '#501a5a'],
+                view: () => this.getIconView("account-heart",),
+                mascotStyle: MASCOT_STYLE.COOL,
+                colors: ['#9c165b', '#3e042b'],
             },
         ];
         this.updateSlides = [];
@@ -103,12 +114,12 @@ export default class CustomIntroSlider extends React.Component<Props> {
                 key: '1',
                 title: i18n.t('intro.aprilFoolsSlide.title'),
                 text: i18n.t('intro.aprilFoolsSlide.text'),
-                icon: 'fish',
+                view: () => <View/>,
+                mascotStyle: MASCOT_STYLE.NORMAL,
                 colors: ['#e01928', '#be1522'],
             },
         ];
     }
-
 
     /**
      * Render item to be used for the intro introSlides
@@ -116,35 +127,112 @@ export default class CustomIntroSlider extends React.Component<Props> {
      * @param item The item to be displayed
      * @param dimensions Dimensions of the item
      */
-    static getIntroRenderItem({item, dimensions}: Object) {
+    getIntroRenderItem = ({item, dimensions}: { item: Slide, dimensions: { width: number, height: number } }) => {
+        const index = parseInt(item.key);
         return (
             <LinearGradient
                 style={[
                     styles.mainContent,
-                    dimensions,
+                    dimensions
                 ]}
                 colors={item.colors}
                 start={{x: 0, y: 0.1}}
                 end={{x: 0.1, y: 1}}
             >
-                {item.image !== undefined ?
-                    <View style={styles.image}>
-                        <Image
-                            source={item.image}
-                            resizeMode={"contain"}
-                            style={{width: '100%', height: '100%'}}
-                            />
-                    </View>
-                    : <MaterialCommunityIcons
-                        name={item.icon}
-                        color={'#fff'}
-                        size={200}/>}
-                <View style={{marginTop: 20}}>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.text}>{item.text}</Text>
-                </View>
+                {this.state.currentSlide === index
+                    ? <View style={{height: "100%", flex: 1}}>
+                        <View style={{flex: 1}}>
+                            {item.view()}
+                        </View>
+                        <Animatable.View
+                            animation={"fadeIn"}>
+                            {index !== 0
+                                ? <Animatable.View
+                                    animation={"pulse"}
+                                    iterationCount={"infinite"}
+                                    duration={2000}
+                                    style={{
+                                        marginLeft: 30,
+                                        marginBottom: 0,
+                                        width: 80
+                                    }}>
+                                    <Mascot emotion={item.mascotStyle} size={80}/>
+                                </Animatable.View> : null}
+
+                            <View style={{
+                                marginLeft: 50,
+                                width: 0,
+                                height: 0,
+                                borderLeftWidth: 20,
+                                borderRightWidth: 0,
+                                borderBottomWidth: 20,
+                                borderStyle: 'solid',
+                                backgroundColor: 'transparent',
+                                borderLeftColor: 'transparent',
+                                borderRightColor: 'transparent',
+                                borderBottomColor: "rgba(0,0,0,0.60)",
+                            }}/>
+                            <Card style={{
+                                backgroundColor: "rgba(0,0,0,0.38)",
+                                marginHorizontal: 20,
+                                borderColor: "rgba(0,0,0,0.60)",
+                                borderWidth: 4,
+                                borderRadius: 10,
+                            }}>
+                                <Card.Content>
+                                    <Animatable.Text
+                                        animation={"fadeIn"}
+                                        delay={100}
+                                        style={styles.title}>
+                                        {item.title}
+                                    </Animatable.Text>
+                                    <Animatable.Text
+                                        animation={"fadeIn"}
+                                        delay={200}
+                                        style={styles.text}>
+                                        {item.text}
+                                    </Animatable.Text>
+                                </Card.Content>
+                            </Card>
+                        </Animatable.View>
+                    </View> : null}
             </LinearGradient>
         );
+    }
+
+    getWelcomeView = () => {
+        return (
+            <View style={{flex: 1}}>
+                <View
+                    style={styles.center}>
+                    <Mascot
+                        size={250}
+                        emotion={MASCOT_STYLE.NORMAL}
+                        animated={true}
+                        entryAnimation={{
+                            animation: "bounceIn",
+                            duration: 2000,
+                        }}
+                    />
+                </View>
+            </View>
+        )
+    }
+
+    getIconView(icon: MaterialCommunityIconsGlyphs) {
+        return (
+            <View style={{flex: 1}}>
+                <Animatable.View
+                    style={styles.center}
+                    animation={"fadeIn"}
+                >
+                    <MaterialCommunityIcons
+                        name={icon}
+                        color={'#fff'}
+                        size={200}/>
+                </Animatable.View>
+            </View>
+        )
     }
 
     setStatusBarColor(color: string) {
@@ -154,17 +242,54 @@ export default class CustomIntroSlider extends React.Component<Props> {
 
     onSlideChange = (index: number, lastIndex: number) => {
         this.setStatusBarColor(this.currentSlides[index].colors[0]);
+        this.setState({currentSlide: index});
     };
 
     onSkip = () => {
-        this.setStatusBarColor(this.currentSlides[this.currentSlides.length-1].colors[0]);
+        this.setStatusBarColor(this.currentSlides[this.currentSlides.length - 1].colors[0]);
         if (this.sliderRef.current != null)
-            this.sliderRef.current.goToSlide(this.currentSlides.length-1);
+            this.sliderRef.current.goToSlide(this.currentSlides.length - 1);
     }
 
     onDone = () => {
         this.setStatusBarColor(ThemeManager.getCurrentTheme().colors.surface);
         this.props.onDone();
+    }
+
+    renderNextButton = () => {
+        return (
+            <Animatable.View
+                animation={"fadeIn"}
+
+                style={{
+                    borderRadius: 25,
+                    padding: 5,
+                    backgroundColor: "rgba(0,0,0,0.2)"
+                }}>
+                <MaterialCommunityIcons
+                    name={"arrow-right"}
+                    color={'#fff'}
+                    size={40}/>
+            </Animatable.View>
+        )
+    }
+
+    renderDoneButton = () => {
+        return (
+            <Animatable.View
+                animation={"bounceIn"}
+
+                style={{
+                    borderRadius: 25,
+                    padding: 5,
+                    backgroundColor: "rgb(190,21,34)"
+                }}>
+                <MaterialCommunityIcons
+                    name={"check"}
+                    color={'#fff'}
+                    size={40}/>
+            </Animatable.View>
+        )
     }
 
     render() {
@@ -177,16 +302,16 @@ export default class CustomIntroSlider extends React.Component<Props> {
         return (
             <AppIntroSlider
                 ref={this.sliderRef}
-                renderItem={CustomIntroSlider.getIntroRenderItem}
                 data={this.currentSlides}
+                extraData={this.state.currentSlide}
+
+                renderItem={this.getIntroRenderItem}
+                renderNextButton={this.renderNextButton}
+                renderDoneButton={this.renderDoneButton}
+
                 onDone={this.onDone}
-                bottomButton
-                showSkipButton
                 onSlideChange={this.onSlideChange}
                 onSkip={this.onSkip}
-                skipLabel={i18n.t('intro.buttons.skip')}
-                doneLabel={i18n.t('intro.buttons.done')}
-                nextLabel={i18n.t('intro.buttons.next')}
             />
         );
     }
@@ -196,15 +321,7 @@ export default class CustomIntroSlider extends React.Component<Props> {
 
 const styles = StyleSheet.create({
     mainContent: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingBottom: 100
-    },
-    image: {
-        width: 300,
-        height: 300,
-        marginBottom: -50,
+        paddingBottom: 100,
     },
     text: {
         color: 'rgba(255, 255, 255, 0.8)',
@@ -219,4 +336,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 16,
     },
+    center: {
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+    }
 });
