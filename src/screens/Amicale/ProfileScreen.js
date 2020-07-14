@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, FlatList, StyleSheet, View} from "react-native";
+import {Animated, FlatList, Image, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, Paragraph, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import i18n from 'i18n-js';
@@ -179,10 +179,12 @@ class ProfileScreen extends React.Component<Props, State> {
             <Card style={styles.card}>
                 <Card.Title
                     title={i18n.t("screens.profile.welcomeTitle", {name: this.data.first_name})}
-                    left={() => <Avatar.Image
-                        size={64}
+                    left={() => <Image
+                        style={{
+                            width: 50,
+                            height: 50,
+                        }}
                         source={ICON_AMICALE}
-                        style={{backgroundColor: 'transparent',}}
                     />}
                     titleStyle={{marginLeft: 10}}
                 />

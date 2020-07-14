@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Avatar, Card, Paragraph} from "react-native-paper";
-import {StyleSheet} from "react-native";
+import {Card, Paragraph} from "react-native-paper";
+import {Image, StyleSheet} from "react-native";
 import i18n from 'i18n-js';
 
 const ICON_AMICALE = require('../../../../assets/amicale.png');
@@ -19,10 +19,13 @@ export default class VoteTitle extends React.Component<{}> {
                 <Card.Title
                     title={i18n.t('screens.vote.main.title')}
                     subtitle={i18n.t('screens.vote.main.subtitle')}
-                    left={(props) => <Avatar.Image
+                    left={(props) => <Image
                         {...props}
+                        style={{
+                            width: props.size,
+                            height: props.size,
+                        }}
                         source={ICON_AMICALE}
-                        style={styles.icon}
                     />}
                 />
                 <Card.Content>
@@ -41,8 +44,5 @@ export default class VoteTitle extends React.Component<{}> {
 const styles = StyleSheet.create({
     card: {
         margin: 10,
-    },
-    icon: {
-        backgroundColor: 'transparent'
     },
 });

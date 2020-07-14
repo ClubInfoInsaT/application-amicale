@@ -6,7 +6,7 @@ import CardList from "../../components/Lists/CardList/CardList";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import {withCollapsible} from "../../utils/withCollapsible";
 import {Collapsible} from "react-navigation-collapsible";
-import {Animated, View} from "react-native";
+import {Animated, Image, View} from "react-native";
 import {Avatar, Card, Divider, List, TouchableRipple, withTheme} from "react-native-paper";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import i18n from 'i18n-js';
@@ -227,12 +227,13 @@ class ServicesScreen extends React.Component<Props, State> {
      */
     getListTitleImage(props, source: string | number) {
         if (typeof source === "number")
-            return <Avatar.Image
-                {...props}
+            return <Image
                 size={48}
                 source={source}
-                style={{backgroundColor: 'transparent'}}
-            />
+                style={{
+                    width: 48,
+                    height: 48,
+                }}/>
         else
             return <Avatar.Icon
                 {...props}

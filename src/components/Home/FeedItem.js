@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Avatar, Button, Card, Text} from 'react-native-paper';
-import {View} from "react-native";
+import {Button, Card, Text} from 'react-native-paper';
+import {Image, View} from "react-native";
 import Autolink from "react-native-autolink";
 import i18n from "i18n-js";
 import ImageModal from 'react-native-image-modal';
@@ -38,9 +38,13 @@ class FeedItem extends React.Component<Props> {
      */
     getAvatar() {
         return (
-            <Avatar.Image
-                size={48} source={ICON_AMICALE}
-                style={{backgroundColor: 'transparent'}}/>
+            <Image
+                size={48}
+                source={ICON_AMICALE}
+                style={{
+                    width: 48,
+                    height: 48,
+                }}/>
         );
     }
 

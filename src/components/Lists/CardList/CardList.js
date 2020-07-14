@@ -36,17 +36,12 @@ export default class CardList extends React.Component<Props> {
     keyExtractor = (item: cardItem) => item.title;
 
     render() {
-        let containerStyle;
+        let containerStyle = {};
         if (this.props.isHorizontal) {
             containerStyle = {
-                ...this.props.contentContainerStyle,
                 height: 150,
                 justifyContent: 'space-around',
             };
-        } else {
-            containerStyle = {
-                ...this.props.contentContainerStyle,
-            }
         }
         return (
             <Animated.FlatList

@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Animated} from "react-native";
-import {Avatar, Card, Paragraph, withTheme} from 'react-native-paper';
+import {Animated, Image} from "react-native";
+import {Card, Paragraph, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import {Collapsible} from "react-navigation-collapsible";
 import {withCollapsible} from "../../../utils/withCollapsible";
@@ -87,10 +87,13 @@ class EquipmentListScreen extends React.Component<Props> {
         return <Card style={{margin: 5}}>
             <Card.Title
                 title={i18n.t('screens.equipment.title')}
-                left={(props) => <Avatar.Image
+                left={(props) => <Image
                     {...props}
+                    style={{
+                        width: props.size,
+                        height: props.size,
+                    }}
                     source={ICON_AMICALE}
-                    style={{backgroundColor: 'transparent'}}
                 />}
             />
             <Card.Content>
