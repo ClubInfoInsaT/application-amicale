@@ -1,8 +1,13 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'Campus' do
+platform :ios, '10.0'
 
+target 'Campus' do
+  config = use_native_modules!
+  
+  use_react_native!(:path => config["reactNativePath"])
+  
   # Permissions
   permissions_path = '../node_modules/react-native-permissions/ios'
 
