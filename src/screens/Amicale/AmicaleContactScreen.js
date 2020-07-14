@@ -7,6 +7,7 @@ import i18n from 'i18n-js';
 import {Collapsible} from "react-navigation-collapsible";
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import {withCollapsible} from "../../utils/withCollapsible";
+import type {MaterialCommunityIconsGlyphs} from "react-native-vector-icons/MaterialCommunityIcons";
 
 type Props = {
     collapsibleStack: Collapsible
@@ -15,7 +16,7 @@ type Props = {
 type DatasetItem = {
     name: string,
     email: string,
-    icon: string,
+    icon: MaterialCommunityIconsGlyphs,
 }
 
 /**
@@ -24,53 +25,58 @@ type DatasetItem = {
 class AmicaleContactScreen extends React.Component<Props> {
 
     // Dataset containing information about contacts
-    CONTACT_DATASET = [
-        {
-            name: i18n.t("screens.amicaleAbout.roles.interSchools"),
-            email: "inter.ecoles@amicale-insat.fr",
-            icon: "share-variant"
-        },
-        {
-            name: i18n.t("screens.amicaleAbout.roles.culture"),
-            email: "culture@amicale-insat.fr",
-            icon: "book"
-        },
-        {
-            name: i18n.t("screens.amicaleAbout.roles.animation"),
-            email: "animation@amicale-insat.fr",
-            icon: "emoticon"
-        },
-        {
-            name: i18n.t("screens.amicaleAbout.roles.clubs"),
-            email: "clubs@amicale-insat.fr",
-            icon: "account-group"
-        },
-        {
-            name: i18n.t("screens.amicaleAbout.roles.event"),
-            email: "evenements@amicale-insat.fr",
-            icon: "calendar-range"
-        },
-        {
-            name: i18n.t("screens.amicaleAbout.roles.tech"),
-            email: "technique@amicale-insat.fr",
-            icon: "settings"
-        },
-        {
-            name: i18n.t("screens.amicaleAbout.roles.communication"),
-            email: "amicale@amicale-insat.fr",
-            icon: "comment-account"
-        },
-        {
-            name: i18n.t("screens.amicaleAbout.roles.intraSchools"),
-            email: "intra.ecoles@amicale-insat.fr",
-            icon: "school"
-        },
-        {
-            name: i18n.t("screens.amicaleAbout.roles.publicRelations"),
-            email: "rp@amicale-insat.fr",
-            icon: "account-tie"
-        },
-    ];
+    CONTACT_DATASET: Array<DatasetItem>;
+
+    constructor(props: Props) {
+        super(props);
+        this.CONTACT_DATASET = [
+            {
+                name: i18n.t("screens.amicaleAbout.roles.interSchools"),
+                email: "inter.ecoles@amicale-insat.fr",
+                icon: "share-variant"
+            },
+            {
+                name: i18n.t("screens.amicaleAbout.roles.culture"),
+                email: "culture@amicale-insat.fr",
+                icon: "book"
+            },
+            {
+                name: i18n.t("screens.amicaleAbout.roles.animation"),
+                email: "animation@amicale-insat.fr",
+                icon: "emoticon"
+            },
+            {
+                name: i18n.t("screens.amicaleAbout.roles.clubs"),
+                email: "clubs@amicale-insat.fr",
+                icon: "account-group"
+            },
+            {
+                name: i18n.t("screens.amicaleAbout.roles.event"),
+                email: "evenements@amicale-insat.fr",
+                icon: "calendar-range"
+            },
+            {
+                name: i18n.t("screens.amicaleAbout.roles.tech"),
+                email: "technique@amicale-insat.fr",
+                icon: "cog"
+            },
+            {
+                name: i18n.t("screens.amicaleAbout.roles.communication"),
+                email: "amicale@amicale-insat.fr",
+                icon: "comment-account"
+            },
+            {
+                name: i18n.t("screens.amicaleAbout.roles.intraSchools"),
+                email: "intra.ecoles@amicale-insat.fr",
+                icon: "school"
+            },
+            {
+                name: i18n.t("screens.amicaleAbout.roles.publicRelations"),
+                email: "rp@amicale-insat.fr",
+                icon: "account-tie"
+            },
+        ];
+    }
 
     keyExtractor = (item: DatasetItem) => item.email;
 

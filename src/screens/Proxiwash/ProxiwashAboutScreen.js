@@ -60,7 +60,7 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                 <Card style={{margin: 5}}>
                     <Card.Title
                         title={i18n.t('screens.proxiwash.tariffs')}
-                        left={props => <List.Icon {...props} icon={'coins'}/>}
+                        left={props => <List.Icon {...props} icon={'circle-multiple'}/>}
                     />
                     <Card.Content>
                         <Paragraph>{i18n.t('screens.proxiwash.washersTariff')}</Paragraph>
