@@ -2,31 +2,6 @@
 
 base_dir=$(pwd)
 
-
-if [[ $1 == "--android" ]]
-then
-  echo "Installing for Android only"
-  node_install
-  android_install
-elif [[ $1 == "--ios" ]]
-then
-  echo "Installing for iOS only"
-  node_install
-  ios_install
-elif [[ $1 == "--all" ]]
-then
-  echo "Installing for Android and iOS"
-  node_install
-  android_install
-  ios_install
-else
-  echo "Usage: ./install.sh [mode]"
-  echo "    [mode]: --android     Installs only Android dependencies"
-  echo "    [mode]: --ios         Installs only iOS dependencies"
-  echo "    [mode]: --all         Installs Android and iOS dependencies"
-fi
-exit
-
 function ios_install {
   cd "$base_dir"/ios && pod install
 }
@@ -75,6 +50,32 @@ function node_install {
   cd "$base_dir" || exit 1
   ./clear-node-cache.sh
 }
+
+if [[ $1 == "--android" ]]
+then
+  echo "Installing for Android only"
+  node_install
+  android_install
+elif [[ $1 == "--ios" ]]
+then
+  echo "Installing for iOS only"
+  node_install
+  ios_install
+elif [[ $1 == "--all" ]]
+then
+  echo "Installing for Android and iOS"
+  node_install
+  android_install
+  ios_install
+else
+  echo "Usage: ./install.sh [mode]"
+  echo "    [mode]: --android     Installs only Android dependencies"
+  echo "    [mode]: --ios         Installs only iOS dependencies"
+  echo "    [mode]: --all         Installs Android and iOS dependencies"
+fi
+exit
+
+
 
 
 
