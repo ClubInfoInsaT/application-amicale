@@ -173,26 +173,17 @@ class MascotPopup extends React.Component<Props, State> {
         const cancel = this.props.buttons.cancel;
         return (
             <View style={{
-                flexDirection: "row",
                 marginLeft: "auto",
                 marginRight: "auto",
                 marginTop: "auto",
                 marginBottom: "auto",
             }}>
-                {cancel != null
-                    ? <Button
-                        mode={"contained"}
-                        icon={cancel.icon}
-                        color={cancel.color}
-                        onPress={cancel.onPress}
-                    >
-                        {cancel.message}
-                    </Button>
-                    : null}
                 {action != null
                     ? <Button
                         style={{
-                            marginLeft: 20,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                            marginBottom: 10,
                         }}
                         mode={"contained"}
                         icon={action.icon}
@@ -200,6 +191,20 @@ class MascotPopup extends React.Component<Props, State> {
                         onPress={action.onPress}
                     >
                         {action.message}
+                    </Button>
+                    : null}
+                {cancel != null
+                    ? <Button
+                        style={{
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                        }}
+                        mode={"contained"}
+                        icon={cancel.icon}
+                        color={cancel.color}
+                        onPress={cancel.onPress}
+                    >
+                        {cancel.message}
                     </Button>
                     : null}
             </View>
