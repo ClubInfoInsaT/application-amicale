@@ -32,11 +32,12 @@ android.useAndroidX=true
 # Automatically convert third-party libraries to use AndroidX
 android.enableJetifier=true
 # Version of flipper SDK to use with React Native
-FLIPPER_VERSION=0.33.1
+FLIPPER_VERSION=0.37.0
 # This file is not included in git because it may contain secrets concerning the release key.
 # To get those secrets, please contact the author at vergnet@etud.insa-toulouse.fr
 " > gradle.properties
 echo -e "Done\n"
 
+cd ..
 ./clear-node-cache.sh
 
