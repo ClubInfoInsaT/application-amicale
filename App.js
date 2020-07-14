@@ -25,6 +25,7 @@ import {OverflowMenuProvider} from "react-navigation-header-buttons";
 
 LogBox.ignoreLogs([ // collapsible headers cause this warning, just ignore as it is not an issue
     'Non-serializable values were found in the navigation state',
+    'Cannot update a component from inside the function body of a different component',
 ]);
 
 type Props = {};
