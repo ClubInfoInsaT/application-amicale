@@ -3,7 +3,9 @@
 base_dir=$(pwd)
 
 function ios_install {
-  cd "$base_dir"/ios && pod install
+  cd "$base_dir"/ios || exit 1
+  rm Podfile.lock
+  pod install
 }
 
 function android_install {
