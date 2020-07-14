@@ -1,12 +1,44 @@
 #!/bin/bash
 
-echo "Creating debug android keystore..."
-cd android/app && keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000
-echo -e "Done\n"
+base_dir=$(pwd)
 
-cd ..
-echo "Creating gradle.properties file..."
-echo "# Project-wide Gradle settings.
+
+if [[ $1 == "--android" ]]
+then
+  echo "Installing for Android only"
+  node_install
+  android_install
+elif [[ $1 == "--ios" ]]
+then
+  echo "Installing for iOS only"
+  node_install
+  ios_install
+elif [[ $1 == "--all" ]]
+then
+  echo "Installing for Android and iOS"
+  node_install
+  android_install
+  ios_install
+else
+  echo "Usage: ./install.sh [mode]"
+  echo "    [mode]: --android     Installs only Android dependencies"
+  echo "    [mode]: --ios         Installs only iOS dependencies"
+  echo "    [mode]: --all         Installs Android and iOS dependencies"
+fi
+exit
+
+function ios_install {
+  cd "$base_dir"/ios && pod install
+}
+
+function android_install {
+  echo "Creating debug android keystore..."
+  cd "$base_dir"/android/app && keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000
+  echo -e "Done\n"
+
+  cd ..
+  echo "Creating gradle.properties file..."
+  echo "# Project-wide Gradle settings.
 
 # IDE (e.g. Android Studio) users:
 # Gradle settings configured through the IDE *will override*
@@ -36,8 +68,13 @@ FLIPPER_VERSION=0.37.0
 # This file is not included in git because it may contain secrets concerning the release key.
 # To get those secrets, please contact the author at vergnet@etud.insa-toulouse.fr
 " > gradle.properties
-echo -e "Done\n"
+  echo -e "Done\n"
+}
 
-cd ..
-./clear-node-cache.sh
+function node_install {
+  cd "$base_dir" || exit 1
+  ./clear-node-cache.sh
+}
+
+
 

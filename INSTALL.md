@@ -4,7 +4,7 @@
 
 Tout est expliqué dans ce guide, si vous avez un problème ou une question, merci de me contacter par mail : [app@amicale-insat.fr](mailto:app@amicale-insat.fr)
 
-Ce guide à été testé sur Linux (Ubuntu 18.04).
+Ce guide a été testé sur Linux (Ubuntu 18.04).
 Si vous utilisez Windows, débrouillez-vous ou installez Linux j'ai la flemme de tester.
 
 ## Table des matières
@@ -64,25 +64,23 @@ Pour revenir sur la branche principale, effectuez la commande
 git checkout master
 ````
 
-## Téléchargement des dépendances
+## Installation du projet
 
-Une fois le dépôt sur votre machine et git sur la branche de votre choix, ouvrez le terminal dans le dossier du dépôt cloné et tapez : 
+Une fois le dépôt sur votre machine et git sur la branche de votre choix, ouvrez le terminal dans le dossier du dépôt cloné et lancez le script d'installation avec la commande suivante : 
 ````shell script
-npm install
+./install.sh [mode]
 ````
-Ceci installera toutes les dépendances listées dans le fichier _package.json_. Cette opération peut prendre quelques minutes et utilisera beaucoup d'espace disque (plus de 300Mo).
+En remplaçant `[mode]` par le mode d'installation de votre choix. Les valeurs valides sont :
+````
+  --android     Installation juste pour Android
+  --ios         Installation juste pour iOS
+  --all         Installation pour Android et iOS
+````
 
 En cas de problème d'installation (notamment lors du changement de branche), lancez la commande suivante pour tout réinstaller :
 ````shell script
 ./clear-node-cache.sh 
 ````
-
-### Instructions pour iOS
-
-Pour iOS, en plus de la commande précédente, il faut aussi installer les dépendances iOS. Pour cela, allez dans le dossier `ios` et installez les pods grâce à la commande suivante :
-```shell script
-cd ios && pod install
-```
 
 ## Lancement de l'appli
 
@@ -99,51 +97,7 @@ npx react-native start
 
 **Ne stoppez pas le Metro Bundler dans la console à chaque changement !** Toutes les modifications sont appliquées automatiquement, pas besoin de stopper et de redémarrer pour des petits changements ! Il est seulement nécessaire de redémarrer le Metro Bundler quand vous changez des librairies ou des fichiers.
 
-
 ### Android
-
-**PRÉREQUIS** : Il est nécessaire de générer un fichier keystore.debug dans le dossier `android/app` pour qu'android puisse détecter que l'application est une version de debug. Pour cela, lancez la commande suivante :
-````shell script
-cd android/app && keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000
-````
-
-Ensuite, vous aurez besoin de créer un autre fichier dans le dossier `android/`, appelé gradle.properties avec le contenu suivant :
-
-<details>
-<summary>gradle.properties</summary>
-
-````properties
-# Project-wide Gradle settings.
-
-# IDE (e.g. Android Studio) users:
-# Gradle settings configured through the IDE *will override*
-# any settings specified in this file.
-
-# For more details on how to configure your build environment visit
-# http://www.gradle.org/docs/current/userguide/build_environment.html
-
-# Specifies the JVM arguments used for the daemon process.
-# The setting is particularly useful for tweaking memory settings.
-# Default value: -Xmx10248m -XX:MaxPermSize=256m
-# org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
-
-# When configured, Gradle will run in incubating parallel mode.
-# This option should only be used with decoupled projects. More details, visit
-# http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects
-# org.gradle.parallel=true
-
-# AndroidX package structure to make it clearer which packages are bundled with the
-# Android operating system, and which are packaged with your app's APK
-# https://developer.android.com/topic/libraries/support-library/androidx-rn
-android.useAndroidX=true
-# Automatically convert third-party libraries to use AndroidX
-android.enableJetifier=true
-# Version of flipper SDK to use with React Native
-FLIPPER_VERSION=0.33.1
-````
-</details>
-
-Ce fichier n'est pas synchronisé sur git car il peut contenir des secrets relatifs à la clé de signature du build de release.
 
 Dans la deuxième console, lancez la commande suivante :
 ````shell script
