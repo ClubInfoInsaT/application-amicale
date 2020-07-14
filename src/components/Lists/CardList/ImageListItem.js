@@ -7,6 +7,7 @@ import type {cardItem} from "./CardList";
 
 type Props = {
     item: cardItem,
+    width: number,
 }
 
 export default class ImageListItem extends React.Component<Props> {
@@ -16,16 +17,15 @@ export default class ImageListItem extends React.Component<Props> {
     }
 
     render() {
-        const props = this.props;
-        const item = props.item;
+        const item = this.props.item;
         const source = typeof item.image === "number"
             ? item.image
             : {uri: item.image};
         return (
             <TouchableRipple
                 style={{
-                    width: 100,
-                    height: 150,
+                    width: this.props.width,
+                    height: this.props.width + 40,
                     margin: 5,
                 }}
                 onPress={item.onPress}
@@ -33,8 +33,8 @@ export default class ImageListItem extends React.Component<Props> {
                 <View>
                     <Image
                         style={{
-                            width: 80,
-                            height: 80,
+                            width: this.props.width - 20,
+                            height: this.props.width - 20,
                             marginLeft: 'auto',
                             marginRight: 'auto',
                         }}
@@ -45,7 +45,9 @@ export default class ImageListItem extends React.Component<Props> {
                         marginLeft: 'auto',
                         marginRight: 'auto',
                         textAlign: 'center'
-                    }}>{item.title}</Text>
+                    }}>
+                        {item.title}
+                    </Text>
                 </View>
             </TouchableRipple>
         );

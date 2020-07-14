@@ -1,13 +1,15 @@
 // @flow
 
 import * as React from 'react';
-import {Animated} from "react-native";
+import {Animated, Dimensions} from "react-native";
 import ImageListItem from "./ImageListItem";
 import CardListItem from "./CardListItem";
+import type {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheet";
 
 type Props = {
     dataset: Array<cardItem>,
     isHorizontal: boolean,
+    contentContainerStyle?: ViewStyle,
 }
 
 export type cardItem = {
@@ -26,9 +28,18 @@ export default class CardList extends React.Component<Props> {
         isHorizontal: false,
     }
 
+    windowWidth: number;
+    horizontalItemSize: number;
+
+    constructor(props: Props) {
+        super(props);
+        this.windowWidth = Dimensions.get('window').width;
+        this.horizontalItemSize = this.windowWidth/4; // So that we can fit 3 items and a part of the 4th => user knows he can scroll
+    }
+
     renderItem = ({item}: { item: cardItem }) => {
         if (this.props.isHorizontal)
-            return <ImageListItem item={item} key={item.title}/>;
+            return <ImageListItem item={item} key={item.title} width={this.horizontalItemSize}/>;
         else
             return <CardListItem item={item} key={item.title}/>;
     };
@@ -39,7 +50,7 @@ export default class CardList extends React.Component<Props> {
         let containerStyle = {};
         if (this.props.isHorizontal) {
             containerStyle = {
-                height: 150,
+                height: this.horizontalItemSize + 50,
                 justifyContent: 'space-around',
             };
         }
@@ -51,7 +62,9 @@ export default class CardList extends React.Component<Props> {
                 keyExtractor={this.keyExtractor}
                 numColumns={this.props.isHorizontal ? undefined : 2}
                 horizontal={this.props.isHorizontal}
-                contentContainerStyle={containerStyle}
+                contentContainerStyle={this.props.isHorizontal ? containerStyle : this.props.contentContainerStyle}
+                pagingEnabled={this.props.isHorizontal}
+                snapToInterval={this.props.isHorizontal ? (this.horizontalItemSize+5)*3 : null}
             />
         );
     }
