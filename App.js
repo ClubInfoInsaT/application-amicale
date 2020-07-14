@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Platform, SafeAreaView, StatusBar, View, YellowBox} from 'react-native';
+import {LogBox, Platform, SafeAreaView, StatusBar, View} from 'react-native';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from "./src/managers/AsyncStorageManager";
 import CustomIntroSlider from "./src/components/Overrides/CustomIntroSlider";
@@ -23,7 +23,7 @@ import {OverflowMenuProvider} from "react-navigation-header-buttons";
 // enableScreens(true);
 
 
-YellowBox.ignoreWarnings([ // collapsible headers cause this warning, just ignore as it is not an issue
+LogBox.ignoreLogs([ // collapsible headers cause this warning, just ignore as it is not an issue
     'Non-serializable values were found in the navigation state',
 ]);
 
