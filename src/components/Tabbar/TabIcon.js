@@ -3,6 +3,7 @@
 import * as React from 'react';
 import {View} from "react-native";
 import {TouchableRipple, withTheme} from 'react-native-paper';
+import type {MaterialCommunityIconsGlyphs} from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import * as Animatable from "react-native-animatable";
 
@@ -10,14 +11,12 @@ type Props = {
     focused: boolean,
     color: string,
     label: string,
-    icon: string,
+    icon: MaterialCommunityIconsGlyphs,
     onPress: Function,
     onLongPress: Function,
     theme: Object,
     extraData: any,
 }
-
-const AnimatedIcon = Animatable.createAnimatableComponent(MaterialCommunityIcons);
 
 
 /**
@@ -83,7 +82,7 @@ class TabIcon extends React.Component<Props> {
                         animation={props.focused ? "focusIn" : "focusOut"}
                         useNativeDriver
                     >
-                        <AnimatedIcon
+                        <MaterialCommunityIcons
                             name={props.icon}
                             color={props.color}
                             size={26}

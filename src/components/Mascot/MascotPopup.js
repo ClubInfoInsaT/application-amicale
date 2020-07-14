@@ -64,7 +64,7 @@ class MascotPopup extends React.Component<Props, State> {
     shouldComponentUpdate(nextProps: Props): boolean {
         if (nextProps.visible) {
             this.state.shouldShowDialog = true;
-        }else if (nextProps.visible !== this.props.visible) {
+        } else if (nextProps.visible !== this.props.visible) {
             setTimeout(this.onAnimationEnd, 300);
         }
         return true;
@@ -144,7 +144,7 @@ class MascotPopup extends React.Component<Props, State> {
                         </ScrollView>
                     </Card.Content>
 
-                    <Card.Actions>
+                    <Card.Actions style={{marginTop: 10, marginBottom: 10}}>
                         {this.getButtons()}
                     </Card.Actions>
                 </Card>
@@ -239,11 +239,17 @@ class MascotPopup extends React.Component<Props, State> {
                         marginTop: "auto",
                         marginBottom: "auto",
                     }}>
-                        {this.getMascot()}
-                        {this.getSpeechBubble()}
+                        <View style={{
+                            marginTop: -80,
+                        }}>
+                            {this.getMascot()}
+                            {this.getSpeechBubble()}
                     </View>
-                </Portal>
-            );
+
+                </View>
+        </Portal>
+        )
+            ;
         } else
             return null;
 
