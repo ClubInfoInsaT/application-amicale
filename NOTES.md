@@ -17,14 +17,6 @@ Pour ces raisons, il a été décidé de l'abandonner pour passer à un dévelop
 
 [Site officiel](https://docs.expo.io/)
 
-
-## _2020-06-23_ | react-native-keychain
-
-Rester en v6.0.0 car à partir de la v6.1.0, il est nécessaire de passer du sdk 28 au 29. Il est donc necessaire de mesurer l'impact d'un tel changement.
-
-[Dépot](https://github.com/oblador/react-native-keychain) | [Référence](https://github.com/oblador/react-native-keychain/issues/351)
-
-
 ## _2020-06-23_ | react-native-mapbox-gl
 
 Librairie utilisée pour afficher une carte en utilisant OSM. N'a pas été utilisée car augmente la taille de l'apk de quelques Mo et rend la compilation plus difficile (il est nécessaire d'augmenter la taille du java heap dans gradle.properties).
