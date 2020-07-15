@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, FlatList, Image, StyleSheet, View} from "react-native";
+import {Animated, FlatList, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, Paragraph, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import i18n from 'i18n-js';
@@ -15,6 +15,7 @@ import CardList from "../../components/Lists/CardList/CardList";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import AvailableWebsites from "../../constants/AvailableWebsites";
+import Mascot, {MASCOT_STYLE} from "../../components/Mascot/Mascot";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -84,7 +85,10 @@ class ProfileScreen extends React.Component<Props, State> {
                 title: i18n.t('screens.websites.amicale'),
                 subtitle: i18n.t('screens.services.descriptions.amicaleWebsite'),
                 image: ICON_AMICALE,
-                onPress: () => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, title: i18n.t('screens.websites.amicale')}),
+                onPress: () => this.props.navigation.navigate("website", {
+                    host: AvailableWebsites.websites.AMICALE,
+                    title: i18n.t('screens.websites.amicale')
+                }),
             },
         ];
     }
@@ -179,12 +183,14 @@ class ProfileScreen extends React.Component<Props, State> {
             <Card style={styles.card}>
                 <Card.Title
                     title={i18n.t("screens.profile.welcomeTitle", {name: this.data.first_name})}
-                    left={() => <Image
-                        style={{
-                            width: 50,
-                            height: 50,
+                    left={() => <Mascot
+                        emotion={MASCOT_STYLE.COOL}
+                        size={60}
+                        animated={true}
+                        entryAnimation={{
+                            animation: "bounceIn",
+                            duration: 1000
                         }}
-                        source={ICON_AMICALE}
                     />}
                     titleStyle={{marginLeft: 10}}
                 />
@@ -290,7 +296,11 @@ class ProfileScreen extends React.Component<Props, State> {
                         <Button
                             icon="account-edit"
                             mode="contained"
-                            onPress={() => this.props.navigation.navigate("website", {host: AvailableWebsites.websites.AMICALE, path: this.data.link, title: i18n.t('screens.websites.amicale')})}
+                            onPress={() => this.props.navigation.navigate("website", {
+                                host: AvailableWebsites.websites.AMICALE,
+                                path: this.data.link,
+                                title: i18n.t('screens.websites.amicale')
+                            })}
                             style={styles.editButton}>
                             {i18n.t("screens.profile.editInformation")}
                         </Button>
