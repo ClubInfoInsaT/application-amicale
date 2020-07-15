@@ -276,7 +276,7 @@
       "otherMonth": "le %{date} %{month}",
       "otherYear": "le %{date} %{month} %{year}",
       "bookingDay": "Réservé pour %{date}",
-      "bookingPeriod": "Réservé du %{begin} au %{end}",
+      "bookingPeriod": "Début : %{begin}\nFin : %{end}",
       "booking": "Clique sur le calendrier pour choisir les dates de début et de fin du prêt",
       "bookButton": "Réserver ces dates",
       "dialogTitle": "Confirmer la réservation ?",
@@ -345,7 +345,7 @@
       "bugsSubtitle": "Tu as trouvé un bug ?",
       "bugsDescription": "Rapporter les bugs m'aide à améliorer l'appli. Pour cela, merci d'utiliser un des boutons ci-dessous et de décrire ton problème le plus précisément possible !",
       "feedbackSubtitle": "Dis moi ce que tu penses !",
-      "feedbackDescription": "tu veux voir une fonctionnalité ajoutée/modifiée/supprimée ? Tu veux donner ton opinion sur l'appli ou simplement discuter avec le développeur (c'est moi coucou) ? Utilise un des liens ci-dessous !",
+      "feedbackDescription": "Tu veux voir une fonctionnalité ajoutée/modifiée/supprimée ? Tu veux donner ton opinion sur l'appli ou simplement discuter avec le développeur (c'est moi coucou) ? Utilise un des liens ci-dessous !",
       "contactMeans": "L'utilisation de Gitea est recommandée, pour l'utiliser, connecte toi avec tes identifiants INSA.",
       "homeButtonTitle": "Feedback/Bugs",
       "homeButtonSubtitle": "Contacter le développeur"
