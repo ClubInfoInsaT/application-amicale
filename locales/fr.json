@@ -268,7 +268,6 @@
       "title": "Réservation de Matériel",
       "book": "Réserver",
       "confirm": "Confirmation",
-      "message": "L'Amicale met à disposition des étudiants du matériel comme des BBQ, des appareils à raclette et autres. Pour réserver l'un de ces formidables appareils, clique sur celui de ton choix dans la liste, indique les dates du prêt, puis passe à l'Amicale pour le récupérer et donner la caution.",
       "bail": "Caution : %{cost}€",
       "available": "Disponible %{date}",
       "today": "aujourd'hui",
@@ -283,7 +282,12 @@
       "dialogTitle": "Confirmer la réservation ?",
       "dialogTitleLoading": "Envoi de votre réservation...",
       "dialogMessage": "Est-tu sûr de confirmer ta réservation ?\n\nTu pourras ensuite passer à l'Amicale récupérer le matériel pour la durée de la réservation en échange d'une caution.",
-      "bookingConfirmedMessage": "N'oublie pas de passer à L'Amicale pour donner la caution en échange du matériel."
+      "bookingConfirmedMessage": "N'oublie pas de passer à L'Amicale pour donner la caution en échange du matériel.",
+      "mascotDialog": {
+        "title": "Comme ça marche ?",
+        "message": "L'Amicale met à disposition des étudiants du matériel comme des BBQ, des appareils à raclette et autres. Pour réserver l'un de ces formidables appareils, clique sur celui de ton choix dans la liste, indique les dates du prêt, puis passe à l'Amicale pour le récupérer et donner la caution.",
+        "button": "Merci !"
+      }
     },
 
     "scanner": {

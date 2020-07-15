@@ -94,6 +94,11 @@ export default class AsyncStorageManager {
             default: '1',
             current: '',
         },
+        equipmentShowBanner: {
+            key: 'equipmentShowBanner',
+            default: '1',
+            current: '',
+        },
         proxiwashWatchedMachines: {
             key: 'proxiwashWatchedMachines',
             default: '[]',

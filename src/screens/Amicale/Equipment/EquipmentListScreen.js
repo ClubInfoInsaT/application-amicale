@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, Image} from "react-native";
-import {Card, Paragraph, withTheme} from 'react-native-paper';
+import {Animated, View} from "react-native";
+import {Button, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import {Collapsible} from "react-navigation-collapsible";
 import {withCollapsible} from "../../../utils/withCollapsible";
@@ -11,11 +11,18 @@ import type {CustomTheme} from "../../../managers/ThemeManager";
 import i18n from "i18n-js";
 import type {club} from "../Clubs/ClubListScreen";
 import EquipmentListItem from "../../../components/Lists/Equipment/EquipmentListItem";
+import MascotPopup from "../../../components/Mascot/MascotPopup";
+import {MASCOT_STYLE} from "../../../components/Mascot/Mascot";
+import AsyncStorageManager from "../../../managers/AsyncStorageManager";
 
 type Props = {
     navigation: StackNavigationProp,
     theme: CustomTheme,
     collapsibleStack: Collapsible,
+}
+
+type State = {
+    mascotDialogVisible: boolean,
 }
 
 export type Device = {
@@ -32,10 +39,13 @@ export type RentedDevice = {
     end: string,
 }
 
-const ICON_AMICALE = require('../../../../assets/amicale.png');
 const LIST_ITEM_HEIGHT = 64;
 
-class EquipmentListScreen extends React.Component<Props> {
+class EquipmentListScreen extends React.Component<Props, State> {
+
+    state = {
+        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.equipmentShowBanner.current === "1"
+    }
 
     data: Array<Device>;
     userRents: Array<RentedDevice>;
@@ -84,24 +94,24 @@ class EquipmentListScreen extends React.Component<Props> {
      * @returns {*}
      */
     getListHeader() {
-        return <Card style={{margin: 5}}>
-            <Card.Title
-                title={i18n.t('screens.equipment.title')}
-                left={(props) => <Image
-                    {...props}
+        return (
+            <View style={{
+                width: "100%",
+                marginTop: 10,
+                marginBottom: 10,
+            }}>
+                <Button
+                    mode={"contained"}
+                    icon={"help-circle"}
+                    onPress={this.showMascotDialog}
                     style={{
-                        width: props.size,
-                        height: props.size,
-                    }}
-                    source={ICON_AMICALE}
-                />}
-            />
-            <Card.Content>
-                <Paragraph>
-                    {i18n.t('screens.equipment.message')}
-                </Paragraph>
-            </Card.Content>
-        </Card>;
+                        marginRight: "auto",
+                        marginLeft: "auto",
+                    }}>
+                    {i18n.t("screens.equipment.mascotDialog.title")}
+                </Button>
+            </View>
+        );
     }
 
     keyExtractor = (item: club) => item.id.toString();
@@ -141,25 +151,54 @@ class EquipmentListScreen extends React.Component<Props> {
         )
     };
 
+    showMascotDialog = () => {
+        this.setState({mascotDialogVisible: true})
+    };
+
+    hideMascotDialog = () => {
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.equipmentShowBanner.key,
+            '0'
+        );
+        this.setState({mascotDialogVisible: false})
+    };
+
     render() {
         return (
-            <AuthenticatedScreen
-                {...this.props}
-                ref={this.authRef}
-                requests={[
-                    {
-                        link: 'location/all',
-                        params: {},
-                        mandatory: true,
-                    },
-                    {
-                        link: 'location/my',
-                        params: {},
-                        mandatory: false,
-                    }
-                ]}
-                renderFunction={this.getScreen}
-            />
+            <View style={{flex: 1}}>
+                <AuthenticatedScreen
+                    {...this.props}
+                    ref={this.authRef}
+                    requests={[
+                        {
+                            link: 'location/all',
+                            params: {},
+                            mandatory: true,
+                        },
+                        {
+                            link: 'location/my',
+                            params: {},
+                            mandatory: false,
+                        }
+                    ]}
+                    renderFunction={this.getScreen}
+                />
+                <MascotPopup
+                    visible={this.state.mascotDialogVisible}
+                    title={i18n.t("screens.equipment.mascotDialog.title")}
+                    message={i18n.t("screens.equipment.mascotDialog.message")}
+                    icon={"vote"}
+                    buttons={{
+                        action: null,
+                        cancel: {
+                            message: i18n.t("screens.equipment.mascotDialog.button"),
+                            icon: "check",
+                            onPress: this.hideMascotDialog,
+                        }
+                    }}
+                    emotion={MASCOT_STYLE.WINK}
+                />
+            </View>
         );
     }
 }

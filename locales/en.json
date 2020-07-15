@@ -269,7 +269,6 @@
       "title": "Equipment Booking",
       "book": "Book",
       "confirm": "Confirmation",
-      "message": "Thanks to the Amicale, students have access to some equipment like BBQs and others. To book one of those items, click the equipment of your choice in the list bellow, enter your lend dates, then come around the Amicale to claim it and give your bail.",
       "bail": "Bail: %{cost}€",
       "available": "Available %{date}",
       "today": "today",
@@ -284,7 +283,12 @@
       "dialogTitle": "Confirm booking?",
       "dialogTitleLoading": "Sending your booking...",
       "dialogMessage": "Are you sure you want to confirm your booking?\n\nYou will then be able to claim the selected equipment at the Amicale for the duration of your booking in exchange of a bail.",
-      "bookingConfirmedMessage": "Do not forget to come by the Amicale to give your bail in exchange of the equipment."
+      "bookingConfirmedMessage": "Do not forget to come by the Amicale to give your bail in exchange of the equipment.",
+      "mascotDialog": {
+        "title": "How does it work ?",
+        "message": "Thanks to the Amicale, students have access to some equipment like BBQs and others. To book one of those items, click the equipment of your choice in the list bellow, enter your lend dates, then come around the Amicale to claim it and give your bail.",
+        "button": "Ok"
+      }
     },
 
     "scanner": {
