@@ -16,6 +16,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import AvailableWebsites from "../../constants/AvailableWebsites";
 import Mascot, {MASCOT_STYLE} from "../../components/Mascot/Mascot";
+import ServicesManager, {SERVICES_KEY} from "../../managers/ServicesManager";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -44,11 +45,6 @@ type Club = {
     is_manager: boolean,
 }
 
-const CLUBS_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Clubs.png";
-const VOTE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Vote.png";
-
-const ICON_AMICALE = require('../../../assets/amicale.png');
-
 class ProfileScreen extends React.Component<Props, State> {
 
     state = {
@@ -60,37 +56,16 @@ class ProfileScreen extends React.Component<Props, State> {
     flatListData: Array<{ id: string }>;
     amicaleDataset: cardList;
 
-    constructor() {
-        super();
+    constructor(props: Props) {
+        super(props);
         this.flatListData = [
             {id: '0'},
             {id: '1'},
             {id: '2'},
             {id: '3'},
         ]
-        this.amicaleDataset = [
-            {
-                title: i18n.t('screens.clubs.title'),
-                subtitle: i18n.t('screens.services.descriptions.clubs'),
-                image: CLUBS_IMAGE,
-                onPress: () => this.props.navigation.navigate("club-list"),
-            },
-            {
-                title: i18n.t('screens.vote.title'),
-                subtitle: i18n.t('screens.services.descriptions.vote'),
-                image: VOTE_IMAGE,
-                onPress: () => this.props.navigation.navigate("vote"),
-            },
-            {
-                title: i18n.t('screens.websites.amicale'),
-                subtitle: i18n.t('screens.services.descriptions.amicaleWebsite'),
-                image: ICON_AMICALE,
-                onPress: () => this.props.navigation.navigate("website", {
-                    host: AvailableWebsites.websites.AMICALE,
-                    title: i18n.t('screens.websites.amicale')
-                }),
-            },
-        ];
+        const services = new ServicesManager(props.navigation);
+        this.amicaleDataset = services.getAmicaleServices([SERVICES_KEY.PROFILE]);
     }
 
     componentDidMount() {

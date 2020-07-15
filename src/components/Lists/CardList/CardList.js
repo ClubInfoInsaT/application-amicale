@@ -13,6 +13,7 @@ type Props = {
 }
 
 export type cardItem = {
+    key: string,
     title: string,
     subtitle: string,
     image: string | number,
@@ -44,7 +45,7 @@ export default class CardList extends React.Component<Props> {
             return <CardListItem item={item} key={item.title}/>;
     };
 
-    keyExtractor = (item: cardItem) => item.title;
+    keyExtractor = (item: cardItem) => item.key;
 
     render() {
         let containerStyle = {};

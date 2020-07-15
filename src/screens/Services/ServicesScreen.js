@@ -13,10 +13,10 @@ import i18n from 'i18n-js';
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
 import ConnectionManager from "../../managers/ConnectionManager";
 import {StackNavigationProp} from "@react-navigation/stack";
-import AvailableWebsites from "../../constants/AvailableWebsites";
 import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
 import MascotPopup from "../../components/Mascot/MascotPopup";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
+import ServicesManager from "../../managers/ServicesManager";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -38,24 +38,6 @@ export type listItem = {
 
 const AMICALE_LOGO = require("../../../assets/amicale.png");
 
-const CLUBS_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Clubs.png";
-const PROFILE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ProfilAmicaliste.png";
-const EQUIPMENT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Materiel.png";
-const VOTE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Vote.png";
-const AMICALE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/WebsiteAmicale.png";
-
-const PROXIMO_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png"
-const WIKETUD_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Wiketud.png";
-const EE_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/EEC.png";
-const TUTORINSA_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/TutorINSA.png";
-
-const BIB_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Bib.png";
-const RU_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/RU.png";
-const ROOM_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Salles.png";
-const EMAIL_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Bluemind.png";
-const ENT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ENT.png";
-const ACCOUNT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Account.png";
-
 class ServicesScreen extends React.Component<Props, State> {
 
     amicaleDataset: cardList;
@@ -70,103 +52,10 @@ class ServicesScreen extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
-        const nav = props.navigation;
-        this.amicaleDataset = [
-            {
-                title: i18n.t('screens.clubs.title'),
-                subtitle: i18n.t('screens.services.descriptions.clubs'),
-                image: CLUBS_IMAGE,
-                onPress: () => this.onAmicaleServicePress("club-list"),
-            },
-            {
-                title: i18n.t('screens.profile.title'),
-                subtitle: i18n.t('screens.services.descriptions.profile'),
-                image: PROFILE_IMAGE,
-                onPress: () => this.onAmicaleServicePress("profile"),
-            },
-            {
-                title: i18n.t('screens.equipment.title'),
-                subtitle: i18n.t('screens.services.descriptions.equipment'),
-                image: EQUIPMENT_IMAGE,
-                onPress: () => this.onAmicaleServicePress("equipment-list"),
-            },
-            {
-                title: i18n.t('screens.websites.amicale'),
-                subtitle: i18n.t('screens.services.descriptions.amicaleWebsite'),
-                image: AMICALE_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.AMICALE, title: i18n.t('screens.websites.amicale')}),
-            },
-            {
-                title: i18n.t('screens.vote.title'),
-                subtitle: i18n.t('screens.services.descriptions.vote'),
-                image: VOTE_IMAGE,
-                onPress: () => this.onAmicaleServicePress("vote"),
-            },
-        ];
-        this.studentsDataset = [
-            {
-                title: i18n.t('screens.proximo.title'),
-                subtitle: i18n.t('screens.services.descriptions.proximo'),
-                image: PROXIMO_IMAGE,
-                onPress: () => nav.navigate("proximo"),
-            },
-            {
-                title: "Wiketud",
-                subtitle: i18n.t('screens.services.descriptions.wiketud'),
-                image: WIKETUD_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.WIKETUD, title: "Wiketud"}),
-            },
-            {
-                title: "Élus Étudiants",
-                subtitle: i18n.t('screens.services.descriptions.elusEtudiants'),
-                image: EE_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.ELUS_ETUDIANTS, title: "Élus Étudiants"}),
-            },
-            {
-                title: "Tutor'INSA",
-                subtitle: i18n.t('screens.services.descriptions.tutorInsa'),
-                image: TUTORINSA_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.TUTOR_INSA, title: "Tutor'INSA"})
-            },
-        ];
-        this.insaDataset = [
-            {
-                title: i18n.t('screens.menu.title'),
-                subtitle: i18n.t('screens.services.descriptions.self'),
-                image: RU_IMAGE,
-                onPress: () => nav.navigate("self-menu"),
-            },
-            {
-                title: i18n.t('screens.websites.rooms'),
-                subtitle: i18n.t('screens.services.descriptions.availableRooms'),
-                image: ROOM_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.AVAILABLE_ROOMS, title: i18n.t('screens.websites.rooms')}),
-            },
-            {
-                title: i18n.t('screens.websites.bib'),
-                subtitle: i18n.t('screens.services.descriptions.bib'),
-                image: BIB_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.BIB, title: i18n.t('screens.websites.bib')}),
-            },
-            {
-                title: i18n.t('screens.websites.mails'),
-                subtitle: i18n.t('screens.services.descriptions.mails'),
-                image: EMAIL_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.BLUEMIND, title: i18n.t('screens.websites.mails')}),
-            },
-            {
-                title: i18n.t('screens.websites.ent'),
-                subtitle: i18n.t('screens.services.descriptions.ent'),
-                image: ENT_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.ENT, title: i18n.t('screens.websites.ent')}),
-            },
-            {
-                title: i18n.t('screens.insaAccount.title'),
-                subtitle: i18n.t('screens.services.descriptions.insaAccount'),
-                image: ACCOUNT_IMAGE,
-                onPress: () => nav.navigate("website", {host: AvailableWebsites.websites.INSA_ACCOUNT, title: i18n.t('screens.insaAccount.title')}),
-            },
-        ];
+        const services = new ServicesManager(props.navigation);
+        this.amicaleDataset = services.getAmicaleServices();
+        this.studentsDataset = services.getStudentServices();
+        this.insaDataset = services.getINSAServices();
         this.finalDataset = [
             {
                 title: i18n.t("screens.services.categories.amicale"),
