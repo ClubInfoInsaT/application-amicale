@@ -4,12 +4,17 @@ import * as React from 'react';
 import {FlatList, RefreshControl, View} from "react-native";
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {getTimeOnlyString, stringToDate} from "../../utils/Planning";
-import VoteTitle from "../../components/Amicale/Vote/VoteTitle";
 import VoteTease from "../../components/Amicale/Vote/VoteTease";
 import VoteSelect from "../../components/Amicale/Vote/VoteSelect";
 import VoteResults from "../../components/Amicale/Vote/VoteResults";
 import VoteWait from "../../components/Amicale/Vote/VoteWait";
 import {StackNavigationProp} from "@react-navigation/stack";
+import i18n from "i18n-js";
+import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
+import MascotPopup from "../../components/Mascot/MascotPopup";
+import AsyncStorageManager from "../../managers/AsyncStorageManager";
+import {Button} from "react-native-paper";
+import VoteNotAvailable from "../../components/Amicale/Vote/VoteNotAvailable";
 
 export type team = {
     id: number,
@@ -37,10 +42,10 @@ type objectVoteDates = {
 }
 
 // const FAKE_DATE = {
-//     "date_begin": "2020-04-19 15:50",
-//     "date_end": "2020-04-19 15:50",
-//     "date_result_begin": "2020-04-19 19:50",
-//     "date_result_end": "2020-04-19 22:50",
+//     "date_begin": "2020-08-19 15:50",
+//     "date_end": "2020-08-19 15:50",
+//     "date_result_begin": "2020-08-19 19:50",
+//     "date_result_end": "2020-08-19 22:50",
 // };
 //
 // const FAKE_DATE2 = {
@@ -92,6 +97,7 @@ type Props = {
 
 type State = {
     hasVoted: boolean,
+    mascotDialogVisible: boolean,
 }
 
 /**
@@ -101,6 +107,7 @@ export default class VoteScreen extends React.Component<Props, State> {
 
     state = {
         hasVoted: false,
+        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.voteShowBanner.current === "1",
     };
 
     teams: Array<team>;
@@ -200,11 +207,23 @@ export default class VoteScreen extends React.Component<Props, State> {
 
     mainRenderItem = ({item}: { item: { key: string } }) => {
         if (item.key === 'info')
-            return <VoteTitle/>;
-        else if (item.key === 'main' && this.dates != null)
-            return this.getContent();
+            return (
+                <View>
+                    <Button
+                        mode={"contained"}
+                        icon={"help-circle"}
+                        onPress={this.showMascotDialog}
+                        style={{
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            marginTop: 20
+                        }}>
+                        {i18n.t("screens.vote.mascotDialog.title")}
+                    </Button>
+                </View>
+            );
         else
-            return null;
+            return this.getContent();
     };
 
     getScreen = (data: Array<{ [key: string]: any } | null>) => {
@@ -254,7 +273,7 @@ export default class VoteScreen extends React.Component<Props, State> {
         else if (this.isResultRunning())
             return this.getVoteResultCard();
         else
-            return null;
+            return <VoteNotAvailable/>;
     }
 
     onVoteSuccess = () => this.setState({hasVoted: true});
@@ -278,7 +297,7 @@ export default class VoteScreen extends React.Component<Props, State> {
                     this.datesString.date_result_end)}
             />;
         else
-            return null;
+            return <VoteNotAvailable/>;
     }
 
     /**
@@ -289,7 +308,7 @@ export default class VoteScreen extends React.Component<Props, State> {
             return <VoteTease
                 startDate={this.getDateString(this.dates.date_begin, this.datesString.date_begin)}/>;
         else
-            return null;
+            return <VoteNotAvailable/>;
     }
 
     /**
@@ -304,6 +323,18 @@ export default class VoteScreen extends React.Component<Props, State> {
                          isVoteRunning={this.isVoteRunning()}/>;
     }
 
+    showMascotDialog = () => {
+        this.setState({mascotDialogVisible: true})
+    };
+
+    hideMascotDialog = () => {
+        AsyncStorageManager.getInstance().savePref(
+            AsyncStorageManager.getInstance().preferences.voteShowBanner.key,
+            '0'
+        );
+        this.setState({mascotDialogVisible: false})
+    };
+
     /**
      * Renders the authenticated screen.
      *
@@ -313,23 +344,40 @@ export default class VoteScreen extends React.Component<Props, State> {
      */
     render() {
         return (
-            <AuthenticatedScreen
-                {...this.props}
-                ref={this.authRef}
-                requests={[
-                    {
-                        link: 'elections/teams',
-                        params: {},
-                        mandatory: false,
-                    },
-                    {
-                        link: 'elections/dates',
-                        params: {},
-                        mandatory: false,
-                    },
-                ]}
-                renderFunction={this.getScreen}
-            />
+            <View style={{flex: 1}}>
+                <AuthenticatedScreen
+                    {...this.props}
+                    ref={this.authRef}
+                    requests={[
+                        {
+                            link: 'elections/teams',
+                            params: {},
+                            mandatory: false,
+                        },
+                        {
+                            link: 'elections/dates',
+                            params: {},
+                            mandatory: false,
+                        },
+                    ]}
+                    renderFunction={this.getScreen}
+                />
+                <MascotPopup
+                    visible={this.state.mascotDialogVisible}
+                    title={i18n.t("screens.vote.mascotDialog.title")}
+                    message={i18n.t("screens.vote.mascotDialog.message")}
+                    icon={"vote"}
+                    buttons={{
+                        action: null,
+                        cancel: {
+                            message: i18n.t("screens.vote.mascotDialog.button"),
+                            icon: "check",
+                            onPress: this.hideMascotDialog,
+                        }
+                    }}
+                    emotion={MASCOT_STYLE.CUTE}
+                />
+            </View>
         );
     }
 }

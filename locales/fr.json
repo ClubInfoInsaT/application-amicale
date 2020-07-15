@@ -229,6 +229,7 @@
     },
     "vote": {
       "title": "Élections",
+      "noVote": "Pas de vote en cours",
       "select": {
         "title": "Élections ouvertes",
         "subtitle": "Vote maintenant !",
@@ -257,11 +258,10 @@
         "totalVotes": "Nombre total de votes :",
         "votes": "votes"
       },
-      "main": {
-        "title": "Les Élections",
-        "subtitle": "Pourquoi ton vote est important",
-        "paragraph1": "Les élections de l'amicale, c'est le moment pour toi de choisir la prochaine équipe qui portera les différents projets du campus, qui soutiendra les organisations de tes événements favoris, qui te proposera des animations tout au long de l'année, et qui poussera tes idées à l’administration pour que la vie de campus soit des plus riches !\nAlors à toi de jouer ! \uD83D\uDE09",
-        "paragraph2": "NB : Si par cas il n'y a qu'une liste qui se présente, il est important que tout le monde vote, afin qui la liste puisse montrer à l’administration que les INSAiens la soutiennent ! Ça compte toujours pour les décisions difficiles ! \uD83D\uDE09"
+      "mascotDialog": {
+        "title": "Pourquoi voter ?",
+        "message": "Les élections de l'amicale, c'est le moment pour toi de choisir la prochaine équipe qui portera les différents projets du campus, qui soutiendra les organisations de tes événements favoris, qui te proposera des animations tout au long de l'année, et qui poussera tes idées à l’administration pour que la vie de campus soit des plus riches !\nAlors à toi de jouer ! \uD83D\uDE09\n\nNB : Si par cas il n'y a qu'une liste qui se présente, il est important que tout le monde vote, afin qui la liste puisse montrer à l’administration que les INSAiens la soutiennent ! Ça compte toujours pour les décisions difficiles ! \uD83D\uDE09",
+        "button": "Oké"
       }
     },
     "equipment": {

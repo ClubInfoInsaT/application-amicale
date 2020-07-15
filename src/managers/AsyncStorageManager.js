@@ -89,6 +89,11 @@ export default class AsyncStorageManager {
             default: '1',
             current: '',
         },
+        voteShowBanner: {
+            key: 'voteShowBanner',
+            default: '1',
+            current: '',
+        },
         proxiwashWatchedMachines: {
             key: 'proxiwashWatchedMachines',
             default: '[]',

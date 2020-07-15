@@ -230,6 +230,7 @@
     },
     "vote": {
       "title": "Elections",
+      "noVote": "No vote available",
       "select": {
         "title": "Elections open",
         "subtitle": "Vote now!",
@@ -258,11 +259,10 @@
         "totalVotes": "Total votes:",
         "votes": "votes"
       },
-      "main": {
-        "title": "The Elections",
-        "subtitle": "Why your vote is important",
-        "paragraph1": "The Amicale's elections is the right moment for you to choose the next team, which will handle different projects on the campus, help organizing your favorite events, animate the campus life during the whole year, and relay your ideas to the administration, so that your campus life is the most enjoyable possible!\nYour turn to make a change!\uD83D\uDE09",
-        "paragraph2": "Note: If there is only one list, it is still important to vote to show your support, so that the administration knows the current list is supported by students. It is always a plus when taking difficult decisions! \uD83D\uDE09"
+      "mascotDialog": {
+        "title": "Why vote?",
+        "message": "The Amicale's elections is the right moment for you to choose the next team, which will handle different projects on the campus, help organizing your favorite events, animate the campus life during the whole year, and relay your ideas to the administration, so that your campus life is the most enjoyable possible!\nYour turn to make a change!\uD83D\uDE09\n\nNote: If there is only one list, it is still important to vote to show your support, so that the administration knows the current list is supported by students. It is always a plus when taking difficult decisions! \uD83D\uDE09",
+        "button": "Ok"
       }
     },
     "equipment": {
