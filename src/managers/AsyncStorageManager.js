@@ -1,6 +1,7 @@
 // @flow
 
 import AsyncStorage from '@react-native-community/async-storage';
+import {SERVICES_KEY} from "./ServicesManager";
 
 /**
  * Singleton used to manage preferences.
@@ -117,6 +118,17 @@ export default class AsyncStorageManager {
         planexFavoriteGroups: {
             key: 'planexFavoriteGroups',
             default: '[]',
+            current: '',
+        },
+        dashboardItems: {
+            key: 'dashboardItems',
+            default: JSON.stringify([
+                SERVICES_KEY.EMAIL,
+                SERVICES_KEY.WASHERS,
+                SERVICES_KEY.PROXIMO,
+                SERVICES_KEY.TUTOR_INSA,
+                SERVICES_KEY.RU,
+            ]),
             current: '',
         },
     };

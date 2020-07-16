@@ -1,17 +1,15 @@
 // @flow
 
 import * as React from 'react';
-import {Badge, IconButton, withTheme} from 'react-native-paper';
-import {View} from "react-native";
+import {Badge, TouchableRipple, withTheme} from 'react-native-paper';
+import {Dimensions, Image, View} from "react-native";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import * as Animatable from "react-native-animatable";
 
 type Props = {
-    color: string,
-    icon: string,
-    clickAction: () => void,
-    isAvailable: boolean,
-    badgeNumber: number,
+    image: string,
+    onPress: () => void,
+    badgeCount: number | null,
     theme: CustomTheme,
 };
 
@@ -22,42 +20,60 @@ const AnimatableBadge = Animatable.createAnimatableComponent(Badge);
  */
 class SmallDashboardItem extends React.Component<Props> {
 
+    itemSize: number;
+
+    constructor(props: Props) {
+        super(props);
+        this.itemSize = Dimensions.get('window').width / 8;
+    }
+
     shouldComponentUpdate(nextProps: Props) {
         return (nextProps.theme.dark !== this.props.theme.dark)
-            || (nextProps.isAvailable !== this.props.isAvailable)
-            || (nextProps.badgeNumber !== this.props.badgeNumber);
+            || (nextProps.badgeCount !== this.props.badgeCount);
     }
 
     render() {
         const props = this.props;
-        const colors = props.theme.colors;
         return (
-            <View>
-                <IconButton
-                    icon={props.icon}
-                    color={
-                        props.isAvailable
-                            ? props.color
-                            : colors.textDisabled
-                    }
-                    size={35}
-                    onPress={props.clickAction}
-                />
-                {
-                    props.badgeNumber > 0 ?
-                        <AnimatableBadge
-                            animation={"zoomIn"}
-                            duration={300}
-                            useNativeDriver
+                <TouchableRipple
+                    onPress={this.props.onPress}
+                    borderless={true}
+                    style={{
+                        marginLeft: 5,
+                        marginRight: 5,
+                    }}
+                >
+                    <View style={{
+                        width: this.itemSize,
+                        height: this.itemSize,
+                    }}>
+                        <Image
+                            source={{uri: props.image}}
                             style={{
-                                position: 'absolute',
-                                top: 5,
-                                right: 5
-                            }}>
-                            {props.badgeNumber}
-                        </AnimatableBadge> : null
-                }
-            </View>
+                                width: "100%",
+                                height: "100%",
+                            }}
+                        />
+                        {
+                            props.badgeCount != null && props.badgeCount > 0 ?
+                                <AnimatableBadge
+                                    animation={"zoomIn"}
+                                    duration={300}
+                                    useNativeDriver
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        right: 0,
+                                        backgroundColor: props.theme.colors.primary,
+                                        borderColor: "#fff",
+                                        borderWidth: 1,
+                                    }}>
+                                    {props.badgeCount}
+                                </AnimatableBadge> : null
+                        }
+                    </View>
+                </TouchableRipple>
+
         );
     }
 

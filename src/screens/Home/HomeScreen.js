@@ -20,9 +20,9 @@ import {View} from "react-native-animatable";
 import ConnectionManager from "../../managers/ConnectionManager";
 import LogoutDialog from "../../components/Amicale/LogoutDialog";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import AvailableWebsites from "../../constants/AvailableWebsites";
 import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
 import MascotPopup from "../../components/Mascot/MascotPopup";
+import DashboardManager from "../../managers/DashboardManager";
 // import DATA from "../dashboard_data.json";
 
 
@@ -52,7 +52,7 @@ export type feedItem = {
     id: string,
 };
 
-type fullDashboard = {
+export type fullDashboard = {
     today_menu: Array<{ [key: string]: any }>,
     proximo_articles: number,
     available_dryers: number,
@@ -64,15 +64,6 @@ type fullDashboard = {
 type dashboardItem = {
     id: string,
     content: Array<{ [key: string]: any }>
-};
-
-type dashboardSmallItem = {
-    id: string,
-    data: number,
-    icon: string,
-    color: string,
-    onPress: () => void,
-    isAvailable: boolean
 };
 
 export type event = {
@@ -113,11 +104,16 @@ class HomeScreen extends React.Component<Props, State> {
 
     fabRef: { current: null | AnimatedFAB };
     currentNewFeed: Array<feedItem>;
+    currentDashboard: fullDashboard | null;
+
+    dashboardManager: DashboardManager;
 
     constructor(props) {
         super(props);
         this.fabRef = React.createRef();
+        this.dashboardManager = new DashboardManager(this.props.navigation);
         this.currentNewFeed = [];
+        this.currentDashboard = null;
         this.isLoggedIn = ConnectionManager.getInstance().isLoggedIn();
         this.props.navigation.setOptions({
             headerRight: this.getHeaderButton,
@@ -207,22 +203,6 @@ class HomeScreen extends React.Component<Props, State> {
 
     hideDisconnectDialog = () => this.setState({dialogVisible: false});
 
-    onProxiwashClick = () => {
-        this.props.navigation.navigate("proxiwash");
-    };
-
-    onProximoClick = () => {
-        this.props.navigation.navigate("proximo");
-    };
-
-    onTutorInsaClick = () => {
-        this.props.navigation.navigate("website", {host: AvailableWebsites.websites.TUTOR_INSA, title: "Tutor'INSA"});
-    };
-
-    onMenuClick = () => {
-        this.props.navigation.navigate('self-menu');
-    };
-
     /**
      * Creates the dataset to be used in the FlatList
      *
@@ -232,9 +212,11 @@ class HomeScreen extends React.Component<Props, State> {
     createDataset = (fetchedData: rawDashboard) => {
         // fetchedData = DATA;
         let dashboardData;
-        if (fetchedData.news_feed != null) {
+        if (fetchedData.news_feed != null)
             this.currentNewFeed = fetchedData.news_feed.data;
-        }
+        if (fetchedData.dashboard != null)
+            this.currentDashboard = fetchedData.dashboard;
+
         if (fetchedData.dashboard != null)
             dashboardData = this.generateDashboardDataset(fetchedData.dashboard);
         else
@@ -264,48 +246,7 @@ class HomeScreen extends React.Component<Props, State> {
             {id: 'actions', content: []},
             {
                 id: 'top',
-                content: [
-                    {
-                        id: 'washers',
-                        data: dashboardData == null ? 0 : dashboardData.available_washers,
-                        icon: 'washing-machine',
-                        color: this.props.theme.colors.proxiwashColor,
-                        onPress: this.onProxiwashClick,
-                        isAvailable: dashboardData == null ? false : dashboardData.available_washers > 0
-                    },
-                    {
-                        id: 'dryers',
-                        data: dashboardData == null ? 0 : dashboardData.available_dryers,
-                        icon: 'tumble-dryer',
-                        color: this.props.theme.colors.proxiwashColor,
-                        onPress: this.onProxiwashClick,
-                        isAvailable: dashboardData == null ? false : dashboardData.available_dryers > 0
-                    },
-                    {
-                        id: 'available_tutorials',
-                        data: dashboardData == null ? 0 : dashboardData.available_tutorials,
-                        icon: 'school',
-                        color: this.props.theme.colors.tutorinsaColor,
-                        onPress: this.onTutorInsaClick,
-                        isAvailable: dashboardData == null ? false : dashboardData.available_tutorials > 0
-                    },
-                    {
-                        id: 'proximo_articles',
-                        data: dashboardData == null ? 0 : dashboardData.proximo_articles,
-                        icon: 'shopping',
-                        color: this.props.theme.colors.proximoColor,
-                        onPress: this.onProximoClick,
-                        isAvailable: dashboardData == null ? false : dashboardData.proximo_articles > 0
-                    },
-                    {
-                        id: 'today_menu',
-                        data: dashboardData == null ? [] : dashboardData.today_menu,
-                        icon: 'silverware-fork-knife',
-                        color: this.props.theme.colors.menuColor,
-                        onPress: this.onMenuClick,
-                        isAvailable: dashboardData == null ? false : dashboardData.today_menu.length > 0
-                    },
-                ]
+                content: this.dashboardManager.getCurrentDashboard(),
             },
             {
                 id: 'event',
@@ -491,14 +432,14 @@ class HomeScreen extends React.Component<Props, State> {
      * @param item
      * @returns {*}
      */
-    dashboardRowRenderItem = ({item}: { item: dashboardSmallItem }) => {
+    dashboardRowRenderItem = ({item}: { item: DashboardItem }) => {
         return (
             <SquareDashboardItem
-                color={item.color}
-                icon={item.icon}
-                clickAction={item.onPress}
-                isAvailable={item.isAvailable}
-                badgeNumber={item.data}
+                image={item.image}
+                onPress={item.onPress}
+                badgeCount={this.currentDashboard != null && item.badgeFunction != null
+                    ? item.badgeFunction(this.currentDashboard)
+                    : null}
             />
         );
     };
@@ -509,7 +450,7 @@ class HomeScreen extends React.Component<Props, State> {
      * @param content
      * @return {*}
      */
-    getDashboardRow(content: Array<dashboardSmallItem>) {
+    getDashboardRow(content: Array<DashboardItem>) {
         return (
             //$FlowFixMe
             <FlatList
