@@ -9,7 +9,7 @@ import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
 import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import PlanexScreen from '../screens/Planex/PlanexScreen';
 import AsyncStorageManager from "../managers/AsyncStorageManager";
-import {useTheme} from 'react-native-paper';
+import {Title, useTheme} from 'react-native-paper';
 import {Platform} from 'react-native';
 import i18n from "i18n-js";
 import ClubDisplayScreen from "../screens/Amicale/Clubs/ClubDisplayScreen";
@@ -22,6 +22,8 @@ import WebsitesHomeScreen from "../screens/Services/ServicesScreen";
 import ServicesSectionScreen from "../screens/Services/ServicesSectionScreen";
 import AmicaleContactScreen from "../screens/Amicale/AmicaleContactScreen";
 import {createScreenCollapsibleStack, getWebsiteStack} from "../utils/CollapsibleUtils";
+import {View} from "react-native-animatable";
+import Mascot, {MASCOT_STYLE} from "../components/Mascot/Mascot";
 
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
 
@@ -113,6 +115,27 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                         headerStyle: {
                             backgroundColor: colors.surface,
                         },
+                        headerTitle: (props) => <View style={{flexDirection: "row"}}>
+                            <Mascot
+                                emotion={MASCOT_STYLE.RANDOM}
+                                size={50}
+                                animated={true}
+                                entryAnimation={{
+                                    animation: "bounceIn",
+                                    duration: 1000
+                                }}
+                                loopAnimation={{
+                                    animation: "pulse",
+                                    duration: 2000,
+                                    iterationCount: "infinite"
+                                }}
+                            />
+                            <Title style={{
+                                marginLeft: 10,
+                                marginTop: "auto",
+                                marginBottom: "auto",
+                            }}>{i18n.t('screens.home.title')}</Title>
+                        </View>
                     }}
                     initialParams={params}
                 />,

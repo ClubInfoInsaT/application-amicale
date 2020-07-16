@@ -54,14 +54,11 @@ export const MASCOT_STYLE = {
     LOVE: 6,
     COOL: 7,
     ANGRY: 8,
+    RANDOM: 999,
 };
 
 
 class Mascot extends React.Component<Props, State> {
-
-    state = {
-        currentEmotion: this.props.emotion
-    }
 
     static defaultProps = {
         animated: false,
@@ -91,6 +88,8 @@ class Mascot extends React.Component<Props, State> {
     onPress: (viewRef: AnimatableViewRef) => null;
     onLongPress: (viewRef: AnimatableViewRef) => null;
 
+    initialEmotion: number;
+
     constructor(props: Props) {
         super(props);
         this.viewRef = React.createRef();
@@ -106,12 +105,21 @@ class Mascot extends React.Component<Props, State> {
         this.glassesList[GLASSES_STYLE.NORMAL] = MASCOT_GLASSES;
         this.glassesList[GLASSES_STYLE.COOl] = MASCOT_SUNGLASSES;
 
+        this.initialEmotion = this.props.emotion;
+
+        if (this.initialEmotion === MASCOT_STYLE.RANDOM)
+            this.initialEmotion = Math.floor(Math.random() * MASCOT_STYLE.ANGRY) + 1;
+
+        this.state = {
+            currentEmotion: this.initialEmotion
+        }
+
         if (this.props.onPress == null) {
             this.onPress = (viewRef: AnimatableViewRef) => {
                 if (viewRef.current != null) {
                     this.setState({currentEmotion: MASCOT_STYLE.LOVE});
                     viewRef.current.rubberBand(1500).then(() => {
-                        this.setState({currentEmotion: this.props.emotion});
+                        this.setState({currentEmotion: this.initialEmotion});
                     });
 
                 }
@@ -125,7 +133,7 @@ class Mascot extends React.Component<Props, State> {
                 if (viewRef.current != null) {
                     this.setState({currentEmotion: MASCOT_STYLE.ANGRY});
                     viewRef.current.tada(1000).then(() => {
-                        this.setState({currentEmotion: this.props.emotion});
+                        this.setState({currentEmotion: this.initialEmotion});
                     });
 
                 }
