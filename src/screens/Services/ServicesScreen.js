@@ -16,7 +16,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
 import MascotPopup from "../../components/Mascot/MascotPopup";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import ServicesManager from "../../managers/ServicesManager";
+import ServicesManager, {SERVICES_CATEGORIES_KEY} from "../../managers/ServicesManager";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -36,13 +36,8 @@ export type listItem = {
     content: cardList,
 }
 
-const AMICALE_LOGO = require("../../../assets/amicale.png");
 
 class ServicesScreen extends React.Component<Props, State> {
-
-    amicaleDataset: cardList;
-    studentsDataset: cardList;
-    insaDataset: cardList;
 
     finalDataset: Array<listItem>
 
@@ -53,29 +48,7 @@ class ServicesScreen extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         const services = new ServicesManager(props.navigation);
-        this.amicaleDataset = services.getAmicaleServices();
-        this.studentsDataset = services.getStudentServices();
-        this.insaDataset = services.getINSAServices();
-        this.finalDataset = [
-            {
-                title: i18n.t("screens.services.categories.amicale"),
-                description: i18n.t("screens.services.more"),
-                image: AMICALE_LOGO,
-                content: this.amicaleDataset
-            },
-            {
-                title: i18n.t("screens.services.categories.students"),
-                description: i18n.t("screens.services.more"),
-                image: 'account-group',
-                content: this.studentsDataset
-            },
-            {
-                title: i18n.t("screens.services.categories.insa"),
-                description: i18n.t("screens.services.more"),
-                image: 'school',
-                content: this.insaDataset
-            },
-        ];
+        this.finalDataset = services.getCategories([SERVICES_CATEGORIES_KEY.SPECIAL])
     }
 
     componentDidMount() {

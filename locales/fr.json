@@ -6,7 +6,8 @@
       "categories": {
         "amicale": "L' Amicale",
         "students": "Services étudiants",
-        "insa": "Services de l'INSA"
+        "insa": "Services de l'INSA",
+        "special": "Proxiwash"
       },
       "descriptions": {
         "clubs": "Tous les clubs et leurs infos",
@@ -23,7 +24,9 @@
         "mails": "Vérifie tes mails INSA",
         "ent": "Retrouve tes notes",
         "insaAccount": "Accède à tes infos INSA et modifie ton mot de passe",
-        "equipment": "Réserve un BBQ ou autre matériel"
+        "equipment": "Réserve un BBQ ou autre matériel",
+        "washers": "Nombre de lave-Linges disponibles",
+        "dryers": "Nombre de sèche-Linges disponibles"
       },
       "mascotDialog": {
         "title": "Un peu perdu ?",
@@ -319,9 +322,16 @@
       "nightModeAutoSub": "Suit le mode sélectionné par le système",
       "startScreen": "Écran de démarrage",
       "startScreenSub": "Choisis l'écran sur lequel démarre Campus",
+      "dashboard": "Dashboard",
+      "dashboardSub": "Choisis les services à afficher sur la dashboard",
       "proxiwashNotifReminder": "Rappel de machine en cours",
       "proxiwashNotifReminderSub": "Combien de minutes avant",
-      "information": "Informations"
+      "information": "Informations",
+      "dashboardEdit": {
+        "title": "Modifier la dashboard",
+        "message": "Les 5 icones ci-dessus représentent ta dashboard.\nTu peux remplacer un de ses services en cliquant dessus, puis en sélectionnant le nouveau service de ton choix dans la liste ci-dessous.",
+        "undo": "Annuler les changements"
+      }
     },
     "about": {
       "title": "À Propos",

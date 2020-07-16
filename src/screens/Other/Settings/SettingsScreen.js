@@ -2,13 +2,13 @@
 
 import * as React from 'react';
 import {ScrollView, View} from "react-native";
-import type {CustomTheme} from "../../managers/ThemeManager";
-import ThemeManager from '../../managers/ThemeManager';
+import type {CustomTheme} from "../../../managers/ThemeManager";
+import ThemeManager from '../../../managers/ThemeManager';
 import i18n from "i18n-js";
-import AsyncStorageManager from "../../managers/AsyncStorageManager";
+import AsyncStorageManager from "../../../managers/AsyncStorageManager";
 import {Card, List, Switch, ToggleButton, withTheme} from 'react-native-paper';
 import {Appearance} from "react-native-appearance";
-import CustomSlider from "../../components/Overrides/CustomSlider";
+import CustomSlider from "../../../components/Overrides/CustomSlider";
 import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
@@ -203,6 +203,12 @@ class SettingsScreen extends React.Component<Props, State> {
                             left={props => <List.Icon {...props} icon="power"/>}
                         />
                         {this.getStartScreenPicker()}
+                        <List.Item
+                            title={i18n.t('screens.settings.dashboard')}
+                            description={i18n.t('screens.settings.dashboardSub')}
+                            onPress={() => this.props.navigation.navigate("dashboard-edit")}
+                            left={props => <List.Icon {...props} icon="view-dashboard"/>}
+                        />
                     </List.Section>
                 </Card>
                 <Card style={{margin: 5}}>

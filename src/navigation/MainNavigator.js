@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import SettingsScreen from '../screens/Other/SettingsScreen';
+import SettingsScreen from '../screens/Other/Settings/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 import DebugScreen from '../screens/About/DebugScreen';
@@ -26,6 +26,7 @@ import WebsiteScreen from "../screens/Services/WebsiteScreen";
 import EquipmentScreen from "../screens/Amicale/Equipment/EquipmentListScreen";
 import EquipmentLendScreen from "../screens/Amicale/Equipment/EquipmentRentScreen";
 import EquipmentConfirmScreen from "../screens/Amicale/Equipment/EquipmentConfirmScreen";
+import DashboardEditScreen from "../screens/Other/Settings/DashboardEditScreen";
 
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
 
@@ -60,6 +61,13 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 component={SettingsScreen}
                 options={{
                     title: i18n.t('screens.settings.title'),
+                }}
+            />
+            <MainStack.Screen
+                name="dashboard-edit"
+                component={DashboardEditScreen}
+                options={{
+                    title: i18n.t('screens.settings.dashboardEdit.title'),
                 }}
             />
             <MainStack.Screen

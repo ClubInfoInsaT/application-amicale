@@ -31,6 +31,8 @@ const ACCOUNT_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/Account
 const WASHER_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ProxiwashLaveLinge.png";
 const DRYER_IMAGE = "https://etud.insa-toulouse.fr/~amicale_app/images/ProxiwashSecheLinge.png";
 
+const AMICALE_LOGO = require("../../assets/amicale.png");
+
 export const SERVICES_KEY = {
     CLUBS: "clubs",
     PROFILE: "profile",
@@ -51,6 +53,14 @@ export const SERVICES_KEY = {
     DRYERS: "dryers",
 }
 
+export const SERVICES_CATEGORIES_KEY = {
+    AMICALE: "amicale",
+    STUDENTS: "students",
+    INSA: "insa",
+    SPECIAL: "special",
+}
+
+
 export type ServiceItem = {
     key: string,
     title: string,
@@ -60,6 +70,15 @@ export type ServiceItem = {
     badgeFunction?: (dashboard: fullDashboard) => number,
 }
 
+export type ServiceCategory = {
+    key: string,
+    title: string,
+    subtitle: string,
+    image: string | number,
+    content: Array<ServiceItem>
+}
+
+
 export default class ServicesManager {
 
     navigation: StackNavigationProp;
@@ -68,6 +87,8 @@ export default class ServicesManager {
     studentsDataset: Array<ServiceItem>;
     insaDataset: Array<ServiceItem>;
     specialDataset: Array<ServiceItem>;
+
+    categoriesDataset: Array<ServiceCategory>;
 
     constructor(nav: StackNavigationProp) {
         this.navigation = nav;
@@ -213,7 +234,7 @@ export default class ServicesManager {
             {
                 key: SERVICES_KEY.WASHERS,
                 title: i18n.t('screens.proxiwash.washers'),
-                subtitle: i18n.t('screens.proxiwash.title'), // TODO add description
+                subtitle: i18n.t('screens.services.descriptions.washers'),
                 image: WASHER_IMAGE,
                 onPress: () => nav.navigate("proxiwash"),
                 badgeFunction: (dashboard: fullDashboard) => dashboard.available_washers
@@ -221,12 +242,42 @@ export default class ServicesManager {
             {
                 key: SERVICES_KEY.DRYERS,
                 title: i18n.t('screens.proxiwash.dryers'),
-                subtitle: i18n.t('screens.proxiwash.title'), // TODO add description
+                subtitle: i18n.t('screens.services.descriptions.washers'),
                 image: DRYER_IMAGE,
                 onPress: () => nav.navigate("proxiwash"),
                 badgeFunction: (dashboard: fullDashboard) => dashboard.available_dryers
             }
-        ]
+        ];
+        this.categoriesDataset = [
+            {
+                key: SERVICES_CATEGORIES_KEY.AMICALE,
+                title: i18n.t("screens.services.categories.amicale"),
+                subtitle: i18n.t("screens.services.more"),
+                image: AMICALE_LOGO,
+                content: this.amicaleDataset
+            },
+            {
+                key: SERVICES_CATEGORIES_KEY.STUDENTS,
+                title: i18n.t("screens.services.categories.students"),
+                subtitle: i18n.t("screens.services.more"),
+                image: 'account-group',
+                content: this.studentsDataset
+            },
+            {
+                key: SERVICES_CATEGORIES_KEY.INSA,
+                title: i18n.t("screens.services.categories.insa"),
+                subtitle: i18n.t("screens.services.more"),
+                image: 'school',
+                content: this.insaDataset
+            },
+            {
+                key: SERVICES_CATEGORIES_KEY.SPECIAL,
+                title: i18n.t("screens.services.categories.special"),
+                subtitle: i18n.t("screens.services.categories.special"),
+                image: 'star',
+                content: this.specialDataset
+            },
+        ];
     }
 
     /**
@@ -249,7 +300,7 @@ export default class ServicesManager {
      * @param sourceList The item list to use as source
      * @returns {[]}
      */
-    getStrippedList(idList: Array<string>, sourceList: Array<ServiceItem>) {
+    getStrippedList(idList: Array<string>, sourceList: Array<{key: string, [key: string]: any}>) {
         let newArray = [];
         for (let i = 0; i < sourceList.length; i++) {
             const item = sourceList[i];
@@ -309,6 +360,19 @@ export default class ServicesManager {
             return this.getStrippedList(excludedItems, this.specialDataset)
         else
             return this.specialDataset;
+    }
+
+    /**
+     * Gets all services sorted by category
+     *
+     * @param excludedItems Ids of categories to exclude from the returned list
+     * @returns {Array<ServiceCategory>}
+     */
+    getCategories(excludedItems?: Array<string>) {
+        if (excludedItems != null)
+            return this.getStrippedList(excludedItems, this.categoriesDataset)
+        else
+            return this.categoriesDataset;
     }
 
 }
