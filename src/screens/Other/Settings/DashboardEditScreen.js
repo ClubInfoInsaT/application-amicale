@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../../managers/ThemeManager";
-import {Button, Paragraph, withTheme} from "react-native-paper";
+import {Button, Card, Paragraph, withTheme} from "react-native-paper";
 import type {ServiceCategory, ServiceItem} from "../../../managers/ServicesManager";
 import DashboardManager from "../../../managers/DashboardManager";
 import DashboardItem from "../../../components/Home/EventDashboardItem";
@@ -97,7 +97,7 @@ class DashboardEditScreen extends React.Component<Props, State> {
         );
     }
 
-    undoDashboard= () => {
+    undoDashboard = () => {
         this.setState({
             currentDashboard: [...this.initialDashboard],
             currentDashboardIdList: [...this.initialDashboardIdList]
@@ -132,13 +132,18 @@ class DashboardEditScreen extends React.Component<Props, State> {
                     </View>
 
                 </View>
-                    <FlatList
-                        data={this.content}
-                        renderItem={this.renderItem}
-                        ListHeaderComponent={<Paragraph>{i18n.t("screens.settings.dashboardEdit.message")}</Paragraph>}
-                        style={{
-                        }}
-                    />
+                <FlatList
+                    data={this.content}
+                    renderItem={this.renderItem}
+                    ListHeaderComponent={<Card style={{margin: 5}}>
+                        <Card.Content>
+                            <Paragraph
+                                style={{textAlign: "center"}}>{i18n.t("screens.settings.dashboardEdit.message")}</Paragraph>
+                        </Card.Content>
+
+                    </Card>}
+                    style={{}}
+                />
             </View>
         );
     }

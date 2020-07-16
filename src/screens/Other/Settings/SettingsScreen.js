@@ -172,6 +172,19 @@ class SettingsScreen extends React.Component<Props, State> {
         );
     }
 
+    getNavigateItem(route: string, icon: string, title: string, subtitle: string, onLongPress?: () => void) {
+        return (
+            <List.Item
+                title={title}
+                description={subtitle}
+                onPress={() => this.props.navigation.navigate(route)}
+                left={props => <List.Icon {...props} icon={icon}/>}
+                right={props => <List.Icon {...props} icon={"chevron-right"}/>}
+                onLongPress={onLongPress}
+            />
+        );
+    }
+
     render() {
         return (
             <ScrollView>
@@ -203,12 +216,12 @@ class SettingsScreen extends React.Component<Props, State> {
                             left={props => <List.Icon {...props} icon="power"/>}
                         />
                         {this.getStartScreenPicker()}
-                        <List.Item
-                            title={i18n.t('screens.settings.dashboard')}
-                            description={i18n.t('screens.settings.dashboardSub')}
-                            onPress={() => this.props.navigation.navigate("dashboard-edit")}
-                            left={props => <List.Icon {...props} icon="view-dashboard"/>}
-                        />
+                        {this.getNavigateItem(
+                            "dashboard-edit",
+                            "view-dashboard",
+                            i18n.t('screens.settings.dashboard'),
+                            i18n.t('screens.settings.dashboardSub')
+                        )}
                     </List.Section>
                 </Card>
                 <Card style={{margin: 5}}>
@@ -229,25 +242,26 @@ class SettingsScreen extends React.Component<Props, State> {
                     <Card.Title title={i18n.t('screens.settings.information')}/>
                     <List.Section>
                         {this.state.isDebugUnlocked
-                            ? <List.Item
-                                title={i18n.t('screens.debug.title')}
-                                left={props => <List.Icon {...props} icon="bug-check"/>}
-                                onPress={() => this.props.navigation.navigate("debug")}
-                            />
+                            ? this.getNavigateItem(
+                                    "debug",
+                                    "bug-check",
+                                    i18n.t('screens.debug.title'),
+                                    ""
+                                )
                             : null}
-                        <List.Item
-                            title={i18n.t('screens.about.title')}
-                            description={i18n.t('screens.about.buttonDesc')}
-                            left={props => <List.Icon {...props} icon="information"/>}
-                            onPress={() => this.props.navigation.navigate("about")}
-                            onLongPress={this.unlockDebugMode}
-                        />
-                        <List.Item
-                            title={i18n.t('screens.feedback.homeButtonTitle')}
-                            description={i18n.t('screens.feedback.homeButtonSubtitle')}
-                            left={props => <List.Icon {...props} icon="bug"/>}
-                            onPress={() => this.props.navigation.navigate("feedback")}
-                        />
+                        {this.getNavigateItem(
+                            "about",
+                            "information",
+                            i18n.t('screens.about.title'),
+                            i18n.t('screens.about.buttonDesc'),
+                            this.unlockDebugMode,
+                        )}
+                        {this.getNavigateItem(
+                            "feedback",
+                            "comment-quote",
+                            i18n.t('screens.feedback.homeButtonTitle'),
+                            i18n.t('screens.feedback.homeButtonSubtitle'),
+                        )}
                     </List.Section>
                 </Card>
             </ScrollView>

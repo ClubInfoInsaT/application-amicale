@@ -39,8 +39,8 @@ class SmallDashboardItem extends React.Component<Props> {
                     onPress={this.props.onPress}
                     borderless={true}
                     style={{
-                        marginLeft: 5,
-                        marginRight: 5,
+                        marginLeft: this.itemSize / 4,
+                        marginRight: this.itemSize / 4,
                     }}
                 >
                     <View style={{
