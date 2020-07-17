@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Button, Card, Text} from 'react-native-paper';
+import {Button, Card, Text, TouchableRipple} from 'react-native-paper';
 import {Image, View} from "react-native";
 import Autolink from "react-native-autolink";
 import i18n from "i18n-js";
@@ -75,45 +75,50 @@ class FeedItem extends React.Component<Props> {
                     margin: cardMargin,
                     height: cardHeight,
                 }}
-                onPress={this.onPress}
             >
-                <Card.Title
-                    title={this.props.title}
-                    subtitle={this.props.subtitle}
-                    left={this.getAvatar}
-                    style={{height: titleHeight}}
-                />
-                {hasImage ?
-                    <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                        <ImageModal
-                            resizeMode="contain"
-                            imageBackgroundColor={"#000"}
-                            style={{
-                                width: imageSize,
-                                height: imageSize,
-                            }}
-                            source={{
-                                uri: item.full_picture,
-                            }}
-                        /></View> : null}
-                <Card.Content>
-                    {item.message !== undefined ?
-                        <Autolink
-                            text={item.message}
-                            hashtag="facebook"
-                            component={Text}
-                            style={{height: textHeight}}
-                        /> : null
-                    }
-                </Card.Content>
-                <Card.Actions style={{height: actionsHeight}}>
-                    <Button
-                        onPress={this.onPress}
-                        icon={'plus'}
-                        style={{marginLeft: 'auto'}}>
-                        {i18n.t('screens.home.dashboard.seeMore')}
-                    </Button>
-                </Card.Actions>
+                <TouchableRipple
+                    style={{flex: 1}}
+                    onPress={this.onPress}>
+                    <View>
+                        <Card.Title
+                            title={this.props.title}
+                            subtitle={this.props.subtitle}
+                            left={this.getAvatar}
+                            style={{height: titleHeight}}
+                        />
+                        {hasImage ?
+                            <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
+                                <ImageModal
+                                    resizeMode="contain"
+                                    imageBackgroundColor={"#000"}
+                                    style={{
+                                        width: imageSize,
+                                        height: imageSize,
+                                    }}
+                                    source={{
+                                        uri: item.full_picture,
+                                    }}
+                                /></View> : null}
+                        <Card.Content>
+                            {item.message !== undefined ?
+                                <Autolink
+                                    text={item.message}
+                                    hashtag="facebook"
+                                    component={Text}
+                                    style={{height: textHeight}}
+                                /> : null
+                            }
+                        </Card.Content>
+                        <Card.Actions style={{height: actionsHeight}}>
+                            <Button
+                                onPress={this.onPress}
+                                icon={'plus'}
+                                style={{marginLeft: 'auto'}}>
+                                {i18n.t('screens.home.dashboard.seeMore')}
+                            </Button>
+                        </Card.Actions>
+                    </View>
+                </TouchableRipple>
             </Card>
         );
     }

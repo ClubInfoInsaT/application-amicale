@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Avatar, Card, Text, withTheme} from 'react-native-paper';
-import {StyleSheet} from "react-native";
+import {Avatar, Card, Text, TouchableRipple, withTheme} from 'react-native-paper';
+import {StyleSheet, View} from "react-native";
 import i18n from "i18n-js";
 import type {CustomTheme} from "../../managers/ThemeManager";
 
@@ -47,24 +47,28 @@ class EventDashBoardItem extends React.Component<Props> {
         } else
             subtitle = i18n.t('screens.home.dashboard.todayEventsSubtitleNA');
         return (
-            <Card
-                style={styles.card}
-                onPress={props.clickAction}>
-                <Card.Title
-                    title={i18n.t('screens.home.dashboard.todayEventsTitle')}
-                    titleStyle={{color: textColor}}
-                    subtitle={subtitle}
-                    subtitleStyle={{color: textColor}}
-                    left={() =>
-                        <Avatar.Icon
-                            icon={'calendar-range'}
-                            color={iconColor}
-                            size={60}
-                            style={styles.avatar}/>}
-                />
-                <Card.Content>
-                    {props.children}
-                </Card.Content>
+            <Card style={styles.card}>
+                <TouchableRipple
+                    style={{flex: 1}}
+                    onPress={props.clickAction}>
+                    <View>
+                        <Card.Title
+                            title={i18n.t('screens.home.dashboard.todayEventsTitle')}
+                            titleStyle={{color: textColor}}
+                            subtitle={subtitle}
+                            subtitleStyle={{color: textColor}}
+                            left={() =>
+                                <Avatar.Icon
+                                    icon={'calendar-range'}
+                                    color={iconColor}
+                                    size={60}
+                                    style={styles.avatar}/>}
+                        />
+                        <Card.Content>
+                            {props.children}
+                        </Card.Content>
+                    </View>
+                </TouchableRipple>
             </Card>
         );
     }

@@ -1,7 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Caption, Card, Paragraph} from 'react-native-paper';
+import {Caption, Card, Paragraph, TouchableRipple} from 'react-native-paper';
+import {View} from "react-native";
 import type {cardItem} from "./CardList";
 
 type Props = {
@@ -28,16 +29,22 @@ export default class CardListItem extends React.Component<Props> {
                     marginLeft: 'auto',
                     marginRight: 'auto',
                 }}
-                onPress={item.onPress}
             >
-                <Card.Cover
-                    style={{height: 80}}
-                    source={source}
-                />
-                <Card.Content>
-                    <Paragraph>{item.title}</Paragraph>
-                    <Caption>{item.subtitle}</Caption>
-                </Card.Content>
+                <TouchableRipple
+                    style={{flex: 1}}
+                    onPress={item.onPress}>
+                    <View>
+                        <Card.Cover
+                            style={{height: 80}}
+                            source={source}
+                        />
+                        <Card.Content>
+                            <Paragraph>{item.title}</Paragraph>
+                            <Caption>{item.subtitle}</Caption>
+                        </Card.Content>
+                    </View>
+                </TouchableRipple>
+
             </Card>
         );
     }
