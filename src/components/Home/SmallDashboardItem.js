@@ -65,8 +65,8 @@ class SmallDashboardItem extends React.Component<Props> {
                                         top: 0,
                                         right: 0,
                                         backgroundColor: props.theme.colors.primary,
-                                        borderColor: "#fff",
-                                        borderWidth: 1,
+                                        borderColor: props.theme.colors.background,
+                                        borderWidth: 2,
                                     }}>
                                     {props.badgeCount}
                                 </AnimatableBadge> : null
