@@ -5,16 +5,15 @@ import {View} from 'react-native';
 import {withTheme} from 'react-native-paper';
 import type {Cell} from "./CellComponent";
 import CellComponent from "./CellComponent";
+import type {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheet";
 
 export type Grid = Array<Array<CellComponent>>;
 
 type Props = {
     grid: Array<Array<Object>>,
-    backgroundColor: string,
     height: number,
     width: number,
-    containerMaxHeight: number | string,
-    containerMaxWidth: number | string,
+    style: ViewStyle,
 }
 
 class GridComponent extends React.Component<Props> {
@@ -23,10 +22,7 @@ class GridComponent extends React.Component<Props> {
         let cells = this.props.grid[rowNumber].map(this.getCellRender);
         return (
             <View
-                style={{
-                    flexDirection: 'row',
-                    backgroundColor: this.props.backgroundColor,
-                }}
+                style={{flexDirection: 'row',}}
                 key={rowNumber.toString()}
             >
                 {cells}
@@ -49,12 +45,8 @@ class GridComponent extends React.Component<Props> {
     render() {
         return (
             <View style={{
-                flexDirection: 'column',
-                maxWidth: this.props.containerMaxWidth,
-                maxHeight: this.props.containerMaxHeight,
                 aspectRatio: this.props.width / this.props.height,
-                marginLeft: 'auto',
-                marginRight: 'auto',
+                ...this.props.style
             }}>
                 {this.getGrid()}
             </View>

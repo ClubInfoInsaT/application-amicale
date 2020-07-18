@@ -363,6 +363,9 @@
     },
     "game": {
       "title": "Game",
+      "score": "Score : %{score}",
+      "time": "Time :",
+      "level": "Level :",
       "pause": "Game Paused",
       "pauseMessage": "The game is paused",
       "resume": "Resume",

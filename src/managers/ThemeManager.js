@@ -119,8 +119,7 @@ export default class ThemeManager {
                 tutorinsaColor: '#f93943',
 
                 // Tetris
-                tetrisBackground: '#e6e6e6',
-                tetrisBorder: '#2f2f2f',
+                tetrisBackground: '#f0f0f0',
                 tetrisScore: '#e2bd33',
                 tetrisI: '#3cd9e6',
                 tetrisO: '#ffdd00',
@@ -182,8 +181,7 @@ export default class ThemeManager {
                 tutorinsaColor: '#f93943',
 
                 // Tetris
-                tetrisBackground: '#2c2c2c',
-                tetrisBorder: '#1b1b1b',
+                tetrisBackground: '#181818',
                 tetrisScore: '#e2d707',
                 tetrisI: '#30b3be',
                 tetrisO: '#c1a700',

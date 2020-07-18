@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {View} from 'react-native';
-import {IconButton, Text, withTheme} from 'react-native-paper';
+import {Caption, IconButton, Text, withTheme} from 'react-native-paper';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import GameLogic from "../logic/GameLogic";
 import type {Grid} from "../components/GridComponent";
@@ -51,7 +51,8 @@ class GameMainScreen extends React.Component<Props, State> {
             dialogTitle: "",
             dialogMessage: "",
             dialogButtons: [],
-            onDialogDismiss: () => {},
+            onDialogDismiss: () => {
+            },
         };
         this.props.navigation.addListener('blur', this.onScreenBlur);
         this.props.navigation.addListener('focus', this.onScreenFocus);
@@ -146,11 +147,11 @@ class GameMainScreen extends React.Component<Props, State> {
             dialogMessage: i18n.t("screens.game.pauseMessage"),
             dialogButtons: [
                 {
-                    title:  i18n.t("screens.game.restart.text"),
+                    title: i18n.t("screens.game.restart.text"),
                     onPress: this.showRestartConfirm
                 },
                 {
-                    title:  i18n.t("screens.game.resume"),
+                    title: i18n.t("screens.game.resume"),
                     onPress: onDismiss
                 }
             ],
@@ -165,14 +166,14 @@ class GameMainScreen extends React.Component<Props, State> {
             dialogMessage: i18n.t("screens.game.restart.confirmMessage"),
             dialogButtons: [
                 {
-                    title:  i18n.t("screens.game.restart.confirmYes"),
+                    title: i18n.t("screens.game.restart.confirmYes"),
                     onPress: () => {
                         this.onDialogDismiss();
                         this.startGame();
                     }
                 },
                 {
-                    title:  i18n.t("screens.game.restart.confirmNo"),
+                    title: i18n.t("screens.game.restart.confirmNo"),
                     onPress: this.showPausePopup
                 }
             ],
@@ -194,11 +195,11 @@ class GameMainScreen extends React.Component<Props, State> {
             dialogMessage: message,
             dialogButtons: [
                 {
-                    title:  i18n.t("screens.game.gameOver.exit"),
+                    title: i18n.t("screens.game.gameOver.exit"),
                     onPress: () => this.props.navigation.goBack()
                 },
                 {
-                    title:  i18n.t("screens.game.resume"),
+                    title: i18n.t("screens.game.resume"),
                     onPress: onDismiss
                 }
             ],
@@ -223,111 +224,168 @@ class GameMainScreen extends React.Component<Props, State> {
             this.showGameOverConfirm();
     }
 
-    render() {
-        const colors = this.props.theme.colors;
+    getStatusIcons() {
         return (
             <View style={{
-                width: '100%',
-                height: '100%',
+                flex: 1,
+                marginTop: "auto",
+                marginBottom: "auto"
             }}>
                 <View style={{
-                    flexDirection: 'row',
-                    position: 'absolute',
-                    top: 5,
-                    left: 10,
-                }}>
-                    <MaterialCommunityIcons
-                        name={'timer'}
-                        color={colors.subtitle}
-                        size={20}/>
-                    <Text style={{
-                        marginLeft: 5,
-                        color: colors.subtitle
-                    }}>{this.getFormattedTime(this.state.gameTime)}</Text>
-                </View>
-                <View style={{
-                    flexDirection: 'row',
-                    position: 'absolute',
-                    top: 50,
-                    left: 10,
-                }}>
-                    <MaterialCommunityIcons
-                        name={'gamepad'}
-                        color={colors.text}
-                        size={20}/>
-                    <Text style={{
-                        marginLeft: 5
-                    }}>{this.state.gameLevel}</Text>
-                </View>
-                <View style={{
-                    flexDirection: 'row',
-                    marginRight: 'auto',
                     marginLeft: 'auto',
+                    marginRight: 'auto',
                 }}>
-                    <MaterialCommunityIcons
-                        name={'star'}
-                        color={colors.tetrisScore}
-                        size={30}/>
-                    <Text style={{
-                        marginLeft: 5,
-                        fontSize: 22,
-                    }}>{this.state.gameScore}</Text>
+                    <Caption style={{
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginBottom: 5,
+                    }}>{i18n.t("screens.game.time")}</Caption>
+                    <View style={{
+                        flexDirection: "row"
+                    }}>
+                        <MaterialCommunityIcons
+                            name={'timer'}
+                            color={this.props.theme.colors.subtitle}
+                            size={20}/>
+                        <Text style={{
+                            marginLeft: 5,
+                            color: this.props.theme.colors.subtitle
+                        }}>{this.getFormattedTime(this.state.gameTime)}</Text>
+                    </View>
+
                 </View>
-                <GridComponent
-                    width={this.logic.getWidth()}
-                    height={this.logic.getHeight()}
-                    containerMaxHeight={'80%'}
-                    containerMaxWidth={'60%'}
-                    grid={this.state.grid}
-                    backgroundColor={colors.tetrisBackground}
+                <View style={{
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    marginTop: 20,
+                }}>
+                    <Caption style={{
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginBottom: 5,
+                    }}>{i18n.t("screens.game.level")}</Caption>
+                    <View style={{
+                        flexDirection: "row"
+                    }}>
+                        <MaterialCommunityIcons
+                            name={'gamepad-square'}
+                            color={this.props.theme.colors.text}
+                            size={20}/>
+                        <Text style={{
+                            marginLeft: 5
+                        }}>{this.state.gameLevel}</Text>
+                    </View>
+                </View>
+            </View>
+        );
+    }
+
+    getScoreIcon() {
+        return (
+            <View style={{
+                flexDirection: "row",
+                marginLeft: "auto",
+                marginRight: "auto",
+                marginTop: 10,
+                marginBottom: 10,
+            }}>
+                <Text style={{
+                    marginLeft: 5,
+                    fontSize: 22,
+                }}>{i18n.t("screens.game.score", {score: this.state.gameScore})}</Text>
+                <MaterialCommunityIcons
+                    name={'star'}
+                    color={this.props.theme.colors.tetrisScore}
+                    size={20}
+                style={{
+                    marginTop: "auto",
+                    marginBottom: "auto",
+                    marginLeft: 5
+                }}/>
+            </View>
+        );
+    }
+
+    getControlButtons() {
+        return (
+            <View style={{
+                height: 80,
+                flexDirection: "row"
+            }}>
+                <IconButton
+                    icon="rotate-right-variant"
+                    size={40}
+                    onPress={() => this.logic.rotatePressed(this.updateGrid)}
+                    style={{flex: 1}}
                 />
                 <View style={{
-                    position: 'absolute',
-                    top: 50,
-                    right: 5,
-                }}>
-                    <Preview
-                        items={this.logic.getNextPiecesPreviews()}
-                    />
-                </View>
-                <View style={{
-                    position: 'absolute',
-                    bottom: 0,
                     flexDirection: 'row',
-                    width: '100%',
+                    flex: 4
                 }}>
                     <IconButton
-                        icon="rotate-right-variant"
+                        icon="chevron-left"
                         size={40}
-                        onPress={() => this.logic.rotatePressed(this.updateGrid)}
-                        style={{marginRight: 'auto'}}
-                    />
-                    <View style={{
-                        flexDirection: 'row',
-                    }}>
-                        <IconButton
-                            icon="arrow-left"
-                            size={40}
-                            onPress={() => this.logic.pressedOut()}
-                            onPressIn={() => this.logic.leftPressedIn(this.updateGrid)}
+                        style={{flex: 1}}
+                        onPress={() => this.logic.pressedOut()}
+                        onPressIn={() => this.logic.leftPressedIn(this.updateGrid)}
 
-                        />
-                        <IconButton
-                            icon="arrow-right"
-                            size={40}
-                            onPress={() => this.logic.pressedOut()}
-                            onPressIn={() => this.logic.rightPressed(this.updateGrid)}
+                    />
+                    <IconButton
+                        icon="chevron-right"
+                        size={40}
+                        style={{flex: 1}}
+                        onPress={() => this.logic.pressedOut()}
+                        onPressIn={() => this.logic.rightPressed(this.updateGrid)}
+                    />
+                </View>
+                <IconButton
+                    icon="arrow-down-bold"
+                    size={40}
+                    onPressIn={() => this.logic.downPressedIn(this.updateGridScore)}
+                    onPress={() => this.logic.pressedOut()}
+                    style={{flex: 1}}
+                    color={this.props.theme.colors.tetrisScore}
+                />
+            </View>
+        );
+    }
+
+    render() {
+        return (
+            <View style={{flex: 1}}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: "row",
+                }}>
+                    {this.getStatusIcons()}
+                    <View style={{flex: 4}}>
+                        {this.getScoreIcon()}
+                        <GridComponent
+                            width={this.logic.getWidth()}
+                            height={this.logic.getHeight()}
+                            grid={this.state.grid}
+                            style={{
+                                backgroundColor: this.props.theme.colors.tetrisBackground,
+                                flex: 1,
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                            }}
                         />
                     </View>
-                    <IconButton
-                        icon="arrow-down"
-                        size={40}
-                        onPressIn={() => this.logic.downPressedIn(this.updateGridScore)}
-                        onPress={() => this.logic.pressedOut()}
-                        style={{marginLeft: 'auto'}}
-                        color={colors.tetrisScore}
-                    />
+
+                    <View style={{flex: 1}}>
+                        <Preview
+                            items={this.logic.getNextPiecesPreviews()}
+                            style={{
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                                marginTop: 10,
+                            }}
+                        />
+                    </View>
                 </View>
+                {this.getControlButtons()}
+
                 <OptionsDialog
                     visible={this.state.dialogVisible}
                     title={this.state.dialogTitle}

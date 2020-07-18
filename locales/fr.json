@@ -361,16 +361,19 @@
       "homeButtonSubtitle": "Contacte le développeur de l'appli"
     },
     "game": {
-      "title": "Le jeu trop ouf",
+      "title": "Le Jeu trop ouf",
+      "score": "Score : %{score}",
+      "time": "Temps :",
+      "level": "Niveau :",
       "pause": "Pause",
-      "pauseMessage": "Le jeu est en pause",
+      "pauseMessage": "T'as fait pause, t'es nul",
       "resume": "Continuer",
       "restart": {
         "text": "Redémarrer",
-        "confirm": "Est-tu sûr de vouloir redémarrer ?",
+        "confirm": "T'es sûr de vouloir redémarrer ?",
         "confirmMessage": "Tout ton progrès sera perdu, continuer ?",
         "confirmYes": "Oui",
-        "confirmNo": "Non"
+        "confirmNo": "Oula non"
       },
       "gameOver": {
         "text": "Game Over",

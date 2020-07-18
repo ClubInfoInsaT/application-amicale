@@ -5,9 +5,11 @@ import {View} from 'react-native';
 import {withTheme} from 'react-native-paper';
 import type {Grid} from "./GridComponent";
 import GridComponent from "./GridComponent";
+import type {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheet";
 
 type Props = {
     items: Array<Grid>,
+    style: ViewStyle
 }
 
 class Preview extends React.PureComponent<Props> {
@@ -25,9 +27,10 @@ class Preview extends React.PureComponent<Props> {
             width={item[0].length}
             height={item.length}
             grid={item}
-            containerMaxHeight={50}
-            containerMaxWidth={50}
-            backgroundColor={'transparent'}
+            style={{
+                marginRight: 5,
+                marginLeft: 5,
+            }}
             key={index.toString()}
         />;
     };
@@ -35,7 +38,7 @@ class Preview extends React.PureComponent<Props> {
     render() {
         if (this.props.items.length > 0) {
             return (
-                <View>
+                <View style={this.props.style}>
                     {this.getGrids()}
                 </View>
             );
