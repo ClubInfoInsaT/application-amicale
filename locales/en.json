@@ -379,6 +379,11 @@
         "level": "Level: ",
         "time": "Time: ",
         "exit": "leave Game"
+      },
+      "mascotDialog": {
+        "title": "Play !",
+        "message": "Play.",
+        "button": "Yes !"
       }
     },
     "debug": {

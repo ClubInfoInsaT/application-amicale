@@ -378,6 +378,11 @@
         "level": "Niveau: ",
         "time": "Temps: ",
         "exit": "Quitter"
+      },
+      "mascotDialog": {
+        "title": "Jeu !",
+        "message": "Jouer.",
+        "button": "Oui !"
       }
     },
     "debug": {

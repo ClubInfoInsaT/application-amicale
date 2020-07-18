@@ -100,6 +100,11 @@ export default class AsyncStorageManager {
             default: '1',
             current: '',
         },
+        gameStartShowBanner: {
+            key: 'gameStartShowBanner',
+            default: '1',
+            current: '',
+        },
         proxiwashWatchedMachines: {
             key: 'proxiwashWatchedMachines',
             default: '[]',
