@@ -1,7 +1,7 @@
 import React from 'react';
-import GridManager from "../GridManager";
-import ScoreManager from "../ScoreManager";
-import Piece from "../Piece";
+import GridManager from "../logic/GridManager";
+import ScoreManager from "../logic/ScoreManager";
+import Piece from "../logic/Piece";
 
 let colors = {
     tetrisBackground: "#000002"

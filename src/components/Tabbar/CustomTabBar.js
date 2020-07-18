@@ -78,7 +78,7 @@ class CustomTabBar extends React.Component<Props, State> {
             canPreventDefault: true,
         });
         if (route.name === "home" && !event.defaultPrevented)
-            this.props.navigation.navigate('tetris');
+            this.props.navigation.navigate('game-start');
     }
 
     /**

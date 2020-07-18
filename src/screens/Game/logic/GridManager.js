@@ -2,10 +2,10 @@
 
 import Piece from "./Piece";
 import ScoreManager from "./ScoreManager";
-import type {Coordinates} from './Shapes/BaseShape';
-import type {Grid} from "./components/GridComponent";
-import type {Cell} from "./components/CellComponent";
-import type {CustomTheme} from "../../managers/ThemeManager";
+import type {Coordinates} from '../Shapes/BaseShape';
+import type {Grid} from "../components/GridComponent";
+import type {Cell} from "../components/CellComponent";
+import type {CustomTheme} from "../../../managers/ThemeManager";
 
 /**
  * Class used to manage the game grid

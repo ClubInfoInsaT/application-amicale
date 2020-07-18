@@ -3,6 +3,7 @@
 import Piece from "./Piece";
 import ScoreManager from "./ScoreManager";
 import GridManager from "./GridManager";
+import type {CustomTheme} from "../../../managers/ThemeManager";
 
 export default class GameLogic {
 
@@ -45,20 +46,20 @@ export default class GameLogic {
     #onClock: Function;
     endCallback: Function;
 
-    #colors: Object;
+    #theme: CustomTheme;
 
-    constructor(height: number, width: number, colors: Object) {
+    constructor(height: number, width: number, theme: CustomTheme) {
         this.#height = height;
         this.#width = width;
         this.#gameRunning = false;
         this.#gamePaused = false;
-        this.#colors = colors;
+        this.#theme = theme;
         this.#autoRepeatActivationDelay = 300;
         this.#autoRepeatDelay = 50;
         this.#nextPieces = [];
         this.#nextPiecesCount = 3;
         this.#scoreManager = new ScoreManager();
-        this.#gridManager = new GridManager(this.getWidth(), this.getHeight(), this.#colors);
+        this.#gridManager = new GridManager(this.getWidth(), this.getHeight(), this.#theme);
     }
 
     getHeight(): number {
@@ -179,7 +180,7 @@ export default class GameLogic {
 
     generateNextPieces() {
         while (this.#nextPieces.length < this.#nextPiecesCount) {
-            this.#nextPieces.push(new Piece(this.#colors));
+            this.#nextPieces.push(new Piece(this.#theme));
         }
     }
 
@@ -219,7 +220,7 @@ export default class GameLogic {
         this.#gameTime = 0;
         this.#scoreManager = new ScoreManager();
         this.#gameTick = GameLogic.levelTicks[this.#scoreManager.getLevel()];
-        this.#gridManager = new GridManager(this.getWidth(), this.getHeight(), this.#colors);
+        this.#gridManager = new GridManager(this.getWidth(), this.getHeight(), this.#theme);
         this.#nextPieces = [];
         this.generateNextPieces();
         this.createTetromino();

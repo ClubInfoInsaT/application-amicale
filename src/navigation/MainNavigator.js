@@ -8,7 +8,7 @@ import DebugScreen from '../screens/About/DebugScreen';
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
 import i18n from "i18n-js";
 import TabNavigator from "./TabNavigator";
-import GameScreen from "../screens/Game/GameScreen";
+import GameMainScreen from "../screens/Game/screens/GameMainScreen";
 import VoteScreen from "../screens/Amicale/VoteScreen";
 import LoginScreen from "../screens/Amicale/LoginScreen";
 import {Platform} from "react-native";
@@ -27,6 +27,8 @@ import EquipmentScreen from "../screens/Amicale/Equipment/EquipmentListScreen";
 import EquipmentLendScreen from "../screens/Amicale/Equipment/EquipmentRentScreen";
 import EquipmentConfirmScreen from "../screens/Amicale/Equipment/EquipmentConfirmScreen";
 import DashboardEditScreen from "../screens/Other/Settings/DashboardEditScreen";
+import GameStartScreen from "../screens/Game/screens/GameStartScreen";
+import GameEndScreen from "../screens/Game/screens/GameEndScreen";
 
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
 
@@ -92,8 +94,22 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                 }}
             />
             <MainStack.Screen
-                name="tetris"
-                component={GameScreen}
+                name="game-start"
+                component={GameStartScreen}
+                options={{
+                    title: i18n.t("screens.game.title"),
+                }}
+            />
+            <MainStack.Screen
+                name="game-main"
+                component={GameMainScreen}
+                options={{
+                    title: i18n.t("screens.game.title"),
+                }}
+            />
+            <MainStack.Screen
+                name="game-end"
+                component={GameEndScreen}
                 options={{
                     title: i18n.t("screens.game.title"),
                 }}

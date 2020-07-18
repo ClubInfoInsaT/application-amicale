@@ -4,14 +4,14 @@ import * as React from 'react';
 import {Alert, View} from 'react-native';
 import {IconButton, Text, withTheme} from 'react-native-paper';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import GameLogic from "./GameLogic";
-import type {Grid} from "./components/GridComponent";
-import GridComponent from "./components/GridComponent";
-import Preview from "./components/Preview";
+import GameLogic from "../logic/GameLogic";
+import type {Grid} from "../components/GridComponent";
+import GridComponent from "../components/GridComponent";
+import Preview from "../components/Preview";
 import i18n from "i18n-js";
-import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
+import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
 import {StackNavigationProp} from "@react-navigation/stack";
-import type {CustomTheme} from "../../managers/ThemeManager";
+import type {CustomTheme} from "../../../managers/ThemeManager";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -26,13 +26,13 @@ type State = {
     gameLevel: number,
 }
 
-class GameScreen extends React.Component<Props, State> {
+class GameMainScreen extends React.Component<Props, State> {
 
     logic: GameLogic;
 
     constructor(props) {
         super(props);
-        this.logic = new GameLogic(20, 10, this.props.theme.colors);
+        this.logic = new GameLogic(20, 10, this.props.theme);
         this.state = {
             grid: this.logic.getCurrentGrid(),
             gameRunning: false,
@@ -287,4 +287,4 @@ class GameScreen extends React.Component<Props, State> {
 
 }
 
-export default withTheme(GameScreen);
+export default withTheme(GameMainScreen);

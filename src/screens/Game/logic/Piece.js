@@ -1,14 +1,14 @@
-import ShapeL from "./Shapes/ShapeL";
-import ShapeI from "./Shapes/ShapeI";
-import ShapeJ from "./Shapes/ShapeJ";
-import ShapeO from "./Shapes/ShapeO";
-import ShapeS from "./Shapes/ShapeS";
-import ShapeT from "./Shapes/ShapeT";
-import ShapeZ from "./Shapes/ShapeZ";
-import type {Coordinates} from './Shapes/BaseShape';
-import BaseShape from "./Shapes/BaseShape";
-import type {Grid} from "./components/GridComponent";
-import type {CustomTheme} from "../../managers/ThemeManager";
+import ShapeL from "../Shapes/ShapeL";
+import ShapeI from "../Shapes/ShapeI";
+import ShapeJ from "../Shapes/ShapeJ";
+import ShapeO from "../Shapes/ShapeO";
+import ShapeS from "../Shapes/ShapeS";
+import ShapeT from "../Shapes/ShapeT";
+import ShapeZ from "../Shapes/ShapeZ";
+import type {Coordinates} from '../Shapes/BaseShape';
+import BaseShape from "../Shapes/BaseShape";
+import type {Grid} from "../components/GridComponent";
+import type {CustomTheme} from "../../../managers/ThemeManager";
 
 /**
  * Class used as an abstraction layer for shapes.

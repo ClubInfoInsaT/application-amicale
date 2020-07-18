@@ -1,5 +1,5 @@
 import React from 'react';
-import ScoreManager from "../ScoreManager";
+import ScoreManager from "../logic/ScoreManager";
 
 
 test('incrementScore', () => {
