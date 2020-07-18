@@ -22,7 +22,7 @@ type State = {
     gameLevel: number,
 }
 
-class TetrisScreen extends React.Component<Props, State> {
+class GameScreen extends React.Component<Props, State> {
 
     colors: Object;
 
@@ -296,4 +296,4 @@ class TetrisScreen extends React.Component<Props, State> {
 
 }
 
-export default withTheme(TetrisScreen);
+export default withTheme(GameScreen);

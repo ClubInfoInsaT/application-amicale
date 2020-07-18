@@ -1,14 +1,14 @@
 // @flow
 
 import AsyncStorageManager from "./AsyncStorageManager";
-import {DarkTheme, DefaultTheme, Theme} from 'react-native-paper';
+import {DarkTheme, DefaultTheme} from 'react-native-paper';
 import AprilFoolsManager from "./AprilFoolsManager";
 import {Appearance} from 'react-native-appearance';
 
 const colorScheme = Appearance.getColorScheme();
 
 export type CustomTheme = {
-    ...Theme,
+    ...DefaultTheme,
     colors: {
         primary: string,
         accent: string,

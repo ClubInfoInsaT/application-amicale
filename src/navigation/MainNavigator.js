@@ -8,7 +8,7 @@ import DebugScreen from '../screens/About/DebugScreen';
 import {createStackNavigator, TransitionPresets} from "@react-navigation/stack";
 import i18n from "i18n-js";
 import TabNavigator from "./TabNavigator";
-import TetrisScreen from "../screens/Tetris/TetrisScreen";
+import GameScreen from "../screens/Game/GameScreen";
 import VoteScreen from "../screens/Amicale/VoteScreen";
 import LoginScreen from "../screens/Amicale/LoginScreen";
 import {Platform} from "react-native";
@@ -93,7 +93,7 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
             />
             <MainStack.Screen
                 name="tetris"
-                component={TetrisScreen}
+                component={GameScreen}
                 options={{
                     title: i18n.t("screens.game.title"),
                 }}
