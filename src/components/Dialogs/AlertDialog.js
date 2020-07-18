@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import {Button, Dialog, Paragraph, Portal} from 'react-native-paper';
+import i18n from "i18n-js";
 
 type Props = {
     visible: boolean,
@@ -23,7 +24,7 @@ class AlertDialog extends React.PureComponent<Props> {
                         <Paragraph>{this.props.message}</Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>
-                        <Button onPress={this.props.onDismiss}>OK</Button>
+                        <Button onPress={this.props.onDismiss}>{i18n.t("dialog.ok")}</Button>
                     </Dialog.Actions>
                 </Dialog>
             </Portal>

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Alert, View} from 'react-native';
+import {View} from 'react-native';
 import {IconButton, Text, withTheme} from 'react-native-paper';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import GameLogic from "../logic/GameLogic";
@@ -12,6 +12,8 @@ import i18n from "i18n-js";
 import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../../managers/ThemeManager";
+import type {OptionsDialogButton} from "../../../components/Dialogs/OptionsDialog";
+import OptionsDialog from "../../../components/Dialogs/OptionsDialog";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -24,6 +26,12 @@ type State = {
     gameTime: number,
     gameScore: number,
     gameLevel: number,
+
+    dialogVisible: boolean,
+    dialogTitle: string,
+    dialogMessage: string,
+    dialogButtons: Array<OptionsDialogButton>,
+    onDialogDismiss: () => void,
 }
 
 class GameMainScreen extends React.Component<Props, State> {
@@ -39,6 +47,11 @@ class GameMainScreen extends React.Component<Props, State> {
             gameTime: 0,
             gameScore: 0,
             gameLevel: 0,
+            dialogVisible: false,
+            dialogTitle: "",
+            dialogMessage: "",
+            dialogButtons: [],
+            onDialogDismiss: () => {},
         };
         this.props.navigation.addListener('blur', this.onScreenBlur);
         this.props.navigation.addListener('focus', this.onScreenFocus);
@@ -120,43 +133,77 @@ class GameMainScreen extends React.Component<Props, State> {
             this.showPausePopup();
     }
 
+    onDialogDismiss = () => this.setState({dialogVisible: false});
+
     showPausePopup = () => {
-        Alert.alert(
-            i18n.t("screens.game.pause"),
-            i18n.t("screens.game.pauseMessage"),
-            [
-                {text: i18n.t("screens.game.restart.text"), onPress: this.showRestartConfirm},
-                {text: i18n.t("screens.game.resume"), onPress: this.togglePause},
+        const onDismiss = () => {
+            this.togglePause();
+            this.onDialogDismiss();
+        };
+        this.setState({
+            dialogVisible: true,
+            dialogTitle: i18n.t("screens.game.pause"),
+            dialogMessage: i18n.t("screens.game.pauseMessage"),
+            dialogButtons: [
+                {
+                    title:  i18n.t("screens.game.restart.text"),
+                    onPress: this.showRestartConfirm
+                },
+                {
+                    title:  i18n.t("screens.game.resume"),
+                    onPress: onDismiss
+                }
             ],
-            {cancelable: false},
-        );
+            onDialogDismiss: onDismiss,
+        });
     }
 
     showRestartConfirm = () => {
-        Alert.alert(
-            i18n.t("screens.game.restart.confirm"),
-            i18n.t("screens.game.restart.confirmMessage"),
-            [
-                {text: i18n.t("screens.game.restart.confirmNo"), onPress: this.showPausePopup},
-                {text: i18n.t("screens.game.restart.confirmYes"), onPress: this.startGame},
+        this.setState({
+            dialogVisible: true,
+            dialogTitle: i18n.t("screens.game.restart.confirm"),
+            dialogMessage: i18n.t("screens.game.restart.confirmMessage"),
+            dialogButtons: [
+                {
+                    title:  i18n.t("screens.game.restart.confirmYes"),
+                    onPress: () => {
+                        this.onDialogDismiss();
+                        this.startGame();
+                    }
+                },
+                {
+                    title:  i18n.t("screens.game.restart.confirmNo"),
+                    onPress: this.showPausePopup
+                }
             ],
-            {cancelable: false},
-        );
+            onDialogDismiss: this.showPausePopup,
+        });
     }
 
     showGameOverConfirm() {
         let message = i18n.t("screens.game.gameOver.score") + this.state.gameScore + '\n';
         message += i18n.t("screens.game.gameOver.level") + this.state.gameLevel + '\n';
         message += i18n.t("screens.game.gameOver.time") + this.getFormattedTime(this.state.gameTime) + '\n';
-        Alert.alert(
-            i18n.t("screens.game.gameOver.text"),
-            message,
-            [
-                {text: i18n.t("screens.game.gameOver.exit"), onPress: () => this.props.navigation.goBack()},
-                {text: i18n.t("screens.game.restart.text"), onPress: this.startGame},
+        const onDismiss = () => {
+            this.onDialogDismiss();
+            this.startGame();
+        };
+        this.setState({
+            dialogVisible: true,
+            dialogTitle: i18n.t("screens.game.gameOver.text"),
+            dialogMessage: message,
+            dialogButtons: [
+                {
+                    title:  i18n.t("screens.game.gameOver.exit"),
+                    onPress: () => this.props.navigation.goBack()
+                },
+                {
+                    title:  i18n.t("screens.game.resume"),
+                    onPress: onDismiss
+                }
             ],
-            {cancelable: false},
-        );
+            onDialogDismiss: onDismiss,
+        });
     }
 
     startGame = () => {
@@ -281,6 +328,13 @@ class GameMainScreen extends React.Component<Props, State> {
                         color={colors.tetrisScore}
                     />
                 </View>
+                <OptionsDialog
+                    visible={this.state.dialogVisible}
+                    title={this.state.dialogTitle}
+                    message={this.state.dialogMessage}
+                    buttons={this.state.dialogButtons}
+                    onDismiss={this.state.onDialogDismiss}
+                />
             </View>
         );
     }
