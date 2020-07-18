@@ -3,10 +3,12 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {withTheme} from 'react-native-paper';
-import Cell from "./Cell";
+import type {Cell} from "./CellComponent";
+import CellComponent from "./CellComponent";
+
+export type Grid = Array<Array<CellComponent>>;
 
 type Props = {
-    navigation: Object,
     grid: Array<Array<Object>>,
     backgroundColor: string,
     height: number,
@@ -15,14 +17,7 @@ type Props = {
     containerMaxWidth: number | string,
 }
 
-class Grid extends React.Component<Props> {
-
-    colors: Object;
-
-    constructor(props) {
-        super(props);
-        this.colors = props.theme.colors;
-    }
+class GridComponent extends React.Component<Props> {
 
     getRow(rowNumber: number) {
         let cells = this.props.grid[rowNumber].map(this.getCellRender);
@@ -39,8 +34,8 @@ class Grid extends React.Component<Props> {
         );
     }
 
-    getCellRender = (item: Object) => {
-        return <Cell item={item} key={item.key}/>;
+    getCellRender = (item: Cell) => {
+        return <CellComponent cell={item}/>;
     };
 
     getGrid() {
@@ -67,4 +62,4 @@ class Grid extends React.Component<Props> {
     }
 }
 
-export default withTheme(Grid);
+export default withTheme(GridComponent);

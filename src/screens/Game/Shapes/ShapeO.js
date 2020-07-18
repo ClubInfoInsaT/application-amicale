@@ -1,19 +1,17 @@
 // @flow
 
 import BaseShape from "./BaseShape";
+import type {CustomTheme} from "../../../managers/ThemeManager";
 
 export default class ShapeO extends BaseShape {
 
-    #colors: Object;
-
-    constructor(colors: Object) {
-        super();
+    constructor(theme: CustomTheme) {
+        super(theme);
         this.position.x = 4;
-        this.#colors = colors;
     }
 
     getColor(): string {
-        return this.#colors.tetrisO;
+        return this.theme.colors.tetrisO;
     }
 
     getShapes() {

@@ -5,8 +5,10 @@ import ShapeO from "./Shapes/ShapeO";
 import ShapeS from "./Shapes/ShapeS";
 import ShapeT from "./Shapes/ShapeT";
 import ShapeZ from "./Shapes/ShapeZ";
-import type {coordinates} from './Shapes/BaseShape';
-import type {grid} from './GridManager';
+import type {Coordinates} from './Shapes/BaseShape';
+import BaseShape from "./Shapes/BaseShape";
+import type {Grid} from "./components/GridComponent";
+import type {CustomTheme} from "../../managers/ThemeManager";
 
 /**
  * Class used as an abstraction layer for shapes.
@@ -24,26 +26,26 @@ export default class Piece {
         ShapeT,
         ShapeZ,
     ];
-    #currentShape: Object;
-    #colors: Object;
+    #currentShape: BaseShape;
+    #theme: CustomTheme;
 
     /**
      * Initializes this piece's color and shape
      *
-     * @param colors Object containing current theme colors
+     * @param theme Object containing current theme
      */
-    constructor(colors: Object) {
-        this.#currentShape = this.getRandomShape(colors);
-        this.#colors = colors;
+    constructor(theme: CustomTheme) {
+        this.#currentShape = this.getRandomShape(theme);
+        this.#theme = theme;
     }
 
     /**
      * Gets a random shape object
      *
-     * @param colors Object containing current theme colors
+     * @param theme Object containing current theme
      */
-    getRandomShape(colors: Object) {
-        return new this.#shapes[Math.floor(Math.random() * 7)](colors);
+    getRandomShape(theme: CustomTheme) {
+        return new this.#shapes[Math.floor(Math.random() * 7)](theme);
     }
 
     /**
@@ -51,13 +53,13 @@ export default class Piece {
      *
      * @param grid The grid to remove the piece from
      */
-    removeFromGrid(grid: grid) {
-        const coord: Array<coordinates> = this.#currentShape.getCellsCoordinates(true);
-        for (let i = 0; i < coord.length; i++) {
-            grid[coord[i].y][coord[i].x] = {
-                color: this.#colors.tetrisBackground,
+    removeFromGrid(grid: Grid) {
+        const pos: Array<Coordinates> = this.#currentShape.getCellsCoordinates(true);
+        for (let i = 0; i < pos.length; i++) {
+            grid[pos[i].y][pos[i].x] = {
+                color: this.#theme.colors.tetrisBackground,
                 isEmpty: true,
-                key: grid[coord[i].y][coord[i].x].key
+                key: grid[pos[i].y][pos[i].x].key
             };
         }
     }
@@ -68,13 +70,13 @@ export default class Piece {
      * @param grid The grid to add the piece to
      * @param isPreview Should we use this piece's current position to determine the cells?
      */
-    toGrid(grid: grid, isPreview: boolean) {
-        const coord: Array<coordinates> = this.#currentShape.getCellsCoordinates(!isPreview);
-        for (let i = 0; i < coord.length; i++) {
-            grid[coord[i].y][coord[i].x] = {
+    toGrid(grid: Grid, isPreview: boolean) {
+        const pos: Array<Coordinates> = this.#currentShape.getCellsCoordinates(!isPreview);
+        for (let i = 0; i < pos.length; i++) {
+            grid[pos[i].y][pos[i].x] = {
                 color: this.#currentShape.getColor(),
                 isEmpty: false,
-                key: grid[coord[i].y][coord[i].x].key
+                key: grid[pos[i].y][pos[i].x].key
             };
         }
     }
@@ -87,15 +89,15 @@ export default class Piece {
      * @param height The grid's height
      * @return {boolean} If the position is valid
      */
-    isPositionValid(grid: grid, width: number, height: number) {
+    isPositionValid(grid: Grid, width: number, height: number) {
         let isValid = true;
-        const coord: Array<coordinates> = this.#currentShape.getCellsCoordinates(true);
-        for (let i = 0; i < coord.length; i++) {
-            if (coord[i].x >= width
-                || coord[i].x < 0
-                || coord[i].y >= height
-                || coord[i].y < 0
-                || !grid[coord[i].y][coord[i].x].isEmpty) {
+        const pos: Array<Coordinates> = this.#currentShape.getCellsCoordinates(true);
+        for (let i = 0; i < pos.length; i++) {
+            if (pos[i].x >= width
+                || pos[i].x < 0
+                || pos[i].y >= height
+                || pos[i].y < 0
+                || !grid[pos[i].y][pos[i].x].isEmpty) {
                 isValid = false;
                 break;
             }
@@ -114,7 +116,7 @@ export default class Piece {
      * @param freezeCallback Callback to use if the piece should freeze itself
      * @return {boolean} True if the move was valid, false otherwise
      */
-    tryMove(x: number, y: number, grid: grid, width: number, height: number, freezeCallback: Function) {
+    tryMove(x: number, y: number, grid: Grid, width: number, height: number, freezeCallback: () => void) {
         if (x > 1) x = 1; // Prevent moving from more than one tile
         if (x < -1) x = -1;
         if (y > 1) y = 1;
@@ -143,7 +145,7 @@ export default class Piece {
      * @param height The grid's height
      * @return {boolean} True if the rotation was valid, false otherwise
      */
-    tryRotate(grid: grid, width: number, height: number) {
+    tryRotate(grid: Grid, width: number, height: number) {
         this.removeFromGrid(grid);
         this.#currentShape.rotate(true);
         if (!this.isPositionValid(grid, width, height)) {
@@ -158,9 +160,9 @@ export default class Piece {
     /**
      * Gets this piece used cells coordinates
      *
-     * @return {Array<coordinates>} An array of coordinates
+     * @return {Array<Coordinates>} An array of coordinates
      */
-    getCoordinates(): Array<coordinates> {
+    getCoordinates(): Array<Coordinates> {
         return this.#currentShape.getCellsCoordinates(true);
     }
 }

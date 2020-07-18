@@ -3,33 +3,25 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {withTheme} from 'react-native-paper';
-import Grid from "./Grid";
+import type {Grid} from "./GridComponent";
+import GridComponent from "./GridComponent";
 
 type Props = {
-    next: Object,
+    items: Array<Grid>,
 }
 
 class Preview extends React.PureComponent<Props> {
 
-    colors: Object;
-
-    constructor(props) {
-        super(props);
-        this.colors = props.theme.colors;
-    }
-
     getGrids() {
         let grids = [];
-        for (let i = 0; i < this.props.next.length; i++) {
-            grids.push(
-                this.getGridRender(this.props.next[i], i)
-            );
+        for (let i = 0; i < this.props.items.length; i++) {
+            grids.push(this.getGridRender(this.props.items[i], i));
         }
         return grids;
     }
 
-    getGridRender(item: Object, index: number) {
-        return <Grid
+    getGridRender(item: Grid, index: number) {
+        return <GridComponent
             width={item[0].length}
             height={item.length}
             grid={item}
@@ -41,7 +33,7 @@ class Preview extends React.PureComponent<Props> {
     };
 
     render() {
-        if (this.props.next.length > 0) {
+        if (this.props.items.length > 0) {
             return (
                 <View>
                     {this.getGrids()}

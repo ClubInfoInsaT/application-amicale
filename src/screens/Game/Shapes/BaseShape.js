@@ -1,9 +1,13 @@
 // @flow
 
-export type coordinates = {
+import type {CustomTheme} from "../../../managers/ThemeManager";
+
+export type Coordinates = {
     x: number,
     y: number,
 }
+
+type Shape = Array<Array<number>>;
 
 /**
  * Abstract class used to represent a BaseShape.
@@ -12,16 +16,18 @@ export type coordinates = {
  */
 export default class BaseShape {
 
-    #currentShape: Array<Array<number>>;
+    #currentShape: Shape;
     #rotation: number;
-    position: coordinates;
+    position: Coordinates;
+    theme: CustomTheme;
 
     /**
      * Prevent instantiation if classname is BaseShape to force class to be abstract
      */
-    constructor() {
+    constructor(theme: CustomTheme) {
         if (this.constructor === BaseShape)
             throw new Error("Abstract class can't be instantiated");
+        this.theme = theme;
         this.#rotation = 0;
         this.position = {x: 0, y: 0};
         this.#currentShape = this.getShapes()[this.#rotation];
@@ -41,7 +47,7 @@ export default class BaseShape {
      *
      * Used by tests to read private fields
      */
-    getShapes(): Array<Array<Array<number>>> {
+    getShapes(): Array<Shape> {
         throw new Error("Method 'getShapes()' must be implemented");
     }
 
@@ -50,7 +56,7 @@ export default class BaseShape {
      *
      * Used by tests to read private fields
      */
-    getCurrentShape(): Array<Array<number>> {
+    getCurrentShape(): Shape {
         return this.#currentShape;
     }
 
@@ -59,9 +65,9 @@ export default class BaseShape {
      * This will return an array of coordinates representing the positions of the cells used by this object.
      *
      * @param isAbsolute Should we take into account the current position of the object?
-     * @return {Array<coordinates>} This object cells coordinates
+     * @return {Array<Coordinates>} This object cells coordinates
      */
-    getCellsCoordinates(isAbsolute: boolean): Array<coordinates> {
+    getCellsCoordinates(isAbsolute: boolean): Array<Coordinates> {
         let coordinates = [];
         for (let row = 0; row < this.#currentShape.length; row++) {
             for (let col = 0; col < this.#currentShape[row].length; col++) {

@@ -5,17 +5,21 @@ import {Alert, View} from 'react-native';
 import {IconButton, Text, withTheme} from 'react-native-paper';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import GameLogic from "./GameLogic";
-import Grid from "./components/Grid";
+import type {Grid} from "./components/GridComponent";
+import GridComponent from "./components/GridComponent";
 import Preview from "./components/Preview";
 import i18n from "i18n-js";
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
+import {StackNavigationProp} from "@react-navigation/stack";
+import type {CustomTheme} from "../../managers/ThemeManager";
 
 type Props = {
-    navigation: Object,
+    navigation: StackNavigationProp,
+    theme: CustomTheme,
 }
 
 type State = {
-    grid: Array<Array<Object>>,
+    grid: Grid,
     gameRunning: boolean,
     gameTime: number,
     gameScore: number,
@@ -24,19 +28,11 @@ type State = {
 
 class GameScreen extends React.Component<Props, State> {
 
-    colors: Object;
-
     logic: GameLogic;
-    onTick: Function;
-    onClock: Function;
-    onGameEnd: Function;
-    updateGrid: Function;
-    updateGridScore: Function;
 
     constructor(props) {
         super(props);
-        this.colors = props.theme.colors;
-        this.logic = new GameLogic(20, 10, this.colors);
+        this.logic = new GameLogic(20, 10, this.props.theme.colors);
         this.state = {
             grid: this.logic.getCurrentGrid(),
             gameRunning: false,
@@ -44,38 +40,32 @@ class GameScreen extends React.Component<Props, State> {
             gameScore: 0,
             gameLevel: 0,
         };
-        this.onTick = this.onTick.bind(this);
-        this.onClock = this.onClock.bind(this);
-        this.onGameEnd = this.onGameEnd.bind(this);
-        this.updateGrid = this.updateGrid.bind(this);
-        this.updateGridScore = this.updateGridScore.bind(this);
-        this.props.navigation.addListener('blur', this.onScreenBlur.bind(this));
-        this.props.navigation.addListener('focus', this.onScreenFocus.bind(this));
+        this.props.navigation.addListener('blur', this.onScreenBlur);
+        this.props.navigation.addListener('focus', this.onScreenFocus);
     }
 
     componentDidMount() {
-        const rightButton = this.getRightButton.bind(this);
         this.props.navigation.setOptions({
-            headerRight: rightButton,
+            headerRight: this.getRightButton,
         });
         this.startGame();
     }
 
-    getRightButton() {
+    getRightButton = () => {
         return <MaterialHeaderButtons>
-            <Item title="pause" iconName="pause" onPress={() => this.togglePause()}/>
+            <Item title="pause" iconName="pause" onPress={this.togglePause}/>
         </MaterialHeaderButtons>;
     }
 
     /**
      * Remove any interval on un-focus
      */
-    onScreenBlur() {
+    onScreenBlur = () => {
         if (!this.logic.isGamePaused())
             this.logic.togglePause();
     }
 
-    onScreenFocus() {
+    onScreenFocus = () => {
         if (!this.logic.isGameRunning())
             this.startGame();
         else if (this.logic.isGamePaused())
@@ -97,7 +87,7 @@ class GameScreen extends React.Component<Props, State> {
         return format;
     }
 
-    onTick(score: number, level: number, newGrid: Array<Array<Object>>) {
+    onTick = (score: number, level: number, newGrid: Grid) => {
         this.setState({
             gameScore: score,
             gameLevel: level,
@@ -105,50 +95,50 @@ class GameScreen extends React.Component<Props, State> {
         });
     }
 
-    onClock(time: number) {
+    onClock = (time: number) => {
         this.setState({
             gameTime: time,
         });
     }
 
-    updateGrid(newGrid: Array<Array<Object>>) {
+    updateGrid = (newGrid: Grid) => {
         this.setState({
             grid: newGrid,
         });
     }
 
-    updateGridScore(newGrid: Array<Array<Object>>, score: number) {
+    updateGridScore = (newGrid: Grid, score: number) => {
         this.setState({
             grid: newGrid,
             gameScore: score,
         });
     }
 
-    togglePause() {
+    togglePause = () => {
         this.logic.togglePause();
         if (this.logic.isGamePaused())
             this.showPausePopup();
     }
 
-    showPausePopup() {
+    showPausePopup = () => {
         Alert.alert(
             i18n.t("screens.game.pause"),
             i18n.t("screens.game.pauseMessage"),
             [
-                {text: i18n.t("screens.game.restart.text"), onPress: () => this.showRestartConfirm()},
-                {text: i18n.t("screens.game.resume"), onPress: () => this.togglePause()},
+                {text: i18n.t("screens.game.restart.text"), onPress: this.showRestartConfirm},
+                {text: i18n.t("screens.game.resume"), onPress: this.togglePause},
             ],
             {cancelable: false},
         );
     }
 
-    showRestartConfirm() {
+    showRestartConfirm = () => {
         Alert.alert(
             i18n.t("screens.game.restart.confirm"),
             i18n.t("screens.game.restart.confirmMessage"),
             [
-                {text: i18n.t("screens.game.restart.confirmNo"), onPress: () => this.showPausePopup()},
-                {text: i18n.t("screens.game.restart.confirmYes"), onPress: () => this.startGame()},
+                {text: i18n.t("screens.game.restart.confirmNo"), onPress: this.showPausePopup},
+                {text: i18n.t("screens.game.restart.confirmYes"), onPress: this.startGame},
             ],
             {cancelable: false},
         );
@@ -163,20 +153,20 @@ class GameScreen extends React.Component<Props, State> {
             message,
             [
                 {text: i18n.t("screens.game.gameOver.exit"), onPress: () => this.props.navigation.goBack()},
-                {text: i18n.t("screens.game.restart.text"), onPress: () => this.startGame()},
+                {text: i18n.t("screens.game.restart.text"), onPress: this.startGame},
             ],
             {cancelable: false},
         );
     }
 
-    startGame() {
+    startGame = () => {
         this.logic.startGame(this.onTick, this.onClock, this.onGameEnd);
         this.setState({
             gameRunning: true,
         });
     }
 
-    onGameEnd(time: number, score: number, isRestart: boolean) {
+    onGameEnd = (time: number, score: number, isRestart: boolean) => {
         this.setState({
             gameTime: time,
             gameScore: score,
@@ -187,6 +177,7 @@ class GameScreen extends React.Component<Props, State> {
     }
 
     render() {
+        const colors = this.props.theme.colors;
         return (
             <View style={{
                 width: '100%',
@@ -200,11 +191,11 @@ class GameScreen extends React.Component<Props, State> {
                 }}>
                     <MaterialCommunityIcons
                         name={'timer'}
-                        color={this.colors.subtitle}
+                        color={colors.subtitle}
                         size={20}/>
                     <Text style={{
                         marginLeft: 5,
-                        color: this.colors.subtitle
+                        color: colors.subtitle
                     }}>{this.getFormattedTime(this.state.gameTime)}</Text>
                 </View>
                 <View style={{
@@ -215,7 +206,7 @@ class GameScreen extends React.Component<Props, State> {
                 }}>
                     <MaterialCommunityIcons
                         name={'gamepad'}
-                        color={this.colors.text}
+                        color={colors.text}
                         size={20}/>
                     <Text style={{
                         marginLeft: 5
@@ -228,20 +219,20 @@ class GameScreen extends React.Component<Props, State> {
                 }}>
                     <MaterialCommunityIcons
                         name={'star'}
-                        color={this.colors.tetrisScore}
+                        color={colors.tetrisScore}
                         size={30}/>
                     <Text style={{
                         marginLeft: 5,
                         fontSize: 22,
                     }}>{this.state.gameScore}</Text>
                 </View>
-                <Grid
+                <GridComponent
                     width={this.logic.getWidth()}
                     height={this.logic.getHeight()}
                     containerMaxHeight={'80%'}
                     containerMaxWidth={'60%'}
                     grid={this.state.grid}
-                    backgroundColor={this.colors.tetrisBackground}
+                    backgroundColor={colors.tetrisBackground}
                 />
                 <View style={{
                     position: 'absolute',
@@ -249,7 +240,7 @@ class GameScreen extends React.Component<Props, State> {
                     right: 5,
                 }}>
                     <Preview
-                        next={this.logic.getNextPiecesPreviews()}
+                        items={this.logic.getNextPiecesPreviews()}
                     />
                 </View>
                 <View style={{
@@ -287,7 +278,7 @@ class GameScreen extends React.Component<Props, State> {
                         onPressIn={() => this.logic.downPressedIn(this.updateGridScore)}
                         onPress={() => this.logic.pressedOut()}
                         style={{marginLeft: 'auto'}}
-                        color={this.colors.tetrisScore}
+                        color={colors.tetrisScore}
                     />
                 </View>
             </View>
