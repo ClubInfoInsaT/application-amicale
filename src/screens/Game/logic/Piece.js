@@ -165,4 +165,8 @@ export default class Piece {
     getCoordinates(): Array<Coordinates> {
         return this.#currentShape.getCellsCoordinates(true);
     }
+
+    getCurrentShape() {
+        return this.#currentShape;
+    }
 }

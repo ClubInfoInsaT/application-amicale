@@ -145,7 +145,7 @@ export default class GameLogic {
                 callback(this.#gridManager.getCurrentGrid());
         }
         this.#pressInInterval = setTimeout(() =>
-            this.movePressedRepeat(false, callback, x, y),
+                this.movePressedRepeat(false, callback, x, y),
             isInitial ? this.#autoRepeatActivationDelay : this.#autoRepeatDelay
         );
     }
@@ -166,7 +166,8 @@ export default class GameLogic {
     getNextPiecesPreviews() {
         let finalArray = [];
         for (let i = 0; i < this.#nextPieces.length; i++) {
-            finalArray.push(this.#gridManager.getEmptyGrid(4, 4));
+            const gridSize = this.#nextPieces[i].getCurrentShape().getCurrentShape()[0].length;
+            finalArray.push(this.#gridManager.getEmptyGrid(gridSize, gridSize));
             this.#nextPieces[i].toGrid(finalArray[i], true);
         }
 

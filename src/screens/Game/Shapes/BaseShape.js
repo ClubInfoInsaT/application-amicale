@@ -53,8 +53,6 @@ export default class BaseShape {
 
     /**
      * Gets this object's current shape.
-     *
-     * Used by tests to read private fields
      */
     getCurrentShape(): Shape {
         return this.#currentShape;
