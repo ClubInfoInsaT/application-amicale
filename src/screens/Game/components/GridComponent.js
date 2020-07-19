@@ -46,6 +46,7 @@ class GridComponent extends React.Component<Props> {
         return (
             <View style={{
                 aspectRatio: this.props.width / this.props.height,
+                borderRadius: 4,
                 ...this.props.style
             }}>
                 {this.getGrid()}

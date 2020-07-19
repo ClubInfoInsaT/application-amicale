@@ -30,6 +30,7 @@ class Preview extends React.PureComponent<Props> {
             style={{
                 marginRight: 5,
                 marginLeft: 5,
+                marginBottom: 5,
             }}
             key={index.toString()}
         />;
