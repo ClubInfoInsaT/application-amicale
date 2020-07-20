@@ -158,15 +158,18 @@ class ProfileScreen extends React.Component<Props, State> {
             <Card style={styles.card}>
                 <Card.Title
                     title={i18n.t("screens.profile.welcomeTitle", {name: this.data.first_name})}
-                    left={() => <Mascot
-                        emotion={MASCOT_STYLE.COOL}
-                        size={60}
-                        animated={true}
-                        entryAnimation={{
-                            animation: "bounceIn",
-                            duration: 1000
-                        }}
-                    />}
+                    left={() =>
+                        <Mascot
+                            style={{
+                                width: 60
+                            }}
+                            emotion={MASCOT_STYLE.COOL}
+                            animated={true}
+                            entryAnimation={{
+                                animation: "bounceIn",
+                                duration: 1000
+                            }}
+                        />}
                     titleStyle={{marginLeft: 10}}
                 />
                 <Card.Content>

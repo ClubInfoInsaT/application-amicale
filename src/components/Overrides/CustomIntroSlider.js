@@ -146,20 +146,27 @@ export default class CustomIntroSlider extends React.Component<Props, State> {
                         </View>
                         <Animatable.View
                             animation={"fadeIn"}>
-                            {index !== 0 && index !== this.introSlides.length -1
-                                ? <Animatable.View
-                                    animation={"pulse"}
-                                    iterationCount={"infinite"}
-                                    duration={2000}
+                            {index !== 0 && index !== this.introSlides.length - 1
+                                ?
+                                <Mascot
                                     style={{
                                         marginLeft: 30,
                                         marginBottom: 0,
                                         width: 100,
                                         marginTop: -30,
-                                    }}>
-                                    <Mascot emotion={item.mascotStyle} size={100}/>
-                                </Animatable.View> : null}
-
+                                    }}
+                                    emotion={item.mascotStyle}
+                                    animated={true}
+                                    entryAnimation={{
+                                        animation: "slideInLeft",
+                                        duration: 500
+                                    }}
+                                    loopAnimation={{
+                                        animation: "pulse",
+                                        iterationCount: "infinite",
+                                        duration: 2000,
+                                    }}
+                                /> : null}
                             <View style={{
                                 marginLeft: 50,
                                 width: 0,
@@ -204,23 +211,23 @@ export default class CustomIntroSlider extends React.Component<Props, State> {
     getEndView = () => {
         return (
             <View style={{flex: 1}}>
-                <View
-                    style={styles.center}>
-                    <Mascot
-                        size={250}
-                        emotion={MASCOT_STYLE.COOL}
-                        animated={true}
-                        entryAnimation={{
-                            animation: "slideInDown",
-                            duration: 2000,
-                        }}
-                        loopAnimation={{
-                            animation: "pulse",
-                            duration: 2000,
-                            iterationCount: "infinite"
-                        }}
-                    />
-                </View>
+                <Mascot
+                    style={{
+                        ...styles.center,
+                        height: "80%"
+                    }}
+                    emotion={MASCOT_STYLE.COOL}
+                    animated={true}
+                    entryAnimation={{
+                        animation: "slideInDown",
+                        duration: 2000,
+                    }}
+                    loopAnimation={{
+                        animation: "pulse",
+                        duration: 2000,
+                        iterationCount: "infinite"
+                    }}
+                />
             </View>
         );
     }
@@ -228,55 +235,52 @@ export default class CustomIntroSlider extends React.Component<Props, State> {
     getWelcomeView = () => {
         return (
             <View style={{flex: 1}}>
-                <View
-                    style={styles.center}>
-                    <Mascot
-                        size={250}
-                        emotion={MASCOT_STYLE.NORMAL}
-                        animated={true}
-                        entryAnimation={{
-                            animation: "bounceIn",
-                            duration: 2000,
-                        }}
-                    />
-                    <Animatable.Text
-                        useNativeDriver={true}
-                        animation={"fadeInUp"}
-                        duration={500}
+                <Mascot
+                    style={{
+                        ...styles.center,
+                        height: "80%"
+                    }}
+                    emotion={MASCOT_STYLE.NORMAL}
+                    animated={true}
+                    entryAnimation={{
+                        animation: "bounceIn",
+                        duration: 2000,
+                    }}
+                />
+                <Animatable.Text
+                    useNativeDriver={true}
+                    animation={"fadeInUp"}
+                    duration={500}
 
-                        style={{
+                    style={{
                         color: "#fff",
                         textAlign: "center",
                         fontSize: 25,
                     }}>
-                        PABLO
-                    </Animatable.Text>
-                    <Animatable.View
-                        useNativeDriver={true}
-                        animation={"fadeInUp"}
-                        duration={500}
-                        delay={200}
+                    PABLO
+                </Animatable.Text>
+                <Animatable.View
+                    useNativeDriver={true}
+                    animation={"fadeInUp"}
+                    duration={500}
+                    delay={200}
 
+                    style={{
+                        position: "absolute",
+                        bottom: 30,
+                        right: "20%",
+                        width: 50,
+                        height: 50,
+                    }}>
+                    <MaterialCommunityIcons
                         style={{
-                            position: "absolute",
-                            top: 210,
-                            left: 160,
-                            width: 50,
-                            height: 50,
-                        }}>
-                        <MaterialCommunityIcons
-                            style={{
-                                marginLeft: "auto",
-                                marginRight: "auto",
-                                marginTop: "auto",
-                                marginBottom: "auto",
-                                transform: [{rotateZ: "70deg"}],
-                            }}
-                            name={"undo"}
-                            color={'#fff'}
-                            size={40}/>
-                    </Animatable.View>
-                </View>
+                            ...styles.center,
+                            transform: [{rotateZ: "70deg"}],
+                        }}
+                        name={"undo"}
+                        color={'#fff'}
+                        size={40}/>
+                </Animatable.View>
             </View>
         )
     }
@@ -403,5 +407,5 @@ const styles = StyleSheet.create({
         marginBottom: 'auto',
         marginRight: 'auto',
         marginLeft: 'auto',
-    }
+    },
 });

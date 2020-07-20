@@ -3,9 +3,10 @@
 import * as React from 'react';
 import * as Animatable from "react-native-animatable";
 import {Image, TouchableWithoutFeedback, View} from "react-native";
+import type {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheet";
 
 type Props = {
-    size: number,
+    style?: ViewStyle,
     emotion: number,
     animated: boolean,
     entryAnimation: Animatable.AnimatableProperties | null,
@@ -116,9 +117,10 @@ class Mascot extends React.Component<Props, State> {
 
         if (this.props.onPress == null) {
             this.onPress = (viewRef: AnimatableViewRef) => {
-                if (viewRef.current != null) {
+                let ref = viewRef.current;
+                if (ref != null) {
                     this.setState({currentEmotion: MASCOT_STYLE.LOVE});
-                    viewRef.current.rubberBand(1500).then(() => {
+                    ref.rubberBand(1500).then(() => {
                         this.setState({currentEmotion: this.initialEmotion});
                     });
 
@@ -130,9 +132,10 @@ class Mascot extends React.Component<Props, State> {
 
         if (this.props.onLongPress == null) {
             this.onLongPress = (viewRef: AnimatableViewRef) => {
-                if (viewRef.current != null) {
+                let ref = viewRef.current;
+                if (ref != null) {
                     this.setState({currentEmotion: MASCOT_STYLE.ANGRY});
-                    viewRef.current.tada(1000).then(() => {
+                    ref.tada(1000).then(() => {
                         this.setState({currentEmotion: this.initialEmotion});
                     });
 
@@ -153,8 +156,8 @@ class Mascot extends React.Component<Props, State> {
                 position: "absolute",
                 top: "15%",
                 left: 0,
-                width: this.props.size,
-                height: this.props.size,
+                width: "100%",
+                height: "100%",
             }}
         />
     }
@@ -168,8 +171,8 @@ class Mascot extends React.Component<Props, State> {
                 position: "absolute",
                 top: "15%",
                 left: isRight ? "-11%" : "11%",
-                width: this.props.size,
-                height: this.props.size,
+                width: "100%",
+                height: "100%",
                 transform: [{rotateY: rotation}]
             }}
         />
@@ -181,8 +184,8 @@ class Mascot extends React.Component<Props, State> {
             key={"container"}
             style={{
                 position: "absolute",
-                width: this.props.size,
-                height: this.props.size,
+                width: "100%",
+                height: "100%",
             }}/>);
         if (emotion === MASCOT_STYLE.CUTE) {
             final.push(this.getEye(EYE_STYLE.CUTE, true));
@@ -217,14 +220,13 @@ class Mascot extends React.Component<Props, State> {
     }
 
     render() {
-        const size = this.props.size;
         const entryAnimation = this.props.animated ? this.props.entryAnimation : null;
         const loopAnimation = this.props.animated ? this.props.loopAnimation : null;
         return (
             <Animatable.View
                 style={{
-                    width: size,
-                    height: size,
+                    aspectRatio: 1,
+                    ...this.props.style
                 }}
                 {...entryAnimation}
             >
@@ -241,8 +243,8 @@ class Mascot extends React.Component<Props, State> {
                             <Image
                                 source={MASCOT_IMAGE}
                                 style={{
-                                    width: size,
-                                    height: size,
+                                    width: "100%",
+                                    height:"100%",
                                 }}
                             />
                             {this.getEyes(this.state.currentEmotion)}

@@ -6,7 +6,7 @@ import type {CustomTheme} from "../../../managers/ThemeManager";
 import {Button, Headline, withTheme} from "react-native-paper";
 import {View} from "react-native";
 import i18n from "i18n-js";
-import {MASCOT_STYLE} from "../../../components/Mascot/Mascot";
+import Mascot, {MASCOT_STYLE} from "../../../components/Mascot/Mascot";
 import MascotPopup from "../../../components/Mascot/MascotPopup";
 import AsyncStorageManager from "../../../managers/AsyncStorageManager";
 
@@ -36,6 +36,11 @@ class GameStartScreen extends React.Component<Props, State> {
     render() {
         return (
             <View style={{flex: 1}}>
+                <Mascot emotion={MASCOT_STYLE.NORMAL} style={{
+                    width: "50%",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}/>
                 <Headline style={{textAlign: "center"}}>Coucou</Headline>
                 <Button
                     mode={"contained"}

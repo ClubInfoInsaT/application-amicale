@@ -160,7 +160,7 @@ class MascotPopup extends React.Component<Props, State> {
                 duration={this.props.visible ? 1500 : 200}
             >
                 <Mascot
-                    size={this.mascotSize}
+                    style={{width: this.mascotSize}}
                     animated={true}
                     emotion={this.props.emotion}
                 />
@@ -241,15 +241,16 @@ class MascotPopup extends React.Component<Props, State> {
                     }}>
                         <View style={{
                             marginTop: -80,
+                            width: "100%"
                         }}>
                             {this.getMascot()}
                             {this.getSpeechBubble()}
-                    </View>
+                        </View>
 
-                </View>
-        </Portal>
-        )
-            ;
+                    </View>
+                </Portal>
+            )
+                ;
         } else
             return null;
 

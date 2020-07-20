@@ -117,8 +117,10 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                         },
                         headerTitle: (props) => <View style={{flexDirection: "row"}}>
                             <Mascot
+                                style={{
+                                    width: 50
+                                }}
                                 emotion={MASCOT_STYLE.RANDOM}
-                                size={50}
                                 animated={true}
                                 entryAnimation={{
                                     animation: "bounceIn",
