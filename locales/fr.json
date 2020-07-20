@@ -361,7 +361,10 @@
       "homeButtonSubtitle": "Contacte le développeur de l'appli"
     },
     "game": {
-      "title": "Le Jeu trop ouf",
+      "title": "Jeu trop ouf",
+      "welcomeTitle": "Bienvenue !",
+      "welcomeMessage": "Coincé sur les WC ? Le prof est pas là ?\nCe jeu est fait pour toi !\n\nEssaie d'avoir le meilleur score et de battre tes amis.",
+      "play": "Jouer !",
       "score": "Score : %{score}",
       "time": "Temps :",
       "level": "Niveau :",

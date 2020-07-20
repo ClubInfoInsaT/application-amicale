@@ -363,6 +363,9 @@
     },
     "game": {
       "title": "Game",
+      "welcomeTitle": "Welcome !",
+      "welcomeMessage": "Stuck on the toilet? The teacher is late?\nThis game is for you!\n\nTry to get the best score and beat your friends.",
+      "play": "Play!",
       "score": "Score : %{score}",
       "time": "Time :",
       "level": "Level :",
