@@ -67,6 +67,10 @@ class GameMainScreen extends React.Component<Props, State> {
         this.startGame();
     }
 
+    componentWillUnmount() {
+        this.logic.stopGame();
+    }
+
     getRightButton = () => {
         return <MaterialHeaderButtons>
             <Item title="pause" iconName="pause" onPress={this.togglePause}/>
@@ -165,32 +169,6 @@ class GameMainScreen extends React.Component<Props, State> {
                 }
             ],
             onDialogDismiss: this.showPausePopup,
-        });
-    }
-
-    showGameOverConfirm() {
-        let message = i18n.t("screens.game.gameOver.score") + this.state.gameScore + '\n';
-        message += i18n.t("screens.game.gameOver.level") + this.state.gameLevel + '\n';
-        message += i18n.t("screens.game.gameOver.time") + this.getFormattedTime(this.state.gameTime) + '\n';
-        const onDismiss = () => {
-            this.onDialogDismiss();
-            this.startGame();
-        };
-        this.setState({
-            dialogVisible: true,
-            dialogTitle: i18n.t("screens.game.gameOver.text"),
-            dialogMessage: message,
-            dialogButtons: [
-                {
-                    title: i18n.t("screens.game.gameOver.exit"),
-                    onPress: () => this.props.navigation.goBack()
-                },
-                {
-                    title: i18n.t("screens.game.resume"),
-                    onPress: onDismiss
-                }
-            ],
-            onDialogDismiss: onDismiss,
         });
     }
 

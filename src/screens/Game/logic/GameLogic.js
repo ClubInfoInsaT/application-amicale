@@ -109,7 +109,6 @@ export default class GameLogic {
 
     onClock(callback: Function) {
         this.#gameTime++;
-        console.log(this.#gameTime);
         callback(this.#gameTime);
     }
 
@@ -206,11 +205,15 @@ export default class GameLogic {
         }
     }
 
-    endGame(isRestart: boolean) {
+    stopGame() {
         this.#gameRunning = false;
         this.#gamePaused = false;
         clearInterval(this.#gameTickInterval);
         clearInterval(this.#gameTimeInterval);
+    }
+
+    endGame(isRestart: boolean) {
+        this.stopGame();
         this.endCallback(this.#gameTime, this.#scoreManager.getScore(), isRestart);
     }
 
