@@ -31,7 +31,7 @@ class GridComponent extends React.Component<Props> {
     }
 
     getCellRender = (item: Cell) => {
-        return <CellComponent cell={item}/>;
+        return <CellComponent cell={item} key={item.key}/>;
     };
 
     getGrid() {

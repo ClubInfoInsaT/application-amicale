@@ -110,7 +110,7 @@ class GameStartScreen extends React.Component<Props, State> {
                             animation={"fadeInDownBig"}
                             delay={animDelay}
                             duration={animDuration}
-                            key={index.toString()}
+                            key={"piece" + index.toString()}
                             style={{
                                 width: size + "%",
                                 position: "absolute",
@@ -118,21 +118,14 @@ class GameStartScreen extends React.Component<Props, State> {
                                 left: left + "%",
                             }}
                         >
-                            <View style={{
-                                transform: [{rotateZ: rot + "deg"}],
-                            }}>
-                                <GridComponent
-                                    width={4}
-                                    height={4}
-                                    grid={item}
-                                    style={{
-                                        marginRight: 5,
-                                        marginLeft: 5,
-                                        marginBottom: 5,
-                                    }}
-                                />
-                            </View>
-
+                            <GridComponent
+                                width={4}
+                                height={4}
+                                grid={item}
+                                style={{
+                                    transform: [{rotateZ: rot + "deg"}],
+                                }}
+                            />
                         </Animatable.View>
                     );
                 })}
@@ -379,34 +372,33 @@ class GameStartScreen extends React.Component<Props, State> {
 
     getMainContent() {
         return (
-
-                <View style={{flex: 1}}>
-                    {
-                        this.gameStats != null
-                            ? this.getPostGameContent(this.gameStats)
-                            : this.getWelcomeText()
-                    }
-                    <Button
-                        icon={"play"}
-                        mode={"contained"}
-                        onPress={() => this.props.navigation.replace(
-                            "game-main",
-                            {
-                                highScore: this.scores.length > 0
-                                    ? this.scores[0]
-                                    : null
-                            }
-                        )}
-                        style={{
-                            marginLeft: "auto",
-                            marginRight: "auto",
-                            marginTop: 10,
-                        }}
-                    >
-                        {i18n.t("screens.game.play")}
-                    </Button>
-                    {this.getTopScoresRender()}
-                </View>
+            <View style={{flex: 1}}>
+                {
+                    this.gameStats != null
+                        ? this.getPostGameContent(this.gameStats)
+                        : this.getWelcomeText()
+                }
+                <Button
+                    icon={"play"}
+                    mode={"contained"}
+                    onPress={() => this.props.navigation.replace(
+                        "game-main",
+                        {
+                            highScore: this.scores.length > 0
+                                ? this.scores[0]
+                                : null
+                        }
+                    )}
+                    style={{
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginTop: 10,
+                    }}
+                >
+                    {i18n.t("screens.game.play")}
+                </Button>
+                {this.getTopScoresRender()}
+            </View>
         )
     }
 
@@ -425,24 +417,24 @@ class GameStartScreen extends React.Component<Props, State> {
                     start={{x: 0, y: 0}}
                     end={{x: 0, y: 1}}
                 >
-                <ScrollView>
-                    {this.getMainContent()}
-                    <MascotPopup
-                        visible={this.state.mascotDialogVisible}
-                        title={i18n.t("screens.game.mascotDialog.title")}
-                        message={i18n.t("screens.game.mascotDialog.message")}
-                        icon={"gamepad-variant"}
-                        buttons={{
-                            action: null,
-                            cancel: {
-                                message: i18n.t("screens.game.mascotDialog.button"),
-                                icon: "check",
-                                onPress: this.hideMascotDialog,
-                            }
-                        }}
-                        emotion={MASCOT_STYLE.COOL}
-                    />
-                </ScrollView>
+                    <ScrollView>
+                        {this.getMainContent()}
+                        <MascotPopup
+                            visible={this.state.mascotDialogVisible}
+                            title={i18n.t("screens.game.mascotDialog.title")}
+                            message={i18n.t("screens.game.mascotDialog.message")}
+                            icon={"gamepad-variant"}
+                            buttons={{
+                                action: null,
+                                cancel: {
+                                    message: i18n.t("screens.game.mascotDialog.button"),
+                                    icon: "check",
+                                    onPress: this.hideMascotDialog,
+                                }
+                            }}
+                            emotion={MASCOT_STYLE.COOL}
+                        />
+                    </ScrollView>
                 </LinearGradient>
             </View>
 

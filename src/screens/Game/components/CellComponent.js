@@ -26,7 +26,6 @@ class CellComponent extends React.PureComponent<Props> {
                     borderWidth: 1,
                     aspectRatio: 1,
                 }}
-                key={item.key}
             />
         );
     }

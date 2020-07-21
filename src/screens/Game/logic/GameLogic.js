@@ -109,6 +109,7 @@ export default class GameLogic {
 
     onClock(callback: Function) {
         this.#gameTime++;
+        console.log(this.#gameTime);
         callback(this.#gameTime);
     }
 
