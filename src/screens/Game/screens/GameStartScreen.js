@@ -379,15 +379,7 @@ class GameStartScreen extends React.Component<Props, State> {
 
     getMainContent() {
         return (
-            <LinearGradient
-                style={{flex: 1}}
-                colors={[
-                    this.props.theme.colors.background + "00",
-                    this.props.theme.colors.background
-                ]}
-                start={{x: 0, y: 0.1}}
-                end={{x: 0.1, y: 1}}
-            >
+
                 <View style={{flex: 1}}>
                     {
                         this.gameStats != null
@@ -415,7 +407,6 @@ class GameStartScreen extends React.Component<Props, State> {
                     </Button>
                     {this.getTopScoresRender()}
                 </View>
-            </LinearGradient>
         )
     }
 
@@ -425,6 +416,15 @@ class GameStartScreen extends React.Component<Props, State> {
         return (
             <View style={{flex: 1}}>
                 {this.getPiecesBackground()}
+                <LinearGradient
+                    style={{flex: 1}}
+                    colors={[
+                        this.props.theme.colors.background + "00",
+                        this.props.theme.colors.background
+                    ]}
+                    start={{x: 0, y: 0}}
+                    end={{x: 0, y: 1}}
+                >
                 <ScrollView>
                     {this.getMainContent()}
                     <MascotPopup
@@ -443,6 +443,7 @@ class GameStartScreen extends React.Component<Props, State> {
                         emotion={MASCOT_STYLE.COOL}
                     />
                 </ScrollView>
+                </LinearGradient>
             </View>
 
         );
