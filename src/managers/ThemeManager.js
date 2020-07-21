@@ -56,6 +56,10 @@ export type CustomTheme = {
         tetrisJ: string,
         tetrisL: string,
 
+        gameGold: string,
+        gameSilver: string,
+        gameBronze: string,
+
         // Mascot Popup
         mascotMessageArrow: string,
     },
@@ -129,6 +133,10 @@ export default class ThemeManager {
                 tetrisJ: '#2a67e3',
                 tetrisL: '#da742d',
 
+                gameGold: "#ffd610",
+                gameSilver: "#7b7b7b",
+                gameBronze: "#a15218",
+
                 // Mascot Popup
                 mascotMessageArrow: "#dedede",
             },
@@ -190,6 +198,10 @@ export default class ThemeManager {
                 tetrisZ: '#b50008',
                 tetrisJ: '#0f37b9',
                 tetrisL: '#b96226',
+
+                gameGold: "#ffd610",
+                gameSilver: "#7b7b7b",
+                gameBronze: "#a15218",
 
                 // Mascot Popup
                 mascotMessageArrow: "#323232",

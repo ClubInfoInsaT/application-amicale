@@ -136,6 +136,11 @@ export default class AsyncStorageManager {
             ]),
             current: '',
         },
+        gameScores: {
+            key: 'gameScores',
+            default: '[]',
+            current: '',
+        },
     };
 
     /**

@@ -366,6 +366,8 @@
       "welcomeMessage": "Coincé sur les WC ? Le prof est pas là ?\nCe jeu est fait pour toi !\n\nEssaie d'avoir le meilleur score et de battre tes amis.",
       "play": "Jouer !",
       "score": "Score : %{score}",
+      "highScore": "Meilleur score : %{score}",
+      "newHighScore": "Meilleur score !",
       "time": "Temps :",
       "level": "Niveau :",
       "pause": "Pause",

@@ -17,6 +17,7 @@ import OptionsDialog from "../../../components/Dialogs/OptionsDialog";
 
 type Props = {
     navigation: StackNavigationProp,
+    route: { params: { highScore: number }, ... },
     theme: CustomTheme,
 }
 
@@ -37,6 +38,7 @@ type State = {
 class GameMainScreen extends React.Component<Props, State> {
 
     logic: GameLogic;
+    highScore: number | null;
 
     constructor(props) {
         super(props);
@@ -54,8 +56,8 @@ class GameMainScreen extends React.Component<Props, State> {
             onDialogDismiss: () => {
             },
         };
-        this.props.navigation.addListener('blur', this.onScreenBlur);
-        this.props.navigation.addListener('focus', this.onScreenFocus);
+        if (this.props.route.params != null)
+            this.highScore = this.props.route.params.highScore;
     }
 
     componentDidMount() {
@@ -69,21 +71,6 @@ class GameMainScreen extends React.Component<Props, State> {
         return <MaterialHeaderButtons>
             <Item title="pause" iconName="pause" onPress={this.togglePause}/>
         </MaterialHeaderButtons>;
-    }
-
-    /**
-     * Remove any interval on un-focus
-     */
-    onScreenBlur = () => {
-        if (!this.logic.isGamePaused())
-            this.logic.togglePause();
-    }
-
-    onScreenFocus = () => {
-        if (!this.logic.isGameRunning())
-            this.startGame();
-        else if (this.logic.isGamePaused())
-            this.showPausePopup();
     }
 
     getFormattedTime(seconds: number) {
@@ -221,7 +208,14 @@ class GameMainScreen extends React.Component<Props, State> {
             gameRunning: false,
         });
         if (!isRestart)
-            this.showGameOverConfirm();
+            this.props.navigation.replace(
+                "game-start",
+                {
+                    score: this.state.gameScore,
+                    level: this.state.gameLevel,
+                    time: this.state.gameTime,
+                }
+            );
     }
 
     getStatusIcons() {
@@ -281,28 +275,56 @@ class GameMainScreen extends React.Component<Props, State> {
     }
 
     getScoreIcon() {
+        let highScore = this.highScore == null || this.state.gameScore > this.highScore
+            ? this.state.gameScore
+            : this.highScore;
         return (
             <View style={{
-                flexDirection: "row",
-                marginLeft: "auto",
-                marginRight: "auto",
                 marginTop: 10,
                 marginBottom: 10,
             }}>
-                <Text style={{
-                    marginLeft: 5,
-                    fontSize: 22,
-                }}>{i18n.t("screens.game.score", {score: this.state.gameScore})}</Text>
-                <MaterialCommunityIcons
-                    name={'star'}
-                    color={this.props.theme.colors.tetrisScore}
-                    size={20}
-                style={{
-                    marginTop: "auto",
-                    marginBottom: "auto",
-                    marginLeft: 5
-                }}/>
+                <View style={{
+                    flexDirection: "row",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                }}>
+                    <Text style={{
+                        marginLeft: 5,
+                        fontSize: 20,
+                    }}>{i18n.t("screens.game.score", {score: this.state.gameScore})}</Text>
+                    <MaterialCommunityIcons
+                        name={'star'}
+                        color={this.props.theme.colors.tetrisScore}
+                        size={20}
+                        style={{
+                            marginTop: "auto",
+                            marginBottom: "auto",
+                            marginLeft: 5
+                        }}/>
+                </View>
+                <View style={{
+                    flexDirection: "row",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    marginTop: 5,
+                }}>
+                    <Text style={{
+                        marginLeft: 5,
+                        fontSize: 10,
+                        color: this.props.theme.colors.textDisabled
+                    }}>{i18n.t("screens.game.highScore", {score: highScore})}</Text>
+                    <MaterialCommunityIcons
+                        name={'star'}
+                        color={this.props.theme.colors.tetrisScore}
+                        size={10}
+                        style={{
+                            marginTop: "auto",
+                            marginBottom: "auto",
+                            marginLeft: 5
+                        }}/>
+                </View>
             </View>
+
         );
     }
 

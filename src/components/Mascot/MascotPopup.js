@@ -6,6 +6,7 @@ import Mascot from "./Mascot";
 import * as Animatable from "react-native-animatable";
 import {BackHandler, Dimensions, ScrollView, TouchableWithoutFeedback, View} from "react-native";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import SpeechArrow from "./SpeechArrow";
 
 type Props = {
     visible: boolean,
@@ -102,19 +103,11 @@ class MascotPopup extends React.Component<Props, State> {
                 animation={this.props.visible ? "bounceInLeft" : "bounceOutLeft"}
                 duration={this.props.visible ? 1000 : 300}
             >
-                <View style={{
-                    marginLeft: this.mascotSize / 3,
-                    width: 0,
-                    height: 0,
-                    borderLeftWidth: 0,
-                    borderRightWidth: 20,
-                    borderBottomWidth: 20,
-                    borderStyle: 'solid',
-                    backgroundColor: 'transparent',
-                    borderLeftColor: 'transparent',
-                    borderRightColor: 'transparent',
-                    borderBottomColor: this.props.theme.colors.mascotMessageArrow,
-                }}/>
+                <SpeechArrow
+                    style={{marginLeft: this.mascotSize / 3}}
+                    size={20}
+                    color={this.props.theme.colors.mascotMessageArrow}
+                />
                 <Card style={{
                     borderColor: this.props.theme.colors.mascotMessageArrow,
                     borderWidth: 4,
