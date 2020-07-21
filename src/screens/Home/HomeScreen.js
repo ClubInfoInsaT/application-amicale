@@ -5,7 +5,7 @@ import {FlatList} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../../components/Home/EventDashboardItem";
 import WebSectionList from "../../components/Screens/WebSectionList";
-import {withTheme} from 'react-native-paper';
+import {Headline, withTheme} from 'react-native-paper';
 import FeedItem from "../../components/Home/FeedItem";
 import SmallDashboardItem from "../../components/Home/SmallDashboardItem";
 import PreviewEventDashboardItem from "../../components/Home/PreviewEventDashboardItem";
@@ -228,7 +228,7 @@ class HomeScreen extends React.Component<Props, State> {
                 id: SECTIONS_ID[0]
             },
             {
-                title: '',
+                title: i18n.t("screens.home.feedTitle"),
                 data: this.currentNewFeed,
                 id: SECTIONS_ID[1]
             }
@@ -511,6 +511,21 @@ class HomeScreen extends React.Component<Props, State> {
             this.fabRef.current.onScroll(event);
     };
 
+    renderSectionHeader = (data: { [key: string]: any }) => {
+        if (data.section.title !== "")
+            return (
+                <Headline style={{
+                    textAlign: "center",
+                    marginTop: 50,
+                    marginBottom: 10,
+                }}>
+                    {data.section.title}
+                </Headline>
+            )
+        else
+            return null;
+    }
+
     /**
      * Callback when pressing the login button on the banner.
      * This hides the banner and takes the user to the login page.
@@ -540,6 +555,7 @@ class HomeScreen extends React.Component<Props, State> {
                         itemHeight={FEED_ITEM_HEIGHT}
                         onScroll={this.onScroll}
                         showError={false}
+                        renderSectionHeader={this.renderSectionHeader}
                     />
                 </View>
                 <MascotPopup

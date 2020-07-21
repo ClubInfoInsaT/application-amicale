@@ -95,6 +95,7 @@
     },
     "home": {
       "title": "Campus",
+      "feedTitle": "Amicale's News",
       "feed": "Details",
       "dashboard": {
         "seeMore": "Click to see more",
