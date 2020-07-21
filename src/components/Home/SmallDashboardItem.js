@@ -39,8 +39,8 @@ class SmallDashboardItem extends React.Component<Props> {
                     onPress={this.props.onPress}
                     borderless={true}
                     style={{
-                        marginLeft: this.itemSize / 4,
-                        marginRight: this.itemSize / 4,
+                        marginLeft: this.itemSize / 6,
+                        marginRight: this.itemSize / 6,
                     }}
                 >
                     <View style={{
@@ -50,8 +50,12 @@ class SmallDashboardItem extends React.Component<Props> {
                         <Image
                             source={{uri: props.image}}
                             style={{
-                                width: "100%",
-                                height: "100%",
+                                width: "80%",
+                                height: "80%",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                                marginTop: "auto",
+                                marginBottom: "auto",
                             }}
                         />
                         {

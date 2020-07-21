@@ -7,7 +7,7 @@ import DashboardItem from "../../components/Home/EventDashboardItem";
 import WebSectionList from "../../components/Screens/WebSectionList";
 import {withTheme} from 'react-native-paper';
 import FeedItem from "../../components/Home/FeedItem";
-import SquareDashboardItem from "../../components/Home/SmallDashboardItem";
+import SmallDashboardItem from "../../components/Home/SmallDashboardItem";
 import PreviewEventDashboardItem from "../../components/Home/PreviewEventDashboardItem";
 import {stringToDate} from "../../utils/Planning";
 import ActionsDashBoardItem from "../../components/Home/ActionsDashboardItem";
@@ -434,7 +434,7 @@ class HomeScreen extends React.Component<Props, State> {
      */
     dashboardRowRenderItem = ({item}: { item: DashboardItem }) => {
         return (
-            <SquareDashboardItem
+            <SmallDashboardItem
                 image={item.image}
                 onPress={item.onPress}
                 badgeCount={this.currentDashboard != null && item.badgeFunction != null
@@ -460,7 +460,8 @@ class HomeScreen extends React.Component<Props, State> {
                 contentContainerStyle={{
                     marginLeft: 'auto',
                     marginRight: 'auto',
-                    marginTop: 5,
+                    marginTop: 10,
+                    marginBottom: 10,
                 }}
             />);
     }
