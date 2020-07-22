@@ -5,7 +5,7 @@ import {FlatList} from 'react-native';
 import i18n from "i18n-js";
 import DashboardItem from "../../components/Home/EventDashboardItem";
 import WebSectionList from "../../components/Screens/WebSectionList";
-import {Headline, withTheme} from 'react-native-paper';
+import {ActivityIndicator, Headline, withTheme} from 'react-native-paper';
 import FeedItem from "../../components/Home/FeedItem";
 import SmallDashboardItem from "../../components/Home/SmallDashboardItem";
 import PreviewEventDashboardItem from "../../components/Home/PreviewEventDashboardItem";
@@ -16,6 +16,7 @@ import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHead
 import AnimatedFAB from "../../components/Animations/AnimatedFAB";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import * as Animatable from "react-native-animatable";
 import {View} from "react-native-animatable";
 import ConnectionManager from "../../managers/ConnectionManager";
 import LogoutDialog from "../../components/Amicale/LogoutDialog";
@@ -23,6 +24,8 @@ import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
 import MascotPopup from "../../components/Mascot/MascotPopup";
 import DashboardManager from "../../managers/DashboardManager";
+import type {ServiceItem} from "../../managers/ServicesManager";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 // import DATA from "../dashboard_data.json";
 
 
@@ -61,11 +64,6 @@ export type fullDashboard = {
     available_tutorials: number,
 }
 
-type dashboardItem = {
-    id: string,
-    content: Array<{ [key: string]: any }>
-};
-
 export type event = {
     id: number,
     title: string,
@@ -77,12 +75,6 @@ export type event = {
     category_id: number,
     url: string,
 }
-
-type listSection = {
-    title: string,
-    data: Array<dashboardItem> | Array<feedItem>,
-    id: string
-};
 
 type Props = {
     navigation: StackNavigationProp,
@@ -203,83 +195,40 @@ class HomeScreen extends React.Component<Props, State> {
 
     hideDisconnectDialog = () => this.setState({dialogVisible: false});
 
+    openScanner = () => this.props.navigation.navigate("scanner");
+
     /**
      * Creates the dataset to be used in the FlatList
      *
      * @param fetchedData
+     * @param isLoading
      * @return {*}
      */
-    createDataset = (fetchedData: rawDashboard) => {
+    createDataset = (fetchedData: rawDashboard | null, isLoading: boolean) => {
         // fetchedData = DATA;
-        let dashboardData;
-        if (fetchedData.news_feed != null)
-            this.currentNewFeed = fetchedData.news_feed.data;
-        if (fetchedData.dashboard != null)
-            this.currentDashboard = fetchedData.dashboard;
-
-        if (fetchedData.dashboard != null)
-            dashboardData = this.generateDashboardDataset(fetchedData.dashboard);
+        if (fetchedData != null) {
+            if (fetchedData.news_feed != null)
+                this.currentNewFeed = fetchedData.news_feed.data;
+            if (fetchedData.dashboard != null)
+                this.currentDashboard = fetchedData.dashboard;
+        }
+        if (this.currentNewFeed.length > 0)
+            return [
+                {
+                    title: i18n.t("screens.home.feedTitle"),
+                    data: this.currentNewFeed,
+                    id: SECTIONS_ID[1]
+                }
+            ];
         else
-            dashboardData = this.generateDashboardDataset(null);
-        return [
-            {
-                title: '',
-                data: dashboardData,
-                id: SECTIONS_ID[0]
-            },
-            {
-                title: i18n.t("screens.home.feedTitle"),
-                data: this.currentNewFeed,
-                id: SECTIONS_ID[1]
-            }
-        ];
+            return [
+                {
+                    title: isLoading ? i18n.t("screens.home.feedLoading") : i18n.t("screens.home.feedError"),
+                    data: [],
+                    id: SECTIONS_ID[1]
+                }
+            ];
     };
-
-    /**
-     * Generates the dataset associated to the dashboard to be displayed in the FlatList as a section
-     *
-     * @param dashboardData
-     * @return {Array<dashboardItem>}
-     */
-    generateDashboardDataset(dashboardData: fullDashboard | null): Array<dashboardItem> {
-        return [
-            {id: 'actions', content: []},
-            {
-                id: 'top',
-                content: this.dashboardManager.getCurrentDashboard(),
-            },
-            {
-                id: 'event',
-                content: dashboardData == null ? [] : dashboardData.today_events
-            },
-
-        ];
-    }
-
-    /**
-     * Gets a dashboard item
-     *
-     * @param item The item to display
-     * @return {*}
-     */
-    getDashboardItem(item: dashboardItem) {
-        let content = item.content;
-        if (item.id === 'event')
-            return this.getDashboardEvent(content);
-        else if (item.id === 'top')
-            return this.getDashboardRow(content);
-        else
-            return this.getDashboardActions();
-    }
-
-    /**
-     * Gets a dashboard item with action buttons
-     *
-     * @returns {*}
-     */
-    getDashboardActions() {
-        return <ActionsDashBoardItem {...this.props} isLoggedIn={this.isLoggedIn}/>;
-    }
 
     /**
      * Gets the time limit depending on the current day:
@@ -427,22 +376,13 @@ class HomeScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Gets a dashboard shortcut item
+     * Gets a dashboard item with action buttons
      *
-     * @param item
      * @returns {*}
      */
-    dashboardRowRenderItem = ({item}: { item: DashboardItem }) => {
-        return (
-            <SmallDashboardItem
-                image={item.image}
-                onPress={item.onPress}
-                badgeCount={this.currentDashboard != null && item.badgeFunction != null
-                    ? item.badgeFunction(this.currentDashboard)
-                    : null}
-            />
-        );
-    };
+    getDashboardActions() {
+        return <ActionsDashBoardItem {...this.props} isLoggedIn={this.isLoggedIn}/>;
+    }
 
     /**
      * Gets a dashboard item with a row of shortcut buttons.
@@ -450,7 +390,7 @@ class HomeScreen extends React.Component<Props, State> {
      * @param content
      * @return {*}
      */
-    getDashboardRow(content: Array<DashboardItem>) {
+    getDashboardRow(content: Array<ServiceItem>) {
         return (
             //$FlowFixMe
             <FlatList
@@ -465,6 +405,24 @@ class HomeScreen extends React.Component<Props, State> {
                 }}
             />);
     }
+
+    /**
+     * Gets a dashboard shortcut item
+     *
+     * @param item
+     * @returns {*}
+     */
+    dashboardRowRenderItem = ({item}: { item: ServiceItem }) => {
+        return (
+            <SmallDashboardItem
+                image={item.image}
+                onPress={item.onPress}
+                badgeCount={this.currentDashboard != null && item.badgeFunction != null
+                    ? item.badgeFunction(this.currentDashboard)
+                    : null}
+            />
+        );
+    };
 
     /**
      * Gets a render item for the given feed object
@@ -491,28 +449,15 @@ class HomeScreen extends React.Component<Props, State> {
      * @param section The current section
      * @return {*}
      */
-    getRenderItem = ({item, section}: {
-        item: { [key: string]: any },
-        section: listSection
-    }) => {
-        if (section.id === SECTIONS_ID[0]) {
-            const data: dashboardItem = item;
-            return this.getDashboardItem(data);
-        } else {
-            const data: feedItem = item;
-            return this.getFeedItem(data);
-        }
-    };
-
-    openScanner = () => this.props.navigation.navigate("scanner");
+    getRenderItem = ({item}: { item: feedItem, }) => this.getFeedItem(item);
 
     onScroll = (event: SyntheticEvent<EventTarget>) => {
         if (this.fabRef.current != null)
             this.fabRef.current.onScroll(event);
     };
 
-    renderSectionHeader = (data: { [key: string]: any }) => {
-        if (data.section.title !== "")
+    renderSectionHeader = (data: { section: { [key: string]: any } }, isLoading: boolean) => {
+        if (data.section.data.length > 0)
             return (
                 <Headline style={{
                     textAlign: "center",
@@ -523,7 +468,59 @@ class HomeScreen extends React.Component<Props, State> {
                 </Headline>
             )
         else
-            return null;
+            return (
+                <View>
+                    <Headline style={{
+                        textAlign: "center",
+                        marginTop: 50,
+                        marginBottom: 10,
+                        marginLeft: 20,
+                        marginRight: 20,
+                        color: this.props.theme.colors.textDisabled
+                    }}>
+                        {data.section.title}
+                    </Headline>
+                    {isLoading
+                        ? <ActivityIndicator
+                            style={{
+                                marginTop: 10
+                            }}
+                        />
+                        : <MaterialCommunityIcons
+                            name={"access-point-network-off"}
+                            size={100}
+                            color={this.props.theme.colors.textDisabled}
+                            style={{
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                            }}
+                        />}
+
+                </View>
+            );
+    }
+
+    getListHeader = (fetchedData: rawDashboard) => {
+        let dashboard = null;
+        if (fetchedData != null) {
+            dashboard = fetchedData.dashboard;
+        }
+
+        return (
+            <Animatable.View
+                animation={"fadeInDown"}
+                duration={500}
+                useNativeDriver={true}
+            >
+                {this.getDashboardActions()}
+                {this.getDashboardRow(this.dashboardManager.getCurrentDashboard())}
+                {this.getDashboardEvent(
+                    dashboard == null
+                        ? []
+                        : dashboard.today_events
+                )}
+            </Animatable.View>
+        );
     }
 
     /**
@@ -556,6 +553,7 @@ class HomeScreen extends React.Component<Props, State> {
                         onScroll={this.onScroll}
                         showError={false}
                         renderSectionHeader={this.renderSectionHeader}
+                        renderListHeaderComponent={this.getListHeader}
                     />
                 </View>
                 <MascotPopup

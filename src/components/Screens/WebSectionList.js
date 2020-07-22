@@ -11,21 +11,23 @@ import {withCollapsible} from "../../utils/withCollapsible";
 import * as Animatable from 'react-native-animatable';
 import CustomTabBar from "../Tabbar/CustomTabBar";
 import {Collapsible} from "react-navigation-collapsible";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
-    navigation: { [key: string]: any },
+    navigation: StackNavigationProp,
     fetchUrl: string,
     autoRefreshTime: number,
     refreshOnFocus: boolean,
     renderItem: (data: { [key: string]: any }) => React.Node,
-    createDataset: (data: { [key: string]: any }) => Array<Object>,
+    createDataset: (data: { [key: string]: any } | null, isLoading?: boolean) => Array<Object>,
     onScroll: (event: SyntheticEvent<EventTarget>) => void,
     collapsibleStack: Collapsible,
 
     showError: boolean,
     itemHeight?: number,
     updateData?: number,
-    renderSectionHeader?: (data: { [key: string]: any }) => React.Node,
+    renderListHeaderComponent?: (data: { [key: string]: any } | null) => React.Node,
+    renderSectionHeader?: (data: { section: { [key: string]: any } }, isLoading?: boolean) => React.Node,
     stickyHeader?: boolean,
 }
 
@@ -53,7 +55,6 @@ class WebSectionList extends React.PureComponent<Props, State> {
         showError: true,
     };
 
-    scrollRef: { current: null | Animated.SectionList };
     refreshInterval: IntervalID;
     lastRefresh: Date | null;
 
@@ -69,31 +70,26 @@ class WebSectionList extends React.PureComponent<Props, State> {
      * Allows to detect when the screen is focused
      */
     componentDidMount() {
-        const onScreenFocus = this.onScreenFocus.bind(this);
-        const onScreenBlur = this.onScreenBlur.bind(this);
-        this.props.navigation.addListener('focus', onScreenFocus);
-        this.props.navigation.addListener('blur', onScreenBlur);
-        this.scrollRef = React.createRef();
-        this.onRefresh();
+        this.props.navigation.addListener('focus', this.onScreenFocus);
+        this.props.navigation.addListener('blur', this.onScreenBlur);
         this.lastRefresh = null;
+        this.onRefresh();
     }
 
     /**
      * Refreshes data when focusing the screen and setup a refresh interval if asked to
      */
-    onScreenFocus() {
+    onScreenFocus = () => {
         if (this.props.refreshOnFocus && this.lastRefresh)
             this.onRefresh();
         if (this.props.autoRefreshTime > 0)
             this.refreshInterval = setInterval(this.onRefresh, this.props.autoRefreshTime)
-        // if (this.scrollRef.current) // Reset scroll to top
-        //     this.scrollRef.current.getNode().scrollToLocation({animated:false, itemIndex:0, sectionIndex:0});
     }
 
     /**
      * Removes any interval on un-focus
      */
-    onScreenBlur() {
+    onScreenBlur = () => {
         clearInterval(this.refreshInterval);
     }
 
@@ -173,7 +169,7 @@ class WebSectionList extends React.PureComponent<Props, State> {
                     duration={500}
                     useNativeDriver
                 >
-                    {this.props.renderSectionHeader(data)}
+                    {this.props.renderSectionHeader(data, this.state.refreshing)}
                 </Animatable.View>
             );
         } else
@@ -205,16 +201,12 @@ class WebSectionList extends React.PureComponent<Props, State> {
     render() {
         let dataset = [];
         if (this.state.fetchedData != null || (this.state.fetchedData == null && !this.props.showError)) {
-            if (this.state.fetchedData == null)
-                dataset = this.props.createDataset({});
-            else
-                dataset = this.props.createDataset(this.state.fetchedData);
+            dataset = this.props.createDataset(this.state.fetchedData, this.state.refreshing);
         }
         const {containerPaddingTop, scrollIndicatorInsetTop, onScrollWithListener} = this.props.collapsibleStack;
         return (
             <View>
                 <Animated.SectionList
-                    ref={this.scrollRef}
                     sections={dataset}
                     extraData={this.props.updateData}
                     refreshControl={
@@ -228,6 +220,9 @@ class WebSectionList extends React.PureComponent<Props, State> {
                     renderItem={this.renderItem}
                     stickySectionHeadersEnabled={this.props.stickyHeader}
                     style={{minHeight: '100%'}}
+                    ListHeaderComponent={this.props.renderListHeaderComponent != null
+                        ? this.props.renderListHeaderComponent(this.state.fetchedData)
+                        : null}
                     ListEmptyComponent={this.state.refreshing
                         ? <BasicLoadingScreen/>
                         : <ErrorView

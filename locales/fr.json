@@ -95,8 +95,10 @@
     },
     "home": {
       "title": "Campus",
-      "feedTitle": "News de l'Amicale",
+      "feedTitle": "News du Campus",
       "feed": "Détails",
+      "feedLoading": "Chargement des news",
+      "feedError": "Erreur de chargement des news",
       "dashboard": {
         "seeMore": "Clique pour plus d'infos",
         "todayEventsTitle": "Événements aujourd'hui",

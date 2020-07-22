@@ -95,8 +95,10 @@
     },
     "home": {
       "title": "Campus",
-      "feedTitle": "Amicale's News",
+      "feedTitle": "Campus News",
       "feed": "Details",
+      "feedLoading": "Loading News",
+      "feedError": "Failed to load news",
       "dashboard": {
         "seeMore": "Click to see more",
         "todayEventsTitle": "Today's events",
