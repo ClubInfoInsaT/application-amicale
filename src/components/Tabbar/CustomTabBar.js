@@ -1,3 +1,5 @@
+// @flow
+
 import * as React from 'react';
 import {withTheme} from 'react-native-paper';
 import TabIcon from "./TabIcon";
