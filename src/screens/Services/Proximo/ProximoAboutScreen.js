@@ -1,11 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Image, ScrollView, View} from 'react-native';
+import {Image, View} from 'react-native';
 import i18n from "i18n-js";
 import {Card, List, Paragraph, Text} from 'react-native-paper';
 import CustomTabBar from "../../../components/Tabbar/CustomTabBar";
 import {StackNavigationProp} from "@react-navigation/stack";
+import CollapsibleScrollView from "../../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -20,7 +21,7 @@ export default class ProximoAboutScreen extends React.Component<Props> {
 
     render() {
         return (
-            <ScrollView style={{padding: 5}}>
+            <CollapsibleScrollView style={{padding: 5}}>
                 <View style={{
                     width: '100%',
                     height: 100,
@@ -52,7 +53,7 @@ export default class ProximoAboutScreen extends React.Component<Props> {
                         <Paragraph>{i18n.t('screens.proximo.paymentMethodsDescription')}</Paragraph>
                     </Card.Content>
                 </Card>
-            </ScrollView>
+            </CollapsibleScrollView>
         );
     }
 }

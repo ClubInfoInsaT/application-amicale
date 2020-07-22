@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {ScrollView, View} from "react-native";
+import {View} from "react-native";
 import type {CustomTheme} from "../../../managers/ThemeManager";
 import ThemeManager from '../../../managers/ThemeManager';
 import i18n from "i18n-js";
@@ -10,6 +10,7 @@ import {Card, List, Switch, ToggleButton, withTheme} from 'react-native-paper';
 import {Appearance} from "react-native-appearance";
 import CustomSlider from "../../../components/Overrides/CustomSlider";
 import {StackNavigationProp} from "@react-navigation/stack";
+import CollapsibleScrollView from "../../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -187,7 +188,7 @@ class SettingsScreen extends React.Component<Props, State> {
 
     render() {
         return (
-            <ScrollView>
+            <CollapsibleScrollView>
                 <Card style={{margin: 5}}>
                     <Card.Title title={i18n.t('screens.settings.generalCard')}/>
                     <List.Section>
@@ -243,11 +244,11 @@ class SettingsScreen extends React.Component<Props, State> {
                     <List.Section>
                         {this.state.isDebugUnlocked
                             ? this.getNavigateItem(
-                                    "debug",
-                                    "bug-check",
-                                    i18n.t('screens.debug.title'),
-                                    ""
-                                )
+                                "debug",
+                                "bug-check",
+                                i18n.t('screens.debug.title'),
+                                ""
+                            )
                             : null}
                         {this.getNavigateItem(
                             "about",
@@ -264,7 +265,7 @@ class SettingsScreen extends React.Component<Props, State> {
                         )}
                     </List.Section>
                 </Card>
-            </ScrollView>
+            </CollapsibleScrollView>
         );
     }
 }

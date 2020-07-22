@@ -12,30 +12,12 @@ import {useCollapsibleStack} from "react-navigation-collapsible";
  * This component will then receive the collapsibleStack prop.
  *
  * @param Component The component to use Collapsible with
- * @returns {React.ComponentType<React.ClassAttributes<unknown>>}
+ * @returns {React.ComponentType<any>}
  */
-export const withCollapsible = (Component: any) => {
+export const withCollapsible = (Component: React.ComponentType<any>) => {
     return React.forwardRef((props: any, ref: any) => {
-
-        const {
-            onScroll,
-            onScrollWithListener,
-            containerPaddingTop,
-            scrollIndicatorInsetTop,
-            translateY,
-            progress,
-            opacity,
-        } = useCollapsibleStack();
         return <Component
-            collapsibleStack={{
-                onScroll,
-                onScrollWithListener,
-                containerPaddingTop: containerPaddingTop,
-                scrollIndicatorInsetTop: scrollIndicatorInsetTop,
-                translateY,
-                progress,
-                opacity,
-            }}
+            collapsibleStack={useCollapsibleStack()}
             ref={ref}
             {...props}
         />;

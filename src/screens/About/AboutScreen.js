@@ -6,6 +6,7 @@ import i18n from "i18n-js";
 import {Avatar, Card, List, Title, withTheme} from 'react-native-paper';
 import packageJson from "../../../package.json";
 import {StackNavigationProp} from "@react-navigation/stack";
+import CollapsibleFlatList from "../../components/Collapsible/CollapsibleFlatList";
 
 type ListItem = {
     onPressCallback: () => void,
@@ -338,7 +339,7 @@ class AboutScreen extends React.Component<Props> {
 
     render() {
         return (
-            <FlatList
+            <CollapsibleFlatList
                 style={{padding: 5}}
                 data={this.dataOrder}
                 renderItem={this.getMainCard}

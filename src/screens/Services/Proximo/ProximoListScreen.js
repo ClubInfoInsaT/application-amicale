@@ -1,17 +1,16 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, Image, Platform, ScrollView, View} from "react-native";
+import {Image, Platform, ScrollView, View} from "react-native";
 import i18n from "i18n-js";
 import CustomModal from "../../../components/Overrides/CustomModal";
 import {RadioButton, Searchbar, Subheading, Text, Title, withTheme} from "react-native-paper";
 import {stringMatchQuery} from "../../../utils/Search";
 import ProximoListItem from "../../../components/Lists/Proximo/ProximoListItem";
 import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
-import {withCollapsible} from "../../../utils/withCollapsible";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../../managers/ThemeManager";
-import {Collapsible} from "react-navigation-collapsible";
+import CollapsibleFlatList from "../../../components/Collapsible/CollapsibleFlatList";
 
 function sortPrice(a, b) {
     return a.price - b.price;
@@ -43,7 +42,6 @@ type Props = {
     navigation: StackNavigationProp,
     route: { params: { data: { data: Object }, shouldFocusSearchBar: boolean } },
     theme: CustomTheme,
-    collapsibleStack: Collapsible,
 }
 
 type State = {
@@ -300,7 +298,6 @@ class ProximoListScreen extends React.Component<Props, State> {
     itemLayout = (data, index) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
 
     render() {
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
             <View style={{
                 height: '100%'
@@ -308,7 +305,7 @@ class ProximoListScreen extends React.Component<Props, State> {
                 <CustomModal onRef={this.onModalRef}>
                     {this.state.modalCurrentDisplayItem}
                 </CustomModal>
-                <Animated.FlatList
+                <CollapsibleFlatList
                     data={this.listData}
                     extraData={this.state.currentSearchString + this.state.currentSortMode}
                     keyExtractor={this.keyExtractor}
@@ -317,16 +314,10 @@ class ProximoListScreen extends React.Component<Props, State> {
                     removeClippedSubviews={true}
                     getItemLayout={this.itemLayout}
                     initialNumToRender={10}
-                    // Animations
-                    onScroll={onScroll}
-                    contentContainerStyle={{
-                        paddingTop: containerPaddingTop,
-                    }}
-                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
                 />
             </View>
         );
     }
 }
 
-export default withCollapsible(withTheme(ProximoListScreen));
+export default withTheme(ProximoListScreen);

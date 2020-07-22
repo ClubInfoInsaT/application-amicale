@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Linking, ScrollView, View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {Avatar, Button, Card, Chip, Paragraph, withTheme} from 'react-native-paper';
 import ImageModal from 'react-native-image-modal';
 import i18n from "i18n-js";
@@ -12,6 +12,7 @@ import type {category, club} from "./ClubListScreen";
 import type {CustomTheme} from "../../../managers/ThemeManager";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {ERROR_TYPE} from "../../../utils/WebData";
+import CollapsibleScrollView from "../../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -184,7 +185,10 @@ class ClubDisplayScreen extends React.Component<Props, State> {
         }
         if (data != null) {
             return (
-                <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
+                <CollapsibleScrollView
+                    style={{paddingLeft: 5, paddingRight: 5}}
+                    hasTab={true}
+                >
                     {this.getCategoriesRender(data.category)}
                     {data.logo !== null ?
                         <View style={{
@@ -214,7 +218,7 @@ class ClubDisplayScreen extends React.Component<Props, State> {
                         </Card.Content>
                         : <View/>}
                     {this.getManagersRender(data.responsibles, data.email)}
-                </ScrollView>
+                </CollapsibleScrollView>
             );
         } else
             return null;

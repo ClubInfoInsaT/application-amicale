@@ -4,7 +4,7 @@ import * as React from "react";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../../managers/ThemeManager";
 import {Button, Card, Divider, Headline, Paragraph, Text, withTheme} from "react-native-paper";
-import {ScrollView, View} from "react-native";
+import {View} from "react-native";
 import i18n from "i18n-js";
 import Mascot, {MASCOT_STYLE} from "../../../components/Mascot/Mascot";
 import MascotPopup from "../../../components/Mascot/MascotPopup";
@@ -17,6 +17,7 @@ import * as Animatable from "react-native-animatable";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import LinearGradient from "react-native-linear-gradient";
 import SpeechArrow from "../../../components/Mascot/SpeechArrow";
+import CollapsibleScrollView from "../../../components/Collapsible/CollapsibleScrollView";
 
 type GameStats = {
     score: number,
@@ -417,7 +418,7 @@ class GameStartScreen extends React.Component<Props, State> {
                     start={{x: 0, y: 0}}
                     end={{x: 0, y: 1}}
                 >
-                    <ScrollView>
+                    <CollapsibleScrollView>
                         {this.getMainContent()}
                         <MascotPopup
                             visible={this.state.mascotDialogVisible}
@@ -434,7 +435,7 @@ class GameStartScreen extends React.Component<Props, State> {
                             }}
                             emotion={MASCOT_STYLE.COOL}
                         />
-                    </ScrollView>
+                    </CollapsibleScrollView>
                 </LinearGradient>
             </View>
 

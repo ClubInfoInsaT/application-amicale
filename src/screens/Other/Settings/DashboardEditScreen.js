@@ -13,6 +13,7 @@ import DashboardEditAccordion from "../../../components/Lists/DashboardEdit/Dash
 import DashboardEditPreviewItem from "../../../components/Lists/DashboardEdit/DashboardEditPreviewItem";
 import AsyncStorageManager from "../../../managers/AsyncStorageManager";
 import i18n from "i18n-js";
+import CollapsibleFlatList from "../../../components/Collapsible/CollapsibleFlatList";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -108,43 +109,43 @@ class DashboardEditScreen extends React.Component<Props, State> {
         );
     }
 
+    getListHeader() {
+        return (
+            <Card style={{margin: 5}}>
+                <Card.Content>
+                    <View style={{padding: 5}}>
+                        <Button
+                            mode={"contained"}
+                            onPress={this.undoDashboard}
+                            style={{
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                                marginBottom: 10,
+                            }}
+                        >
+                            {i18n.t("screens.settings.dashboardEdit.undo")}
+                        </Button>
+                        <View style={{height: 50}}>
+                            {this.getDashboard(this.state.currentDashboard)}
+                        </View>
+                    </View>
+                    <Paragraph style={{textAlign: "center"}}>
+                        {i18n.t("screens.settings.dashboardEdit.message")}
+                    </Paragraph>
+                </Card.Content>
+            </Card>
+        );
+    }
+
 
     render() {
         return (
-            <View style={{flex: 1}}>
-                <View style={{
-                    padding: 5
-                }}>
-                    <Button
-                        mode={"contained"}
-                        onPress={this.undoDashboard}
-                        style={{
-                            marginLeft: "auto",
-                            marginRight: "auto",
-                        }}
-                    >
-                        {i18n.t("screens.settings.dashboardEdit.undo")}
-                    </Button>
-                    <View style={{
-                        height: 50
-                    }}>
-                        {this.getDashboard(this.state.currentDashboard)}
-                    </View>
-
-                </View>
-                <FlatList
-                    data={this.content}
-                    renderItem={this.renderItem}
-                    ListHeaderComponent={<Card style={{margin: 5}}>
-                        <Card.Content>
-                            <Paragraph
-                                style={{textAlign: "center"}}>{i18n.t("screens.settings.dashboardEdit.message")}</Paragraph>
-                        </Card.Content>
-
-                    </Card>}
-                    style={{}}
-                />
-            </View>
+            <CollapsibleFlatList
+                data={this.content}
+                renderItem={this.renderItem}
+                ListHeaderComponent={this.getListHeader()}
+                style={{}}
+            />
         );
     }
 

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, Platform} from "react-native";
+import {Platform} from "react-native";
 import {Searchbar} from 'react-native-paper';
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
 import i18n from "i18n-js";
@@ -9,10 +9,9 @@ import ClubListItem from "../../../components/Lists/Clubs/ClubListItem";
 import {isItemInCategoryFilter, stringMatchQuery} from "../../../utils/Search";
 import ClubListHeader from "../../../components/Lists/Clubs/ClubListHeader";
 import MaterialHeaderButtons, {Item} from "../../../components/Overrides/CustomHeaderButton";
-import {withCollapsible} from "../../../utils/withCollapsible";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../../managers/ThemeManager";
-import {Collapsible} from "react-navigation-collapsible";
+import CollapsibleFlatList from "../../../components/Collapsible/CollapsibleFlatList";
 
 export type category = {
     id: number,
@@ -32,7 +31,6 @@ export type club = {
 type Props = {
     navigation: StackNavigationProp,
     theme: CustomTheme,
-    collapsibleStack: Collapsible,
 }
 
 type State = {
@@ -111,9 +109,8 @@ class ClubListScreen extends React.Component<Props, State> {
             clubList = data[0].clubs;
         }
         this.categories = categoryList;
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
-            <Animated.FlatList
+            <CollapsibleFlatList
                 data={clubList}
                 keyExtractor={this.keyExtractor}
                 renderItem={this.getRenderItem}
@@ -121,10 +118,6 @@ class ClubListScreen extends React.Component<Props, State> {
                 // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
                 removeClippedSubviews={true}
                 getItemLayout={this.itemLayout}
-                // Animations
-                onScroll={onScroll}
-                contentContainerStyle={{paddingTop: containerPaddingTop}}
-                scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
             />
         )
     };
@@ -241,4 +234,4 @@ class ClubListScreen extends React.Component<Props, State> {
     }
 }
 
-export default withCollapsible(ClubListScreen);
+export default ClubListScreen;

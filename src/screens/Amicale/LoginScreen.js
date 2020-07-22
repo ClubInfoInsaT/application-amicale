@@ -1,13 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, Dimensions, Image, KeyboardAvoidingView, StyleSheet, View} from "react-native";
+import {Image, KeyboardAvoidingView, StyleSheet, View} from "react-native";
 import {Button, Card, HelperText, TextInput, withTheme} from 'react-native-paper';
 import ConnectionManager from "../../managers/ConnectionManager";
 import i18n from 'i18n-js';
 import ErrorDialog from "../../components/Dialogs/ErrorDialog";
-import {withCollapsible} from "../../utils/withCollapsible";
-import {Collapsible} from "react-navigation-collapsible";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import {StackNavigationProp} from "@react-navigation/stack";
@@ -15,11 +13,11 @@ import AvailableWebsites from "../../constants/AvailableWebsites";
 import {MASCOT_STYLE} from "../../components/Mascot/Mascot";
 import MascotPopup from "../../components/Mascot/MascotPopup";
 import LinearGradient from "react-native-linear-gradient";
+import CollapsibleScrollView from "../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {
     navigation: StackNavigationProp,
     route: { params: { nextScreen: string } },
-    collapsibleStack: Collapsible,
     theme: CustomTheme
 }
 
@@ -56,7 +54,6 @@ class LoginScreen extends React.Component<Props, State> {
     onEmailChange: (value: string) => null;
     onPasswordChange: (value: string) => null;
     passwordInputRef: { current: null | TextInput };
-    windowHeight: number;
 
     nextScreen: string | null;
 
@@ -66,7 +63,6 @@ class LoginScreen extends React.Component<Props, State> {
         this.onEmailChange = this.onInputChange.bind(this, true);
         this.onPasswordChange = this.onInputChange.bind(this, false);
         this.props.navigation.addListener('focus', this.onScreenFocus);
-        this.windowHeight = Dimensions.get('window').height;
     }
 
     onScreenFocus = () => {
@@ -323,13 +319,13 @@ class LoginScreen extends React.Component<Props, State> {
                     {this.getFormInput()}
                     <Card.Actions style={{flexWrap: "wrap"}}>
                         <Button
-                        icon="lock-question"
-                        mode="contained"
-                        onPress={this.onResetPasswordClick}
-                        color={this.props.theme.colors.warning}
-                        style={{marginRight: 'auto', marginBottom: 20}}>
-                        {i18n.t("screens.login.resetPassword")}
-                    </Button>
+                            icon="lock-question"
+                            mode="contained"
+                            onPress={this.onResetPasswordClick}
+                            color={this.props.theme.colors.warning}
+                            style={{marginRight: 'auto', marginBottom: 20}}>
+                            {i18n.t("screens.login.resetPassword")}
+                        </Button>
                         <Button
                             icon="send"
                             mode="contained"
@@ -359,7 +355,6 @@ class LoginScreen extends React.Component<Props, State> {
     }
 
     render() {
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
             <LinearGradient
                 style={{
@@ -375,16 +370,10 @@ class LoginScreen extends React.Component<Props, State> {
                     enabled
                     keyboardVerticalOffset={100}
                 >
-                    <Animated.ScrollView
-                        onScroll={onScroll}
-                        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
-                        style={{flex: 1}}
-                    >
-                        <View style={{height: this.windowHeight - containerPaddingTop}}>
+                    <CollapsibleScrollView>
+                        <View style={{height: "100%"}}>
                             {this.getMainCard()}
                         </View>
-
-
                         <MascotPopup
                             visible={this.state.mascotDialogVisible}
                             title={i18n.t("screens.login.mascotDialog.title")}
@@ -405,7 +394,7 @@ class LoginScreen extends React.Component<Props, State> {
                             onDismiss={this.hideErrorDialog}
                             errorCode={this.state.dialogError}
                         />
-                    </Animated.ScrollView>
+                    </CollapsibleScrollView>
                 </KeyboardAvoidingView>
             </LinearGradient>
         );
@@ -431,4 +420,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default withCollapsible(withTheme(LoginScreen));
+export default withTheme(LoginScreen);

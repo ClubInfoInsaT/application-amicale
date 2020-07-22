@@ -24,7 +24,7 @@ import StackNavigator, {StackNavigationOptions} from "@react-navigation/stack";
 export function createScreenCollapsibleStack(
     name: string,
     Stack: StackNavigator,
-    component: React.Node,
+    component: React.ComponentType<any>,
     title: string,
     useNativeDriver?: boolean,
     options?: StackNavigationOptions,

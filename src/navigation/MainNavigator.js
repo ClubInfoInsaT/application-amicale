@@ -28,16 +28,13 @@ import EquipmentLendScreen from "../screens/Amicale/Equipment/EquipmentRentScree
 import EquipmentConfirmScreen from "../screens/Amicale/Equipment/EquipmentConfirmScreen";
 import DashboardEditScreen from "../screens/Other/Settings/DashboardEditScreen";
 import GameStartScreen from "../screens/Game/screens/GameStartScreen";
-import GameEndScreen from "../screens/Game/screens/GameEndScreen";
 
 const modalTransition = Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : TransitionPresets.ModalSlideFromBottomIOS;
-
-const screenTransition = TransitionPresets.SlideFromRightIOS;
 
 const defaultScreenOptions = {
     gestureEnabled: true,
     cardOverlayEnabled: true,
-    ...screenTransition,
+    ...TransitionPresets.SlideFromRightIOS,
 };
 
 
@@ -58,48 +55,37 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                     title: i18n.t('screens.home.title'),
                 }}
             />
-            <MainStack.Screen
-                name="settings"
-                component={SettingsScreen}
-                options={{
-                    title: i18n.t('screens.settings.title'),
-                }}
-            />
-            <MainStack.Screen
-                name="dashboard-edit"
-                component={DashboardEditScreen}
-                options={{
-                    title: i18n.t('screens.settings.dashboardEdit.title'),
-                }}
-            />
-            <MainStack.Screen
-                name="about"
-                component={AboutScreen}
-                options={{
-                    title: i18n.t('screens.about.title'),
-                }}
-            />
-            <MainStack.Screen
-                name="dependencies"
-                component={AboutDependenciesScreen}
-                options={{
-                    title: i18n.t('screens.about.libs')
-                }}
-            />
-            <MainStack.Screen
-                name="debug"
-                component={DebugScreen}
-                options={{
-                    title: i18n.t('screens.about.debug')
-                }}
-            />
-            <MainStack.Screen
-                name="game-start"
-                component={GameStartScreen}
-                options={{
-                    title: i18n.t("screens.game.title"),
-                }}
-            />
+            {createScreenCollapsibleStack(
+                "settings",
+                MainStack,
+                SettingsScreen,
+                i18n.t('screens.settings.title'))}
+            {createScreenCollapsibleStack(
+                "dashboard-edit",
+                MainStack,
+                DashboardEditScreen,
+                i18n.t('screens.settings.dashboardEdit.title'))}
+            {createScreenCollapsibleStack(
+                "about",
+                MainStack,
+                AboutScreen,
+                i18n.t('screens.about.title'))}
+            {createScreenCollapsibleStack(
+                "dependencies",
+                MainStack,
+                AboutDependenciesScreen,
+                i18n.t('screens.about.libs'))}
+            {createScreenCollapsibleStack(
+                "debug",
+                MainStack,
+                DebugScreen,
+                i18n.t('screens.about.debug'))}
+
+            {createScreenCollapsibleStack(
+                "game-start",
+                MainStack,
+                GameStartScreen,
+                i18n.t('screens.game.title'))}
             <MainStack.Screen
                 name="game-main"
                 component={GameMainScreen}
@@ -107,73 +93,91 @@ function MainStackComponent(props: { createTabNavigator: () => React.Node }) {
                     title: i18n.t("screens.game.title"),
                 }}
             />
-            <MainStack.Screen
-                name="game-end"
-                component={GameEndScreen}
-                options={{
-                    title: i18n.t("screens.game.title"),
-                }}
-            />
-            {createScreenCollapsibleStack("login", MainStack, LoginScreen, i18n.t('screens.login.title'),
-                true, {headerTintColor: "#fff"}, 'transparent')}
+            {createScreenCollapsibleStack(
+                "login",
+                MainStack,
+                LoginScreen,
+                i18n.t('screens.login.title'),
+                true,
+                {headerTintColor: "#fff"},
+                'transparent')}
             {getWebsiteStack("website", MainStack, WebsiteScreen, "")}
 
 
-            {createScreenCollapsibleStack("self-menu", MainStack, SelfMenuScreen, i18n.t('screens.menu.title'))}
-            {createScreenCollapsibleStack("proximo", MainStack, ProximoMainScreen, i18n.t('screens.proximo.title'))}
+            {createScreenCollapsibleStack(
+                "self-menu",
+                MainStack,
+                SelfMenuScreen,
+                i18n.t('screens.menu.title'))}
+            {createScreenCollapsibleStack(
+                "proximo",
+                MainStack,
+                ProximoMainScreen,
+                i18n.t('screens.proximo.title'))}
             {createScreenCollapsibleStack(
                 "proximo-list",
                 MainStack,
                 ProximoListScreen,
                 i18n.t('screens.proximo.articleList'),
-                true,
-                {...screenTransition},
             )}
-            <MainStack.Screen
-                name="proximo-about"
-                component={ProximoAboutScreen}
-                options={{
-                    title: i18n.t('screens.proximo.title'),
-                    ...modalTransition,
-                }}
-            />
+            {createScreenCollapsibleStack(
+                "proximo-about",
+                MainStack,
+                ProximoAboutScreen,
+                i18n.t('screens.proximo.title'),
+                true,
+                {...modalTransition},
+            )}
 
-            {createScreenCollapsibleStack("profile", MainStack, ProfileScreen, i18n.t('screens.profile.title'))}
-            {createScreenCollapsibleStack("club-list", MainStack, ClubListScreen, i18n.t('screens.clubs.title'))}
-            {createScreenCollapsibleStack("equipment-list", MainStack, EquipmentScreen, i18n.t('screens.equipment.title'))}
-            {createScreenCollapsibleStack("equipment-rent", MainStack, EquipmentLendScreen, i18n.t('screens.equipment.book'))}
-            {createScreenCollapsibleStack("equipment-confirm", MainStack, EquipmentConfirmScreen, i18n.t('screens.equipment.confirm'))}
-            <MainStack.Screen
-                name="club-information"
-                component={ClubDisplayScreen}
-                options={{
-                    title: i18n.t('screens.clubs.details'),
-                    ...modalTransition,
-                }}
-            />
-            <MainStack.Screen
-                name="club-about"
-                component={ClubAboutScreen}
-                options={{
-                    title: i18n.t('screens.clubs.title'),
-                    ...modalTransition,
-                }}
-            />
-            <MainStack.Screen
-                name="vote"
-                component={VoteScreen}
-                options={{
-                    title: i18n.t('screens.vote.title'),
-                }}
-            />
-
-            <MainStack.Screen
-                name="feedback"
-                component={BugReportScreen}
-                options={{
-                    title: i18n.t('screens.feedback.title'),
-                }}
-            />
+            {createScreenCollapsibleStack(
+                "profile",
+                MainStack,
+                ProfileScreen,
+                i18n.t('screens.profile.title'))}
+            {createScreenCollapsibleStack(
+                "club-list",
+                MainStack,
+                ClubListScreen,
+                i18n.t('screens.clubs.title'))}
+            {createScreenCollapsibleStack(
+                "club-information",
+                MainStack,
+                ClubDisplayScreen,
+                i18n.t('screens.clubs.details'),
+                true,
+                {...modalTransition})}
+            {createScreenCollapsibleStack(
+                "club-about",
+                MainStack,
+                ClubAboutScreen,
+                i18n.t('screens.clubs.title'),
+                true,
+                {...modalTransition})}
+            {createScreenCollapsibleStack(
+                "equipment-list",
+                MainStack,
+                EquipmentScreen,
+                i18n.t('screens.equipment.title'))}
+            {createScreenCollapsibleStack(
+                "equipment-rent",
+                MainStack,
+                EquipmentLendScreen,
+                i18n.t('screens.equipment.book'))}
+            {createScreenCollapsibleStack(
+                "equipment-confirm",
+                MainStack,
+                EquipmentConfirmScreen,
+                i18n.t('screens.equipment.confirm'))}
+            {createScreenCollapsibleStack(
+                "vote",
+                MainStack,
+                VoteScreen,
+                i18n.t('screens.vote.title'))}
+            {createScreenCollapsibleStack(
+                "feedback",
+                MainStack,
+                BugReportScreen,
+                i18n.t('screens.feedback.title'))}
         </MainStack.Navigator>
     );
 }

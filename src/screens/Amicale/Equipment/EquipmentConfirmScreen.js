@@ -2,14 +2,13 @@
 
 import * as React from 'react';
 import {Button, Caption, Card, Headline, Paragraph, withTheme} from 'react-native-paper';
-import {Collapsible} from "react-navigation-collapsible";
-import {withCollapsible} from "../../../utils/withCollapsible";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../../managers/ThemeManager";
 import type {Device} from "./EquipmentListScreen";
-import {Animated, View} from "react-native";
+import {View} from "react-native";
 import i18n from "i18n-js";
 import {getRelativeDateString} from "../../../utils/EquipmentBooking";
+import CollapsibleScrollView from "../../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -20,7 +19,6 @@ type Props = {
         },
     },
     theme: CustomTheme,
-    collapsibleStack: Collapsible,
 }
 
 
@@ -44,21 +42,13 @@ class EquipmentConfirmScreen extends React.Component<Props> {
     }
 
     render() {
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         const item = this.item;
         const dates = this.dates;
         if (item != null && dates != null) {
             const start = new Date(dates[0]);
             const end = new Date(dates[1]);
             return (
-                <Animated.ScrollView
-                    // Animations
-                    onScroll={onScroll}
-                    contentContainerStyle={{
-                        paddingTop: containerPaddingTop,
-                        minHeight: '100%'
-                    }}
-                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}>
+                <CollapsibleScrollView>
                     <Card style={{margin: 5}}>
                         <Card.Content>
                             <View style={{flex: 1}}>
@@ -103,7 +93,7 @@ class EquipmentConfirmScreen extends React.Component<Props> {
                             </Paragraph>
                         </Card.Content>
                     </Card>
-                </Animated.ScrollView>
+                </CollapsibleScrollView>
             );
         } else
             return null;
@@ -112,4 +102,4 @@ class EquipmentConfirmScreen extends React.Component<Props> {
 
 }
 
-export default withCollapsible(withTheme(EquipmentConfirmScreen));
+export default withTheme(EquipmentConfirmScreen);

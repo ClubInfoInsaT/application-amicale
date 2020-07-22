@@ -1,15 +1,12 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, FlatList, StyleSheet, View} from "react-native";
+import {FlatList, StyleSheet, View} from "react-native";
 import {Avatar, Button, Card, Divider, List, Paragraph, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import i18n from 'i18n-js';
 import LogoutDialog from "../../components/Amicale/LogoutDialog";
 import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHeaderButton";
-import CustomTabBar from "../../components/Tabbar/CustomTabBar";
-import {Collapsible} from "react-navigation-collapsible";
-import {withCollapsible} from "../../utils/withCollapsible";
 import type {cardList} from "../../components/Lists/CardList/CardList";
 import CardList from "../../components/Lists/CardList/CardList";
 import {StackNavigationProp} from "@react-navigation/stack";
@@ -17,11 +14,11 @@ import type {CustomTheme} from "../../managers/ThemeManager";
 import AvailableWebsites from "../../constants/AvailableWebsites";
 import Mascot, {MASCOT_STYLE} from "../../components/Mascot/Mascot";
 import ServicesManager, {SERVICES_KEY} from "../../managers/ServicesManager";
+import CollapsibleFlatList from "../../components/Collapsible/CollapsibleFlatList";
 
 type Props = {
     navigation: StackNavigationProp,
     theme: CustomTheme,
-    collapsibleStack: Collapsible,
 }
 
 type State = {
@@ -97,20 +94,11 @@ class ProfileScreen extends React.Component<Props, State> {
         if (data[0] != null) {
             this.data = data[0];
         }
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
             <View style={{flex: 1}}>
-                <Animated.FlatList
+                <CollapsibleFlatList
                     renderItem={this.getRenderItem}
                     data={this.flatListData}
-                    // Animations
-                    onScroll={onScroll}
-                    contentContainerStyle={{
-                        paddingTop: containerPaddingTop,
-                        paddingBottom: CustomTabBar.TAB_BAR_HEIGHT,
-                        minHeight: '100%'
-                    }}
-                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
                 />
                 <LogoutDialog
                     {...this.props}
@@ -441,4 +429,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default withCollapsible(withTheme(ProfileScreen));
+export default withTheme(ProfileScreen);

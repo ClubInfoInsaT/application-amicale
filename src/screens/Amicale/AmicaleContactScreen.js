@@ -1,16 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, FlatList, Image, Linking, View} from 'react-native';
+import {FlatList, Image, Linking, View} from 'react-native';
 import {Card, List, Text, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
-import {Collapsible} from "react-navigation-collapsible";
-import CustomTabBar from "../../components/Tabbar/CustomTabBar";
-import {withCollapsible} from "../../utils/withCollapsible";
 import type {MaterialCommunityIconsGlyphs} from "react-native-vector-icons/MaterialCommunityIcons";
+import CollapsibleFlatList from "../../components/Collapsible/CollapsibleFlatList";
 
 type Props = {
-    collapsibleStack: Collapsible
 };
 
 type DatasetItem = {
@@ -130,22 +127,14 @@ class AmicaleContactScreen extends React.Component<Props> {
     };
 
     render() {
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
-            <Animated.FlatList
+            <CollapsibleFlatList
                 data={[{key: "1"}]}
                 renderItem={this.getScreen}
-                // Animations
-                onScroll={onScroll}
-                contentContainerStyle={{
-                    paddingTop: containerPaddingTop,
-                    paddingBottom: CustomTabBar.TAB_BAR_HEIGHT,
-                    minHeight: '100%'
-                }}
-                scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+                hasTab={true}
             />
         );
     }
 }
 
-export default withCollapsible(withTheme(AmicaleContactScreen));
+export default withTheme(AmicaleContactScreen);

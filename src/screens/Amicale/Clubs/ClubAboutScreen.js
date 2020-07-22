@@ -1,10 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {Image, ScrollView, View} from 'react-native';
+import {Image, View} from 'react-native';
 import {Card, List, Text, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
 import Autolink from "react-native-autolink";
+import CollapsibleScrollView from "../../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {};
 
@@ -14,7 +15,7 @@ class ClubAboutScreen extends React.Component<Props> {
 
     render() {
         return (
-            <ScrollView style={{padding: 5}}>
+            <CollapsibleScrollView style={{padding: 5}}>
                 <View style={{
                     width: '100%',
                     height: 100,
@@ -43,7 +44,7 @@ class ClubAboutScreen extends React.Component<Props> {
                         />
                     </Card.Content>
                 </Card>
-            </ScrollView>
+            </CollapsibleScrollView>
         );
     }
 }

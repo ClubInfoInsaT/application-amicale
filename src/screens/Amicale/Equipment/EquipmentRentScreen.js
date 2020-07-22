@@ -2,12 +2,10 @@
 
 import * as React from 'react';
 import {Button, Caption, Card, Headline, Subheading, withTheme} from 'react-native-paper';
-import {Collapsible} from "react-navigation-collapsible";
-import {withCollapsible} from "../../../utils/withCollapsible";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../../managers/ThemeManager";
 import type {Device} from "./EquipmentListScreen";
-import {Animated, BackHandler, View} from "react-native";
+import {BackHandler, View} from "react-native";
 import * as Animatable from "react-native-animatable";
 import i18n from "i18n-js";
 import {CalendarList} from "react-native-calendars";
@@ -22,6 +20,7 @@ import {
     isEquipmentAvailable
 } from "../../../utils/EquipmentBooking";
 import ConnectionManager from "../../../managers/ConnectionManager";
+import CollapsibleScrollView from "../../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -31,7 +30,6 @@ type Props = {
         },
     },
     theme: CustomTheme,
-    collapsibleStack: Collapsible,
 }
 
 type State = {
@@ -269,8 +267,6 @@ class EquipmentRentScreen extends React.Component<Props, State> {
     }
 
     render() {
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
-
         const item = this.item;
         const start = this.getBookStartDate();
         const end = this.getBookEndDate();
@@ -280,14 +276,7 @@ class EquipmentRentScreen extends React.Component<Props, State> {
             const firstAvailability = getFirstEquipmentAvailability(item);
             return (
                 <View style={{flex: 1}}>
-                    <Animated.ScrollView
-                        // Animations
-                        onScroll={onScroll}
-                        contentContainerStyle={{
-                            paddingTop: containerPaddingTop,
-                            minHeight: '100%'
-                        }}
-                        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}>
+                    <CollapsibleScrollView>
                         <Card style={{margin: 5}}>
                             <Card.Content>
                                 <View style={{flex: 1}}>
@@ -396,7 +385,7 @@ class EquipmentRentScreen extends React.Component<Props, State> {
                             }}
                             style={{marginBottom: 50}}
                         />
-                    </Animated.ScrollView>
+                    </CollapsibleScrollView>
                     <LoadingConfirmDialog
                         visible={this.state.dialogVisible}
                         onDismiss={this.onDialogDismiss}
@@ -449,4 +438,4 @@ class EquipmentRentScreen extends React.Component<Props, State> {
 
 }
 
-export default withCollapsible(withTheme(EquipmentRentScreen));
+export default withTheme(EquipmentRentScreen);

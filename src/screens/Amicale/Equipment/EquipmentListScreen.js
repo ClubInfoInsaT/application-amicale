@@ -1,11 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, View} from "react-native";
+import {View} from "react-native";
 import {Button, withTheme} from 'react-native-paper';
 import AuthenticatedScreen from "../../../components/Amicale/AuthenticatedScreen";
-import {Collapsible} from "react-navigation-collapsible";
-import {withCollapsible} from "../../../utils/withCollapsible";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../../managers/ThemeManager";
 import i18n from "i18n-js";
@@ -14,11 +12,11 @@ import EquipmentListItem from "../../../components/Lists/Equipment/EquipmentList
 import MascotPopup from "../../../components/Mascot/MascotPopup";
 import {MASCOT_STYLE} from "../../../components/Mascot/Mascot";
 import AsyncStorageManager from "../../../managers/AsyncStorageManager";
+import CollapsibleFlatList from "../../../components/Collapsible/CollapsibleFlatList";
 
 type Props = {
     navigation: StackNavigationProp,
     theme: CustomTheme,
-    collapsibleStack: Collapsible,
 }
 
 type State = {
@@ -29,7 +27,7 @@ export type Device = {
     id: number,
     name: string,
     caution: number,
-    booked_at: Array<{begin: string, end: string}>,
+    booked_at: Array<{ begin: string, end: string }>,
 };
 
 export type RentedDevice = {
@@ -133,20 +131,12 @@ class EquipmentListScreen extends React.Component<Props, State> {
             if (fetchedData != null)
                 this.userRents = fetchedData["locations"];
         }
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScroll} = this.props.collapsibleStack;
         return (
-            <Animated.FlatList
+            <CollapsibleFlatList
                 keyExtractor={this.keyExtractor}
                 renderItem={this.getRenderItem}
                 ListHeaderComponent={this.getListHeader()}
                 data={this.data}
-                // Animations
-                onScroll={onScroll}
-                contentContainerStyle={{
-                    paddingTop: containerPaddingTop,
-                    minHeight: '100%'
-                }}
-                scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
             />
         )
     };
@@ -203,4 +193,4 @@ class EquipmentListScreen extends React.Component<Props, State> {
     }
 }
 
-export default withCollapsible(withTheme(EquipmentListScreen));
+export default withTheme(EquipmentListScreen);

@@ -4,7 +4,7 @@ import * as React from 'react';
 import {ERROR_TYPE, readData} from "../../utils/WebData";
 import i18n from "i18n-js";
 import {Snackbar} from 'react-native-paper';
-import {Animated, RefreshControl, View} from "react-native";
+import {RefreshControl, View} from "react-native";
 import ErrorView from "./ErrorView";
 import BasicLoadingScreen from "./BasicLoadingScreen";
 import {withCollapsible} from "../../utils/withCollapsible";
@@ -12,6 +12,7 @@ import * as Animatable from 'react-native-animatable';
 import CustomTabBar from "../Tabbar/CustomTabBar";
 import {Collapsible} from "react-navigation-collapsible";
 import {StackNavigationProp} from "@react-navigation/stack";
+import CollapsibleSectionList from "../Collapsible/CollapsibleSectionList";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -203,10 +204,10 @@ class WebSectionList extends React.PureComponent<Props, State> {
         if (this.state.fetchedData != null || (this.state.fetchedData == null && !this.props.showError)) {
             dataset = this.props.createDataset(this.state.fetchedData, this.state.refreshing);
         }
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScrollWithListener} = this.props.collapsibleStack;
+        const {containerPaddingTop} = this.props.collapsibleStack;
         return (
             <View>
-                <Animated.SectionList
+                <CollapsibleSectionList
                     sections={dataset}
                     extraData={this.props.updateData}
                     refreshControl={
@@ -231,14 +232,8 @@ class WebSectionList extends React.PureComponent<Props, State> {
                             onRefresh={this.onRefresh}/>
                     }
                     getItemLayout={this.props.itemHeight != null ? this.itemLayout : undefined}
-                    // Animations
-                    onScroll={onScrollWithListener(this.onScroll)}
-                    contentContainerStyle={{
-                        paddingTop: containerPaddingTop,
-                        paddingBottom: CustomTabBar.TAB_BAR_HEIGHT,
-                        minHeight: '100%'
-                    }}
-                    scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+                    onScroll={this.onScroll}
+                    hasTab={true}
                 />
                 <Snackbar
                     visible={this.state.snackbarVisible}

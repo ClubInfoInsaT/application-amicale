@@ -1,13 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, View} from "react-native";
+import {View} from "react-native";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import CustomModal from "../../components/Overrides/CustomModal";
 import {Button, List, Subheading, TextInput, Title, withTheme} from 'react-native-paper';
 import {StackNavigationProp} from "@react-navigation/stack";
 import {Modalize} from "react-native-modalize";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import CollapsibleFlatList from "../../components/Collapsible/CollapsibleFlatList";
 
 type PreferenceItem = {
     key: string,
@@ -168,7 +169,7 @@ class DebugScreen extends React.Component<Props, State> {
                     {this.getModalContent()}
                 </CustomModal>
                 {/*$FlowFixMe*/}
-                <FlatList
+                <CollapsibleFlatList
                     data={this.state.currentPreferences}
                     extraData={this.state.currentPreferences}
                     renderItem={this.renderItem}

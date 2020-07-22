@@ -1,10 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList} from "react-native";
 import packageJson from '../../../package';
 import {List} from 'react-native-paper';
 import {StackNavigationProp} from "@react-navigation/stack";
+import CollapsibleFlatList from "../../components/Collapsible/CollapsibleFlatList";
+import {View} from "react-native-animatable";
 
 type listItem = {
     name: string,
@@ -59,14 +60,16 @@ export default class AboutDependenciesScreen extends React.Component<Props> {
 
     render() {
         return (
-            <FlatList
-                data={this.data}
-                keyExtractor={this.keyExtractor}
-                renderItem={this.renderItem}
-                // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-                removeClippedSubviews={true}
-                getItemLayout={this.itemLayout}
-            />
+            <View>
+                <CollapsibleFlatList
+                    data={this.data}
+                    keyExtractor={this.keyExtractor}
+                    renderItem={this.renderItem}
+                    // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+                    removeClippedSubviews={true}
+                    getItemLayout={this.itemLayout}
+                />
+            </View>
         );
     }
 }

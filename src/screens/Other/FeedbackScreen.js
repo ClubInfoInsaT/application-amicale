@@ -3,8 +3,9 @@
 import * as React from 'react';
 import {Avatar, Button, Card, Paragraph, withTheme} from "react-native-paper";
 import i18n from "i18n-js";
-import {Linking, ScrollView} from "react-native";
+import {Linking} from "react-native";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import CollapsibleScrollView from "../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {
     theme: CustomTheme
@@ -76,7 +77,7 @@ class FeedbackScreen extends React.Component<Props> {
 
     render() {
         return (
-            <ScrollView style={{padding: 5}}>
+            <CollapsibleScrollView style={{padding: 5}}>
                 <Card>
                     <Card.Title
                         title={i18n.t('screens.feedback.bugs')}
@@ -107,7 +108,7 @@ class FeedbackScreen extends React.Component<Props> {
                     </Card.Content>
                     {this.getButtons(false)}
                 </Card>
-            </ScrollView>
+            </CollapsibleScrollView>
         );
     }
 }

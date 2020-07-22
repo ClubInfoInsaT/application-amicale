@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, RefreshControl, View} from "react-native";
+import {RefreshControl, View} from "react-native";
 import AuthenticatedScreen from "../../components/Amicale/AuthenticatedScreen";
 import {getTimeOnlyString, stringToDate} from "../../utils/Planning";
 import VoteTease from "../../components/Amicale/Vote/VoteTease";
@@ -15,6 +15,7 @@ import MascotPopup from "../../components/Mascot/MascotPopup";
 import AsyncStorageManager from "../../managers/AsyncStorageManager";
 import {Button} from "react-native-paper";
 import VoteNotAvailable from "../../components/Amicale/Vote/VoteNotAvailable";
+import CollapsibleFlatList from "../../components/Collapsible/CollapsibleFlatList";
 
 export type team = {
     id: number,
@@ -246,20 +247,17 @@ export default class VoteScreen extends React.Component<Props, State> {
 
         this.generateDateObject();
         return (
-            <View>
-                {/*$FlowFixMe*/}
-                <FlatList
-                    data={this.mainFlatListData}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={false}
-                            onRefresh={this.reloadData}
-                        />
-                    }
-                    extraData={this.state.hasVoted.toString()}
-                    renderItem={this.mainRenderItem}
-                />
-            </View>
+            <CollapsibleFlatList
+                data={this.mainFlatListData}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={false}
+                        onRefresh={this.reloadData}
+                    />
+                }
+                extraData={this.state.hasVoted.toString()}
+                renderItem={this.mainRenderItem}
+            />
         );
     };
 
