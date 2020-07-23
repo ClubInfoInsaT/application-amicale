@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Linking, ScrollView, View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {Avatar, Card, Text, withTheme} from 'react-native-paper';
 import ImageModal from 'react-native-image-modal';
 import Autolink from "react-native-autolink";
@@ -9,6 +9,7 @@ import MaterialHeaderButtons, {Item} from "../../components/Overrides/CustomHead
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {feedItem} from "./HomeScreen";
+import CollapsibleScrollView from "../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -71,7 +72,10 @@ class FeedItemScreen extends React.Component<Props> {
     render() {
         const hasImage = this.displayData.full_picture !== '' && this.displayData.full_picture != null;
         return (
-            <ScrollView style={{margin: 5,}}>
+            <CollapsibleScrollView
+                style={{margin: 5,}}
+                hasTab={true}
+            >
                 <Card.Title
                     title={NAME_AMICALE}
                     subtitle={this.date}
@@ -99,7 +103,7 @@ class FeedItemScreen extends React.Component<Props> {
                         /> : null
                     }
                 </Card.Content>
-            </ScrollView>
+            </CollapsibleScrollView>
         );
     }
 }

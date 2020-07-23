@@ -44,9 +44,21 @@ function ServicesStackComponent() {
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {createScreenCollapsibleStack("index", ServicesStack, WebsitesHomeScreen, i18n.t('screens.services.title'))}
-            {createScreenCollapsibleStack("services-section", ServicesStack, ServicesSectionScreen, "SECTION")}
-            {createScreenCollapsibleStack("amicale-contact", ServicesStack, AmicaleContactScreen, i18n.t('screens.amicaleAbout.title'))}
+            {createScreenCollapsibleStack(
+                "index",
+                ServicesStack,
+                WebsitesHomeScreen,
+                i18n.t('screens.services.title'))}
+            {createScreenCollapsibleStack(
+                "services-section",
+                ServicesStack,
+                ServicesSectionScreen,
+                "SECTION")}
+            {createScreenCollapsibleStack(
+                "amicale-contact",
+                ServicesStack,
+                AmicaleContactScreen,
+                i18n.t('screens.amicaleAbout.title'))}
         </ServicesStack.Navigator>
     );
 }
@@ -60,12 +72,16 @@ function ProxiwashStackComponent() {
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {createScreenCollapsibleStack("index", ProxiwashStack, ProxiwashScreen, i18n.t('screens.proxiwash.title'))}
-            <ProxiwashStack.Screen
-                name="proxiwash-about"
-                component={ProxiwashAboutScreen}
-                options={{title: i18n.t('screens.proxiwash.title'),}}
-            />
+            {createScreenCollapsibleStack(
+                "index",
+                ProxiwashStack,
+                ProxiwashScreen,
+                i18n.t('screens.proxiwash.title'))}
+            {createScreenCollapsibleStack(
+                "proxiwash-about",
+                ProxiwashStack,
+                ProxiwashAboutScreen,
+                i18n.t('screens.proxiwash.title'))}
         </ProxiwashStack.Navigator>
     );
 }
@@ -84,11 +100,11 @@ function PlanningStackComponent() {
                 component={PlanningScreen}
                 options={{title: i18n.t('screens.planning.title'),}}
             />
-            <PlanningStack.Screen
-                name="planning-information"
-                component={PlanningDisplayScreen}
-                options={{title: i18n.t('screens.planning.eventDetails'),}}
-            />
+            {createScreenCollapsibleStack(
+                "planning-information",
+                PlanningStack,
+                PlanningDisplayScreen,
+                i18n.t('screens.planning.eventDetails'))}
         </PlanningStack.Navigator>
     );
 }
@@ -115,29 +131,30 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                         headerStyle: {
                             backgroundColor: colors.surface,
                         },
-                        headerTitle: (props) => <View style={{flexDirection: "row"}}>
-                            <Mascot
-                                style={{
-                                    width: 50
-                                }}
-                                emotion={MASCOT_STYLE.RANDOM}
-                                animated={true}
-                                entryAnimation={{
-                                    animation: "bounceIn",
-                                    duration: 1000
-                                }}
-                                loopAnimation={{
-                                    animation: "pulse",
-                                    duration: 2000,
-                                    iterationCount: "infinite"
-                                }}
-                            />
-                            <Title style={{
-                                marginLeft: 10,
-                                marginTop: "auto",
-                                marginBottom: "auto",
-                            }}>{i18n.t('screens.home.title')}</Title>
-                        </View>
+                        headerTitle: () =>
+                            <View style={{flexDirection: "row"}}>
+                                <Mascot
+                                    style={{
+                                        width: 50
+                                    }}
+                                    emotion={MASCOT_STYLE.RANDOM}
+                                    animated={true}
+                                    entryAnimation={{
+                                        animation: "bounceIn",
+                                        duration: 1000
+                                    }}
+                                    loopAnimation={{
+                                        animation: "pulse",
+                                        duration: 2000,
+                                        iterationCount: "infinite"
+                                    }}
+                                />
+                                <Title style={{
+                                    marginLeft: 10,
+                                    marginTop: "auto",
+                                    marginBottom: "auto",
+                                }}>{i18n.t('screens.home.title')}</Title>
+                            </View>
                     }}
                     initialParams={params}
                 />,
@@ -151,21 +168,22 @@ function HomeStackComponent(initialRoute: string | null, defaultData: { [key: st
                 component={ScannerScreen}
                 options={{title: i18n.t('screens.scanner.title'),}}
             />
-            <HomeStack.Screen
-                name="club-information"
-                component={ClubDisplayScreen}
-                options={{title: i18n.t('screens.clubs.details'),}}
-            />
-            <HomeStack.Screen
-                name="feed-information"
-                component={FeedItemScreen}
-                options={{title: i18n.t('screens.home.feed'),}}
-            />
-            <HomeStack.Screen
-                name="planning-information"
-                component={PlanningDisplayScreen}
-                options={{title: i18n.t('screens.planning.eventDetails'),}}
-            />
+
+            {createScreenCollapsibleStack(
+                "club-information",
+                HomeStack,
+                ClubDisplayScreen,
+                i18n.t('screens.clubs.details'))}
+            {createScreenCollapsibleStack(
+                "feed-information",
+                HomeStack,
+                FeedItemScreen,
+                i18n.t('screens.home.feed'))}
+            {createScreenCollapsibleStack(
+                "planning-information",
+                HomeStack,
+                PlanningDisplayScreen,
+                i18n.t('screens.planning.eventDetails'))}
         </HomeStack.Navigator>
     );
 }
@@ -179,8 +197,16 @@ function PlanexStackComponent() {
             headerMode={"screen"}
             screenOptions={defaultScreenOptions}
         >
-            {getWebsiteStack("index", PlanexStack, PlanexScreen, i18n.t("screens.planex.title"))}
-            {createScreenCollapsibleStack("group-select", PlanexStack, GroupSelectionScreen, "GROUP SELECT")}
+            {getWebsiteStack(
+                "index",
+                PlanexStack,
+                PlanexScreen,
+                i18n.t("screens.planex.title"))}
+            {createScreenCollapsibleStack(
+                "group-select",
+                PlanexStack,
+                GroupSelectionScreen,
+                "")}
         </PlanexStack.Navigator>
     );
 }

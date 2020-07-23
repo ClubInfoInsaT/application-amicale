@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {ScrollView, View} from 'react-native';
+import {View} from 'react-native';
 import {getDateOnlyString, getFormattedEventTime} from '../../utils/Planning';
 import {Card, withTheme} from 'react-native-paper';
 import DateManager from "../../managers/DateManager";
@@ -14,6 +14,7 @@ import CustomTabBar from "../../components/Tabbar/CustomTabBar";
 import i18n from 'i18n-js';
 import {StackNavigationProp} from "@react-navigation/stack";
 import type {CustomTheme} from "../../managers/ThemeManager";
+import CollapsibleScrollView from "../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {
     navigation: StackNavigationProp,
@@ -108,7 +109,10 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
         if (dateString !== null)
             subtitle += ' | ' + DateManager.getInstance().getTranslatedDate(dateString);
         return (
-            <ScrollView style={{paddingLeft: 5, paddingRight: 5}}>
+            <CollapsibleScrollView
+                style={{paddingLeft: 5, paddingRight: 5}}
+                hasTab={true}
+            >
                 <Card.Title
                     title={this.displayData.title}
                     subtitle={subtitle}
@@ -133,7 +137,7 @@ class PlanningDisplayScreen extends React.Component<Props, State> {
                         <CustomHTML html={this.displayData.description}/>
                     </Card.Content>
                     : <View/>}
-            </ScrollView>
+            </CollapsibleScrollView>
         );
     }
 

@@ -1,10 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {Image, ScrollView, View} from 'react-native';
+import {Image, View} from 'react-native';
 import i18n from "i18n-js";
 import {Card, List, Paragraph, Text, Title} from 'react-native-paper';
 import CustomTabBar from "../../components/Tabbar/CustomTabBar";
+import CollapsibleScrollView from "../../components/Collapsible/CollapsibleScrollView";
 
 type Props = {};
 
@@ -17,7 +18,10 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
 
     render() {
         return (
-            <ScrollView style={{padding: 5}}>
+            <CollapsibleScrollView
+                style={{padding: 5}}
+                hasTab={true}
+            >
                 <View style={{
                     width: '100%',
                     height: 100,
@@ -76,7 +80,7 @@ export default class ProxiwashAboutScreen extends React.Component<Props> {
                         <Paragraph>{i18n.t('screens.proxiwash.paymentMethodsDescription')}</Paragraph>
                     </Card.Content>
                 </Card>
-            </ScrollView>
+            </CollapsibleScrollView>
         );
     }
 }
