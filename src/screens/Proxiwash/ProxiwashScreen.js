@@ -46,7 +46,6 @@ type State = {
     refreshing: boolean,
     modalCurrentDisplayItem: React.Node,
     machinesWatched: Array<Machine>,
-    mascotDialogVisible: boolean,
 };
 
 
@@ -67,7 +66,6 @@ class ProxiwashScreen extends React.Component<Props, State> {
         refreshing: false,
         modalCurrentDisplayItem: null,
         machinesWatched: AsyncStorageManager.getObject(AsyncStorageManager.PREFERENCES.proxiwashWatchedMachines.key),
-        mascotDialogVisible: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.proxiwashShowBanner.key),
     };
 
     /**
@@ -83,15 +81,6 @@ class ProxiwashScreen extends React.Component<Props, State> {
         modalStateStrings[ProxiwashConstants.machineStates.ERROR] = i18n.t('screens.proxiwash.modal.error');
         modalStateStrings[ProxiwashConstants.machineStates.UNKNOWN] = i18n.t('screens.proxiwash.modal.unknown');
     }
-
-    /**
-     * Callback used when closing the banner.
-     * This hides the banner and saves to preferences to prevent it from reopening
-     */
-    onHideMascotDialog = () => {
-        this.setState({mascotDialogVisible: false});
-        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.proxiwashShowBanner.key, false);
-    };
 
     /**
      * Setup notification channel for android and add listeners to detect notifications fired
@@ -409,7 +398,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
                         updateData={this.state.machinesWatched.length}/>
                 </View>
                 <MascotPopup
-                    visible={this.state.mascotDialogVisible}
+                    prefKey={AsyncStorageManager.PREFERENCES.proxiwashShowBanner.key}
                     title={i18n.t("screens.proxiwash.mascotDialog.title")}
                     message={i18n.t("screens.proxiwash.mascotDialog.message")}
                     icon={"information"}
@@ -418,7 +407,6 @@ class ProxiwashScreen extends React.Component<Props, State> {
                         cancel: {
                             message: i18n.t("screens.proxiwash.mascotDialog.ok"),
                             icon: "check",
-                            onPress: this.onHideMascotDialog,
                         }
                     }}
                     emotion={MASCOT_STYLE.NORMAL}

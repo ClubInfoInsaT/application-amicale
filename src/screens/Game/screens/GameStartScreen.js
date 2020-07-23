@@ -33,21 +33,13 @@ type Props = {
     theme: CustomTheme,
 }
 
-type State = {
-    mascotDialogVisible: boolean,
-}
-
-class GameStartScreen extends React.Component<Props, State> {
+class GameStartScreen extends React.Component<Props> {
 
     gridManager: GridManager;
     scores: Array<number>;
 
     gameStats: GameStats | null;
     isHighScore: boolean;
-
-    state = {
-        mascotDialogVisible: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.gameStartShowBanner.key),
-    }
 
     constructor(props: Props) {
         super(props);
@@ -74,11 +66,6 @@ class GameStartScreen extends React.Component<Props, State> {
             this.scores.splice(3, 1);
         AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.gameScores.key, this.scores);
     }
-
-    hideMascotDialog = () => {
-        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.gameStartShowBanner.key, false);
-        this.setState({mascotDialogVisible: false})
-    };
 
     getPiecesBackground() {
         let gridList = [];
@@ -415,7 +402,7 @@ class GameStartScreen extends React.Component<Props, State> {
                     <CollapsibleScrollView>
                         {this.getMainContent()}
                         <MascotPopup
-                            visible={this.state.mascotDialogVisible}
+                            prefKey={AsyncStorageManager.PREFERENCES.gameStartShowBanner.key}
                             title={i18n.t("screens.game.mascotDialog.title")}
                             message={i18n.t("screens.game.mascotDialog.message")}
                             icon={"gamepad-variant"}
@@ -424,7 +411,6 @@ class GameStartScreen extends React.Component<Props, State> {
                                 cancel: {
                                     message: i18n.t("screens.game.mascotDialog.button"),
                                     icon: "check",
-                                    onPress: this.hideMascotDialog,
                                 }
                             }}
                             emotion={MASCOT_STYLE.COOL}

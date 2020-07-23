@@ -20,11 +20,6 @@ type Props = {
     theme: CustomTheme,
 }
 
-type State = {
-    mascotDialogVisible: boolean,
-}
-
-
 export type listItem = {
     title: string,
     description: string,
@@ -33,13 +28,9 @@ export type listItem = {
 }
 
 
-class ServicesScreen extends React.Component<Props, State> {
+class ServicesScreen extends React.Component<Props> {
 
     finalDataset: Array<listItem>
-
-    state = {
-        mascotDialogVisible: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.servicesShowBanner.key),
-    }
 
     constructor(props) {
         super(props);
@@ -52,16 +43,6 @@ class ServicesScreen extends React.Component<Props, State> {
             headerRight: this.getAboutButton,
         });
     }
-
-
-    /**
-     * Callback used when closing the banner.
-     * This hides the banner and saves to preferences to prevent it from reopening
-     */
-    onHideMascotDialog = () => {
-        this.setState({mascotDialogVisible: false});
-        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.servicesShowBanner.key, false);
-    };
 
     getAboutButton = () =>
         <MaterialHeaderButtons>
@@ -146,7 +127,7 @@ class ServicesScreen extends React.Component<Props, State> {
                     hasTab={true}
                 />
                 <MascotPopup
-                    visible={this.state.mascotDialogVisible}
+                    prefKey={AsyncStorageManager.PREFERENCES.servicesShowBanner.key}
                     title={i18n.t("screens.services.mascotDialog.title")}
                     message={i18n.t("screens.services.mascotDialog.message")}
                     icon={"cloud-question"}

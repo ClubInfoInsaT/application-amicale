@@ -7,9 +7,9 @@ import * as Animatable from "react-native-animatable";
 import {BackHandler, Dimensions, ScrollView, TouchableWithoutFeedback, View} from "react-native";
 import type {CustomTheme} from "../../managers/ThemeManager";
 import SpeechArrow from "./SpeechArrow";
+import AsyncStorageManager from "../../managers/AsyncStorageManager";
 
 type Props = {
-    visible: boolean,
     theme: CustomTheme,
     icon: string,
     title: string,
@@ -19,33 +19,33 @@ type Props = {
             message: string,
             icon: string | null,
             color: string | null,
-            onPress: () => void,
+            onPress?: () => void,
         },
         cancel: {
             message: string,
             icon: string | null,
             color: string | null,
-            onPress: () => void,
+            onPress?: () => void,
         }
     },
     emotion: number,
+    visible?: boolean,
+    prefKey?: string,
 }
 
 type State = {
-    shouldShowDialog: boolean;
+    shouldRenderDialog: boolean, // Used to stop rendering after hide animation
+    dialogVisible: boolean,
 }
 
-
+/**
+ * Component used to display a popup with the mascot.
+ */
 class MascotPopup extends React.Component<Props, State> {
 
     mascotSize: number;
     windowWidth: number;
     windowHeight: number;
-
-    state = {
-        shouldShowDialog: this.props.visible,
-    };
-
 
     constructor(props: Props) {
         super(props);
@@ -54,18 +54,40 @@ class MascotPopup extends React.Component<Props, State> {
         this.windowHeight = Dimensions.get('window').height;
 
         this.mascotSize = Dimensions.get('window').height / 6;
+
+        if (this.props.visible != null) {
+            this.state = {
+                shouldRenderDialog: this.props.visible,
+                dialogVisible: this.props.visible,
+            };
+        } else if (this.props.prefKey != null) {
+            const visible = AsyncStorageManager.getBool(this.props.prefKey);
+            this.state = {
+                shouldRenderDialog: visible,
+                dialogVisible: visible,
+            };
+        } else {
+            this.state = {
+                shouldRenderDialog: false,
+                dialogVisible: false,
+            };
+        }
+
     }
 
     onAnimationEnd = () => {
         this.setState({
-            shouldShowDialog: this.props.visible,
+            shouldRenderDialog: false,
         })
     }
 
-    shouldComponentUpdate(nextProps: Props): boolean {
+    shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
         if (nextProps.visible) {
-            this.state.shouldShowDialog = true;
-        } else if (nextProps.visible !== this.props.visible) {
+            this.state.shouldRenderDialog = true;
+            this.state.dialogVisible = true;
+        } else if (nextProps.visible !== this.props.visible
+            || (!nextState.dialogVisible && nextState.dialogVisible !== this.state.dialogVisible)) {
+            this.state.dialogVisible = false;
             setTimeout(this.onAnimationEnd, 300);
         }
         return true;
@@ -79,13 +101,13 @@ class MascotPopup extends React.Component<Props, State> {
     }
 
     onBackButtonPressAndroid = () => {
-        if (this.state.shouldShowDialog) {
+        if (this.state.dialogVisible) {
             const cancel = this.props.buttons.cancel;
             const action = this.props.buttons.action;
             if (cancel != null)
-                cancel.onPress();
+                this.onDismiss(cancel.onPress);
             else
-                action.onPress();
+                this.onDismiss(action.onPress);
             return true;
         } else {
             return false;
@@ -100,8 +122,8 @@ class MascotPopup extends React.Component<Props, State> {
                     marginRight: "10%",
                 }}
                 useNativeDriver={true}
-                animation={this.props.visible ? "bounceInLeft" : "bounceOutLeft"}
-                duration={this.props.visible ? 1000 : 300}
+                animation={this.state.dialogVisible ? "bounceInLeft" : "bounceOutLeft"}
+                duration={this.state.dialogVisible ? 1000 : 300}
             >
                 <SpeechArrow
                     style={{marginLeft: this.mascotSize / 3}}
@@ -149,8 +171,8 @@ class MascotPopup extends React.Component<Props, State> {
         return (
             <Animatable.View
                 useNativeDriver={true}
-                animation={this.props.visible ? "bounceInLeft" : "bounceOutLeft"}
-                duration={this.props.visible ? 1500 : 200}
+                animation={this.state.dialogVisible ? "bounceInLeft" : "bounceOutLeft"}
+                duration={this.state.dialogVisible ? 1500 : 200}
             >
                 <Mascot
                     style={{width: this.mascotSize}}
@@ -181,7 +203,7 @@ class MascotPopup extends React.Component<Props, State> {
                         mode={"contained"}
                         icon={action.icon}
                         color={action.color}
-                        onPress={action.onPress}
+                        onPress={() => this.onDismiss(action.onPress)}
                     >
                         {action.message}
                     </Button>
@@ -195,7 +217,7 @@ class MascotPopup extends React.Component<Props, State> {
                         mode={"contained"}
                         icon={cancel.icon}
                         color={cancel.color}
-                        onPress={cancel.onPress}
+                        onPress={() => this.onDismiss(cancel.onPress)}
                     >
                         {cancel.message}
                     </Button>
@@ -206,7 +228,7 @@ class MascotPopup extends React.Component<Props, State> {
 
     getBackground() {
         return (
-            <TouchableWithoutFeedback onPress={this.props.buttons.cancel.onPress}>
+            <TouchableWithoutFeedback onPress={() => this.onDismiss(this.props.buttons.cancel.onPress)}>
                 <Animatable.View
                     style={{
                         position: "absolute",
@@ -215,16 +237,25 @@ class MascotPopup extends React.Component<Props, State> {
                         height: "100%",
                     }}
                     useNativeDriver={true}
-                    animation={this.props.visible ? "fadeIn" : "fadeOut"}
-                    duration={this.props.visible ? 300 : 300}
+                    animation={this.state.dialogVisible ? "fadeIn" : "fadeOut"}
+                    duration={this.state.dialogVisible ? 300 : 300}
                 />
             </TouchableWithoutFeedback>
 
         );
     }
 
+    onDismiss = (callback?: ()=> void) => {
+        if (this.props.prefKey != null) {
+            AsyncStorageManager.set(this.props.prefKey, false);
+            this.setState({dialogVisible: false});
+        }
+        if (callback != null)
+            callback();
+    }
+
     render() {
-        if (this.state.shouldShowDialog) {
+        if (this.state.shouldRenderDialog) {
             return (
                 <Portal>
                     {this.getBackground()}
@@ -242,8 +273,7 @@ class MascotPopup extends React.Component<Props, State> {
 
                     </View>
                 </Portal>
-            )
-                ;
+            );
         } else
             return null;
 

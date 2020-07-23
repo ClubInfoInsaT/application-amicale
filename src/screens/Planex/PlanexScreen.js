@@ -26,7 +26,6 @@ type Props = {
 }
 
 type State = {
-    mascotDialogVisible: boolean,
     dialogVisible: boolean,
     dialogTitle: string,
     dialogMessage: string,
@@ -143,10 +142,6 @@ class PlanexScreen extends React.Component<Props, State> {
             props.navigation.setOptions({title: currentGroup.name})
         }
         this.state = {
-            mascotDialogVisible:
-                AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.planexShowBanner.key)
-                && AsyncStorageManager.getString(AsyncStorageManager.PREFERENCES.defaultStartScreen.key)
-                    .toLowerCase() !== 'planex',
             dialogVisible: false,
             dialogTitle: "",
             dialogMessage: "",
@@ -163,23 +158,10 @@ class PlanexScreen extends React.Component<Props, State> {
     }
 
     /**
-     * Callback used when closing the banner.
-     * This hides the banner and saves to preferences to prevent it from reopening
-     */
-    onMascotDialogCancel = () => {
-        this.setState({mascotDialogVisible: false});
-        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.planexShowBanner.key, false);
-    };
-
-
-    /**
      * Callback used when the user clicks on the navigate to settings button.
      * This will hide the banner and open the SettingsScreen
      */
-    onGoToSettings = () => {
-        this.onMascotDialogCancel();
-        this.props.navigation.navigate('settings');
-    };
+    onGoToSettings = () => this.props.navigation.navigate('settings');
 
     onScreenFocus = () => {
         this.handleNavigationParams();
@@ -357,8 +339,10 @@ class PlanexScreen extends React.Component<Props, State> {
                         ? this.getWebView()
                         : <View style={{height: '100%'}}>{this.getWebView()}</View>}
                 </View>
-                <MascotPopup
-                    visible={this.state.mascotDialogVisible}
+                {AsyncStorageManager.getString(AsyncStorageManager.PREFERENCES.defaultStartScreen.key)
+                    .toLowerCase() !== 'planex'
+                    ? <MascotPopup
+                    prefKey={AsyncStorageManager.PREFERENCES.planexShowBanner.key}
                     title={i18n.t("screens.planex.mascotDialog.title")}
                     message={i18n.t("screens.planex.mascotDialog.message")}
                     icon={"emoticon-kiss"}
@@ -372,11 +356,10 @@ class PlanexScreen extends React.Component<Props, State> {
                             message: i18n.t("screens.planex.mascotDialog.cancel"),
                             icon: "close",
                             color: this.props.theme.colors.warning,
-                            onPress: this.onMascotDialogCancel,
                         }
                     }}
                     emotion={MASCOT_STYLE.INTELLO}
-                />
+                /> : null }
                 <AlertDialog
                     visible={this.state.dialogVisible}
                     onDismiss={this.hideDialog}

@@ -36,7 +36,6 @@ type State = {
     refreshing: boolean,
     agendaItems: Object,
     calendarShowing: boolean,
-    mascotDialogVisible: boolean,
 };
 
 const FETCH_URL = "https://www.amicale-insat.fr/api/event/list";
@@ -56,7 +55,6 @@ class PlanningScreen extends React.Component<Props, State> {
         refreshing: false,
         agendaItems: {},
         calendarShowing: false,
-        mascotDialogVisible: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.eventsShowBanner.key)
     };
 
     currentDate = getDateOnlyString(getCurrentDateString());
@@ -103,15 +101,6 @@ class PlanningScreen extends React.Component<Props, State> {
         } else {
             return false;
         }
-    };
-
-    /**
-     * Callback used when closing the banner.
-     * This hides the banner and saves to preferences to prevent it from reopening
-     */
-    onHideMascotDialog = () => {
-        this.setState({mascotDialogVisible: false});
-        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.eventsShowBanner.key, false);
     };
 
     /**
@@ -250,7 +239,7 @@ class PlanningScreen extends React.Component<Props, State> {
                     onRef={this.onAgendaRef}
                 />
                 <MascotPopup
-                    visible={this.state.mascotDialogVisible}
+                    prefKey={AsyncStorageManager.PREFERENCES.eventsShowBanner.key}
                     title={i18n.t("screens.planning.mascotDialog.title")}
                     message={i18n.t("screens.planning.mascotDialog.message")}
                     icon={"party-popper"}
@@ -259,7 +248,6 @@ class PlanningScreen extends React.Component<Props, State> {
                         cancel: {
                             message: i18n.t("screens.planning.mascotDialog.button"),
                             icon: "check",
-                            onPress: this.onHideMascotDialog,
                         }
                     }}
                     emotion={MASCOT_STYLE.HAPPY}

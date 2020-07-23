@@ -84,7 +84,6 @@ type Props = {
 
 type State = {
     dialogVisible: boolean,
-    mascotDialogVisible: boolean,
 }
 
 /**
@@ -112,9 +111,6 @@ class HomeScreen extends React.Component<Props, State> {
         });
         this.state = {
             dialogVisible: false,
-            mascotDialogVisible: AsyncStorageManager.getBool(
-                AsyncStorageManager.PREFERENCES.homeShowBanner.key)
-                && !this.isLoggedIn,
         }
     }
 
@@ -182,11 +178,6 @@ class HomeScreen extends React.Component<Props, State> {
             <Item title="log" iconName={logIcon} color={logColor} onPress={onPressLog}/>
             <Item title={i18n.t("screens.settings.title")} iconName={"cog"} onPress={onPressSettings}/>
         </MaterialHeaderButtons>;
-    };
-
-    hideMascotDialog = () => {
-        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.homeShowBanner.key, false);
-        this.setState({mascotDialogVisible: false})
     };
 
     showDisconnectDialog = () => this.setState({dialogVisible: true});
@@ -525,10 +516,7 @@ class HomeScreen extends React.Component<Props, State> {
      * Callback when pressing the login button on the banner.
      * This hides the banner and takes the user to the login page.
      */
-    onLogin = () => {
-        this.hideMascotDialog();
-        this.props.navigation.navigate("login", {nextScreen: "profile"});
-    }
+    onLogin = () => this.props.navigation.navigate("login", {nextScreen: "profile"});
 
     render() {
         return (
@@ -554,26 +542,26 @@ class HomeScreen extends React.Component<Props, State> {
                         renderListHeaderComponent={this.getListHeader}
                     />
                 </View>
-                <MascotPopup
-                    visible={this.state.mascotDialogVisible}
-                    title={i18n.t("screens.home.mascotDialog.title")}
-                    message={i18n.t("screens.home.mascotDialog.message")}
-                    icon={"human-greeting"}
-                    buttons={{
-                        action: {
-                            message: i18n.t("screens.home.mascotDialog.login"),
-                            icon: "login",
-                            onPress: this.onLogin,
-                        },
-                        cancel: {
-                            message: i18n.t("screens.home.mascotDialog.later"),
-                            icon: "close",
-                            color: this.props.theme.colors.warning,
-                            onPress: this.hideMascotDialog,
-                        }
-                    }}
-                    emotion={MASCOT_STYLE.CUTE}
-                />
+                {!this.isLoggedIn
+                    ? <MascotPopup
+                        prefKey={AsyncStorageManager.PREFERENCES.homeShowBanner.key}
+                        title={i18n.t("screens.home.mascotDialog.title")}
+                        message={i18n.t("screens.home.mascotDialog.message")}
+                        icon={"human-greeting"}
+                        buttons={{
+                            action: {
+                                message: i18n.t("screens.home.mascotDialog.login"),
+                                icon: "login",
+                                onPress: this.onLogin,
+                            },
+                            cancel: {
+                                message: i18n.t("screens.home.mascotDialog.later"),
+                                icon: "close",
+                                color: this.props.theme.colors.warning,
+                            }
+                        }}
+                        emotion={MASCOT_STYLE.CUTE}
+                    /> : null}
                 <AnimatedFAB
                     {...this.props}
                     ref={this.fabRef}
