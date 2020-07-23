@@ -376,6 +376,7 @@
       "pause": "Pause",
       "pauseMessage": "T'as fait pause, t'es nul",
       "resume": "Continuer",
+      "gameOver": "Game Over",
       "restart": {
         "text": "Redémarrer",
         "confirm": "T'es sûr de vouloir redémarrer ?",
@@ -383,17 +384,10 @@
         "confirmYes": "Oui",
         "confirmNo": "Oula non"
       },
-      "gameOver": {
-        "text": "Game Over",
-        "score": "Score: ",
-        "level": "Niveau: ",
-        "time": "Temps: ",
-        "exit": "Quitter"
-      },
       "mascotDialog": {
-        "title": "Jeu !",
-        "message": "Jouer.",
-        "button": "Oui !"
+        "title": "Un secret !",
+        "message": "Tu as découvert le jeu secret, bravo !\nSi jamais tu as du temps à perdre, ce jeu est là pour toi.",
+        "button": "Youpi."
       }
     },
     "debug": {

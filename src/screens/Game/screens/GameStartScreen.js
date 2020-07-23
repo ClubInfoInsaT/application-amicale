@@ -168,7 +168,7 @@ class GameStartScreen extends React.Component<Props, State> {
                             }}>
                             {this.isHighScore
                                 ? i18n.t("screens.game.newHighScore")
-                                : i18n.t("screens.game.gameOver.text")}
+                                : i18n.t("screens.game.gameOver")}
                         </Headline>
                         <Divider/>
                         <View style={{
