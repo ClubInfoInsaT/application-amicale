@@ -202,7 +202,7 @@ export default class TabNavigator extends React.Component<Props> {
         if (props.defaultHomeRoute != null)
             this.defaultRoute = 'home';
         else
-            this.defaultRoute = AsyncStorageManager.getInstance().preferences.defaultStartScreen.current.toLowerCase();
+            this.defaultRoute = AsyncStorageManager.getString(AsyncStorageManager.PREFERENCES.defaultStartScreen.key).toLowerCase();
         this.createHomeStackComponent = () => HomeStackComponent(props.defaultHomeRoute, props.defaultHomeData);
     }
 

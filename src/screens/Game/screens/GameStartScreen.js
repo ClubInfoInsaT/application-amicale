@@ -46,13 +46,13 @@ class GameStartScreen extends React.Component<Props, State> {
     isHighScore: boolean;
 
     state = {
-        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.gameStartShowBanner.current === "1",
+        mascotDialogVisible: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.gameStartShowBanner.key),
     }
 
     constructor(props: Props) {
         super(props);
         this.gridManager = new GridManager(4, 4, props.theme);
-        this.scores = JSON.parse(AsyncStorageManager.getInstance().preferences.gameScores.current);
+        this.scores = AsyncStorageManager.getObject(AsyncStorageManager.PREFERENCES.gameScores.key);
         this.scores.sort((a, b) => b - a);
         if (this.props.route.params != null)
             this.recoverGameScore();
@@ -72,17 +72,11 @@ class GameStartScreen extends React.Component<Props, State> {
         }
         if (this.scores.length > 3)
             this.scores.splice(3, 1);
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.gameScores.key,
-            JSON.stringify(this.scores)
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.gameScores.key, this.scores);
     }
 
     hideMascotDialog = () => {
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.gameStartShowBanner.key,
-            '0'
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.gameStartShowBanner.key, false);
         this.setState({mascotDialogVisible: false})
     };
 

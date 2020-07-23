@@ -38,7 +38,7 @@ class DashboardEditScreen extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         let dashboardManager = new DashboardManager(this.props.navigation);
-        this.initialDashboardIdList = JSON.parse(AsyncStorageManager.getInstance().preferences.dashboardItems.current);
+        this.initialDashboardIdList = AsyncStorageManager.getObject(AsyncStorageManager.PREFERENCES.dashboardItems.key);
         this.initialDashboard = dashboardManager.getCurrentDashboard();
         this.state = {
             currentDashboard: [...this.initialDashboard],
@@ -92,10 +92,7 @@ class DashboardEditScreen extends React.Component<Props, State> {
             currentDashboard: currentDashboard,
             currentDashboardIdList: currentDashboardIdList,
         });
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.dashboardItems.key,
-            JSON.stringify(currentDashboardIdList)
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.dashboardItems.key, currentDashboardIdList);
     }
 
     undoDashboard = () => {
@@ -103,10 +100,7 @@ class DashboardEditScreen extends React.Component<Props, State> {
             currentDashboard: [...this.initialDashboard],
             currentDashboardIdList: [...this.initialDashboardIdList]
         });
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.dashboardItems.key,
-            JSON.stringify(this.initialDashboardIdList)
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.dashboardItems.key, this.initialDashboardIdList);
     }
 
     getListHeader() {

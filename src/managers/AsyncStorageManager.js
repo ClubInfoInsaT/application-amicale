@@ -13,117 +13,86 @@ export default class AsyncStorageManager {
 
     static instance: AsyncStorageManager | null = null;
 
-    /**
-     * Get this class instance or create one if none is found
-     * @returns {AsyncStorageManager}
-     */
-    static getInstance(): AsyncStorageManager {
-        return AsyncStorageManager.instance === null ?
-            AsyncStorageManager.instance = new AsyncStorageManager() :
-            AsyncStorageManager.instance;
-    }
-
-    // Object storing preferences keys, default and current values for use in the app
-    preferences = {
+    static PREFERENCES = {
         debugUnlocked: {
             key: 'debugUnlocked',
             default: '0',
-            current: '',
         },
         showIntro: {
             key: 'showIntro',
             default: '1',
-            current: '',
         },
         updateNumber: {
             key: 'updateNumber',
             default: '0',
-            current: '',
         },
         proxiwashNotifications: {
             key: 'proxiwashNotifications',
             default: '5',
-            current: '',
         },
         nightModeFollowSystem: {
             key: 'nightModeFollowSystem',
             default: '1',
-            current: '',
         },
         nightMode: {
             key: 'nightMode',
             default: '1',
-            current: '',
         },
         defaultStartScreen: {
             key: 'defaultStartScreen',
             default: 'home',
-            current: '',
         },
         servicesShowBanner: {
             key: 'servicesShowBanner',
             default: '1',
-            current: '',
         },
         proxiwashShowBanner: {
             key: 'proxiwashShowBanner',
             default: '1',
-            current: '',
         },
         homeShowBanner: {
             key: 'homeShowBanner',
             default: '1',
-            current: '',
         },
         eventsShowBanner: {
             key: 'eventsShowBanner',
             default: '1',
-            current: '',
         },
         planexShowBanner: {
             key: 'planexShowBanner',
             default: '1',
-            current: '',
         },
         loginShowBanner: {
             key: 'loginShowBanner',
             default: '1',
-            current: '',
         },
         voteShowBanner: {
             key: 'voteShowBanner',
             default: '1',
-            current: '',
         },
         equipmentShowBanner: {
             key: 'equipmentShowBanner',
             default: '1',
-            current: '',
         },
         gameStartShowBanner: {
             key: 'gameStartShowBanner',
             default: '1',
-            current: '',
         },
         proxiwashWatchedMachines: {
             key: 'proxiwashWatchedMachines',
             default: '[]',
-            current: '',
         },
         showAprilFoolsStart: {
             key: 'showAprilFoolsStart',
             default: '1',
-            current: '',
         },
         planexCurrentGroup: {
             key: 'planexCurrentGroup',
             default: '',
-            current: '',
         },
         planexFavoriteGroups: {
             key: 'planexFavoriteGroups',
             default: '[]',
-            current: '',
         },
         dashboardItems: {
             key: 'dashboardItems',
@@ -134,14 +103,28 @@ export default class AsyncStorageManager {
                 SERVICES_KEY.TUTOR_INSA,
                 SERVICES_KEY.RU,
             ]),
-            current: '',
         },
         gameScores: {
             key: 'gameScores',
             default: '[]',
-            current: '',
         },
-    };
+    }
+
+    #currentPreferences: {[key: string]: string};
+
+    constructor() {
+        this.#currentPreferences = {};
+    }
+
+    /**
+     * Get this class instance or create one if none is found
+     * @returns {AsyncStorageManager}
+     */
+    static getInstance(): AsyncStorageManager {
+        return AsyncStorageManager.instance === null ?
+            AsyncStorageManager.instance = new AsyncStorageManager() :
+            AsyncStorageManager.instance;
+    }
 
     /**
      * Set preferences object current values from AsyncStorage.
@@ -152,9 +135,8 @@ export default class AsyncStorageManager {
     async loadPreferences() {
         let prefKeys = [];
         // Get all available keys
-        for (let [key, value] of Object.entries(this.preferences)) {
-            //$FlowFixMe
-            prefKeys.push(value.key);
+        for (let key in AsyncStorageManager.PREFERENCES) {
+            prefKeys.push(key);
         }
         // Get corresponding values
         let resultArray: Array<Array<string>> = await AsyncStorage.multiGet(prefKeys);
@@ -163,21 +145,92 @@ export default class AsyncStorageManager {
             let key: string = resultArray[i][0];
             let val: string | null = resultArray[i][1];
             if (val === null)
-                val = this.preferences[key].default;
-            this.preferences[key].current = val;
+                val = AsyncStorageManager.PREFERENCES[key].default;
+            this.#currentPreferences[key] = val;
         }
     }
 
     /**
-     * Save the value associated to the given key to preferences.
+     * Saves the value associated to the given key to preferences.
      * This updates the preferences object and saves it to AsyncStorage.
      *
      * @param key
-     * @param val
+     * @param value
      */
-    savePref(key: string, val: string) {
-        this.preferences[key].current = val;
-        AsyncStorage.setItem(key, val);
+    setPreference(key: string, value: any) {
+        if (AsyncStorageManager.PREFERENCES[key] != null) {
+            let convertedValue = "";
+            if (typeof value === "string")
+                convertedValue = value;
+            else if (typeof value === "boolean" || typeof value === "number")
+                convertedValue = value.toString();
+            else
+                convertedValue = JSON.stringify(value);
+            this.#currentPreferences[key] = convertedValue;
+            AsyncStorage.setItem(key, convertedValue);
+        }
+    }
+
+    /**
+     * Gets the value at the given key.
+     * If the key is not available, returns null
+     *
+     * @param key
+     * @returns {string|null}
+     */
+    getPreference(key: string) {
+        return this.#currentPreferences[key];
+    }
+
+    /**
+     * aves the value associated to the given key to preferences.
+     *
+     * @param key
+     * @param value
+     */
+    static set(key: string, value: any) {
+        AsyncStorageManager.getInstance().setPreference(key, value);
+    }
+
+    /**
+     * Gets the string value of the given preference
+     *
+     * @param key
+     * @returns {boolean}
+     */
+    static getString(key: string) {
+        return AsyncStorageManager.getInstance().getPreference(key);
+    }
+
+    /**
+     * Gets the boolean value of the given preference
+     *
+     * @param key
+     * @returns {boolean}
+     */
+    static getBool(key: string) {
+        const value = AsyncStorageManager.getString(key);
+        return value === "1" || value === "true";
+    }
+
+    /**
+     * Gets the number value of the given preference
+     *
+     * @param key
+     * @returns {boolean}
+     */
+    static getNumber(key: string) {
+        return parseFloat(AsyncStorageManager.getString(key));
+    }
+
+    /**
+     * Gets the object value of the given preference
+     *
+     * @param key
+     * @returns {boolean}
+     */
+    static getObject(key: string) {
+        return JSON.parse(AsyncStorageManager.getString(key));
     }
 
 }

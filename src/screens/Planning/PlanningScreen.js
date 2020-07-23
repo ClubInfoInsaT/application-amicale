@@ -56,7 +56,7 @@ class PlanningScreen extends React.Component<Props, State> {
         refreshing: false,
         agendaItems: {},
         calendarShowing: false,
-        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.eventsShowBanner.current === "1"
+        mascotDialogVisible: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.eventsShowBanner.key)
     };
 
     currentDate = getDateOnlyString(getCurrentDateString());
@@ -111,10 +111,7 @@ class PlanningScreen extends React.Component<Props, State> {
      */
     onHideMascotDialog = () => {
         this.setState({mascotDialogVisible: false});
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.eventsShowBanner.key,
-            '0'
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.eventsShowBanner.key, false);
     };
 
     /**

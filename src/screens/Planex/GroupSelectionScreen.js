@@ -53,7 +53,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         super(props);
         this.state = {
             currentSearchString: '',
-            favoriteGroups: JSON.parse(AsyncStorageManager.getInstance().preferences.planexFavoriteGroups.current),
+            favoriteGroups: AsyncStorageManager.getObject(AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key),
         };
     }
 
@@ -172,9 +172,7 @@ class GroupSelectionScreen extends React.Component<Props, State> {
         else
             this.addGroupToFavorites(newFavorites, group);
         this.setState({favoriteGroups: newFavorites})
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.planexFavoriteGroups.key,
-            JSON.stringify(newFavorites));
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key, newFavorites);
     }
 
     /**

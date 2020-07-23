@@ -42,7 +42,7 @@ const LIST_ITEM_HEIGHT = 64;
 class EquipmentListScreen extends React.Component<Props, State> {
 
     state = {
-        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.equipmentShowBanner.current === "1"
+        mascotDialogVisible: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.equipmentShowBanner.key),
     }
 
     data: Array<Device>;
@@ -146,10 +146,7 @@ class EquipmentListScreen extends React.Component<Props, State> {
     };
 
     hideMascotDialog = () => {
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.equipmentShowBanner.key,
-            '0'
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.equipmentShowBanner.key, false);
         this.setState({mascotDialogVisible: false})
     };
 

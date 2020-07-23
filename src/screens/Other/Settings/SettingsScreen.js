@@ -37,18 +37,18 @@ class SettingsScreen extends React.Component<Props, State> {
      */
     constructor() {
         super();
-        let notifReminder = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current;
+        let notifReminder = AsyncStorageManager.getString(AsyncStorageManager.PREFERENCES.proxiwashNotifications.key);
         this.savedNotificationReminder = parseInt(notifReminder);
         if (isNaN(this.savedNotificationReminder))
             this.savedNotificationReminder = 0;
 
         this.state = {
             nightMode: ThemeManager.getNightMode(),
-            nightModeFollowSystem: AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current === '1' &&
-                Appearance.getColorScheme() !== 'no-preference',
+            nightModeFollowSystem: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key)
+                && Appearance.getColorScheme() !== 'no-preference',
             notificationReminderSelected: this.savedNotificationReminder,
-            startScreenPickerSelected: AsyncStorageManager.getInstance().preferences.defaultStartScreen.current,
-            isDebugUnlocked: AsyncStorageManager.getInstance().preferences.debugUnlocked.current === '1'
+            startScreenPickerSelected: AsyncStorageManager.getString(AsyncStorageManager.PREFERENCES.defaultStartScreen.key),
+            isDebugUnlocked: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.debugUnlocked.key)
         };
     }
 
@@ -57,8 +57,7 @@ class SettingsScreen extends React.Component<Props, State> {
      */
     unlockDebugMode = () => {
         this.setState({isDebugUnlocked: true});
-        let key = AsyncStorageManager.getInstance().preferences.debugUnlocked.key;
-        AsyncStorageManager.getInstance().savePref(key, '1');
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.debugUnlocked.key, true);
     }
 
     /**
@@ -67,9 +66,8 @@ class SettingsScreen extends React.Component<Props, State> {
      * @param value The value to store
      */
     onProxiwashNotifPickerValueChange = (value: number) => {
-        let key = AsyncStorageManager.getInstance().preferences.proxiwashNotifications.key;
-        AsyncStorageManager.getInstance().savePref(key, value.toString());
-        this.setState({notificationReminderSelected: value})
+        this.setState({notificationReminderSelected: value});
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.proxiwashNotifications.key, value);
     };
 
     /**
@@ -79,11 +77,8 @@ class SettingsScreen extends React.Component<Props, State> {
      */
     onStartScreenPickerValueChange = (value: string) => {
         if (value != null) {
-            let key = AsyncStorageManager.getInstance().preferences.defaultStartScreen.key;
-            AsyncStorageManager.getInstance().savePref(key, value);
-            this.setState({
-                startScreenPickerSelected: value
-            });
+            this.setState({startScreenPickerSelected: value});
+            AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.defaultStartScreen.key, value);
         }
     };
 
@@ -139,8 +134,7 @@ class SettingsScreen extends React.Component<Props, State> {
     onToggleNightModeFollowSystem = () => {
         const value = !this.state.nightModeFollowSystem;
         this.setState({nightModeFollowSystem: value});
-        let key = AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.key;
-        AsyncStorageManager.getInstance().savePref(key, value ? '1' : '0');
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key, value);
         if (value) {
             const nightMode = Appearance.getColorScheme() === 'dark';
             ThemeManager.getInstance().setNightMode(nightMode);

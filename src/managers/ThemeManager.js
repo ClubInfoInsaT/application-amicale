@@ -228,10 +228,11 @@ export default class ThemeManager {
      * @returns {boolean} Night mode state
      */
     static getNightMode(): boolean {
-        return (AsyncStorageManager.getInstance().preferences.nightMode.current === '1' &&
-            (AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current !== '1' ||
-                colorScheme === 'no-preference')) ||
-            (AsyncStorageManager.getInstance().preferences.nightModeFollowSystem.current === '1' && colorScheme === 'dark');
+        return (AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.nightMode.key) &&
+            (!AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key)
+                || colorScheme === 'no-preference')) ||
+            (AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key)
+                && colorScheme === 'dark');
     }
 
     /**
@@ -273,8 +274,7 @@ export default class ThemeManager {
      * @param isNightMode True to enable night mode, false to disable
      */
     setNightMode(isNightMode: boolean) {
-        let nightModeKey = AsyncStorageManager.getInstance().preferences.nightMode.key;
-        AsyncStorageManager.getInstance().savePref(nightModeKey, isNightMode ? '1' : '0');
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.nightMode.key, isNightMode);
         if (this.updateThemeCallback != null)
             this.updateThemeCallback();
     }

@@ -66,8 +66,8 @@ class ProxiwashScreen extends React.Component<Props, State> {
     state = {
         refreshing: false,
         modalCurrentDisplayItem: null,
-        machinesWatched: JSON.parse(AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.current),
-        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.current === "1",
+        machinesWatched: AsyncStorageManager.getObject(AsyncStorageManager.PREFERENCES.proxiwashWatchedMachines.key),
+        mascotDialogVisible: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.proxiwashShowBanner.key),
     };
 
     /**
@@ -90,10 +90,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
      */
     onHideMascotDialog = () => {
         this.setState({mascotDialogVisible: false});
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.proxiwashShowBanner.key,
-            '0'
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.proxiwashShowBanner.key, false);
     };
 
     /**
@@ -185,10 +182,7 @@ class ProxiwashScreen extends React.Component<Props, State> {
 
     saveNewWatchedList(list: Array<Machine>) {
         this.setState({machinesWatched: list});
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.proxiwashWatchedMachines.key,
-            JSON.stringify(list),
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.proxiwashWatchedMachines.key, list);
     }
 
     /**

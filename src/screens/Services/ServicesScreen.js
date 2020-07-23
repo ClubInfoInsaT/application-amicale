@@ -38,7 +38,7 @@ class ServicesScreen extends React.Component<Props, State> {
     finalDataset: Array<listItem>
 
     state = {
-        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.servicesShowBanner.current === "1"
+        mascotDialogVisible: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.servicesShowBanner.key),
     }
 
     constructor(props) {
@@ -60,10 +60,7 @@ class ServicesScreen extends React.Component<Props, State> {
      */
     onHideMascotDialog = () => {
         this.setState({mascotDialogVisible: false});
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.servicesShowBanner.key,
-            '0'
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.servicesShowBanner.key, false);
     };
 
     getAboutButton = () =>

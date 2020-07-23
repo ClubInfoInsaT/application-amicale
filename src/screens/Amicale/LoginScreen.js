@@ -48,7 +48,7 @@ class LoginScreen extends React.Component<Props, State> {
         loading: false,
         dialogVisible: false,
         dialogError: 0,
-        mascotDialogVisible: AsyncStorageManager.getInstance().preferences.loginShowBanner.current === "1"
+        mascotDialogVisible: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.loginShowBanner.key),
     };
 
     onEmailChange: (value: string) => null;
@@ -82,10 +82,7 @@ class LoginScreen extends React.Component<Props, State> {
     }
 
     hideMascotDialog = () => {
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.loginShowBanner.key,
-            '0'
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.loginShowBanner.key, false);
         this.setState({mascotDialogVisible: false})
     };
 
@@ -111,11 +108,8 @@ class LoginScreen extends React.Component<Props, State> {
      * Saves in user preferences to not show the login banner again.
      */
     handleSuccess = () => {
-        // Do not show the login banner again
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.homeShowBanner.key,
-            '0'
-        );
+        // Do not show the home login banner again
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.homeShowBanner.key, false);
         if (this.nextScreen == null)
             this.props.navigation.goBack();
         else

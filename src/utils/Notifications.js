@@ -43,7 +43,7 @@ export async function askPermissions() {
  * @param date The date to trigger the notification at
  */
 function createNotifications(machineID: string, date: Date) {
-    let reminder = parseInt(AsyncStorageManager.getInstance().preferences.proxiwashNotifications.current);
+    let reminder = AsyncStorageManager.getNumber(AsyncStorageManager.PREFERENCES.proxiwashNotifications.key);
     if (!isNaN(reminder) && reminder > 0) {
         let id = reminderIdFactor * parseInt(machineID);
         let reminderDate = new Date(date);

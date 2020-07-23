@@ -135,7 +135,7 @@ class PlanexScreen extends React.Component<Props, State> {
         this.webScreenRef = React.createRef();
         this.barRef = React.createRef();
 
-        let currentGroup = AsyncStorageManager.getInstance().preferences.planexCurrentGroup.current;
+        let currentGroup = AsyncStorageManager.getString(AsyncStorageManager.PREFERENCES.planexCurrentGroup.key);
         if (currentGroup === '')
             currentGroup = {name: "SELECT GROUP", id: -1, isFav: false};
         else {
@@ -144,8 +144,9 @@ class PlanexScreen extends React.Component<Props, State> {
         }
         this.state = {
             mascotDialogVisible:
-                AsyncStorageManager.getInstance().preferences.planexShowBanner.current === '1' &&
-                AsyncStorageManager.getInstance().preferences.defaultStartScreen.current !== 'Planex',
+                AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.planexShowBanner.key)
+                && AsyncStorageManager.getString(AsyncStorageManager.PREFERENCES.defaultStartScreen.key)
+                    .toLowerCase() !== 'planex',
             dialogVisible: false,
             dialogTitle: "",
             dialogMessage: "",
@@ -167,10 +168,7 @@ class PlanexScreen extends React.Component<Props, State> {
      */
     onMascotDialogCancel = () => {
         this.setState({mascotDialogVisible: false});
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.planexShowBanner.key,
-            '0'
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.planexShowBanner.key, false);
     };
 
 
@@ -208,10 +206,7 @@ class PlanexScreen extends React.Component<Props, State> {
     selectNewGroup(group: group) {
         this.sendMessage('setGroup', group.id);
         this.setState({currentGroup: group});
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.planexCurrentGroup.key,
-            JSON.stringify(group)
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.planexCurrentGroup.key, group);
         this.props.navigation.setOptions({title: group.name});
         this.generateInjectedJS(group.id);
     }

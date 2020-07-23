@@ -112,7 +112,8 @@ class HomeScreen extends React.Component<Props, State> {
         });
         this.state = {
             dialogVisible: false,
-            mascotDialogVisible: AsyncStorageManager.getInstance().preferences.homeShowBanner.current === "1"
+            mascotDialogVisible: AsyncStorageManager.getBool(
+                AsyncStorageManager.PREFERENCES.homeShowBanner.key)
                 && !this.isLoggedIn,
         }
     }
@@ -184,10 +185,7 @@ class HomeScreen extends React.Component<Props, State> {
     };
 
     hideMascotDialog = () => {
-        AsyncStorageManager.getInstance().savePref(
-            AsyncStorageManager.getInstance().preferences.homeShowBanner.key,
-            '0'
-        );
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.homeShowBanner.key, false);
         this.setState({mascotDialogVisible: false})
     };
 

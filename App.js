@@ -56,7 +56,6 @@ export default class App extends React.Component<Props, State> {
     createDrawerNavigator: () => React.Node;
 
     urlHandler: URLHandler;
-    storageManager: AsyncStorageManager;
 
     constructor() {
         super();
@@ -64,7 +63,6 @@ export default class App extends React.Component<Props, State> {
         this.navigatorRef = React.createRef();
         this.defaultHomeRoute = null;
         this.defaultHomeData = {};
-        this.storageManager = AsyncStorageManager.getInstance();
         this.urlHandler = new URLHandler(this.onInitialURLParsed, this.onDetectURL);
         this.urlHandler.listen();
         setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 20);
@@ -133,9 +131,9 @@ export default class App extends React.Component<Props, State> {
             showUpdate: false,
             showAprilFools: false,
         });
-        this.storageManager.savePref(this.storageManager.preferences.showIntro.key, '0');
-        this.storageManager.savePref(this.storageManager.preferences.updateNumber.key, Update.number.toString());
-        this.storageManager.savePref(this.storageManager.preferences.showAprilFoolsStart.key, '0');
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.showIntro.key, false);
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.updateNumber.key, Update.number);
+        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.showAprilFoolsStart.key, false);
     };
 
     /**
@@ -144,7 +142,7 @@ export default class App extends React.Component<Props, State> {
      * @returns {Promise<void>}
      */
     loadAssetsAsync = async () => {
-        await this.storageManager.loadPreferences();
+        await AsyncStorageManager.getInstance().loadPreferences();
         try {
             await ConnectionManager.getInstance().recoverLogin();
         } catch (e) {
@@ -169,9 +167,11 @@ export default class App extends React.Component<Props, State> {
         this.setState({
             isLoading: false,
             currentTheme: ThemeManager.getCurrentTheme(),
-            showIntro: this.storageManager.preferences.showIntro.current === '1',
-            showUpdate: this.storageManager.preferences.updateNumber.current !== Update.number.toString(),
-            showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled() && this.storageManager.preferences.showAprilFoolsStart.current === '1',
+            showIntro: AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.showIntro.key),
+            showUpdate: AsyncStorageManager.getNumber(AsyncStorageManager.PREFERENCES.updateNumber.key)
+                !== Update.number,
+            showAprilFools: AprilFoolsManager.getInstance().isAprilFoolsEnabled()
+                && AsyncStorageManager.getBool(AsyncStorageManager.PREFERENCES.showAprilFoolsStart.key),
         });
         SplashScreen.hide();
     }

@@ -43,10 +43,11 @@ class DebugScreen extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.modalInputValue = "";
-        let copy = {...AsyncStorageManager.getInstance().preferences};
         let currentPreferences : Array<PreferenceItem> = [];
-        Object.values(copy).map((object: any) => {
-            currentPreferences.push(object);
+        Object.values(AsyncStorageManager.PREFERENCES).map((object: any) => {
+            let newObject: PreferenceItem = {...object};
+            newObject.current = AsyncStorageManager.getString(newObject.key);
+            currentPreferences.push(newObject);
         });
         this.state = {
             modalCurrentDisplayItem: {},
@@ -139,7 +140,7 @@ class DebugScreen extends React.Component<Props, State> {
             currentPreferences[this.findIndexOfKey(key)].current = value;
             return {currentPreferences};
         });
-        AsyncStorageManager.getInstance().savePref(key, value);
+        AsyncStorageManager.set(key, value);
         this.modalRef.close();
     }
 
