@@ -29,8 +29,8 @@
         "dryers": "Number of available dryers"
       },
       "mascotDialog": {
-        "title": "So handy!",
-        "message": "There a lot of thing you can do with Campus!\n\nHere is a list of every service provided by the app.",
+        "title": "A bit lost?",
+        "message": "Here is a mix of handy services! Between INSA and students services, I am sure you will find something for you.\n\nAnd if you have an Amicale account, you will have even more choices!",
         "button": "Thx buddy"
       }
     },
@@ -88,8 +88,8 @@
         "machineRunningBody": "The machine n°{{number}} is still running"
       },
       "mascotDialog": {
-        "title": "Notifications!",
-        "message": "Click on a running machine to enable notifications!\n\nYou will never forget your laundry again.",
+        "title": "Small tips",
+        "message": "No need for queues anymore, you will be notified when machines are ready !\n\nIf you have your head in the clouds, you can turn on notifications for your machine by clicking on it.",
         "ok": "Got it!"
       }
     },
@@ -119,8 +119,8 @@
       "invalidEvent": "Could not find the event. Please make sure the event you are trying to access is valid.",
       "mascotDialog": {
         "title": "Let's party!",
-        "message": "At the INSA, it's not all about classes!\n\nIf you want to see new people, this page is just for you. Here you will find the list of every event organised by students!",
-        "button": "Thx!"
+        "message": "And even more! Here you will find every event on the campus.\n\nFrom pancake sales, to the Gala, you will never miss anything!",
+        "button": "Let's go!"
       }
     },
     "planex": {
@@ -128,9 +128,9 @@
       "noGroupSelected": "No group selected. Please select your group using the big beautiful red button bellow.",
       "favorites": "Favorites",
       "mascotDialog": {
-        "title": "Come here often?",
-        "message": "Set it as default screen!\n\nCampus will start on Planex so you never miss a class. Click on the button bellow to navigate to the settings page.",
-        "ok": "Yes please!",
+        "title": "Skipping classes is bad",
+        "message": "Here is Planex! You can set your class and your crush's to favorites in order to find them back easily!\n\nIf you mainly use Campus for Planex, go to the settings to make the app directly start on it!",
+        "ok": "Settings",
         "cancel": "Later"
       }
     },
@@ -193,7 +193,7 @@
       "passwordError": "Please enter a password",
       "resetPassword": "Forgot Password",
       "mascotDialog": {
-        "title": "Why have an account?",
+        "title": "An account?",
         "message": "An Amicale account allows you to take part in several activities around campus. You can join a club, or even create your own!\n\nLogging into your Amicale account on the app will allow you to see all available clubs on the campus, vote for the upcoming elections, and more to come!\n\nNo Account? Go to the Amicale's building during open hours to create one.",
         "button": "OK"
       }
@@ -311,9 +311,9 @@
         "button": "What can I scan?"
       },
       "mascotDialog": {
-        "title": "How to use Scanotron 3000",
-        "message": "Find Campus QR codes posted by clubs and events, scan them and get instant access to detailed information!",
-        "button": "ok"
+        "title": "Scano...what?",
+        "message": "Scanotron 3000 allows you to scan Campus QR codes, created by clubs or event managers, to get more detailed info!\n\nThe camera will never be used for any other purposes.",
+        "button": "OK"
       }
     },
     "settings": {
@@ -365,7 +365,7 @@
       "homeButtonSubtitle": "Contact the devs"
     },
     "game": {
-      "title": "Game",
+      "title": "So Awesome Game",
       "welcomeTitle": "Welcome !",
       "welcomeMessage": "Stuck on the toilet? The teacher is late?\nThis game is for you!\n\nTry to get the best score and beat your friends.",
       "play": "Play!",
@@ -375,7 +375,7 @@
       "time": "Time:",
       "level": "Level:",
       "pause": "Game Paused",
-      "pauseMessage": "The game is paused",
+      "pauseMessage": "You paused, loser",
       "resume": "Resume",
       "gameOver": "Game Over",
       "restart": {
@@ -386,9 +386,9 @@
         "confirmNo": "No"
       },
       "mascotDialog": {
-        "title": "Play !",
-        "message": "Play.",
-        "button": "Yes !"
+        "title": "A secret!",
+        "message": "You found the secret game, awesome ! If you have time to lose, this game is for you.",
+        "button": "Yay!"
       }
     },
     "debug": {
@@ -397,24 +397,24 @@
   },
   "intro": {
     "slideMain": {
-      "title": "Welcome to CAMPUS",
-      "text": "The new app to use during your coffee break to get updates on the campus life!"
-    },
-    "slideEvents": {
-      "title": "Stay up to date",
-      "text": "CAMPUS allows you to be aware of any event occurring on the campus, from pancake sales to Enfoiros concerts!"
+      "title": "Welcome to CAMPUS!",
+      "text": "The students app of the INSA Toulouse! Read along to see everything you can do."
     },
     "slidePlanex": {
-      "title": "Planex",
-      "text": "Lookup your next course on CAMPUS with a mobile friendly timetable"
+      "title": "Prettier Planex",
+      "text": "Lookup your and your friends timetable with a mobile friendly Planex!"
+    },
+    "slideEvents": {
+      "title": "Events",
+      "text": "Be aware of any event occurring on the campus, from pancake sales to Enfoiros concerts!"
     },
     "slideServices": {
-      "title": "More services!",
-      "text": "You can do much more with CAMPUS, explore the app to find out"
+      "title": "And even more!",
+      "text": "You can do much more with CAMPUS, but I can't explain everything here. Explore the app to find out!"
     },
     "slideDone": {
-      "title": "Made by a student",
-      "text": "This app is the work of one student (with some help here and there), so any feedback is appreciated!"
+      "title": "Your feedback is valuable!",
+      "text": "This app is the work of one student (with some help here and there), so your feedback is much appreciated!"
     },
     "updateSlide0": {
       "title": "New in this update!",
@@ -435,11 +435,6 @@
     "aprilFoolsSlide": {
       "title": "New in this update!",
       "text": "We heard you, you don't like the new design and colors, so we changed them!\nLove."
-    },
-    "buttons": {
-      "next": "Next",
-      "skip": "Skip",
-      "done": "Done"
     }
   },
   "errors": {
