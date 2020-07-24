@@ -311,7 +311,7 @@
       },
       "mascotDialog": {
         "title": "Scano...quoi ?",
-        "message": "Scanotron 3000 te permettra de scanner des QR codes Campus affichés par des clubs ou des respo d'évenements pour avoir plus d'infos !\n\nL'appareil photo ne sera jamais utilisé pour d'autres raisons.",
+        "message": "Scanotron 3000 te permet de scanner des QR codes Campus, affichés par des clubs ou des respo d'évenements, pour avoir plus d'infos !\n\nL'appareil photo ne sera jamais utilisé pour d'autres raisons.",
         "button": "Oké"
       }
     },
@@ -387,7 +387,7 @@
       "mascotDialog": {
         "title": "Un secret !",
         "message": "Tu as découvert le jeu secret, bravo !\nSi jamais tu as du temps à perdre, ce jeu est là pour toi.",
-        "button": "Youpi."
+        "button": "Youpi !"
       }
     },
     "debug": {
@@ -434,11 +434,6 @@
     "aprilFoolsSlide": {
       "title": "Nouveau dans cette mise à jour !",
       "text": "Nous vous avons entendu, vous n'aimez pas le nouveau design et couleurs, alors on les as changés !\nLa bise."
-    },
-    "buttons": {
-      "next": "Suivant",
-      "skip": "Passer",
-      "done": "Commencer"
     }
   },
   "errors": {
