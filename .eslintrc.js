@@ -13,6 +13,7 @@ module.exports = {
     jest: true,
   },
   rules: {
+    'react/jsx-filename-extension': [1, {extensions: ['.js', '.jsx']}],
     'flowtype/define-flow-type': 1,
     'flowtype/no-mixed': 2,
     'flowtype/no-primitive-constructor-types': 2,
