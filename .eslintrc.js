@@ -14,6 +14,7 @@ module.exports = {
   },
   rules: {
     'react/jsx-filename-extension': [1, {extensions: ['.js', '.jsx']}],
+    'react/static-property-placement': [2, 'static public field'],
     'flowtype/define-flow-type': 1,
     'flowtype/no-mixed': 2,
     'flowtype/no-primitive-constructor-types': 2,
@@ -37,5 +38,9 @@ module.exports = {
     flowtype: {
       onlyFilesWithFlowAnnotation: false,
     },
+  },
+  globals: {
+    fetch: false,
+    Headers: false,
   },
 };
