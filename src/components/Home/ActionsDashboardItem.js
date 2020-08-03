@@ -2,37 +2,46 @@
 
 import * as React from 'react';
 import {List, withTheme} from 'react-native-paper';
-import {View} from "react-native";
-import type {CustomTheme} from "../../managers/ThemeManager";
+import {View} from 'react-native';
 import i18n from 'i18n-js';
-import {StackNavigationProp} from "@react-navigation/stack";
+import {StackNavigationProp} from '@react-navigation/stack';
+import type {CustomTheme} from '../../managers/ThemeManager';
 
-type Props = {
-    navigation: StackNavigationProp,
-    theme: CustomTheme,
-}
+type PropsType = {
+  navigation: StackNavigationProp,
+  theme: CustomTheme,
+};
 
-class ActionsDashBoardItem extends React.Component<Props> {
+class ActionsDashBoardItem extends React.Component<PropsType> {
+  shouldComponentUpdate(nextProps: PropsType): boolean {
+    const {props} = this;
+    return nextProps.theme.dark !== props.theme.dark;
+  }
 
-    shouldComponentUpdate(nextProps: Props): boolean {
-        return (nextProps.theme.dark !== this.props.theme.dark);
-    }
-
-    render() {
-        return (
-            <View>
-                <List.Item
-                    title={i18n.t("screens.feedback.homeButtonTitle")}
-                    description={i18n.t("screens.feedback.homeButtonSubtitle")}
-                    left={props => <List.Icon {...props} icon={"comment-quote"}/>}
-                    right={props => <List.Icon {...props} icon={"chevron-right"}/>}
-                    onPress={() => this.props.navigation.navigate("feedback")}
-                    style={{paddingTop: 0, paddingBottom: 0, marginLeft: 10, marginRight: 10}}
-                />
-            </View>
-
-        );
-    }
+  render(): React.Node {
+    const {props} = this;
+    return (
+      <View>
+        <List.Item
+          title={i18n.t('screens.feedback.homeButtonTitle')}
+          description={i18n.t('screens.feedback.homeButtonSubtitle')}
+          left={({size}: {size: number}): React.Node => (
+            <List.Icon size={size} icon="comment-quote" />
+          )}
+          right={({size}: {size: number}): React.Node => (
+            <List.Icon size={size} icon="chevron-right" />
+          )}
+          onPress={(): void => props.navigation.navigate('feedback')}
+          style={{
+            paddingTop: 0,
+            paddingBottom: 0,
+            marginLeft: 10,
+            marginRight: 10,
+          }}
+        />
+      </View>
+    );
+  }
 }
 
 export default withTheme(ActionsDashBoardItem);
