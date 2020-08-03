@@ -1,6 +1,5 @@
 // @flow
 
-
 /**
  * Sanitizes the given string to improve search performance.
  *
@@ -10,11 +9,12 @@
  * @return {string} The sanitized string
  */
 export function sanitizeString(str: string): string {
-    return str.toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/ /g, "")
-        .replace(/_/g, "");
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ /g, '')
+    .replace(/_/g, '');
 }
 
 /**
@@ -24,8 +24,8 @@ export function sanitizeString(str: string): string {
  * @param query The query string used to find a match
  * @returns {boolean}
  */
-export function stringMatchQuery(str: string, query: string) {
-    return sanitizeString(str).includes(sanitizeString(query));
+export function stringMatchQuery(str: string, query: string): boolean {
+  return sanitizeString(str).includes(sanitizeString(query));
 }
 
 /**
@@ -35,10 +35,13 @@ export function stringMatchQuery(str: string, query: string) {
  * @param categories The item's categories tuple
  * @returns {boolean} True if at least one entry is in both arrays
  */
-export function isItemInCategoryFilter(filter: Array<number>, categories: [number, number]) {
-    for (const category of categories) {
-        if (filter.indexOf(category) !== -1)
-            return true;
-    }
-    return false;
+export function isItemInCategoryFilter(
+  filter: Array<number>,
+  categories: Array<number | null>,
+): boolean {
+  let itemFound = false;
+  categories.forEach((cat: number | null) => {
+    if (cat != null && filter.indexOf(cat) !== -1) itemFound = true;
+  });
+  return itemFound;
 }
