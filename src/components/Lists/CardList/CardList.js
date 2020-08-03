@@ -1,72 +1,73 @@
 // @flow
 
 import * as React from 'react';
-import {Animated, Dimensions} from "react-native";
-import ImageListItem from "./ImageListItem";
-import CardListItem from "./CardListItem";
-import type {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheet";
+import {Animated, Dimensions} from 'react-native';
+import type {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import ImageListItem from './ImageListItem';
+import CardListItem from './CardListItem';
+import type {ServiceItemType} from '../../../managers/ServicesManager';
 
-type Props = {
-    dataset: Array<cardItem>,
-    isHorizontal: boolean,
-    contentContainerStyle?: ViewStyle,
-}
-
-export type cardItem = {
-    key: string,
-    title: string,
-    subtitle: string,
-    image: string | number,
-    onPress: () => void,
+type PropsType = {
+  dataset: Array<ServiceItemType>,
+  isHorizontal?: boolean,
+  contentContainerStyle?: ViewStyle | null,
 };
 
-export type cardList = Array<cardItem>;
+export default class CardList extends React.Component<PropsType> {
+  static defaultProps = {
+    isHorizontal: false,
+    contentContainerStyle: null,
+  };
 
+  windowWidth: number;
 
-export default class CardList extends React.Component<Props> {
+  horizontalItemSize: number;
 
-    static defaultProps = {
-        isHorizontal: false,
+  constructor(props: PropsType) {
+    super(props);
+    this.windowWidth = Dimensions.get('window').width;
+    this.horizontalItemSize = this.windowWidth / 4; // So that we can fit 3 items and a part of the 4th => user knows he can scroll
+  }
+
+  getRenderItem = ({item}: {item: ServiceItemType}): React.Node => {
+    const {props} = this;
+    if (props.isHorizontal)
+      return (
+        <ImageListItem
+          item={item}
+          key={item.title}
+          width={this.horizontalItemSize}
+        />
+      );
+    return <CardListItem item={item} key={item.title} />;
+  };
+
+  keyExtractor = (item: ServiceItemType): string => item.key;
+
+  render(): React.Node {
+    const {props} = this;
+    let containerStyle = {};
+    if (props.isHorizontal) {
+      containerStyle = {
+        height: this.horizontalItemSize + 50,
+        justifyContent: 'space-around',
+      };
     }
-
-    windowWidth: number;
-    horizontalItemSize: number;
-
-    constructor(props: Props) {
-        super(props);
-        this.windowWidth = Dimensions.get('window').width;
-        this.horizontalItemSize = this.windowWidth/4; // So that we can fit 3 items and a part of the 4th => user knows he can scroll
-    }
-
-    renderItem = ({item}: { item: cardItem }) => {
-        if (this.props.isHorizontal)
-            return <ImageListItem item={item} key={item.title} width={this.horizontalItemSize}/>;
-        else
-            return <CardListItem item={item} key={item.title}/>;
-    };
-
-    keyExtractor = (item: cardItem) => item.key;
-
-    render() {
-        let containerStyle = {};
-        if (this.props.isHorizontal) {
-            containerStyle = {
-                height: this.horizontalItemSize + 50,
-                justifyContent: 'space-around',
-            };
+    return (
+      <Animated.FlatList
+        data={props.dataset}
+        renderItem={this.getRenderItem}
+        keyExtractor={this.keyExtractor}
+        numColumns={props.isHorizontal ? undefined : 2}
+        horizontal={props.isHorizontal}
+        contentContainerStyle={
+          props.isHorizontal ? containerStyle : props.contentContainerStyle
         }
-        return (
-            <Animated.FlatList
-                {...this.props}
-                data={this.props.dataset}
-                renderItem={this.renderItem}
-                keyExtractor={this.keyExtractor}
-                numColumns={this.props.isHorizontal ? undefined : 2}
-                horizontal={this.props.isHorizontal}
-                contentContainerStyle={this.props.isHorizontal ? containerStyle : this.props.contentContainerStyle}
-                pagingEnabled={this.props.isHorizontal}
-                snapToInterval={this.props.isHorizontal ? (this.horizontalItemSize+5)*3 : null}
-            />
-        );
-    }
+        pagingEnabled={props.isHorizontal}
+        snapToInterval={
+          props.isHorizontal ? (this.horizontalItemSize + 5) * 3 : null
+        }
+      />
+    );
+  }
 }

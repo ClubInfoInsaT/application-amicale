@@ -1,12 +1,12 @@
 // @flow
 
-import type {ServiceItem} from './ServicesManager';
+import type {ServiceItemType} from './ServicesManager';
 import ServicesManager from './ServicesManager';
 import {getSublistWithIds} from '../utils/Utils';
 import AsyncStorageManager from './AsyncStorageManager';
 
 export default class DashboardManager extends ServicesManager {
-  getCurrentDashboard(): Array<ServiceItem | null> {
+  getCurrentDashboard(): Array<ServiceItemType | null> {
     const dashboardIdList = AsyncStorageManager.getObject(
       AsyncStorageManager.PREFERENCES.dashboardItems.key,
     );

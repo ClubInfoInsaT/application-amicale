@@ -26,7 +26,7 @@ import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import DashboardManager from '../../managers/DashboardManager';
-import type {ServiceItem} from '../../managers/ServicesManager';
+import type {ServiceItemType} from '../../managers/ServicesManager';
 import {getDisplayEvent, getFutureEvents} from '../../utils/Home';
 // import DATA from "../dashboard_data.json";
 
@@ -230,7 +230,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param content
    * @return {*}
    */
-  getDashboardRow(content: Array<ServiceItem | null>): React.Node {
+  getDashboardRow(content: Array<ServiceItemType | null>): React.Node {
     return (
       // $FlowFixMe
       <FlatList
@@ -256,7 +256,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
   getDashboardRowRenderItem = ({
     item,
   }: {
-    item: ServiceItem | null,
+    item: ServiceItemType | null,
   }): React.Node => {
     if (item != null)
       return (
