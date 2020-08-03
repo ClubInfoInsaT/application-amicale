@@ -2,55 +2,50 @@
 
 import * as React from 'react';
 import {Button, Dialog, Paragraph, Portal} from 'react-native-paper';
-import {FlatList} from "react-native";
+import {FlatList} from 'react-native';
 
-export type OptionsDialogButton = {
-    title: string,
-    onPress: () => void,
-}
+export type OptionsDialogButtonType = {
+  title: string,
+  onPress: () => void,
+};
 
-type Props = {
-    visible: boolean,
-    title: string,
-    message: string,
-    buttons: Array<OptionsDialogButton>,
-    onDismiss: () => void,
-}
+type PropsType = {
+  visible: boolean,
+  title: string,
+  message: string,
+  buttons: Array<OptionsDialogButtonType>,
+  onDismiss: () => void,
+};
 
-class OptionsDialog extends React.PureComponent<Props> {
+class OptionsDialog extends React.PureComponent<PropsType> {
+  getButtonRender = ({item}: {item: OptionsDialogButtonType}): React.Node => {
+    return <Button onPress={item.onPress}>{item.title}</Button>;
+  };
 
-    getButtonRender = ({item}: { item: OptionsDialogButton }) => {
-        return <Button
-            onPress={item.onPress}>
-            {item.title}
-        </Button>;
-    }
+  keyExtractor = (item: OptionsDialogButtonType): string => item.title;
 
-    keyExtractor = (item: OptionsDialogButton) => item.title;
-
-    render() {
-        return (
-            <Portal>
-                <Dialog
-                    visible={this.props.visible}
-                    onDismiss={this.props.onDismiss}>
-                    <Dialog.Title>{this.props.title}</Dialog.Title>
-                    <Dialog.Content>
-                        <Paragraph>{this.props.message}</Paragraph>
-                    </Dialog.Content>
-                    <Dialog.Actions>
-                        <FlatList
-                            data={this.props.buttons}
-                            renderItem={this.getButtonRender}
-                            keyExtractor={this.keyExtractor}
-                            horizontal={true}
-                            inverted={true}
-                        />
-                    </Dialog.Actions>
-                </Dialog>
-            </Portal>
-        );
-    }
+  render(): React.Node {
+    const {props} = this;
+    return (
+      <Portal>
+        <Dialog visible={props.visible} onDismiss={props.onDismiss}>
+          <Dialog.Title>{props.title}</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>{props.message}</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <FlatList
+              data={props.buttons}
+              renderItem={this.getButtonRender}
+              keyExtractor={this.keyExtractor}
+              horizontal
+              inverted
+            />
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    );
+  }
 }
 
 export default OptionsDialog;

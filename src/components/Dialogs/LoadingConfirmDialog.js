@@ -1,92 +1,106 @@
 // @flow
 
 import * as React from 'react';
-import {ActivityIndicator, Button, Dialog, Paragraph, Portal} from 'react-native-paper';
-import i18n from "i18n-js";
+import {
+  ActivityIndicator,
+  Button,
+  Dialog,
+  Paragraph,
+  Portal,
+} from 'react-native-paper';
+import i18n from 'i18n-js';
 
-type Props = {
-    visible: boolean,
-    onDismiss: () => void,
-    onAccept: () => Promise<void>, // async function to be executed
-    title: string,
-    titleLoading: string,
-    message: string,
-    startLoading: boolean,
-}
+type PropsType = {
+  visible: boolean,
+  onDismiss?: () => void,
+  onAccept?: () => Promise<void>, // async function to be executed
+  title?: string,
+  titleLoading?: string,
+  message?: string,
+  startLoading?: boolean,
+};
 
-type State = {
-    loading: boolean,
-}
+type StateType = {
+  loading: boolean,
+};
 
-class LoadingConfirmDialog extends React.PureComponent<Props, State> {
+class LoadingConfirmDialog extends React.PureComponent<PropsType, StateType> {
+  static defaultProps = {
+    onDismiss: () => {},
+    onAccept: (): Promise<void> => {
+      return Promise.resolve();
+    },
+    title: '',
+    titleLoading: '',
+    message: '',
+    startLoading: false,
+  };
 
-    static defaultProps = {
-        title: '',
-        message: '',
-        onDismiss: () => {},
-        onAccept: () => {return Promise.resolve()},
-        startLoading: false,
-    }
-
-    state = {
-        loading: this.props.startLoading,
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      loading:
+        props.startLoading != null
+          ? props.startLoading
+          : LoadingConfirmDialog.defaultProps.startLoading,
     };
+  }
 
-    /**
-     * Set the dialog into loading state and closes it when operation finishes
-     */
-    onClickAccept = () => {
-        this.setState({loading: true});
-        this.props.onAccept().then(this.hideLoading);
-    };
+  /**
+   * Set the dialog into loading state and closes it when operation finishes
+   */
+  onClickAccept = () => {
+    const {props} = this;
+    this.setState({loading: true});
+    if (props.onAccept != null) props.onAccept().then(this.hideLoading);
+  };
 
-    /**
-     * Waits for fade out animations to finish before hiding loading
-     * @returns {TimeoutID}
-     */
-    hideLoading = () => setTimeout(() => {
-        this.setState({loading: false})
+  /**
+   * Waits for fade out animations to finish before hiding loading
+   * @returns {TimeoutID}
+   */
+  hideLoading = (): TimeoutID =>
+    setTimeout(() => {
+      this.setState({loading: false});
     }, 200);
 
-    /**
-     * Hide the dialog if it is not loading
-     */
-    onDismiss = () => {
-        if (!this.state.loading)
-            this.props.onDismiss();
-    };
+  /**
+   * Hide the dialog if it is not loading
+   */
+  onDismiss = () => {
+    const {state, props} = this;
+    if (!state.loading && props.onDismiss != null) props.onDismiss();
+  };
 
-    render() {
-        return (
-            <Portal>
-                <Dialog
-                    visible={this.props.visible}
-                    onDismiss={this.onDismiss}>
-                    <Dialog.Title>
-                        {this.state.loading
-                            ? this.props.titleLoading
-                            : this.props.title}
-                    </Dialog.Title>
-                    <Dialog.Content>
-                        {this.state.loading
-                            ? <ActivityIndicator
-                                animating={true}
-                                size={'large'}/>
-                            : <Paragraph>{this.props.message}</Paragraph>
-                        }
-                    </Dialog.Content>
-                    {this.state.loading
-                        ? null
-                        : <Dialog.Actions>
-                            <Button onPress={this.onDismiss}
-                                    style={{marginRight: 10}}>{i18n.t("dialog.cancel")}</Button>
-                            <Button onPress={this.onClickAccept}>{i18n.t("dialog.yes")}</Button>
-                        </Dialog.Actions>
-                    }
-                </Dialog>
-            </Portal>
-        );
-    }
+  render(): React.Node {
+    const {state, props} = this;
+    return (
+      <Portal>
+        <Dialog visible={props.visible} onDismiss={this.onDismiss}>
+          <Dialog.Title>
+            {state.loading ? props.titleLoading : props.title}
+          </Dialog.Title>
+          <Dialog.Content>
+            {state.loading ? (
+              <ActivityIndicator animating size="large" />
+            ) : (
+              <Paragraph>{props.message}</Paragraph>
+            )}
+          </Dialog.Content>
+          {state.loading ? null : (
+            <Dialog.Actions>
+              <Button onPress={this.onDismiss} style={{marginRight: 10}}>
+                {i18n.t('dialog.cancel')}
+              </Button>
+              <Button onPress={this.onClickAccept}>
+                {i18n.t('dialog.yes')}
+              </Button>
+            </Dialog.Actions>
+          )}
+        </Dialog>
+      </Portal>
+    );
+  }
 }
 
 export default LoadingConfirmDialog;
