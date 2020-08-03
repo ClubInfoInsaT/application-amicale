@@ -1,51 +1,59 @@
 // @flow
 
 import * as React from 'react';
-import {withCollapsible} from "../../utils/withCollapsible";
-import {Collapsible} from "react-navigation-collapsible";
-import CustomTabBar from "../Tabbar/CustomTabBar";
+import {Collapsible} from 'react-navigation-collapsible';
+import {withCollapsible} from '../../utils/withCollapsible';
+import CustomTabBar from '../Tabbar/CustomTabBar';
 
-export type CollapsibleComponentProps = {
-    children?: React.Node,
-    hasTab?: boolean,
-    onScroll?: (event: SyntheticEvent<EventTarget>) => void,
+export type CollapsibleComponentPropsType = {
+  children?: React.Node,
+  hasTab?: boolean,
+  onScroll?: (event: SyntheticEvent<EventTarget>) => void,
 };
 
-type Props = {
-    ...CollapsibleComponentProps,
-    collapsibleStack: Collapsible,
-    component: any,
-}
+type PropsType = {
+  ...CollapsibleComponentPropsType,
+  collapsibleStack: Collapsible,
+  // eslint-disable-next-line flowtype/no-weak-types
+  component: any,
+};
 
-class CollapsibleComponent extends React.Component<Props> {
+class CollapsibleComponent extends React.Component<PropsType> {
+  static defaultProps = {
+    children: null,
+    hasTab: false,
+    onScroll: null,
+  };
 
-    static defaultProps = {
-        hasTab: false,
-    }
+  onScroll = (event: SyntheticEvent<EventTarget>) => {
+    const {props} = this;
+    if (props.onScroll) props.onScroll(event);
+  };
 
-    onScroll = (event: SyntheticEvent<EventTarget>) => {
-        if (this.props.onScroll)
-            this.props.onScroll(event);
-    }
+  render(): React.Node {
+    const {props} = this;
+    const Comp = props.component;
+    const {
+      containerPaddingTop,
+      scrollIndicatorInsetTop,
+      onScrollWithListener,
+    } = props.collapsibleStack;
 
-    render() {
-        const Comp = this.props.component;
-        const {containerPaddingTop, scrollIndicatorInsetTop, onScrollWithListener} = this.props.collapsibleStack;
-        return (
-            <Comp
-                {...this.props}
-                onScroll={onScrollWithListener(this.onScroll)}
-                contentContainerStyle={{
-                    paddingTop: containerPaddingTop,
-                    paddingBottom: this.props.hasTab ? CustomTabBar.TAB_BAR_HEIGHT : 0,
-                    minHeight: '100%'
-                }}
-                scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
-            >
-                {this.props.children}
-            </Comp>
-        );
-    }
+    return (
+      <Comp
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+        onScroll={onScrollWithListener(this.onScroll)}
+        contentContainerStyle={{
+          paddingTop: containerPaddingTop,
+          paddingBottom: props.hasTab ? CustomTabBar.TAB_BAR_HEIGHT : 0,
+          minHeight: '100%',
+        }}
+        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}>
+        {props.children}
+      </Comp>
+    );
+  }
 }
 
 export default withCollapsible(CollapsibleComponent);

@@ -1,26 +1,26 @@
 // @flow
 
 import * as React from 'react';
-import {Animated} from "react-native";
-import type {CollapsibleComponentProps} from "./CollapsibleComponent";
-import CollapsibleComponent from "./CollapsibleComponent";
+import {Animated} from 'react-native';
+import type {CollapsibleComponentPropsType} from './CollapsibleComponent';
+import CollapsibleComponent from './CollapsibleComponent';
 
-type Props = {
-    ...CollapsibleComponentProps
-}
+type PropsType = {
+  ...CollapsibleComponentPropsType,
+};
 
-class CollapsibleSectionList extends React.Component<Props> {
-
-    render() {
-        return (
-            <CollapsibleComponent
-                {...this.props}
-                component={Animated.SectionList}
-            >
-                {this.props.children}
-            </CollapsibleComponent>
-        );
-    }
+// eslint-disable-next-line react/prefer-stateless-function
+class CollapsibleSectionList extends React.Component<PropsType> {
+  render(): React.Node {
+    const {props} = this;
+    return (
+      <CollapsibleComponent // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+        component={Animated.SectionList}>
+        {props.children}
+      </CollapsibleComponent>
+    );
+  }
 }
 
 export default CollapsibleSectionList;
