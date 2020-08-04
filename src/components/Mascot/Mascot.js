@@ -1,259 +1,269 @@
 // @flow
 
 import * as React from 'react';
-import * as Animatable from "react-native-animatable";
-import {Image, TouchableWithoutFeedback, View} from "react-native";
-import type {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheet";
+import * as Animatable from 'react-native-animatable';
+import {Image, TouchableWithoutFeedback, View} from 'react-native';
+import type {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-type Props = {
-    style?: ViewStyle,
-    emotion: number,
-    animated: boolean,
-    entryAnimation: Animatable.AnimatableProperties | null,
-    loopAnimation: Animatable.AnimatableProperties | null,
-    onPress?: (viewRef: AnimatableViewRef) => null,
-    onLongPress?: (viewRef: AnimatableViewRef) => null,
-}
+export type AnimatableViewRefType = {current: null | Animatable.View};
 
-type State = {
-    currentEmotion: number,
-}
-
-export type AnimatableViewRef = {current: null | Animatable.View};
-
-const MASCOT_IMAGE = require("../../../assets/mascot/mascot.png");
-const MASCOT_EYES_NORMAL = require("../../../assets/mascot/mascot_eyes_normal.png");
-const MASCOT_EYES_GIRLY = require("../../../assets/mascot/mascot_eyes_girly.png");
-const MASCOT_EYES_CUTE = require("../../../assets/mascot/mascot_eyes_cute.png");
-const MASCOT_EYES_WINK = require("../../../assets/mascot/mascot_eyes_wink.png");
-const MASCOT_EYES_HEART = require("../../../assets/mascot/mascot_eyes_heart.png");
-const MASCOT_EYES_ANGRY = require("../../../assets/mascot/mascot_eyes_angry.png");
-const MASCOT_GLASSES = require("../../../assets/mascot/mascot_glasses.png");
-const MASCOT_SUNGLASSES = require("../../../assets/mascot/mascot_sunglasses.png");
-
-export const EYE_STYLE = {
-    NORMAL: 0,
-    GIRLY: 2,
-    CUTE: 3,
-    WINK: 4,
-    HEART: 5,
-    ANGRY: 6,
-}
-
-const GLASSES_STYLE = {
-    NORMAL: 0,
-    COOl: 1
-}
-
-export const MASCOT_STYLE = {
-    NORMAL: 0,
-    HAPPY: 1,
-    GIRLY: 2,
-    WINK: 3,
-    CUTE: 4,
-    INTELLO: 5,
-    LOVE: 6,
-    COOL: 7,
-    ANGRY: 8,
-    RANDOM: 999,
+type PropsType = {
+  emotion?: number,
+  animated?: boolean,
+  style?: ViewStyle | null,
+  entryAnimation?: Animatable.AnimatableProperties | null,
+  loopAnimation?: Animatable.AnimatableProperties | null,
+  onPress?: null | ((viewRef: AnimatableViewRefType) => void),
+  onLongPress?: null | ((viewRef: AnimatableViewRefType) => void),
 };
 
+type StateType = {
+  currentEmotion: number,
+};
 
-class Mascot extends React.Component<Props, State> {
+const MASCOT_IMAGE = require('../../../assets/mascot/mascot.png');
+const MASCOT_EYES_NORMAL = require('../../../assets/mascot/mascot_eyes_normal.png');
+const MASCOT_EYES_GIRLY = require('../../../assets/mascot/mascot_eyes_girly.png');
+const MASCOT_EYES_CUTE = require('../../../assets/mascot/mascot_eyes_cute.png');
+const MASCOT_EYES_WINK = require('../../../assets/mascot/mascot_eyes_wink.png');
+const MASCOT_EYES_HEART = require('../../../assets/mascot/mascot_eyes_heart.png');
+const MASCOT_EYES_ANGRY = require('../../../assets/mascot/mascot_eyes_angry.png');
+const MASCOT_GLASSES = require('../../../assets/mascot/mascot_glasses.png');
+const MASCOT_SUNGLASSES = require('../../../assets/mascot/mascot_sunglasses.png');
 
-    static defaultProps = {
-        animated: false,
-        entryAnimation: {
-            useNativeDriver: true,
-            animation: "rubberBand",
-            duration: 2000,
-        },
-        loopAnimation: {
-            useNativeDriver: true,
-            animation: "swing",
-            duration: 2000,
-            iterationDelay: 250,
-            iterationCount: "infinite",
-        },
-        clickAnimation: {
-            useNativeDriver: true,
-            animation: "rubberBand",
-            duration: 2000,
-        },
-    }
+export const EYE_STYLE = {
+  NORMAL: 0,
+  GIRLY: 2,
+  CUTE: 3,
+  WINK: 4,
+  HEART: 5,
+  ANGRY: 6,
+};
 
-    viewRef: AnimatableViewRef;
-    eyeList: { [key: number]: number | string };
-    glassesList: { [key: number]: number | string };
+const GLASSES_STYLE = {
+  NORMAL: 0,
+  COOl: 1,
+};
 
-    onPress: (viewRef: AnimatableViewRef) => null;
-    onLongPress: (viewRef: AnimatableViewRef) => null;
+export const MASCOT_STYLE = {
+  NORMAL: 0,
+  HAPPY: 1,
+  GIRLY: 2,
+  WINK: 3,
+  CUTE: 4,
+  INTELLO: 5,
+  LOVE: 6,
+  COOL: 7,
+  ANGRY: 8,
+  RANDOM: 999,
+};
 
-    initialEmotion: number;
+class Mascot extends React.Component<PropsType, StateType> {
+  static defaultProps = {
+    emotion: MASCOT_STYLE.NORMAL,
+    animated: false,
+    style: null,
+    entryAnimation: {
+      useNativeDriver: true,
+      animation: 'rubberBand',
+      duration: 2000,
+    },
+    loopAnimation: {
+      useNativeDriver: true,
+      animation: 'swing',
+      duration: 2000,
+      iterationDelay: 250,
+      iterationCount: 'infinite',
+    },
+    onPress: null,
+    onLongPress: null,
+  };
 
-    constructor(props: Props) {
-        super(props);
-        this.viewRef = React.createRef();
-        this.eyeList = {};
-        this.glassesList = {};
-        this.eyeList[EYE_STYLE.NORMAL] = MASCOT_EYES_NORMAL;
-        this.eyeList[EYE_STYLE.GIRLY] = MASCOT_EYES_GIRLY;
-        this.eyeList[EYE_STYLE.CUTE] = MASCOT_EYES_CUTE;
-        this.eyeList[EYE_STYLE.WINK] = MASCOT_EYES_WINK;
-        this.eyeList[EYE_STYLE.HEART] = MASCOT_EYES_HEART;
-        this.eyeList[EYE_STYLE.ANGRY] = MASCOT_EYES_ANGRY;
+  viewRef: AnimatableViewRefType;
 
-        this.glassesList[GLASSES_STYLE.NORMAL] = MASCOT_GLASSES;
-        this.glassesList[GLASSES_STYLE.COOl] = MASCOT_SUNGLASSES;
+  eyeList: {[key: number]: number | string};
 
-        this.initialEmotion = this.props.emotion;
+  glassesList: {[key: number]: number | string};
 
-        if (this.initialEmotion === MASCOT_STYLE.RANDOM)
-            this.initialEmotion = Math.floor(Math.random() * MASCOT_STYLE.ANGRY) + 1;
+  onPress: (viewRef: AnimatableViewRefType) => void;
 
-        this.state = {
-            currentEmotion: this.initialEmotion
+  onLongPress: (viewRef: AnimatableViewRefType) => void;
+
+  initialEmotion: number;
+
+  constructor(props: PropsType) {
+    super(props);
+    this.viewRef = React.createRef();
+    this.eyeList = {};
+    this.glassesList = {};
+    this.eyeList[EYE_STYLE.NORMAL] = MASCOT_EYES_NORMAL;
+    this.eyeList[EYE_STYLE.GIRLY] = MASCOT_EYES_GIRLY;
+    this.eyeList[EYE_STYLE.CUTE] = MASCOT_EYES_CUTE;
+    this.eyeList[EYE_STYLE.WINK] = MASCOT_EYES_WINK;
+    this.eyeList[EYE_STYLE.HEART] = MASCOT_EYES_HEART;
+    this.eyeList[EYE_STYLE.ANGRY] = MASCOT_EYES_ANGRY;
+
+    this.glassesList[GLASSES_STYLE.NORMAL] = MASCOT_GLASSES;
+    this.glassesList[GLASSES_STYLE.COOl] = MASCOT_SUNGLASSES;
+
+    this.initialEmotion =
+      props.emotion != null ? props.emotion : Mascot.defaultProps.emotion;
+
+    if (this.initialEmotion === MASCOT_STYLE.RANDOM)
+      this.initialEmotion = Math.floor(Math.random() * MASCOT_STYLE.ANGRY) + 1;
+
+    this.state = {
+      currentEmotion: this.initialEmotion,
+    };
+
+    if (props.onPress == null) {
+      this.onPress = (viewRef: AnimatableViewRefType) => {
+        const ref = viewRef.current;
+        if (ref != null) {
+          this.setState({currentEmotion: MASCOT_STYLE.LOVE});
+          ref.rubberBand(1500).then(() => {
+            this.setState({currentEmotion: this.initialEmotion});
+          });
         }
+      };
+    } else this.onPress = props.onPress;
 
-        if (this.props.onPress == null) {
-            this.onPress = (viewRef: AnimatableViewRef) => {
-                let ref = viewRef.current;
-                if (ref != null) {
-                    this.setState({currentEmotion: MASCOT_STYLE.LOVE});
-                    ref.rubberBand(1500).then(() => {
-                        this.setState({currentEmotion: this.initialEmotion});
-                    });
-
-                }
-                return null;
-            }
-        } else
-            this.onPress = this.props.onPress;
-
-        if (this.props.onLongPress == null) {
-            this.onLongPress = (viewRef: AnimatableViewRef) => {
-                let ref = viewRef.current;
-                if (ref != null) {
-                    this.setState({currentEmotion: MASCOT_STYLE.ANGRY});
-                    ref.tada(1000).then(() => {
-                        this.setState({currentEmotion: this.initialEmotion});
-                    });
-
-                }
-                return null;
-            }
-        } else
-            this.onLongPress = this.props.onLongPress;
-
-    }
-
-    getGlasses(style: number) {
-        const glasses = this.glassesList[style];
-        return <Image
-            key={"glasses"}
-            source={glasses != null ? glasses : this.glassesList[GLASSES_STYLE.NORMAL]}
-            style={{
-                position: "absolute",
-                top: "15%",
-                left: 0,
-                width: "100%",
-                height: "100%",
-            }}
-        />
-    }
-
-    getEye(style: number, isRight: boolean, rotation: string="0deg") {
-        const eye = this.eyeList[style];
-        return <Image
-            key={isRight ? "right" : "left"}
-            source={eye != null ? eye : this.eyeList[EYE_STYLE.NORMAL]}
-            style={{
-                position: "absolute",
-                top: "15%",
-                left: isRight ? "-11%" : "11%",
-                width: "100%",
-                height: "100%",
-                transform: [{rotateY: rotation}]
-            }}
-        />
-    }
-
-    getEyes(emotion: number) {
-        let final = [];
-        final.push(<View
-            key={"container"}
-            style={{
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-            }}/>);
-        if (emotion === MASCOT_STYLE.CUTE) {
-            final.push(this.getEye(EYE_STYLE.CUTE, true));
-            final.push(this.getEye(EYE_STYLE.CUTE, false));
-        } else if (emotion === MASCOT_STYLE.GIRLY) {
-            final.push(this.getEye(EYE_STYLE.GIRLY, true));
-            final.push(this.getEye(EYE_STYLE.GIRLY, false));
-        } else if (emotion === MASCOT_STYLE.HAPPY) {
-            final.push(this.getEye(EYE_STYLE.WINK, true));
-            final.push(this.getEye(EYE_STYLE.WINK, false));
-        } else if (emotion === MASCOT_STYLE.WINK) {
-            final.push(this.getEye(EYE_STYLE.WINK, true));
-            final.push(this.getEye(EYE_STYLE.NORMAL, false));
-        } else if (emotion === MASCOT_STYLE.LOVE) {
-            final.push(this.getEye(EYE_STYLE.HEART, true));
-            final.push(this.getEye(EYE_STYLE.HEART, false));
-        } else if (emotion === MASCOT_STYLE.ANGRY) {
-            final.push(this.getEye(EYE_STYLE.ANGRY, true));
-            final.push(this.getEye(EYE_STYLE.ANGRY, false, "180deg"));
-        } else if (emotion === MASCOT_STYLE.COOL) {
-            final.push(this.getGlasses(GLASSES_STYLE.COOl));
-        } else {
-            final.push(this.getEye(EYE_STYLE.NORMAL, true));
-            final.push(this.getEye(EYE_STYLE.NORMAL, false));
+    if (props.onLongPress == null) {
+      this.onLongPress = (viewRef: AnimatableViewRefType) => {
+        const ref = viewRef.current;
+        if (ref != null) {
+          this.setState({currentEmotion: MASCOT_STYLE.ANGRY});
+          ref.tada(1000).then(() => {
+            this.setState({currentEmotion: this.initialEmotion});
+          });
         }
+      };
+    } else this.onLongPress = props.onLongPress;
+  }
 
-        if (emotion === MASCOT_STYLE.INTELLO) { // Needs to have normal eyes behind the glasses
-            final.push(this.getGlasses(GLASSES_STYLE.NORMAL));
+  getGlasses(style: number): React.Node {
+    const glasses = this.glassesList[style];
+    return (
+      <Image
+        key="glasses"
+        source={
+          glasses != null ? glasses : this.glassesList[GLASSES_STYLE.NORMAL]
         }
-        final.push(<View key={"container2"}/>);
-        return final;
+        style={{
+          position: 'absolute',
+          top: '15%',
+          left: 0,
+          width: '100%',
+          height: '100%',
+        }}
+      />
+    );
+  }
+
+  getEye(
+    style: number,
+    isRight: boolean,
+    rotation: string = '0deg',
+  ): React.Node {
+    const eye = this.eyeList[style];
+    return (
+      <Image
+        key={isRight ? 'right' : 'left'}
+        source={eye != null ? eye : this.eyeList[EYE_STYLE.NORMAL]}
+        style={{
+          position: 'absolute',
+          top: '15%',
+          left: isRight ? '-11%' : '11%',
+          width: '100%',
+          height: '100%',
+          transform: [{rotateY: rotation}],
+        }}
+      />
+    );
+  }
+
+  getEyes(emotion: number): React.Node {
+    const final = [];
+    final.push(
+      <View
+        key="container"
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+        }}
+      />,
+    );
+    if (emotion === MASCOT_STYLE.CUTE) {
+      final.push(this.getEye(EYE_STYLE.CUTE, true));
+      final.push(this.getEye(EYE_STYLE.CUTE, false));
+    } else if (emotion === MASCOT_STYLE.GIRLY) {
+      final.push(this.getEye(EYE_STYLE.GIRLY, true));
+      final.push(this.getEye(EYE_STYLE.GIRLY, false));
+    } else if (emotion === MASCOT_STYLE.HAPPY) {
+      final.push(this.getEye(EYE_STYLE.WINK, true));
+      final.push(this.getEye(EYE_STYLE.WINK, false));
+    } else if (emotion === MASCOT_STYLE.WINK) {
+      final.push(this.getEye(EYE_STYLE.WINK, true));
+      final.push(this.getEye(EYE_STYLE.NORMAL, false));
+    } else if (emotion === MASCOT_STYLE.LOVE) {
+      final.push(this.getEye(EYE_STYLE.HEART, true));
+      final.push(this.getEye(EYE_STYLE.HEART, false));
+    } else if (emotion === MASCOT_STYLE.ANGRY) {
+      final.push(this.getEye(EYE_STYLE.ANGRY, true));
+      final.push(this.getEye(EYE_STYLE.ANGRY, false, '180deg'));
+    } else if (emotion === MASCOT_STYLE.COOL) {
+      final.push(this.getGlasses(GLASSES_STYLE.COOl));
+    } else {
+      final.push(this.getEye(EYE_STYLE.NORMAL, true));
+      final.push(this.getEye(EYE_STYLE.NORMAL, false));
     }
 
-    render() {
-        const entryAnimation = this.props.animated ? this.props.entryAnimation : null;
-        const loopAnimation = this.props.animated ? this.props.loopAnimation : null;
-        return (
+    if (emotion === MASCOT_STYLE.INTELLO) {
+      // Needs to have normal eyes behind the glasses
+      final.push(this.getGlasses(GLASSES_STYLE.NORMAL));
+    }
+    final.push(<View key="container2" />);
+    return final;
+  }
+
+  render(): React.Node {
+    const {props, state} = this;
+    const entryAnimation = props.animated ? props.entryAnimation : null;
+    const loopAnimation = props.animated ? props.loopAnimation : null;
+    return (
+      <Animatable.View
+        style={{
+          aspectRatio: 1,
+          ...props.style,
+        }}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...entryAnimation}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            this.onPress(this.viewRef);
+          }}
+          onLongPress={() => {
+            this.onLongPress(this.viewRef);
+          }}>
+          <Animatable.View ref={this.viewRef}>
             <Animatable.View
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...loopAnimation}>
+              <Image
+                source={MASCOT_IMAGE}
                 style={{
-                    aspectRatio: 1,
-                    ...this.props.style
+                  width: '100%',
+                  height: '100%',
                 }}
-                {...entryAnimation}
-            >
-                <TouchableWithoutFeedback
-                    onPress={() => this.onPress(this.viewRef)}
-                    onLongPress={() => this.onLongPress(this.viewRef)}
-                >
-                    <Animatable.View
-                        ref={this.viewRef}
-                    >
-                        <Animatable.View
-                            {...loopAnimation}
-                        >
-                            <Image
-                                source={MASCOT_IMAGE}
-                                style={{
-                                    width: "100%",
-                                    height:"100%",
-                                }}
-                            />
-                            {this.getEyes(this.state.currentEmotion)}
-                        </Animatable.View>
-                    </Animatable.View>
-                </TouchableWithoutFeedback>
+              />
+              {this.getEyes(state.currentEmotion)}
             </Animatable.View>
-        );
-    }
+          </Animatable.View>
+        </TouchableWithoutFeedback>
+      </Animatable.View>
+    );
+  }
 }
 
 export default Mascot;
