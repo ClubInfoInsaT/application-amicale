@@ -1,44 +1,45 @@
 // @flow
 
 import * as React from 'react';
-import {Platform} from "react-native";
-import i18n from "i18n-js";
-import {Searchbar} from "react-native-paper";
-import {stringMatchQuery} from "../../utils/Search";
-import WebSectionList from "../../components/Screens/WebSectionList";
-import GroupListAccordion from "../../components/Lists/PlanexGroups/GroupListAccordion";
-import AsyncStorageManager from "../../managers/AsyncStorageManager";
-import {StackNavigationProp} from "@react-navigation/stack";
+import {Platform} from 'react-native';
+import i18n from 'i18n-js';
+import {Searchbar} from 'react-native-paper';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {stringMatchQuery} from '../../utils/Search';
+import WebSectionList from '../../components/Screens/WebSectionList';
+import GroupListAccordion from '../../components/Lists/PlanexGroups/GroupListAccordion';
+import AsyncStorageManager from '../../managers/AsyncStorageManager';
 
 const LIST_ITEM_HEIGHT = 70;
 
-export type group = {
-    name: string,
-    id: number,
-    isFav: boolean,
+export type PlanexGroupType = {
+  name: string,
+  id: number,
+  isFav: boolean,
 };
 
-export type groupCategory = {
-    name: string,
-    id: number,
-    content: Array<group>,
+export type PlanexGroupCategoryType = {
+  name: string,
+  id: number,
+  content: Array<PlanexGroupType>,
 };
 
-type Props = {
-    navigation: StackNavigationProp,
-}
-
-type State = {
-    currentSearchString: string,
-    favoriteGroups: Array<group>,
+type PropsType = {
+  navigation: StackNavigationProp,
 };
 
-function sortName(a: group | groupCategory, b: group | groupCategory) {
-    if (a.name.toLowerCase() < b.name.toLowerCase())
-        return -1;
-    if (a.name.toLowerCase() > b.name.toLowerCase())
-        return 1;
-    return 0;
+type StateType = {
+  currentSearchString: string,
+  favoriteGroups: Array<PlanexGroupType>,
+};
+
+function sortName(
+  a: PlanexGroupType | PlanexGroupCategoryType,
+  b: PlanexGroupType | PlanexGroupCategoryType,
+): number {
+  if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+  if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+  return 0;
 }
 
 const GROUPS_URL = 'http://planex.insa-toulouse.fr/wsAdeGrp.php?projectId=1';
@@ -47,232 +48,263 @@ const REPLACE_REGEX = /_/g;
 /**
  * Class defining planex group selection screen.
  */
-class GroupSelectionScreen extends React.Component<Props, State> {
-
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            currentSearchString: '',
-            favoriteGroups: AsyncStorageManager.getObject(AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key),
-        };
+class GroupSelectionScreen extends React.Component<PropsType, StateType> {
+  /**
+   * Removes the given group from the given array
+   *
+   * @param favorites The array containing favorites groups
+   * @param group The group to remove from the array
+   */
+  static removeGroupFromFavorites(
+    favorites: Array<PlanexGroupType>,
+    group: PlanexGroupType,
+  ) {
+    for (let i = 0; i < favorites.length; i += 1) {
+      if (group.id === favorites[i].id) {
+        favorites.splice(i, 1);
+        break;
+      }
     }
+  }
 
-    /**
-     * Creates the header content
-     */
-    componentDidMount() {
-        this.props.navigation.setOptions({
-            headerTitle: this.getSearchBar,
-            headerBackTitleVisible: false,
-            headerTitleContainerStyle: Platform.OS === 'ios' ?
-                {marginHorizontal: 0, width: '70%'} :
-                {marginHorizontal: 0, right: 50, left: 50},
-        });
-    }
+  /**
+   * Adds the given group to the given array
+   *
+   * @param favorites The array containing favorites groups
+   * @param group The group to add to the array
+   */
+  static addGroupToFavorites(
+    favorites: Array<PlanexGroupType>,
+    group: PlanexGroupType,
+  ) {
+    const favGroup = {...group};
+    favGroup.isFav = true;
+    favorites.push(favGroup);
+    favorites.sort(sortName);
+  }
 
-    /**
-     * Gets the header search bar
-     *
-     * @return {*}
-     */
-    getSearchBar = () => {
-        return (
-            <Searchbar
-                placeholder={i18n.t('screens.proximo.search')}
-                onChangeText={this.onSearchStringChange}
-            />
-        );
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      currentSearchString: '',
+      favoriteGroups: AsyncStorageManager.getObject(
+        AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
+      ),
     };
+  }
 
-    /**
-     * Callback used when the search changes
-     *
-     * @param str The new search string
-     */
-    onSearchStringChange = (str: string) => {
-        this.setState({currentSearchString: str})
-    };
+  /**
+   * Creates the header content
+   */
+  componentDidMount() {
+    const [navigation] = this.props;
+    navigation.setOptions({
+      headerTitle: this.getSearchBar,
+      headerBackTitleVisible: false,
+      headerTitleContainerStyle:
+        Platform.OS === 'ios'
+          ? {marginHorizontal: 0, width: '70%'}
+          : {marginHorizontal: 0, right: 50, left: 50},
+    });
+  }
 
-    /**
-     * Callback used when clicking an article in the list.
-     * It opens the modal to show detailed information about the article
-     *
-     * @param item The article pressed
-     */
-    onListItemPress = (item: group) => {
-        this.props.navigation.navigate("planex", {
-            screen: "index",
-            params: {group: item}
-        });
-    };
+  /**
+   * Gets the header search bar
+   *
+   * @return {*}
+   */
+  getSearchBar = (): React.Node => {
+    return (
+      <Searchbar
+        placeholder={i18n.t('screens.proximo.search')}
+        onChangeText={this.onSearchStringChange}
+      />
+    );
+  };
 
-    /**
-     * Callback used when the user clicks on the favorite button
-     *
-     * @param item The item to add/remove from favorites
-     */
-    onListFavoritePress = (item: group) => {
-        this.updateGroupFavorites(item);
-    };
-
-    /**
-     * Checks if the given group is in the favorites list
-     *
-     * @param group The group to check
-     * @returns {boolean}
-     */
-    isGroupInFavorites(group: group) {
-        let isFav = false;
-        for (let i = 0; i < this.state.favoriteGroups.length; i++) {
-            if (group.id === this.state.favoriteGroups[i].id) {
-                isFav = true;
-                break;
-            }
-        }
-        return isFav;
+  /**
+   * Gets a render item for the given article
+   *
+   * @param item The article to render
+   * @return {*}
+   */
+  getRenderItem = ({item}: {item: PlanexGroupCategoryType}): React.Node => {
+    const {currentSearchString, favoriteGroups} = this.state;
+    if (this.shouldDisplayAccordion(item)) {
+      return (
+        <GroupListAccordion
+          item={item}
+          onGroupPress={this.onListItemPress}
+          onFavoritePress={this.onListFavoritePress}
+          currentSearchString={currentSearchString}
+          favoriteNumber={favoriteGroups.length}
+          height={LIST_ITEM_HEIGHT}
+        />
+      );
     }
+    return null;
+  };
 
-    /**
-     * Removes the given group from the given array
-     *
-     * @param favorites The array containing favorites groups
-     * @param group The group to remove from the array
-     */
-    removeGroupFromFavorites(favorites: Array<group>, group: group) {
-        for (let i = 0; i < favorites.length; i++) {
-            if (group.id === favorites[i].id) {
-                favorites.splice(i, 1);
-                break;
-            }
-        }
+  /**
+   * Replaces underscore by spaces and sets the favorite state of every group in the given category
+   *
+   * @param groups The groups to format
+   * @return {Array<PlanexGroupType>}
+   */
+  getFormattedGroups(groups: Array<PlanexGroupType>): Array<PlanexGroupType> {
+    return groups.map((group: PlanexGroupType): PlanexGroupType => {
+      const newGroup = {...group};
+      newGroup.name = group.name.replace(REPLACE_REGEX, ' ');
+      newGroup.isFav = this.isGroupInFavorites(group);
+      return newGroup;
+    });
+  }
+
+  /**
+   * Creates the dataset to be used in the FlatList
+   *
+   * @param fetchedData
+   * @return {*}
+   * */
+  createDataset = (fetchedData: {
+    [key: string]: PlanexGroupCategoryType,
+  }): Array<{title: string, data: Array<PlanexGroupCategoryType>}> => {
+    return [
+      {
+        title: '',
+        data: this.generateData(fetchedData),
+      },
+    ];
+  };
+
+  /**
+   * Callback used when the search changes
+   *
+   * @param str The new search string
+   */
+  onSearchStringChange = (str: string) => {
+    this.setState({currentSearchString: str});
+  };
+
+  /**
+   * Callback used when clicking an article in the list.
+   * It opens the modal to show detailed information about the article
+   *
+   * @param item The article pressed
+   */
+  onListItemPress = (item: PlanexGroupType) => {
+    const {navigation} = this.props;
+    navigation.navigate('planex', {
+      screen: 'index',
+      params: {group: item},
+    });
+  };
+
+  /**
+   * Callback used when the user clicks on the favorite button
+   *
+   * @param item The item to add/remove from favorites
+   */
+  onListFavoritePress = (item: PlanexGroupType) => {
+    this.updateGroupFavorites(item);
+  };
+
+  /**
+   * Checks if the given group is in the favorites list
+   *
+   * @param group The group to check
+   * @returns {boolean}
+   */
+  isGroupInFavorites(group: PlanexGroupType): boolean {
+    let isFav = false;
+    const {favoriteGroups} = this.state;
+    favoriteGroups.forEach((favGroup: PlanexGroupType) => {
+      if (group.id === favGroup.id) isFav = true;
+    });
+    return isFav;
+  }
+
+  /**
+   * Adds or removes the given group to the favorites list, depending on whether it is already in it or not.
+   * Favorites are then saved in user preferences
+   *
+   * @param group The group to add/remove to favorites
+   */
+  updateGroupFavorites(group: PlanexGroupType) {
+    const {favoriteGroups} = this.state;
+    const newFavorites = [...favoriteGroups];
+    if (this.isGroupInFavorites(group))
+      GroupSelectionScreen.removeGroupFromFavorites(newFavorites, group);
+    else GroupSelectionScreen.addGroupToFavorites(newFavorites, group);
+    this.setState({favoriteGroups: newFavorites});
+    AsyncStorageManager.set(
+      AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
+      newFavorites,
+    );
+  }
+
+  /**
+   * Checks whether to display the given group category, depending on user search query
+   *
+   * @param item The group category
+   * @returns {boolean}
+   */
+  shouldDisplayAccordion(item: PlanexGroupCategoryType): boolean {
+    const {currentSearchString} = this.state;
+    let shouldDisplay = false;
+    for (let i = 0; i < item.content.length; i += 1) {
+      if (stringMatchQuery(item.content[i].name, currentSearchString)) {
+        shouldDisplay = true;
+        break;
+      }
     }
+    return shouldDisplay;
+  }
 
-    /**
-     * Adds the given group to the given array
-     *
-     * @param favorites The array containing favorites groups
-     * @param group The group to add to the array
-     */
-    addGroupToFavorites(favorites: Array<group>, group: group) {
-        group.isFav = true;
-        favorites.push(group);
-        favorites.sort(sortName);
-    }
+  /**
+   * Generates the dataset to be used in the FlatList.
+   * This improves formatting of group names, sorts alphabetically the categories, and adds favorites at the top.
+   *
+   * @param fetchedData The raw data fetched from the server
+   * @returns {[]}
+   */
+  generateData(fetchedData: {
+    [key: string]: PlanexGroupCategoryType,
+  }): Array<PlanexGroupCategoryType> {
+    const {favoriteGroups} = this.state;
+    const data = [];
+    // eslint-disable-next-line flowtype/no-weak-types
+    (Object.values(fetchedData): Array<any>).forEach(
+      (category: PlanexGroupCategoryType) => {
+        const newCat = {...category};
+        newCat.content = this.getFormattedGroups(category.content);
+        data.push(newCat);
+      },
+    );
+    data.sort(sortName);
+    data.unshift({
+      name: i18n.t('screens.planex.favorites'),
+      id: 0,
+      content: favoriteGroups,
+    });
+    return data;
+  }
 
-    /**
-     * Adds or removes the given group to the favorites list, depending on whether it is already in it or not.
-     * Favorites are then saved in user preferences
-     *
-     * @param group The group to add/remove to favorites
-     */
-    updateGroupFavorites(group: group) {
-        let newFavorites = [...this.state.favoriteGroups]
-        if (this.isGroupInFavorites(group))
-            this.removeGroupFromFavorites(newFavorites, group);
-        else
-            this.addGroupToFavorites(newFavorites, group);
-        this.setState({favoriteGroups: newFavorites})
-        AsyncStorageManager.set(AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key, newFavorites);
-    }
-
-    /**
-     * Checks whether to display the given group category, depending on user search query
-     *
-     * @param item The group category
-     * @returns {boolean}
-     */
-    shouldDisplayAccordion(item: groupCategory) {
-        let shouldDisplay = false;
-        for (let i = 0; i < item.content.length; i++) {
-            if (stringMatchQuery(item.content[i].name, this.state.currentSearchString)) {
-                shouldDisplay = true;
-                break;
-            }
-        }
-        return shouldDisplay;
-    }
-
-    /**
-     * Gets a render item for the given article
-     *
-     * @param item The article to render
-     * @return {*}
-     */
-    renderItem = ({item}: { item: groupCategory }) => {
-        if (this.shouldDisplayAccordion(item)) {
-            return (
-                <GroupListAccordion
-                    item={item}
-                    onGroupPress={this.onListItemPress}
-                    onFavoritePress={this.onListFavoritePress}
-                    currentSearchString={this.state.currentSearchString}
-                    favoriteNumber={this.state.favoriteGroups.length}
-                    height={LIST_ITEM_HEIGHT}
-                />
-            );
-        } else
-            return null;
-    };
-
-    /**
-     * Generates the dataset to be used in the FlatList.
-     * This improves formatting of group names, sorts alphabetically the categories, and adds favorites at the top.
-     *
-     * @param fetchedData The raw data fetched from the server
-     * @returns {[]}
-     */
-    generateData(fetchedData: { [key: string]: groupCategory }) {
-        let data = [];
-        for (let key in fetchedData) {
-            this.formatGroups(fetchedData[key]);
-            data.push(fetchedData[key]);
-        }
-        data.sort(sortName);
-        data.unshift({name: i18n.t("screens.planex.favorites"), id: 0, content: this.state.favoriteGroups});
-        return data;
-    }
-
-    /**
-     * Replaces underscore by spaces and sets the favorite state of every group in the given category
-     *
-     * @param item The category containing groups to format
-     */
-    formatGroups(item: groupCategory) {
-        for (let i = 0; i < item.content.length; i++) {
-            item.content[i].name = item.content[i].name.replace(REPLACE_REGEX, " ")
-            item.content[i].isFav = this.isGroupInFavorites(item.content[i]);
-        }
-    }
-
-    /**
-     * Creates the dataset to be used in the FlatList
-     *
-     * @param fetchedData
-     * @return {*}
-     * */
-    createDataset = (fetchedData: { [key: string]: groupCategory }) => {
-        return [
-            {
-                title: '',
-                data: this.generateData(fetchedData)
-            }
-        ];
-    }
-
-    render() {
-        return (
-            <WebSectionList
-                {...this.props}
-                createDataset={this.createDataset}
-                autoRefreshTime={0}
-                refreshOnFocus={false}
-                fetchUrl={GROUPS_URL}
-                renderItem={this.renderItem}
-                updateData={this.state.currentSearchString + this.state.favoriteGroups.length}
-                itemHeight={LIST_ITEM_HEIGHT}
-            />
-        );
-    }
+  render(): React.Node {
+    const {props, state} = this;
+    return (
+      <WebSectionList
+        navigation={props.navigation}
+        createDataset={this.createDataset}
+        autoRefreshTime={0}
+        refreshOnFocus={false}
+        fetchUrl={GROUPS_URL}
+        renderItem={this.getRenderItem}
+        updateData={state.currentSearchString + state.favoriteGroups.length}
+        itemHeight={LIST_ITEM_HEIGHT}
+      />
+    );
+  }
 }
 
 export default GroupSelectionScreen;

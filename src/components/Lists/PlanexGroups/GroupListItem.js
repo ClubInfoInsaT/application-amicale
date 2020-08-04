@@ -2,65 +2,67 @@
 
 import * as React from 'react';
 import {IconButton, List, withTheme} from 'react-native-paper';
-import type {CustomTheme} from "../../../managers/ThemeManager";
-import type {group} from "../../../screens/Planex/GroupSelectionScreen";
+import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {PlanexGroupType} from '../../../screens/Planex/GroupSelectionScreen';
 
-type Props = {
-    theme: CustomTheme,
-    onPress: () => void,
-    onStarPress: () => void,
-    item: group,
-    height: number,
-}
+type PropsType = {
+  theme: CustomTheme,
+  onPress: () => void,
+  onStarPress: () => void,
+  item: PlanexGroupType,
+  height: number,
+};
 
-type State = {
-    isFav: boolean,
-}
+type StateType = {
+  isFav: boolean,
+};
 
-class GroupListItem extends React.Component<Props, State> {
+class GroupListItem extends React.Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      isFav: props.item.isFav !== undefined && props.item.isFav,
+    };
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            isFav: (props.item.isFav !== undefined && props.item.isFav),
-        }
-    }
+  shouldComponentUpdate(prevProps: PropsType, prevState: StateType): boolean {
+    const {isFav} = this.state;
+    return prevState.isFav !== isFav;
+  }
 
-    shouldComponentUpdate(prevProps: Props, prevState: State) {
-        return (prevState.isFav !== this.state.isFav);
-    }
+  onStarPress = () => {
+    const {props} = this;
+    this.setState((prevState: StateType): StateType => ({
+      isFav: !prevState.isFav,
+    }));
+    props.onStarPress();
+  };
 
-    onStarPress = () => {
-        this.setState({isFav: !this.state.isFav});
-        this.props.onStarPress();
-    }
-
-    render() {
-        const colors = this.props.theme.colors;
-        return (
-            <List.Item
-                title={this.props.item.name}
-                onPress={this.props.onPress}
-                left={props =>
-                    <List.Icon
-                        {...props}
-                        icon={"chevron-right"}/>}
-                right={props =>
-                    <IconButton
-                        {...props}
-                        icon={"star"}
-                        onPress={this.onStarPress}
-                        color={this.state.isFav
-                            ? colors.tetrisScore
-                            : props.color}
-                    />}
-                style={{
-                    height: this.props.height,
-                    justifyContent: 'center',
-                }}
-            />
-        );
-    }
+  render(): React.Node {
+    const {props, state} = this;
+    const {colors} = props.theme;
+    return (
+      <List.Item
+        title={props.item.name}
+        onPress={props.onPress}
+        left={({size}: {size: number}): React.Node => (
+          <List.Icon size={size} icon="chevron-right" />
+        )}
+        right={({size, color}: {size: number, color: string}): React.Node => (
+          <IconButton
+            size={size}
+            icon="star"
+            onPress={this.onStarPress}
+            color={state.isFav ? colors.tetrisScore : color}
+          />
+        )}
+        style={{
+          height: props.height,
+          justifyContent: 'center',
+        }}
+      />
+    );
+  }
 }
 
 export default withTheme(GroupListItem);
