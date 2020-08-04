@@ -1,60 +1,63 @@
-import * as React from 'react';
-import {View} from "react-native";
-import {withTheme} from 'react-native-paper';
-import {Agenda} from "react-native-calendars";
+// @flow
 
-type Props = {
-    theme: Object,
-}
+import * as React from 'react';
+import {View} from 'react-native';
+import {withTheme} from 'react-native-paper';
+import {Agenda} from 'react-native-calendars';
+import type {CustomTheme} from '../../managers/ThemeManager';
+
+type PropsType = {
+  theme: CustomTheme,
+  onRef: (ref: Agenda) => void,
+};
 
 /**
  * Abstraction layer for Agenda component, using custom configuration
  */
-class CustomAgenda extends React.Component<Props> {
+class CustomAgenda extends React.Component<PropsType> {
+  getAgenda(): React.Node {
+    const {props} = this;
+    return (
+      <Agenda
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+        ref={props.onRef}
+        theme={{
+          backgroundColor: props.theme.colors.agendaBackgroundColor,
+          calendarBackground: props.theme.colors.background,
+          textSectionTitleColor: props.theme.colors.agendaDayTextColor,
+          selectedDayBackgroundColor: props.theme.colors.primary,
+          selectedDayTextColor: '#ffffff',
+          todayTextColor: props.theme.colors.primary,
+          dayTextColor: props.theme.colors.text,
+          textDisabledColor: props.theme.colors.agendaDayTextColor,
+          dotColor: props.theme.colors.primary,
+          selectedDotColor: '#ffffff',
+          arrowColor: 'orange',
+          monthTextColor: props.theme.colors.primary,
+          indicatorColor: props.theme.colors.primary,
+          textDayFontWeight: '300',
+          textMonthFontWeight: 'bold',
+          textDayHeaderFontWeight: '300',
+          textDayFontSize: 16,
+          textMonthFontSize: 16,
+          textDayHeaderFontSize: 16,
+          agendaDayTextColor: props.theme.colors.agendaDayTextColor,
+          agendaDayNumColor: props.theme.colors.agendaDayTextColor,
+          agendaTodayColor: props.theme.colors.primary,
+          agendaKnobColor: props.theme.colors.primary,
+        }}
+      />
+    );
+  }
 
-    getAgenda() {
-        return <Agenda
-            {...this.props}
-            ref={this.props.onRef}
-            theme={{
-                backgroundColor: this.props.theme.colors.agendaBackgroundColor,
-                calendarBackground: this.props.theme.colors.background,
-                textSectionTitleColor: this.props.theme.colors.agendaDayTextColor,
-                selectedDayBackgroundColor: this.props.theme.colors.primary,
-                selectedDayTextColor: '#ffffff',
-                todayTextColor: this.props.theme.colors.primary,
-                dayTextColor: this.props.theme.colors.text,
-                textDisabledColor: this.props.theme.colors.agendaDayTextColor,
-                dotColor: this.props.theme.colors.primary,
-                selectedDotColor: '#ffffff',
-                arrowColor: 'orange',
-                monthTextColor: this.props.theme.colors.primary,
-                indicatorColor: this.props.theme.colors.primary,
-                textDayFontWeight: '300',
-                textMonthFontWeight: 'bold',
-                textDayHeaderFontWeight: '300',
-                textDayFontSize: 16,
-                textMonthFontSize: 16,
-                textDayHeaderFontSize: 16,
-                agendaDayTextColor: this.props.theme.colors.agendaDayTextColor,
-                agendaDayNumColor: this.props.theme.colors.agendaDayTextColor,
-                agendaTodayColor: this.props.theme.colors.primary,
-                agendaKnobColor: this.props.theme.colors.primary,
-            }}
-        />;
-    }
-
-    render() {
-        // Completely recreate the component on theme change to force theme reload
-        if (this.props.theme.dark)
-            return (
-                <View style={{flex: 1}}>
-                    {this.getAgenda()}
-                </View>
-            );
-        else
-            return this.getAgenda();
-    }
+  render(): React.Node {
+    const {props} = this;
+    // Completely recreate the component on theme change to force theme reload
+    if (props.theme.dark)
+      return <View style={{flex: 1}}>{this.getAgenda()}</View>;
+    return this.getAgenda();
+  }
 }
 
 export default withTheme(CustomAgenda);

@@ -2,9 +2,10 @@
 
 import * as React from 'react';
 import {withTheme} from 'react-native-paper';
-import {Modalize} from "react-native-modalize";
-import {View} from "react-native-animatable";
-import CustomTabBar from "../Tabbar/CustomTabBar";
+import {Modalize} from 'react-native-modalize';
+import {View} from 'react-native-animatable';
+import CustomTabBar from '../Tabbar/CustomTabBar';
+import type {CustomTheme} from '../../managers/ThemeManager';
 
 /**
  * Abstraction layer for Modalize component, using custom configuration
@@ -12,25 +13,29 @@ import CustomTabBar from "../Tabbar/CustomTabBar";
  * @param props Props to pass to the element. Must specify an onRef prop to get an Modalize ref.
  * @return {*}
  */
-function CustomModal(props) {
-    const {colors} = props.theme;
-    return (
-        <Modalize
-            ref={props.onRef}
-            adjustToContentHeight
-            handlePosition={'inside'}
-            modalStyle={{backgroundColor: colors.card}}
-            handleStyle={{backgroundColor: colors.primary}}
-        >
-            <View style={{
-                paddingBottom: CustomTabBar.TAB_BAR_HEIGHT
-            }}>
-                {props.children}
-            </View>
-
-        </Modalize>
-    );
+function CustomModal(props: {
+  theme: CustomTheme,
+  onRef: (re: Modalize) => void,
+  children?: React.Node,
+}): React.Node {
+  const {theme, onRef, children} = props;
+  return (
+    <Modalize
+      ref={onRef}
+      adjustToContentHeight
+      handlePosition="inside"
+      modalStyle={{backgroundColor: theme.colors.card}}
+      handleStyle={{backgroundColor: theme.colors.primary}}>
+      <View
+        style={{
+          paddingBottom: CustomTabBar.TAB_BAR_HEIGHT,
+        }}>
+        {children}
+      </View>
+    </Modalize>
+  );
 }
 
-export default withTheme(CustomModal);
+CustomModal.defaultProps = {children: null};
 
+export default withTheme(CustomModal);
