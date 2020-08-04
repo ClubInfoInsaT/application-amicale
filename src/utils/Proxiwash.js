@@ -1,6 +1,6 @@
 // @flow
 
-import type {Machine} from "../screens/Proxiwash/ProxiwashScreen";
+import type {ProxiwashMachineType} from '../screens/Proxiwash/ProxiwashScreen';
 
 /**
  * Gets the machine end Date object.
@@ -11,42 +11,43 @@ import type {Machine} from "../screens/Proxiwash/ProxiwashScreen";
  * @param machine The machine to get the date from
  * @returns {Date} The date object representing the end time.
  */
-export function getMachineEndDate(machine: Machine): Date | null {
-    const array = machine.endTime.split(":");
-    let endDate = new Date(Date.now());
-    endDate.setHours(parseInt(array[0]), parseInt(array[1]));
+export function getMachineEndDate(machine: ProxiwashMachineType): Date | null {
+  const array = machine.endTime.split(':');
+  let endDate = new Date(Date.now());
+  endDate.setHours(parseInt(array[0], 10), parseInt(array[1], 10));
 
-    let limit = new Date(Date.now());
-    if (endDate < limit) {
-        if (limit.getHours() > 12) {
-            limit.setHours(limit.getHours() - 12);
-            if (endDate < limit)
-                endDate.setDate(endDate.getDate() + 1);
-            else
-                endDate = null;
-        } else
-            endDate = null;
-    }
+  const limit = new Date(Date.now());
+  if (endDate < limit) {
+    if (limit.getHours() > 12) {
+      limit.setHours(limit.getHours() - 12);
+      if (endDate < limit) endDate.setDate(endDate.getDate() + 1);
+      else endDate = null;
+    } else endDate = null;
+  }
 
-    return endDate;
+  return endDate;
 }
 
 /**
  * Checks whether the machine of the given ID has scheduled notifications
  *
  * @param machine The machine to check
- * @param machineList The machine list
+ * @param machinesWatched The machine list
  * @returns {boolean}
  */
-export function isMachineWatched(machine: Machine, machineList: Array<Machine>) {
-    let watched = false;
-    for (let i = 0; i < machineList.length; i++) {
-        if (machineList[i].number === machine.number && machineList[i].endTime === machine.endTime) {
-            watched = true;
-            break;
-        }
-    }
-    return watched;
+export function isMachineWatched(
+  machine: ProxiwashMachineType,
+  machinesWatched: Array<ProxiwashMachineType>,
+): boolean {
+  let watched = false;
+  machinesWatched.forEach((watchedMachine: ProxiwashMachineType) => {
+    if (
+      watchedMachine.number === machine.number &&
+      watchedMachine.endTime === machine.endTime
+    )
+      watched = true;
+  });
+  return watched;
 }
 
 /**
@@ -54,14 +55,17 @@ export function isMachineWatched(machine: Machine, machineList: Array<Machine>) 
  *
  * @param id The machine's ID
  * @param allMachines The machine list
- * @returns {null|Machine} The machine or null if not found
+ * @returns {null|ProxiwashMachineType} The machine or null if not found
  */
-export function getMachineOfId(id: string, allMachines: Array<Machine>) {
-    for (let i = 0; i < allMachines.length; i++) {
-        if (allMachines[i].number === id)
-            return allMachines[i];
-    }
-    return null;
+export function getMachineOfId(
+  id: string,
+  allMachines: Array<ProxiwashMachineType>,
+): ProxiwashMachineType | null {
+  let machineFound = null;
+  allMachines.forEach((machine: ProxiwashMachineType) => {
+    if (machine.number === id) machineFound = machine;
+  });
+  return machineFound;
 }
 
 /**
@@ -71,17 +75,22 @@ export function getMachineOfId(id: string, allMachines: Array<Machine>) {
  *
  * @param machineWatchedList The current machine watch list
  * @param allMachines The current full machine list
- * @returns {Array<Machine>}
+ * @returns {Array<ProxiwashMachineType>}
  */
-export function getCleanedMachineWatched(machineWatchedList: Array<Machine>, allMachines: Array<Machine>) {
-    let newList = [];
-    for (let i = 0; i < machineWatchedList.length; i++) {
-        let machine = getMachineOfId(machineWatchedList[i].number, allMachines);
-        if (machine !== null
-            && machineWatchedList[i].number === machine.number
-            && machineWatchedList[i].endTime === machine.endTime) {
-            newList.push(machine);
-        }
+export function getCleanedMachineWatched(
+  machineWatchedList: Array<ProxiwashMachineType>,
+  allMachines: Array<ProxiwashMachineType>,
+): Array<ProxiwashMachineType> {
+  const newList = [];
+  machineWatchedList.forEach((watchedMachine: ProxiwashMachineType) => {
+    const machine = getMachineOfId(watchedMachine.number, allMachines);
+    if (
+      machine != null &&
+      watchedMachine.number === machine.number &&
+      watchedMachine.endTime === machine.endTime
+    ) {
+      newList.push(machine);
     }
-    return newList;
+  });
+  return newList;
 }
