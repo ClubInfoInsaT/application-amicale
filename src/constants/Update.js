@@ -1,6 +1,6 @@
 // @flow
 
-import i18n from "i18n-js";
+import i18n from 'i18n-js';
 
 /**
  * Singleton used to manage update slides.
@@ -14,51 +14,47 @@ import i18n from "i18n-js";
  * </ul>
  */
 export default class Update {
+  // Increment the number to show the update slide
+  static number = 6;
 
-    // Increment the number to show the update slide
-    static number = 6;
-    // Change the number of slides to display
-    static slidesNumber = 4;
-    // Change the icons to be displayed on the update slide
-    static iconList = [
-        'star',
-        'clock',
-        'qrcode-scan',
-        'account',
-    ];
-    static colorsList = [
-        ['#e01928', '#be1522'],
-        ['#7c33ec', '#5e11d1'],
-        ['#337aec', '#114ed1'],
-        ['#e01928', '#be1522'],
-    ]
+  // Change the number of slides to display
+  static slidesNumber = 4;
 
-    static instance: Update | null = null;
+  // Change the icons to be displayed on the update slide
+  static iconList = ['star', 'clock', 'qrcode-scan', 'account'];
 
-    titleList: Array<string>;
-    descriptionList: Array<string>;
+  static colorsList = [
+    ['#e01928', '#be1522'],
+    ['#7c33ec', '#5e11d1'],
+    ['#337aec', '#114ed1'],
+    ['#e01928', '#be1522'],
+  ];
 
-    /**
-     * Init translations
-     */
-    constructor() {
-        this.titleList = [];
-        this.descriptionList = [];
-        for (let i = 0; i < Update.slidesNumber; i++) {
-            this.titleList.push(i18n.t('intro.updateSlide' + i + '.title'))
-            this.descriptionList.push(i18n.t('intro.updateSlide' + i + '.text'))
-        }
+  static instance: Update | null = null;
+
+  titleList: Array<string>;
+
+  descriptionList: Array<string>;
+
+  /**
+   * Init translations
+   */
+  constructor() {
+    this.titleList = [];
+    this.descriptionList = [];
+    for (let i = 0; i < Update.slidesNumber; i += 1) {
+      this.titleList.push(i18n.t(`intro.updateSlide${i}.title`));
+      this.descriptionList.push(i18n.t(`intro.updateSlide${i}.text`));
     }
+  }
 
-    /**
-     * Get this class instance or create one if none is found
-     *
-     * @returns {Update}
-     */
-    static getInstance(): Update {
-        return Update.instance === null ?
-            Update.instance = new Update() :
-            Update.instance;
-    }
-
-};
+  /**
+   * Get this class instance or create one if none is found
+   *
+   * @returns {Update}
+   */
+  static getInstance(): Update {
+    if (Update.instance == null) Update.instance = new Update();
+    return Update.instance;
+  }
+}
