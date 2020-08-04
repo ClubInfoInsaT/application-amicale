@@ -2,58 +2,74 @@
 
 import * as React from 'react';
 import {Image, View} from 'react-native';
-import i18n from "i18n-js";
+import i18n from 'i18n-js';
 import {Card, List, Paragraph, Text} from 'react-native-paper';
-import CustomTabBar from "../../../components/Tabbar/CustomTabBar";
-import {StackNavigationProp} from "@react-navigation/stack";
-import CollapsibleScrollView from "../../../components/Collapsible/CollapsibleScrollView";
+import CustomTabBar from '../../../components/Tabbar/CustomTabBar';
+import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 
-type Props = {
-    navigation: StackNavigationProp,
-};
-
-const LOGO = "https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png";
+const LOGO = 'https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png';
 
 /**
  * Class defining the proximo about screen.
  */
-export default class ProximoAboutScreen extends React.Component<Props> {
-
-    render() {
-        return (
-            <CollapsibleScrollView style={{padding: 5}}>
-                <View style={{
-                    width: '100%',
-                    height: 100,
-                    marginTop: 20,
-                    marginBottom: 20,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Image
-                        source={{uri: LOGO}}
-                        style={{height: '100%', width: '100%', resizeMode: "contain"}}/>
-                </View>
-                <Text>{i18n.t('screens.proximo.description')}</Text>
-                <Card style={{margin: 5}}>
-                    <Card.Title
-                        title={i18n.t('screens.proximo.openingHours')}
-                        left={props => <List.Icon {...props} icon={'clock-outline'}/>}
-                    />
-                    <Card.Content>
-                        <Paragraph>18h30 - 19h30</Paragraph>
-                    </Card.Content>
-                </Card>
-                <Card style={{margin: 5, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
-                    <Card.Title
-                        title={i18n.t('screens.proximo.paymentMethods')}
-                        left={props => <List.Icon {...props} icon={'cash'}/>}
-                    />
-                    <Card.Content>
-                        <Paragraph>{i18n.t('screens.proximo.paymentMethodsDescription')}</Paragraph>
-                    </Card.Content>
-                </Card>
-            </CollapsibleScrollView>
-        );
-    }
+// eslint-disable-next-line react/prefer-stateless-function
+export default class ProximoAboutScreen extends React.Component<null> {
+  render(): React.Node {
+    return (
+      <CollapsibleScrollView style={{padding: 5}}>
+        <View
+          style={{
+            width: '100%',
+            height: 100,
+            marginTop: 20,
+            marginBottom: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Image
+            source={{uri: LOGO}}
+            style={{height: '100%', width: '100%', resizeMode: 'contain'}}
+          />
+        </View>
+        <Text>{i18n.t('screens.proximo.description')}</Text>
+        <Card style={{margin: 5}}>
+          <Card.Title
+            title={i18n.t('screens.proximo.openingHours')}
+            left={({
+              size,
+              color,
+            }: {
+              size: number,
+              color: string,
+            }): React.Node => (
+              <List.Icon size={size} color={color} icon="clock-outline" />
+            )}
+          />
+          <Card.Content>
+            <Paragraph>18h30 - 19h30</Paragraph>
+          </Card.Content>
+        </Card>
+        <Card
+          style={{margin: 5, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
+          <Card.Title
+            title={i18n.t('screens.proximo.paymentMethods')}
+            left={({
+              size,
+              color,
+            }: {
+              size: number,
+              color: string,
+            }): React.Node => (
+              <List.Icon size={size} color={color} icon="cash" />
+            )}
+          />
+          <Card.Content>
+            <Paragraph>
+              {i18n.t('screens.proximo.paymentMethodsDescription')}
+            </Paragraph>
+          </Card.Content>
+        </Card>
+      </CollapsibleScrollView>
+    );
+  }
 }
