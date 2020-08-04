@@ -1,36 +1,31 @@
 // @flow
 
 import * as React from 'react';
-import packageJson from '../../../package';
 import {List} from 'react-native-paper';
-import {StackNavigationProp} from "@react-navigation/stack";
-import CollapsibleFlatList from "../../components/Collapsible/CollapsibleFlatList";
-import {View} from "react-native-animatable";
+import {View} from 'react-native-animatable';
+import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
+import packageJson from '../../../package.json';
 
-type listItem = {
-    name: string,
-    version: string
+type ListItemType = {
+  name: string,
+  version: string,
 };
 
 /**
  * Generates the dependencies list from the raw json
  *
  * @param object The raw json
- * @return {Array<listItem>}
+ * @return {Array<ListItemType>}
  */
-function generateListFromObject(object: { [key: string]: string }): Array<listItem> {
-    let list = [];
-    let keys = Object.keys(object);
-    let values = Object.values(object);
-    for (let i = 0; i < keys.length; i++) {
-        list.push({name: keys[i], version: values[i]});
-    }
-    //$FlowFixMe
-    return list;
-}
-
-type Props = {
-    navigation: StackNavigationProp,
+function generateListFromObject(object: {
+  [key: string]: string,
+}): Array<ListItemType> {
+  const list = [];
+  const keys = Object.keys(object);
+  keys.forEach((key: string) => {
+    list.push({name: key, version: object[key]});
+  });
+  return list;
 }
 
 const LIST_ITEM_HEIGHT = 64;
@@ -38,38 +33,45 @@ const LIST_ITEM_HEIGHT = 64;
 /**
  * Class defining a screen showing the list of libraries used by the app, taken from package.json
  */
-export default class AboutDependenciesScreen extends React.Component<Props> {
+export default class AboutDependenciesScreen extends React.Component<null> {
+  data: Array<ListItemType>;
 
-    data: Array<listItem>;
+  constructor() {
+    super();
+    this.data = generateListFromObject(packageJson.dependencies);
+  }
 
-    constructor() {
-        super();
-        this.data = generateListFromObject(packageJson.dependencies);
-    }
+  keyExtractor = (item: ListItemType): string => item.name;
 
-    keyExtractor = (item: listItem) => item.name;
+  getRenderItem = ({item}: {item: ListItemType}): React.Node => (
+    <List.Item
+      title={item.name}
+      description={item.version.replace('^', '').replace('~', '')}
+      style={{height: LIST_ITEM_HEIGHT}}
+    />
+  );
 
-    renderItem = ({item}: { item: listItem }) =>
-        <List.Item
-            title={item.name}
-            description={item.version.replace('^', '').replace('~', '')}
-            style={{height: LIST_ITEM_HEIGHT}}
-        />;
+  getItemLayout = (
+    data: ListItemType,
+    index: number,
+  ): {length: number, offset: number, index: number} => ({
+    length: LIST_ITEM_HEIGHT,
+    offset: LIST_ITEM_HEIGHT * index,
+    index,
+  });
 
-    itemLayout = (data: any, index: number) => ({length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index});
-
-    render() {
-        return (
-            <View>
-                <CollapsibleFlatList
-                    data={this.data}
-                    keyExtractor={this.keyExtractor}
-                    renderItem={this.renderItem}
-                    // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-                    removeClippedSubviews={true}
-                    getItemLayout={this.itemLayout}
-                />
-            </View>
-        );
-    }
+  render(): React.Node {
+    return (
+      <View>
+        <CollapsibleFlatList
+          data={this.data}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.getRenderItem}
+          // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+          removeClippedSubviews
+          getItemLayout={this.getItemLayout}
+        />
+      </View>
+    );
+  }
 }
