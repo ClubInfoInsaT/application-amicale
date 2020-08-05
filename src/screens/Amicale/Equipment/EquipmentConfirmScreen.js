@@ -11,7 +11,7 @@ import {
 } from 'react-native-paper';
 import {View} from 'react-native';
 import i18n from 'i18n-js';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {DeviceType} from './EquipmentListScreen';
 import {getRelativeDateString} from '../../../utils/EquipmentBooking';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
@@ -23,7 +23,7 @@ type PropsType = {
       dates: [string, string],
     },
   },
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 class EquipmentConfirmScreen extends React.Component<PropsType> {

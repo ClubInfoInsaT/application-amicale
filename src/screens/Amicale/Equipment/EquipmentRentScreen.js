@@ -15,7 +15,7 @@ import * as Animatable from 'react-native-animatable';
 import i18n from 'i18n-js';
 import {CalendarList} from 'react-native-calendars';
 import type {DeviceType} from './EquipmentListScreen';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 import LoadingConfirmDialog from '../../../components/Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../../components/Dialogs/ErrorDialog';
 import {
@@ -36,7 +36,7 @@ type PropsType = {
       item?: DeviceType,
     },
   },
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 export type MarkedDatesObjectType = {

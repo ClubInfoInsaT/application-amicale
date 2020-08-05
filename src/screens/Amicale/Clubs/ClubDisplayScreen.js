@@ -17,7 +17,7 @@ import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen
 import CustomHTML from '../../../components/Overrides/CustomHTML';
 import CustomTabBar from '../../../components/Tabbar/CustomTabBar';
 import type {ClubCategoryType, ClubType} from './ClubListScreen';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 import {ERROR_TYPE} from '../../../utils/WebData';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import type {ApiGenericDataType} from '../../../utils/WebData';
@@ -32,7 +32,7 @@ type PropsType = {
     },
     ...
   },
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 const AMICALE_MAIL = 'clubs@amicale-insat.fr';
