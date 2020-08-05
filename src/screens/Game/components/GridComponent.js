@@ -3,56 +3,55 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {withTheme} from 'react-native-paper';
-import type {Cell} from "./CellComponent";
-import CellComponent from "./CellComponent";
-import type {ViewStyle} from "react-native/Libraries/StyleSheet/StyleSheet";
+import type {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {CellType} from './CellComponent';
+import CellComponent from './CellComponent';
 
-export type Grid = Array<Array<CellComponent>>;
+export type GridType = Array<Array<CellComponent>>;
 
-type Props = {
-    grid: Array<Array<Object>>,
-    height: number,
-    width: number,
-    style: ViewStyle,
-}
+type PropsType = {
+  grid: Array<Array<CellType>>,
+  height: number,
+  width: number,
+  style: ViewStyle,
+};
 
-class GridComponent extends React.Component<Props> {
+class GridComponent extends React.Component<PropsType> {
+  getRow(rowNumber: number): React.Node {
+    const {grid} = this.props;
+    return (
+      <View style={{flexDirection: 'row'}} key={rowNumber.toString()}>
+        {grid[rowNumber].map(this.getCellRender)}
+      </View>
+    );
+  }
 
-    getRow(rowNumber: number) {
-        let cells = this.props.grid[rowNumber].map(this.getCellRender);
-        return (
-            <View
-                style={{flexDirection: 'row',}}
-                key={rowNumber.toString()}
-            >
-                {cells}
-            </View>
-        );
+  getCellRender = (item: CellType): React.Node => {
+    return <CellComponent cell={item} key={item.key} />;
+  };
+
+  getGrid(): React.Node {
+    const {height} = this.props;
+    const rows = [];
+    for (let i = 0; i < height; i += 1) {
+      rows.push(this.getRow(i));
     }
+    return rows;
+  }
 
-    getCellRender = (item: Cell) => {
-        return <CellComponent cell={item} key={item.key}/>;
-    };
-
-    getGrid() {
-        let rows = [];
-        for (let i = 0; i < this.props.height; i++) {
-            rows.push(this.getRow(i));
-        }
-        return rows;
-    }
-
-    render() {
-        return (
-            <View style={{
-                aspectRatio: this.props.width / this.props.height,
-                borderRadius: 4,
-                ...this.props.style
-            }}>
-                {this.getGrid()}
-            </View>
-        );
-    }
+  render(): React.Node {
+    const {style, width, height} = this.props;
+    return (
+      <View
+        style={{
+          aspectRatio: width / height,
+          borderRadius: 4,
+          ...style,
+        }}>
+        {this.getGrid()}
+      </View>
+    );
+  }
 }
 
 export default withTheme(GridComponent);

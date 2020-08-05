@@ -3,34 +3,30 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {withTheme} from 'react-native-paper';
-import type {CustomTheme} from "../../../managers/ThemeManager";
 
-export type Cell = {color: string, isEmpty: boolean, key: string};
+export type CellType = {color: string, isEmpty: boolean, key: string};
 
-type Props = {
-    cell: Cell,
-    theme: CustomTheme,
-}
+type PropsType = {
+  cell: CellType,
+};
 
-class CellComponent extends React.PureComponent<Props> {
-
-    render() {
-        const item = this.props.cell;
-        return (
-            <View
-                style={{
-                    flex: 1,
-                    backgroundColor: item.isEmpty ? 'transparent' : item.color,
-                    borderColor: 'transparent',
-                    borderRadius: 4,
-                    borderWidth: 1,
-                    aspectRatio: 1,
-                }}
-            />
-        );
-    }
-
-
+class CellComponent extends React.PureComponent<PropsType> {
+  render(): React.Node {
+    const {props} = this;
+    const item = props.cell;
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: item.isEmpty ? 'transparent' : item.color,
+          borderColor: 'transparent',
+          borderRadius: 4,
+          borderWidth: 1,
+          aspectRatio: 1,
+        }}
+      />
+    );
+  }
 }
 
 export default withTheme(CellComponent);
