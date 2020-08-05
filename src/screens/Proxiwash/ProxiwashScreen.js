@@ -17,7 +17,7 @@ import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
 import ProxiwashSectionHeader from '../../components/Lists/Proxiwash/ProxiwashSectionHeader';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 import {
   getCleanedMachineWatched,
   getMachineEndDate,
@@ -47,7 +47,7 @@ export type ProxiwashMachineType = {
 
 type PropsType = {
   navigation: StackNavigationProp,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 type StateType = {

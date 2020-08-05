@@ -15,12 +15,12 @@ import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
 import ProxiwashConstants from '../../../constants/ProxiwashConstants';
 import AprilFoolsManager from '../../../managers/AprilFoolsManager';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {ProxiwashMachineType} from '../../../screens/Proxiwash/ProxiwashScreen';
 
 type PropsType = {
   item: ProxiwashMachineType,
-  theme: CustomTheme,
+  theme: CustomThemeType,
   onPress: (
     title: string,
     item: ProxiwashMachineType,

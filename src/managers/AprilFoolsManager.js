@@ -2,6 +2,7 @@
 
 import type {ProxiwashMachineType} from '../screens/Proxiwash/ProxiwashScreen';
 import type {CustomThemeType} from './ThemeManager';
+import type {RuFoodCategoryType} from '../screens/Services/SelfMenuScreen';
 
 /**
  * Singleton class used to manage april fools
@@ -49,8 +50,8 @@ export default class AprilFoolsManager {
    * @returns {Object}
    */
   static getFakeMenuItem(
-    menu: Array<{dishes: Array<{name: string}>}>,
-  ): Array<{dishes: Array<{name: string}>}> {
+    menu: Array<RuFoodCategoryType>,
+  ): Array<RuFoodCategoryType> {
     menu[1].dishes.splice(4, 0, {name: 'Coq au vin'});
     menu[1].dishes.splice(2, 0, {name: "Bat'Soupe"});
     menu[1].dishes.splice(1, 0, {name: 'Pave de loup'});

@@ -13,7 +13,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {withTheme} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Collapsible} from 'react-navigation-collapsible';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 import {withCollapsible} from '../../utils/withCollapsible';
 import MaterialHeaderButtons, {Item} from '../Overrides/CustomHeaderButton';
 import {ERROR_TYPE} from '../../utils/WebData';
@@ -22,7 +22,7 @@ import BasicLoadingScreen from './BasicLoadingScreen';
 
 type PropsType = {
   navigation: StackNavigationProp,
-  theme: CustomTheme,
+  theme: CustomThemeType,
   url: string,
   collapsibleStack: Collapsible,
   onMessage: (event: {nativeEvent: {data: string}}) => void,

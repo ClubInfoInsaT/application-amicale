@@ -13,7 +13,7 @@ import {
 import i18n from 'i18n-js';
 import {StackNavigationProp} from '@react-navigation/stack';
 import CardList from '../../components/Lists/CardList/CardList';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
@@ -28,7 +28,7 @@ import type {ServiceCategoryType} from '../../managers/ServicesManager';
 
 type PropsType = {
   navigation: StackNavigationProp,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 class ServicesScreen extends React.Component<PropsType> {

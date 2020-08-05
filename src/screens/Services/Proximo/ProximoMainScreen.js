@@ -8,7 +8,7 @@ import WebSectionList from '../../../components/Screens/WebSectionList';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {SectionListDataType} from '../../../components/Screens/WebSectionList';
 
 const DATA_URL = 'https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json';
@@ -43,7 +43,7 @@ export type ProximoDataType = {
 
 type PropsType = {
   navigation: StackNavigationProp,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 /**

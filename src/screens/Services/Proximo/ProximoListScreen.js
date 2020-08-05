@@ -19,7 +19,7 @@ import ProximoListItem from '../../../components/Lists/Proximo/ProximoListItem';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
 import type {ProximoArticleType} from './ProximoMainScreen';
 
@@ -56,7 +56,7 @@ type PropsType = {
       shouldFocusSearchBar: boolean,
     },
   },
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 type StateType = {
