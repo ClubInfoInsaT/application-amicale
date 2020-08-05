@@ -3,7 +3,7 @@
 import i18n from 'i18n-js';
 import type {DeviceType} from '../screens/Amicale/Equipment/EquipmentListScreen';
 import DateManager from '../managers/DateManager';
-import type {CustomTheme} from '../managers/ThemeManager';
+import type {CustomThemeType} from '../managers/ThemeManager';
 import type {MarkedDatesObjectType} from '../screens/Amicale/Equipment/EquipmentRentScreen';
 
 /**
@@ -161,7 +161,7 @@ export function getValidRange(
  */
 export function generateMarkedDates(
   isSelection: boolean,
-  theme: CustomTheme,
+  theme: CustomThemeType,
   range: Array<string>,
 ): MarkedDatesObjectType {
   const markedDates = {};

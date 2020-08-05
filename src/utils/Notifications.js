@@ -1,10 +1,14 @@
 // @flow
 
-import {checkNotifications, requestNotifications, RESULTS} from 'react-native-permissions';
-import AsyncStorageManager from "../managers/AsyncStorageManager";
-import i18n from "i18n-js";
+import {
+  checkNotifications,
+  requestNotifications,
+  RESULTS,
+} from 'react-native-permissions';
+import i18n from 'i18n-js';
+import AsyncStorageManager from '../managers/AsyncStorageManager';
 
-const PushNotification = require("react-native-push-notification");
+const PushNotification = require('react-native-push-notification');
 
 // Used to multiply the normal notification id to create the reminder one. It allows to find it back easily
 const reminderIdFactor = 100;
@@ -13,25 +17,21 @@ const reminderIdFactor = 100;
  * Async function asking permission to send notifications to the user.
  * Used on ios.
  *
- * @returns {Promise}
+ * @returns {Promise<void>}
  */
-export async function askPermissions() {
-    return new Promise(((resolve, reject) => {
-        checkNotifications().then(({status}) => {
-            if (status === RESULTS.GRANTED)
-                resolve();
-            else if (status === RESULTS.BLOCKED)
-                reject()
-            else {
-                requestNotifications().then(({status}) => {
-                    if (status === RESULTS.GRANTED)
-                        resolve();
-                    else
-                        reject();
-                });
-            }
+export async function askPermissions(): Promise<void> {
+  return new Promise((resolve: () => void, reject: () => void) => {
+    checkNotifications().then(({status}: {status: string}) => {
+      if (status === RESULTS.GRANTED) resolve();
+      else if (status === RESULTS.BLOCKED) reject();
+      else {
+        requestNotifications().then((result: {status: string}) => {
+          if (result.status === RESULTS.GRANTED) resolve();
+          else reject();
         });
-    }));
+      }
+    });
+  });
 }
 
 /**
@@ -43,27 +43,33 @@ export async function askPermissions() {
  * @param date The date to trigger the notification at
  */
 function createNotifications(machineID: string, date: Date) {
-    let reminder = AsyncStorageManager.getNumber(AsyncStorageManager.PREFERENCES.proxiwashNotifications.key);
-    if (!isNaN(reminder) && reminder > 0) {
-        let id = reminderIdFactor * parseInt(machineID);
-        let reminderDate = new Date(date);
-        reminderDate.setMinutes(reminderDate.getMinutes() - reminder);
-        PushNotification.localNotificationSchedule({
-            title: i18n.t("screens.proxiwash.notifications.machineRunningTitle", {time: reminder}),
-            message: i18n.t("screens.proxiwash.notifications.machineRunningBody", {number: machineID}),
-            id: id.toString(),
-            date: reminderDate,
-        });
-        console.log("Setting up notifications for ", date, " and reminder for ", reminderDate);
-    } else
-        console.log("Setting up notifications for ", date);
-
+  const reminder = AsyncStorageManager.getNumber(
+    AsyncStorageManager.PREFERENCES.proxiwashNotifications.key,
+  );
+  if (!Number.isNaN(reminder) && reminder > 0) {
+    const id = reminderIdFactor * parseInt(machineID, 10);
+    const reminderDate = new Date(date);
+    reminderDate.setMinutes(reminderDate.getMinutes() - reminder);
     PushNotification.localNotificationSchedule({
-        title: i18n.t("screens.proxiwash.notifications.machineFinishedTitle"),
-        message: i18n.t("screens.proxiwash.notifications.machineFinishedBody", {number: machineID}),
-        id: machineID,
-        date: date,
+      title: i18n.t('screens.proxiwash.notifications.machineRunningTitle', {
+        time: reminder,
+      }),
+      message: i18n.t('screens.proxiwash.notifications.machineRunningBody', {
+        number: machineID,
+      }),
+      id: id.toString(),
+      date: reminderDate,
     });
+  }
+
+  PushNotification.localNotificationSchedule({
+    title: i18n.t('screens.proxiwash.notifications.machineFinishedTitle'),
+    message: i18n.t('screens.proxiwash.notifications.machineFinishedBody', {
+      number: machineID,
+    }),
+    id: machineID,
+    date,
+  });
 }
 
 /**
@@ -76,22 +82,26 @@ function createNotifications(machineID: string, date: Date) {
  * @param isEnabled True to enable notifications, false to disable
  * @param endDate The trigger date, or null if disabling notifications
  */
-export async function setupMachineNotification(machineID: string, isEnabled: boolean, endDate: Date | null) {
-    return new Promise((resolve, reject) => {
-        if (isEnabled && endDate != null) {
-            askPermissions()
-                .then(() => {
-                    createNotifications(machineID, endDate);
-                    resolve();
-                })
-                .catch(() => {
-                    reject();
-                });
-        } else {
-            PushNotification.cancelLocalNotifications({id: machineID});
-            let reminderId = reminderIdFactor * parseInt(machineID);
-            PushNotification.cancelLocalNotifications({id: reminderId.toString()});
-            resolve();
-        }
-    });
+export async function setupMachineNotification(
+  machineID: string,
+  isEnabled: boolean,
+  endDate: Date | null,
+): Promise<void> {
+  return new Promise((resolve: () => void, reject: () => void) => {
+    if (isEnabled && endDate != null) {
+      askPermissions()
+        .then(() => {
+          createNotifications(machineID, endDate);
+          resolve();
+        })
+        .catch(() => {
+          reject();
+        });
+    } else {
+      PushNotification.cancelLocalNotifications({id: machineID});
+      const reminderId = reminderIdFactor * parseInt(machineID, 10);
+      PushNotification.cancelLocalNotifications({id: reminderId.toString()});
+      resolve();
+    }
+  });
 }
