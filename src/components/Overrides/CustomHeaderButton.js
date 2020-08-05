@@ -4,10 +4,10 @@ import * as React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {HeaderButton, HeaderButtons} from 'react-navigation-header-buttons';
 import {withTheme} from 'react-native-paper';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 const MaterialHeaderButton = (props: {
-  theme: CustomTheme,
+  theme: CustomThemeType,
   color: string,
 }): React.Node => {
   const {color, theme} = props;

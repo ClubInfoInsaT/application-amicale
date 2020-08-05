@@ -10,13 +10,13 @@ import type {
   ServiceCategoryType,
   ServiceItemType,
 } from '../../../managers/ServicesManager';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 type PropsType = {
   item: ServiceCategoryType,
   activeDashboard: Array<string>,
   onPress: (service: ServiceItemType) => void,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 const LIST_ITEM_HEIGHT = 64;

@@ -5,10 +5,10 @@ import {View} from 'react-native';
 import {List, withTheme} from 'react-native-paper';
 import Collapsible from 'react-native-collapsible';
 import * as Animatable from 'react-native-animatable';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
-  theme: CustomTheme,
+  theme: CustomThemeType,
   title: string,
   subtitle?: string,
   left?: () => React.Node,

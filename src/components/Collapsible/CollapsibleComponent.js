@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {Collapsible} from 'react-navigation-collapsible';
-import {withCollapsible} from '../../utils/withCollapsible';
+import withCollapsible from '../../utils/withCollapsible';
 import CustomTabBar from '../Tabbar/CustomTabBar';
 
 export type CollapsibleComponentPropsType = {

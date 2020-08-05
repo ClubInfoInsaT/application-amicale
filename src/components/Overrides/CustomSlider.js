@@ -4,10 +4,10 @@ import * as React from 'react';
 import {Text, withTheme} from 'react-native-paper';
 import {View} from 'react-native-animatable';
 import Slider, {SliderProps} from '@react-native-community/slider';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
-  theme: CustomTheme,
+  theme: CustomThemeType,
   valueSuffix?: string,
   ...SliderProps,
 };

@@ -4,7 +4,7 @@ import * as React from 'react';
 import {Avatar, List, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
 import {StackNavigationProp} from '@react-navigation/stack';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {DeviceType} from '../../../screens/Amicale/Equipment/EquipmentListScreen';
 import {
   getFirstEquipmentAvailability,
@@ -17,7 +17,7 @@ type PropsType = {
   userDeviceRentDates: [string, string],
   item: DeviceType,
   height: number,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 class EquipmentListItem extends React.Component<PropsType> {

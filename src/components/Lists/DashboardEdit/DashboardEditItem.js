@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Image} from 'react-native';
 import {List, withTheme} from 'react-native-paper';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {ServiceItemType} from '../../../managers/ServicesManager';
 
 type PropsType = {
@@ -11,7 +11,7 @@ type PropsType = {
   isActive: boolean,
   height: number,
   onPress: () => void,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 class DashboardEditItem extends React.Component<PropsType> {

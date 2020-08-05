@@ -6,7 +6,7 @@ import {CommonActions} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import CardList from '../../components/Lists/CardList/CardList';
 import CustomTabBar from '../../components/Tabbar/CustomTabBar';
-import {withCollapsible} from '../../utils/withCollapsible';
+import withCollapsible from '../../utils/withCollapsible';
 import type {ServiceCategoryType} from '../../managers/ServicesManager';
 
 type PropsType = {

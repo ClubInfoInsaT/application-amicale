@@ -2,11 +2,11 @@
 
 import * as React from 'react';
 import {IconButton, List, withTheme} from 'react-native-paper';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {PlanexGroupType} from '../../../screens/Planex/GroupSelectionScreen';
 
 type PropsType = {
-  theme: CustomTheme,
+  theme: CustomThemeType,
   onPress: () => void,
   onStarPress: () => void,
   item: PlanexGroupType,

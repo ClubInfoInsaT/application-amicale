@@ -6,7 +6,7 @@ import i18n from 'i18n-js';
 import {View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 import ThemeManager from '../../managers/ThemeManager';
 import WebViewScreen from '../../components/Screens/WebViewScreen';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
@@ -22,7 +22,7 @@ import MascotPopup from '../../components/Mascot/MascotPopup';
 type PropsType = {
   navigation: StackNavigationProp,
   route: {params: {group: PlanexGroupType}},
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 type StateType = {

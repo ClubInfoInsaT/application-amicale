@@ -5,10 +5,10 @@ import * as React from 'react';
 import {Text, withTheme} from 'react-native-paper';
 import HTML from 'react-native-render-html';
 import {Linking} from 'react-native';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
-  theme: CustomTheme,
+  theme: CustomThemeType,
   html: string,
 };
 

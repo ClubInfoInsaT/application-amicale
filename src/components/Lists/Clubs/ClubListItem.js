@@ -7,14 +7,14 @@ import type {
   ClubCategoryType,
   ClubType,
 } from '../../../screens/Amicale/Clubs/ClubListScreen';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 type PropsType = {
   onPress: () => void,
   categoryTranslator: (id: number) => ClubCategoryType,
   item: ClubType,
   height: number,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 class ClubListItem extends React.Component<PropsType> {

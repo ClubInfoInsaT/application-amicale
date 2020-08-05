@@ -14,7 +14,7 @@ import {withTheme} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Collapsible} from 'react-navigation-collapsible';
 import type {CustomThemeType} from '../../managers/ThemeManager';
-import {withCollapsible} from '../../utils/withCollapsible';
+import withCollapsible from '../../utils/withCollapsible';
 import MaterialHeaderButtons, {Item} from '../Overrides/CustomHeaderButton';
 import {ERROR_TYPE} from '../../utils/WebData';
 import ErrorView from './ErrorView';

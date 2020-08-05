@@ -10,12 +10,12 @@ import {
 } from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import i18n from 'i18n-js';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
   eventNumber: number,
   clickAction: () => void,
-  theme: CustomTheme,
+  theme: CustomThemeType,
   children?: React.Node,
 };
 

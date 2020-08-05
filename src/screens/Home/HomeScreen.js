@@ -19,7 +19,7 @@ import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
 import AnimatedFAB from '../../components/Animations/AnimatedFAB';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 import ConnectionManager from '../../managers/ConnectionManager';
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
@@ -78,7 +78,7 @@ type RawDashboardType = {
 type PropsType = {
   navigation: StackNavigationProp,
   route: {params: {nextScreen: string, data: {...}}},
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 type StateType = {

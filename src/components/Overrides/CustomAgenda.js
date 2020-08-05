@@ -4,10 +4,10 @@ import * as React from 'react';
 import {View} from 'react-native';
 import {withTheme} from 'react-native-paper';
 import {Agenda} from 'react-native-calendars';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
-  theme: CustomTheme,
+  theme: CustomThemeType,
   onRef: (ref: Agenda) => void,
 };
 

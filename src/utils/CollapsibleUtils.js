@@ -1,9 +1,9 @@
 // @flow
 
 import * as React from 'react';
-import {useTheme} from "react-native-paper";
-import {createCollapsibleStack} from "react-navigation-collapsible";
-import StackNavigator, {StackNavigationOptions} from "@react-navigation/stack";
+import {useTheme} from 'react-native-paper';
+import {createCollapsibleStack} from 'react-navigation-collapsible';
+import StackNavigator, {StackNavigationOptions} from '@react-navigation/stack';
 
 /**
  * Creates a navigation stack with the collapsible library, allowing the header to collapse on scroll.
@@ -22,32 +22,34 @@ import StackNavigator, {StackNavigationOptions} from "@react-navigation/stack";
  * @returns {JSX.Element}
  */
 export function createScreenCollapsibleStack(
-    name: string,
-    Stack: StackNavigator,
-    component: React.ComponentType<any>,
-    title: string,
-    useNativeDriver?: boolean,
-    options?: StackNavigationOptions,
-    headerColor?: string) {
-    const {colors} = useTheme();
-    const screenOptions = options != null ? options : {};
-    return createCollapsibleStack(
-        <Stack.Screen
-            name={name}
-            component={component}
-            options={{
-                title: title,
-                headerStyle: {
-                    backgroundColor: headerColor!=null ? headerColor :colors.surface,
-                },
-                ...screenOptions,
-            }}
-        />,
-        {
-            collapsedColor: headerColor!=null ? headerColor :colors.surface,
-            useNativeDriver: useNativeDriver != null ? useNativeDriver : true, // native driver does not work with webview
-        }
-    )
+  name: string,
+  Stack: StackNavigator,
+  // eslint-disable-next-line flowtype/no-weak-types
+  component: React.ComponentType<any>,
+  title: string,
+  useNativeDriver?: boolean,
+  options?: StackNavigationOptions,
+  headerColor?: string,
+): React.Node {
+  const {colors} = useTheme();
+  const screenOptions = options != null ? options : {};
+  return createCollapsibleStack(
+    <Stack.Screen
+      name={name}
+      component={component}
+      options={{
+        title,
+        headerStyle: {
+          backgroundColor: headerColor != null ? headerColor : colors.surface,
+        },
+        ...screenOptions,
+      }}
+    />,
+    {
+      collapsedColor: headerColor != null ? headerColor : colors.surface,
+      useNativeDriver: useNativeDriver != null ? useNativeDriver : true, // native driver does not work with webview
+    },
+  );
 }
 
 /**
@@ -62,6 +64,12 @@ export function createScreenCollapsibleStack(
  * @param title
  * @returns {JSX.Element}
  */
-export function getWebsiteStack(name: string, Stack: any, component: any, title: string) {
-    return createScreenCollapsibleStack(name, Stack, component, title, false);
+export function getWebsiteStack(
+  name: string,
+  Stack: StackNavigator,
+  // eslint-disable-next-line flowtype/no-weak-types
+  component: React.ComponentType<any>,
+  title: string,
+): React.Node {
+  return createScreenCollapsibleStack(name, Stack, component, title, false);
 }

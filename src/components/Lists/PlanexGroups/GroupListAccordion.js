@@ -10,7 +10,7 @@ import type {
   PlanexGroupType,
   PlanexGroupCategoryType,
 } from '../../../screens/Planex/GroupSelectionScreen';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 type PropsType = {
   item: PlanexGroupCategoryType,
@@ -19,7 +19,7 @@ type PropsType = {
   currentSearchString: string,
   favoriteNumber: number,
   height: number,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 const LIST_ITEM_HEIGHT = 64;

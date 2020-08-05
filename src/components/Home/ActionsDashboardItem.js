@@ -5,11 +5,11 @@ import {List, withTheme} from 'react-native-paper';
 import {View} from 'react-native';
 import i18n from 'i18n-js';
 import {StackNavigationProp} from '@react-navigation/stack';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
   navigation: StackNavigationProp,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 class ActionsDashBoardItem extends React.Component<PropsType> {

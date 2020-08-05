@@ -7,7 +7,7 @@ import {Collapsible} from 'react-navigation-collapsible';
 import {StackNavigationProp} from '@react-navigation/stack';
 import TabIcon from './TabIcon';
 import TabHomeIcon from './TabHomeIcon';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type RouteType = {
   name: string,
@@ -33,7 +33,7 @@ type PropsType = {
     },
   },
   navigation: StackNavigationProp,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 type StateType = {

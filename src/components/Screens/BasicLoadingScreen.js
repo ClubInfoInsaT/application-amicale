@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {ActivityIndicator, withTheme} from 'react-native-paper';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 /**
  * Component used to display a header button
@@ -12,7 +12,7 @@ import type {CustomTheme} from '../../managers/ThemeManager';
  * @return {*}
  */
 function BasicLoadingScreen(props: {
-  theme: CustomTheme,
+  theme: CustomThemeType,
   isAbsolute: boolean,
 }): React.Node {
   const {theme, isAbsolute} = props;

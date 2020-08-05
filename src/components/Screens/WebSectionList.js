@@ -9,7 +9,7 @@ import {Collapsible} from 'react-navigation-collapsible';
 import {StackNavigationProp} from '@react-navigation/stack';
 import ErrorView from './ErrorView';
 import BasicLoadingScreen from './BasicLoadingScreen';
-import {withCollapsible} from '../../utils/withCollapsible';
+import withCollapsible from '../../utils/withCollapsible';
 import CustomTabBar from '../Tabbar/CustomTabBar';
 import {ERROR_TYPE, readData} from '../../utils/WebData';
 import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';

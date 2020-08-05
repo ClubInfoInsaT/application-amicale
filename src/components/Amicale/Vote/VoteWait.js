@@ -9,14 +9,14 @@ import {
 } from 'react-native-paper';
 import {StyleSheet} from 'react-native';
 import i18n from 'i18n-js';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 type PropsType = {
   startDate: string | null,
   justVoted: boolean,
   hasVoted: boolean,
   isVoteRunning: boolean,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 const styles = StyleSheet.create({

@@ -12,12 +12,12 @@ import {
 import {FlatList, StyleSheet} from 'react-native';
 import i18n from 'i18n-js';
 import type {VoteTeamType} from '../../../screens/Amicale/VoteScreen';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 type PropsType = {
   teams: Array<VoteTeamType>,
   dateEnd: string,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 const styles = StyleSheet.create({

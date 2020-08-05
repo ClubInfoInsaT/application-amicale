@@ -7,13 +7,14 @@ import * as Animatable from 'react-native-animatable';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AutoHideHandler from '../../utils/AutoHideHandler';
 import CustomTabBar from '../Tabbar/CustomTabBar';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
+import type {OnScrollType} from '../../utils/AutoHideHandler';
 
 const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
 
 type PropsType = {
   navigation: StackNavigationProp,
-  theme: CustomTheme,
+  theme: CustomThemeType,
   onPress: (action: string, data?: string) => void,
   seekAttention: boolean,
 };
@@ -94,7 +95,7 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
     }
   };
 
-  onScroll = (event: SyntheticEvent<EventTarget>) => {
+  onScroll = (event: OnScrollType) => {
     this.hideHandler.onScroll(event);
   };
 

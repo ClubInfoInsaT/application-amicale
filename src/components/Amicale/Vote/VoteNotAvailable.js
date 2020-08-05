@@ -4,10 +4,10 @@ import * as React from 'react';
 import {View} from 'react-native';
 import {Headline, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 type PropsType = {
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 class VoteNotAvailable extends React.Component<PropsType> {

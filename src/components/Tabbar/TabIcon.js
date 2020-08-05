@@ -6,7 +6,7 @@ import {TouchableRipple, withTheme} from 'react-native-paper';
 import type {MaterialCommunityIconsGlyphs} from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
   focused: boolean,
@@ -15,7 +15,7 @@ type PropsType = {
   icon: MaterialCommunityIconsGlyphs,
   onPress: () => void,
   onLongPress: () => void,
-  theme: CustomTheme,
+  theme: CustomThemeType,
   extraData: null | boolean | number | string,
 };
 

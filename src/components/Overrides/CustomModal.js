@@ -5,7 +5,7 @@ import {withTheme} from 'react-native-paper';
 import {Modalize} from 'react-native-modalize';
 import {View} from 'react-native-animatable';
 import CustomTabBar from '../Tabbar/CustomTabBar';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 /**
  * Abstraction layer for Modalize component, using custom configuration
@@ -14,7 +14,7 @@ import type {CustomTheme} from '../../managers/ThemeManager';
  * @return {*}
  */
 function CustomModal(props: {
-  theme: CustomTheme,
+  theme: CustomThemeType,
   onRef: (re: Modalize) => void,
   children?: React.Node,
 }): React.Node {

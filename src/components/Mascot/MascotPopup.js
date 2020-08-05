@@ -18,12 +18,12 @@ import {
   View,
 } from 'react-native';
 import Mascot from './Mascot';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 import SpeechArrow from './SpeechArrow';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 
 type PropsType = {
-  theme: CustomTheme,
+  theme: CustomThemeType,
   icon: string,
   title: string,
   message: string,

@@ -6,13 +6,13 @@ import {FAB, TouchableRipple, withTheme} from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import FOCUSED_ICON from '../../../assets/tab-icon.png';
 import UNFOCUSED_ICON from '../../../assets/tab-icon-outline.png';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
   focused: boolean,
   onPress: () => void,
   onLongPress: () => void,
-  theme: CustomTheme,
+  theme: CustomThemeType,
   tabBarHeight: number,
 };
 

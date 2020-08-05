@@ -10,7 +10,7 @@ import {OverflowMenuProvider} from 'react-navigation-header-buttons';
 import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from './src/managers/AsyncStorageManager';
 import CustomIntroSlider from './src/components/Overrides/CustomIntroSlider';
-import type {CustomTheme} from './src/managers/ThemeManager';
+import type {CustomThemeType} from './src/managers/ThemeManager';
 import ThemeManager from './src/managers/ThemeManager';
 import MainNavigator from './src/navigation/MainNavigator';
 import AprilFoolsManager from './src/managers/AprilFoolsManager';
@@ -35,7 +35,7 @@ type StateType = {
   showIntro: boolean,
   showUpdate: boolean,
   showAprilFools: boolean,
-  currentTheme: CustomTheme | null,
+  currentTheme: CustomThemeType | null,
 };
 
 export default class App extends React.Component<null, StateType> {

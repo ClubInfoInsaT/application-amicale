@@ -4,13 +4,13 @@ import * as React from 'react';
 import {Badge, TouchableRipple, withTheme} from 'react-native-paper';
 import {Dimensions, Image, View} from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
   image: string | null,
   onPress: () => void | null,
   badgeCount: number | null,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 const AnimatableBadge = Animatable.createAnimatableComponent(Badge);

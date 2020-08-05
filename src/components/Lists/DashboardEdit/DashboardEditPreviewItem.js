@@ -3,13 +3,13 @@
 import * as React from 'react';
 import {TouchableRipple, withTheme} from 'react-native-paper';
 import {Dimensions, Image, View} from 'react-native';
-import type {CustomTheme} from '../../../managers/ThemeManager';
+import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 type PropsType = {
   image: string,
   isActive: boolean,
   onPress: () => void,
-  theme: CustomTheme,
+  theme: CustomThemeType,
 };
 
 /**

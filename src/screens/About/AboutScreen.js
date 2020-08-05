@@ -145,9 +145,7 @@ class AboutScreen extends React.Component<PropsType> {
    */
   additionalDevData = [
     {
-      onPressCallback: () => {
-        console.log('Meme this');
-      },
+      onPressCallback: () => {},
       icon: 'account',
       text: 'Yohan SIMARD',
       showChevron: false,

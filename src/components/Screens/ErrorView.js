@@ -8,11 +8,11 @@ import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {ERROR_TYPE} from '../../utils/WebData';
-import type {CustomTheme} from '../../managers/ThemeManager';
+import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
   navigation: StackNavigationProp,
-  theme: CustomTheme,
+  theme: CustomThemeType,
   route: {name: string},
   onRefresh?: () => void,
   errorCode?: number,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 
 class ErrorView extends React.PureComponent<PropsType> {
   static defaultProps = {
-    onRefresh: (): void => null,
+    onRefresh: () => {},
     errorCode: 0,
     icon: '',
     message: '',
@@ -141,10 +141,12 @@ class ErrorView extends React.PureComponent<PropsType> {
           this.icon = 'alert-circle-outline';
           break;
       }
-      this.message += `\n\nCode ${props.errorCode}`;
+      this.message += `\n\nCode ${
+        props.errorCode != null ? props.errorCode : -1
+      }`;
     } else {
-      this.message = props.message;
-      this.icon = props.icon;
+      this.message = props.message != null ? props.message : '';
+      this.icon = props.icon != null ? props.icon : '';
     }
   }
 
@@ -168,6 +170,7 @@ class ErrorView extends React.PureComponent<PropsType> {
         <View style={styles.inner}>
           <View style={styles.iconContainer}>
             <MaterialCommunityIcons
+              // $FlowFixMe
               name={this.icon}
               size={150}
               color={props.theme.colors.textDisabled}
