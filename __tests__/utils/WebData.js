@@ -1,45 +1,47 @@
-import React from 'react';
-import {isResponseValid} from "../../src/utils/WebData";
+/* eslint-disable */
 
-let fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS but in react-native
+import React from 'react';
+import {isApiResponseValid} from '../../src/utils/WebData';
+
+const fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS but in react-native
 
 test('isRequestResponseValid', () => {
-    let json = {
-        error: 0,
-        data: {}
-    };
-    expect(isResponseValid(json)).toBeTrue();
-    json = {
-        error: 1,
-        data: {}
-    };
-    expect(isResponseValid(json)).toBeTrue();
-    json = {
-        error: 50,
-        data: {}
-    };
-    expect(isResponseValid(json)).toBeTrue();
-    json = {
-        error: 50,
-        data: {truc: 'machin'}
-    };
-    expect(isResponseValid(json)).toBeTrue();
-    json = {
-        message: 'coucou'
-    };
-    expect(isResponseValid(json)).toBeFalse();
-    json = {
-        error: 'coucou',
-        data: {truc: 'machin'}
-    };
-    expect(isResponseValid(json)).toBeFalse();
-    json = {
-        error: 0,
-        data: 'coucou'
-    };
-    expect(isResponseValid(json)).toBeFalse();
-    json = {
-        error: 0,
-    };
-    expect(isResponseValid(json)).toBeFalse();
+  let json = {
+    error: 0,
+    data: {},
+  };
+  expect(isApiResponseValid(json)).toBeTrue();
+  json = {
+    error: 1,
+    data: {},
+  };
+  expect(isApiResponseValid(json)).toBeTrue();
+  json = {
+    error: 50,
+    data: {},
+  };
+  expect(isApiResponseValid(json)).toBeTrue();
+  json = {
+    error: 50,
+    data: {truc: 'machin'},
+  };
+  expect(isApiResponseValid(json)).toBeTrue();
+  json = {
+    message: 'coucou',
+  };
+  expect(isApiResponseValid(json)).toBeFalse();
+  json = {
+    error: 'coucou',
+    data: {truc: 'machin'},
+  };
+  expect(isApiResponseValid(json)).toBeFalse();
+  json = {
+    error: 0,
+    data: 'coucou',
+  };
+  expect(isApiResponseValid(json)).toBeFalse();
+  json = {
+    error: 0,
+  };
+  expect(isApiResponseValid(json)).toBeFalse();
 });

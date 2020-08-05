@@ -1,210 +1,217 @@
-jest.mock('react-native-keychain');
+/* eslint-disable */
 
 import React from 'react';
-import ConnectionManager from "../../src/managers/ConnectionManager";
-import {ERROR_TYPE} from "../../src/utils/WebData";
+import ConnectionManager from '../../src/managers/ConnectionManager';
+import {ERROR_TYPE} from '../../src/utils/WebData';
 
-let fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS but in react-native
+jest.mock('react-native-keychain');
+
+const fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS but in react-native
 
 const c = ConnectionManager.getInstance();
 
 afterEach(() => {
-    jest.restoreAllMocks();
+  jest.restoreAllMocks();
 });
 
 test('isLoggedIn yes', () => {
-    jest.spyOn(ConnectionManager.prototype, 'getToken').mockImplementationOnce(() => {
-        return 'token';
+  jest
+    .spyOn(ConnectionManager.prototype, 'getToken')
+    .mockImplementationOnce(() => {
+      return 'token';
     });
-    return expect(c.isLoggedIn()).toBe(true);
+  return expect(c.isLoggedIn()).toBe(true);
 });
 
 test('isLoggedIn no', () => {
-    jest.spyOn(ConnectionManager.prototype, 'getToken').mockImplementationOnce(() => {
-        return null;
+  jest
+    .spyOn(ConnectionManager.prototype, 'getToken')
+    .mockImplementationOnce(() => {
+      return null;
     });
-    return expect(c.isLoggedIn()).toBe(false);
+  return expect(c.isLoggedIn()).toBe(false);
 });
 
-test("isConnectionResponseValid", () => {
-    let json = {
-        error: 0,
-        data: {token: 'token'}
-    };
-    expect(c.isConnectionResponseValid(json)).toBeTrue();
-    json = {
-        error: 2,
-        data: {}
-    };
-    expect(c.isConnectionResponseValid(json)).toBeTrue();
-    json = {
-        error: 0,
-        data: {token: ''}
-    };
-    expect(c.isConnectionResponseValid(json)).toBeFalse();
-    json = {
-        error: 'prout',
-        data: {token: ''}
-    };
-    expect(c.isConnectionResponseValid(json)).toBeFalse();
+test('connect bad credentials', () => {
+  jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
+    return Promise.resolve({
+      json: () => {
+        return {
+          error: ERROR_TYPE.BAD_CREDENTIALS,
+          data: {},
+        };
+      },
+    });
+  });
+  return expect(c.connect('email', 'password')).rejects.toBe(
+    ERROR_TYPE.BAD_CREDENTIALS,
+  );
 });
 
-test("connect bad credentials", () => {
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.resolve({
-            json: () => {
-                return {
-                    error: ERROR_TYPE.BAD_CREDENTIALS,
-                    data: {}
-                };
-            },
-        })
+test('connect good credentials', () => {
+  jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
+    return Promise.resolve({
+      json: () => {
+        return {
+          error: ERROR_TYPE.SUCCESS,
+          data: {token: 'token'},
+        };
+      },
     });
-    return expect(c.connect('email', 'password'))
-        .rejects.toBe(ERROR_TYPE.BAD_CREDENTIALS);
+  });
+  jest
+    .spyOn(ConnectionManager.prototype, 'saveLogin')
+    .mockImplementationOnce(() => {
+      return Promise.resolve(true);
+    });
+  return expect(c.connect('email', 'password')).resolves.toBeTruthy();
 });
 
-test("connect good credentials", () => {
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.resolve({
-            json: () => {
-                return {
-                    error: ERROR_TYPE.SUCCESS,
-                    data: {token: 'token'}
-                };
-            },
-        })
+test('connect good credentials no consent', () => {
+  jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
+    return Promise.resolve({
+      json: () => {
+        return {
+          error: ERROR_TYPE.NO_CONSENT,
+          data: {},
+        };
+      },
     });
-    jest.spyOn(ConnectionManager.prototype, 'saveLogin').mockImplementationOnce(() => {
-        return Promise.resolve(true);
-    });
-    return expect(c.connect('email', 'password')).resolves.toBeTruthy();
+  });
+  return expect(c.connect('email', 'password')).rejects.toBe(
+    ERROR_TYPE.NO_CONSENT,
+  );
 });
 
-test("connect good credentials no consent", () => {
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.resolve({
-            json: () => {
-                return {
-                    error: ERROR_TYPE.NO_CONSENT,
-                    data: {}
-                };
-            },
-        })
+test('connect good credentials, fail save token', () => {
+  jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
+    return Promise.resolve({
+      json: () => {
+        return {
+          error: ERROR_TYPE.SUCCESS,
+          data: {token: 'token'},
+        };
+      },
     });
-    return expect(c.connect('email', 'password'))
-        .rejects.toBe(ERROR_TYPE.NO_CONSENT);
+  });
+  jest
+    .spyOn(ConnectionManager.prototype, 'saveLogin')
+    .mockImplementationOnce(() => {
+      return Promise.reject(false);
+    });
+  return expect(c.connect('email', 'password')).rejects.toBe(
+    ERROR_TYPE.UNKNOWN,
+  );
 });
 
-test("connect good credentials, fail save token", () => {
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.resolve({
-            json: () => {
-                return {
-                    error: ERROR_TYPE.SUCCESS,
-                    data: {token: 'token'}
-                };
-            },
-        })
-    });
-    jest.spyOn(ConnectionManager.prototype, 'saveLogin').mockImplementationOnce(() => {
-        return Promise.reject(false);
-    });
-    return expect(c.connect('email', 'password')).rejects.toBe(ERROR_TYPE.UNKNOWN);
+test('connect connection error', () => {
+  jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
+    return Promise.reject();
+  });
+  return expect(c.connect('email', 'password')).rejects.toBe(
+    ERROR_TYPE.CONNECTION_ERROR,
+  );
 });
 
-test("connect connection error", () => {
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.reject();
+test('connect bogus response 1', () => {
+  jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
+    return Promise.resolve({
+      json: () => {
+        return {
+          thing: true,
+          wrong: '',
+        };
+      },
     });
-    return expect(c.connect('email', 'password'))
-        .rejects.toBe(ERROR_TYPE.CONNECTION_ERROR);
+  });
+  return expect(c.connect('email', 'password')).rejects.toBe(
+    ERROR_TYPE.CONNECTION_ERROR,
+  );
 });
 
-test("connect bogus response 1", () => {
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.resolve({
-            json: () => {
-                return {
-                    thing: true,
-                    wrong: '',
-                }
-            },
-        })
+test('authenticatedRequest success', () => {
+  jest
+    .spyOn(ConnectionManager.prototype, 'getToken')
+    .mockImplementationOnce(() => {
+      return 'token';
     });
-    return expect(c.connect('email', 'password'))
-        .rejects.toBe(ERROR_TYPE.CONNECTION_ERROR);
+  jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
+    return Promise.resolve({
+      json: () => {
+        return {
+          error: ERROR_TYPE.SUCCESS,
+          data: {coucou: 'toi'},
+        };
+      },
+    });
+  });
+  return expect(
+    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
+  ).resolves.toStrictEqual({coucou: 'toi'});
 });
 
-
-test("authenticatedRequest success", () => {
-    jest.spyOn(ConnectionManager.prototype, 'getToken').mockImplementationOnce(() => {
-        return 'token';
+test('authenticatedRequest error wrong token', () => {
+  jest
+    .spyOn(ConnectionManager.prototype, 'getToken')
+    .mockImplementationOnce(() => {
+      return 'token';
     });
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.resolve({
-            json: () => {
-                return {
-                    error: ERROR_TYPE.SUCCESS,
-                    data: {coucou: 'toi'}
-                };
-            },
-        })
+  jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
+    return Promise.resolve({
+      json: () => {
+        return {
+          error: ERROR_TYPE.BAD_TOKEN,
+          data: {},
+        };
+      },
     });
-    return expect(c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'))
-        .resolves.toStrictEqual({coucou: 'toi'});
+  });
+  return expect(
+    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
+  ).rejects.toBe(ERROR_TYPE.BAD_TOKEN);
 });
 
-test("authenticatedRequest error wrong token", () => {
-    jest.spyOn(ConnectionManager.prototype, 'getToken').mockImplementationOnce(() => {
-        return 'token';
+test('authenticatedRequest error bogus response', () => {
+  jest
+    .spyOn(ConnectionManager.prototype, 'getToken')
+    .mockImplementationOnce(() => {
+      return 'token';
     });
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.resolve({
-            json: () => {
-                return {
-                    error: ERROR_TYPE.BAD_TOKEN,
-                    data: {}
-                };
-            },
-        })
+  jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
+    return Promise.resolve({
+      json: () => {
+        return {
+          error: ERROR_TYPE.SUCCESS,
+        };
+      },
     });
-    return expect(c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'))
-        .rejects.toBe(ERROR_TYPE.BAD_TOKEN);
+  });
+  return expect(
+    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
+  ).rejects.toBe(ERROR_TYPE.CONNECTION_ERROR);
 });
 
-test("authenticatedRequest error bogus response", () => {
-    jest.spyOn(ConnectionManager.prototype, 'getToken').mockImplementationOnce(() => {
-        return 'token';
+test('authenticatedRequest connection error', () => {
+  jest
+    .spyOn(ConnectionManager.prototype, 'getToken')
+    .mockImplementationOnce(() => {
+      return 'token';
     });
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.resolve({
-            json: () => {
-                return {
-                    error: ERROR_TYPE.SUCCESS,
-                };
-            },
-        })
-    });
-    return expect(c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'))
-        .rejects.toBe(ERROR_TYPE.CONNECTION_ERROR);
+  jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
+    return Promise.reject();
+  });
+  return expect(
+    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
+  ).rejects.toBe(ERROR_TYPE.CONNECTION_ERROR);
 });
 
-test("authenticatedRequest connection error", () => {
-    jest.spyOn(ConnectionManager.prototype, 'getToken').mockImplementationOnce(() => {
-        return 'token';
+test('authenticatedRequest error no token', () => {
+  jest
+    .spyOn(ConnectionManager.prototype, 'getToken')
+    .mockImplementationOnce(() => {
+      return null;
     });
-    jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        return Promise.reject()
-    });
-    return expect(c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'))
-        .rejects.toBe(ERROR_TYPE.CONNECTION_ERROR);
-});
-
-test("authenticatedRequest error no token", () => {
-    jest.spyOn(ConnectionManager.prototype, 'getToken').mockImplementationOnce(() => {
-        return null;
-    });
-    return expect(c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'))
-        .rejects.toBe(ERROR_TYPE.UNKNOWN);
+  return expect(
+    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
+  ).rejects.toBe(ERROR_TYPE.UNKNOWN);
 });
