@@ -131,7 +131,11 @@ export default class AsyncStorageManager {
    * @param key
    * @param value
    */
-  static set(key: string, value: number | string | boolean | {...} | []) {
+  static set(
+    key: string,
+    // eslint-disable-next-line flowtype/no-weak-types
+    value: number | string | boolean | {...} | Array<any>,
+  ) {
     AsyncStorageManager.getInstance().setPreference(key, value);
   }
 
@@ -142,7 +146,8 @@ export default class AsyncStorageManager {
    * @returns {string}
    */
   static getString(key: string): string {
-    return AsyncStorageManager.getInstance().getPreference(key);
+    const value = AsyncStorageManager.getInstance().getPreference(key);
+    return value != null ? value : '';
   }
 
   /**
@@ -207,7 +212,11 @@ export default class AsyncStorageManager {
    * @param key
    * @param value
    */
-  setPreference(key: string, value: number | string | boolean | {...} | []) {
+  setPreference(
+    key: string,
+    // eslint-disable-next-line flowtype/no-weak-types
+    value: number | string | boolean | {...} | Array<any>,
+  ) {
     if (AsyncStorageManager.PREFERENCES[key] != null) {
       let convertedValue;
       if (typeof value === 'string') convertedValue = value;
