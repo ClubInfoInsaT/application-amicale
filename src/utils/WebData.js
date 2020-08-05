@@ -100,15 +100,17 @@ export async function apiRequest(
  * If no data was found, returns an empty object
  *
  * @param url The urls to fetch data from
- * @return Promise<{...}>
+ * @return Promise<any>
  */
-export async function readData(url: string): Promise<{...}> {
-  return new Promise(
-    (resolve: (response: {...}) => void, reject: () => void) => {
-      fetch(url)
-        .then(async (response: Response): Promise<{...}> => response.json())
-        .then((data: {...}): void => resolve(data))
-        .catch((): void => reject());
-    },
-  );
+// eslint-disable-next-line flowtype/no-weak-types
+export async function readData(url: string): Promise<any> {
+  // eslint-disable-next-line flowtype/no-weak-types
+  return new Promise((resolve: (response: any) => void, reject: () => void) => {
+    fetch(url)
+      // eslint-disable-next-line flowtype/no-weak-types
+      .then(async (response: Response): Promise<any> => response.json())
+      // eslint-disable-next-line flowtype/no-weak-types
+      .then((data: any): void => resolve(data))
+      .catch((): void => reject());
+  });
 }
