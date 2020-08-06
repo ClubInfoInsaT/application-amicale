@@ -4,9 +4,11 @@ import React from 'react';
 import Piece from '../logic/Piece';
 import ShapeI from '../Shapes/ShapeI';
 
-let colors = {
-  tetrisI: '#000001',
-  tetrisBackground: '#000002',
+let theme = {
+  colors: {
+    tetrisI: '#000001',
+    tetrisBackground: '#000002',
+  },
 };
 
 jest.mock('../Shapes/ShapeI');
@@ -37,7 +39,7 @@ test('isPositionValid', () => {
   ];
   let size = 2;
 
-  let p = new Piece(colors);
+  let p = new Piece(theme);
   expect(p.isPositionValid(grid, size, size)).toBeTrue();
   x = 1;
   y = 0;
@@ -65,7 +67,7 @@ test('isPositionValid', () => {
 });
 
 test('tryMove', () => {
-  let p = new Piece(colors);
+  let p = new Piece(theme);
   const callbackMock = jest.fn();
   let isValid = true;
   let spy1 = jest
@@ -98,7 +100,7 @@ test('tryMove', () => {
 });
 
 test('tryRotate', () => {
-  let p = new Piece(colors);
+  let p = new Piece(theme);
   let isValid = true;
   let spy1 = jest
     .spyOn(Piece.prototype, 'isPositionValid')
@@ -131,18 +133,30 @@ test('toGrid', () => {
       return [{x: x, y: y}];
     });
   let spy2 = jest.spyOn(ShapeI.prototype, 'getColor').mockImplementation(() => {
-    return colors.tetrisI;
+    return theme.colors.tetrisI;
   });
   let grid = [
-    [{isEmpty: true}, {isEmpty: true}],
-    [{isEmpty: true}, {isEmpty: true}],
+    [
+      {isEmpty: true, key: '0'},
+      {isEmpty: true, key: '1'},
+    ],
+    [
+      {isEmpty: true, key: '0'},
+      {isEmpty: true, key: '1'},
+    ],
   ];
   let expectedGrid = [
-    [{color: colors.tetrisI, isEmpty: false}, {isEmpty: true}],
-    [{isEmpty: true}, {isEmpty: true}],
+    [
+      {color: theme.colors.tetrisI, isEmpty: false, key: '0'},
+      {isEmpty: true, key: '1'},
+    ],
+    [
+      {isEmpty: true, key: '0'},
+      {isEmpty: true, key: '1'},
+    ],
   ];
 
-  let p = new Piece(colors);
+  let p = new Piece(theme);
   p.toGrid(grid, true);
   expect(grid).toStrictEqual(expectedGrid);
 
@@ -153,16 +167,16 @@ test('toGrid', () => {
 test('removeFromGrid', () => {
   let gridOld = [
     [
-      {color: colors.tetrisI, isEmpty: false},
-      {color: colors.tetrisI, isEmpty: false},
-      {color: colors.tetrisBackground, isEmpty: true},
+      {color: theme.colors.tetrisI, isEmpty: false, key: '0'},
+      {color: theme.colors.tetrisI, isEmpty: false, key: '1'},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '2'},
     ],
   ];
   let gridNew = [
     [
-      {color: colors.tetrisBackground, isEmpty: true},
-      {color: colors.tetrisBackground, isEmpty: true},
-      {color: colors.tetrisBackground, isEmpty: true},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '2'},
     ],
   ];
   let oldCoord = [
@@ -175,9 +189,9 @@ test('removeFromGrid', () => {
       return oldCoord;
     });
   let spy2 = jest.spyOn(ShapeI.prototype, 'getColor').mockImplementation(() => {
-    return colors.tetrisI;
+    return theme.colors.tetrisI;
   });
-  let p = new Piece(colors);
+  let p = new Piece(theme);
   p.removeFromGrid(gridOld);
   expect(gridOld).toStrictEqual(gridNew);
 

@@ -64,7 +64,7 @@ test('connect good credentials', () => {
     .mockImplementationOnce(() => {
       return Promise.resolve(true);
     });
-  return expect(c.connect('email', 'password')).resolves.toBeTruthy();
+  return expect(c.connect('email', 'password')).resolves.toBe(undefined);
 });
 
 test('connect good credentials no consent', () => {
@@ -100,7 +100,7 @@ test('connect good credentials, fail save token', () => {
       return Promise.reject(false);
     });
   return expect(c.connect('email', 'password')).rejects.toBe(
-    ERROR_TYPE.UNKNOWN,
+    ERROR_TYPE.TOKEN_SAVE,
   );
 });
 
@@ -125,7 +125,7 @@ test('connect bogus response 1', () => {
     });
   });
   return expect(c.connect('email', 'password')).rejects.toBe(
-    ERROR_TYPE.CONNECTION_ERROR,
+    ERROR_TYPE.SERVER_ERROR,
   );
 });
 
@@ -188,7 +188,7 @@ test('authenticatedRequest error bogus response', () => {
   });
   return expect(
     c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
-  ).rejects.toBe(ERROR_TYPE.CONNECTION_ERROR);
+  ).rejects.toBe(ERROR_TYPE.SERVER_ERROR);
 });
 
 test('authenticatedRequest connection error', () => {
@@ -213,5 +213,5 @@ test('authenticatedRequest error no token', () => {
     });
   return expect(
     c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
-  ).rejects.toBe(ERROR_TYPE.UNKNOWN);
+  ).rejects.toBe(ERROR_TYPE.TOKEN_RETRIEVE);
 });

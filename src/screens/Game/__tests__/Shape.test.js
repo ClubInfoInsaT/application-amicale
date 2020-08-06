@@ -4,28 +4,30 @@ import React from 'react';
 import BaseShape from '../Shapes/BaseShape';
 import ShapeI from '../Shapes/ShapeI';
 
-const colors = {
-  tetrisI: '#000001',
-  tetrisO: '#000002',
-  tetrisT: '#000003',
-  tetrisS: '#000004',
-  tetrisZ: '#000005',
-  tetrisJ: '#000006',
-  tetrisL: '#000007',
+const theme = {
+  colors: {
+    tetrisI: '#000001',
+    tetrisO: '#000002',
+    tetrisT: '#000003',
+    tetrisS: '#000004',
+    tetrisZ: '#000005',
+    tetrisJ: '#000006',
+    tetrisL: '#000007',
+  },
 };
 
 test('constructor', () => {
   expect(() => new BaseShape()).toThrow(Error);
 
-  let T = new ShapeI(colors);
+  let T = new ShapeI(theme);
   expect(T.position.y).toBe(0);
   expect(T.position.x).toBe(3);
   expect(T.getCurrentShape()).toStrictEqual(T.getShapes()[0]);
-  expect(T.getColor()).toBe(colors.tetrisI);
+  expect(T.getColor()).toBe(theme.colors.tetrisI);
 });
 
 test('move', () => {
-  let T = new ShapeI(colors);
+  let T = new ShapeI(theme);
   T.move(0, 1);
   expect(T.position.x).toBe(3);
   expect(T.position.y).toBe(1);
@@ -44,7 +46,7 @@ test('move', () => {
 });
 
 test('rotate', () => {
-  let T = new ShapeI(colors);
+  let T = new ShapeI(theme);
   T.rotate(true);
   expect(T.getCurrentShape()).toStrictEqual(T.getShapes()[1]);
   T.rotate(true);
@@ -64,7 +66,7 @@ test('rotate', () => {
 });
 
 test('getCellsCoordinates', () => {
-  let T = new ShapeI(colors);
+  let T = new ShapeI(theme);
   expect(T.getCellsCoordinates(false)).toStrictEqual([
     {x: 0, y: 1},
     {x: 1, y: 1},

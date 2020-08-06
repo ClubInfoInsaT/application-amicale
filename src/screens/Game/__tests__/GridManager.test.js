@@ -5,36 +5,38 @@ import GridManager from '../logic/GridManager';
 import ScoreManager from '../logic/ScoreManager';
 import Piece from '../logic/Piece';
 
-let colors = {
-  tetrisBackground: '#000002',
+let theme = {
+  colors: {
+    tetrisBackground: '#000002',
+  },
 };
 
-jest.mock('../ScoreManager');
+jest.mock('../logic/ScoreManager');
 
 afterAll(() => {
   jest.restoreAllMocks();
 });
 
 test('getEmptyLine', () => {
-  let g = new GridManager(2, 2, colors);
+  let g = new GridManager(2, 2, theme);
   expect(g.getEmptyLine(2)).toStrictEqual([
-    {color: colors.tetrisBackground, isEmpty: true},
-    {color: colors.tetrisBackground, isEmpty: true},
+    {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
+    {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
   ]);
 
   expect(g.getEmptyLine(-1)).toStrictEqual([]);
 });
 
 test('getEmptyGrid', () => {
-  let g = new GridManager(2, 2, colors);
+  let g = new GridManager(2, 2, theme);
   expect(g.getEmptyGrid(2, 2)).toStrictEqual([
     [
-      {color: colors.tetrisBackground, isEmpty: true},
-      {color: colors.tetrisBackground, isEmpty: true},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
     ],
     [
-      {color: colors.tetrisBackground, isEmpty: true},
-      {color: colors.tetrisBackground, isEmpty: true},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
     ],
   ]);
 
@@ -43,7 +45,7 @@ test('getEmptyGrid', () => {
 });
 
 test('getLinesToClear', () => {
-  let g = new GridManager(2, 2, colors);
+  let g = new GridManager(2, 2, theme);
   g.getCurrentGrid()[0][0].isEmpty = false;
   g.getCurrentGrid()[0][1].isEmpty = false;
   let coord = [{x: 1, y: 0}];
@@ -59,15 +61,15 @@ test('getLinesToClear', () => {
 });
 
 test('clearLines', () => {
-  let g = new GridManager(2, 2, colors);
+  let g = new GridManager(2, 2, theme);
   let grid = [
     [
-      {color: colors.tetrisBackground, isEmpty: true},
-      {color: colors.tetrisBackground, isEmpty: true},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
     ],
     [
-      {color: '0', isEmpty: true},
-      {color: '0', isEmpty: true},
+      {color: '0', isEmpty: true, key: '0'},
+      {color: '0', isEmpty: true, key: '1'},
     ],
   ];
   g.getCurrentGrid()[1][0].color = '0';
@@ -77,19 +79,19 @@ test('clearLines', () => {
   g.clearLines([1], scoreManager);
   grid = [
     [
-      {color: colors.tetrisBackground, isEmpty: true},
-      {color: colors.tetrisBackground, isEmpty: true},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
     ],
     [
-      {color: colors.tetrisBackground, isEmpty: true},
-      {color: colors.tetrisBackground, isEmpty: true},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
+      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
     ],
   ];
   expect(g.getCurrentGrid()).toStrictEqual(grid);
 });
 
 test('freezeTetromino', () => {
-  let g = new GridManager(2, 2, colors);
+  let g = new GridManager(2, 2, theme);
   let spy1 = jest
     .spyOn(GridManager.prototype, 'getLinesToClear')
     .mockImplementation(() => {});
