@@ -82,7 +82,7 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
   }
 
   componentWillUnmount() {
-    this.logic.endGame(false);
+    this.logic.endGame(true);
   }
 
   getRightButton = (): React.Node => {
