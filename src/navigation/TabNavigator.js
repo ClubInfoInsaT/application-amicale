@@ -33,7 +33,7 @@ import Mascot, {MASCOT_STYLE} from '../components/Mascot/Mascot';
 const modalTransition =
   Platform.OS === 'ios'
     ? TransitionPresets.ModalPresentationIOS
-    : TransitionPresets.ModalSlideFromBottomIOS;
+    : TransitionPresets.ModalTransition;
 
 const defaultScreenOptions = {
   gestureEnabled: true,

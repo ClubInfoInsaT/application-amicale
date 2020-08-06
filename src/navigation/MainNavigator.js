@@ -35,7 +35,7 @@ import GameStartScreen from '../screens/Game/screens/GameStartScreen';
 const modalTransition =
   Platform.OS === 'ios'
     ? TransitionPresets.ModalPresentationIOS
-    : TransitionPresets.ModalSlideFromBottomIOS;
+    : TransitionPresets.ModalTransition;
 
 const defaultScreenOptions = {
   gestureEnabled: true,
