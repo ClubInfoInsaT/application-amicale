@@ -97,7 +97,7 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    * Creates the header content
    */
   componentDidMount() {
-    const [navigation] = this.props;
+    const {navigation} = this.props;
     navigation.setOptions({
       headerTitle: this.getSearchBar,
       headerBackTitleVisible: false,
