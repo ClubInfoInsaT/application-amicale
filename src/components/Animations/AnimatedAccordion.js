@@ -57,8 +57,8 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
   }
 
   setupChevron() {
-    const {state} = this;
-    if (state.expanded) {
+    const {expanded} = this.state;
+    if (expanded) {
       this.chevronIcon = 'chevron-up';
       this.animStart = '180deg';
       this.animEnd = '0deg';
@@ -70,12 +70,14 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
   }
 
   toggleAccordion = () => {
-    const {state} = this;
+    const {expanded} = this.state;
     if (this.chevronRef.current != null) {
       this.chevronRef.current.transitionTo({
-        rotate: state.expanded ? this.animStart : this.animEnd,
+        rotate: expanded ? this.animStart : this.animEnd,
       });
-      this.setState({expanded: !state.expanded});
+      this.setState((prevState: StateType): {expanded: boolean} => ({
+        expanded: !prevState.expanded,
+      }));
     }
   };
 
@@ -87,15 +89,16 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
         <List.Item
           title={props.title}
           subtitle={props.subtitle}
-          titleStyle={state.expanded ? {color: colors.primary} : undefined}
+          titleStyle={state.expanded ? {color: colors.primary} : null}
           onPress={this.toggleAccordion}
           right={({size}: {size: number}): React.Node => (
             <AnimatedListIcon
               ref={this.chevronRef}
               size={size}
               icon={this.chevronIcon}
-              color={state.expanded ? colors.primary : undefined}
+              color={state.expanded ? colors.primary : null}
               useNativeDriver
+              style={{rotate: '0deg'}}
             />
           )}
           left={props.left}

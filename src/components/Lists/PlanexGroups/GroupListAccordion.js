@@ -96,7 +96,6 @@ class GroupListAccordion extends React.Component<PropsType> {
           }
           unmountWhenCollapsed // Only render list if expanded for increased performance
           opened={props.item.id === 0 || props.currentSearchString.length > 0}>
-          {/* $FlowFixMe */}
           <FlatList
             data={this.getData()}
             extraData={props.currentSearchString}
