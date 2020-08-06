@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
+import {Animated} from 'react-native';
 import {withTheme} from 'react-native-paper';
-import Animated from 'react-native-reanimated';
 import {Collapsible} from 'react-navigation-collapsible';
 import {StackNavigationProp} from '@react-navigation/stack';
 import TabIcon from './TabIcon';
@@ -194,8 +194,8 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
     const {props, state} = this;
     props.navigation.addListener('state', this.onRouteChange);
     const icons = this.getIcons();
-    // $FlowFixMe
     return (
+      // $FlowFixMe
       <Animated.View
         useNativeDriver
         style={{
