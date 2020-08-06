@@ -10,40 +10,44 @@ type PropsType = {
   onPress: () => void,
   onStarPress: () => void,
   item: PlanexGroupType,
+  favorites: Array<PlanexGroupType>,
   height: number,
 };
 
-type StateType = {
-  isFav: boolean,
-};
+const REPLACE_REGEX = /_/g;
 
-class GroupListItem extends React.Component<PropsType, StateType> {
+class GroupListItem extends React.Component<PropsType> {
+  isFav: boolean;
+
   constructor(props: PropsType) {
     super(props);
-    this.state = {
-      isFav: props.item.isFav !== undefined && props.item.isFav,
-    };
+    this.isFav = this.isGroupInFavorites(props.favorites);
   }
 
-  shouldComponentUpdate(prevProps: PropsType, prevState: StateType): boolean {
-    const {isFav} = this.state;
-    return prevState.isFav !== isFav;
+  shouldComponentUpdate(nextProps: PropsType): boolean {
+    const {favorites} = this.props;
+    const favChanged = favorites.length !== nextProps.favorites.length;
+    let newFavState = this.isFav;
+    if (favChanged) newFavState = this.isGroupInFavorites(nextProps.favorites);
+    const shouldUpdate = this.isFav !== newFavState;
+    this.isFav = newFavState;
+    return shouldUpdate;
   }
 
-  onStarPress = () => {
-    const {props} = this;
-    this.setState((prevState: StateType): StateType => ({
-      isFav: !prevState.isFav,
-    }));
-    props.onStarPress();
-  };
+  isGroupInFavorites(favorites: Array<PlanexGroupType>): boolean {
+    const {item} = this.props;
+    for (let i = 0; i < favorites.length; i += 1) {
+      if (favorites[i].id === item.id) return true;
+    }
+    return false;
+  }
 
   render(): React.Node {
-    const {props, state} = this;
+    const {props} = this;
     const {colors} = props.theme;
     return (
       <List.Item
-        title={props.item.name}
+        title={props.item.name.replace(REPLACE_REGEX, ' ')}
         onPress={props.onPress}
         left={({size}: {size: number}): React.Node => (
           <List.Icon size={size} icon="chevron-right" />
@@ -52,8 +56,8 @@ class GroupListItem extends React.Component<PropsType, StateType> {
           <IconButton
             size={size}
             icon="star"
-            onPress={this.onStarPress}
-            color={state.isFav ? colors.tetrisScore : color}
+            onPress={props.onStarPress}
+            color={this.isFav ? colors.tetrisScore : color}
           />
         )}
         style={{

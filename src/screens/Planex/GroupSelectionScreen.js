@@ -15,7 +15,6 @@ const LIST_ITEM_HEIGHT = 70;
 export type PlanexGroupType = {
   name: string,
   id: number,
-  isFav: boolean,
 };
 
 export type PlanexGroupCategoryType = {
@@ -43,46 +42,11 @@ function sortName(
 }
 
 const GROUPS_URL = 'http://planex.insa-toulouse.fr/wsAdeGrp.php?projectId=1';
-const REPLACE_REGEX = /_/g;
 
 /**
  * Class defining planex group selection screen.
  */
 class GroupSelectionScreen extends React.Component<PropsType, StateType> {
-  /**
-   * Removes the given group from the given array
-   *
-   * @param favorites The array containing favorites groups
-   * @param group The group to remove from the array
-   */
-  static removeGroupFromFavorites(
-    favorites: Array<PlanexGroupType>,
-    group: PlanexGroupType,
-  ) {
-    for (let i = 0; i < favorites.length; i += 1) {
-      if (group.id === favorites[i].id) {
-        favorites.splice(i, 1);
-        break;
-      }
-    }
-  }
-
-  /**
-   * Adds the given group to the given array
-   *
-   * @param favorites The array containing favorites groups
-   * @param group The group to add to the array
-   */
-  static addGroupToFavorites(
-    favorites: Array<PlanexGroupType>,
-    group: PlanexGroupType,
-  ) {
-    const favGroup = {...group};
-    favGroup.isFav = true;
-    favorites.push(favGroup);
-    favorites.sort(sortName);
-  }
-
   constructor(props: PropsType) {
     super(props);
     this.state = {
@@ -130,35 +94,23 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    */
   getRenderItem = ({item}: {item: PlanexGroupCategoryType}): React.Node => {
     const {currentSearchString, favoriteGroups} = this.state;
-    if (this.shouldDisplayAccordion(item)) {
+    if (
+      this.shouldDisplayAccordion(item) ||
+      (item.id === 0 && item.content.length === 0)
+    ) {
       return (
         <GroupListAccordion
           item={item}
+          favorites={[...favoriteGroups]}
           onGroupPress={this.onListItemPress}
           onFavoritePress={this.onListFavoritePress}
           currentSearchString={currentSearchString}
-          favoriteNumber={favoriteGroups.length}
           height={LIST_ITEM_HEIGHT}
         />
       );
     }
     return null;
   };
-
-  /**
-   * Replaces underscore by spaces and sets the favorite state of every group in the given category
-   *
-   * @param groups The groups to format
-   * @return {Array<PlanexGroupType>}
-   */
-  getFormattedGroups(groups: Array<PlanexGroupType>): Array<PlanexGroupType> {
-    return groups.map((group: PlanexGroupType): PlanexGroupType => {
-      const newGroup = {...group};
-      newGroup.name = group.name.replace(REPLACE_REGEX, ' ');
-      newGroup.isFav = this.isGroupInFavorites(group);
-      return newGroup;
-    });
-  }
 
   /**
    * Creates the dataset to be used in the FlatList
@@ -231,16 +183,8 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    * @param group The group to add/remove to favorites
    */
   updateGroupFavorites(group: PlanexGroupType) {
-    const {favoriteGroups} = this.state;
-    const newFavorites = [...favoriteGroups];
-    if (this.isGroupInFavorites(group))
-      GroupSelectionScreen.removeGroupFromFavorites(newFavorites, group);
-    else GroupSelectionScreen.addGroupToFavorites(newFavorites, group);
-    this.setState({favoriteGroups: newFavorites});
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
-      newFavorites,
-    );
+    if (this.isGroupInFavorites(group)) this.removeGroupFromFavorites(group);
+    else this.addGroupToFavorites(group);
   }
 
   /**
@@ -276,9 +220,7 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
     // eslint-disable-next-line flowtype/no-weak-types
     (Object.values(fetchedData): Array<any>).forEach(
       (category: PlanexGroupCategoryType) => {
-        const newCat = {...category};
-        newCat.content = this.getFormattedGroups(category.content);
-        data.push(newCat);
+        data.push(category);
       },
     );
     data.sort(sortName);
@@ -288,6 +230,50 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
       content: favoriteGroups,
     });
     return data;
+  }
+
+  /**
+   * Removes the given group from the favorites
+   *
+   * @param group The group to remove from the array
+   */
+  removeGroupFromFavorites(group: PlanexGroupType) {
+    this.setState((prevState: StateType): {
+      favoriteGroups: Array<PlanexGroupType>,
+    } => {
+      const {favoriteGroups} = prevState;
+      for (let i = 0; i < favoriteGroups.length; i += 1) {
+        if (group.id === favoriteGroups[i].id) {
+          favoriteGroups.splice(i, 1);
+          break;
+        }
+      }
+      AsyncStorageManager.set(
+        AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
+        favoriteGroups,
+      );
+      return {favoriteGroups};
+    });
+  }
+
+  /**
+   * Adds the given group to favorites
+   *
+   * @param group The group to add to the array
+   */
+  addGroupToFavorites(group: PlanexGroupType) {
+    this.setState((prevState: StateType): {
+      favoriteGroups: Array<PlanexGroupType>,
+    } => {
+      const {favoriteGroups} = prevState;
+      favoriteGroups.push(group);
+      favoriteGroups.sort(sortName);
+      AsyncStorageManager.set(
+        AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
+        favoriteGroups,
+      );
+      return {favoriteGroups};
+    });
   }
 
   render(): React.Node {

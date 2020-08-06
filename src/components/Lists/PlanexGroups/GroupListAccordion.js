@@ -14,22 +14,23 @@ import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 type PropsType = {
   item: PlanexGroupCategoryType,
+  favorites: Array<PlanexGroupType>,
   onGroupPress: (PlanexGroupType) => void,
   onFavoritePress: (PlanexGroupType) => void,
   currentSearchString: string,
-  favoriteNumber: number,
   height: number,
   theme: CustomThemeType,
 };
 
 const LIST_ITEM_HEIGHT = 64;
+const REPLACE_REGEX = /_/g;
 
 class GroupListAccordion extends React.Component<PropsType> {
   shouldComponentUpdate(nextProps: PropsType): boolean {
     const {props} = this;
     return (
       nextProps.currentSearchString !== props.currentSearchString ||
-      nextProps.favoriteNumber !== props.favoriteNumber ||
+      nextProps.favorites.length !== props.favorites.length ||
       nextProps.item.content.length !== props.item.content.length
     );
   }
@@ -46,6 +47,7 @@ class GroupListAccordion extends React.Component<PropsType> {
       <GroupListItem
         height={LIST_ITEM_HEIGHT}
         item={item}
+        favorites={props.favorites}
         onPress={onPress}
         onStarPress={onStarPress}
       />
@@ -80,7 +82,7 @@ class GroupListAccordion extends React.Component<PropsType> {
     return (
       <View>
         <AnimatedAccordion
-          title={item.name}
+          title={item.name.replace(REPLACE_REGEX, ' ')}
           style={{
             height: props.height,
             justifyContent: 'center',
@@ -94,11 +96,11 @@ class GroupListAccordion extends React.Component<PropsType> {
               />
             ) : null
           }
-          unmountWhenCollapsed // Only render list if expanded for increased performance
-          opened={props.item.id === 0 || props.currentSearchString.length > 0}>
+          unmountWhenCollapsed={item.id !== 0} // Only render list if expanded for increased performance
+          opened={props.currentSearchString.length > 0}>
           <FlatList
             data={this.getData()}
-            extraData={props.currentSearchString}
+            extraData={props.currentSearchString + props.favorites.length}
             renderItem={this.getRenderItem}
             keyExtractor={this.keyExtractor}
             listKey={item.id.toString()}
