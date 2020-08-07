@@ -280,7 +280,7 @@ class EquipmentRentScreen extends React.Component<PropsType, StateType> {
         end: getRelativeDateString(end),
       });
     else
-      i18n.t('screens.equipment.bookingDay', {
+      subHeadingText = i18n.t('screens.equipment.bookingDay', {
         date: getRelativeDateString(start),
       });
     if (item != null) {
