@@ -66,43 +66,14 @@ git checkout master
 
 ## Installation du projet
 
-Une fois le dépôt sur votre machine et git sur la branche de votre choix, ouvrez le terminal dans le dossier du dépôt cloné et lancez le script d'installation avec la commande suivante : 
+Une fois le dépôt sur votre machine et git sur la branche de votre choix, ouvrez le terminal dans le dossier du dépôt cloné et installez les dépendances commande suivante : 
 ````shell script
-./install.sh [mode]
-````
-En remplaçant `[mode]` par le mode d'installation de votre choix. Les valeurs valides sont :
-````
-  --android     Installation juste pour Android
-  --ios         Installation juste pour iOS
-  --all         Installation pour Android et iOS
+npm install
 ````
 
-Lors de l'installation pour Android, vous serez amenés à créer un keystore (permettant d'authentifier l'appli sur votre tel). Plusieurs informations vous seront demandées, mais ce keystore n'est utile que pour le debug, donc vous pouvez laisser tous les champs vides, et taper `y` lors de la confirmation pour valider comme dans l'exemple ci-dessous :
-
-````
-Creating debug android keystore...
-What is your first and last name?
-  [Unknown]:  
-What is the name of your organizational unit?
-  [Unknown]:  
-What is the name of your organization?
-  [Unknown]:  
-What is the name of your City or Locality?
-  [Unknown]:  
-What is the name of your State or Province?
-  [Unknown]:  
-What is the two-letter country code for this unit?
-  [Unknown]:  
-Is CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown correct?
-  [no]:  y
-
-Generating 2,048 bit RSA key pair and self-signed certificate (SHA256withRSA) with a validity of 10,000 days
-        for: CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown
-[Storing debug.keystore]
-Done
-
-Creating gradle.properties file...
-Done
+Si vous êtes sur macOS, vous devrez aussi lancez la commande suivant pour terminer l'installation :
+````shell script
+cd ios && pod install
 ````
 
 En cas de problème d'installation (notamment lors du changement de branche), lancez la commande suivante pour réinstaller seulement les modules node :
