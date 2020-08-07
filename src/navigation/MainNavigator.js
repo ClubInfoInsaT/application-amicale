@@ -98,6 +98,9 @@ function MainStackComponent(props: {
         MainStack,
         GameStartScreen,
         i18n.t('screens.game.title'),
+        true,
+        null,
+        'transparent',
       )}
       <MainStack.Screen
         name="game-main"

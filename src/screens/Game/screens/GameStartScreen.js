@@ -384,22 +384,24 @@ class GameStartScreen extends React.Component<PropsType> {
   recoverGameScore() {
     const {route} = this.props;
     this.gameStats = route.params;
-    this.isHighScore =
-      this.scores.length === 0 || this.gameStats.score > this.scores[0];
-    for (let i = 0; i < 3; i += 1) {
-      if (this.scores.length > i && this.gameStats.score > this.scores[i]) {
-        this.scores.splice(i, 0, this.gameStats.score);
-        break;
-      } else if (this.scores.length <= i) {
-        this.scores.push(this.gameStats.score);
-        break;
+    if (this.gameStats.score != null) {
+      this.isHighScore =
+        this.scores.length === 0 || this.gameStats.score > this.scores[0];
+      for (let i = 0; i < 3; i += 1) {
+        if (this.scores.length > i && this.gameStats.score > this.scores[i]) {
+          this.scores.splice(i, 0, this.gameStats.score);
+          break;
+        } else if (this.scores.length <= i) {
+          this.scores.push(this.gameStats.score);
+          break;
+        }
       }
+      if (this.scores.length > 3) this.scores.splice(3, 1);
+      AsyncStorageManager.set(
+        AsyncStorageManager.PREFERENCES.gameScores.key,
+        this.scores,
+      );
     }
-    if (this.scores.length > 3) this.scores.splice(3, 1);
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.gameScores.key,
-      this.scores,
-    );
   }
 
   render(): React.Node {
