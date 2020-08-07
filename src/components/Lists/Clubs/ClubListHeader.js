@@ -7,6 +7,7 @@ import i18n from 'i18n-js';
 import AnimatedAccordion from '../../Animations/AnimatedAccordion';
 import {isItemInCategoryFilter} from '../../../utils/Search';
 import type {ClubCategoryType} from '../../../screens/Amicale/Clubs/ClubListScreen';
+import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
   categories: Array<ClubCategoryType>,
@@ -74,8 +75,8 @@ class ClubListHeader extends React.Component<PropsType> {
       <Card style={styles.card}>
         <AnimatedAccordion
           title={i18n.t('screens.clubs.categories')}
-          left={({size}: {size: number}): React.Node => (
-            <List.Icon size={size} icon="star" />
+          left={(props: ListIconPropsType): React.Node => (
+            <List.Icon color={props.color} style={props.style} icon="star" />
           )}
           opened>
           <Text style={styles.text}>

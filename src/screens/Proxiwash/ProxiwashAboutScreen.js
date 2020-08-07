@@ -3,9 +3,10 @@
 import * as React from 'react';
 import {Image, View} from 'react-native';
 import i18n from 'i18n-js';
-import {Card, List, Paragraph, Text, Title} from 'react-native-paper';
+import {Card, Avatar, Paragraph, Text, Title} from 'react-native-paper';
 import CustomTabBar from '../../components/Tabbar/CustomTabBar';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
+import type {CardTitleIconPropsType} from '../../constants/PaperStyles';
 
 const LOGO = 'https://etud.insa-toulouse.fr/~amicale_app/images/Proxiwash.png';
 
@@ -35,14 +36,8 @@ export default class ProxiwashAboutScreen extends React.Component<null> {
         <Card style={{margin: 5}}>
           <Card.Title
             title={i18n.t('screens.proxiwash.dryer')}
-            left={({
-              size,
-              color,
-            }: {
-              size: number,
-              color: string,
-            }): React.Node => (
-              <List.Icon size={size} color={color} icon="tumble-dryer" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="tumble-dryer" />
             )}
           />
           <Card.Content>
@@ -56,14 +51,8 @@ export default class ProxiwashAboutScreen extends React.Component<null> {
         <Card style={{margin: 5}}>
           <Card.Title
             title={i18n.t('screens.proxiwash.washer')}
-            left={({
-              size,
-              color,
-            }: {
-              size: number,
-              color: string,
-            }): React.Node => (
-              <List.Icon size={size} color={color} icon="washing-machine" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="washing-machine" />
             )}
           />
           <Card.Content>
@@ -77,14 +66,8 @@ export default class ProxiwashAboutScreen extends React.Component<null> {
         <Card style={{margin: 5}}>
           <Card.Title
             title={i18n.t('screens.proxiwash.tariffs')}
-            left={({
-              size,
-              color,
-            }: {
-              size: number,
-              color: string,
-            }): React.Node => (
-              <List.Icon size={size} color={color} icon="circle-multiple" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="circle-multiple" />
             )}
           />
           <Card.Content>
@@ -96,14 +79,8 @@ export default class ProxiwashAboutScreen extends React.Component<null> {
           style={{margin: 5, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
           <Card.Title
             title={i18n.t('screens.proxiwash.paymentMethods')}
-            left={({
-              size,
-              color,
-            }: {
-              size: number,
-              color: string,
-            }): React.Node => (
-              <List.Icon size={size} color={color} icon="cash" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="cash" />
             )}
           />
           <Card.Content>

@@ -3,9 +3,10 @@
 import * as React from 'react';
 import {Image, View} from 'react-native';
 import i18n from 'i18n-js';
-import {Card, List, Paragraph, Text} from 'react-native-paper';
+import {Card, Avatar, Paragraph, Text} from 'react-native-paper';
 import CustomTabBar from '../../../components/Tabbar/CustomTabBar';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import type {CardTitleIconPropsType} from '../../../constants/PaperStyles';
 
 const LOGO = 'https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png';
 
@@ -35,14 +36,8 @@ export default class ProximoAboutScreen extends React.Component<null> {
         <Card style={{margin: 5}}>
           <Card.Title
             title={i18n.t('screens.proximo.openingHours')}
-            left={({
-              size,
-              color,
-            }: {
-              size: number,
-              color: string,
-            }): React.Node => (
-              <List.Icon size={size} color={color} icon="clock-outline" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="clock-outline" />
             )}
           />
           <Card.Content>
@@ -53,14 +48,8 @@ export default class ProximoAboutScreen extends React.Component<null> {
           style={{margin: 5, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
           <Card.Title
             title={i18n.t('screens.proximo.paymentMethods')}
-            left={({
-              size,
-              color,
-            }: {
-              size: number,
-              color: string,
-            }): React.Node => (
-              <List.Icon size={size} color={color} icon="cash" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="cash" />
             )}
           />
           <Card.Content>

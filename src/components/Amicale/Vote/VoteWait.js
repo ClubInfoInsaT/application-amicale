@@ -1,15 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {
-  ActivityIndicator,
-  Card,
-  Paragraph,
-  withTheme,
-} from 'react-native-paper';
+import {Avatar, Card, Paragraph, withTheme} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
 import i18n from 'i18n-js';
 import type {CustomThemeType} from '../../../managers/ThemeManager';
+import type {CardTitleIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
   startDate: string | null,
@@ -45,8 +41,8 @@ class VoteWait extends React.Component<PropsType> {
               : i18n.t('screens.vote.wait.titleEnded')
           }
           subtitle={i18n.t('screens.vote.wait.subtitle')}
-          left={({size}: {size: number}): React.Node => (
-            <ActivityIndicator size={size} />
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
+            <Avatar.Icon size={iconProps.size} icon="progress-check" />
           )}
         />
         <Card.Content>

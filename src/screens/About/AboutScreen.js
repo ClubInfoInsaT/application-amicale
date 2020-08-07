@@ -8,6 +8,10 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import packageJson from '../../../package.json';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import APP_LOGO from '../../../assets/android.icon.png';
+import type {
+  CardTitleIconPropsType,
+  ListIconPropsType,
+} from '../../constants/PaperStyles';
 
 type ListItemType = {
   onPressCallback: () => void,
@@ -217,9 +221,9 @@ class AboutScreen extends React.Component<PropsType> {
         <Card.Title
           title="Campus"
           subtitle={packageJson.version}
-          left={({size}: {size: number}): React.Node => (
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
             <Avatar.Image
-              size={size}
+              size={iconProps.size}
               source={APP_LOGO}
               style={{backgroundColor: 'transparent'}}
             />
@@ -246,8 +250,8 @@ class AboutScreen extends React.Component<PropsType> {
       <Card style={{marginBottom: 10}}>
         <Card.Title
           title={i18n.t('screens.about.team')}
-          left={({size, color}: {size: number, color: string}): React.Node => (
-            <Avatar.Icon size={size} color={color} icon="account-multiple" />
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
+            <Avatar.Icon size={iconProps.size} icon="account-multiple" />
           )}
         />
         <Card.Content>
@@ -296,14 +300,10 @@ class AboutScreen extends React.Component<PropsType> {
    * @param props
    * @return {*}
    */
-  static getChevronIcon({
-    size,
-    color,
-  }: {
-    size: number,
-    color: string,
-  }): React.Node {
-    return <List.Icon size={size} color={color} icon="chevron-right" />;
+  static getChevronIcon(props: ListIconPropsType): React.Node {
+    return (
+      <List.Icon color={props.color} style={props.style} icon="chevron-right" />
+    );
   }
 
   /**
@@ -313,11 +313,10 @@ class AboutScreen extends React.Component<PropsType> {
    * @param props
    * @return {*}
    */
-  static getItemIcon(
-    item: ListItemType,
-    {size, color}: {size: number, color: string},
-  ): React.Node {
-    return <List.Icon size={size} color={color} icon={item.icon} />;
+  static getItemIcon(item: ListItemType, props: ListIconPropsType): React.Node {
+    return (
+      <List.Icon color={props.color} style={props.style} icon={item.icon} />
+    );
   }
 
   /**
@@ -326,7 +325,7 @@ class AboutScreen extends React.Component<PropsType> {
    * @returns {*}
    */
   getCardItem = ({item}: {item: ListItemType}): React.Node => {
-    const getItemIcon = (props: {size: number, color: string}): React.Node =>
+    const getItemIcon = (props: ListIconPropsType): React.Node =>
       AboutScreen.getItemIcon(item, props);
     if (item.showChevron) {
       return (

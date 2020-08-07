@@ -21,6 +21,7 @@ import type {CustomThemeType} from '../../../managers/ThemeManager';
 import {ERROR_TYPE} from '../../../utils/WebData';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import type {ApiGenericDataType} from '../../../utils/WebData';
+import type {CardTitleIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
   navigation: StackNavigationProp,
@@ -133,9 +134,9 @@ class ClubDisplayScreen extends React.Component<PropsType> {
               ? i18n.t('screens.clubs.managersSubtitle')
               : i18n.t('screens.clubs.managersUnavailable')
           }
-          left={({size}: {size: number}): React.Node => (
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
             <Avatar.Icon
-              size={size}
+              size={iconProps.size}
               style={{backgroundColor: 'transparent'}}
               color={
                 hasManagers

@@ -2,11 +2,12 @@
 
 import * as React from 'react';
 import {Image, View} from 'react-native';
-import {Card, List, Text, withTheme} from 'react-native-paper';
+import {Card, Avatar, Text, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
 import Autolink from 'react-native-autolink';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import AMICALE_ICON from '../../../../assets/amicale.png';
+import type {CardTitleIconPropsType} from '../../../constants/PaperStyles';
 
 const CONTACT_LINK = 'clubs@amicale-insat.fr';
 
@@ -35,8 +36,8 @@ class ClubAboutScreen extends React.Component<null> {
           <Card.Title
             title={i18n.t('screens.clubs.about.title')}
             subtitle={i18n.t('screens.clubs.about.subtitle')}
-            left={({size}: {size: number}): React.Node => (
-              <List.Icon size={size} icon="information" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="information" />
             )}
           />
           <Card.Content>

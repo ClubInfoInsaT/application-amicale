@@ -118,9 +118,7 @@ class ServicesScreen extends React.Component<PropsType> {
             title={item.title}
             subtitle={item.subtitle}
             left={(): React.Node => this.getListTitleImage(item.image)}
-            right={({size}: {size: number}): React.Node => (
-              <List.Icon size={size} icon="chevron-right" />
-            )}
+            right={(): React.Node => <List.Icon icon="chevron-right" />}
           />
           <CardList dataset={item.content} isHorizontal />
         </View>

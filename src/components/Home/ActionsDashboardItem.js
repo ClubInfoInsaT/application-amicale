@@ -6,6 +6,7 @@ import {View} from 'react-native';
 import i18n from 'i18n-js';
 import {StackNavigationProp} from '@react-navigation/stack';
 import type {CustomThemeType} from '../../managers/ThemeManager';
+import type {ListIconPropsType} from '../../constants/PaperStyles';
 
 type PropsType = {
   navigation: StackNavigationProp,
@@ -19,19 +20,27 @@ class ActionsDashBoardItem extends React.Component<PropsType> {
   }
 
   render(): React.Node {
-    const {props} = this;
+    const {navigation} = this.props;
     return (
       <View>
         <List.Item
           title={i18n.t('screens.feedback.homeButtonTitle')}
           description={i18n.t('screens.feedback.homeButtonSubtitle')}
-          left={({size}: {size: number}): React.Node => (
-            <List.Icon size={size} icon="comment-quote" />
+          left={(props: ListIconPropsType): React.Node => (
+            <List.Icon
+              color={props.color}
+              style={props.style}
+              icon="comment-quote"
+            />
           )}
-          right={({size}: {size: number}): React.Node => (
-            <List.Icon size={size} icon="chevron-right" />
+          right={(props: ListIconPropsType): React.Node => (
+            <List.Icon
+              color={props.color}
+              style={props.style}
+              icon="chevron-right"
+            />
           )}
-          onPress={(): void => props.navigation.navigate('feedback')}
+          onPress={(): void => navigation.navigate('feedback')}
           style={{
             paddingTop: 0,
             paddingBottom: 0,

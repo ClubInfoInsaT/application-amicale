@@ -11,6 +11,7 @@ import {
 import {StyleSheet, View} from 'react-native';
 import i18n from 'i18n-js';
 import type {CustomThemeType} from '../../managers/ThemeManager';
+import type {CardTitleIconPropsType} from '../../constants/PaperStyles';
 
 type PropsType = {
   eventNumber: number,
@@ -76,11 +77,11 @@ class EventDashBoardItem extends React.Component<PropsType> {
               titleStyle={{color: textColor}}
               subtitle={subtitle}
               subtitleStyle={{color: textColor}}
-              left={(): React.Node => (
+              left={(iconProps: CardTitleIconPropsType): React.Node => (
                 <Avatar.Icon
                   icon="calendar-range"
                   color={iconColor}
-                  size={60}
+                  size={iconProps.size}
                   style={styles.avatar}
                 />
               )}

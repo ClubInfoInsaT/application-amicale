@@ -5,6 +5,7 @@ import {IconButton, List, withTheme} from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {PlanexGroupType} from '../../../screens/Planex/GroupSelectionScreen';
+import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
   theme: CustomThemeType,
@@ -61,8 +62,12 @@ class GroupListItem extends React.Component<PropsType> {
       <List.Item
         title={props.item.name.replace(REPLACE_REGEX, ' ')}
         onPress={props.onPress}
-        left={({size}: {size: number}): React.Node => (
-          <List.Icon size={size} icon="chevron-right" />
+        left={(iconProps: ListIconPropsType): React.Node => (
+          <List.Icon
+            color={iconProps.color}
+            style={iconProps.style}
+            icon="chevron-right"
+          />
         )}
         right={({size, color}: {size: number, color: string}): React.Node => (
           <Animatable.View ref={this.starRef} useNativeDriver>

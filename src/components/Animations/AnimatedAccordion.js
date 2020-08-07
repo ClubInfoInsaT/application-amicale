@@ -6,6 +6,7 @@ import {List, withTheme} from 'react-native-paper';
 import Collapsible from 'react-native-collapsible';
 import * as Animatable from 'react-native-animatable';
 import type {CustomThemeType} from '../../managers/ThemeManager';
+import type {ListIconPropsType} from '../../constants/PaperStyles';
 
 type PropsType = {
   theme: CustomThemeType,
@@ -91,14 +92,13 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
           subtitle={props.subtitle}
           titleStyle={state.expanded ? {color: colors.primary} : null}
           onPress={this.toggleAccordion}
-          right={({size}: {size: number}): React.Node => (
+          right={(iconProps: ListIconPropsType): React.Node => (
             <AnimatedListIcon
               ref={this.chevronRef}
-              size={size}
+              style={iconProps.style}
               icon={this.chevronIcon}
-              color={state.expanded ? colors.primary : null}
+              color={state.expanded ? colors.primary : iconProps.color}
               useNativeDriver
-              style={{rotate: '0deg'}}
             />
           )}
           left={props.left}

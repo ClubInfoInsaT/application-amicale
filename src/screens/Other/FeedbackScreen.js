@@ -6,6 +6,7 @@ import i18n from 'i18n-js';
 import {Linking} from 'react-native';
 import type {CustomThemeType} from '../../managers/ThemeManager';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
+import type {CardTitleIconPropsType} from '../../constants/PaperStyles';
 
 type PropsType = {
   theme: CustomThemeType,
@@ -91,14 +92,8 @@ class FeedbackScreen extends React.Component<PropsType> {
           <Card.Title
             title={i18n.t('screens.feedback.bugs')}
             subtitle={i18n.t('screens.feedback.bugsSubtitle')}
-            left={({
-              size,
-              color,
-            }: {
-              size: number,
-              color: number,
-            }): React.Node => (
-              <Avatar.Icon size={size} color={color} icon="bug" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="bug" />
             )}
           />
           <Card.Content>
@@ -114,14 +109,8 @@ class FeedbackScreen extends React.Component<PropsType> {
           <Card.Title
             title={i18n.t('screens.feedback.title')}
             subtitle={i18n.t('screens.feedback.feedbackSubtitle')}
-            left={({
-              size,
-              color,
-            }: {
-              size: number,
-              color: number,
-            }): React.Node => (
-              <Avatar.Icon size={size} color={color} icon="comment" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="comment" />
             )}
           />
           <Card.Content>

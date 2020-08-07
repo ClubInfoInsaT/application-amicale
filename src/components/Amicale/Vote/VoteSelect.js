@@ -8,6 +8,7 @@ import ConnectionManager from '../../../managers/ConnectionManager';
 import LoadingConfirmDialog from '../../Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../Dialogs/ErrorDialog';
 import type {VoteTeamType} from '../../../screens/Amicale/VoteScreen';
+import type {CardTitleIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
   teams: Array<VoteTeamType>,
@@ -99,8 +100,8 @@ export default class VoteSelect extends React.PureComponent<
           <Card.Title
             title={i18n.t('screens.vote.select.title')}
             subtitle={i18n.t('screens.vote.select.subtitle')}
-            left={({size}: {size: number}): React.Node => (
-              <Avatar.Icon size={size} icon="alert-decagram" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="alert-decagram" />
             )}
           />
           <Card.Content>

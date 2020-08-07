@@ -11,6 +11,7 @@ import ThemeManager from '../../../managers/ThemeManager';
 import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import CustomSlider from '../../../components/Overrides/CustomSlider';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
   navigation: StackNavigationProp,
@@ -171,8 +172,8 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
       <List.Item
         title={title}
         description={subtitle}
-        left={({size, color}: {size: number, color: number}): React.Node => (
-          <List.Icon size={size} color={color} icon={icon} />
+        left={(props: ListIconPropsType): React.Node => (
+          <List.Icon color={props.color} style={props.style} icon={icon} />
         )}
         right={(): React.Node => (
           <Switch value={state} onValueChange={onPressCallback} />
@@ -196,11 +197,15 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
         onPress={() => {
           navigation.navigate(route);
         }}
-        left={({size, color}: {size: number, color: number}): React.Node => (
-          <List.Icon size={size} color={color} icon={icon} />
+        left={(props: ListIconPropsType): React.Node => (
+          <List.Icon color={props.color} style={props.style} icon={icon} />
         )}
-        right={({size, color}: {size: number, color: number}): React.Node => (
-          <List.Icon size={size} color={color} icon="chevron-right" />
+        right={(props: ListIconPropsType): React.Node => (
+          <List.Icon
+            color={props.color}
+            style={props.style}
+            icon="chevron-right"
+          />
         )}
         onLongPress={onLongPress}
       />
@@ -249,14 +254,12 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
             <List.Item
               title={i18n.t('screens.settings.startScreen')}
               description={i18n.t('screens.settings.startScreenSub')}
-              left={({
-                size,
-                color,
-              }: {
-                size: number,
-                color: number,
-              }): React.Node => (
-                <List.Icon size={size} color={color} icon="power" />
+              left={(props: ListIconPropsType): React.Node => (
+                <List.Icon
+                  color={props.color}
+                  style={props.style}
+                  icon="power"
+                />
               )}
             />
             {this.getStartScreenPicker()}
@@ -274,14 +277,12 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
             <List.Item
               title={i18n.t('screens.settings.proxiwashNotifReminder')}
               description={i18n.t('screens.settings.proxiwashNotifReminderSub')}
-              left={({
-                size,
-                color,
-              }: {
-                size: number,
-                color: number,
-              }): React.Node => (
-                <List.Icon size={size} color={color} icon="washing-machine" />
+              left={(props: ListIconPropsType): React.Node => (
+                <List.Icon
+                  color={props.color}
+                  style={props.style}
+                  icon="washing-machine"
+                />
               )}
             />
             <View style={{marginLeft: 30}}>

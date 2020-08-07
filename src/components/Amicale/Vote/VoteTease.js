@@ -4,6 +4,7 @@ import * as React from 'react';
 import {Avatar, Card, Paragraph} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
 import i18n from 'i18n-js';
+import type {CardTitleIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
   startDate: string,
@@ -30,8 +31,8 @@ export default class VoteTease extends React.Component<PropsType> {
         <Card.Title
           title={i18n.t('screens.vote.tease.title')}
           subtitle={i18n.t('screens.vote.tease.subtitle')}
-          left={({size}: {size: number}): React.Node => (
-            <Avatar.Icon size={size} icon="vote" />
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
+            <Avatar.Icon size={iconProps.size} icon="vote" />
           )}
         />
         <Card.Content>

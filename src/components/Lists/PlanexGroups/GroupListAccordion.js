@@ -11,6 +11,7 @@ import type {
   PlanexGroupCategoryType,
 } from '../../../screens/Planex/GroupSelectionScreen';
 import type {CustomThemeType} from '../../../managers/ThemeManager';
+import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
   item: PlanexGroupCategoryType,
@@ -87,10 +88,10 @@ class GroupListAccordion extends React.Component<PropsType> {
             height: props.height,
             justifyContent: 'center',
           }}
-          left={({size}: {size: number}): React.Node =>
+          left={(iconProps: ListIconPropsType): React.Node =>
             item.id === 0 ? (
               <List.Icon
-                size={size}
+                style={iconProps.style}
                 icon="star"
                 color={props.theme.colors.tetrisScore}
               />

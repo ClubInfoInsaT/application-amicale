@@ -10,6 +10,7 @@ import MaterialHeaderButtons, {
 } from '../../../components/Overrides/CustomHeaderButton';
 import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {SectionListDataType} from '../../../components/Screens/WebSectionList';
+import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 const DATA_URL = 'https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json';
 const LIST_ITEM_HEIGHT = 84;
@@ -199,15 +200,19 @@ class ProximoMainScreen extends React.Component<PropsType> {
           title={item.type.name}
           description={subtitle}
           onPress={onPress}
-          left={({size}: {size: number}): React.Node => (
+          left={(props: ListIconPropsType): React.Node => (
             <List.Icon
-              size={size}
+              style={props.style}
               icon={item.type.icon}
               color={theme.colors.primary}
             />
           )}
-          right={({size, color}: {size: number, color: string}): React.Node => (
-            <List.Icon size={size} color={color} icon="chevron-right" />
+          right={(props: ListIconPropsType): React.Node => (
+            <List.Icon
+              color={props.color}
+              style={props.style}
+              icon="chevron-right"
+            />
           )}
           style={{
             height: LIST_ITEM_HEIGHT,

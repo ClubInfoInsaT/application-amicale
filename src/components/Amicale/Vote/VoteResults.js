@@ -13,6 +13,10 @@ import {FlatList, StyleSheet} from 'react-native';
 import i18n from 'i18n-js';
 import type {VoteTeamType} from '../../../screens/Amicale/VoteScreen';
 import type {CustomThemeType} from '../../../managers/ThemeManager';
+import type {
+  CardTitleIconPropsType,
+  ListIconPropsType,
+} from '../../../constants/PaperStyles';
 
 type PropsType = {
   teams: Array<VoteTeamType>,
@@ -78,10 +82,10 @@ class VoteResults extends React.Component<PropsType> {
         <List.Item
           title={item.name}
           description={`${item.votes} ${i18n.t('screens.vote.results.votes')}`}
-          left={({size}: {size: number}): React.Node =>
+          left={(iconProps: ListIconPropsType): React.Node =>
             isWinner ? (
               <List.Icon
-                size={size}
+                style={iconProps.style}
                 icon={isDraw ? 'trophy-outline' : 'trophy'}
                 color={props.theme.colors.primary}
               />
@@ -111,8 +115,8 @@ class VoteResults extends React.Component<PropsType> {
           subtitle={`${i18n.t('screens.vote.results.subtitle')} ${
             props.dateEnd
           }`}
-          left={({size}: {size: number}): React.Node => (
-            <Avatar.Icon size={size} icon="podium-gold" />
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
+            <Avatar.Icon size={iconProps.size} icon="podium-gold" />
           )}
         />
         <Card.Content>

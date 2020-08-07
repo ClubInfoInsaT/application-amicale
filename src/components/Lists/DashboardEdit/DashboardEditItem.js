@@ -5,6 +5,7 @@ import {Image} from 'react-native';
 import {List, withTheme} from 'react-native-paper';
 import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {ServiceItemType} from '../../../managers/ServicesManager';
+import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
   item: ServiceItemType,
@@ -21,36 +22,36 @@ class DashboardEditItem extends React.Component<PropsType> {
   }
 
   render(): React.Node {
-    const {props} = this;
+    const {item, onPress, height, isActive, theme} = this.props;
     return (
       <List.Item
-        title={props.item.title}
-        description={props.item.subtitle}
-        onPress={props.isActive ? null : props.onPress}
+        title={item.title}
+        description={item.subtitle}
+        onPress={isActive ? null : onPress}
         left={(): React.Node => (
           <Image
-            source={{uri: props.item.image}}
+            source={{uri: item.image}}
             style={{
               width: 40,
               height: 40,
             }}
           />
         )}
-        right={({size}: {size: number}): React.Node =>
-          props.isActive ? (
+        right={(props: ListIconPropsType): React.Node =>
+          isActive ? (
             <List.Icon
-              size={size}
+              style={props.style}
               icon="check"
-              color={props.theme.colors.success}
+              color={theme.colors.success}
             />
           ) : null
         }
         style={{
-          height: props.height,
+          height,
           justifyContent: 'center',
           paddingLeft: 30,
-          backgroundColor: props.isActive
-            ? props.theme.colors.proxiwashFinishedColor
+          backgroundColor: isActive
+            ? theme.colors.proxiwashFinishedColor
             : 'transparent',
         }}
       />

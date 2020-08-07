@@ -25,6 +25,10 @@ import Mascot, {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import ServicesManager, {SERVICES_KEY} from '../../managers/ServicesManager';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import type {ServiceItemType} from '../../managers/ServicesManager';
+import type {
+  CardTitleIconPropsType,
+  ListIconPropsType,
+} from '../../constants/PaperStyles';
 
 type PropsType = {
   navigation: StackNavigationProp,
@@ -229,11 +233,11 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
       <List.Item
         title={title}
         description={subtitle}
-        left={({size}: {size: number}): React.Node => (
+        left={(props: ListIconPropsType): React.Node => (
           <List.Icon
-            size={size}
+            style={props.style}
             icon={icon}
-            color={field != null ? null : theme.colors.textDisabled}
+            color={field != null ? props.color : theme.colors.textDisabled}
           />
         )}
       />
@@ -252,9 +256,9 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
         <Card.Title
           title={`${this.data.first_name} ${this.data.last_name}`}
           subtitle={this.data.email}
-          left={({size}: {size: number}): React.Node => (
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
             <Avatar.Icon
-              size={size}
+              size={iconProps.size}
               icon="account"
               color={theme.colors.primary}
               style={styles.icon}
@@ -305,9 +309,9 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
         <Card.Title
           title={i18n.t('screens.profile.clubs')}
           subtitle={i18n.t('screens.profile.clubsSubtitle')}
-          left={({size}: {size: number}): React.Node => (
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
             <Avatar.Icon
-              size={size}
+              size={iconProps.size}
               icon="account-group"
               color={theme.colors.primary}
               style={styles.icon}
@@ -334,9 +338,9 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
         <Card.Title
           title={i18n.t('screens.profile.membership')}
           subtitle={i18n.t('screens.profile.membershipSubtitle')}
-          left={({size}: {size: number}): React.Node => (
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
             <Avatar.Icon
-              size={size}
+              size={iconProps.size}
               icon="credit-card"
               color={theme.colors.primary}
               style={styles.icon}
@@ -366,9 +370,9 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
             ? i18n.t('screens.profile.membershipPayed')
             : i18n.t('screens.profile.membershipNotPayed')
         }
-        left={({size}: {size: number}): React.Node => (
+        left={(props: ListIconPropsType): React.Node => (
           <List.Icon
-            size={size}
+            style={props.style}
             color={state ? theme.colors.success : theme.colors.danger}
             icon={state ? 'check' : 'close'}
           />
@@ -389,13 +393,17 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
       this.openClubDetailsScreen(item.id);
     };
     let description = i18n.t('screens.profile.isMember');
-    let icon = ({size, color}: {size: number, color: string}): React.Node => (
-      <List.Icon size={size} color={color} icon="chevron-right" />
+    let icon = (props: ListIconPropsType): React.Node => (
+      <List.Icon color={props.color} style={props.style} icon="chevron-right" />
     );
     if (item.is_manager) {
       description = i18n.t('screens.profile.isManager');
-      icon = ({size}: {size: number}): React.Node => (
-        <List.Icon size={size} icon="star" color={theme.colors.primary} />
+      icon = (props: ListIconPropsType): React.Node => (
+        <List.Icon
+          style={props.style}
+          icon="star"
+          color={theme.colors.primary}
+        />
       );
     }
     return (

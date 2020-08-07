@@ -2,11 +2,15 @@
 
 import * as React from 'react';
 import {FlatList, Image, Linking, View} from 'react-native';
-import {Card, List, Text, withTheme} from 'react-native-paper';
+import {Card, List, Text, withTheme, Avatar} from 'react-native-paper';
 import i18n from 'i18n-js';
 import type {MaterialCommunityIconsGlyphs} from 'react-native-vector-icons/MaterialCommunityIcons';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import AMICALE_LOGO from '../../../assets/amicale.png';
+import type {
+  CardTitleIconPropsType,
+  ListIconPropsType,
+} from '../../constants/PaperStyles';
 
 type DatasetItemType = {
   name: string,
@@ -74,14 +78,12 @@ class AmicaleContactScreen extends React.Component<null> {
 
   keyExtractor = (item: DatasetItemType): string => item.email;
 
-  getChevronIcon = ({
-    size,
-    color,
-  }: {
-    size: number,
-    color: string,
-  }): React.Node => (
-    <List.Icon size={size} color={color} icon="chevron-right" />
+  getChevronIcon = (iconProps: ListIconPropsType): React.Node => (
+    <List.Icon
+      color={iconProps.color}
+      style={iconProps.style}
+      icon="chevron-right"
+    />
   );
 
   getRenderItem = ({item}: {item: DatasetItemType}): React.Node => {
@@ -92,8 +94,12 @@ class AmicaleContactScreen extends React.Component<null> {
       <List.Item
         title={item.name}
         description={item.email}
-        left={({size, color}: {size: number, color: string}): React.Node => (
-          <List.Icon size={size} color={color} icon={item.icon} />
+        left={(iconProps: ListIconPropsType): React.Node => (
+          <List.Icon
+            color={iconProps.color}
+            style={iconProps.style}
+            icon={item.icon}
+          />
         )}
         right={this.getChevronIcon}
         onPress={onPress}
@@ -123,14 +129,8 @@ class AmicaleContactScreen extends React.Component<null> {
           <Card.Title
             title={i18n.t('screens.amicaleAbout.title')}
             subtitle={i18n.t('screens.amicaleAbout.subtitle')}
-            left={({
-              size,
-              color,
-            }: {
-              size: number,
-              color: string,
-            }): React.Node => (
-              <List.Icon size={size} color={color} icon="information" />
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="information" />
             )}
           />
           <Card.Content>
