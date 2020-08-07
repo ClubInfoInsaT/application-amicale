@@ -165,7 +165,9 @@ export default class App extends React.Component<null, StateType> {
    */
   loadAssetsAsync = async () => {
     await AsyncStorageManager.getInstance().loadPreferences();
-    await ConnectionManager.getInstance().recoverLogin();
+    await ConnectionManager.getInstance()
+      .recoverLogin()
+      .catch(() => {});
   };
 
   /**
