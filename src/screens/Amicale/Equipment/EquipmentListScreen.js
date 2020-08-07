@@ -39,9 +39,7 @@ export type RentedDeviceType = {
 const LIST_ITEM_HEIGHT = 64;
 
 class EquipmentListScreen extends React.Component<PropsType, StateType> {
-  data: Array<DeviceType>;
-
-  userRents: Array<RentedDeviceType>;
+  userRents: null | Array<RentedDeviceType>;
 
   authRef: {current: null | AuthenticatedScreen};
 
@@ -79,11 +77,13 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
 
   getUserDeviceRentDates(item: DeviceType): [number, number] | null {
     let dates = null;
-    this.userRents.forEach((device: RentedDeviceType) => {
-      if (item.id === device.device_id) {
-        dates = [device.begin, device.end];
-      }
-    });
+    if (this.userRents != null) {
+      this.userRents.forEach((device: RentedDeviceType) => {
+        if (item.id === device.device_id) {
+          dates = [device.begin, device.end];
+        }
+      });
+    }
     return dates;
   }
 
@@ -123,20 +123,14 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getScreen = (data: Array<ApiGenericDataType | null>): React.Node => {
-    if (data[0] != null) {
-      const fetchedData = data[0];
-      if (fetchedData != null) this.data = fetchedData.devices;
-    }
-    if (data[1] != null) {
-      const fetchedData = data[1];
-      if (fetchedData != null) this.userRents = fetchedData.locations;
-    }
+    const [allDevices, userRents] = data;
+    if (userRents != null) this.userRents = userRents.locations;
     return (
       <CollapsibleFlatList
         keyExtractor={this.keyExtractor}
         renderItem={this.getRenderItem}
         ListHeaderComponent={this.getListHeader()}
-        data={this.data}
+        data={allDevices != null ? allDevices.devices : null}
       />
     );
   };
