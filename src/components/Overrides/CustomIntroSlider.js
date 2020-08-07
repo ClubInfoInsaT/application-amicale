@@ -174,7 +174,7 @@ export default class CustomIntroSlider extends React.Component<
         {state.currentSlide === index ? (
           <View style={{height: '100%', flex: 1}}>
             <View style={{flex: 1}}>{item.view()}</View>
-            <Animatable.View animation="fadeIn">
+            <Animatable.View useNativeDriver animation="fadeIn">
               {index !== 0 && index !== this.introSlides.length - 1 ? (
                 <Mascot
                   style={{
@@ -218,15 +218,18 @@ export default class CustomIntroSlider extends React.Component<
                   borderColor: 'rgba(0,0,0,0.60)',
                   borderWidth: 4,
                   borderRadius: 10,
+                  elevation: 0,
                 }}>
                 <Card.Content>
                   <Animatable.Text
+                    useNativeDriver
                     animation="fadeIn"
                     delay={100}
                     style={styles.title}>
                     {item.title}
                   </Animatable.Text>
                   <Animatable.Text
+                    useNativeDriver
                     animation="fadeIn"
                     delay={200}
                     style={styles.text}>
@@ -320,7 +323,10 @@ export default class CustomIntroSlider extends React.Component<
   static getIconView(icon: MaterialCommunityIconsGlyphs): React.Node {
     return (
       <View style={{flex: 1}}>
-        <Animatable.View style={styles.center} animation="fadeIn">
+        <Animatable.View
+          useNativeDriver
+          style={styles.center}
+          animation="fadeIn">
           <MaterialCommunityIcons name={icon} color="#fff" size={200} />
         </Animatable.View>
       </View>
@@ -355,6 +361,7 @@ export default class CustomIntroSlider extends React.Component<
   getRenderNextButton = (): React.Node => {
     return (
       <Animatable.View
+        useNativeDriver
         animation="fadeIn"
         style={{
           borderRadius: 25,
@@ -369,6 +376,7 @@ export default class CustomIntroSlider extends React.Component<
   getRenderDoneButton = (): React.Node => {
     return (
       <Animatable.View
+        useNativeDriver
         animation="bounceIn"
         style={{
           borderRadius: 25,
