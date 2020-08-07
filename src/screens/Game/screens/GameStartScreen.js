@@ -84,6 +84,7 @@ class GameStartScreen extends React.Component<PropsType> {
           const animDuration = 2 * (2000 - size * 30);
           return (
             <Animatable.View
+              useNativeDriver
               animation="fadeInDownBig"
               delay={animDelay}
               duration={animDuration}

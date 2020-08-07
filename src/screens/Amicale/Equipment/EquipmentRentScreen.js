@@ -408,6 +408,7 @@ class EquipmentRentScreen extends React.Component<PropsType, StateType> {
           />
           <Animatable.View
             ref={this.bookRef}
+            useNativeDriver
             style={{
               position: 'absolute',
               bottom: 0,
