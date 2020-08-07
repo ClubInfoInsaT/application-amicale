@@ -42,7 +42,7 @@ buck-out/
 *.keystore
 !debug.keystore
 *.jks
-/android/gradle.properties
+/android/keystores/release.keystore.properties
 
 # fastlane
 #
