@@ -94,6 +94,16 @@ class HomeScreen extends React.Component<PropsType, StateType> {
   static sortFeedTime = (a: FeedItemType, b: FeedItemType): number =>
     b.time - a.time;
 
+  static generateNewsFeed(rawFeed: RawNewsFeedType): Array<FeedItemType> {
+    const finalFeed = [];
+    Object.keys(rawFeed).forEach((key: string) => {
+      const category: Array<FeedItemType> | null = rawFeed[key];
+      if (category != null && category.length > 0) finalFeed.push(...category);
+    });
+    finalFeed.sort(HomeScreen.sortFeedTime);
+    return finalFeed;
+  }
+
   isLoggedIn: boolean | null;
 
   fabRef: {current: null | AnimatedFAB};
@@ -407,7 +417,9 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     // fetchedData = DATA;
     if (fetchedData != null) {
       if (fetchedData.news_feed != null)
-        this.currentNewFeed = this.generateNewsFeed(fetchedData.news_feed);
+        this.currentNewFeed = HomeScreen.generateNewsFeed(
+          fetchedData.news_feed,
+        );
       if (fetchedData.dashboard != null)
         this.currentDashboard = fetchedData.dashboard;
     }
@@ -449,16 +461,6 @@ class HomeScreen extends React.Component<PropsType, StateType> {
       nextScreen: 'profile',
     });
   };
-
-  generateNewsFeed(rawFeed: RawNewsFeedType): Array<FeedItemType> {
-    const finalFeed = [];
-    Object.keys(rawFeed).forEach((key: string) => {
-      const category: Array<FeedItemType> | null = rawFeed[key];
-      if (category != null && category.length > 0) finalFeed.push(...category);
-    });
-    finalFeed.sort(HomeScreen.sortFeedTime);
-    return finalFeed;
-  }
 
   render(): React.Node {
     const {props, state} = this;
