@@ -30,7 +30,6 @@ import type {ServiceItemType} from '../../managers/ServicesManager';
 import {getDisplayEvent, getFutureEvents} from '../../utils/Home';
 // import DATA from "../dashboard_data.json";
 
-const NAME_AMICALE = 'Amicale INSA Toulouse';
 const DATA_URL =
   'https://etud.insa-toulouse.fr/~amicale_app/v2/dashboard/dashboard_data.json';
 const FEED_ITEM_HEIGHT = 500;
@@ -40,11 +39,14 @@ const SECTIONS_ID = ['dashboard', 'news_feed'];
 const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
 export type FeedItemType = {
-  full_picture: string,
-  message: string,
-  permalink_url: string,
-  created_time: number,
   id: string,
+  message: string,
+  url: string,
+  image: string | null,
+  video: string | null,
+  link: string | null,
+  time: number,
+  page_id: string,
 };
 
 export type EventType = {
@@ -68,10 +70,10 @@ export type FullDashboardType = {
   available_tutorials: number,
 };
 
+type RawNewsFeedType = {[key: string]: Array<FeedItemType>};
+
 type RawDashboardType = {
-  news_feed: {
-    data: Array<FeedItemType>,
-  },
+  news_feed: RawNewsFeedType,
   dashboard: FullDashboardType,
 };
 
@@ -89,6 +91,9 @@ type StateType = {
  * Class defining the app's home screen
  */
 class HomeScreen extends React.Component<PropsType, StateType> {
+  static sortFeedTime = (a: FeedItemType, b: FeedItemType): number =>
+    b.time - a.time;
+
   isLoggedIn: boolean | null;
 
   fabRef: {current: null | AnimatedFAB};
@@ -119,17 +124,6 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     props.navigation.addListener('focus', this.onScreenFocus);
     // Handle link open when home is focused
     props.navigation.addListener('state', this.handleNavigationParams);
-  }
-
-  /**
-   * Converts a dateString using Unix Timestamp to a formatted date
-   *
-   * @param dateString {string} The Unix Timestamp representation of a date
-   * @return {string} The formatted output date
-   */
-  static getFormattedDate(dateString: number): string {
-    const date = new Date(dateString * 1000);
-    return date.toLocaleString();
   }
 
   /**
@@ -285,8 +279,6 @@ class HomeScreen extends React.Component<PropsType, StateType> {
       <FeedItem
         navigation={props.navigation}
         item={item}
-        title={NAME_AMICALE}
-        subtitle={HomeScreen.getFormattedDate(item.created_time)}
         height={FEED_ITEM_HEIGHT}
       />
     );
@@ -415,7 +407,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     // fetchedData = DATA;
     if (fetchedData != null) {
       if (fetchedData.news_feed != null)
-        this.currentNewFeed = fetchedData.news_feed.data;
+        this.currentNewFeed = this.generateNewsFeed(fetchedData.news_feed);
       if (fetchedData.dashboard != null)
         this.currentDashboard = fetchedData.dashboard;
     }
@@ -457,6 +449,16 @@ class HomeScreen extends React.Component<PropsType, StateType> {
       nextScreen: 'profile',
     });
   };
+
+  generateNewsFeed(rawFeed: RawNewsFeedType): Array<FeedItemType> {
+    const finalFeed = [];
+    Object.keys(rawFeed).forEach((key: string) => {
+      const category: Array<FeedItemType> | null = rawFeed[key];
+      if (category != null && category.length > 0) finalFeed.push(...category);
+    });
+    finalFeed.sort(HomeScreen.sortFeedTime);
+    return finalFeed;
+  }
 
   render(): React.Node {
     const {props, state} = this;

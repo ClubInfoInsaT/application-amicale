@@ -8,14 +8,12 @@ import i18n from 'i18n-js';
 import ImageModal from 'react-native-image-modal';
 import {StackNavigationProp} from '@react-navigation/stack';
 import type {FeedItemType} from '../../screens/Home/HomeScreen';
-
-const ICON_AMICALE = require('../../../assets/amicale.png');
+import NewsSourcesConstants from '../../constants/NewsSourcesConstants';
+import type {NewsSourceType} from '../../constants/NewsSourcesConstants';
 
 type PropsType = {
   navigation: StackNavigationProp,
   item: FeedItemType,
-  title: string,
-  subtitle: string,
   height: number,
 };
 
@@ -23,24 +21,34 @@ type PropsType = {
  * Component used to display a feed item
  */
 class FeedItem extends React.Component<PropsType> {
+  /**
+   * Converts a dateString using Unix Timestamp to a formatted date
+   *
+   * @param dateString {string} The Unix Timestamp representation of a date
+   * @return {string} The formatted output date
+   */
+  static getFormattedDate(dateString: number): string {
+    const date = new Date(dateString * 1000);
+    return date.toLocaleString();
+  }
+
   shouldComponentUpdate(): boolean {
     return false;
   }
 
   onPress = () => {
-    const {props} = this;
-    props.navigation.navigate('feed-information', {
-      data: props.item,
-      date: props.subtitle,
+    const {item, navigation} = this.props;
+    navigation.navigate('feed-information', {
+      data: item,
+      date: FeedItem.getFormattedDate(item.time),
     });
   };
 
   render(): React.Node {
     const {props} = this;
     const {item} = props;
-    const hasImage =
-      item.full_picture !== '' && item.full_picture !== undefined;
-
+    const hasImage = item.image !== '' && item.image != null;
+    const pageSource: NewsSourceType = NewsSourcesConstants[item.page_id];
     const cardMargin = 10;
     const cardHeight = props.height - 2 * cardMargin;
     const imageSize = 250;
@@ -58,12 +66,12 @@ class FeedItem extends React.Component<PropsType> {
         <TouchableRipple style={{flex: 1}} onPress={this.onPress}>
           <View>
             <Card.Title
-              title={props.title}
-              subtitle={props.subtitle}
+              title={pageSource.name}
+              subtitle={FeedItem.getFormattedDate(item.time)}
               left={(): React.Node => (
                 <Image
                   size={48}
-                  source={ICON_AMICALE}
+                  source={pageSource.icon}
                   style={{
                     width: 48,
                     height: 48,
@@ -82,7 +90,7 @@ class FeedItem extends React.Component<PropsType> {
                     height: imageSize,
                   }}
                   source={{
-                    uri: item.full_picture,
+                    uri: item.image,
                   }}
                 />
               </View>

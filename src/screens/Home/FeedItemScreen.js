@@ -47,7 +47,7 @@ class FeedItemScreen extends React.Component<PropsType> {
    * Opens the feed item out link in browser or compatible app
    */
   onOutLinkPress = () => {
-    Linking.openURL(this.displayData.permalink_url);
+    Linking.openURL(this.displayData.url);
   };
 
   /**
@@ -70,8 +70,7 @@ class FeedItemScreen extends React.Component<PropsType> {
 
   render(): React.Node {
     const hasImage =
-      this.displayData.full_picture !== '' &&
-      this.displayData.full_picture != null;
+      this.displayData.image !== '' && this.displayData.image != null;
     return (
       <CollapsibleScrollView style={{margin: 5}} hasTab>
         <Card.Title
@@ -95,7 +94,7 @@ class FeedItemScreen extends React.Component<PropsType> {
                 height: 250,
               }}
               source={{
-                uri: this.displayData.full_picture,
+                uri: this.displayData.image,
               }}
             />
           </View>
