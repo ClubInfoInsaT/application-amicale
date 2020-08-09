@@ -9,11 +9,11 @@ Si tu as des problèmes ou des questions, n'hésite pas à me contacter par mail
 
 # Table des matières
 
-* [1. Prérequis](#1.)
-* [2. Fork du projet](#2.)
-* [3. Création d'une nouvelle branche](#3.)
-* [4. Réalisation d'une modification](#4.)
-* [5. Création d'une Pull Request](#6.)
+* [1. Prérequis](#1-prérequis)
+* [2. Fork du projet](#2-fork-du-projet)
+* [3. Création d'une nouvelle branche](#3-création-dune-nouvelle-branche)
+* [4. Réalisation d'une modification](#4-réalisation-dune-modification)
+* [5. Création d'une Pull Request](#5-création-dune-pull-request)
 
 # 1. Prérequis
 

@@ -9,12 +9,12 @@ Si tu utilises Windows, débrouilles-toi ou installe Linux.
 
 # Table des matières
 * [1. Installation de Git](#1-installation-de-git)
-* [2. Installation de  React Native](#2.)
-* [3. Installation de l'application](#3.)
-    * [3.1 Téléchargement du dépot](#3.1)
-    * [3.2 Téléchargement des dépendances](#3.2)
-* [4. Lancement de l'application](#4.)
-* [5. Compiler une version release](#5.)
+* [2. Installation de  React Native](#2-installation-de-react-native)
+* [3. Installation de l'application](#3-installation-de-lapplication)
+    * [3.1 Téléchargement du dépot](#31-téléchargement-du-dépt)
+    * [3.2 Téléchargement des dépendances](#32-installation-des-dépendances)
+* [4. Lancement de l'application](#4-lancement-de-lapplication)
+* [5. Compiler une version release](#5-compiler-une-version-release)
 
 # 1. Installation de Git
 
