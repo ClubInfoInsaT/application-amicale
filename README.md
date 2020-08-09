@@ -32,7 +32,7 @@ Pas de problème ! Tu peux aider simplement en proposant des améliorations ou e
 
 Tu peux aider à traduire l'application ! Le projet existe en français et anglais (mais il peut y avoir des fautes !), et tout autre langue est la bienvenue.
 
-Si tu es intéressé, rends-toi sur [cette page]() pour plus de détails.
+Si tu es intéressé, rends-toi sur [cette page](doc/TRANSLATE.md) pour plus de détails.
 
 #### 🤓 Développeur dans l'âme ?
 Peu importe ton niveau, toutes les propositions de modification sont les bienvenues ! (enfin presque)
@@ -62,7 +62,7 @@ Tu trouveras [une liste de liens utiles](doc/LINKS.md) pour retrouver toutes les
 | <img src="https://secure.gravatar.com/avatar/8e33a1b2cedf7168e8468a1522cc8c56?d=identicon&s=290" alt="app-store" width="150"/> | <img src="https://secure.gravatar.com/avatar/9792c3643f98cddbc2a42e05422fe66e?d=identicon&s=290" alt="app-store" width="150"/> | ❔ |
 |--------------------------------|--------------------------------|-------------------------------------------|
 | **Arnaud Vergnet**             | **Yohan Simard**               | **Toi ?**                                 |
-| Créateur et mainteneur actuel  | Correction de quelques bugs    | [Contribue pour faire vivre le projet !](#contribuer)   |
+| Créateur et mainteneur actuel  | Correction de quelques bugs    | [Contribue pour faire vivre le projet !](doc/CONTRIBUTE.md)   |
 
 # 👏 Remerciements
 
