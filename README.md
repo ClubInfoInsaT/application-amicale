@@ -49,7 +49,7 @@ React Native permet de n'avoir qu'un seul code JavaScript à écrire pour Androi
 
 Tu trouveras [une liste de liens utiles](doc/LINKS.md) pour retrouver toutes les infos !
 
-# 💾 [Installer l'application sur votre téléphone depuis ce dépot](doc/INSTALL.md)
+# 💾 [Installer l'application sur ton téléphone depuis ce dépot](doc/INSTALL.md)
 
 # 📔️ [Notes de changement](Changelog.md)
 
@@ -61,8 +61,8 @@ Tu trouveras [une liste de liens utiles](doc/LINKS.md) pour retrouver toutes les
 
 | <img src="https://secure.gravatar.com/avatar/8e33a1b2cedf7168e8468a1522cc8c56?d=identicon&s=290" alt="app-store" width="150"/> | <img src="https://secure.gravatar.com/avatar/9792c3643f98cddbc2a42e05422fe66e?d=identicon&s=290" alt="app-store" width="150"/> | ❔ |
 |--------------------------------|--------------------------------|-------------------------------------------|
-| **Arnaud Vergnet**             | **Yohan Simard**               | **Vous ?**                                 |
-| Créateur et mainteneur actuel  | Correction de quelques bugs    | [Contribuez pour faire vivre le projet !](#contribuer)   |
+| **Arnaud Vergnet**             | **Yohan Simard**               | **Toi ?**                                 |
+| Créateur et mainteneur actuel  | Correction de quelques bugs    | [Contribue pour faire vivre le projet !](#contribuer)   |
 
 # 👏 Remerciements
 
