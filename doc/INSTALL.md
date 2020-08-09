@@ -8,7 +8,7 @@ Si tu utilises Windows, débrouilles-toi ou installe Linux.
 ## ⚠️ Avant de commencer, merci de te familiariser avec [les bases !](LINKS.md)
 
 # Table des matières
-* [1. Installation de Git](#1.)
+* [1. Installation de Git](#1-installation-de-git)
 * [2. Installation de  React Native](#2.)
 * [3. Installation de l'application](#3.)
     * [3.1 Téléchargement du dépot](#3.1)
