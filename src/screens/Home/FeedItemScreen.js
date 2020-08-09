@@ -12,15 +12,13 @@ import CustomTabBar from '../../components/Tabbar/CustomTabBar';
 import type {FeedItemType} from './HomeScreen';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
+import NewsSourcesConstants from '../../constants/NewsSourcesConstants';
+import type {NewsSourceType} from '../../constants/NewsSourcesConstants';
 
 type PropsType = {
   navigation: StackNavigationProp,
   route: {params: {data: FeedItemType, date: string}},
 };
-
-const ICON_AMICALE = require('../../../assets/amicale.png');
-
-const NAME_AMICALE = 'Amicale INSA Toulouse';
 
 /**
  * Class defining a feed item page.
@@ -72,15 +70,17 @@ class FeedItemScreen extends React.Component<PropsType> {
     const {navigation} = this.props;
     const hasImage =
       this.displayData.image !== '' && this.displayData.image != null;
+    const pageSource: NewsSourceType =
+      NewsSourcesConstants[this.displayData.page_id];
     return (
       <CollapsibleScrollView style={{margin: 5}} hasTab>
         <Card.Title
-          title={NAME_AMICALE}
+          title={pageSource.name}
           subtitle={this.date}
           left={(): React.Node => (
             <Avatar.Image
               size={48}
-              source={ICON_AMICALE}
+              source={pageSource.icon}
               style={{backgroundColor: 'transparent'}}
             />
           )}
