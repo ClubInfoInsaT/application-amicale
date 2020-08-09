@@ -31,6 +31,7 @@ import EquipmentLendScreen from '../screens/Amicale/Equipment/EquipmentRentScree
 import EquipmentConfirmScreen from '../screens/Amicale/Equipment/EquipmentConfirmScreen';
 import DashboardEditScreen from '../screens/Other/Settings/DashboardEditScreen';
 import GameStartScreen from '../screens/Game/screens/GameStartScreen';
+import ImageGalleryScreen from '../screens/Media/ImageGalleryScreen';
 
 const modalTransition =
   Platform.OS === 'ios'
@@ -60,6 +61,14 @@ function MainStackComponent(props: {
         options={{
           headerShown: false,
           title: i18n.t('screens.home.title'),
+        }}
+      />
+      <MainStack.Screen
+        name="gallery"
+        component={ImageGalleryScreen}
+        options={{
+          headerShown: false,
+          ...modalTransition,
         }}
       />
       {createScreenCollapsibleStack(

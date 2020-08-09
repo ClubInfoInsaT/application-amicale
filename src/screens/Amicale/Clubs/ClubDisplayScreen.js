@@ -10,7 +10,6 @@ import {
   Paragraph,
   withTheme,
 } from 'react-native-paper';
-import ImageModal from 'react-native-image-modal';
 import i18n from 'i18n-js';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen';
@@ -22,6 +21,7 @@ import {ERROR_TYPE} from '../../../utils/WebData';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import type {ApiGenericDataType} from '../../../utils/WebData';
 import type {CardTitleIconPropsType} from '../../../constants/PaperStyles';
+import ImageGalleryButton from '../../../components/Media/ImageGalleryButton';
 
 type PropsType = {
   navigation: StackNavigationProp,
@@ -188,7 +188,7 @@ class ClubDisplayScreen extends React.Component<PropsType> {
   }
 
   getScreen = (response: Array<ApiGenericDataType | null>): React.Node => {
-    const {props} = this;
+    const {navigation} = this.props;
     let data: ClubType | null = null;
     if (response[0] != null) {
       [data] = response;
@@ -199,25 +199,18 @@ class ClubDisplayScreen extends React.Component<PropsType> {
         <CollapsibleScrollView style={{paddingLeft: 5, paddingRight: 5}} hasTab>
           {this.getCategoriesRender(data.category)}
           {data.logo !== null ? (
-            <View
+            <ImageGalleryButton
+              navigation={navigation}
+              images={[{url: data.logo}]}
               style={{
+                width: 300,
+                height: 300,
                 marginLeft: 'auto',
                 marginRight: 'auto',
                 marginTop: 10,
                 marginBottom: 10,
-              }}>
-              <ImageModal
-                resizeMode="contain"
-                imageBackgroundColor={props.theme.colors.background}
-                style={{
-                  width: 300,
-                  height: 300,
-                }}
-                source={{
-                  uri: data.logo,
-                }}
-              />
-            </View>
+              }}
+            />
           ) : (
             <View />
           )}

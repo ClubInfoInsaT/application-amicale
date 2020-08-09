@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 import {View} from 'react-native';
-import {Card, withTheme} from 'react-native-paper';
-import ImageModal from 'react-native-image-modal';
+import {Card} from 'react-native-paper';
 import i18n from 'i18n-js';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {getDateOnlyString, getFormattedEventTime} from '../../utils/Planning';
@@ -13,14 +12,13 @@ import {apiRequest, ERROR_TYPE} from '../../utils/WebData';
 import ErrorView from '../../components/Screens/ErrorView';
 import CustomHTML from '../../components/Overrides/CustomHTML';
 import CustomTabBar from '../../components/Tabbar/CustomTabBar';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import type {PlanningEventType} from '../../utils/Planning';
+import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
 
 type PropsType = {
   navigation: StackNavigationProp,
   route: {params: {data: PlanningEventType, id: number, eventId: number}},
-  theme: CustomThemeType,
 };
 
 type StateType = {
@@ -95,7 +93,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getContent(): React.Node {
-    const {theme} = this.props;
+    const {navigation} = this.props;
     const {displayData} = this;
     if (displayData == null) return null;
     let subtitle = getFormattedEventTime(
@@ -111,19 +109,16 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
       <CollapsibleScrollView style={{paddingLeft: 5, paddingRight: 5}} hasTab>
         <Card.Title title={displayData.title} subtitle={subtitle} />
         {displayData.logo !== null ? (
-          <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
-            <ImageModal
-              resizeMode="contain"
-              imageBackgroundColor={theme.colors.background}
-              style={{
-                width: 300,
-                height: 300,
-              }}
-              source={{
-                uri: displayData.logo,
-              }}
-            />
-          </View>
+          <ImageGalleryButton
+            navigation={navigation}
+            images={[{url: displayData.logo}]}
+            style={{
+              width: 300,
+              height: 300,
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          />
         ) : null}
 
         {displayData.description !== null ? (
@@ -181,4 +176,4 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
   }
 }
 
-export default withTheme(PlanningDisplayScreen);
+export default PlanningDisplayScreen;

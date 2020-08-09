@@ -39,7 +39,7 @@
     "react-native-camera": "^3.35.0",
     "react-native-collapsible": "^1.5.3",
     "react-native-gesture-handler": "^1.7.0",
-    "react-native-image-modal": "^1.0.9",
+    "react-native-image-zoom-viewer": "^3.0.1",
     "react-native-keychain": "^6.1.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-localize": "^1.4.1",

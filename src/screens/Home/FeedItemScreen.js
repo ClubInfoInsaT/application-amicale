@@ -1,9 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Linking, View} from 'react-native';
+import {Linking} from 'react-native';
 import {Avatar, Card, Text, withTheme} from 'react-native-paper';
-import ImageModal from 'react-native-image-modal';
 import Autolink from 'react-native-autolink';
 import {StackNavigationProp} from '@react-navigation/stack';
 import MaterialHeaderButtons, {
@@ -12,6 +11,7 @@ import MaterialHeaderButtons, {
 import CustomTabBar from '../../components/Tabbar/CustomTabBar';
 import type {FeedItemType} from './HomeScreen';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
+import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
 
 type PropsType = {
   navigation: StackNavigationProp,
@@ -69,6 +69,7 @@ class FeedItemScreen extends React.Component<PropsType> {
   };
 
   render(): React.Node {
+    const {navigation} = this.props;
     const hasImage =
       this.displayData.image !== '' && this.displayData.image != null;
     return (
@@ -85,19 +86,16 @@ class FeedItemScreen extends React.Component<PropsType> {
           )}
         />
         {hasImage ? (
-          <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
-            <ImageModal
-              resizeMode="contain"
-              imageBackgroundColor="#000"
-              style={{
-                width: 250,
-                height: 250,
-              }}
-              source={{
-                uri: this.displayData.image,
-              }}
-            />
-          </View>
+          <ImageGalleryButton
+            navigation={navigation}
+            images={[{url: this.displayData.image}]}
+            style={{
+              width: 250,
+              height: 250,
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          />
         ) : null}
         <Card.Content style={{paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
           {this.displayData.message !== undefined ? (
