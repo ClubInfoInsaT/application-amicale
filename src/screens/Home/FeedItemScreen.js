@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import {Linking} from 'react-native';
-import {Avatar, Card, Text, withTheme} from 'react-native-paper';
+import {Linking, Image} from 'react-native';
+import {Card, Text, withTheme} from 'react-native-paper';
 import Autolink from 'react-native-autolink';
 import {StackNavigationProp} from '@react-navigation/stack';
 import MaterialHeaderButtons, {
@@ -78,10 +78,13 @@ class FeedItemScreen extends React.Component<PropsType> {
           title={pageSource.name}
           subtitle={this.date}
           left={(): React.Node => (
-            <Avatar.Image
+            <Image
               size={48}
               source={pageSource.icon}
-              style={{backgroundColor: 'transparent'}}
+              style={{
+                width: 48,
+                height: 48,
+              }}
             />
           )}
         />

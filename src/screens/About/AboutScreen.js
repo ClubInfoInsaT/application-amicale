@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, Linking, Platform} from 'react-native';
+import {FlatList, Linking, Platform, Image} from 'react-native';
 import i18n from 'i18n-js';
 import {Avatar, Card, List, Title, withTheme} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -222,10 +222,10 @@ class AboutScreen extends React.Component<PropsType> {
           title="Campus"
           subtitle={packageJson.version}
           left={(iconProps: CardTitleIconPropsType): React.Node => (
-            <Avatar.Image
+            <Image
               size={iconProps.size}
               source={APP_LOGO}
-              style={{backgroundColor: 'transparent'}}
+              style={{width: iconProps.size, height: iconProps.size}}
             />
           )}
         />
