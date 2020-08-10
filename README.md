@@ -3,6 +3,7 @@
 [<img src="https://etud.insa-toulouse.fr/~amicale_app/images/promo/app-store-badge.png" alt="app-store" width="150"/>](https://apps.apple.com/us/app/id1477722148)
 [<img src="https://etud.insa-toulouse.fr/~amicale_app/images/promo/google-play-badge.png" alt="google-play" width="150"/>](https://play.google.com/store/apps/details?id=fr.amicaleinsat.application)
 
+
 Projet démarré pendant l'été 2019 par Arnaud Vergnet (alors en 3MIC), cette application compatible Android et iOS permet aux étudiants d'avoir un accès facile aux informations du campus :
  - Connexion à son compte Amicale
  - Liste des événements sur le campus
@@ -12,6 +13,8 @@ Projet démarré pendant l'été 2019 par Arnaud Vergnet (alors en 3MIC), cette 
 ...et bien d'autres services
 
 Pour la source du serveur utilisé pour synchroniser les informations, merci de voir [ce dépôt](https://git.etud.insa-toulouse.fr/vergnet/application-amicale-serveur).
+
+## 🗨️ [Des questions? Viens discuter sur Discord !](https://discord.gg/W8MeTec)
 
 # 🔎 Besoin de mainteneur
 
