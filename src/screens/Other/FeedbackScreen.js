@@ -24,8 +24,7 @@ Stp corrige le pb, bien cordialement.`,
   facebook: 'https://www.facebook.com/campus.insat',
   feedbackMail: `mailto:app@amicale-insat.fr?subject=[FEEDBACK] Application CAMPUS
 &body=Coucou Arnaud j'ai du feedback\n\n\n\nBien cordialement.`,
-  feedbackGit:
-    'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues/new',
+  feedbackDiscord: 'https://discord.gg/W8MeTec',
 };
 
 class FeedbackScreen extends React.Component<PropsType> {
@@ -55,17 +54,17 @@ class FeedbackScreen extends React.Component<PropsType> {
           MAIL
         </Button>
         <Button
-          icon="git"
+          icon={isBug ? 'git' : 'discord'}
           mode="contained"
-          color="#609927"
+          color={isBug ? '#609927' : '#7289da'}
           style={{
             marginLeft: 'auto',
             marginTop: 5,
           }}
           onPress={() => {
-            Linking.openURL(isBug ? links.bugsGit : links.feedbackGit);
+            Linking.openURL(isBug ? links.bugsGit : links.feedbackDiscord);
           }}>
-          GITEA
+          {isBug ? 'GITEA' : 'Discord'}
         </Button>
         <Button
           icon="facebook"
