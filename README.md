@@ -29,11 +29,11 @@ Le tout, bien sûr, permet de valoriser une implication citoyenne 😉.
 **Tu veux influencer le développement ? C'est très simple !**
 
 #### 🙃 Aucune connaissance ?
-Pas de problème ! Tu peux aider simplement en proposant des améliorations ou en rapportant des bugs par mail ([app@amicale-insat.fr](mailto:app@amicale-insat.fr)), ou sur [cette page](https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues) en te connectant avec tes login INSA.
+Pas de problème ! Tu peux aider simplement en proposant des améliorations ou en rapportant des bugs par mail ([app@amicale-insat.fr](mailto:app@amicale-insat.fr)), sur [Discord](https://discord.gg/W8MeTec), ou sur [cette page](https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues) en te connectant avec tes login INSA.
 
 #### 🌍 Bilingue ou plus ?
 
-Tu peux aider à traduire l'application ! Le projet existe en français et anglais (mais il peut y avoir des fautes !), et tout autre langue est la bienvenue.
+Tu peux aider à traduire l'application ! Le projet existe en français et anglais (mais il peut y avoir des fautes !), et toute autre langue est la bienvenue.
 
 Si tu es intéressé, rends-toi sur [cette page](doc/TRANSLATE.md) pour plus de détails.
 
