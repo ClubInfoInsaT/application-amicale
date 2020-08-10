@@ -1,16 +1,14 @@
 // @flow
 
 import * as React from 'react';
-import {TouchableRipple, withTheme} from 'react-native-paper';
+import {TouchableRipple} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Image} from 'react-native-animatable';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
   navigation: StackNavigationProp,
   images: Array<{url: string}>,
-  theme: CustomThemeType,
   style: ViewStyleProp,
 };
 
@@ -37,4 +35,4 @@ class ImageGalleryButton extends React.Component<PropsType> {
   }
 }
 
-export default withTheme(ImageGalleryButton);
+export default ImageGalleryButton;

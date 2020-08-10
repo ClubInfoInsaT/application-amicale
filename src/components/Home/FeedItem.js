@@ -45,18 +45,18 @@ class FeedItem extends React.Component<PropsType> {
   };
 
   render(): React.Node {
-    const {props} = this;
-    const {item} = props;
-    const hasImage = item.image !== '' && item.image != null;
+    const {item, height, navigation} = this.props;
+    const image = item.image !== '' && item.image != null ? item.image : null;
     const pageSource: NewsSourceType = NewsSourcesConstants[item.page_id];
     const cardMargin = 10;
-    const cardHeight = props.height - 2 * cardMargin;
+    const cardHeight = height - 2 * cardMargin;
     const imageSize = 250;
     const titleHeight = 80;
     const actionsHeight = 60;
-    const textHeight = hasImage
-      ? cardHeight - titleHeight - actionsHeight - imageSize
-      : cardHeight - titleHeight - actionsHeight;
+    const textHeight =
+      image != null
+        ? cardHeight - titleHeight - actionsHeight - imageSize
+        : cardHeight - titleHeight - actionsHeight;
     return (
       <Card
         style={{
@@ -80,17 +80,17 @@ class FeedItem extends React.Component<PropsType> {
               )}
               style={{height: titleHeight}}
             />
-            {hasImage ? (
-              <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                <ImageGalleryButton
-                  navigation={props.navigation}
-                  images={[{url: item.image}]}
-                  style={{
-                    width: imageSize,
-                    height: imageSize,
-                  }}
-                />
-              </View>
+            {image != null ? (
+              <ImageGalleryButton
+                navigation={navigation}
+                images={[{url: image}]}
+                style={{
+                  width: imageSize,
+                  height: imageSize,
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                }}
+              />
             ) : null}
             <Card.Content>
               {item.message !== undefined ? (
