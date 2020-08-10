@@ -1,6 +1,6 @@
 # Changelog
 
-Penses à garder l'appli à jour pour profiter des dernières fonctionnalités !
+Pense à garder l'appli à jour pour profiter des dernières fonctionnalités !
 
 # Prochainement - **v4.0.1**
 ## 🎉 Nouveautés
