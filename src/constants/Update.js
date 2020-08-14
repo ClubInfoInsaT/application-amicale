@@ -1,6 +1,10 @@
 // @flow
 
+import * as React from 'react';
 import i18n from 'i18n-js';
+import type {IntroSlideType} from '../components/Overrides/CustomIntroSlider';
+import MascotIntroWelcome from '../components/Intro/MascotIntroWelcome';
+import IntroIcon from '../components/Intro/IconIntro';
 
 /**
  * Singleton used to manage update slides.
@@ -15,46 +19,33 @@ import i18n from 'i18n-js';
  */
 export default class Update {
   // Increment the number to show the update slide
-  static number = 6;
+  static number = 7;
 
-  // Change the number of slides to display
-  static slidesNumber = 4;
-
-  // Change the icons to be displayed on the update slide
-  static iconList = ['star', 'clock', 'qrcode-scan', 'account'];
-
-  static colorsList = [
-    ['#e01928', '#be1522'],
-    ['#7c33ec', '#5e11d1'],
-    ['#337aec', '#114ed1'],
-    ['#e01928', '#be1522'],
-  ];
-
-  static instance: Update | null = null;
-
-  titleList: Array<string>;
-
-  descriptionList: Array<string>;
+  updateSlides: Array<IntroSlideType>;
 
   /**
    * Init translations
    */
   constructor() {
-    this.titleList = [];
-    this.descriptionList = [];
-    for (let i = 0; i < Update.slidesNumber; i += 1) {
-      this.titleList.push(i18n.t(`intro.updateSlide${i}.title`));
-      this.descriptionList.push(i18n.t(`intro.updateSlide${i}.text`));
-    }
+    this.updateSlides = [
+      {
+        key: '0',
+        title: i18n.t(`intro.updateSlide0.title`),
+        text: i18n.t(`intro.updateSlide0.text`),
+        view: (): React.Node => <MascotIntroWelcome />,
+        colors: ['#be1522', '#57080e'],
+      },
+      {
+        key: '1',
+        title: i18n.t(`intro.updateSlide1.title`),
+        text: i18n.t(`intro.updateSlide1.text`),
+        view: (): React.Node => <IntroIcon icon="account-heart-outline" />,
+        colors: ['#9c165b', '#3e042b'],
+      },
+    ];
   }
 
-  /**
-   * Get this class instance or create one if none is found
-   *
-   * @returns {Update}
-   */
-  static getInstance(): Update {
-    if (Update.instance == null) Update.instance = new Update();
-    return Update.instance;
+  getUpdateSlides(): Array<IntroSlideType> {
+    return this.updateSlides;
   }
 }

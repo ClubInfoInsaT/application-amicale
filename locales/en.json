@@ -418,19 +418,11 @@
     },
     "updateSlide0": {
       "title": "New in this update!",
-      "text": "Faster than ever and easier to use!\nThis update includes lots of changes to improve your experience.\nUse the brand new feedback button on the home screen to talk to the developer!"
+      "text": ""
     },
     "updateSlide1": {
-      "title": "Improved Planex!",
-      "text": "You now have access to new controls, improved display, and you can also mark groups as favorites."
-    },
-    "updateSlide2": {
-      "title": "Scanotron 3000!",
-      "text": "Say hello to Scanotron 3000!\nAvailable from the Qr-Code button on the home screen, it will help you get information about clubs and events around the campus.\n(Useless right now but we have hope for next year)"
-    },
-    "updateSlide3": {
-      "title": "Amicale Account!",
-      "text": "You can now connect to your Amicale INSAT account from within the app! See all available clubs and more to come!\nClick on the login button from the home screen."
+      "title": "",
+      "text": ""
     },
     "aprilFoolsSlide": {
       "title": "New in this update!",

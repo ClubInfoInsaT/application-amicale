@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import {Platform, StatusBar, StyleSheet, View} from 'react-native';
-import type {MaterialCommunityIconsGlyphs} from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18n from 'i18n-js';
 import AppIntroSlider from 'react-native-app-intro-slider';
@@ -12,6 +11,9 @@ import {Card} from 'react-native-paper';
 import Update from '../../constants/Update';
 import ThemeManager from '../../managers/ThemeManager';
 import Mascot, {MASCOT_STYLE} from '../Mascot/Mascot';
+import MascotIntroWelcome from '../Intro/MascotIntroWelcome';
+import IntroIcon from '../Intro/IconIntro';
+import MascotIntroEnd from '../Intro/MascotIntroEnd';
 
 type PropsType = {
   onDone: () => void,
@@ -23,12 +25,12 @@ type StateType = {
   currentSlide: number,
 };
 
-type IntroSlideType = {
+export type IntroSlideType = {
   key: string,
   title: string,
   text: string,
   view: () => React.Node,
-  mascotStyle: number,
+  mascotStyle?: number,
   colors: [string, string],
 };
 
@@ -88,15 +90,14 @@ export default class CustomIntroSlider extends React.Component<
         key: '0', // Mascot
         title: i18n.t('intro.slideMain.title'),
         text: i18n.t('intro.slideMain.text'),
-        view: this.getWelcomeView,
-        mascotStyle: MASCOT_STYLE.NORMAL,
+        view: (): React.Node => <MascotIntroWelcome />,
         colors: ['#be1522', '#57080e'],
       },
       {
         key: '1',
         title: i18n.t('intro.slidePlanex.title'),
         text: i18n.t('intro.slidePlanex.text'),
-        view: (): React.Node => CustomIntroSlider.getIconView('calendar-clock'),
+        view: (): React.Node => <IntroIcon icon="calendar-clock" />,
         mascotStyle: MASCOT_STYLE.INTELLO,
         colors: ['#be1522', '#57080e'],
       },
@@ -104,7 +105,7 @@ export default class CustomIntroSlider extends React.Component<
         key: '2',
         title: i18n.t('intro.slideEvents.title'),
         text: i18n.t('intro.slideEvents.text'),
-        view: (): React.Node => CustomIntroSlider.getIconView('calendar-star'),
+        view: (): React.Node => <IntroIcon icon="calendar-star" />,
         mascotStyle: MASCOT_STYLE.HAPPY,
         colors: ['#be1522', '#57080e'],
       },
@@ -112,8 +113,7 @@ export default class CustomIntroSlider extends React.Component<
         key: '3',
         title: i18n.t('intro.slideServices.title'),
         text: i18n.t('intro.slideServices.text'),
-        view: (): React.Node =>
-          CustomIntroSlider.getIconView('view-dashboard-variant'),
+        view: (): React.Node => <IntroIcon icon="view-dashboard-variant" />,
         mascotStyle: MASCOT_STYLE.CUTE,
         colors: ['#be1522', '#57080e'],
       },
@@ -121,22 +121,12 @@ export default class CustomIntroSlider extends React.Component<
         key: '4',
         title: i18n.t('intro.slideDone.title'),
         text: i18n.t('intro.slideDone.text'),
-        view: (): React.Node => this.getEndView(),
-        mascotStyle: MASCOT_STYLE.COOL,
+        view: (): React.Node => <MascotIntroEnd />,
         colors: ['#9c165b', '#3e042b'],
       },
     ];
-    // $FlowFixMe
-    this.updateSlides = [];
-    for (let i = 0; i < Update.slidesNumber; i += 1) {
-      this.updateSlides.push({
-        key: i.toString(),
-        title: Update.getInstance().titleList[i],
-        text: Update.getInstance().descriptionList[i],
-        icon: Update.iconList[i],
-        colors: Update.colorsList[i],
-      });
-    }
+
+    this.updateSlides = new Update().getUpdateSlides();
 
     this.aprilFoolsSlides = [
       {
@@ -175,7 +165,7 @@ export default class CustomIntroSlider extends React.Component<
           <View style={{height: '100%', flex: 1}}>
             <View style={{flex: 1}}>{item.view()}</View>
             <Animatable.View useNativeDriver animation="fadeIn">
-              {index !== 0 && index !== this.introSlides.length - 1 ? (
+              {item.mascotStyle != null ? (
                 <Mascot
                   style={{
                     marginLeft: 30,
@@ -243,95 +233,6 @@ export default class CustomIntroSlider extends React.Component<
       </LinearGradient>
     );
   };
-
-  getEndView = (): React.Node => {
-    return (
-      <View style={{flex: 1}}>
-        <Mascot
-          style={{
-            ...styles.center,
-            height: '80%',
-          }}
-          emotion={MASCOT_STYLE.COOL}
-          animated
-          entryAnimation={{
-            animation: 'slideInDown',
-            duration: 2000,
-          }}
-          loopAnimation={{
-            animation: 'pulse',
-            duration: 2000,
-            iterationCount: 'infinite',
-          }}
-        />
-      </View>
-    );
-  };
-
-  getWelcomeView = (): React.Node => {
-    return (
-      <View style={{flex: 1}}>
-        <Mascot
-          style={{
-            ...styles.center,
-            height: '80%',
-          }}
-          emotion={MASCOT_STYLE.NORMAL}
-          animated
-          entryAnimation={{
-            animation: 'bounceIn',
-            duration: 2000,
-          }}
-        />
-        <Animatable.Text
-          useNativeDriver
-          animation="fadeInUp"
-          duration={500}
-          style={{
-            color: '#fff',
-            textAlign: 'center',
-            fontSize: 25,
-          }}>
-          PABLO
-        </Animatable.Text>
-        <Animatable.View
-          useNativeDriver
-          animation="fadeInUp"
-          duration={500}
-          delay={200}
-          style={{
-            position: 'absolute',
-            bottom: 30,
-            right: '20%',
-            width: 50,
-            height: 50,
-          }}>
-          <MaterialCommunityIcons
-            style={{
-              ...styles.center,
-              transform: [{rotateZ: '70deg'}],
-            }}
-            name="undo"
-            color="#fff"
-            size={40}
-          />
-        </Animatable.View>
-      </View>
-    );
-  };
-
-  static getIconView(icon: MaterialCommunityIconsGlyphs): React.Node {
-    return (
-      <View style={{flex: 1}}>
-        <Animatable.View
-          useNativeDriver
-          style={styles.center}
-          animation="fadeIn">
-          <MaterialCommunityIcons name={icon} color="#fff" size={200} />
-        </Animatable.View>
-      </View>
-    );
-  }
 
   static setStatusBarColor(color: string) {
     if (Platform.OS === 'android') StatusBar.setBackgroundColor(color, true);
