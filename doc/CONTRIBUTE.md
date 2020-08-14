@@ -11,15 +11,20 @@ Si tu as des problèmes ou des questions, n'hésite pas à me contacter par mail
 
 * [1. Prérequis](#1-prérequis)
 * [2. Fork du projet](#2-fork-du-projet)
-* [3. Création d'une nouvelle branche](#3-création-dune-nouvelle-branche)
-* [4. Réalisation d'une modification](#4-réalisation-dune-modification)
-* [5. Création d'une Pull Request](#5-création-dune-pull-request)
+* [3. Fork du projet](#3-fork-du-projet)
+* [4. Création d'une nouvelle branche](#4-création-dune-nouvelle-branche)
+* [5. Réalisation d'une modification](#5-réalisation-dune-modification)
+* [6. Création d'une Pull Request](#6-création-dune-pull-request)
 
 # 1. Prérequis
 
 Avant toute chose, tu dois installer React Native et git sur ta machine. Pour cela, suis [ce guide](INSTALL.md) jusqu'à l'étape 3.
 
-# 2. Fork du projet
+# 2. Quoi faire ?
+
+Tu trouveras une liste de choses à faire sur [Trello](https://trello.com/b/RMej49Uq/application-campus-insa).
+
+# 3. Fork du projet
 
 Si tu as bien suivi les instructions plus haut, tu devrais pouvoir lancer une application vide sur un appareil. Si ce n'est pas le cas, recommence l'installation depuis le début. Si malgré tout tu n'y arrives pas, envoie-moi un petit mail : [app@amicale-insat.fr](mailto:app@amicale-insat.fr).
 
@@ -40,7 +45,7 @@ git clone [LINK]
 en remplaçant `[LINK]` par le lien que tu peux copier en haut à droite, au-dessus de la liste des fichiers.
 * Tu as réussi à faire un Fork, bravo !
 
-# 3. Création d'une nouvelle branche
+# 4. Création d'une nouvelle branche
 
 Comme indiqué sur [ce guide](WORKFLOW.md), chaque fonctionnalité doit être développée dans sa propre branche puis fusionnée avec le master du dépôt officiel.
 
@@ -52,7 +57,7 @@ En remplaçant `<branch-name>` par le nom souhaité (sans espaces !). Ce nom doi
 
 Tu es maintenant sur ta nouvelle branche et prêt à faire tes modifications.
 
-# 4. Réalisation d'une modification
+# 5. Réalisation d'une modification
 
 Tu peux maintenant modifier ce que tu veux pour corriger un bug ou ajoute une fonctionnalité.
 
@@ -62,7 +67,7 @@ Pour installer l'appli sur ton téléphone/émulateur, reviens sur le [guide d'i
 
 Avant de passer à l'étape suivante, merci de bien vérifier et tester tes modifications.
 
-# 5. Création d'une Pull Request
+# 6. Création d'une Pull Request
 
 Cette étape te permet d'envoyer tes modifications sur le dépôt officiel, pour être intégrées à l'application disponible dans les magasins.
 

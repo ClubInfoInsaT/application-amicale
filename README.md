@@ -16,6 +16,9 @@ Pour la source du serveur utilisé pour synchroniser les informations, merci de 
 
 ## 🗨️ [Des questions ? Viens discuter sur Discord !](https://discord.gg/W8MeTec)
 
+## ✔️ [Organisation sur Trello](https://trello.com/b/RMej49Uq/application-campus-insa)
+
+
 # 🔎 Besoin de mainteneur
 
 Ce projet a été réalisé en grande partie par **un seul étudiant**, mais cet étudiant (coucou c'est moi) ne va pas rester éternellement à l'INSA. **Il faut donc une relève !** Le projet étant stable, le minimum est de corriger les bugs rencontrés.
@@ -26,7 +29,7 @@ Le tout, bien sûr, permet de valoriser une implication citoyenne 😉.
 
 # 🚀 Contribuer
 
-**Tu veux influencer le développement ? C'est très simple !**
+**Tu veux influencer le développement ? C'est très simple !** Tu trouveras une liste de choses à faire sur [Trello](https://trello.com/b/RMej49Uq/application-campus-insa).
 
 #### 🙃 Aucune connaissance ?
 Pas de problème ! Tu peux aider simplement en proposant des améliorations ou en rapportant des bugs par mail ([app@amicale-insat.fr](mailto:app@amicale-insat.fr)), sur [Discord](https://discord.gg/W8MeTec), ou sur [cette page](https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues) en te connectant avec tes login INSA.
