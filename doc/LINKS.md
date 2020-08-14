@@ -10,7 +10,6 @@ Le strict minimum pour pouvoir comprendre le code de l'application. Il n'est pas
 * [**Tutoriel Git**](https://learngitbranching.js.org/) : Le système utilisé pour synchroniser le code entre plusieurs ordinateurs. Tout le projet repose sur cette technologie, une compréhension minimale de son fonctionnement est nécessaire. Si tu ne sais pas ce que veut dire commit, pull, push, merge, ou branch, alors lis ce tuto !
 * [**Tutoriel JavaScript**](https://www.w3schools.com/js) : Un minimum de connaissances en JavaScript est nécessaire pour pouvoir comprendre le code. Pas besoin de lire tout le tutoriel. Pour les bases, tu peux t'arrêter à la partie `JS Dates` ou un peu avant. Il est utile de revenir souvent vers ce guide quand tu rencontres des difficultés. 
 * [**Documentation React Native**](https://reactnative.dev/docs/getting-started) : La techno de base, qui utilise JavaScript. Lire au moins les articles de la catégorie `The Basics`, tout est interactif c'est plutôt simple et rapide à comprendre.
-* [**List des librairies**](../package.json) : Tu trouveras dans ce fichier la liste de toutes les librairies utilisées dans ce projet (catégorie `dependencies`). Pour accéder à leur documentation, fais une simple recherche de leur nom dans un moteur de recherche.
 
 ## 🤔 Comprendre les librairies
 
@@ -19,6 +18,7 @@ Si tu as compris les bases et que tu veux te plonger un peu plus en profondeur d
 * [**Documentation Flow**](https://flow.org/en/docs/react/) : Un utilitaire pour rendre JavaScript typé statique (c'est-à-dire plus robuste pour de gros projets). Flow permet de rajouter des annotations pour donner un type aux variables.
 * [**Documentation React Native Paper**](https://callstack.github.io/react-native-paper/) : Le framework utilisé pour créer l'interface utilisateur (UI). Paper met à disposition de nombreux composants respectant les normes Material Design. Comparé à d'autres frameworks, paper est léger et facile à utiliser.
 * [**Documentation React Navigation**](https://reactnavigation.org/docs/getting-started) : Le framework utilisé pour faciliter la navigation classique entre différents écrans. Permet de créer facilement une navigation par onglets/menu déroulant.
+* [**Liste des librairies**](../package.json) : Tu trouveras dans ce fichier la liste de toutes les librairies utilisées dans ce projet (catégorie `dependencies`). Pour accéder à leur documentation, fais une simple recherche de leur nom dans un moteur de recherche.
 
 ## 🤯 Les Plus
 
