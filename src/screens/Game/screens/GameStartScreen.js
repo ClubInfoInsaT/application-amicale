@@ -420,7 +420,7 @@ class GameStartScreen extends React.Component<PropsType> {
           <CollapsibleScrollView>
             {this.getMainContent()}
             <MascotPopup
-              prefKey={AsyncStorageManager.PREFERENCES.gameStartShowBanner.key}
+              prefKey={AsyncStorageManager.PREFERENCES.gameStartMascot.key}
               title={i18n.t('screens.game.mascotDialog.title')}
               message={i18n.t('screens.game.mascotDialog.message')}
               icon="gamepad-variant"

@@ -41,40 +41,40 @@ export default class AsyncStorageManager {
       key: 'defaultStartScreen',
       default: 'home',
     },
-    servicesShowBanner: {
-      key: 'servicesShowBanner',
+    servicesShowMascot: {
+      key: 'servicesShowMascot',
       default: '1',
     },
-    proxiwashShowBanner: {
-      key: 'proxiwashShowBanner',
+    proxiwashShowMascot: {
+      key: 'proxiwashShowMascot',
       default: '1',
     },
-    homeShowBanner: {
-      key: 'homeShowBanner',
+    homeShowMascot: {
+      key: 'homeShowMascot',
       default: '1',
     },
-    eventsShowBanner: {
-      key: 'eventsShowBanner',
+    eventsShowMascot: {
+      key: 'eventsShowMascot',
       default: '1',
     },
-    planexShowBanner: {
-      key: 'planexShowBanner',
+    planexShowMascot: {
+      key: 'planexShowMascot',
       default: '1',
     },
-    loginShowBanner: {
-      key: 'loginShowBanner',
+    loginShowMascot: {
+      key: 'loginShowMascot',
       default: '1',
     },
-    voteShowBanner: {
-      key: 'voteShowBanner',
+    voteShowMascot: {
+      key: 'voteShowMascot',
       default: '1',
     },
-    equipmentShowBanner: {
-      key: 'equipmentShowBanner',
+    equipmentShowMascot: {
+      key: 'equipmentShowMascot',
       default: '1',
     },
-    gameStartShowBanner: {
-      key: 'gameStartShowBanner',
+    gameStartMascot: {
+      key: 'gameStartMascot',
       default: '1',
     },
     proxiwashWatchedMachines: {

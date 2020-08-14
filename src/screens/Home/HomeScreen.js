@@ -488,7 +488,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
         </View>
         {!this.isLoggedIn ? (
           <MascotPopup
-            prefKey={AsyncStorageManager.PREFERENCES.homeShowBanner.key}
+            prefKey={AsyncStorageManager.PREFERENCES.homeShowMascot.key}
             title={i18n.t('screens.home.mascotDialog.title')}
             message={i18n.t('screens.home.mascotDialog.message')}
             icon="human-greeting"

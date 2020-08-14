@@ -457,7 +457,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
           />
         </View>
         <MascotPopup
-          prefKey={AsyncStorageManager.PREFERENCES.proxiwashShowBanner.key}
+          prefKey={AsyncStorageManager.PREFERENCES.proxiwashShowMascot.key}
           title={i18n.t('screens.proxiwash.mascotDialog.title')}
           message={i18n.t('screens.proxiwash.mascotDialog.message')}
           icon="information"

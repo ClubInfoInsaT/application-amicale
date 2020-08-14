@@ -127,7 +127,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
     this.state = {
       hasVoted: false,
       mascotDialogVisible: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.voteShowBanner.key,
+        AsyncStorageManager.PREFERENCES.voteShowMascot.key,
       ),
     };
     this.hasVoted = false;
@@ -309,7 +309,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
 
   hideMascotDialog = () => {
     AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.voteShowBanner.key,
+      AsyncStorageManager.PREFERENCES.voteShowMascot.key,
       false,
     );
     this.setState({mascotDialogVisible: false});

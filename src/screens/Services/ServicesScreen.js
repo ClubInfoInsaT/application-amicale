@@ -139,7 +139,7 @@ class ServicesScreen extends React.Component<PropsType> {
           hasTab
         />
         <MascotPopup
-          prefKey={AsyncStorageManager.PREFERENCES.servicesShowBanner.key}
+          prefKey={AsyncStorageManager.PREFERENCES.servicesShowMascot.key}
           title={i18n.t('screens.services.mascotDialog.title')}
           message={i18n.t('screens.services.mascotDialog.message')}
           icon="cloud-question"

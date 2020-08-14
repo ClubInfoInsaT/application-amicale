@@ -361,7 +361,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
           AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
         ).toLowerCase() !== 'planex' ? (
           <MascotPopup
-            prefKey={AsyncStorageManager.PREFERENCES.planexShowBanner.key}
+            prefKey={AsyncStorageManager.PREFERENCES.planexShowMascot.key}
             title={i18n.t('screens.planex.mascotDialog.title')}
             message={i18n.t('screens.planex.mascotDialog.message')}
             icon="emoticon-kiss"

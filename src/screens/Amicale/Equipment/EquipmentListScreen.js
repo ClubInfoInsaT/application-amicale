@@ -49,7 +49,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
     super(props);
     this.state = {
       mascotDialogVisible: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.equipmentShowBanner.key,
+        AsyncStorageManager.PREFERENCES.equipmentShowMascot.key,
       ),
     };
     this.canRefresh = false;
@@ -141,7 +141,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
 
   hideMascotDialog = () => {
     AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.equipmentShowBanner.key,
+      AsyncStorageManager.PREFERENCES.equipmentShowMascot.key,
       false,
     );
     this.setState({mascotDialogVisible: false});

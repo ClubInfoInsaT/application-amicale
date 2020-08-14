@@ -262,7 +262,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
           onRef={this.onAgendaRef}
         />
         <MascotPopup
-          prefKey={AsyncStorageManager.PREFERENCES.eventsShowBanner.key}
+          prefKey={AsyncStorageManager.PREFERENCES.eventsShowMascot.key}
           title={i18n.t('screens.planning.mascotDialog.title')}
           message={i18n.t('screens.planning.mascotDialog.message')}
           icon="party-popper"

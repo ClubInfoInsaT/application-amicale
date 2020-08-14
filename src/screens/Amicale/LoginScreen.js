@@ -91,7 +91,7 @@ class LoginScreen extends React.Component<PropsType, StateType> {
       dialogVisible: false,
       dialogError: 0,
       mascotDialogVisible: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.loginShowBanner.key,
+        AsyncStorageManager.PREFERENCES.loginShowMascot.key,
       ),
     };
   }
@@ -293,7 +293,7 @@ class LoginScreen extends React.Component<PropsType, StateType> {
 
   hideMascotDialog = () => {
     AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.loginShowBanner.key,
+      AsyncStorageManager.PREFERENCES.loginShowMascot.key,
       false,
     );
     this.setState({mascotDialogVisible: false});
@@ -327,7 +327,7 @@ class LoginScreen extends React.Component<PropsType, StateType> {
     const {navigation} = this.props;
     // Do not show the home login banner again
     AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.homeShowBanner.key,
+      AsyncStorageManager.PREFERENCES.homeShowMascot.key,
       false,
     );
     if (this.nextScreen == null) navigation.goBack();
