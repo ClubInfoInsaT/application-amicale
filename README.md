@@ -16,7 +16,7 @@ Pour la source du serveur utilisé pour synchroniser les informations, merci de 
 
 ## 🗨️ [Des questions ? Viens discuter sur Discord !](https://discord.gg/W8MeTec)
 
-## ✔️ [Organisation sur Trello](https://trello.com/b/RMej49Uq/application-campus-insa)
+## ️☑️ [Organisation sur Trello](https://trello.com/b/RMej49Uq/application-campus-insa)
 
 
 # 🔎 Besoin de mainteneur
