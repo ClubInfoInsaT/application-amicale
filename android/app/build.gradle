@@ -125,11 +125,16 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 def enableHermes = project.ext.react.get("enableHermes", false);
 
 /**
- * Load release keystore
+ * Load release keystore using release properties file.
+ * If the file is not found, uses a dummy keystore file to prevent build from crashing
  */
 def keystorePropertiesFile = rootProject.file("keystores/release.keystore.properties");
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+if (keystorePropertiesFile.exists() && !keystorePropertiesFile.isDirectory()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+} else {
+    keystoreProperties['UPLOAD_STORE_FILE'] = 'release.keystore';
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -143,7 +148,7 @@ android {
         applicationId 'fr.amicaleinsat.application'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 39
+        versionCode 41
         versionName "4.0.1"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
