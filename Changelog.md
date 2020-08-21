@@ -1,8 +1,22 @@
-# Changelog
+# Version actuelle - v3.0.7 - 13/06/2020
 
-Pense à garder l'appli à jour pour profiter des dernières fonctionnalités !
+## 🎉 Nouveautés
+- Mise à jour des écrans d'intro pour mieux refléter l'appli actuelle
+- Déplacement du bouton *À propos* dans les paramètres
+- Mode sombre par défaut parce que voilà
+
+## 🐛 Corrections de bugs
+- Correction de crash au démarrage sur certains appareils
+- Correction de l'affichage de certains sites web
+
+## 🖥️ Notes de développement
+- Force soloader 0.8.2
+
 
 # Prochainement - **v4.0.1**
+
+<details><summary>**v4.0.1**</summary>
+
 ## 🎉 Nouveautés
 - Ajout d'une mascotte !
 - Ajout de la sauvegarde des scores pour le jeu
@@ -17,31 +31,15 @@ Pense à garder l'appli à jour pour profiter des dernières fonctionnalités !
 
 ## 🐛 Corrections de bugs
 - Correction d'un problème de connexion sur certains appareils android
-- Correction de bugs
+- Correction de l'icône de notification sur Android
+- Correction de bugs divers
 
 ## 🖥️ Notes de développement
 - Utilisation de prettier
 - Utilisation de eslint avec config de airbnb
 - Passage de React Native 62.2 à 63.2
 
-# Version actuelle
-
-<details><summary>**v3.0.7** - 13/06/2020</summary>
-
-## 🎉 Nouveautés
-- Mise à jour des écrans d'intro pour mieux refléter l'appli actuelle
-- Déplacement du bouton *À propos* dans les paramètres
-- Mode sombre par défaut parce que voilà
-
-## 🐛 Corrections de bugs
-- Correction de crash au démarrage sur certains appareils
-- Correction de l'affichage de certains sites web
-
-## 🖥️ Notes de développement
-- Force soloader 0.8.2
-
 </details>
-
 
 # Versions précédentes
 
