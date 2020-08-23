@@ -353,15 +353,15 @@
       "libs": "Librairies utilisées"
     },
     "feedback": {
-      "title": "Feedback",
-      "bugs": "Rapporter des Bugs",
-      "bugsSubtitle": "Tu as trouvé un bug ?",
-      "bugsDescription": "Rapporter les bugs m'aide à améliorer l'appli. Pour cela, merci d'utiliser un des boutons ci-dessous et de décrire ton problème le plus précisément possible !",
-      "feedbackSubtitle": "Dis moi ce que tu penses !",
-      "feedbackDescription": "Tu veux voir une fonctionnalité ajoutée/modifiée/supprimée ? Tu veux donner ton opinion sur l'appli ou simplement discuter avec le développeur (c'est moi coucou) ? Utilise un des liens ci-dessous !",
-      "contactMeans": "L'utilisation de Gitea est recommandée, pour l'utiliser, connecte toi avec tes identifiants INSA.",
-      "homeButtonTitle": "Feedback/Bugs",
-      "homeButtonSubtitle": "Contacte le développeur de l'appli"
+      "title": "Participer",
+      "feedback": "Contacte le développeur",
+      "feedbackSubtitle": "C'est un étudiant comme toi !",
+      "feedbackDescription": "Que ce soit pour donner ton avis ou rapporter des bugs, tu es le bienvenue.\nUtilise le moyen de ton choix parmi les boutons ci-dessous.",
+      "contribute": "Contribue au projet",
+      "contributeSubtitle": "Avec une possible implication citoyenne !",
+      "contributeDescription": "Il y en a pour tous les goûts : de la com', du design ou de la technique. Tu es libre de participer comme tu veux.\nTu trouveras ci-dessous un Trello de l'organisation du projet, ainsi que le code source sur GitEtud.",
+      "homeButtonTitle": "Participer au projet",
+      "homeButtonSubtitle": "Ton aide compte"
     },
     "game": {
       "title": "Jeu trop ouf",
@@ -412,16 +412,16 @@
       "text": "Tu peux faire bien plus avec CAMPUS, mais je n'ai pas le temps de tout dire ici. Balade toi sur l'appli pour tout découvrir !"
     },
     "slideDone": {
-      "title": "Ton avis compte !",
-      "text": "Cette appli à été réalisée par un seul étudiant (avec un peu d'aide par-ci par-là), donc tes retours sont les bienvenus !"
+      "title": "Participe au projet !",
+      "text": "Cette appli à été réalisée par un seul étudiant, donc tes retours et ton aide sont les bienvenus !\nIl y en a pour tous les goûts : de la com', du design ou de la technique !"
     },
     "updateSlide0": {
-      "title": "Nouveau dans cette mise à jour !",
-      "text": "Coucou toi ! Je suis là pour t'aider trouver à utiliser l'appli."
+      "title": "Coucou toi !",
+      "text": "Je suis le petit nouveau qui t'accompagnera sur l'appli. Mon dada c'est de te donner plein d'astuces et d'infos."
     },
     "updateSlide1": {
       "title": "Participe au projet !",
-      "text": "Tout le monde peut participer, que ce soit pour trouver des bugs ou ajouter des nouvelles fonctionnalités."
+      "text": "Cette appli à été réalisée par un seul étudiant, donc tes retours et ton aide sont les bienvenus !\nIl y en a pour tous les goûts : de la com', du design ou de la technique !"
     },
     "aprilFoolsSlide": {
       "title": "Nouveau dans cette mise à jour !",

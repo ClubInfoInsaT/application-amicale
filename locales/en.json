@@ -354,15 +354,15 @@
       "libs": "Libraries used"
     },
     "feedback": {
-      "title": "Feedback",
-      "bugs": "Report Bugs",
-      "bugsSubtitle": "Did you find a bug? Let us know!",
-      "bugsDescription": "Reporting bugs helps us make the app better. To do so, use one of the buttons below and be as precise as possible when describing your problem!",
-      "feedbackSubtitle": "Let us know what you think!",
-      "feedbackDescription": "Do you have a feature you want to be added/changed/removed, want to give your opinion on the app or simply chat with the dev? Use one of the links below!",
-      "contactMeans": "Using Gitea is recommended, to use it simply login with your INSA account.",
-      "homeButtonTitle": "Feedback/Bug report",
-      "homeButtonSubtitle": "Contact the devs"
+      "title": "Contribute",
+      "feedback": "Contact the dev",
+      "feedbackSubtitle": "A student like you!",
+      "feedbackDescription": "Feedback or bugs, you are always welcome.\nChoose your preferred way from the buttons bellow.",
+      "contribute": "Contribute to the project",
+      "contributeSubtitle": "With a possible \"implication citoyenne\"!",
+      "contributeDescription": "Everyone can help: communication, design or coding! You are free to contribute as you like.\nYou can find bellow a link to Trello for project organization, and a link to the source code on GitEtud.",
+      "homeButtonTitle": "Contribute to the project",
+      "homeButtonSubtitle": "Your help is important"
     },
     "game": {
       "title": "So Awesome Game",
@@ -413,16 +413,16 @@
       "text": "You can do much more with CAMPUS, but I can't explain everything here. Explore the app to find out!"
     },
     "slideDone": {
-      "title": "Your feedback is valuable!",
-      "text": "This app is the work of one student (with some help here and there), so your feedback is much appreciated!"
+      "title": "Contribute to the project!",
+      "text": "This app is the work of one student, so your feedback and your help are welcome!\nEveryone can help: communication, design or coding!"
     },
     "updateSlide0": {
-      "title": "New in this update!",
-      "text": "Hello you! I'm here to help you around the app."
+      "title": "Hi you!",
+      "text": "I'm new here and I will help you around the app. My thing is to give you lots of tips and tricks."
     },
     "updateSlide1": {
-      "title": "Contribute!",
-      "text": "Everyone is free to contribute to the project, from reporting bugs to implementing new features"
+      "title": "Contribute to the project!",
+      "text": "This app is the work of one student, so your feedback and your help are welcome!\nEveryone can help: communication, design or coding!"
     },
     "aprilFoolsSlide": {
       "title": "New in this update!",

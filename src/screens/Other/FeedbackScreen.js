@@ -3,110 +3,130 @@
 import * as React from 'react';
 import {Avatar, Button, Card, Paragraph, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
-import {Linking} from 'react-native';
-import type {CustomThemeType} from '../../managers/ThemeManager';
+import {Linking, View} from 'react-native';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import type {CardTitleIconPropsType} from '../../constants/PaperStyles';
 
-type PropsType = {
-  theme: CustomThemeType,
-};
-
 const links = {
-  bugsMail: `mailto:app@amicale-insat.fr?subject=[BUG] Application CAMPUS
-&body=Coucou Arnaud ça bug c'est nul,\n\n
-Informations sur ton système si tu sais (iOS ou Android, modèle du tel, version):\n\n\n
-Nature du problème :\n\n\n
-Étapes pour reproduire ce pb :\n\n\n\n
-Stp corrige le pb, bien cordialement.`,
-  bugsGit:
-    'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/issues/new',
+  bugsGit: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/',
+  trello: 'https://trello.com/b/RMej49Uq/application-campus-insa',
   facebook: 'https://www.facebook.com/campus.insat',
   feedbackMail: `mailto:app@amicale-insat.fr?subject=[FEEDBACK] Application CAMPUS
 &body=Coucou Arnaud j'ai du feedback\n\n\n\nBien cordialement.`,
   feedbackDiscord: 'https://discord.gg/W8MeTec',
 };
 
-class FeedbackScreen extends React.Component<PropsType> {
+class FeedbackScreen extends React.Component<null> {
   /**
    * Gets link buttons
    *
-   * @param isBug True if buttons should redirect to bug report methods
    * @returns {*}
    */
-  static getButtons(isBug: boolean): React.Node {
+  static getButtons(isFeedback: boolean): React.Node {
     return (
       <Card.Actions
         style={{
           flex: 1,
           flexWrap: 'wrap',
         }}>
-        <Button
-          icon="email"
-          mode="contained"
-          style={{
-            marginLeft: 'auto',
-            marginTop: 5,
-          }}
-          onPress={() => {
-            Linking.openURL(isBug ? links.bugsMail : links.feedbackMail);
-          }}>
-          MAIL
-        </Button>
-        <Button
-          icon={isBug ? 'git' : 'discord'}
-          mode="contained"
-          color={isBug ? '#609927' : '#7289da'}
-          style={{
-            marginLeft: 'auto',
-            marginTop: 5,
-          }}
-          onPress={() => {
-            Linking.openURL(isBug ? links.bugsGit : links.feedbackDiscord);
-          }}>
-          {isBug ? 'GITEA' : 'Discord'}
-        </Button>
-        <Button
-          icon="facebook"
-          mode="contained"
-          color="#2e88fe"
-          style={{
-            marginLeft: 'auto',
-            marginTop: 5,
-          }}
-          onPress={() => {
-            Linking.openURL(links.facebook);
-          }}>
-          Facebook
-        </Button>
+        {isFeedback ? (
+          <View
+            style={{
+              flex: 1,
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              width: '100%',
+            }}>
+            <Button
+              icon="email"
+              mode="contained"
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: 5,
+              }}
+              onPress={() => {
+                Linking.openURL(links.feedbackMail);
+              }}>
+              MAIL
+            </Button>
+            <Button
+              icon="facebook"
+              mode="contained"
+              color="#2e88fe"
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: 5,
+              }}
+              onPress={() => {
+                Linking.openURL(links.facebook);
+              }}>
+              Facebook
+            </Button>
+            <Button
+              icon="discord"
+              mode="contained"
+              color="#7289da"
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: 5,
+              }}
+              onPress={() => {
+                Linking.openURL(links.feedbackDiscord);
+              }}>
+              Discord
+            </Button>
+          </View>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              width: '100%',
+            }}>
+            <Button
+              icon="git"
+              mode="contained"
+              color="#609927"
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: 5,
+              }}
+              onPress={() => {
+                Linking.openURL(links.bugsGit);
+              }}>
+              GITETUD
+            </Button>
+            <Button
+              icon="calendar"
+              mode="contained"
+              color="#026AA7"
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: 5,
+              }}
+              onPress={() => {
+                Linking.openURL(links.trello);
+              }}>
+              TRELLO
+            </Button>
+          </View>
+        )}
       </Card.Actions>
     );
   }
 
   render(): React.Node {
-    const {theme} = this.props;
     return (
       <CollapsibleScrollView style={{padding: 5}}>
         <Card>
           <Card.Title
-            title={i18n.t('screens.feedback.bugs')}
-            subtitle={i18n.t('screens.feedback.bugsSubtitle')}
-            left={(iconProps: CardTitleIconPropsType): React.Node => (
-              <Avatar.Icon size={iconProps.size} icon="bug" />
-            )}
-          />
-          <Card.Content>
-            <Paragraph>{i18n.t('screens.feedback.bugsDescription')}</Paragraph>
-            <Paragraph style={{color: theme.colors.primary}}>
-              {i18n.t('screens.feedback.contactMeans')}
-            </Paragraph>
-          </Card.Content>
-          {FeedbackScreen.getButtons(true)}
-        </Card>
-
-        <Card style={{marginTop: 20, marginBottom: 10}}>
-          <Card.Title
-            title={i18n.t('screens.feedback.title')}
+            title={i18n.t('screens.feedback.feedback')}
             subtitle={i18n.t('screens.feedback.feedbackSubtitle')}
             left={(iconProps: CardTitleIconPropsType): React.Node => (
               <Avatar.Icon size={iconProps.size} icon="comment" />
@@ -115,6 +135,19 @@ class FeedbackScreen extends React.Component<PropsType> {
           <Card.Content>
             <Paragraph>
               {i18n.t('screens.feedback.feedbackDescription')}
+            </Paragraph>
+          </Card.Content>
+          {FeedbackScreen.getButtons(true)}
+          <Card.Title
+            title={i18n.t('screens.feedback.contribute')}
+            subtitle={i18n.t('screens.feedback.contributeSubtitle')}
+            left={(iconProps: CardTitleIconPropsType): React.Node => (
+              <Avatar.Icon size={iconProps.size} icon="handshake" />
+            )}
+          />
+          <Card.Content>
+            <Paragraph>
+              {i18n.t('screens.feedback.contributeDescription')}
             </Paragraph>
           </Card.Content>
           {FeedbackScreen.getButtons(false)}
