@@ -24,7 +24,7 @@ class MascotIntroEnd extends React.Component<null> {
         <Mascot
           style={{
             ...styles.center,
-            height: '80%',
+            width: '100%',
           }}
           emotion={MASCOT_STYLE.COOL}
           animated
