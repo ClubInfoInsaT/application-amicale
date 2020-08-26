@@ -28,6 +28,7 @@ import MascotPopup from '../../components/Mascot/MascotPopup';
 import DashboardManager from '../../managers/DashboardManager';
 import type {ServiceItemType} from '../../managers/ServicesManager';
 import {getDisplayEvent, getFutureEvents} from '../../utils/Home';
+import type {PlanningEventType} from '../../utils/Planning';
 // import DATA from "../dashboard_data.json";
 
 const DATA_URL =
@@ -49,24 +50,12 @@ export type FeedItemType = {
   page_id: string,
 };
 
-export type EventType = {
-  id: number,
-  title: string,
-  logo: string | null,
-  date_begin: string,
-  date_end: string,
-  description: string,
-  club: string,
-  category_id: number,
-  url: string,
-};
-
 export type FullDashboardType = {
   today_menu: Array<{[key: string]: {...}}>,
   proximo_articles: number,
   available_dryers: number,
   available_washers: number,
-  today_events: Array<EventType>,
+  today_events: Array<PlanningEventType>,
   available_tutorials: number,
 };
 
@@ -193,7 +182,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param content
    * @return {*}
    */
-  getDashboardEvent(content: Array<EventType>): React.Node {
+  getDashboardEvent(content: Array<PlanningEventType>): React.Node {
     const futureEvents = getFutureEvents(content);
     const displayEvent = getDisplayEvent(futureEvents);
     // const clickPreviewAction = () =>

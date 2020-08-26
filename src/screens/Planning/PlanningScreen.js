@@ -12,7 +12,7 @@ import {
   generateEventAgenda,
   getCurrentDateString,
   getDateOnlyString,
-  getFormattedEventTime,
+  getTimeOnlyString,
 } from '../../utils/Planning';
 import CustomAgenda from '../../components/Overrides/CustomAgenda';
 import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
@@ -198,7 +198,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
           <Divider />
           <List.Item
             title={item.title}
-            description={getFormattedEventTime(item.date_begin, item.date_end)}
+            description={getTimeOnlyString(item.date_begin)}
             left={(): React.Node => (
               <Avatar.Image
                 source={{uri: item.logo}}
@@ -215,7 +215,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
         <Divider />
         <List.Item
           title={item.title}
-          description={getFormattedEventTime(item.date_begin, item.date_end)}
+          description={getTimeOnlyString(item.date_begin)}
           onPress={onPress}
         />
       </View>

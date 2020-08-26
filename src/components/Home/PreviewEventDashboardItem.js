@@ -4,12 +4,12 @@ import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 import i18n from 'i18n-js';
 import {Avatar, Button, Card, TouchableRipple} from 'react-native-paper';
-import {getFormattedEventTime, isDescriptionEmpty} from '../../utils/Planning';
+import {getTimeOnlyString, isDescriptionEmpty} from '../../utils/Planning';
 import CustomHTML from '../Overrides/CustomHTML';
-import type {EventType} from '../../screens/Home/HomeScreen';
+import type {PlanningEventType} from '../../utils/Planning';
 
 type PropsType = {
-  event?: EventType | null,
+  event?: PlanningEventType | null,
   clickAction: () => void,
 };
 
@@ -62,19 +62,13 @@ class PreviewEventDashboardItem extends React.Component<PropsType> {
               {hasImage ? (
                 <Card.Title
                   title={event.title}
-                  subtitle={getFormattedEventTime(
-                    event.date_begin,
-                    event.date_end,
-                  )}
+                  subtitle={getTimeOnlyString(event.date_begin)}
                   left={getImage}
                 />
               ) : (
                 <Card.Title
                   title={event.title}
-                  subtitle={getFormattedEventTime(
-                    event.date_begin,
-                    event.date_end,
-                  )}
+                  subtitle={getTimeOnlyString(event.date_begin)}
                 />
               )}
               {!isEmpty ? (

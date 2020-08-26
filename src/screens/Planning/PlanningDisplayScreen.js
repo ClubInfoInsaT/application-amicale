@@ -5,7 +5,7 @@ import {View} from 'react-native';
 import {Card} from 'react-native-paper';
 import i18n from 'i18n-js';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {getDateOnlyString, getFormattedEventTime} from '../../utils/Planning';
+import {getDateOnlyString, getTimeOnlyString} from '../../utils/Planning';
 import DateManager from '../../managers/DateManager';
 import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
 import {apiRequest, ERROR_TYPE} from '../../utils/WebData';
@@ -96,12 +96,9 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
     const {navigation} = this.props;
     const {displayData} = this;
     if (displayData == null) return null;
-    let subtitle = getFormattedEventTime(
-      displayData.date_begin,
-      displayData.date_end,
-    );
+    let subtitle = getTimeOnlyString(displayData.date_begin);
     const dateString = getDateOnlyString(displayData.date_begin);
-    if (dateString !== null)
+    if (dateString !== null && subtitle != null)
       subtitle += ` | ${DateManager.getInstance().getTranslatedDate(
         dateString,
       )}`;

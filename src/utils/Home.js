@@ -1,7 +1,7 @@
 // @flow
 
 import {stringToDate} from './Planning';
-import type {EventType} from '../screens/Home/HomeScreen';
+import type {PlanningEventType} from './Planning';
 
 /**
  * Gets the time limit depending on the current day:
@@ -21,20 +21,6 @@ export function getTodayEventTimeLimit(): Date {
 }
 
 /**
- * Gets the duration (in milliseconds) of an event
- *
- * @param event {EventType}
- * @return {number} The number of milliseconds
- */
-export function getEventDuration(event: EventType): number {
-  const start = stringToDate(event.date_begin);
-  const end = stringToDate(event.date_end);
-  let duration = 0;
-  if (start != null && end != null) duration = end - start;
-  return duration;
-}
-
-/**
  * Gets events starting after the limit
  *
  * @param events
@@ -42,11 +28,11 @@ export function getEventDuration(event: EventType): number {
  * @return {Array<Object>}
  */
 export function getEventsAfterLimit(
-  events: Array<EventType>,
+  events: Array<PlanningEventType>,
   limit: Date,
-): Array<EventType> {
+): Array<PlanningEventType> {
   const validEvents = [];
-  events.forEach((event: EventType) => {
+  events.forEach((event: PlanningEventType) => {
     const startDate = stringToDate(event.date_begin);
     if (startDate != null && startDate >= limit) {
       validEvents.push(event);
@@ -56,43 +42,18 @@ export function getEventsAfterLimit(
 }
 
 /**
- * Gets the event with the longest duration in the given array.
- * If all events have the same duration, return the first in the array.
- *
- * @param events
- */
-export function getLongestEvent(events: Array<EventType>): EventType {
-  let longestEvent = events[0];
-  let longestTime = 0;
-  events.forEach((event: EventType) => {
-    const time = getEventDuration(event);
-    if (time > longestTime) {
-      longestTime = time;
-      longestEvent = event;
-    }
-  });
-  return longestEvent;
-}
-
-/**
  * Gets events that have not yet ended/started
  *
  * @param events
  */
-export function getFutureEvents(events: Array<EventType>): Array<EventType> {
+export function getFutureEvents(
+  events: Array<PlanningEventType>,
+): Array<PlanningEventType> {
   const validEvents = [];
   const now = new Date();
-  events.forEach((event: EventType) => {
+  events.forEach((event: PlanningEventType) => {
     const startDate = stringToDate(event.date_begin);
-    const endDate = stringToDate(event.date_end);
-    if (startDate != null) {
-      if (startDate > now) validEvents.push(event);
-      else if (endDate != null) {
-        if (endDate > now || endDate < startDate)
-          // Display event if it ends the following day
-          validEvents.push(event);
-      }
-    }
+    if (startDate != null && startDate > now) validEvents.push(event);
   });
   return validEvents;
 }
@@ -101,23 +62,19 @@ export function getFutureEvents(events: Array<EventType>): Array<EventType> {
  * Gets the event to display in the preview
  *
  * @param events
- * @return {EventType | null}
+ * @return {PlanningEventType | null}
  */
-export function getDisplayEvent(events: Array<EventType>): EventType | null {
+export function getDisplayEvent(
+  events: Array<PlanningEventType>,
+): PlanningEventType | null {
   let displayEvent = null;
   if (events.length > 1) {
     const eventsAfterLimit = getEventsAfterLimit(
       events,
       getTodayEventTimeLimit(),
     );
-    if (eventsAfterLimit.length > 0) {
-      if (eventsAfterLimit.length === 1) [displayEvent] = eventsAfterLimit;
-      else displayEvent = getLongestEvent(events);
-    } else {
-      displayEvent = getLongestEvent(events);
-    }
-  } else if (events.length === 1) {
-    [displayEvent] = events;
-  }
+    if (eventsAfterLimit.length > 0) [displayEvent] = eventsAfterLimit;
+    else [displayEvent] = events;
+  } else if (events.length === 1) [displayEvent] = events;
   return displayEvent;
 }

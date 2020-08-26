@@ -3,13 +3,13 @@
 export type PlanningEventType = {
   id: number,
   title: string,
-  logo: string,
   date_begin: string,
-  date_end: string,
-  description: string,
   club: string,
   category_id: number,
+  description: string,
+  place: string,
   url: string,
+  logo: string | null,
 };
 
 // Regex used to check date string validity
@@ -118,50 +118,6 @@ export function getDateOnlyString(dateString: string): string | null {
 export function getTimeOnlyString(dateString: string): string | null {
   if (isEventDateStringFormatValid(dateString)) return dateString.split(' ')[1];
   return null;
-}
-
-/**
- * Returns a string corresponding to the event start and end times in the following format:
- *
- * HH:MM - HH:MM
- *
- * If the end date is not specified or is equal to start time, only start time will be shown.
- *
- * If the end date is not on the same day, 23:59 will be shown as end time
- *
- * @param start Start time in YYYY-MM-DD HH:MM:SS format
- * @param end End time in YYYY-MM-DD HH:MM:SS format
- * @return {string} Formatted string or "/ - /" on error
- */
-export function getFormattedEventTime(start: string, end: string): string {
-  let formattedStr = '/ - /';
-  const startDate = stringToDate(start);
-  const endDate = stringToDate(end);
-
-  if (
-    startDate !== null &&
-    endDate !== null &&
-    startDate.getTime() !== endDate.getTime()
-  ) {
-    formattedStr = `${String(startDate.getHours()).padStart(2, '0')}:${String(
-      startDate.getMinutes(),
-    ).padStart(2, '0')} - `;
-    if (
-      endDate.getFullYear() > startDate.getFullYear() ||
-      endDate.getMonth() > startDate.getMonth() ||
-      endDate.getDate() > startDate.getDate()
-    )
-      formattedStr += '23:59';
-    else
-      formattedStr += `${String(endDate.getHours()).padStart(2, '0')}:${String(
-        endDate.getMinutes(),
-      ).padStart(2, '0')}`;
-  } else if (startDate !== null)
-    formattedStr = `${String(startDate.getHours()).padStart(2, '0')}:${String(
-      startDate.getMinutes(),
-    ).padStart(2, '0')}`;
-
-  return formattedStr;
 }
 
 /**
