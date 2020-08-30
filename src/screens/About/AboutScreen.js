@@ -1,10 +1,11 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, Linking, Platform, Image} from 'react-native';
+import {FlatList, Linking, Platform, Image, View, ScrollView} from 'react-native';
 import i18n from 'i18n-js';
-import {Avatar, Card, List, Title, withTheme} from 'react-native-paper';
+import {Avatar, Card, List, Text, Title, withTheme} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {Modalize} from "react-native-modalize";
 import packageJson from '../../../package.json';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import APP_LOGO from '../../../assets/android.icon.png';
@@ -12,6 +13,7 @@ import type {
   CardTitleIconPropsType,
   ListIconPropsType,
 } from '../../constants/PaperStyles';
+import CustomModal from "../../components/Overrides/CustomModal";
 
 type ListItemType = {
   onPressCallback: () => void,
@@ -64,6 +66,8 @@ function openWebLink(link: string) {
  * Class defining an about screen. This screen shows the user information about the app and it's author.
  */
 class AboutScreen extends React.Component<PropsType> {
+  modalRef: Modalize | null;
+
   /**
    * Data to be displayed in the app card
    */
@@ -149,7 +153,11 @@ class AboutScreen extends React.Component<PropsType> {
    */
   additionalDevData = [
     {
-      onPressCallback: () => {},
+      onPressCallback: () => {
+        this.onListItemPress(
+            'Yohan Simard',
+            'Correction de quelques bugs');
+      },
       icon: 'account',
       text: 'Yohan SIMARD',
       showChevron: false,
@@ -169,6 +177,62 @@ class AboutScreen extends React.Component<PropsType> {
       icon: 'linkedin',
       text: 'Linkedin',
       showChevron: true,
+    },
+  ];
+
+  /**
+   * Data to be displayed in the thanks card
+   */
+  thanksData = [
+    {
+      onPressCallback: () => {
+        this.onListItemPress(
+            'Béranger Quintana Y Arciosana',
+            'Étudiant en AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.');
+      },
+      icon: 'account-circle',
+      text: 'Béranger Quintana Y Arciosana',
+      showChevron: false,
+    },
+    {
+      onPressCallback: () => {
+        this.onListItemPress(
+            'Céline Tassin',
+            'Étudiante en GPE (2020). Sans elle, tout serait moins mignon. Elle a aidé pour écrire le texte, faire de la com, et aussi à créer la mascotte 🦊.');
+      },
+      icon: 'account-circle',
+      text: 'Céline Tassin',
+      showChevron: false,
+    },
+    {
+      onPressCallback: () => {
+        this.onListItemPress(
+            'Damien Molina',
+            'Étudiant en IR (2020) et créateur de la dernière version du site de l’Amicale. Grâce à son aide, intégrer les services de l’Amicale à l’application a été très simple.');
+      },
+      icon: 'account-circle',
+      text: 'Damien Molina',
+      showChevron: false,
+    },
+    {
+      onPressCallback: () => {
+        this.onListItemPress(
+            'Titouan Labourdette',
+            'Étudiant en AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.');
+      },
+      icon: 'account-circle',
+      text: 'Titouan Labourdette',
+      showChevron: false,
+    },
+    {
+      onPressCallback: () => {
+        this.onListItemPress(
+            'Titouan Labourdette',
+            'Étudiant en IR (2020). Il a beaucoup aidé pour trouver des bugs et proposer des nouvelles fonctionnalités.');
+      },
+      icon: 'account-circle',
+      text: 'Titouan Labourdette',
+      showChevron: false,
     },
   ];
 
@@ -206,9 +270,35 @@ class AboutScreen extends React.Component<PropsType> {
       id: 'team',
     },
     {
+      id: 'thanks',
+    },
+    {
       id: 'techno',
     },
   ];
+
+  constructor() {
+    super();
+    this.state = {
+      modalCurrentDisplayItem: null,
+    };
+  }
+
+  /**
+   * Callback used when clicking an article in the list.
+   * It opens the modal to show detailed information about the article
+   *
+   * @param title TODO
+   * @param message TODO
+   */
+  onListItemPress(title: string, message : string) {
+    this.setState({
+      modalCurrentDisplayItem: AboutScreen.getModalItemContent(title, message),
+    });
+    if (this.modalRef) {
+      this.modalRef.open();
+    }
+  }
 
   /**
    * Gets the app card showing information and links about the app.
@@ -275,6 +365,30 @@ class AboutScreen extends React.Component<PropsType> {
   }
 
   /**
+   * Gets the thanks card showing information and links about the team TODO
+   *
+   * @return {*}
+   */
+  getThanksCard(): React.Node {
+    return (
+        <Card style={{marginBottom: 10}}>
+          <Card.Title
+              title={i18n.t('screens.about.thanks')}
+              left={(iconProps: CardTitleIconPropsType): React.Node => (
+                  <Avatar.Icon size={iconProps.size} icon="hand-heart" />
+              )}
+          />
+          <FlatList
+              data={this.thanksData}
+              keyExtractor={this.keyExtractor}
+              listKey="1"
+              renderItem={this.getCardItem}
+          />
+        </Card>
+    );
+  }
+
+  /**
    * Gets the techno card showing information and links about the technologies used in the app
    *
    * @return {*}
@@ -293,6 +407,29 @@ class AboutScreen extends React.Component<PropsType> {
       </Card>
     );
   }
+
+  /**
+   * Gets the modal content depending on the given article TODO
+   *
+   * @param title TODO
+   * @param message TODO
+   * @return {*}
+   */
+  static getModalItemContent(title: string, message : string): React.Node {
+    return (
+        <View
+            style={{
+              flex: 1,
+              padding: 20,
+            }}>
+          <Title>{title}</Title>
+          <ScrollView>
+            <Text>{message}</Text>
+          </ScrollView>
+        </View>
+    );
+  }
+
 
   /**
    * Gets a chevron icon
@@ -358,6 +495,8 @@ class AboutScreen extends React.Component<PropsType> {
         return this.getAppCard();
       case 'team':
         return this.getTeamCard();
+      case 'thanks':
+        return this.getThanksCard();
       case 'techno':
         return this.getTechnoCard();
       default:
@@ -373,13 +512,31 @@ class AboutScreen extends React.Component<PropsType> {
    */
   keyExtractor = (item: ListItemType): string => item.icon;
 
+  /**
+   * Callback used when receiving the modal ref
+   *
+   * @param ref
+   */
+  onModalRef = (ref: Modalize) => {
+    this.modalRef = ref;
+  };
+
   render(): React.Node {
+    const {state} = this;
     return (
-      <CollapsibleFlatList
-        style={{padding: 5}}
-        data={this.dataOrder}
-        renderItem={this.getMainCard}
-      />
+      <View
+          style={{
+            height: '100%',
+          }}>
+        <CollapsibleFlatList
+          style={{padding: 5}}
+          data={this.dataOrder}
+          renderItem={this.getMainCard}
+        />
+        <CustomModal onRef={this.onModalRef}>
+          {state.modalCurrentDisplayItem}
+        </CustomModal>
+      </View>
     );
   }
 }
