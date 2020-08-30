@@ -347,10 +347,11 @@
       "team": "Équipe",
       "author": "Auteur et mainteneur",
       "authorMail": "Envoyer un mail",
-      "additionalDev": "Remerciements",
+      "additionalDev": "Dévelopeur",
       "technologies": "Technologies",
       "reactNative": "Créé avec React Native",
-      "libs": "Librairies utilisées"
+      "libs": "Librairies utilisées",
+      "thanks": "Remerciements"
     },
     "feedback": {
       "title": "Participer",

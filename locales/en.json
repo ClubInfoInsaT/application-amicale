@@ -348,10 +348,11 @@
       "team": "Team",
       "author": "Author and maintainer",
       "authorMail": "Send an email",
-      "additionalDev": "Thanks",
+      "additionalDev": "Developer",
       "technologies": "Technologies",
       "reactNative": "Made with React Native",
-      "libs": "Libraries used"
+      "libs": "Libraries used",
+      "thanks": "Thanks"
     },
     "feedback": {
       "title": "Contribute",
