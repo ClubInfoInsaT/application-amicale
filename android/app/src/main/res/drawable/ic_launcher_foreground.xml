@@ -17,11 +17,11 @@
               <gradient
                       android:startY="60"
                       android:startX="60"
-                      android:endY="125"
-                      android:endX="125"
+                      android:endY="100"
+                      android:endX="100"
                       android:type="linear">
                   <item
-                          android:color="#44000000"
+                          android:color="#22000000"
                           android:offset="0.0" />
                   <item
                           android:color="#00000000"
