@@ -1,25 +1,34 @@
 // @flow
 
 import * as React from 'react';
-import {FlatList, Linking, Platform, Image, View, ScrollView} from 'react-native';
+import {FlatList, Linking, Platform, Image, View} from 'react-native';
 import i18n from 'i18n-js';
-import {Avatar, Card, List, Text, Title, withTheme} from 'react-native-paper';
+import {Avatar, Card, List, withTheme} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Modalize} from "react-native-modalize";
 import packageJson from '../../../package.json';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
-import APP_LOGO from '../../../assets/android.icon.png';
+import APP_LOGO from '../../../assets/android.icon.round.png';
 import type {
   CardTitleIconPropsType,
   ListIconPropsType,
 } from '../../constants/PaperStyles';
-import CustomModal from "../../components/Overrides/CustomModal";
+import OptionsDialog from "../../components/Dialogs/OptionsDialog";
+import type {OptionsDialogButtonType} from "../../components/Dialogs/OptionsDialog";
 
 type ListItemType = {
   onPressCallback: () => void,
   icon: string,
   text: string,
   showChevron: boolean,
+};
+
+type AthorsItemType = {
+  name: string,
+  message: string,
+  btnTrool: OptionsDialogButtonType,
+  btnLinkedin: OptionsDialogButtonType,
+  btnMail: OptionsDialogButtonType,
 };
 
 const links = {
@@ -32,13 +41,13 @@ const links = {
     'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
   license:
     'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
-  authorMail:
+  arnaudMail:
     'mailto:vergnet@etud.insa-toulouse.fr?' +
     'subject=' +
     'Application Amicale INSA Toulouse' +
     '&body=' +
     'Coucou !\n\n',
-  authorLinkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
+  arnaudLinkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
   yohanMail:
     'mailto:ysimard@etud.insa-toulouse.fr?' +
     'subject=' +
@@ -67,6 +76,99 @@ function openWebLink(link: string) {
  */
 class AboutScreen extends React.Component<PropsType> {
   modalRef: Modalize | null;
+
+  /**
+   * Data team
+   */
+  teamUsers = {
+    arnaud: {
+      name: 'Arnaud VERGNET',
+      message: 'C vrément tro 1 bg !!',
+      icon: 'account-circle',
+      btnTrool: {
+          title: 'SWAG',
+          onPress: () => {
+            openWebLink(links.meme);
+          },
+        },
+      btnLinkedin: {
+        title: 'Linkedin',
+        onPress: () => {
+          openWebLink(links.arnaudMail);
+        },
+      },
+      btnMail: {
+        title: i18n.t('screens.about.authorMail'),
+        onPress: () => {
+          openWebLink(links.arnaudLinkedin);
+        },
+      },
+    },
+    yohan: {
+      name: 'Yohan Simard',
+      message: 'Correction de quelques bugs',
+      icon: 'account-circle',
+      btnTrool: null,
+      btnLinkedin: {
+        title: 'Linkedin',
+        onPress: () => {
+          openWebLink(links.yohanLinkedin);
+        },
+      },
+      btnMail: {
+        title: i18n.t('screens.about.authorMail'),
+        onPress: () => {
+          openWebLink(links.yohanMail);
+        },
+      },
+    },
+  };
+
+  /**
+   * Data thanks
+   */
+  thanksUsers = {
+    beranger: {
+      name: 'Béranger Quintana Y Arciosana',
+      message: 'Étudiant en AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.',
+      icon: 'account-circle',
+      btnTrool: null,
+      btnLinkedin: null,
+      btnMail: null,
+    },
+    celine: {
+      name: 'Céline Tassin',
+      message: 'Étudiante en GPE (2020). Sans elle, tout serait moins mignon. Elle a aidé pour écrire le texte, faire de la com, et aussi à créer la mascotte 🦊.',
+      icon: 'account-circle',
+      btnTrool: null,
+      btnLinkedin: null,
+      btnMail: null,
+    },
+    damien: {
+      name: 'Damien Molina',
+      message: 'Étudiant en IR (2020) et créateur de la dernière version du site de l’Amicale. Grâce à son aide, intégrer les services de l’Amicale à l’application a été très simple.',
+      icon: 'account-circle',
+      btnTrool: null,
+      btnLinkedin: null,
+      btnMail: null,
+    },
+    titouan: {
+      name: 'Titouan Labourdette',
+      message: 'Étudiant en AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.',
+      icon: 'account-circle',
+      btnTrool: null,
+      btnLinkedin: null,
+      btnMail: null,
+    },
+    theo: {
+      name: 'Théo Tami',
+      message: 'Étudiant en IR (2020). Il a beaucoup aidé pour trouver des bugs et proposer des nouvelles fonctionnalités.',
+      icon: 'account-circle',
+      btnTrool: null,
+      btnLinkedin: null,
+      btnMail: null,
+    },
+  };
 
   /**
    * Data to be displayed in the app card
@@ -119,64 +221,24 @@ class AboutScreen extends React.Component<PropsType> {
   ];
 
   /**
-   * Data to be displayed in the author card
-   */
-  authorData = [
-    {
-      onPressCallback: () => {
-        openWebLink(links.meme);
-      },
-      icon: 'account-circle',
-      text: 'Arnaud VERGNET',
-      showChevron: false,
-    },
-    {
-      onPressCallback: () => {
-        openWebLink(links.authorMail);
-      },
-      icon: 'email',
-      text: i18n.t('screens.about.authorMail'),
-      showChevron: true,
-    },
-    {
-      onPressCallback: () => {
-        openWebLink(links.authorLinkedin);
-      },
-      icon: 'linkedin',
-      text: 'Linkedin',
-      showChevron: true,
-    },
-  ];
-
-  /**
    * Data to be displayed in the additional developer card
    */
-  additionalDevData = [
+  teamData = [
     {
       onPressCallback: () => {
-        this.onListItemPress(
-            'Yohan Simard',
-            'Correction de quelques bugs');
+        this.onListItemPress(this.teamUsers.arnaud);
       },
-      icon: 'account',
-      text: 'Yohan SIMARD',
+      icon: this.teamUsers.arnaud.icon,
+      text: this.teamUsers.arnaud.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        openWebLink(links.yohanMail);
+        this.onListItemPress(this.teamUsers.yohan);
       },
-      icon: 'email',
-      text: i18n.t('screens.about.authorMail'),
-      showChevron: true,
-    },
-    {
-      onPressCallback: () => {
-        openWebLink(links.yohanLinkedin);
-      },
-      icon: 'linkedin',
-      text: 'Linkedin',
-      showChevron: true,
+      icon: this.teamUsers.yohan.icon,
+      text: this.teamUsers.yohan.name,
+      showChevron: false,
     },
   ];
 
@@ -186,52 +248,42 @@ class AboutScreen extends React.Component<PropsType> {
   thanksData = [
     {
       onPressCallback: () => {
-        this.onListItemPress(
-            'Béranger Quintana Y Arciosana',
-            'Étudiant en AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.');
+        this.onListItemPress(this.thanksUsers.beranger);
       },
-      icon: 'account-circle',
-      text: 'Béranger Quintana Y Arciosana',
+      icon: this.thanksUsers.beranger.icon,
+      text: this.thanksUsers.beranger.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onListItemPress(
-            'Céline Tassin',
-            'Étudiante en GPE (2020). Sans elle, tout serait moins mignon. Elle a aidé pour écrire le texte, faire de la com, et aussi à créer la mascotte 🦊.');
+        this.onListItemPress(this.thanksUsers.celine);
       },
-      icon: 'account-circle',
-      text: 'Céline Tassin',
+      icon: this.thanksUsers.celine.icon,
+      text: this.thanksUsers.celine.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onListItemPress(
-            'Damien Molina',
-            'Étudiant en IR (2020) et créateur de la dernière version du site de l’Amicale. Grâce à son aide, intégrer les services de l’Amicale à l’application a été très simple.');
+        this.onListItemPress(this.thanksUsers.damien);
       },
-      icon: 'account-circle',
-      text: 'Damien Molina',
+      icon: this.thanksUsers.damien.icon,
+      text: this.thanksUsers.damien.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onListItemPress(
-            'Titouan Labourdette',
-            'Étudiant en AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.');
+        this.onListItemPress(this.thanksUsers.titouan);
       },
-      icon: 'account-circle',
-      text: 'Titouan Labourdette',
+      icon: this.thanksUsers.titouan.icon,
+      text: this.thanksUsers.titouan.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onListItemPress(
-            'Titouan Labourdette',
-            'Étudiant en IR (2020). Il a beaucoup aidé pour trouver des bugs et proposer des nouvelles fonctionnalités.');
+        this.onListItemPress(this.thanksUsers.theo);
       },
-      icon: 'account-circle',
-      text: 'Titouan Labourdette',
+      icon: this.thanksUsers.theo.icon,
+      text: this.thanksUsers.theo.name,
       showChevron: false,
     },
   ];
@@ -277,10 +329,16 @@ class AboutScreen extends React.Component<PropsType> {
     },
   ];
 
-  constructor() {
-    super();
+  constructor(props: PropsType) {
+    super(props);
     this.state = {
-      modalCurrentDisplayItem: null,
+      dialogVisible: false,
+      dialogTitle: '',
+      dialogMessage: '',
+      dialogButtons: [],
+      onDialogDismiss: () => {
+        this.setState({dialogVisible: false});
+      },
     };
   }
 
@@ -288,16 +346,32 @@ class AboutScreen extends React.Component<PropsType> {
    * Callback used when clicking an article in the list.
    * It opens the modal to show detailed information about the article
    *
-   * @param title TODO
-   * @param message TODO
+   * @param user TODO
    */
-  onListItemPress(title: string, message : string) {
-    this.setState({
-      modalCurrentDisplayItem: AboutScreen.getModalItemContent(title, message),
-    });
-    if (this.modalRef) {
-      this.modalRef.open();
+  onListItemPress(user: AthorsItemType) {
+    const dialogBtn: Array<OptionsDialogButtonType> = [
+      {
+        title: 'OK',
+        onPress: () => {
+          this.onDialogDismiss();
+        },
+      }
+    ];
+    if(user.btnMail != null) {
+      dialogBtn.push(user.btnMail);
     }
+    if(user.btnLinkedin != null) {
+      dialogBtn.push(user.btnLinkedin);
+    }
+    if(user.btnTrool != null) {
+      dialogBtn.push(user.btnTrool);
+    }
+    this.setState({
+      dialogVisible: true,
+      dialogTitle: user.name,
+      dialogMessage: user.message,
+      dialogButtons: dialogBtn,
+    });
   }
 
   /**
@@ -345,18 +419,9 @@ class AboutScreen extends React.Component<PropsType> {
           )}
         />
         <Card.Content>
-          <Title>{i18n.t('screens.about.author')}</Title>
           <FlatList
-            data={this.authorData}
+            data={this.teamData}
             keyExtractor={this.keyExtractor}
-            listKey="1"
-            renderItem={this.getCardItem}
-          />
-          <Title>{i18n.t('screens.about.additionalDev')}</Title>
-          <FlatList
-            data={this.additionalDevData}
-            keyExtractor={this.keyExtractor}
-            listKey="2"
             renderItem={this.getCardItem}
           />
         </Card.Content>
@@ -378,12 +443,13 @@ class AboutScreen extends React.Component<PropsType> {
                   <Avatar.Icon size={iconProps.size} icon="hand-heart" />
               )}
           />
-          <FlatList
-              data={this.thanksData}
-              keyExtractor={this.keyExtractor}
-              listKey="1"
-              renderItem={this.getCardItem}
-          />
+          <Card.Content>
+            <FlatList
+                data={this.thanksData}
+                keyExtractor={this.keyExtractor}
+                renderItem={this.getCardItem}
+            />
+          </Card.Content>
         </Card>
     );
   }
@@ -395,41 +461,23 @@ class AboutScreen extends React.Component<PropsType> {
    */
   getTechnoCard(): React.Node {
     return (
-      <Card style={{marginBottom: 10}}>
-        <Card.Content>
-          <Title>{i18n.t('screens.about.technologies')}</Title>
-          <FlatList
-            data={this.technoData}
-            keyExtractor={this.keyExtractor}
-            renderItem={this.getCardItem}
+        <Card style={{marginBottom: 10}}>
+          <Card.Title
+              title={i18n.t('screens.about.technologies')}
+              left={(iconProps: CardTitleIconPropsType): React.Node => (
+                  <Avatar.Icon size={iconProps.size} icon="build" />
+              )}
           />
-        </Card.Content>
-      </Card>
+          <Card.Content>
+            <FlatList
+                data={this.technoData}
+                keyExtractor={this.keyExtractor}
+                renderItem={this.getCardItem}
+            />
+          </Card.Content>
+        </Card>
     );
   }
-
-  /**
-   * Gets the modal content depending on the given article TODO
-   *
-   * @param title TODO
-   * @param message TODO
-   * @return {*}
-   */
-  static getModalItemContent(title: string, message : string): React.Node {
-    return (
-        <View
-            style={{
-              flex: 1,
-              padding: 20,
-            }}>
-          <Title>{title}</Title>
-          <ScrollView>
-            <Text>{message}</Text>
-          </ScrollView>
-        </View>
-    );
-  }
-
 
   /**
    * Gets a chevron icon
@@ -512,15 +560,6 @@ class AboutScreen extends React.Component<PropsType> {
    */
   keyExtractor = (item: ListItemType): string => item.icon;
 
-  /**
-   * Callback used when receiving the modal ref
-   *
-   * @param ref
-   */
-  onModalRef = (ref: Modalize) => {
-    this.modalRef = ref;
-  };
-
   render(): React.Node {
     const {state} = this;
     return (
@@ -533,9 +572,13 @@ class AboutScreen extends React.Component<PropsType> {
           data={this.dataOrder}
           renderItem={this.getMainCard}
         />
-        <CustomModal onRef={this.onModalRef}>
-          {state.modalCurrentDisplayItem}
-        </CustomModal>
+        <OptionsDialog
+            visible={state.dialogVisible}
+            title={state.dialogTitle}
+            message={state.dialogMessage}
+            buttons={state.dialogButtons}
+            onDismiss={state.onDialogDismiss}
+        />
       </View>
     );
   }
