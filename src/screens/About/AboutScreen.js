@@ -5,7 +5,7 @@ import {FlatList, Linking, Platform, Image, View} from 'react-native';
 import i18n from 'i18n-js';
 import {Avatar, Card, List, withTheme} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Modalize} from "react-native-modalize";
+import {Modalize} from 'react-native-modalize';
 import packageJson from '../../../package.json';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import APP_LOGO from '../../../assets/android.icon.round.png';
@@ -13,8 +13,7 @@ import type {
   CardTitleIconPropsType,
   ListIconPropsType,
 } from '../../constants/PaperStyles';
-import OptionsDialog from "../../components/Dialogs/OptionsDialog";
-import type {OptionsDialogButtonType} from "../../components/Dialogs/OptionsDialog";
+import OptionsDialog from '../../components/Dialogs/OptionsDialog';
 
 type ListItemType = {
   onPressCallback: () => void,
@@ -82,23 +81,25 @@ class AboutScreen extends React.Component<PropsType> {
    */
   teamUsers = {
     arnaud: {
-      name: 'Arnaud VERGNET',
-      message: 'C vrément tro 1 bg !!',
-      icon: 'account-circle',
+      name: 'Arnaud Vergnrt',
+      message: i18n.t('screens.about.user.arnaud'),
+      icon: 'crown',
       btnTrool: {
-          title: 'SWAG',
-          onPress: () => {
-            openWebLink(links.meme);
-          },
+        title: 'SWAG',
+        onPress: () => {
+          openWebLink(links.meme);
         },
+      },
       btnLinkedin: {
-        title: 'Linkedin',
+        title: '',
+        icon: 'linkedin',
         onPress: () => {
           openWebLink(links.arnaudMail);
         },
       },
       btnMail: {
-        title: i18n.t('screens.about.authorMail'),
+        title: '',
+        icon: 'email-edit',
         onPress: () => {
           openWebLink(links.arnaudLinkedin);
         },
@@ -106,21 +107,37 @@ class AboutScreen extends React.Component<PropsType> {
     },
     yohan: {
       name: 'Yohan Simard',
-      message: 'Correction de quelques bugs',
-      icon: 'account-circle',
+      message: i18n.t('screens.about.user.yohan'),
+      icon: 'xml',
       btnTrool: null,
       btnLinkedin: {
-        title: 'Linkedin',
+        title: '',
+        icon: 'linkedin',
         onPress: () => {
           openWebLink(links.yohanLinkedin);
         },
       },
       btnMail: {
-        title: i18n.t('screens.about.authorMail'),
+        title: '',
+        icon: 'email-edit',
         onPress: () => {
           openWebLink(links.yohanMail);
         },
       },
+    },
+    you: {
+      name: i18n.t('screens.about.user.youName'),
+      message: i18n.t('screens.about.user.you'),
+      icon: 'hand-pointing-right',
+      btnTrool: {
+        title: '',
+        icon: 'git',
+        onPress: () => {
+          openWebLink(links.git);
+        },
+      },
+      btnLinkedin: null,
+      btnMail: null,
     },
   };
 
@@ -130,40 +147,40 @@ class AboutScreen extends React.Component<PropsType> {
   thanksUsers = {
     beranger: {
       name: 'Béranger Quintana Y Arciosana',
-      message: 'Étudiant en AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.',
-      icon: 'account-circle',
+      message: i18n.t('screens.about.user.beranger'),
+      icon: 'account-heart',
       btnTrool: null,
       btnLinkedin: null,
       btnMail: null,
     },
     celine: {
       name: 'Céline Tassin',
-      message: 'Étudiante en GPE (2020). Sans elle, tout serait moins mignon. Elle a aidé pour écrire le texte, faire de la com, et aussi à créer la mascotte 🦊.',
-      icon: 'account-circle',
+      message: i18n.t('screens.about.user.celine'),
+      icon: 'brush',
       btnTrool: null,
       btnLinkedin: null,
       btnMail: null,
     },
     damien: {
       name: 'Damien Molina',
-      message: 'Étudiant en IR (2020) et créateur de la dernière version du site de l’Amicale. Grâce à son aide, intégrer les services de l’Amicale à l’application a été très simple.',
-      icon: 'account-circle',
+      message: i18n.t('screens.about.user.damien'),
+      icon: 'web',
       btnTrool: null,
       btnLinkedin: null,
       btnMail: null,
     },
     titouan: {
       name: 'Titouan Labourdette',
-      message: 'Étudiant en AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.',
-      icon: 'account-circle',
+      message: i18n.t('screens.about.user.titouan'),
+      icon: 'shield-bug',
       btnTrool: null,
       btnLinkedin: null,
       btnMail: null,
     },
     theo: {
       name: 'Théo Tami',
-      message: 'Étudiant en IR (2020). Il a beaucoup aidé pour trouver des bugs et proposer des nouvelles fonctionnalités.',
-      icon: 'account-circle',
+      message: i18n.t('screens.about.user.theo'),
+      icon: 'food-apple',
       btnTrool: null,
       btnLinkedin: null,
       btnMail: null,
@@ -238,6 +255,14 @@ class AboutScreen extends React.Component<PropsType> {
       },
       icon: this.teamUsers.yohan.icon,
       text: this.teamUsers.yohan.name,
+      showChevron: false,
+    },
+    {
+      onPressCallback: () => {
+        this.onListItemPress(this.teamUsers.you);
+      },
+      icon: this.teamUsers.you.icon,
+      text: this.teamUsers.you.name,
       showChevron: false,
     },
   ];
@@ -346,24 +371,24 @@ class AboutScreen extends React.Component<PropsType> {
    * Callback used when clicking an article in the list.
    * It opens the modal to show detailed information about the article
    *
-   * @param user TODO
+   * @param user A user key
    */
   onListItemPress(user: AthorsItemType) {
-    const dialogBtn: Array<OptionsDialogButtonType> = [
+    const dialogBtn: Array<IconOptionsDialogButtonType> = [
       {
         title: 'OK',
         onPress: () => {
-          this.onDialogDismiss();
+          this.setState({dialogVisible: false});
         },
-      }
+      },
     ];
-    if(user.btnMail != null) {
+    if (user.btnMail != null) {
       dialogBtn.push(user.btnMail);
     }
-    if(user.btnLinkedin != null) {
+    if (user.btnLinkedin != null) {
       dialogBtn.push(user.btnLinkedin);
     }
-    if(user.btnTrool != null) {
+    if (user.btnTrool != null) {
       dialogBtn.push(user.btnTrool);
     }
     this.setState({
@@ -430,27 +455,27 @@ class AboutScreen extends React.Component<PropsType> {
   }
 
   /**
-   * Gets the thanks card showing information and links about the team TODO
+   * Get the thank you card showing support information and links
    *
    * @return {*}
    */
   getThanksCard(): React.Node {
     return (
-        <Card style={{marginBottom: 10}}>
-          <Card.Title
-              title={i18n.t('screens.about.thanks')}
-              left={(iconProps: CardTitleIconPropsType): React.Node => (
-                  <Avatar.Icon size={iconProps.size} icon="hand-heart" />
-              )}
+      <Card style={{marginBottom: 10}}>
+        <Card.Title
+          title={i18n.t('screens.about.thanks')}
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
+            <Avatar.Icon size={iconProps.size} icon="hand-heart" />
+          )}
+        />
+        <Card.Content>
+          <FlatList
+            data={this.thanksData}
+            keyExtractor={this.keyExtractor}
+            renderItem={this.getCardItem}
           />
-          <Card.Content>
-            <FlatList
-                data={this.thanksData}
-                keyExtractor={this.keyExtractor}
-                renderItem={this.getCardItem}
-            />
-          </Card.Content>
-        </Card>
+        </Card.Content>
+      </Card>
     );
   }
 
@@ -461,21 +486,21 @@ class AboutScreen extends React.Component<PropsType> {
    */
   getTechnoCard(): React.Node {
     return (
-        <Card style={{marginBottom: 10}}>
-          <Card.Title
-              title={i18n.t('screens.about.technologies')}
-              left={(iconProps: CardTitleIconPropsType): React.Node => (
-                  <Avatar.Icon size={iconProps.size} icon="build" />
-              )}
+      <Card style={{marginBottom: 10}}>
+        <Card.Title
+          title={i18n.t('screens.about.technologies')}
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
+            <Avatar.Icon size={iconProps.size} icon="wrench" />
+          )}
+        />
+        <Card.Content>
+          <FlatList
+            data={this.technoData}
+            keyExtractor={this.keyExtractor}
+            renderItem={this.getCardItem}
           />
-          <Card.Content>
-            <FlatList
-                data={this.technoData}
-                keyExtractor={this.keyExtractor}
-                renderItem={this.getCardItem}
-            />
-          </Card.Content>
-        </Card>
+        </Card.Content>
+      </Card>
     );
   }
 
@@ -564,20 +589,20 @@ class AboutScreen extends React.Component<PropsType> {
     const {state} = this;
     return (
       <View
-          style={{
-            height: '100%',
-          }}>
+        style={{
+          height: '100%',
+        }}>
         <CollapsibleFlatList
           style={{padding: 5}}
           data={this.dataOrder}
           renderItem={this.getMainCard}
         />
         <OptionsDialog
-            visible={state.dialogVisible}
-            title={state.dialogTitle}
-            message={state.dialogMessage}
-            buttons={state.dialogButtons}
-            onDismiss={state.onDialogDismiss}
+          visible={state.dialogVisible}
+          title={state.dialogTitle}
+          message={state.dialogMessage}
+          buttons={state.dialogButtons}
+          onDismiss={state.onDialogDismiss}
         />
       </View>
     );
