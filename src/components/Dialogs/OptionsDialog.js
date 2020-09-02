@@ -6,6 +6,7 @@ import {FlatList} from 'react-native';
 
 export type OptionsDialogButtonType = {
   title: string,
+  icon?: string,
   onPress: () => void,
 };
 
@@ -19,10 +20,19 @@ type PropsType = {
 
 class OptionsDialog extends React.PureComponent<PropsType> {
   getButtonRender = ({item}: {item: OptionsDialogButtonType}): React.Node => {
-    return <Button onPress={item.onPress}>{item.title}</Button>;
+    return (
+      <Button onPress={item.onPress} icon={item.icon}>
+        {item.title}
+      </Button>
+    );
   };
 
-  keyExtractor = (item: OptionsDialogButtonType): string => item.title;
+  keyExtractor = (item: OptionsDialogButtonType): string => {
+    if (item.icon != null) {
+      return item.title + item.icon;
+    }
+    return item.title;
+  };
 
   render(): React.Node {
     const {props} = this;
