@@ -5,7 +5,6 @@ import {FlatList, Linking, Platform, Image, View} from 'react-native';
 import i18n from 'i18n-js';
 import {Avatar, Card, List, withTheme} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Modalize} from 'react-native-modalize';
 import packageJson from '../../../package.json';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import APP_LOGO from '../../../assets/android.icon.round.png';
@@ -74,8 +73,6 @@ function openWebLink(link: string) {
  * Class defining an about screen. This screen shows the user information about the app and it's author.
  */
 class AboutScreen extends React.Component<PropsType> {
-  modalRef: Modalize | null;
-
   /**
    * Data team
    */
