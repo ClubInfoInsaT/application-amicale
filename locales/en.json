@@ -346,13 +346,20 @@
       "license": "License",
       "debug": "Debug",
       "team": "Team",
-      "author": "Author and maintainer",
-      "authorMail": "Send an email",
-      "additionalDev": "Developer",
       "technologies": "Technologies",
       "reactNative": "Made with React Native",
       "libs": "Libraries used",
-      "thanks": "Thanks"
+      "thanks": "Thanks",
+      "user": {
+        "you": "You",
+        "arnaud": "[NON TRADUIT] Étudiant en IR (2020). C'est le créateur de cette magnifique application que t'utilise tout les jour. Et il est vraiment BG aussi.",
+        "yohan":  "[NON TRADUIT] Étudiant en [Je sais pas quoi] (2020). Il nous aide à corriger les bug. Et j'imagine aussi qu'il est BG mais je le connait pas.",
+        "beranger": "[NON TRADUIT] Étudiant en AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.",
+        "celine": "[NON TRADUIT] Étudiante en GPE (2020). Sans elle, tout serait moins mignon. Elle a aidé pour écrire le texte, faire de la com, et aussi à créer la mascotte 🦊.",
+        "damien": "[NON TRADUIT] Étudiant en IR (2020) et créateur de la dernière version du site de l’Amicale. Grâce à son aide, intégrer les services de l’Amicale à l’application a été très simple.",
+        "titouan": "[NON TRADUIT] Étudiant en IR (2020). Il a beaucoup aidé pour trouver des bugs et proposer des nouvelles fonctionnalités.",
+        "theo": "[NON TRADUIT] Étudiant en AE (2020). Si l’application marche sur iOS, c’est grâce à son aide lors de ses nombreux tests."
+      }
     },
     "feedback": {
       "title": "Contribute",
