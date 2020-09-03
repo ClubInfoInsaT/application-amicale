@@ -125,20 +125,6 @@ class AboutScreen extends React.Component<PropsType> {
         },
       },
     },
-    you: {
-      name: i18n.t('screens.about.user.youName'),
-      message: i18n.t('screens.about.user.you'),
-      icon: 'hand-pointing-right',
-      btnTrool: {
-        title: '',
-        icon: 'git',
-        onPress: () => {
-          openWebLink(links.git);
-        },
-      },
-      btnLinkedin: null,
-      btnMail: null,
-    },
   };
 
   /**
@@ -259,11 +245,12 @@ class AboutScreen extends React.Component<PropsType> {
     },
     {
       onPressCallback: () => {
-        this.onListItemPress(this.teamUsers.you);
+        const {navigation} = this.props;
+        navigation.navigate('feedback');
       },
-      icon: this.teamUsers.you.icon,
-      text: this.teamUsers.you.name,
-      showChevron: false,
+      icon: 'hand-pointing-right',
+      text: i18n.t('screens.about.user.you'),
+      showChevron: true,
     },
   ];
 
