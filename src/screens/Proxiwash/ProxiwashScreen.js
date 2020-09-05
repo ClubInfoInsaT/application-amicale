@@ -26,9 +26,31 @@ import {
 import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import type {SectionListDataType} from '../../components/Screens/WebSectionList';
+import type {CardTitleIconPropsType} from '../../constants/PaperStyles';
 
-const DATA_URL =
-  'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/washinsa_data.json';
+type LaverieType = {
+  title: string,
+  subtitle: string,
+  icon: string,
+  url: string,
+};
+
+const DATA = {
+  washinsa: {
+    title: 'Laverie INSA',
+    subtitle: 'Ta laverie préférer !!',
+    icon: 'school-outline',
+    url:
+      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/washinsa_data.json',
+  },
+  tripodeB: {
+    title: 'Laverie Tripode B',
+    subtitle: 'En vrai je sais pas trop quoi marqué.',
+    icon: 'domain',
+    url:
+      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/tripode_b_data.json',
+  },
+};
 
 const modalStateStrings = {};
 
@@ -38,6 +60,7 @@ const LIST_ITEM_HEIGHT = 64;
 export type ProxiwashMachineType = {
   number: string,
   state: string,
+  maxWeight: number,
   startTime: string,
   endTime: string,
   donePercent: string,
@@ -53,6 +76,7 @@ type PropsType = {
 type StateType = {
   modalCurrentDisplayItem: React.Node,
   machinesWatched: Array<ProxiwashMachineType>,
+  selectedWash: string,
 };
 
 /**
@@ -86,6 +110,9 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
       modalCurrentDisplayItem: null,
       machinesWatched: AsyncStorageManager.getObject(
         AsyncStorageManager.PREFERENCES.proxiwashWatchedMachines.key,
+      ),
+      selectedWash: AsyncStorageManager.getString(
+        AsyncStorageManager.PREFERENCES.selectedWash.key,
       ),
     };
     modalStateStrings[ProxiwashConstants.machineStates.AVAILABLE] = i18n.t(
@@ -396,6 +423,29 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     }
   };
 
+  getListHeader = (): React.Node => {
+    const {selectedWash} = this.state;
+    let data: LaverieType;
+    switch (selectedWash) {
+      case 'tripodeB':
+        data = DATA.tripodeB;
+        break;
+      default:
+        data = DATA.washinsa;
+    }
+    return (
+      <Card>
+        <Card.Title
+          title={data.title}
+          subtitle={data.subtitle}
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
+            <Avatar.Icon size={iconProps.size} icon={data.icon} />
+          )}
+        />
+      </Card>
+    );
+  };
+
   /**
    * Adds the given notifications associated to a machine ID to the watchlist, and saves the array to the preferences
    *
@@ -437,8 +487,19 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   render(): React.Node {
     const {state} = this;
     const {navigation} = this.props;
+    let data: LaverieType;
+    switch (state.selectedWash) {
+      case 'tripodeB':
+        data = DATA.tripodeB;
+        break;
+      default:
+        data = DATA.washinsa;
+    }
     return (
-      <View style={{flex: 1}}>
+      <View
+        style={{
+          flex: 1,
+        }}>
         <View
           style={{
             position: 'absolute',
@@ -448,12 +509,13 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
           <WebSectionList
             createDataset={this.createDataset}
             navigation={navigation}
-            fetchUrl={DATA_URL}
+            fetchUrl={data.url}
             renderItem={this.getRenderItem}
             renderSectionHeader={this.getRenderSectionHeader}
             autoRefreshTime={REFRESH_TIME}
             refreshOnFocus
             updateData={state.machinesWatched.length}
+            renderListHeaderComponent={this.getListHeader}
           />
         </View>
         <MascotPopup

@@ -67,6 +67,7 @@ class ProxiwashListItem extends React.Component<PropsType> {
     this.updateStateStrings();
 
     let displayNumber = props.item.number;
+    const displayMaxWeight = props.item.maxWeight;
     if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
       displayNumber = AprilFoolsManager.getProxiwashMachineDisplayNumber(
         parseInt(props.item.number, 10),
@@ -75,7 +76,7 @@ class ProxiwashListItem extends React.Component<PropsType> {
     this.title = props.isDryer
       ? i18n.t('screens.proxiwash.dryer')
       : i18n.t('screens.proxiwash.washer');
-    this.title += ` n°${displayNumber}`;
+    this.title += ` n°${displayNumber} - ${displayMaxWeight} kg`;
   }
 
   shouldComponentUpdate(nextProps: PropsType): boolean {

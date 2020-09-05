@@ -107,6 +107,10 @@ export default class AsyncStorageManager {
       key: 'gameScores',
       default: '[]',
     },
+    selectedWash: {
+      key: 'selectedWash',
+      default: 'washinsa',
+    },
   };
 
   #currentPreferences: {[key: string]: string};
