@@ -71,7 +71,7 @@ class ProxiwashSettingsScreen extends React.Component<null, StateType> {
   }
 
   /**
-   * Saves the value for the proxiwash reminder notification time
+   * Saves the value for the proxiwash selected wash
    *
    * @param value The value to store
    */

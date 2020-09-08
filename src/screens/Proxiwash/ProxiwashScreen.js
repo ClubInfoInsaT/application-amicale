@@ -440,15 +440,13 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     const getItemIcon = (props: ListIconPropsType): React.Node =>
       ProxiwashScreen.getItemIcon(item, props);
     return (
-      <Card>
-        <List.Item
-          title={item.title}
-          description={item.subtitle}
-          left={getItemIcon}
-          right={ProxiwashScreen.getChevronIcon}
-          onPress={this.onPressCallback}
-        />
-      </Card>
+      <List.Item
+        title={item.title}
+        description={item.subtitle}
+        left={getItemIcon}
+        right={ProxiwashScreen.getChevronIcon}
+        onPress={this.onPressCallback}
+      />
     );
   };
 
