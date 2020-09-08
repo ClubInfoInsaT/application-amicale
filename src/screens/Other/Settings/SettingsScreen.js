@@ -52,9 +52,6 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
       startScreenPickerSelected: AsyncStorageManager.getString(
         AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
       ),
-      selectedWash: AsyncStorageManager.getString(
-        AsyncStorageManager.PREFERENCES.selectedWash.key,
-      ),
       isDebugUnlocked: AsyncStorageManager.getBool(
         AsyncStorageManager.PREFERENCES.debugUnlocked.key,
       ),
@@ -89,21 +86,6 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
   };
 
   /**
-   * Saves the value for the proxiwash reminder notification time
-   *
-   * @param value The value to store
-   */
-  onSelectWashValueChange = (value: string) => {
-    if (value != null) {
-      this.setState({selectedWash: value});
-      AsyncStorageManager.set(
-        AsyncStorageManager.PREFERENCES.selectedWash.key,
-        value,
-      );
-    }
-  };
-
-  /**
    * Returns a picker allowing the user to select the proxiwash reminder notification time
    *
    * @returns {React.Node}
@@ -121,24 +103,6 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
         thumbTintColor={theme.colors.primary}
         minimumTrackTintColor={theme.colors.primary}
       />
-    );
-  }
-
-  /**
-   * Returns a picker allowing the user to select the wash
-   *
-   * @returns {React.Node}
-   */
-  getSelectWashPicker(): React.Node {
-    const {selectedWash} = this.state;
-    return (
-      <ToggleButton.Row
-        onValueChange={this.onSelectWashValueChange}
-        value={selectedWash}
-        style={{marginLeft: 'auto', marginRight: 'auto'}}>
-        <ToggleButton icon="school-outline" value="washinsa" />
-        <ToggleButton icon="domain" value="tripodeB" />
-      </ToggleButton.Row>
     );
   }
 
@@ -324,20 +288,6 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
             <View style={{marginLeft: 30}}>
               {this.getProxiwashNotifPicker()}
             </View>
-
-            <List.Item
-              title={i18n.t('screens.settings.proxiwashNotifReminder')}
-              description={i18n.t('screens.settings.proxiwashNotifReminderSub')}
-              left={(props: ListIconPropsType): React.Node => (
-                <List.Icon
-                  color={props.color}
-                  style={props.style}
-                  icon="washing-machine"
-                />
-              )}
-            />
-
-            <View style={{marginLeft: 30}}>{this.getSelectWashPicker()}</View>
           </List.Section>
         </Card>
         <Card style={{margin: 5}}>
