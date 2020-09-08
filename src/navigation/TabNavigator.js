@@ -29,6 +29,7 @@ import {
   getWebsiteStack,
 } from '../utils/CollapsibleUtils';
 import Mascot, {MASCOT_STYLE} from '../components/Mascot/Mascot';
+import ProxiwashSettingsScreen from '../screens/Proxiwash/ProxiwashSettingsScreen';
 
 const modalTransition =
   Platform.OS === 'ios'
@@ -89,6 +90,12 @@ function ProxiwashStackComponent(): React.Node {
         'proxiwash-about',
         ProxiwashStack,
         ProxiwashAboutScreen,
+        i18n.t('screens.proxiwash.title'),
+      )}
+      {createScreenCollapsibleStack(
+        'proxiwash-settings',
+        ProxiwashStack,
+        ProxiwashSettingsScreen,
         i18n.t('screens.proxiwash.title'),
       )}
     </ProxiwashStack.Navigator>

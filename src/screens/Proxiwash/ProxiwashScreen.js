@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Alert, View} from 'react-native';
 import i18n from 'i18n-js';
-import {Avatar, Button, Card, Text, withTheme} from 'react-native-paper';
+import {Avatar, Button, Card, List, Text, withTheme} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Modalize} from 'react-native-modalize';
 import WebSectionList from '../../components/Screens/WebSectionList';
@@ -26,31 +26,8 @@ import {
 import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import type {SectionListDataType} from '../../components/Screens/WebSectionList';
-import type {CardTitleIconPropsType} from '../../constants/PaperStyles';
-
-type LaverieType = {
-  title: string,
-  subtitle: string,
-  icon: string,
-  url: string,
-};
-
-const DATA = {
-  washinsa: {
-    title: 'Laverie INSA',
-    subtitle: 'Ta laverie préférer !!',
-    icon: 'school-outline',
-    url:
-      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/washinsa_data.json',
-  },
-  tripodeB: {
-    title: 'Laverie Tripode B',
-    subtitle: 'En vrai je sais pas trop quoi marqué.',
-    icon: 'domain',
-    url:
-      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/tripode_b_data.json',
-  },
-};
+import type {ListIconPropsType} from '../../constants/PaperStyles';
+import {PROXIWASH_DATA} from './ProxiwashSettingsScreen';
 
 const modalStateStrings = {};
 
@@ -225,9 +202,6 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
         remaining: remainingTime,
         program: item.program,
       });
-    } else if (item.state === ProxiwashConstants.machineStates.AVAILABLE) {
-      if (isDryer) message += `\n${i18n.t('screens.proxiwash.dryersTariff')}`;
-      else message += `\n${i18n.t('screens.proxiwash.washersTariff')}`;
     }
     return (
       <View
@@ -370,6 +344,31 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   }
 
   /**
+   * Gets a chevron icon
+   *
+   * @param props
+   * @return {*}
+   */
+  static getChevronIcon(props: ListIconPropsType): React.Node {
+    return (
+      <List.Icon color={props.color} style={props.style} icon="chevron-right" />
+    );
+  }
+
+  /**
+   * Gets a custom list item icon
+   *
+   * @param item The item to show the icon for
+   * @param props
+   * @return {*}
+   */
+  static getItemIcon(item: ListItemType, props: ListIconPropsType): React.Node {
+    return (
+      <List.Icon color={props.color} style={props.style} icon={item.icon} />
+    );
+  }
+
+  /**
    * Creates the dataset to be used by the FlatList
    *
    * @param fetchedData
@@ -423,24 +422,31 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     }
   };
 
+  onPressCallback = () => {
+    const {navigation} = this.props;
+    navigation.navigate('proxiwash-settings');
+  };
+
   getListHeader = (): React.Node => {
     const {selectedWash} = this.state;
-    let data: LaverieType;
+    let item: LaverieType;
     switch (selectedWash) {
       case 'tripodeB':
-        data = DATA.tripodeB;
+        item = PROXIWASH_DATA.tripodeB;
         break;
       default:
-        data = DATA.washinsa;
+        item = PROXIWASH_DATA.washinsa;
     }
+    const getItemIcon = (props: ListIconPropsType): React.Node =>
+      ProxiwashScreen.getItemIcon(item, props);
     return (
       <Card>
-        <Card.Title
-          title={data.title}
-          subtitle={data.subtitle}
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
-            <Avatar.Icon size={iconProps.size} icon={data.icon} />
-          )}
+        <List.Item
+          title={item.title}
+          description={item.subtitle}
+          left={getItemIcon}
+          right={ProxiwashScreen.getChevronIcon}
+          onPress={this.onPressCallback}
         />
       </Card>
     );
@@ -490,10 +496,10 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     let data: LaverieType;
     switch (state.selectedWash) {
       case 'tripodeB':
-        data = DATA.tripodeB;
+        data = PROXIWASH_DATA.tripodeB;
         break;
       default:
-        data = DATA.washinsa;
+        data = PROXIWASH_DATA.washinsa;
     }
     return (
       <View
