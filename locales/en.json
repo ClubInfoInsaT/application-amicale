@@ -41,14 +41,10 @@
       "washer": "Washer",
       "washers": "Washers",
       "min": "min",
-      "description": "This is the washing service operated by Promologis for INSA's residences (We don't mind if you do not live on the campus and you do your laundry here). The room is right next to the R2, with 3 dryers and 9 washers, is open 7d/7 24h/24 ! Here you can check their availability ! You can bring your own detergent, use the one given on site or buy it at the Proximo (cheaper than the one given by the machines ). You can pay by credit card or cash.",
       "informationTab": "Information",
       "paymentTab": "Payment",
       "tariffs": "Tariffs",
-      "washersTariff": "3€ the washer + 0.80€ with detergent.",
-      "dryersTariff": "0.35€ for 5min of dryer usage.",
       "paymentMethods": "Payment Methods",
-      "paymentMethodsDescription": "Cash up until 10€.\nCredit Card also accepted.",
       "washerProcedure": "Put your laundry in the tumble without tamping it and by respecting charge limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the command central, then press the START button on the machine.\n\nWhen the program is finished, the screen indicates 'Programme terminé', press the yellow button to open the lid and retrieve your laundry.",
       "washerTips": "Program 'blanc/couleur': 6kg of dry laundry (cotton linen, linen, underwear, sheets, jeans, towels).\n\nProgram 'non repassable': 3,5 kg of dry laundry (synthetic fibre linen, cotton and polyester mixed).\n\nProgram 'fin 30°C': 2,5 kg of dry laundry (delicate linen in synthetic fibres).\n\nProgram 'laine 30°C': 2,5 kg of dry laundry (wool textiles).",
       "dryerProcedure": "Put your laundry in the tumble without tamping it and by respecting charge limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the command central, then press the START button on the machine.",
@@ -57,6 +53,20 @@
       "tips": "Tips",
       "numAvailable": "available",
       "numAvailablePlural": "available",
+      "washinsa": {
+        "title": "INSA laundromat",
+        "subtitle": "Your favorite laundromat !!",
+        "description": "This is the washing service operated by Promologis for INSA's residences (We don't mind if you do not live on the campus and you do your laundry here). The room is right next to the R2, with 3 dryers and 9 washers, is open 7d/7 24h/24 ! You can bring your own detergent, use the one given on site or buy it at the Proximo (cheaper than the one given by the machines ).",
+        "tariff": "Washers 6kg: 3€ the washer + 0.80€ with detergent.\nDryers: 0.35€ for 5min of dryer usage.",
+        "paymentMethods": "Cash up until 10€.\nCredit Card also accepted."
+      },
+      "tripodeB": {
+        "title": "Tripode B laundromat",
+        "subtitle": "[A TRADUIRE] Celle de ceux qui habite prés du métro.",
+        "description": "[A TRADUIRE] C'est le service de laverie proposé par le crous pour les résidences Tripode B et C ainsi que Thalès et Pythagore. Le local situé au pied du Tripode B en face de de la résidence Pythagore avec ses 2 sèche-linges et 6 machines est ouvert 7J/7 de 7h à 23h. En plus des machine 6kg il y as une machine de 10kg.",
+        "tariff": "Washers 6kg: 2.60€ the washer + 0.90€ with detergent.\nWashers 10kg: 4.90€ the washer + 1.50€ with detergent.\nDryers: 0.40€ for 5min of dryer usage.",
+        "paymentMethods": "Carte bancaire acceptée."
+      },
       "modal": {
         "enableNotifications": "Notify me",
         "disableNotifications": "Stop notifications",
@@ -197,7 +207,6 @@
         "message": "An Amicale account allows you to take part in several activities around campus. You can join a club, or even create your own!\n\nLogging into your Amicale account on the app will allow you to see all available clubs on the campus, vote for the upcoming elections, and more to come!\n\nNo Account? Go to the Amicale's building during open hours to create one.",
         "button": "OK"
       }
-
     },
     "profile": {
       "title": "Profile",

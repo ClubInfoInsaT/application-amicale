@@ -41,14 +41,10 @@
       "washer": "Lave-Linge",
       "washers": "Lave-Linges",
       "min": "min",
-      "description": "C'est le service de laverie proposé par Promologis pour les résidences INSA (On t'en voudra pas si tu loges pas sur le campus et que tu fais ta machine ici). Le local situé au pied du R2 avec ses 3 sèche-linges et 9 machines est ouvert 7J/7 24h/24 ! Ici tu peux vérifier leur disponibilité ! Tu peux amener ta lessive, la prendre sur place ou encore mieux l'acheter au Proximo (moins chère qu'à la laverie directement). Tu peux payer par CB ou espèces.",
       "informationTab": "Informations",
       "paymentTab": "Paiement",
       "tariffs": "Tarifs",
-      "washersTariff": "3€ la machine + 0.80€ avec la lessive.",
-      "dryersTariff": "0.35€ pour 5min de sèche linge.",
       "paymentMethods": "Moyens de Paiement",
-      "paymentMethodsDescription": "Toute monnaie jusqu'à 10€.\nCarte bancaire acceptée.",
       "washerProcedure": "Déposer le linge dans le tambour sans le tasser et en respectant les charges.\n\nFermer la porte de l'appareil.\n\nSélectionner un programme avec l'une des quatre touches de programme favori standard.\n\nAprès avoir payé à la centrale de commande, appuyer sur le bouton marqué START du lave-linge.\n\nDès que le programme est terminé, l’afficheur indique 'Programme terminé', appuyer sur le bouton jaune d’ouverture du hublot pour récupérer le linge.",
       "washerTips": "Programme blanc/couleur : 6kg de linge sec (textiles en coton, lin, linge de corps, draps, jeans,serviettes de toilettes).\n\nProgramme non repassable : 3,5 kg de linge sec (textiles en fibres synthétiques, coton et polyester mélangés).\n\nProgramme fin 30°C : 2,5 kg de linge sec (textiles délicats en fibres synthétiques, rayonne).\n\nProgramme laine 30°C : 2,5 kg de linge sec (textiles en laine et lainages lavables).",
       "dryerProcedure": "Déposer le linge dans le tambour sans le tasser et en respectant les charges.\n\nFermer la porte de l'appareil.\n\nSélectionner un programme avec l'une des quatre touches de programme favori standard.\n\nAprès avoir payé à la centrale de commande, appuyer sur le bouton marqué START du lave-linge.",
@@ -57,6 +53,20 @@
       "tips": "Conseils",
       "numAvailable": "disponible",
       "numAvailablePlural": "disponibles",
+      "washinsa": {
+        "title": "Laverie INSA",
+        "subtitle": "Ta laverie préférer !!",
+        "description": "C'est le service de laverie proposé par Promologis pour les résidences INSA (On t'en voudra pas si tu loges pas sur le campus et que tu fais ta machine ici). Le local situé au pied du R2 avec ses 3 sèche-linges et 9 machines est ouvert 7J/7 24h/24 ! Tu peux amener ta lessive, la prendre sur place ou encore mieux l'acheter au Proximo (moins chère qu'à la laverie directement).",
+        "tariff": "Lave-Linges 6kg: 3€ la machine + 0.80€ avec la lessive.\nSèche-Linges: 0.35€ pour 5min de sèche linge.",
+        "paymentMethods": "Toute monnaie jusqu'à 10€.\nCarte bancaire acceptée."
+      },
+      "tripodeB": {
+        "title": "Laverie Tripode B",
+        "subtitle": "Celle de ceux qui habite prés du métro.",
+        "description": "C'est le service de laverie proposé par le crous pour les résidences Tripode B et C ainsi que Thalès et Pythagore. Le local situé au pied du Tripode B en face de de la résidence Pythagore avec ses 2 sèche-linges et 6 machines est ouvert 7J/7 de 7h à 23h. En plus des machine 6kg il y as une machine de 10kg.",
+        "tariff": "Lave-Linges 6kg: 2.60€ la machine + 0.90€ avec la lessive.\nLave-Linges 10kg: 4.90€ la machine + 1.50€ avec la lessive.\nSèche-Linges: 0.40€ pour 5min de sèche linge.",
+        "paymentMethods": "Carte bancaire acceptée."
+      },
       "modal": {
         "enableNotifications": "Me Notifier",
         "disableNotifications": "Désactiver les  notifications",
