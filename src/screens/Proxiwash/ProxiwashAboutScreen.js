@@ -3,8 +3,7 @@
 import * as React from 'react';
 import {Image, View} from 'react-native';
 import i18n from 'i18n-js';
-import {Card, Avatar, Paragraph, Text, Title} from 'react-native-paper';
-import CustomTabBar from '../../components/Tabbar/CustomTabBar';
+import {Card, Avatar, Paragraph, Title} from 'react-native-paper';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import type {CardTitleIconPropsType} from '../../constants/PaperStyles';
 
@@ -32,7 +31,7 @@ export default class ProxiwashAboutScreen extends React.Component<null> {
             style={{height: '100%', width: '100%', resizeMode: 'contain'}}
           />
         </View>
-        <Text>{i18n.t('screens.proxiwash.description')}</Text>
+
         <Card style={{margin: 5}}>
           <Card.Title
             title={i18n.t('screens.proxiwash.dryer')}
@@ -60,33 +59,6 @@ export default class ProxiwashAboutScreen extends React.Component<null> {
             <Paragraph>{i18n.t('screens.proxiwash.washerProcedure')}</Paragraph>
             <Title>{i18n.t('screens.proxiwash.tips')}</Title>
             <Paragraph>{i18n.t('screens.proxiwash.washerTips')}</Paragraph>
-          </Card.Content>
-        </Card>
-
-        <Card style={{margin: 5}}>
-          <Card.Title
-            title={i18n.t('screens.proxiwash.tariffs')}
-            left={(iconProps: CardTitleIconPropsType): React.Node => (
-              <Avatar.Icon size={iconProps.size} icon="circle-multiple" />
-            )}
-          />
-          <Card.Content>
-            <Paragraph>{i18n.t('screens.proxiwash.washersTariff')}</Paragraph>
-            <Paragraph>{i18n.t('screens.proxiwash.dryersTariff')}</Paragraph>
-          </Card.Content>
-        </Card>
-        <Card
-          style={{margin: 5, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
-          <Card.Title
-            title={i18n.t('screens.proxiwash.paymentMethods')}
-            left={(iconProps: CardTitleIconPropsType): React.Node => (
-              <Avatar.Icon size={iconProps.size} icon="cash" />
-            )}
-          />
-          <Card.Content>
-            <Paragraph>
-              {i18n.t('screens.proxiwash.paymentMethodsDescription')}
-            </Paragraph>
           </Card.Content>
         </Card>
       </CollapsibleScrollView>
