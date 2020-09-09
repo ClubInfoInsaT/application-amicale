@@ -351,14 +351,14 @@
       "libs": "Libraries used",
       "thanks": "Thanks",
       "user": {
-        "you": "You",
-        "arnaud": "[NON TRADUIT] Étudiant en IR (2020). C'est le créateur de cette magnifique application que t'utilise tout les jour. Et il est vraiment BG aussi.",
-        "yohan":  "[NON TRADUIT] Étudiant en [Je sais pas quoi] (2020). Il nous aide à corriger les bug. Et j'imagine aussi qu'il est BG mais je le connait pas.",
-        "beranger": "[NON TRADUIT] Étudiant en AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.",
-        "celine": "[NON TRADUIT] Étudiante en GPE (2020). Sans elle, tout serait moins mignon. Elle a aidé pour écrire le texte, faire de la com, et aussi à créer la mascotte 🦊.",
-        "damien": "[NON TRADUIT] Étudiant en IR (2020) et créateur de la dernière version du site de l’Amicale. Grâce à son aide, intégrer les services de l’Amicale à l’application a été très simple.",
-        "titouan": "[NON TRADUIT] Étudiant en IR (2020). Il a beaucoup aidé pour trouver des bugs et proposer des nouvelles fonctionnalités.",
-        "theo": "[NON TRADUIT] Étudiant en AE (2020). Si l’application marche sur iOS, c’est grâce à son aide lors de ses nombreux tests."
+        "you": "You ?",
+        "arnaud": "Student in IR (2020). He is the creator of this beautiful app you use everyday. Some say he is handsome as well.",
+        "yohan":  "Student in IR (2020). He helped to fix bugs. I think he is handsome as well but I don't know him personally.",
+        "beranger": "Student in AE (2020) and president of the Amicale when the app was created. The app was his idea. He helped a lot to find bugs, new features and communication.",
+        "celine": "Student in GPE (2020). Without her, everything would be less cute. She helped to write the text, for communication, and also to create the mascot 🦊.",
+        "damien": "Student in IR (2020) and creator of the 2020 version of the Amicale's website. Thanks to his help, integrating Amicale's services into the app was child's play.",
+        "titouan": "Student in IR (2020). He helped a lot in finding bugs and new features.",
+        "theo": "Student in AE (2020). If the app works on iOS, this is all thanks to his help during his numerous tests."
       }
     },
     "feedback": {
