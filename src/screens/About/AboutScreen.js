@@ -13,6 +13,7 @@ import type {
   ListIconPropsType,
 } from '../../constants/PaperStyles';
 import OptionsDialog from '../../components/Dialogs/OptionsDialog';
+import type {OptionsDialogButtonType} from '../../components/Dialogs/OptionsDialog';
 
 type ListItemType = {
   onPressCallback: () => void,
@@ -21,12 +22,13 @@ type ListItemType = {
   showChevron: boolean,
 };
 
-type AthorsItemType = {
+type MemberItemType = {
   name: string,
   message: string,
-  btnTrool: OptionsDialogButtonType,
-  btnLinkedin: OptionsDialogButtonType,
-  btnMail: OptionsDialogButtonType,
+  icon: string,
+  trollLink?: string,
+  linkedin?: string,
+  mail?: string,
 };
 
 const links = {
@@ -39,26 +41,18 @@ const links = {
     'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
   license:
     'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
-  arnaudMail:
-    'mailto:vergnet@etud.insa-toulouse.fr?' +
-    'subject=' +
-    'Application Amicale INSA Toulouse' +
-    '&body=' +
-    'Coucou !\n\n',
-  arnaudLinkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
-  yohanMail:
-    'mailto:ysimard@etud.insa-toulouse.fr?' +
-    'subject=' +
-    'Application Amicale INSA Toulouse' +
-    '&body=' +
-    'Coucou !\n\n',
-  yohanLinkedin: 'https://www.linkedin.com/in/yohan-simard',
   react: 'https://facebook.github.io/react-native/',
-  meme: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
 };
 
 type PropsType = {
   navigation: StackNavigationProp,
+};
+
+type StateType = {
+  dialogVisible: boolean,
+  dialogTitle: string,
+  dialogMessage: string,
+  dialogButtons: Array<OptionsDialogButtonType>,
 };
 
 /**
@@ -70,110 +64,75 @@ function openWebLink(link: string) {
 }
 
 /**
+ * Object containing data relative to major contributors
+ */
+const majorContributors: {[key: string]: MemberItemType} = {
+  arnaud: {
+    name: 'Arnaud Vergnet',
+    message: i18n.t('screens.about.user.arnaud'),
+    icon: 'crown',
+    trollLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    linkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
+    mail:
+      'mailto:vergnet@etud.insa-toulouse.fr?' +
+      'subject=' +
+      'Application Amicale INSA Toulouse' +
+      '&body=' +
+      'Coucou !\n\n',
+  },
+  yohan: {
+    name: 'Yohan Simard',
+    message: i18n.t('screens.about.user.yohan'),
+    icon: 'xml',
+    linkedin: 'https://www.linkedin.com/in/yohan-simard',
+    mail: 'mailto:ysimard@etud.insa-toulouse.fr?' +
+      'subject=' +
+      'Application Amicale INSA Toulouse' +
+      '&body=' +
+      'Coucou !\n\n',
+  },
+};
+
+/**
+ * Object containing data relative to users who helped during development
+ */
+const helpfulUsers: {[key: string]: MemberItemType} = {
+  beranger: {
+    name: 'Béranger Quintana Y Arciosana',
+    message: i18n.t('screens.about.user.beranger'),
+    icon: 'account-heart',
+  },
+  celine: {
+    name: 'Céline Tassin',
+    message: i18n.t('screens.about.user.celine'),
+    icon: 'brush',
+  },
+  damien: {
+    name: 'Damien Molina',
+    message: i18n.t('screens.about.user.damien'),
+    icon: 'web',
+  },
+  titouan: {
+    name: 'Titouan Labourdette',
+    message: i18n.t('screens.about.user.titouan'),
+    icon: 'shield-bug',
+  },
+  theo: {
+    name: 'Théo Tami',
+    message: i18n.t('screens.about.user.theo'),
+    icon: 'food-apple',
+  },
+};
+
+/**
  * Class defining an about screen. This screen shows the user information about the app and it's author.
  */
-class AboutScreen extends React.Component<PropsType> {
-  /**
-   * Data team
-   */
-  teamUsers = {
-    arnaud: {
-      name: 'Arnaud Vergnrt',
-      message: i18n.t('screens.about.user.arnaud'),
-      icon: 'crown',
-      btnTrool: {
-        title: 'SWAG',
-        onPress: () => {
-          openWebLink(links.meme);
-        },
-      },
-      btnLinkedin: {
-        title: '',
-        icon: 'linkedin',
-        onPress: () => {
-          openWebLink(links.arnaudMail);
-        },
-      },
-      btnMail: {
-        title: '',
-        icon: 'email-edit',
-        onPress: () => {
-          openWebLink(links.arnaudLinkedin);
-        },
-      },
-    },
-    yohan: {
-      name: 'Yohan Simard',
-      message: i18n.t('screens.about.user.yohan'),
-      icon: 'xml',
-      btnTrool: null,
-      btnLinkedin: {
-        title: '',
-        icon: 'linkedin',
-        onPress: () => {
-          openWebLink(links.yohanLinkedin);
-        },
-      },
-      btnMail: {
-        title: '',
-        icon: 'email-edit',
-        onPress: () => {
-          openWebLink(links.yohanMail);
-        },
-      },
-    },
-  };
-
-  /**
-   * Data thanks
-   */
-  thanksUsers = {
-    beranger: {
-      name: 'Béranger Quintana Y Arciosana',
-      message: i18n.t('screens.about.user.beranger'),
-      icon: 'account-heart',
-      btnTrool: null,
-      btnLinkedin: null,
-      btnMail: null,
-    },
-    celine: {
-      name: 'Céline Tassin',
-      message: i18n.t('screens.about.user.celine'),
-      icon: 'brush',
-      btnTrool: null,
-      btnLinkedin: null,
-      btnMail: null,
-    },
-    damien: {
-      name: 'Damien Molina',
-      message: i18n.t('screens.about.user.damien'),
-      icon: 'web',
-      btnTrool: null,
-      btnLinkedin: null,
-      btnMail: null,
-    },
-    titouan: {
-      name: 'Titouan Labourdette',
-      message: i18n.t('screens.about.user.titouan'),
-      icon: 'shield-bug',
-      btnTrool: null,
-      btnLinkedin: null,
-      btnMail: null,
-    },
-    theo: {
-      name: 'Théo Tami',
-      message: i18n.t('screens.about.user.theo'),
-      icon: 'food-apple',
-      btnTrool: null,
-      btnLinkedin: null,
-      btnMail: null,
-    },
-  };
+class AboutScreen extends React.Component<PropsType, StateType> {
 
   /**
    * Data to be displayed in the app card
    */
-  appData = [
+  appData: Array<ListItemType> = [
     {
       onPressCallback: () => {
         openWebLink(Platform.OS === 'ios' ? links.appstore : links.playstore);
@@ -221,23 +180,23 @@ class AboutScreen extends React.Component<PropsType> {
   ];
 
   /**
-   * Data to be displayed in the additional developer card
+   * Data to be displayed in the team card
    */
-  teamData = [
+  teamData: Array<ListItemType> = [
     {
       onPressCallback: () => {
-        this.onListItemPress(this.teamUsers.arnaud);
+        this.onContributorListItemPress(majorContributors.arnaud);
       },
-      icon: this.teamUsers.arnaud.icon,
-      text: this.teamUsers.arnaud.name,
+      icon: majorContributors.arnaud.icon,
+      text: majorContributors.arnaud.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onListItemPress(this.teamUsers.yohan);
+        this.onContributorListItemPress(majorContributors.yohan);
       },
-      icon: this.teamUsers.yohan.icon,
-      text: this.teamUsers.yohan.name,
+      icon: majorContributors.yohan.icon,
+      text: majorContributors.yohan.name,
       showChevron: false,
     },
     {
@@ -254,45 +213,45 @@ class AboutScreen extends React.Component<PropsType> {
   /**
    * Data to be displayed in the thanks card
    */
-  thanksData = [
+  thanksData: Array<ListItemType> = [
     {
       onPressCallback: () => {
-        this.onListItemPress(this.thanksUsers.beranger);
+        this.onContributorListItemPress(helpfulUsers.beranger);
       },
-      icon: this.thanksUsers.beranger.icon,
-      text: this.thanksUsers.beranger.name,
+      icon: helpfulUsers.beranger.icon,
+      text: helpfulUsers.beranger.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onListItemPress(this.thanksUsers.celine);
+        this.onContributorListItemPress(helpfulUsers.celine);
       },
-      icon: this.thanksUsers.celine.icon,
-      text: this.thanksUsers.celine.name,
+      icon: helpfulUsers.celine.icon,
+      text: helpfulUsers.celine.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onListItemPress(this.thanksUsers.damien);
+        this.onContributorListItemPress(helpfulUsers.damien);
       },
-      icon: this.thanksUsers.damien.icon,
-      text: this.thanksUsers.damien.name,
+      icon: helpfulUsers.damien.icon,
+      text: helpfulUsers.damien.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onListItemPress(this.thanksUsers.titouan);
+        this.onContributorListItemPress(helpfulUsers.titouan);
       },
-      icon: this.thanksUsers.titouan.icon,
-      text: this.thanksUsers.titouan.name,
+      icon: helpfulUsers.titouan.icon,
+      text: helpfulUsers.titouan.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onListItemPress(this.thanksUsers.theo);
+        this.onContributorListItemPress(helpfulUsers.theo);
       },
-      icon: this.thanksUsers.theo.icon,
-      text: this.thanksUsers.theo.name,
+      icon: helpfulUsers.theo.icon,
+      text: helpfulUsers.theo.name,
       showChevron: false,
     },
   ];
@@ -345,35 +304,48 @@ class AboutScreen extends React.Component<PropsType> {
       dialogTitle: '',
       dialogMessage: '',
       dialogButtons: [],
-      onDialogDismiss: () => {
-        this.setState({dialogVisible: false});
-      },
     };
   }
 
   /**
-   * Callback used when clicking an article in the list.
-   * It opens the modal to show detailed information about the article
+   * Callback used when clicking a member in the list
+   * It opens a dialog to show detailed information this member
    *
-   * @param user A user key
+   * @param user The member to show information for
    */
-  onListItemPress(user: AthorsItemType) {
-    const dialogBtn: Array<IconOptionsDialogButtonType> = [
+  onContributorListItemPress(user: MemberItemType) {
+    const dialogBtn = [
       {
         title: 'OK',
-        onPress: () => {
-          this.setState({dialogVisible: false});
-        },
+        onPress: this.onDialogDismiss,
       },
     ];
-    if (user.btnMail != null) {
-      dialogBtn.push(user.btnMail);
+    const {linkedin, trollLink, mail} = user;
+    if (linkedin != null) {
+      dialogBtn.push({
+        title: '',
+        icon: 'linkedin',
+        onPress: () => {
+          openWebLink(linkedin);
+        },
+      });
     }
-    if (user.btnLinkedin != null) {
-      dialogBtn.push(user.btnLinkedin);
+    if (mail) {
+      dialogBtn.push({
+        title: '',
+        icon: 'email-edit',
+        onPress: () => {
+          openWebLink(mail);
+        },
+      });
     }
-    if (user.btnTrool != null) {
-      dialogBtn.push(user.btnTrool);
+    if (trollLink) {
+      dialogBtn.push({
+        title: 'SWAG',
+        onPress: () => {
+          openWebLink(trollLink);
+        },
+      });
     }
     this.setState({
       dialogVisible: true,
@@ -561,6 +533,10 @@ class AboutScreen extends React.Component<PropsType> {
     }
   };
 
+  onDialogDismiss = () => {
+    this.setState({dialogVisible: false});
+  };
+
   /**
    * Extracts a key from the given item
    *
@@ -586,7 +562,7 @@ class AboutScreen extends React.Component<PropsType> {
           title={state.dialogTitle}
           message={state.dialogMessage}
           buttons={state.dialogButtons}
-          onDismiss={state.onDialogDismiss}
+          onDismiss={this.onDialogDismiss}
         />
       </View>
     );
