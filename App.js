@@ -7,7 +7,6 @@ import {Provider as PaperProvider} from 'react-native-paper';
 import {setSafeBounceHeight} from 'react-navigation-collapsible';
 import SplashScreen from 'react-native-splash-screen';
 import {OverflowMenuProvider} from 'react-navigation-header-buttons';
-import LocaleManager from './src/managers/LocaleManager';
 import AsyncStorageManager from './src/managers/AsyncStorageManager';
 import CustomIntroSlider from './src/components/Overrides/CustomIntroSlider';
 import type {CustomThemeType} from './src/managers/ThemeManager';
@@ -19,6 +18,7 @@ import ConnectionManager from './src/managers/ConnectionManager';
 import type {ParsedUrlDataType} from './src/utils/URLHandler';
 import URLHandler from './src/utils/URLHandler';
 import {setupStatusBar} from './src/utils/Utils';
+import initLocales from './src/utils/Locales';
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 // Crashes app when navigating away from webview on android 9+
@@ -56,7 +56,7 @@ export default class App extends React.Component<null, StateType> {
       showAprilFools: false,
       currentTheme: null,
     };
-    LocaleManager.initTranslations();
+    initLocales();
     this.navigatorRef = React.createRef();
     this.defaultHomeRoute = null;
     this.defaultHomeData = {};
