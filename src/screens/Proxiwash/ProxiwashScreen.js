@@ -37,7 +37,7 @@ const LIST_ITEM_HEIGHT = 64;
 export type ProxiwashMachineType = {
   number: string,
   state: string,
-  maxWeight: number,
+  'maxWeight ': number,
   startTime: string,
   endTime: string,
   donePercent: string,
@@ -128,6 +128,11 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
             iconName="information"
             onPress={this.onAboutPress}
           />
+          <Item
+            title="settings"
+            iconName="settings"
+            onPress={this.onSettingsPress}
+          />
         </MaterialHeaderButtons>
       ),
     });
@@ -140,6 +145,15 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   onAboutPress = () => {
     const {navigation} = this.props;
     navigation.navigate('proxiwash-about');
+  };
+
+  /**
+   * Callback used when pressing the settings button.
+   * This will open the ProxiwashSettingsScreen.
+   */
+  onSettingsPress = () => {
+    const {navigation} = this.props;
+    navigation.navigate('proxiwash-settings');
   };
 
   /**
@@ -422,34 +436,6 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     }
   };
 
-  onPressCallback = () => {
-    const {navigation} = this.props;
-    navigation.navigate('proxiwash-settings');
-  };
-
-  getListHeader = (): React.Node => {
-    const {selectedWash} = this.state;
-    let item: LaverieType;
-    switch (selectedWash) {
-      case 'tripodeB':
-        item = PROXIWASH_DATA.tripodeB;
-        break;
-      default:
-        item = PROXIWASH_DATA.washinsa;
-    }
-    const getItemIcon = (props: ListIconPropsType): React.Node =>
-      ProxiwashScreen.getItemIcon(item, props);
-    return (
-      <List.Item
-        title={item.title}
-        description={item.subtitle}
-        left={getItemIcon}
-        right={ProxiwashScreen.getChevronIcon}
-        onPress={this.onPressCallback}
-      />
-    );
-  };
-
   /**
    * Adds the given notifications associated to a machine ID to the watchlist, and saves the array to the preferences
    *
@@ -519,7 +505,6 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
             autoRefreshTime={REFRESH_TIME}
             refreshOnFocus
             updateData={state.machinesWatched.length}
-            renderListHeaderComponent={this.getListHeader}
           />
         </View>
         <MascotPopup
