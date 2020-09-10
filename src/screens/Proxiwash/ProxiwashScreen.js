@@ -27,7 +27,7 @@ import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import type {SectionListDataType} from '../../components/Screens/WebSectionList';
 import type {ListIconPropsType} from '../../constants/PaperStyles';
-import {PROXIWASH_DATA} from './ProxiwashSettingsScreen';
+import {PROXIWASH_DATA} from './ProxiwashAboutScreen';
 
 const modalStateStrings = {};
 
@@ -128,11 +128,6 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
             iconName="information"
             onPress={this.onAboutPress}
           />
-          <Item
-            title="settings"
-            iconName="settings"
-            onPress={this.onSettingsPress}
-          />
         </MaterialHeaderButtons>
       ),
     });
@@ -145,15 +140,6 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   onAboutPress = () => {
     const {navigation} = this.props;
     navigation.navigate('proxiwash-about');
-  };
-
-  /**
-   * Callback used when pressing the settings button.
-   * This will open the ProxiwashSettingsScreen.
-   */
-  onSettingsPress = () => {
-    const {navigation} = this.props;
-    navigation.navigate('proxiwash-settings');
   };
 
   /**

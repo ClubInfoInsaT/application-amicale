@@ -3,7 +3,14 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import i18n from 'i18n-js';
-import {Card, List, Switch, ToggleButton, withTheme} from 'react-native-paper';
+import {
+  RadioButton,
+  Card,
+  List,
+  Switch,
+  ToggleButton,
+  withTheme,
+} from 'react-native-paper';
 import {Appearance} from 'react-native-appearance';
 import {StackNavigationProp} from '@react-navigation/stack';
 import type {CustomThemeType} from '../../../managers/ThemeManager';
@@ -12,6 +19,7 @@ import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import CustomSlider from '../../../components/Overrides/CustomSlider';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import type {ListIconPropsType} from '../../../constants/PaperStyles';
+import {PROXIWASH_DATA} from '../../Proxiwash/ProxiwashAboutScreen';
 
 type PropsType = {
   navigation: StackNavigationProp,
@@ -22,6 +30,7 @@ type StateType = {
   nightMode: boolean,
   nightModeFollowSystem: boolean,
   startScreenPickerSelected: string,
+  selectedWash: string,
   isDebugUnlocked: boolean,
 };
 
@@ -51,6 +60,9 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
         ) && Appearance.getColorScheme() !== 'no-preference',
       startScreenPickerSelected: AsyncStorageManager.getString(
         AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
+      ),
+      selectedWash: AsyncStorageManager.getString(
+        AsyncStorageManager.PREFERENCES.selectedWash.key,
       ),
       isDebugUnlocked: AsyncStorageManager.getBool(
         AsyncStorageManager.PREFERENCES.debugUnlocked.key,
@@ -103,6 +115,29 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
         thumbTintColor={theme.colors.primary}
         minimumTrackTintColor={theme.colors.primary}
       />
+    );
+  }
+
+  /**
+   * Returns a radio picker allowing the user to select the proxiwash
+   *
+   * @returns {React.Node}
+   */
+  getProxiwashChangePicker(): React.Node {
+    const {selectedWash} = this.state;
+    return (
+      <RadioButton.Group
+        onValueChange={this.onSelectWashValueChange}
+        value={selectedWash}>
+        <RadioButton.Item
+          label={PROXIWASH_DATA.washinsa.title}
+          value={PROXIWASH_DATA.washinsa.id}
+        />
+        <RadioButton.Item
+          label={PROXIWASH_DATA.tripodeB.title}
+          value={PROXIWASH_DATA.tripodeB.id}
+        />
+      </RadioButton.Group>
     );
   }
 
@@ -213,6 +248,21 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
   }
 
   /**
+   * Saves the value for the proxiwash selected wash
+   *
+   * @param value The value to store
+   */
+  onSelectWashValueChange = (value: string) => {
+    if (value != null) {
+      this.setState({selectedWash: value});
+      AsyncStorageManager.set(
+        AsyncStorageManager.PREFERENCES.selectedWash.key,
+        value,
+      );
+    }
+  };
+
+  /**
    * Unlocks debug mode and saves its state to user preferences
    */
   unlockDebugMode = () => {
@@ -287,6 +337,20 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
             />
             <View style={{marginLeft: 30}}>
               {this.getProxiwashNotifPicker()}
+            </View>
+            <List.Item
+              title="Test"
+              description="Test"
+              left={(props: ListIconPropsType): React.Node => (
+                <List.Icon
+                  color={props.color}
+                  style={props.style}
+                  icon="washing-machine"
+                />
+              )}
+            />
+            <View style={{marginLeft: 30}}>
+              {this.getProxiwashChangePicker()}
             </View>
           </List.Section>
         </Card>

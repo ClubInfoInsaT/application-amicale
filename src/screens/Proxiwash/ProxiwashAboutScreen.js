@@ -9,11 +9,67 @@ import type {CardTitleIconPropsType} from '../../constants/PaperStyles';
 
 const LOGO = 'https://etud.insa-toulouse.fr/~amicale_app/images/Proxiwash.png';
 
+export type LaverieType = {
+  id: string,
+  title: string,
+  subtitle: string,
+  description: string,
+  tarif: string,
+  paymentMethods: string,
+  icon: string,
+  url: string,
+};
+
+export const PROXIWASH_DATA = {
+  washinsa: {
+    id: 'washinsa',
+    title: i18n.t('screens.proxiwash.washinsa.title'),
+    subtitle: i18n.t('screens.proxiwash.washinsa.subtitle'),
+    description: i18n.t('screens.proxiwash.washinsa.description'),
+    tarif: i18n.t('screens.proxiwash.washinsa.tariff'),
+    paymentMethods: i18n.t('screens.proxiwash.washinsa.paymentMethods'),
+    icon: 'school-outline',
+    url:
+      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/washinsa_data.json',
+  },
+  tripodeB: {
+    id: 'tripodeB',
+    title: i18n.t('screens.proxiwash.tripodeB.title'),
+    subtitle: i18n.t('screens.proxiwash.tripodeB.subtitle'),
+    description: i18n.t('screens.proxiwash.tripodeB.description'),
+    tarif: i18n.t('screens.proxiwash.tripodeB.tariff'),
+    paymentMethods: i18n.t('screens.proxiwash.tripodeB.paymentMethods'),
+    icon: 'domain',
+    url:
+      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/tripode_b_data.json',
+  },
+};
+
 /**
  * Class defining the proxiwash about screen.
  */
-// eslint-disable-next-line react/prefer-stateless-function
 export default class ProxiwashAboutScreen extends React.Component<null> {
+  static getCardItem(item: LaverieType): React.Node {
+    return (
+      <Card style={{margin: 5}}>
+        <Card.Title
+          title={item.title}
+          subtitle={item.subtitle}
+          left={(iconProps: CardTitleIconPropsType): React.Node => (
+            <Avatar.Icon size={iconProps.size} icon={item.icon} />
+          )}
+        />
+        <Card.Content>
+          <Paragraph>{item.description}</Paragraph>
+          <Title>{i18n.t('screens.proxiwash.tariffs')}</Title>
+          <Paragraph>{item.tarif}</Paragraph>
+          <Title>{i18n.t('screens.proxiwash.paymentMethods')}</Title>
+          <Paragraph>{item.paymentMethods}</Paragraph>
+        </Card.Content>
+      </Card>
+    );
+  }
+
   render(): React.Node {
     return (
       <CollapsibleScrollView style={{padding: 5}} hasTab>
@@ -31,6 +87,10 @@ export default class ProxiwashAboutScreen extends React.Component<null> {
             style={{height: '100%', width: '100%', resizeMode: 'contain'}}
           />
         </View>
+
+        {ProxiwashAboutScreen.getCardItem(PROXIWASH_DATA.washinsa)}
+
+        {ProxiwashAboutScreen.getCardItem(PROXIWASH_DATA.tripodeB)}
 
         <Card style={{margin: 5}}>
           <Card.Title
