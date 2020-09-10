@@ -57,14 +57,14 @@
         "title": "INSA laundromat",
         "subtitle": "Your favorite laundromat !!",
         "description": "This is the washing service operated by Promologis for INSA's residences (We don't mind if you do not live on the campus and you do your laundry here). The room is right next to the R2, with 3 dryers and 9 washers, is open 7d/7 24h/24 ! You can bring your own detergent, use the one given on site or buy it at the Proximo (cheaper than the one given by the machines ).",
-        "tariff": "Washers 6kg: 3€ the washer + 0.80€ with detergent.\nDryers: 0.35€ for 5min of dryer usage.",
+        "tariff": "Washers 6kg: 3€ the washer + 0.80€ with detergent.\nDryers 14kg: 0.35€ for 5min of dryer usage.",
         "paymentMethods": "Cash up until 10€.\nCredit Card also accepted."
       },
       "tripodeB": {
         "title": "Tripode B laundromat",
         "subtitle": "[A TRADUIRE] Celle de ceux qui habite prés du métro.",
         "description": "[A TRADUIRE] C'est le service de laverie proposé par le crous pour les résidences Tripode B et C ainsi que Thalès et Pythagore. Le local situé au pied du Tripode B en face de de la résidence Pythagore avec ses 2 sèche-linges et 6 machines est ouvert 7J/7 de 7h à 23h. En plus des machine 6kg il y as une machine de 10kg.",
-        "tariff": "Washers 6kg: 2.60€ the washer + 0.90€ with detergent.\nWashers 10kg: 4.90€ the washer + 1.50€ with detergent.\nDryers: 0.40€ for 5min of dryer usage.",
+        "tariff": "Washers 6kg: 2.60€ the washer + 0.90€ with detergent.\nWashers 10kg: 4.90€ the washer + 1.50€ with detergent.\nDryers 14kg: 0.40€ for 5min of dryer usage.",
         "paymentMethods": "Carte bancaire acceptée."
       },
       "modal": {
