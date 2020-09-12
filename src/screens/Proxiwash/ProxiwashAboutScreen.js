@@ -23,22 +23,22 @@ export type LaverieType = {
 export const PROXIWASH_DATA = {
   washinsa: {
     id: 'washinsa',
-    title: i18n.t('screens.proxiwash.washinsa.title'),
-    subtitle: i18n.t('screens.proxiwash.washinsa.subtitle'),
-    description: i18n.t('screens.proxiwash.washinsa.description'),
-    tarif: i18n.t('screens.proxiwash.washinsa.tariff'),
-    paymentMethods: i18n.t('screens.proxiwash.washinsa.paymentMethods'),
+    title: 'screens.proxiwash.washinsa.title',
+    subtitle: 'screens.proxiwash.washinsa.subtitle',
+    description: 'screens.proxiwash.washinsa.description',
+    tarif: 'screens.proxiwash.washinsa.tariff',
+    paymentMethods: 'screens.proxiwash.washinsa.paymentMethods',
     icon: 'school-outline',
     url:
       'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/washinsa_data.json',
   },
   tripodeB: {
     id: 'tripodeB',
-    title: i18n.t('screens.proxiwash.tripodeB.title'),
-    subtitle: i18n.t('screens.proxiwash.tripodeB.subtitle'),
-    description: i18n.t('screens.proxiwash.tripodeB.description'),
-    tarif: i18n.t('screens.proxiwash.tripodeB.tariff'),
-    paymentMethods: i18n.t('screens.proxiwash.tripodeB.paymentMethods'),
+    title: 'screens.proxiwash.tripodeB.title',
+    subtitle: 'screens.proxiwash.tripodeB.subtitle',
+    description: 'screens.proxiwash.tripodeB.description',
+    tarif: 'screens.proxiwash.tripodeB.tariff',
+    paymentMethods: 'screens.proxiwash.tripodeB.paymentMethods',
     icon: 'domain',
     url:
       'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/tripode_b_data.json',
@@ -53,18 +53,18 @@ export default class ProxiwashAboutScreen extends React.Component<null> {
     return (
       <Card style={{margin: 5}}>
         <Card.Title
-          title={item.title}
-          subtitle={item.subtitle}
+          title={i18n.t(item.title)}
+          subtitle={i18n.t(item.subtitle)}
           left={(iconProps: CardTitleIconPropsType): React.Node => (
             <Avatar.Icon size={iconProps.size} icon={item.icon} />
           )}
         />
         <Card.Content>
-          <Paragraph>{item.description}</Paragraph>
+          <Paragraph>{i18n.t(item.description)}</Paragraph>
           <Title>{i18n.t('screens.proxiwash.tariffs')}</Title>
-          <Paragraph>{item.tarif}</Paragraph>
+          <Paragraph>{i18n.t(item.tarif)}</Paragraph>
           <Title>{i18n.t('screens.proxiwash.paymentMethods')}</Title>
-          <Paragraph>{item.paymentMethods}</Paragraph>
+          <Paragraph>{i18n.t(item.paymentMethods)}</Paragraph>
         </Card.Content>
       </Card>
     );

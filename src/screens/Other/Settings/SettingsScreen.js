@@ -19,7 +19,6 @@ import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import CustomSlider from '../../../components/Overrides/CustomSlider';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import type {ListIconPropsType} from '../../../constants/PaperStyles';
-import {PROXIWASH_DATA} from '../../Proxiwash/ProxiwashAboutScreen';
 
 type PropsType = {
   navigation: StackNavigationProp,
@@ -130,12 +129,12 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
         onValueChange={this.onSelectWashValueChange}
         value={selectedWash}>
         <RadioButton.Item
-          label={PROXIWASH_DATA.washinsa.title}
-          value={PROXIWASH_DATA.washinsa.id}
+          label={i18n.t('screens.proxiwash.washinsa.title')}
+          value="washinsa"
         />
         <RadioButton.Item
-          label={PROXIWASH_DATA.tripodeB.title}
-          value={PROXIWASH_DATA.tripodeB.id}
+          label={i18n.t('screens.proxiwash.tripodeB.title')}
+          value="tripodeB"
         />
       </RadioButton.Group>
     );

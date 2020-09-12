@@ -37,7 +37,7 @@ const LIST_ITEM_HEIGHT = 64;
 export type ProxiwashMachineType = {
   number: string,
   state: string,
-  'maxWeight ': number,
+  maxWeight: number,
   startTime: string,
   endTime: string,
   donePercent: string,

@@ -69,7 +69,7 @@ class ProxiwashListItem extends React.Component<PropsType> {
     this.updateStateStrings();
 
     let displayNumber = props.item.number;
-    const displayMaxWeight = props.item['maxWeight '];
+    const displayMaxWeight = props.item.maxWeight;
     if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
       displayNumber = AprilFoolsManager.getProxiwashMachineDisplayNumber(
         parseInt(props.item.number, 10),
