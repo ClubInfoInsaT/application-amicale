@@ -62,8 +62,8 @@
       },
       "tripodeB": {
         "title": "Tripode B laundromat",
-        "subtitle": "[A TRADUIRE] Celle de ceux qui habite prés du métro.",
-        "description": "[A TRADUIRE] C'est le service de laverie proposé par le crous pour les résidences Tripode B et C ainsi que Thalès et Pythagore. Le local situé au pied du Tripode B en face de de la résidence Pythagore avec ses 2 sèche-linges et 6 machines est ouvert 7J/7 de 7h à 23h. En plus des machine 6kg il y as une machine de 10kg.",
+        "subtitle": "That of those who live near the metro.",
+        "description": "This is the washing service operated by the CROUS for the Tripode B and C residences as well as Thalès and Pythagore. The room is at the foot of Tripod B in front of the Pythagore residence, with 2 dryers and 6 washers, is open 7d/7 from 7am to 11pm. In addition to the 6kg washers there is one 10kg washers",
         "tariff": "Washers 6kg: 2.60€ the washer + 0.90€ with detergent.\nWashers 10kg: 4.90€ the washer + 1.50€ with detergent.\nDryers 14kg: 0.40€ for 5min of dryer usage.",
         "paymentMethods": "Carte bancaire acceptée."
       },
