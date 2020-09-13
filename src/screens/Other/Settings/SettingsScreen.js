@@ -338,8 +338,8 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
               {this.getProxiwashNotifPicker()}
             </View>
             <List.Item
-              title="Test"
-              description="Test"
+              title={i18n.t('screens.settings.proxiwashChangeWash')}
+              description={i18n.t('screens.settings.proxiwashChangeWashSub')}
               left={(props: ListIconPropsType): React.Node => (
                 <List.Icon
                   color={props.color}

@@ -339,6 +339,8 @@
       "dashboardSub": "Choisis les services à afficher sur la dashboard",
       "proxiwashNotifReminder": "Rappel de machine en cours",
       "proxiwashNotifReminderSub": "Combien de minutes avant",
+      "proxiwashChangeWash": "Sélection de la laverie",
+      "proxiwashChangeWashSub": "Quel laverie à afficher",
       "information": "Informations",
       "dashboardEdit": {
         "title": "Modifier la dashboard",

@@ -339,6 +339,8 @@
       "dashboardSub": "Edit what services to display on the dashboard",
       "proxiwashNotifReminder": "Machine running reminder",
       "proxiwashNotifReminderSub": "How many minutes before",
+      "proxiwashChangeWash": "Laundromat selection",
+      "proxiwashChangeWashSub": "Which laundromat to display",
       "information": "Information",
       "dashboardEdit": {
         "title": "Edit dashboard",
