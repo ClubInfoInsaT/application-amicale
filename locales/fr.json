@@ -99,8 +99,9 @@
       },
       "mascotDialog": {
         "title": "Pour info",
-        "message": "Plus besoin de faire la queue, tu seras informé des machines disponibles !\n\nSi tu es tête en l'air, tu peux activer les notifications pour ta machine en cliquant dessus.",
-        "ok": "Mercé"
+        "message": "Plus besoin de faire la queue, tu seras informé des machines disponibles !\n\nSi tu es tête en l'air, tu peux activer les notifications pour ta machine en cliquant dessus.\n\nSi tu habites hors du campus on a d'autre laverie disponible, vas voir dans les paramètres !!!!",
+        "ok": "Paramètres",
+        "cancel": "Plus tard"
       }
     },
     "home": {

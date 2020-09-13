@@ -407,6 +407,15 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   };
 
   /**
+   * Callback used when the user clicks on the navigate to settings button.
+   * This will hide the banner and open the SettingsScreen
+   */
+  onGoToSettings = () => {
+    const {navigation} = this.props;
+    navigation.navigate('settings');
+  };
+
+  /**
    * Shows a modal for the given item
    *
    * @param title The title to use
@@ -499,10 +508,14 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
           message={i18n.t('screens.proxiwash.mascotDialog.message')}
           icon="information"
           buttons={{
-            action: null,
-            cancel: {
+            action: {
               message: i18n.t('screens.proxiwash.mascotDialog.ok'),
-              icon: 'check',
+              icon: 'cog',
+              onPress: this.onGoToSettings,
+            },
+            cancel: {
+              message: i18n.t('screens.proxiwash.mascotDialog.cancel'),
+              icon: 'close',
             },
           }}
           emotion={MASCOT_STYLE.NORMAL}

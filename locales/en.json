@@ -99,8 +99,9 @@
       },
       "mascotDialog": {
         "title": "Small tips",
-        "message": "No need for queues anymore, you will be notified when machines are ready !\n\nIf you have your head in the clouds, you can turn on notifications for your machine by clicking on it.",
-        "ok": "Got it!"
+        "message": "No need for queues anymore, you will be notified when machines are ready !\n\nIf you have your head in the clouds, you can turn on notifications for your machine by clicking on it.\n\nIf you live off campus we have other laundromat available, check the settings !!!!",
+        "ok": "Settings",
+        "cancel": "Later"
       }
     },
     "home": {
