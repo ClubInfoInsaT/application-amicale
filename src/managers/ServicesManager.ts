@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import i18n from 'i18n-js';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AvailableWebsites from '../constants/AvailableWebsites';
@@ -93,24 +91,24 @@ export const SERVICES_CATEGORIES_KEY = {
 };
 
 export type ServiceItemType = {
-  key: string,
-  title: string,
-  subtitle: string,
-  image: string,
-  onPress: () => void,
-  badgeFunction?: (dashboard: FullDashboardType) => number,
+  key: string;
+  title: string;
+  subtitle: string;
+  image: string;
+  onPress: () => void;
+  badgeFunction?: (dashboard: FullDashboardType) => number;
 };
 
 export type ServiceCategoryType = {
-  key: string,
-  title: string,
-  subtitle: string,
-  image: string | number,
-  content: Array<ServiceItemType>,
+  key: string;
+  title: string;
+  subtitle: string;
+  image: string | number;
+  content: Array<ServiceItemType>;
 };
 
 export default class ServicesManager {
-  navigation: StackNavigationProp;
+  navigation: StackNavigationProp<any>;
 
   amicaleDataset: Array<ServiceItemType>;
 
@@ -122,7 +120,7 @@ export default class ServicesManager {
 
   categoriesDataset: Array<ServiceCategoryType>;
 
-  constructor(nav: StackNavigationProp) {
+  constructor(nav: StackNavigationProp<any>) {
     this.navigation = nav;
     this.amicaleDataset = [
       {
@@ -336,9 +334,11 @@ export default class ServicesManager {
    * @returns {null}
    */
   onAmicaleServicePress(route: string) {
-    if (ConnectionManager.getInstance().isLoggedIn())
+    if (ConnectionManager.getInstance().isLoggedIn()) {
       this.navigation.navigate(route);
-    else this.navigation.navigate('login', {nextScreen: route});
+    } else {
+      this.navigation.navigate('login', {nextScreen: route});
+    }
   }
 
   /**
@@ -348,8 +348,9 @@ export default class ServicesManager {
    * @returns {Array<ServiceItemType>}
    */
   getAmicaleServices(excludedItems?: Array<string>): Array<ServiceItemType> {
-    if (excludedItems != null)
+    if (excludedItems != null) {
       return getStrippedServicesList(excludedItems, this.amicaleDataset);
+    }
     return this.amicaleDataset;
   }
 
@@ -360,8 +361,9 @@ export default class ServicesManager {
    * @returns {Array<ServiceItemType>}
    */
   getStudentServices(excludedItems?: Array<string>): Array<ServiceItemType> {
-    if (excludedItems != null)
+    if (excludedItems != null) {
       return getStrippedServicesList(excludedItems, this.studentsDataset);
+    }
     return this.studentsDataset;
   }
 
@@ -372,8 +374,9 @@ export default class ServicesManager {
    * @returns {Array<ServiceItemType>}
    */
   getINSAServices(excludedItems?: Array<string>): Array<ServiceItemType> {
-    if (excludedItems != null)
+    if (excludedItems != null) {
       return getStrippedServicesList(excludedItems, this.insaDataset);
+    }
     return this.insaDataset;
   }
 
@@ -384,8 +387,9 @@ export default class ServicesManager {
    * @returns {Array<ServiceItemType>}
    */
   getSpecialServices(excludedItems?: Array<string>): Array<ServiceItemType> {
-    if (excludedItems != null)
+    if (excludedItems != null) {
       return getStrippedServicesList(excludedItems, this.specialDataset);
+    }
     return this.specialDataset;
   }
 
@@ -396,8 +400,9 @@ export default class ServicesManager {
    * @returns {Array<ServiceCategoryType>}
    */
   getCategories(excludedItems?: Array<string>): Array<ServiceCategoryType> {
-    if (excludedItems != null)
+    if (excludedItems != null) {
       return getStrippedServicesList(excludedItems, this.categoriesDataset);
+    }
     return this.categoriesDataset;
   }
 }

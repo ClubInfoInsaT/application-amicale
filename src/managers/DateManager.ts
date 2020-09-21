@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import i18n from 'i18n-js';
 
 /**
@@ -28,9 +26,9 @@ import i18n from 'i18n-js';
 export default class DateManager {
   static instance: DateManager | null = null;
 
-  daysOfWeek = [];
+  daysOfWeek: Array<string> = [];
 
-  monthsOfYear = [];
+  monthsOfYear: Array<string> = [];
 
   constructor() {
     this.daysOfWeek.push(i18n.t('date.daysOfWeek.sunday')); // 0 represents sunday
@@ -60,7 +58,9 @@ export default class DateManager {
    * @returns {DateManager}
    */
   static getInstance(): DateManager {
-    if (DateManager.instance == null) DateManager.instance = new DateManager();
+    if (DateManager.instance == null) {
+      DateManager.instance = new DateManager();
+    }
     return DateManager.instance;
   }
 

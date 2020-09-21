@@ -17,20 +17,23 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
+import {Platform, StatusBar} from 'react-native';
+import ThemeManager from '../managers/ThemeManager';
 
-import i18n from 'i18n-js';
-import * as RNLocalize from 'react-native-localize';
-
-import en from '../../locales/en.json';
-import fr from '../../locales/fr.json';
-
-const initLocales = () => {
-  i18n.fallbacks = true;
-  i18n.translations = {fr, en};
-  i18n.locale = RNLocalize.findBestAvailableLanguage([
-    'en',
-    'fr',
-  ]).languageTag;
+/**
+ * Updates status bar content color if on iOS only,
+ * as the android status bar is always set to black.
+ */
+export function setupStatusBar() {
+  if (ThemeManager.getNightMode()) {
+    StatusBar.setBarStyle('light-content', true);
+  } else {
+    StatusBar.setBarStyle('dark-content', true);
+  }
+  if (Platform.OS === 'android') {
+    StatusBar.setBackgroundColor(
+      ThemeManager.getCurrentTheme().colors.surface,
+      true,
+    );
+  }
 }
-export default initLocales;

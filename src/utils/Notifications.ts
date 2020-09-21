@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import {
   checkNotifications,
   requestNotifications,
@@ -41,12 +39,17 @@ const reminderIdFactor = 100;
 export async function askPermissions(): Promise<void> {
   return new Promise((resolve: () => void, reject: () => void) => {
     checkNotifications().then(({status}: {status: string}) => {
-      if (status === RESULTS.GRANTED) resolve();
-      else if (status === RESULTS.BLOCKED) reject();
-      else {
-        requestNotifications().then((result: {status: string}) => {
-          if (result.status === RESULTS.GRANTED) resolve();
-          else reject();
+      if (status === RESULTS.GRANTED) {
+        resolve();
+      } else if (status === RESULTS.BLOCKED) {
+        reject();
+      } else {
+        requestNotifications([]).then((result: {status: string}) => {
+          if (result.status === RESULTS.GRANTED) {
+            resolve();
+          } else {
+            reject();
+          }
         });
       }
     });

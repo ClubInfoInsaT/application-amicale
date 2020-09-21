@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 export const ERROR_TYPE = {
   SUCCESS: 0,
   BAD_CREDENTIALS: 1,
@@ -34,15 +32,14 @@ export const ERROR_TYPE = {
 };
 
 export type ApiDataLoginType = {
-  token: string,
+  token: string;
 };
 
-// eslint-disable-next-line flowtype/no-weak-types
 export type ApiGenericDataType = {[key: string]: any};
 
-type ApiResponseType = {
-  error: number,
-  data: ApiGenericDataType,
+type ApiResponseType<T> = {
+  error: number;
+  data: T;
 };
 
 const API_ENDPOINT = 'https://www.amicale-insat.fr/api/';
@@ -55,11 +52,10 @@ const API_ENDPOINT = 'https://www.amicale-insat.fr/api/';
  * @param response
  * @returns {boolean}
  */
-export function isApiResponseValid(response: ApiResponseType): boolean {
+export function isApiResponseValid<T>(response: ApiResponseType<T>): boolean {
   return (
     response != null &&
     response.error != null &&
-    typeof response.error === 'number' &&
     response.data != null &&
     typeof response.data === 'object'
   );
@@ -76,18 +72,17 @@ export function isApiResponseValid(response: ApiResponseType): boolean {
  * @param params The params to use for this request
  * @returns {Promise<ApiGenericDataType>}
  */
-export async function apiRequest(
+export async function apiRequest<T>(
   path: string,
   method: string,
-  params?: {...},
-): Promise<ApiGenericDataType> {
+  params?: object,
+): Promise<T> {
   return new Promise(
-    (
-      resolve: (data: ApiGenericDataType) => void,
-      reject: (error: number) => void,
-    ) => {
+    (resolve: (data: T) => void, reject: (error: number) => void) => {
       let requestParams = {};
-      if (params != null) requestParams = {...params};
+      if (params != null) {
+        requestParams = {...params};
+      }
       fetch(API_ENDPOINT + path, {
         method,
         headers: new Headers({
@@ -96,14 +91,20 @@ export async function apiRequest(
         }),
         body: JSON.stringify(requestParams),
       })
-        .then(async (response: Response): Promise<ApiResponseType> =>
-          response.json(),
+        .then(
+          async (response: Response): Promise<ApiResponseType<T>> =>
+            response.json(),
         )
-        .then((response: ApiResponseType) => {
+        .then((response: ApiResponseType<T>) => {
           if (isApiResponseValid(response)) {
-            if (response.error === ERROR_TYPE.SUCCESS) resolve(response.data);
-            else reject(response.error);
-          } else reject(ERROR_TYPE.SERVER_ERROR);
+            if (response.error === ERROR_TYPE.SUCCESS) {
+              resolve(response.data);
+            } else {
+              reject(response.error);
+            }
+          } else {
+            reject(ERROR_TYPE.SERVER_ERROR);
+          }
         })
         .catch((): void => reject(ERROR_TYPE.CONNECTION_ERROR));
     },
@@ -121,14 +122,10 @@ export async function apiRequest(
  * @param url The urls to fetch data from
  * @return Promise<any>
  */
-// eslint-disable-next-line flowtype/no-weak-types
 export async function readData(url: string): Promise<any> {
-  // eslint-disable-next-line flowtype/no-weak-types
   return new Promise((resolve: (response: any) => void, reject: () => void) => {
     fetch(url)
-      // eslint-disable-next-line flowtype/no-weak-types
       .then(async (response: Response): Promise<any> => response.json())
-      // eslint-disable-next-line flowtype/no-weak-types
       .then((data: any): void => resolve(data))
       .catch((): void => reject());
   });

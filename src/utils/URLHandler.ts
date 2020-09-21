@@ -17,20 +17,18 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import {Linking} from 'react-native';
 
 export type ParsedUrlDataType = {
-  route: string,
-  data: {[key: string]: string},
+  route: string;
+  data: {[key: string]: string};
 };
 
 export type ParsedUrlCallbackType = (parsedData: ParsedUrlDataType) => void;
 
 type RawParsedUrlDataType = {
-  path: string,
-  queryParams: {[key: string]: string},
+  path: string;
+  queryParams: {[key: string]: string};
 };
 
 /**
@@ -69,7 +67,7 @@ export default class URLHandler {
     let parsedData: RawParsedUrlDataType | null = null;
     const urlNoScheme = url.replace(URLHandler.SCHEME, '');
     if (urlNoScheme != null) {
-      const params = {};
+      const params: {[key: string]: string} = {};
       const [path, fullParamsString] = urlNoScheme.split('?');
       if (fullParamsString != null) {
         const paramsStringArray = fullParamsString.split('&');
@@ -80,7 +78,9 @@ export default class URLHandler {
           }
         });
       }
-      if (path != null) parsedData = {path, queryParams: params};
+      if (path != null) {
+        parsedData = {path, queryParams: params};
+      }
     }
     return parsedData;
   }
@@ -99,10 +99,11 @@ export default class URLHandler {
     if (rawParsedUrlData != null) {
       const {path} = rawParsedUrlData;
       const {queryParams} = rawParsedUrlData;
-      if (URLHandler.isClubInformationLink(path))
+      if (URLHandler.isClubInformationLink(path)) {
         parsedData = URLHandler.generateClubInformationData(queryParams);
-      else if (URLHandler.isPlanningInformationLink(path))
+      } else if (URLHandler.isPlanningInformationLink(path)) {
         parsedData = URLHandler.generatePlanningInformationData(queryParams);
+      }
     }
 
     return parsedData;
@@ -145,15 +146,16 @@ export default class URLHandler {
    * @returns {null|{route: string, data: {clubId: number}}}
    */
   static generateClubInformationData(params: {
-    [key: string]: string,
+    [key: string]: string;
   }): ParsedUrlDataType | null {
     if (params.id != null) {
       const id = parseInt(params.id, 10);
-      if (!Number.isNaN(id))
+      if (!Number.isNaN(id)) {
         return {
           route: URLHandler.CLUB_INFO_ROUTE,
           data: {clubId: id.toString()},
         };
+      }
     }
     return null;
   }
@@ -165,7 +167,7 @@ export default class URLHandler {
    * @returns {null|{route: string, data: {clubId: number}}}
    */
   static generatePlanningInformationData(params: {
-    [key: string]: string,
+    [key: string]: string;
   }): ParsedUrlDataType | null {
     if (params.id != null) {
       const id = parseInt(params.id, 10);
@@ -201,7 +203,9 @@ export default class URLHandler {
   onUrl = ({url}: {url: string}) => {
     if (url != null) {
       const data = URLHandler.getUrlData(URLHandler.parseUrl(url));
-      if (data != null) this.onDetectURL(data);
+      if (data != null) {
+        this.onDetectURL(data);
+      }
     }
   };
 
@@ -210,10 +214,12 @@ export default class URLHandler {
    *
    * @param url The url detected
    */
-  onInitialUrl = (url: ?string) => {
+  onInitialUrl = (url: string | null) => {
     if (url != null) {
       const data = URLHandler.getUrlData(URLHandler.parseUrl(url));
-      if (data != null) this.onInitialURLParsed(data);
+      if (data != null) {
+        this.onInitialURLParsed(data);
+      }
     }
   };
 }

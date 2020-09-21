@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 /**
  * Sanitizes the given string to improve search performance.
  *
@@ -60,7 +58,9 @@ export function isItemInCategoryFilter(
 ): boolean {
   let itemFound = false;
   categories.forEach((cat: number | null) => {
-    if (cat != null && filter.indexOf(cat) !== -1) itemFound = true;
+    if (cat != null && filter.indexOf(cat) !== -1) {
+      itemFound = true;
+    }
   });
   return itemFound;
 }

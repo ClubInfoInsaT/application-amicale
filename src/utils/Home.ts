@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import {stringToDate} from './Planning';
 import type {PlanningEventType} from './Planning';
 
@@ -29,13 +27,15 @@ import type {PlanningEventType} from './Planning';
  */
 export function getTodayEventTimeLimit(): Date {
   const now = new Date();
-  if (now.getDay() === 4)
+  if (now.getDay() === 4) {
     // Thursday
     now.setHours(11, 30, 0);
-  else if (now.getDay() === 6 || now.getDay() === 0)
+  } else if (now.getDay() === 6 || now.getDay() === 0) {
     // Weekend
     now.setHours(0, 0, 0);
-  else now.setHours(17, 30, 0);
+  } else {
+    now.setHours(17, 30, 0);
+  }
   return now;
 }
 
@@ -50,7 +50,7 @@ export function getEventsAfterLimit(
   events: Array<PlanningEventType>,
   limit: Date,
 ): Array<PlanningEventType> {
-  const validEvents = [];
+  const validEvents: Array<PlanningEventType> = [];
   events.forEach((event: PlanningEventType) => {
     const startDate = stringToDate(event.date_begin);
     if (startDate != null && startDate >= limit) {
@@ -68,11 +68,13 @@ export function getEventsAfterLimit(
 export function getFutureEvents(
   events: Array<PlanningEventType>,
 ): Array<PlanningEventType> {
-  const validEvents = [];
+  const validEvents: Array<PlanningEventType> = [];
   const now = new Date();
   events.forEach((event: PlanningEventType) => {
     const startDate = stringToDate(event.date_begin);
-    if (startDate != null && startDate > now) validEvents.push(event);
+    if (startDate != null && startDate > now) {
+      validEvents.push(event);
+    }
   });
   return validEvents;
 }
@@ -92,8 +94,13 @@ export function getDisplayEvent(
       events,
       getTodayEventTimeLimit(),
     );
-    if (eventsAfterLimit.length > 0) [displayEvent] = eventsAfterLimit;
-    else [displayEvent] = events;
-  } else if (events.length === 1) [displayEvent] = events;
+    if (eventsAfterLimit.length > 0) {
+      [displayEvent] = eventsAfterLimit;
+    } else {
+      [displayEvent] = events;
+    }
+  } else if (events.length === 1) {
+    [displayEvent] = events;
+  }
   return displayEvent;
 }

@@ -17,10 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import type {ProxiwashMachineType} from '../screens/Proxiwash/ProxiwashScreen';
-import type {CustomThemeType} from './ThemeManager';
 import type {RuFoodCategoryType} from '../screens/Services/SelfMenuScreen';
 
 /**
@@ -57,8 +54,9 @@ export default class AprilFoolsManager {
    * @returns {ThemeManager}
    */
   static getInstance(): AprilFoolsManager {
-    if (AprilFoolsManager.instance == null)
+    if (AprilFoolsManager.instance == null) {
       AprilFoolsManager.instance = new AprilFoolsManager();
+    }
     return AprilFoolsManager.instance;
   }
 
@@ -130,7 +128,9 @@ export default class AprilFoolsManager {
    * @param currentTheme
    * @returns {{colors: {textDisabled: string, agendaDayTextColor: string, surface: string, background: string, dividerBackground: string, accent: string, agendaBackgroundColor: string, tabIcon: string, card: string, primary: string}}}
    */
-  static getAprilFoolsTheme(currentTheme: CustomThemeType): CustomThemeType {
+  static getAprilFoolsTheme(
+    currentTheme: ReactNativePaper.Theme,
+  ): ReactNativePaper.Theme {
     return {
       ...currentTheme,
       colors: {

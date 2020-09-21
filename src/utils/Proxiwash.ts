@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import type {ProxiwashMachineType} from '../screens/Proxiwash/ProxiwashScreen';
 
 /**
@@ -32,16 +30,21 @@ import type {ProxiwashMachineType} from '../screens/Proxiwash/ProxiwashScreen';
  */
 export function getMachineEndDate(machine: ProxiwashMachineType): Date | null {
   const array = machine.endTime.split(':');
-  let endDate = new Date(Date.now());
+  let endDate: Date | null = new Date(Date.now());
   endDate.setHours(parseInt(array[0], 10), parseInt(array[1], 10));
 
   const limit = new Date(Date.now());
   if (endDate < limit) {
     if (limit.getHours() > 12) {
       limit.setHours(limit.getHours() - 12);
-      if (endDate < limit) endDate.setDate(endDate.getDate() + 1);
-      else endDate = null;
-    } else endDate = null;
+      if (endDate < limit) {
+        endDate.setDate(endDate.getDate() + 1);
+      } else {
+        endDate = null;
+      }
+    } else {
+      endDate = null;
+    }
   }
 
   return endDate;
@@ -63,8 +66,9 @@ export function isMachineWatched(
     if (
       watchedMachine.number === machine.number &&
       watchedMachine.endTime === machine.endTime
-    )
+    ) {
       watched = true;
+    }
   });
   return watched;
 }
@@ -82,7 +86,9 @@ export function getMachineOfId(
 ): ProxiwashMachineType | null {
   let machineFound = null;
   allMachines.forEach((machine: ProxiwashMachineType) => {
-    if (machine.number === id) machineFound = machine;
+    if (machine.number === id) {
+      machineFound = machine;
+    }
   });
   return machineFound;
 }
@@ -100,7 +106,7 @@ export function getCleanedMachineWatched(
   machineWatchedList: Array<ProxiwashMachineType>,
   allMachines: Array<ProxiwashMachineType>,
 ): Array<ProxiwashMachineType> {
-  const newList = [];
+  const newList: Array<ProxiwashMachineType> = [];
   machineWatchedList.forEach((watchedMachine: ProxiwashMachineType) => {
     const machine = getMachineOfId(watchedMachine.number, allMachines);
     if (

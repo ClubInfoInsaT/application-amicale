@@ -17,18 +17,16 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 export type PlanningEventType = {
-  id: number,
-  title: string,
-  date_begin: string,
-  club: string,
-  category_id: number,
-  description: string,
-  place: string,
-  url: string,
-  logo: string | null,
+  id: number;
+  title: string;
+  date_begin: string;
+  club: string;
+  category_id: number;
+  description: string;
+  place: string;
+  url: string;
+  logo: string | null;
 };
 
 // Regex used to check date string validity
@@ -41,7 +39,7 @@ const dateRegExp = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
  * @param dateString The string to check
  * @return {boolean}
  */
-export function isEventDateStringFormatValid(dateString: ?string): boolean {
+export function isEventDateStringFormatValid(dateString?: string): boolean {
   return (
     dateString !== undefined &&
     dateString !== null &&
@@ -57,7 +55,7 @@ export function isEventDateStringFormatValid(dateString: ?string): boolean {
  * @return {Date|null} The date object or null if the given string is invalid
  */
 export function stringToDate(dateString: string): Date | null {
-  let date = new Date();
+  let date: Date | null = new Date();
   if (isEventDateStringFormatValid(dateString)) {
     const stringArray = dateString.split(' ');
     const dateArray = stringArray[0].split('-');
@@ -68,7 +66,9 @@ export function stringToDate(dateString: string): Date | null {
       parseInt(dateArray[2], 10),
     );
     date.setHours(parseInt(timeArray[0], 10), parseInt(timeArray[1], 10), 0, 0);
-  } else date = null;
+  } else {
+    date = null;
+  }
 
   return date;
 }
@@ -111,7 +111,9 @@ export function getCurrentDateString(): string {
 export function isEventBefore(event1Date: string, event2Date: string): boolean {
   const date1 = stringToDate(event1Date);
   const date2 = stringToDate(event2Date);
-  if (date1 !== null && date2 !== null) return date1 < date2;
+  if (date1 !== null && date2 !== null) {
+    return date1 < date2;
+  }
   return false;
 }
 
@@ -123,7 +125,9 @@ export function isEventBefore(event1Date: string, event2Date: string): boolean {
  * @return {string|null} Date in format YYYY:MM:DD or null if given string is invalid
  */
 export function getDateOnlyString(dateString: string): string | null {
-  if (isEventDateStringFormatValid(dateString)) return dateString.split(' ')[0];
+  if (isEventDateStringFormatValid(dateString)) {
+    return dateString.split(' ')[0];
+  }
   return null;
 }
 
@@ -135,7 +139,9 @@ export function getDateOnlyString(dateString: string): string | null {
  * @return {string|null} Time in format HH:MM or null if given string is invalid
  */
 export function getTimeOnlyString(dateString: string): string | null {
-  if (isEventDateStringFormatValid(dateString)) return dateString.split(' ')[1];
+  if (isEventDateStringFormatValid(dateString)) {
+    return dateString.split(' ')[1];
+  }
   return null;
 }
 
@@ -148,7 +154,7 @@ export function getTimeOnlyString(dateString: string): string | null {
  * @param description The text to check
  * @return {boolean}
  */
-export function isDescriptionEmpty(description: ?string): boolean {
+export function isDescriptionEmpty(description?: string): boolean {
   if (description !== undefined && description !== null) {
     return (
       description
@@ -177,10 +183,12 @@ export function generateEmptyCalendar(
 ): {[key: string]: Array<PlanningEventType>} {
   const end = new Date(Date.now());
   end.setMonth(end.getMonth() + numberOfMonths);
-  const daysOfYear = {};
+  const daysOfYear: {[key: string]: Array<PlanningEventType>} = {};
   for (let d = new Date(Date.now()); d <= end; d.setDate(d.getDate() + 1)) {
     const dateString = getDateOnlyString(dateToString(new Date(d), false));
-    if (dateString !== null) daysOfYear[dateString] = [];
+    if (dateString !== null) {
+      daysOfYear[dateString] = [];
+    }
   }
   return daysOfYear;
 }
@@ -197,8 +205,9 @@ export function pushEventInOrder(
   eventArray: Array<PlanningEventType>,
   event: PlanningEventType,
 ) {
-  if (eventArray.length === 0) eventArray.push(event);
-  else {
+  if (eventArray.length === 0) {
+    eventArray.push(event);
+  } else {
     for (let i = 0; i < eventArray.length; i += 1) {
       if (isEventBefore(event.date_begin, eventArray[i].date_begin)) {
         eventArray.splice(i, 0, event);
@@ -231,7 +240,9 @@ export function generateEventAgenda(
     const dateString = getDateOnlyString(eventList[i].date_begin);
     if (dateString != null) {
       const eventArray = agendaItems[dateString];
-      if (eventArray != null) pushEventInOrder(eventArray, eventList[i]);
+      if (eventArray != null) {
+        pushEventInOrder(eventArray, eventList[i]);
+      }
     }
   }
   return agendaItems;

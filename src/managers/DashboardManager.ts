@@ -19,20 +19,22 @@
 
 // @flow
 
-/**
- * Gets the given services list without items of the given ids
- *
- * @param idList The ids of items to remove
- * @param sourceList The item list to use as source
- * @returns {[]}
- */
-export default function getStrippedServicesList<T>(
-  idList: Array<string>,
-  sourceList: Array<{key: string, ...T}>,
-): Array<{key: string, ...T}> {
-  const newArray = [];
-  sourceList.forEach((item: {key: string, ...T}) => {
-    if (!idList.includes(item.key)) newArray.push(item);
-  });
-  return newArray;
+import type {ServiceItemType} from './ServicesManager';
+import ServicesManager from './ServicesManager';
+import {getSublistWithIds} from '../utils/Services';
+import AsyncStorageManager from './AsyncStorageManager';
+
+export default class DashboardManager extends ServicesManager {
+  getCurrentDashboard(): Array<ServiceItemType | null> {
+    const dashboardIdList = AsyncStorageManager.getObject<Array<string>>(
+      AsyncStorageManager.PREFERENCES.dashboardItems.key,
+    );
+    const allDatasets = [
+      ...this.amicaleDataset,
+      ...this.studentsDataset,
+      ...this.insaDataset,
+      ...this.specialDataset,
+    ];
+    return getSublistWithIds(dashboardIdList, allDatasets);
+  }
 }

@@ -17,24 +17,16 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
+import i18n from 'i18n-js';
+import * as RNLocalize from 'react-native-localize';
 
-import type {ServiceItemType} from './ServicesManager';
-import ServicesManager from './ServicesManager';
-import {getSublistWithIds} from '../utils/Utils';
-import AsyncStorageManager from './AsyncStorageManager';
+import en from '../../locales/en.json';
+import fr from '../../locales/fr.json';
 
-export default class DashboardManager extends ServicesManager {
-  getCurrentDashboard(): Array<ServiceItemType | null> {
-    const dashboardIdList = AsyncStorageManager.getObject(
-      AsyncStorageManager.PREFERENCES.dashboardItems.key,
-    );
-    const allDatasets = [
-      ...this.amicaleDataset,
-      ...this.studentsDataset,
-      ...this.insaDataset,
-      ...this.specialDataset,
-    ];
-    return getSublistWithIds(dashboardIdList, allDatasets);
-  }
-}
+const initLocales = () => {
+  i18n.fallbacks = true;
+  i18n.translations = {fr, en};
+  const bestLanguage = RNLocalize.findBestAvailableLanguage(['en', 'fr']);
+  i18n.locale = bestLanguage ? bestLanguage.languageTag : 'en';
+};
+export default initLocales;

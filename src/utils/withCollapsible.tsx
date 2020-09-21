@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {useCollapsibleStack} from 'react-navigation-collapsible';
 
@@ -35,18 +33,12 @@ import {useCollapsibleStack} from 'react-navigation-collapsible';
  * @param Component The component to use Collapsible with
  * @returns {React.ComponentType<any>}
  */
-export default function withCollapsible(
-  // eslint-disable-next-line flowtype/no-weak-types
-  Component: React.ComponentType<any>,
-  // eslint-disable-next-line flowtype/no-weak-types
-): React$AbstractComponent<any, any> {
-  // eslint-disable-next-line flowtype/no-weak-types
-  return React.forwardRef((props: any, ref: any): React.Node => {
+export default function withCollapsible(Component: React.ComponentType<any>) {
+  return React.forwardRef((props: any, ref: any) => {
     return (
       <Component
         collapsibleStack={useCollapsibleStack()}
         ref={ref}
-        // eslint-disable-next-line react/jsx-props-no-spreading
         {...props}
       />
     );

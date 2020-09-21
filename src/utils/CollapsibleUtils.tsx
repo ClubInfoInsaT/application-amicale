@@ -17,12 +17,20 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {useTheme} from 'react-native-paper';
 import {createCollapsibleStack} from 'react-navigation-collapsible';
 import StackNavigator, {StackNavigationOptions} from '@react-navigation/stack';
+import {StackNavigationState} from '@react-navigation/native';
+import {StackNavigationEventMap} from '@react-navigation/stack/lib/typescript/src/types';
+
+type StackNavigatorType = import('@react-navigation/native').TypedNavigator<
+  Record<string, object | undefined>,
+  StackNavigationState,
+  StackNavigationOptions,
+  StackNavigationEventMap,
+  typeof StackNavigator
+>;
 
 /**
  * Creates a navigation stack with the collapsible library, allowing the header to collapse on scroll.
@@ -40,18 +48,16 @@ import StackNavigator, {StackNavigationOptions} from '@react-navigation/stack';
  * @param headerColor The color of the header. Uses default color if not specified
  * @returns {JSX.Element}
  */
-export function createScreenCollapsibleStack(
+export function CreateScreenCollapsibleStack(
   name: string,
-  Stack: StackNavigator,
-  // eslint-disable-next-line flowtype/no-weak-types
+  Stack: StackNavigatorType,
   component: React.ComponentType<any>,
   title: string,
-  useNativeDriver?: boolean,
-  options?: StackNavigationOptions,
+  useNativeDriver: boolean = true,
+  options: StackNavigationOptions = {},
   headerColor?: string,
-): React.Node {
+) {
   const {colors} = useTheme();
-  const screenOptions = options != null ? options : {};
   return createCollapsibleStack(
     <Stack.Screen
       name={name}
@@ -61,12 +67,12 @@ export function createScreenCollapsibleStack(
         headerStyle: {
           backgroundColor: headerColor != null ? headerColor : colors.surface,
         },
-        ...screenOptions,
+        ...options,
       }}
     />,
     {
       collapsedColor: headerColor != null ? headerColor : colors.surface,
-      useNativeDriver: useNativeDriver != null ? useNativeDriver : true, // native driver does not work with webview
+      useNativeDriver: useNativeDriver, // native driver does not work with webview
     },
   );
 }
@@ -85,10 +91,9 @@ export function createScreenCollapsibleStack(
  */
 export function getWebsiteStack(
   name: string,
-  Stack: StackNavigator,
-  // eslint-disable-next-line flowtype/no-weak-types
+  Stack: StackNavigatorType,
   component: React.ComponentType<any>,
   title: string,
-): React.Node {
-  return createScreenCollapsibleStack(name, Stack, component, title, false);
+) {
+  return CreateScreenCollapsibleStack(name, Stack, component, title, false);
 }

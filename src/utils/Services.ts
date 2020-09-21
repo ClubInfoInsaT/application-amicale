@@ -17,10 +17,25 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
-import {Platform, StatusBar} from 'react-native';
-import ThemeManager from '../managers/ThemeManager';
+/**
+ * Gets the given services list without items of the given ids
+ *
+ * @param idList The ids of items to remove
+ * @param sourceList The item list to use as source
+ * @returns {[]}
+ */
+export default function getStrippedServicesList<T extends {key: string}>(
+  idList: Array<string>,
+  sourceList: Array<T>,
+) {
+  const newArray: Array<T> = [];
+  sourceList.forEach((item: T) => {
+    if (!idList.includes(item.key)) {
+      newArray.push(item);
+    }
+  });
+  return newArray;
+}
 
 /**
  * Gets a sublist of the given list with items of the given ids only
@@ -31,11 +46,11 @@ import ThemeManager from '../managers/ThemeManager';
  * @param originalList The original list
  * @returns {[]}
  */
-export function getSublistWithIds<T>(
+export function getSublistWithIds<T extends {key: string}>(
   idList: Array<string>,
-  originalList: Array<{key: string, ...T}>,
-): Array<{key: string, ...T} | null> {
-  const subList = [];
+  originalList: Array<T>,
+) {
+  const subList: Array<T | null> = [];
   for (let i = 0; i < idList.length; i += 1) {
     subList.push(null);
   }
@@ -45,26 +60,10 @@ export function getSublistWithIds<T>(
     if (idList.includes(item.key)) {
       subList[idList.indexOf(item.key)] = item;
       itemsAdded += 1;
-      if (itemsAdded === idList.length) break;
+      if (itemsAdded === idList.length) {
+        break;
+      }
     }
   }
   return subList;
-}
-
-/**
- * Updates status bar content color if on iOS only,
- * as the android status bar is always set to black.
- */
-export function setupStatusBar() {
-  if (ThemeManager.getNightMode()) {
-    StatusBar.setBarStyle('light-content', true);
-  } else {
-    StatusBar.setBarStyle('dark-content', true);
-  }
-  if (Platform.OS === 'android') {
-    StatusBar.setBackgroundColor(
-      ThemeManager.getCurrentTheme().colors.surface,
-      true,
-    );
-  }
 }

@@ -20,7 +20,7 @@
 // @flow
 
 import * as Keychain from 'react-native-keychain';
-import type {ApiDataLoginType, ApiGenericDataType} from '../utils/WebData';
+import type {ApiDataLoginType} from '../utils/WebData';
 import {apiRequest, ERROR_TYPE} from '../utils/WebData';
 
 /**
@@ -40,12 +40,10 @@ const AUTH_PATH = 'password';
 export default class ConnectionManager {
   static instance: ConnectionManager | null = null;
 
-  #email: string;
-
-  #token: string | null;
+  private token: string | null;
 
   constructor() {
-    this.#token = null;
+    this.token = null;
   }
 
   /**
@@ -54,8 +52,9 @@ export default class ConnectionManager {
    * @returns {ConnectionManager}
    */
   static getInstance(): ConnectionManager {
-    if (ConnectionManager.instance == null)
+    if (ConnectionManager.instance == null) {
       ConnectionManager.instance = new ConnectionManager();
+    }
     return ConnectionManager.instance;
   }
 
@@ -65,7 +64,7 @@ export default class ConnectionManager {
    * @returns {string | null}
    */
   getToken(): string | null {
-    return this.#token;
+    return this.token;
   }
 
   /**
@@ -77,18 +76,17 @@ export default class ConnectionManager {
     return new Promise(
       (resolve: (token: string) => void, reject: () => void) => {
         const token = this.getToken();
-        if (token != null) resolve(token);
-        else {
+        if (token != null) {
+          resolve(token);
+        } else {
           Keychain.getInternetCredentials(SERVER_NAME)
             .then((data: Keychain.UserCredentials | false) => {
-              if (
-                data != null &&
-                data.password != null &&
-                typeof data.password === 'string'
-              ) {
-                this.#token = data.password;
-                resolve(this.#token);
-              } else reject();
+              if (data && data.password != null) {
+                this.token = data.password;
+                resolve(this.token);
+              } else {
+                reject();
+              }
             })
             .catch((): void => reject());
         }
@@ -116,8 +114,7 @@ export default class ConnectionManager {
     return new Promise((resolve: () => void, reject: () => void) => {
       Keychain.setInternetCredentials(SERVER_NAME, 'token', token)
         .then(() => {
-          this.#token = token;
-          this.#email = email;
+          this.token = token;
           resolve();
         })
         .catch((): void => reject());
@@ -133,7 +130,7 @@ export default class ConnectionManager {
     return new Promise((resolve: () => void, reject: () => void) => {
       Keychain.resetInternetCredentials(SERVER_NAME)
         .then(() => {
-          this.#token = null;
+          this.token = null;
           resolve();
         })
         .catch((): void => reject());
@@ -156,13 +153,15 @@ export default class ConnectionManager {
           email,
           password,
         };
-        apiRequest(AUTH_PATH, 'POST', data)
+        apiRequest<ApiDataLoginType>(AUTH_PATH, 'POST', data)
           .then((response: ApiDataLoginType) => {
             if (response.token != null) {
               this.saveLogin(email, response.token)
                 .then((): void => resolve())
                 .catch((): void => reject(ERROR_TYPE.TOKEN_SAVE));
-            } else reject(ERROR_TYPE.SERVER_ERROR);
+            } else {
+              reject(ERROR_TYPE.SERVER_ERROR);
+            }
           })
           .catch((error: number): void => reject(error));
       },
@@ -176,24 +175,23 @@ export default class ConnectionManager {
    * @param params
    * @returns Promise<ApiGenericDataType>
    */
-  async authenticatedRequest(
+  async authenticatedRequest<T>(
     path: string,
-    params: {...},
-  ): Promise<ApiGenericDataType> {
+    params: {[key: string]: any},
+  ): Promise<T> {
     return new Promise(
-      (
-        resolve: (response: ApiGenericDataType) => void,
-        reject: (error: number) => void,
-      ) => {
+      (resolve: (response: T) => void, reject: (error: number) => void) => {
         if (this.getToken() !== null) {
           const data = {
             ...params,
             token: this.getToken(),
           };
-          apiRequest(path, 'POST', data)
-            .then((response: ApiGenericDataType): void => resolve(response))
+          apiRequest<T>(path, 'POST', data)
+            .then((response: T): void => resolve(response))
             .catch((error: number): void => reject(error));
-        } else reject(ERROR_TYPE.TOKEN_RETRIEVE);
+        } else {
+          reject(ERROR_TYPE.TOKEN_RETRIEVE);
+        }
       },
     );
   }

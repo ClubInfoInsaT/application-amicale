@@ -198,7 +198,7 @@ export default class AsyncStorageManager {
    * @param key
    * @returns {{...}}
    */
-  static getObject(key: string): object | Array<any> {
+  static getObject<T>(key: string): T {
     return JSON.parse(AsyncStorageManager.getString(key));
   }
 

@@ -17,12 +17,9 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import i18n from 'i18n-js';
 import type {DeviceType} from '../screens/Amicale/Equipment/EquipmentListScreen';
 import DateManager from '../managers/DateManager';
-import type {CustomThemeType} from '../managers/ThemeManager';
 import type {MarkedDatesObjectType} from '../screens/Amicale/Equipment/EquipmentRentScreen';
 
 /**
@@ -56,10 +53,12 @@ export function isEquipmentAvailable(item: DeviceType): boolean {
   let isAvailable = true;
   const today = getCurrentDay();
   const dates = item.booked_at;
-  dates.forEach((date: {begin: string, end: string}) => {
+  dates.forEach((date: {begin: string; end: string}) => {
     const start = new Date(date.begin);
     const end = new Date(date.end);
-    if (!(today < start || today > end)) isAvailable = false;
+    if (!(today < start || today > end)) {
+      isAvailable = false;
+    }
   });
   return isAvailable;
 }
@@ -73,11 +72,13 @@ export function isEquipmentAvailable(item: DeviceType): boolean {
 export function getFirstEquipmentAvailability(item: DeviceType): Date {
   let firstAvailability = getCurrentDay();
   const dates = item.booked_at;
-  dates.forEach((date: {begin: string, end: string}) => {
+  dates.forEach((date: {begin: string; end: string}) => {
     const start = new Date(date.begin);
     const end = new Date(date.end);
     end.setDate(end.getDate() + 1);
-    if (firstAvailability >= start) firstAvailability = end;
+    if (firstAvailability >= start) {
+      firstAvailability = end;
+    }
   });
   return firstAvailability;
 }
@@ -93,23 +94,24 @@ export function getRelativeDateString(date: Date): string {
   const monthDelta = date.getUTCMonth() - today.getUTCMonth();
   const dayDelta = date.getUTCDate() - today.getUTCDate();
   let translatedString = i18n.t('screens.equipment.today');
-  if (yearDelta > 0)
+  if (yearDelta > 0) {
     translatedString = i18n.t('screens.equipment.otherYear', {
       date: date.getDate(),
       month: DateManager.getInstance().getMonthsOfYear()[date.getMonth()],
       year: date.getFullYear(),
     });
-  else if (monthDelta > 0)
+  } else if (monthDelta > 0) {
     translatedString = i18n.t('screens.equipment.otherMonth', {
       date: date.getDate(),
       month: DateManager.getInstance().getMonthsOfYear()[date.getMonth()],
     });
-  else if (dayDelta > 1)
+  } else if (dayDelta > 1) {
     translatedString = i18n.t('screens.equipment.thisMonth', {
       date: date.getDate(),
     });
-  else if (dayDelta === 1)
+  } else if (dayDelta === 1) {
     translatedString = i18n.t('screens.equipment.tomorrow');
+  }
 
   return translatedString;
 }
@@ -162,8 +164,11 @@ export function getValidRange(
     (direction === 1 && date < limit) ||
     (direction === -1 && date > limit)
   ) {
-    if (direction === 1) validRange.push(getISODate(date));
-    else validRange.unshift(getISODate(date));
+    if (direction === 1) {
+      validRange.push(getISODate(date));
+    } else {
+      validRange.unshift(getISODate(date));
+    }
     date.setDate(date.getDate() + direction);
   }
   return validRange;
@@ -180,17 +185,27 @@ export function getValidRange(
  */
 export function generateMarkedDates(
   isSelection: boolean,
-  theme: CustomThemeType,
+  theme: ReactNativePaper.Theme,
   range: Array<string>,
 ): MarkedDatesObjectType {
-  const markedDates = {};
+  const markedDates: {
+    [key: string]: {
+      startingDay: boolean;
+      endingDay: boolean;
+      color: string;
+    };
+  } = {};
   for (let i = 0; i < range.length; i += 1) {
     const isStart = i === 0;
     const isEnd = i === range.length - 1;
     let color;
-    if (isSelection && (isStart || isEnd)) color = theme.colors.primary;
-    else if (isSelection) color = theme.colors.danger;
-    else color = theme.colors.textDisabled;
+    if (isSelection && (isStart || isEnd)) {
+      color = theme.colors.primary;
+    } else if (isSelection) {
+      color = theme.colors.danger;
+    } else {
+      color = theme.colors.textDisabled;
+    }
     markedDates[range[i]] = {
       startingDay: isStart,
       endingDay: isEnd,
