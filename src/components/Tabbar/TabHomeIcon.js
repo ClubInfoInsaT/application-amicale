@@ -31,7 +31,6 @@ type PropsType = {
   focused: boolean,
   onPress: () => void,
   onLongPress: () => void,
-  theme: CustomThemeType,
   tabBarHeight: number,
 };
 
@@ -84,20 +83,9 @@ class TabHomeIcon extends React.Component<PropsType> {
     color: string,
   }): React.Node => {
     const {focused} = this.props;
-    if (focused)
-      return (
-        <Image
-          source={FOCUSED_ICON}
-          style={{
-            width: size,
-            height: size,
-            tintColor: color,
-          }}
-        />
-      );
     return (
       <Image
-        source={UNFOCUSED_ICON}
+        source={focused ? FOCUSED_ICON : UNFOCUSED_ICON}
         style={{
           width: size,
           height: size,
@@ -115,15 +103,7 @@ class TabHomeIcon extends React.Component<PropsType> {
           flex: 1,
           justifyContent: 'center',
         }}>
-        <TouchableRipple
-          onPress={props.onPress}
-          onLongPress={props.onLongPress}
-          borderless
-          rippleColor={
-            Platform.OS === 'android'
-              ? props.theme.colors.primary
-              : 'transparent'
-          }
+        <View
           style={{
             position: 'absolute',
             bottom: 0,
@@ -137,16 +117,18 @@ class TabHomeIcon extends React.Component<PropsType> {
             easing="ease-out"
             animation={props.focused ? 'fabFocusIn' : 'fabFocusOut'}
             icon={this.getIconRender}
+            onPress={props.onPress}
+            onLongPress={props.onLongPress}
             style={{
               marginTop: 15,
               marginLeft: 'auto',
               marginRight: 'auto',
             }}
           />
-        </TouchableRipple>
+        </View>
       </View>
     );
   }
 }
 
-export default withTheme(TabHomeIcon);
+export default TabHomeIcon;
