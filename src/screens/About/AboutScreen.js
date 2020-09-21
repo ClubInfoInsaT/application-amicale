@@ -64,70 +64,70 @@ function openWebLink(link: string) {
 }
 
 /**
- * Object containing data relative to major contributors
- */
-const majorContributors: {[key: string]: MemberItemType} = {
-  arnaud: {
-    name: 'Arnaud Vergnet',
-    message: i18n.t('screens.about.user.arnaud'),
-    icon: 'crown',
-    trollLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-    linkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
-    mail:
-      'mailto:vergnet@etud.insa-toulouse.fr?' +
-      'subject=' +
-      'Application Amicale INSA Toulouse' +
-      '&body=' +
-      'Coucou !\n\n',
-  },
-  yohan: {
-    name: 'Yohan Simard',
-    message: i18n.t('screens.about.user.yohan'),
-    icon: 'xml',
-    linkedin: 'https://www.linkedin.com/in/yohan-simard',
-    mail: 'mailto:ysimard@etud.insa-toulouse.fr?' +
-      'subject=' +
-      'Application Amicale INSA Toulouse' +
-      '&body=' +
-      'Coucou !\n\n',
-  },
-};
-
-/**
- * Object containing data relative to users who helped during development
- */
-const helpfulUsers: {[key: string]: MemberItemType} = {
-  beranger: {
-    name: 'Béranger Quintana Y Arciosana',
-    message: i18n.t('screens.about.user.beranger'),
-    icon: 'account-heart',
-  },
-  celine: {
-    name: 'Céline Tassin',
-    message: i18n.t('screens.about.user.celine'),
-    icon: 'brush',
-  },
-  damien: {
-    name: 'Damien Molina',
-    message: i18n.t('screens.about.user.damien'),
-    icon: 'web',
-  },
-  titouan: {
-    name: 'Titouan Labourdette',
-    message: i18n.t('screens.about.user.titouan'),
-    icon: 'shield-bug',
-  },
-  theo: {
-    name: 'Théo Tami',
-    message: i18n.t('screens.about.user.theo'),
-    icon: 'food-apple',
-  },
-};
-
-/**
  * Class defining an about screen. This screen shows the user information about the app and it's author.
  */
 class AboutScreen extends React.Component<PropsType, StateType> {
+
+  /**
+   * Object containing data relative to major contributors
+   */
+  static majorContributors: {[key: string]: MemberItemType} = {
+    arnaud: {
+      name: 'Arnaud Vergnet',
+      message: i18n.t('screens.about.user.arnaud'),
+      icon: 'crown',
+      trollLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      linkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
+      mail:
+        'mailto:vergnet@etud.insa-toulouse.fr?' +
+        'subject=' +
+        'Application Amicale INSA Toulouse' +
+        '&body=' +
+        'Coucou !\n\n',
+    },
+    yohan: {
+      name: 'Yohan Simard',
+      message: i18n.t('screens.about.user.yohan'),
+      icon: 'xml',
+      linkedin: 'https://www.linkedin.com/in/yohan-simard',
+      mail: 'mailto:ysimard@etud.insa-toulouse.fr?' +
+        'subject=' +
+        'Application Amicale INSA Toulouse' +
+        '&body=' +
+        'Coucou !\n\n',
+    },
+  };
+
+  /**
+   * Object containing data relative to users who helped during development
+   */
+  static helpfulUsers: {[key: string]: MemberItemType} = {
+    beranger: {
+      name: 'Béranger Quintana Y Arciosana',
+      message: i18n.t('screens.about.user.beranger'),
+      icon: 'account-heart',
+    },
+    celine: {
+      name: 'Céline Tassin',
+      message: i18n.t('screens.about.user.celine'),
+      icon: 'brush',
+    },
+    damien: {
+      name: 'Damien Molina',
+      message: i18n.t('screens.about.user.damien'),
+      icon: 'web',
+    },
+    titouan: {
+      name: 'Titouan Labourdette',
+      message: i18n.t('screens.about.user.titouan'),
+      icon: 'shield-bug',
+    },
+    theo: {
+      name: 'Théo Tami',
+      message: i18n.t('screens.about.user.theo'),
+      icon: 'food-apple',
+    },
+  };
 
   /**
    * Data to be displayed in the app card
@@ -185,18 +185,18 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   teamData: Array<ListItemType> = [
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(majorContributors.arnaud);
+        this.onContributorListItemPress(AboutScreen.majorContributors.arnaud);
       },
-      icon: majorContributors.arnaud.icon,
-      text: majorContributors.arnaud.name,
+      icon: AboutScreen.majorContributors.arnaud.icon,
+      text: AboutScreen.majorContributors.arnaud.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(majorContributors.yohan);
+        this.onContributorListItemPress(AboutScreen.majorContributors.yohan);
       },
-      icon: majorContributors.yohan.icon,
-      text: majorContributors.yohan.name,
+      icon: AboutScreen.majorContributors.yohan.icon,
+      text: AboutScreen.majorContributors.yohan.name,
       showChevron: false,
     },
     {
@@ -216,42 +216,42 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   thanksData: Array<ListItemType> = [
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(helpfulUsers.beranger);
+        this.onContributorListItemPress(AboutScreen.helpfulUsers.beranger);
       },
-      icon: helpfulUsers.beranger.icon,
-      text: helpfulUsers.beranger.name,
+      icon: AboutScreen.helpfulUsers.beranger.icon,
+      text: AboutScreen.helpfulUsers.beranger.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(helpfulUsers.celine);
+        this.onContributorListItemPress(AboutScreen.helpfulUsers.celine);
       },
-      icon: helpfulUsers.celine.icon,
-      text: helpfulUsers.celine.name,
+      icon: AboutScreen.helpfulUsers.celine.icon,
+      text: AboutScreen.helpfulUsers.celine.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(helpfulUsers.damien);
+        this.onContributorListItemPress(AboutScreen.helpfulUsers.damien);
       },
-      icon: helpfulUsers.damien.icon,
-      text: helpfulUsers.damien.name,
+      icon: AboutScreen.helpfulUsers.damien.icon,
+      text: AboutScreen.helpfulUsers.damien.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(helpfulUsers.titouan);
+        this.onContributorListItemPress(AboutScreen.helpfulUsers.titouan);
       },
-      icon: helpfulUsers.titouan.icon,
-      text: helpfulUsers.titouan.name,
+      icon: AboutScreen.helpfulUsers.titouan.icon,
+      text: AboutScreen.helpfulUsers.titouan.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(helpfulUsers.theo);
+        this.onContributorListItemPress(AboutScreen.helpfulUsers.theo);
       },
-      icon: helpfulUsers.theo.icon,
-      text: helpfulUsers.theo.name,
+      icon: AboutScreen.helpfulUsers.theo.icon,
+      text: AboutScreen.helpfulUsers.theo.name,
       showChevron: false,
     },
   ];
