@@ -94,11 +94,12 @@ class TabIcon extends React.Component<PropsType> {
       <TouchableRipple
         onPress={props.onPress}
         onLongPress={props.onLongPress}
-        borderless
         rippleColor={props.theme.colors.primary}
+        borderless
         style={{
           flex: 1,
           justifyContent: 'center',
+          borderRadius: 10
         }}>
         <View>
           <Animatable.View
