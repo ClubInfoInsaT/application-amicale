@@ -99,7 +99,9 @@ class WebSectionList<T> extends React.PureComponent<PropsType<T>, StateType> {
    */
   onScreenFocus = () => {
     const {props} = this;
-    if (props.refreshOnFocus && this.lastRefresh) this.onRefresh();
+    if (props.refreshOnFocus && this.lastRefresh) {
+      setTimeout(this.onRefresh, 200);
+    }
     if (props.autoRefreshTime > 0)
       this.refreshInterval = setInterval(this.onRefresh, props.autoRefreshTime);
   };
