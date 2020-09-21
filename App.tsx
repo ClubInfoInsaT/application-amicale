@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {LogBox, Platform, SafeAreaView, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -28,7 +26,6 @@ import SplashScreen from 'react-native-splash-screen';
 import {OverflowMenuProvider} from 'react-navigation-header-buttons';
 import AsyncStorageManager from './src/managers/AsyncStorageManager';
 import CustomIntroSlider from './src/components/Overrides/CustomIntroSlider';
-import type {CustomThemeType} from './src/managers/ThemeManager';
 import ThemeManager from './src/managers/ThemeManager';
 import MainNavigator from './src/navigation/MainNavigator';
 import AprilFoolsManager from './src/managers/AprilFoolsManager';
@@ -38,6 +35,7 @@ import type {ParsedUrlDataType} from './src/utils/URLHandler';
 import URLHandler from './src/utils/URLHandler';
 import {setupStatusBar} from './src/utils/Utils';
 import initLocales from './src/utils/Locales';
+import {NavigationContainerRef} from '@react-navigation/core';
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 // Crashes app when navigating away from webview on android 9+
@@ -50,15 +48,15 @@ LogBox.ignoreLogs([
 ]);
 
 type StateType = {
-  isLoading: boolean,
-  showIntro: boolean,
-  showUpdate: boolean,
-  showAprilFools: boolean,
-  currentTheme: CustomThemeType | null,
+  isLoading: boolean;
+  showIntro: boolean;
+  showUpdate: boolean;
+  showAprilFools: boolean;
+  currentTheme: ReactNativePaper.Theme | undefined;
 };
 
 export default class App extends React.Component<null, StateType> {
-  navigatorRef: {current: null | NavigationContainer};
+  navigatorRef: {current: null | NavigationContainerRef};
 
   defaultHomeRoute: string | null;
 
@@ -67,13 +65,13 @@ export default class App extends React.Component<null, StateType> {
   urlHandler: URLHandler;
 
   constructor() {
-    super();
+    super(null);
     this.state = {
       isLoading: true,
       showIntro: true,
       showUpdate: true,
       showAprilFools: false,
-      currentTheme: null,
+      currentTheme: undefined,
     };
     initLocales();
     this.navigatorRef = React.createRef();
@@ -155,8 +153,11 @@ export default class App extends React.Component<null, StateType> {
     // Only show intro if this is the first time starting the app
     ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
     // Status bar goes dark if set too fast on ios
-    if (Platform.OS === 'ios') setTimeout(setupStatusBar, 1000);
-    else setupStatusBar();
+    if (Platform.OS === 'ios') {
+      setTimeout(setupStatusBar, 1000);
+    } else {
+      setupStatusBar();
+    }
 
     this.setState({
       isLoading: false,
@@ -192,7 +193,7 @@ export default class App extends React.Component<null, StateType> {
   /**
    * Renders the app based on loading state
    */
-  render(): React.Node {
+  render() {
     const {state} = this;
     if (state.isLoading) {
       return null;

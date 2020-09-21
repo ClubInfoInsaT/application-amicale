@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import AsyncStorage from '@react-native-community/async-storage';
 import {SERVICES_KEY} from './ServicesManager';
 
@@ -31,7 +29,7 @@ import {SERVICES_KEY} from './ServicesManager';
 export default class AsyncStorageManager {
   static instance: AsyncStorageManager | null = null;
 
-  static PREFERENCES = {
+  static PREFERENCES: {[key: string]: {key: string; default: string}} = {
     debugUnlocked: {
       key: 'debugUnlocked',
       default: '0',
@@ -132,10 +130,10 @@ export default class AsyncStorageManager {
     },
   };
 
-  #currentPreferences: {[key: string]: string};
+  private currentPreferences: {[key: string]: string};
 
   constructor() {
-    this.#currentPreferences = {};
+    this.currentPreferences = {};
   }
 
   /**
@@ -143,8 +141,9 @@ export default class AsyncStorageManager {
    * @returns {AsyncStorageManager}
    */
   static getInstance(): AsyncStorageManager {
-    if (AsyncStorageManager.instance == null)
+    if (AsyncStorageManager.instance == null) {
       AsyncStorageManager.instance = new AsyncStorageManager();
+    }
     return AsyncStorageManager.instance;
   }
 
@@ -156,8 +155,7 @@ export default class AsyncStorageManager {
    */
   static set(
     key: string,
-    // eslint-disable-next-line flowtype/no-weak-types
-    value: number | string | boolean | {...} | Array<any>,
+    value: number | string | boolean | object | Array<any>,
   ) {
     AsyncStorageManager.getInstance().setPreference(key, value);
   }
@@ -200,8 +198,7 @@ export default class AsyncStorageManager {
    * @param key
    * @returns {{...}}
    */
-  // eslint-disable-next-line flowtype/no-weak-types
-  static getObject(key: string): any {
+  static getObject(key: string): object | Array<any> {
     return JSON.parse(AsyncStorageManager.getString(key));
   }
 
@@ -212,7 +209,7 @@ export default class AsyncStorageManager {
    * @return {Promise<void>}
    */
   async loadPreferences() {
-    const prefKeys = [];
+    const prefKeys: Array<string> = [];
     // Get all available keys
     Object.keys(AsyncStorageManager.PREFERENCES).forEach((key: string) => {
       prefKeys.push(key);
@@ -223,8 +220,10 @@ export default class AsyncStorageManager {
     resultArray.forEach((item: [string, string | null]) => {
       const key = item[0];
       let val = item[1];
-      if (val === null) val = AsyncStorageManager.PREFERENCES[key].default;
-      this.#currentPreferences[key] = val;
+      if (val === null) {
+        val = AsyncStorageManager.PREFERENCES[key].default;
+      }
+      this.currentPreferences[key] = val;
     });
   }
 
@@ -237,16 +236,18 @@ export default class AsyncStorageManager {
    */
   setPreference(
     key: string,
-    // eslint-disable-next-line flowtype/no-weak-types
-    value: number | string | boolean | {...} | Array<any>,
+    value: number | string | boolean | object | Array<any>,
   ) {
     if (AsyncStorageManager.PREFERENCES[key] != null) {
       let convertedValue;
-      if (typeof value === 'string') convertedValue = value;
-      else if (typeof value === 'boolean' || typeof value === 'number')
+      if (typeof value === 'string') {
+        convertedValue = value;
+      } else if (typeof value === 'boolean' || typeof value === 'number') {
         convertedValue = value.toString();
-      else convertedValue = JSON.stringify(value);
-      this.#currentPreferences[key] = convertedValue;
+      } else {
+        convertedValue = JSON.stringify(value);
+      }
+      this.currentPreferences[key] = convertedValue;
       AsyncStorage.setItem(key, convertedValue);
     }
   }
@@ -259,6 +260,6 @@ export default class AsyncStorageManager {
    * @returns {string|null}
    */
   getPreference(key: string): string | null {
-    return this.#currentPreferences[key];
+    return this.currentPreferences[key];
   }
 }
