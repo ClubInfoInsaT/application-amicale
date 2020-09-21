@@ -20,11 +20,12 @@
 // @flow
 
 import * as React from 'react';
-import {withTheme} from 'react-native-paper';
+import {Title, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
 import {View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import Autolink from 'react-native-autolink';
 import type {CustomThemeType} from '../../managers/ThemeManager';
 import ThemeManager from '../../managers/ThemeManager';
 import WebViewScreen from '../../components/Screens/WebViewScreen';
@@ -46,7 +47,7 @@ type PropsType = {
 
 type StateType = {
   dialogVisible: boolean,
-  dialogTitle: string,
+  dialogTitle: string | React.Node,
   dialogMessage: string,
   currentGroup: PlanexGroupType,
 };
@@ -285,7 +286,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
   showDialog = (title: string, message: string) => {
     this.setState({
       dialogVisible: true,
-      dialogTitle: title,
+      dialogTitle: <Autolink text={title} component={Title}/>,
       dialogMessage: message,
     });
   };

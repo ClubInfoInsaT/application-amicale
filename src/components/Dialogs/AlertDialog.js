@@ -26,8 +26,8 @@ import i18n from 'i18n-js';
 type PropsType = {
   visible: boolean,
   onDismiss: () => void,
-  title: string,
-  message: string,
+  title: string | React.Node,
+  message: string | React.Node,
 };
 
 class AlertDialog extends React.PureComponent<PropsType> {
