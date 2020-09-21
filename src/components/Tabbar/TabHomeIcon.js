@@ -20,12 +20,11 @@
 // @flow
 
 import * as React from 'react';
-import {Image, Platform, View} from 'react-native';
-import {FAB, TouchableRipple, withTheme} from 'react-native-paper';
+import {Image, View} from 'react-native';
+import {FAB} from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import FOCUSED_ICON from '../../../assets/tab-icon.png';
 import UNFOCUSED_ICON from '../../../assets/tab-icon-outline.png';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
   focused: boolean,
