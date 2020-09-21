@@ -6,6 +6,7 @@ import i18n from 'i18n-js';
 import {Card, Avatar, Paragraph, Title} from 'react-native-paper';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import type {CardTitleIconPropsType} from '../../constants/PaperStyles';
+import ProxiwashConstants from '../../constants/ProxiwashConstants';
 
 const LOGO = 'https://etud.insa-toulouse.fr/~amicale_app/images/Proxiwash.png';
 
@@ -18,31 +19,6 @@ export type LaundromatType = {
   paymentMethods: string,
   icon: string,
   url: string,
-};
-
-export const PROXIWASH_DATA = {
-  washinsa: {
-    id: 'washinsa',
-    title: 'screens.proxiwash.washinsa.title',
-    subtitle: 'screens.proxiwash.washinsa.subtitle',
-    description: 'screens.proxiwash.washinsa.description',
-    tarif: 'screens.proxiwash.washinsa.tariff',
-    paymentMethods: 'screens.proxiwash.washinsa.paymentMethods',
-    icon: 'school-outline',
-    url:
-      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/washinsa_data.json',
-  },
-  tripodeB: {
-    id: 'tripodeB',
-    title: 'screens.proxiwash.tripodeB.title',
-    subtitle: 'screens.proxiwash.tripodeB.subtitle',
-    description: 'screens.proxiwash.tripodeB.description',
-    tarif: 'screens.proxiwash.tripodeB.tariff',
-    paymentMethods: 'screens.proxiwash.tripodeB.paymentMethods',
-    icon: 'domain',
-    url:
-      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/tripode_b_data.json',
-  },
 };
 
 /**
@@ -88,9 +64,9 @@ export default class ProxiwashAboutScreen extends React.Component<null> {
           />
         </View>
 
-        {ProxiwashAboutScreen.getCardItem(PROXIWASH_DATA.washinsa)}
+        {ProxiwashAboutScreen.getCardItem(ProxiwashConstants.washinsa)}
 
-        {ProxiwashAboutScreen.getCardItem(PROXIWASH_DATA.tripodeB)}
+        {ProxiwashAboutScreen.getCardItem(ProxiwashConstants.tripodeB)}
 
         <Card style={{margin: 5}}>
           <Card.Title

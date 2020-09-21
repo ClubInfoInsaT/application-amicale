@@ -17,4 +17,26 @@ export default {
     5: 'alert',
     6: 'help-circle-outline',
   },
+  washinsa: {
+    id: 'washinsa',
+    title: 'screens.proxiwash.washinsa.title',
+    subtitle: 'screens.proxiwash.washinsa.subtitle',
+    description: 'screens.proxiwash.washinsa.description',
+    tarif: 'screens.proxiwash.washinsa.tariff',
+    paymentMethods: 'screens.proxiwash.washinsa.paymentMethods',
+    icon: 'school-outline',
+    url:
+      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/washinsa_data.json',
+  },
+  tripodeB: {
+    id: 'tripodeB',
+    title: 'screens.proxiwash.tripodeB.title',
+    subtitle: 'screens.proxiwash.tripodeB.subtitle',
+    description: 'screens.proxiwash.tripodeB.description',
+    tarif: 'screens.proxiwash.tripodeB.tariff',
+    paymentMethods: 'screens.proxiwash.tripodeB.paymentMethods',
+    icon: 'domain',
+    url:
+      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/tripode_b_data.json',
+  },
 };

@@ -26,7 +26,6 @@ import {
 import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import type {SectionListDataType} from '../../components/Screens/WebSectionList';
-import {PROXIWASH_DATA} from './ProxiwashAboutScreen';
 import type {LaundromatType} from './ProxiwashAboutScreen';
 
 const modalStateStrings = {};
@@ -450,10 +449,10 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     let data: LaundromatType;
     switch (state.selectedWash) {
       case 'tripodeB':
-        data = PROXIWASH_DATA.tripodeB;
+        data = ProxiwashConstants.tripodeB;
         break;
       default:
-        data = PROXIWASH_DATA.washinsa;
+        data = ProxiwashConstants.washinsa;
     }
     return (
       <View
