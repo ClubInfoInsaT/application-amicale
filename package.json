@@ -8,12 +8,17 @@
     "android-release": "react-native run-android --variant=release",
     "ios": "react-native run-ios",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "jest": {
     "preset": "react-native",
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base)"
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
     ],
     "setupFilesAfterEnv": [
       "jest-extended"
@@ -59,9 +64,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.11.0",
-    "@babel/preset-flow": "^7.10.4",
     "@babel/runtime": "^7.11.0",
-    "babel-eslint": "^10.1.0",
+    "@react-native-community/eslint-config": "^1.1.0",
+    "@types/jest": "^25.2.3",
+    "@types/react-native": "^0.63.2",
+    "@types/react-test-renderer": "^16.9.2",
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
     "babel-jest": "^25.1.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb": "^18.2.0",
@@ -71,11 +80,11 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.0",
-    "flow-bin": "^0.123.0",
     "jest": "^25.1.0",
     "jest-extended": "^0.11.5",
     "metro-react-native-babel-preset": "^0.59.0",
     "prettier": "2.0.5",
-    "react-test-renderer": "16.13.1"
+    "react-test-renderer": "16.13.1",
+    "typescript": "^3.8.3"
   }
 }
