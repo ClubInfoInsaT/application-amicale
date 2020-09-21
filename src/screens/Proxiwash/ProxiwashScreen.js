@@ -130,6 +130,19 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
         </MaterialHeaderButtons>
       ),
     });
+    navigation.addListener('focus', this.onScreenFocus);
+  }
+
+  onScreenFocus = () => {
+    const {state} = this;
+    const selected = AsyncStorageManager.getString(
+      AsyncStorageManager.PREFERENCES.selectedWash.key,
+    );
+    if (selected !== state.selectedWash) {
+      this.setState({
+        selectedWash: selected
+      });
+    }
   }
 
   /**
