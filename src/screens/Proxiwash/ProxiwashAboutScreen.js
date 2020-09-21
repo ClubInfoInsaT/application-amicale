@@ -9,7 +9,7 @@ import type {CardTitleIconPropsType} from '../../constants/PaperStyles';
 
 const LOGO = 'https://etud.insa-toulouse.fr/~amicale_app/images/Proxiwash.png';
 
-export type LaverieType = {
+export type LaundromatType = {
   id: string,
   title: string,
   subtitle: string,
@@ -49,7 +49,7 @@ export const PROXIWASH_DATA = {
  * Class defining the proxiwash about screen.
  */
 export default class ProxiwashAboutScreen extends React.Component<null> {
-  static getCardItem(item: LaverieType): React.Node {
+  static getCardItem(item: LaundromatType): React.Node {
     return (
       <Card style={{margin: 5}}>
         <Card.Title

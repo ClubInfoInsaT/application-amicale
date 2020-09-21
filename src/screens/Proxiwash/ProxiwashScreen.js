@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Alert, View} from 'react-native';
 import i18n from 'i18n-js';
-import {Avatar, Button, Card, List, Text, withTheme} from 'react-native-paper';
+import {Avatar, Button, Card, Text, withTheme} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Modalize} from 'react-native-modalize';
 import WebSectionList from '../../components/Screens/WebSectionList';
@@ -26,8 +26,8 @@ import {
 import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import type {SectionListDataType} from '../../components/Screens/WebSectionList';
-import type {ListIconPropsType} from '../../constants/PaperStyles';
 import {PROXIWASH_DATA} from './ProxiwashAboutScreen';
+import type {LaundromatType} from './ProxiwashAboutScreen';
 
 const modalStateStrings = {};
 
@@ -344,31 +344,6 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   }
 
   /**
-   * Gets a chevron icon
-   *
-   * @param props
-   * @return {*}
-   */
-  static getChevronIcon(props: ListIconPropsType): React.Node {
-    return (
-      <List.Icon color={props.color} style={props.style} icon="chevron-right" />
-    );
-  }
-
-  /**
-   * Gets a custom list item icon
-   *
-   * @param item The item to show the icon for
-   * @param props
-   * @return {*}
-   */
-  static getItemIcon(item: ListItemType, props: ListIconPropsType): React.Node {
-    return (
-      <List.Icon color={props.color} style={props.style} icon={item.icon} />
-    );
-  }
-
-  /**
    * Creates the dataset to be used by the FlatList
    *
    * @param fetchedData
@@ -472,7 +447,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   render(): React.Node {
     const {state} = this;
     const {navigation} = this.props;
-    let data: LaverieType;
+    let data: LaundromatType;
     switch (state.selectedWash) {
       case 'tripodeB':
         data = PROXIWASH_DATA.tripodeB;
