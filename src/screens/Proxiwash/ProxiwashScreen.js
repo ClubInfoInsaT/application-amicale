@@ -123,6 +123,11 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
       headerRight: (): React.Node => (
         <MaterialHeaderButtons>
           <Item
+            title="switch"
+            iconName="swap-horizontal"
+            onPress={():void => navigation.navigate('settings')}
+          />
+          <Item
             title="information"
             iconName="information"
             onPress={this.onAboutPress}
