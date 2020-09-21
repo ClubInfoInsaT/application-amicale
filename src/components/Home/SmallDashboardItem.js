@@ -32,8 +32,6 @@ type PropsType = {
   theme: CustomThemeType,
 };
 
-const AnimatableBadge = Animatable.createAnimatableComponent(Badge);
-
 /**
  * Component used to render a small dashboard item
  */
@@ -80,7 +78,7 @@ class SmallDashboardItem extends React.Component<PropsType> {
             }}
           />
           {props.badgeCount != null && props.badgeCount > 0 ? (
-            <AnimatableBadge
+            <Animatable.View
               animation="zoomIn"
               duration={300}
               useNativeDriver
@@ -88,12 +86,16 @@ class SmallDashboardItem extends React.Component<PropsType> {
                 position: 'absolute',
                 top: 0,
                 right: 0,
-                backgroundColor: props.theme.colors.primary,
-                borderColor: props.theme.colors.background,
-                borderWidth: 2,
               }}>
-              {props.badgeCount}
-            </AnimatableBadge>
+              <Badge
+                style={{
+                  backgroundColor: props.theme.colors.primary,
+                  borderColor: props.theme.colors.background,
+                  borderWidth: 2,
+                }}>
+                {props.badgeCount}
+              </Badge>
+            </Animatable.View>
           ) : null}
         </View>
       </TouchableRipple>
