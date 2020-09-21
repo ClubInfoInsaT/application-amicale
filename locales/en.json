@@ -197,7 +197,7 @@
 
     "login": {
       "title": "Login",
-      "subtitle": "Please enter your credentials",
+      "subtitle": "Please enter your AMICALE credentials",
       "email": "Email",
       "emailError": "Please enter a valid email",
       "password": "Password",
@@ -451,7 +451,7 @@
   },
   "errors": {
     "title": "Error!",
-    "badCredentials": "Email or password invalid.",
+    "badCredentials": "Email or password invalid.\n\nMake sure you are using your AMICALE credentials, and not INSA.",
     "badToken": "You are not logged in. Please login and try again.",
     "noConsent": "You did not give your consent for data processing to the Amicale.",
     "tokenSave": "Could not save session token. Please contact support.",

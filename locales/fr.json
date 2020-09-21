@@ -197,7 +197,7 @@
 
     "login": {
       "title": "Connexion",
-      "subtitle": "Entre tes identifiants",
+      "subtitle": "Entre tes identifiants AMICALE",
       "email": "Email",
       "emailError": "Merci d'entrer un email valide",
       "password": "Mot de passe",
@@ -451,7 +451,7 @@
   },
   "errors": {
     "title": "Erreur !",
-    "badCredentials": "Email ou mot de passe invalide.",
+    "badCredentials": "Email ou mot de passe invalide.\n\nVérifie que tu utilises bien tes identifiants AMICALE et non pas INSA.",
     "badToken": "Tu n'est pas connecté. Merci de te connecter puis réessayes.",
     "noConsent": "Tu n'as pas donné ton consentement pour l'utilisation de tes données personnelles.",
     "tokenSave": "Impossible de sauvegarder le token de session. Merci de contacter le support.",
