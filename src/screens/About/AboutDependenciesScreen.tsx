@@ -50,11 +50,11 @@ const LIST_ITEM_HEIGHT = 64;
 /**
  * Class defining a screen showing the list of libraries used by the app, taken from package.json
  */
-export default class AboutDependenciesScreen extends React.Component<null> {
+export default class AboutDependenciesScreen extends React.Component<{}> {
   data: Array<ListItemType>;
 
   constructor() {
-    super(null);
+    super({});
     this.data = generateListFromObject(packageJson.dependencies);
   }
 

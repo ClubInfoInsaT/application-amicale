@@ -34,12 +34,12 @@ type DatasetItemType = {
 /**
  * Class defining a planning event information page.
  */
-class AmicaleContactScreen extends React.Component<null> {
+class AmicaleContactScreen extends React.Component<{}> {
   // Dataset containing information about contacts
   CONTACT_DATASET: Array<DatasetItemType>;
 
   constructor() {
-    super(null);
+    super({});
     this.CONTACT_DATASET = [
       {
         name: i18n.t('screens.amicaleAbout.roles.interSchools'),

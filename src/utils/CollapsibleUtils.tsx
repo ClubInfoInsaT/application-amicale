@@ -21,7 +21,7 @@ import * as React from 'react';
 import {useTheme} from 'react-native-paper';
 import {createCollapsibleStack} from 'react-navigation-collapsible';
 import StackNavigator, {StackNavigationOptions} from '@react-navigation/stack';
-import {StackNavigationState} from '@react-navigation/native';
+import {StackNavigationState, TypedNavigator} from '@react-navigation/native';
 import {StackNavigationEventMap} from '@react-navigation/stack/lib/typescript/src/types';
 
 type StackNavigatorType = import('@react-navigation/native').TypedNavigator<
@@ -50,7 +50,7 @@ type StackNavigatorType = import('@react-navigation/native').TypedNavigator<
  */
 export function CreateScreenCollapsibleStack(
   name: string,
-  Stack: StackNavigatorType,
+  Stack: TypedNavigator<any, any, any, any, any>,
   component: React.ComponentType<any>,
   title: string,
   useNativeDriver: boolean = true,
@@ -91,7 +91,7 @@ export function CreateScreenCollapsibleStack(
  */
 export function getWebsiteStack(
   name: string,
-  Stack: StackNavigatorType,
+  Stack: TypedNavigator<any, any, any, any, any>,
   component: React.ComponentType<any>,
   title: string,
 ) {

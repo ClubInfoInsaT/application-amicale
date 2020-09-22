@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -44,7 +42,7 @@ import WebsitesHomeScreen from '../screens/Services/ServicesScreen';
 import ServicesSectionScreen from '../screens/Services/ServicesSectionScreen';
 import AmicaleContactScreen from '../screens/Amicale/AmicaleContactScreen';
 import {
-  createScreenCollapsibleStack,
+  CreateScreenCollapsibleStack,
   getWebsiteStack,
 } from '../utils/CollapsibleUtils';
 import Mascot, {MASCOT_STYLE} from '../components/Mascot/Mascot';
@@ -62,25 +60,25 @@ const defaultScreenOptions = {
 
 const ServicesStack = createStackNavigator();
 
-function ServicesStackComponent(): React.Node {
+function ServicesStackComponent() {
   return (
     <ServicesStack.Navigator
       initialRouteName="index"
       headerMode="screen"
       screenOptions={defaultScreenOptions}>
-      {createScreenCollapsibleStack(
+      {CreateScreenCollapsibleStack(
         'index',
         ServicesStack,
         WebsitesHomeScreen,
         i18n.t('screens.services.title'),
       )}
-      {createScreenCollapsibleStack(
+      {CreateScreenCollapsibleStack(
         'services-section',
         ServicesStack,
         ServicesSectionScreen,
         'SECTION',
       )}
-      {createScreenCollapsibleStack(
+      {CreateScreenCollapsibleStack(
         'amicale-contact',
         ServicesStack,
         AmicaleContactScreen,
@@ -92,19 +90,19 @@ function ServicesStackComponent(): React.Node {
 
 const ProxiwashStack = createStackNavigator();
 
-function ProxiwashStackComponent(): React.Node {
+function ProxiwashStackComponent() {
   return (
     <ProxiwashStack.Navigator
       initialRouteName="index"
       headerMode="screen"
       screenOptions={defaultScreenOptions}>
-      {createScreenCollapsibleStack(
+      {CreateScreenCollapsibleStack(
         'index',
         ProxiwashStack,
         ProxiwashScreen,
         i18n.t('screens.proxiwash.title'),
       )}
-      {createScreenCollapsibleStack(
+      {CreateScreenCollapsibleStack(
         'proxiwash-about',
         ProxiwashStack,
         ProxiwashAboutScreen,
@@ -116,7 +114,7 @@ function ProxiwashStackComponent(): React.Node {
 
 const PlanningStack = createStackNavigator();
 
-function PlanningStackComponent(): React.Node {
+function PlanningStackComponent() {
   return (
     <PlanningStack.Navigator
       initialRouteName="index"
@@ -127,7 +125,7 @@ function PlanningStackComponent(): React.Node {
         component={PlanningScreen}
         options={{title: i18n.t('screens.planning.title')}}
       />
-      {createScreenCollapsibleStack(
+      {CreateScreenCollapsibleStack(
         'planning-information',
         PlanningStack,
         PlanningDisplayScreen,
@@ -142,10 +140,11 @@ const HomeStack = createStackNavigator();
 function HomeStackComponent(
   initialRoute: string | null,
   defaultData: {[key: string]: string},
-): React.Node {
+) {
   let params;
-  if (initialRoute != null)
+  if (initialRoute != null) {
     params = {data: defaultData, nextScreen: initialRoute, shouldOpen: true};
+  }
   const {colors} = useTheme();
   return (
     <HomeStack.Navigator
@@ -161,7 +160,7 @@ function HomeStackComponent(
             headerStyle: {
               backgroundColor: colors.surface,
             },
-            headerTitle: (): React.Node => (
+            headerTitle: () => (
               <View style={{flexDirection: 'row'}}>
                 <Mascot
                   style={{
@@ -203,19 +202,19 @@ function HomeStackComponent(
         options={{title: i18n.t('screens.scanner.title')}}
       />
 
-      {createScreenCollapsibleStack(
+      {CreateScreenCollapsibleStack(
         'club-information',
         HomeStack,
         ClubDisplayScreen,
         i18n.t('screens.clubs.details'),
       )}
-      {createScreenCollapsibleStack(
+      {CreateScreenCollapsibleStack(
         'feed-information',
         HomeStack,
         FeedItemScreen,
         i18n.t('screens.home.feed'),
       )}
-      {createScreenCollapsibleStack(
+      {CreateScreenCollapsibleStack(
         'planning-information',
         HomeStack,
         PlanningDisplayScreen,
@@ -227,7 +226,7 @@ function HomeStackComponent(
 
 const PlanexStack = createStackNavigator();
 
-function PlanexStackComponent(): React.Node {
+function PlanexStackComponent() {
   return (
     <PlanexStack.Navigator
       initialRouteName="index"
@@ -239,7 +238,7 @@ function PlanexStackComponent(): React.Node {
         PlanexScreen,
         i18n.t('screens.planex.title'),
       )}
-      {createScreenCollapsibleStack(
+      {CreateScreenCollapsibleStack(
         'group-select',
         PlanexStack,
         GroupSelectionScreen,
@@ -252,60 +251,49 @@ function PlanexStackComponent(): React.Node {
 const Tab = createBottomTabNavigator();
 
 type PropsType = {
-  defaultHomeRoute: string | null,
-  defaultHomeData: {[key: string]: string},
+  defaultHomeRoute: string | null;
+  defaultHomeData: {[key: string]: string};
 };
 
-export default class TabNavigator extends React.Component<PropsType> {
-  createHomeStackComponent: () => React.Node;
-
-  defaultRoute: string;
-
-  constructor(props: PropsType) {
-    super(props);
-    if (props.defaultHomeRoute != null) this.defaultRoute = 'home';
-    else
-      this.defaultRoute = AsyncStorageManager.getString(
-        AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
-      ).toLowerCase();
-    this.createHomeStackComponent = (): React.Node =>
-      HomeStackComponent(props.defaultHomeRoute, props.defaultHomeData);
+export default function TabNavigator(props: PropsType) {
+  let defaultRoute = 'home';
+  if (!props.defaultHomeRoute) {
+    defaultRoute = AsyncStorageManager.getString(
+      AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
+    ).toLowerCase();
   }
+  const createHomeStackComponent = () =>
+    HomeStackComponent(props.defaultHomeRoute, props.defaultHomeData);
 
-  render(): React.Node {
-    return (
-      <Tab.Navigator
-        initialRouteName={this.defaultRoute}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        tabBar={(props: {...}): React.Node => <CustomTabBar {...props} />}>
-        <Tab.Screen
-          name="services"
-          option
-          component={ServicesStackComponent}
-          options={{title: i18n.t('screens.services.title')}}
-        />
-        <Tab.Screen
-          name="proxiwash"
-          component={ProxiwashStackComponent}
-          options={{title: i18n.t('screens.proxiwash.title')}}
-        />
-        <Tab.Screen
-          name="home"
-          component={this.createHomeStackComponent}
-          options={{title: i18n.t('screens.home.title')}}
-        />
-        <Tab.Screen
-          name="planning"
-          component={PlanningStackComponent}
-          options={{title: i18n.t('screens.planning.title')}}
-        />
-
-        <Tab.Screen
-          name="planex"
-          component={PlanexStackComponent}
-          options={{title: i18n.t('screens.planex.title')}}
-        />
-      </Tab.Navigator>
-    );
-  }
+  return (
+    <Tab.Navigator
+      initialRouteName={defaultRoute}
+      tabBar={(tabProps) => <CustomTabBar {...tabProps} />}>
+      <Tab.Screen
+        name="services"
+        component={ServicesStackComponent}
+        options={{title: i18n.t('screens.services.title')}}
+      />
+      <Tab.Screen
+        name="proxiwash"
+        component={ProxiwashStackComponent}
+        options={{title: i18n.t('screens.proxiwash.title')}}
+      />
+      <Tab.Screen
+        name="home"
+        component={createHomeStackComponent}
+        options={{title: i18n.t('screens.home.title')}}
+      />
+      <Tab.Screen
+        name="planning"
+        component={PlanningStackComponent}
+        options={{title: i18n.t('screens.planning.title')}}
+      />
+      <Tab.Screen
+        name="planex"
+        component={PlanexStackComponent}
+        options={{title: i18n.t('screens.planex.title')}}
+      />
+    </Tab.Navigator>
+  );
 }

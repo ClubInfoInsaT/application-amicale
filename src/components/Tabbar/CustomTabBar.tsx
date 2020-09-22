@@ -21,36 +21,22 @@ import * as React from 'react';
 import {Animated} from 'react-native';
 import {withTheme} from 'react-native-paper';
 import {Collapsible} from 'react-navigation-collapsible';
-import {StackNavigationProp} from '@react-navigation/stack';
 import TabIcon from './TabIcon';
 import TabHomeIcon from './TabHomeIcon';
+import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
+import {NavigationState} from '@react-navigation/native';
+import {
+  PartialState,
+  Route,
+} from '@react-navigation/routers/lib/typescript/src/types';
 
-type RouteType = {
-  name: string;
-  key: string;
-  params: {collapsible: Collapsible};
-  state: {
-    index: number;
-    routes: Array<RouteType>;
-  };
+type RouteType = Route<string> & {
+  state?: NavigationState | PartialState<NavigationState>;
 };
 
-type PropsType = {
-  state: {
-    index: number;
-    routes: Array<RouteType>;
-  };
-  descriptors: {
-    [key: string]: {
-      options: {
-        tabBarLabel: string;
-        title: string;
-      };
-    };
-  };
-  navigation: StackNavigationProp<any>;
+interface PropsType extends BottomTabBarProps {
   theme: ReactNativePaper.Theme;
-};
+}
 
 type StateType = {
   translateY: any;
@@ -164,7 +150,7 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
           onLongPress={onLongPress}
           icon={this.getTabBarIcon(route, isFocused)}
           color={color}
-          label={label}
+          label={label as string}
           focused={isFocused}
           extraData={state.index > index}
           key={route.key}
@@ -193,9 +179,12 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
     if (isFocused) {
       const stackState = route.state;
       const stackRoute =
-        stackState != null ? stackState.routes[stackState.index] : null;
-      const params: {collapsible: Collapsible} | null =
-        stackRoute != null ? stackRoute.params : null;
+        stackState && stackState.index
+          ? stackState.routes[stackState.index]
+          : null;
+      const params: {collapsible: Collapsible} | null | undefined = stackRoute
+        ? (stackRoute.params as {collapsible: Collapsible})
+        : null;
       const collapsible = params != null ? params.collapsible : null;
       if (collapsible != null) {
         this.setState({

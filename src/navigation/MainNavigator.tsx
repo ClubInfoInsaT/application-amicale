@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import i18n from 'i18n-js';
@@ -40,17 +38,62 @@ import ClubListScreen from '../screens/Amicale/Clubs/ClubListScreen';
 import ClubAboutScreen from '../screens/Amicale/Clubs/ClubAboutScreen';
 import ClubDisplayScreen from '../screens/Amicale/Clubs/ClubDisplayScreen';
 import {
-  createScreenCollapsibleStack,
+  CreateScreenCollapsibleStack,
   getWebsiteStack,
 } from '../utils/CollapsibleUtils';
 import BugReportScreen from '../screens/Other/FeedbackScreen';
 import WebsiteScreen from '../screens/Services/WebsiteScreen';
-import EquipmentScreen from '../screens/Amicale/Equipment/EquipmentListScreen';
+import EquipmentScreen, {
+  DeviceType,
+} from '../screens/Amicale/Equipment/EquipmentListScreen';
 import EquipmentLendScreen from '../screens/Amicale/Equipment/EquipmentRentScreen';
 import EquipmentConfirmScreen from '../screens/Amicale/Equipment/EquipmentConfirmScreen';
 import DashboardEditScreen from '../screens/Other/Settings/DashboardEditScreen';
 import GameStartScreen from '../screens/Game/screens/GameStartScreen';
 import ImageGalleryScreen from '../screens/Media/ImageGalleryScreen';
+
+export enum MainRoutes {
+  Main = 'main',
+  Gallery = 'gallery',
+  Settings = 'settings',
+  DashboardEdit = 'dashboard-edit',
+  About = 'about',
+  Dependencies = 'dependencies',
+  Debug = 'debug',
+  GameStart = 'game-start',
+  GameMain = 'game-main',
+  Login = 'login',
+  SelfMenu = 'self-menu',
+  Proximo = 'proximo',
+  ProximoList = 'proximo-list',
+  ProximoAbout = 'proximo-about',
+  Profile = 'profile',
+  ClubList = 'club-list',
+  ClubInformation = 'club-information',
+  ClubAbout = 'club-about',
+  EquipmentList = 'equipment-list',
+  EquipmentRent = 'equipment-rent',
+  EquipmentConfirm = 'equipment-confirm',
+  Vote = 'vote',
+  Feedback = 'feedback',
+}
+
+type DefaultParams = {[key in MainRoutes]: object | undefined};
+
+export interface FullParamsList extends DefaultParams {
+  login: {nextScreen: string};
+  'equipment-confirm': {
+    item?: DeviceType;
+    dates: [string, string];
+  };
+  'equipment-rent': {item?: DeviceType};
+  gallery: {images: Array<{url: string}>};
+}
+
+// Don't know why but TS is complaining without this
+// See: https://stackoverflow.com/questions/63652687/interface-does-not-satisfy-the-constraint-recordstring-object-undefined
+export type MainStackParamsList = FullParamsList &
+  Record<string, object | undefined>;
 
 const modalTransition =
   Platform.OS === 'ios'
@@ -63,19 +106,17 @@ const defaultScreenOptions = {
   ...TransitionPresets.SlideFromRightIOS,
 };
 
-const MainStack = createStackNavigator();
+const MainStack = createStackNavigator<MainStackParamsList>();
 
-function MainStackComponent(props: {
-  createTabNavigator: () => React.Node,
-}): React.Node {
+function MainStackComponent(props: {createTabNavigator: () => JSX.Element}) {
   const {createTabNavigator} = props;
   return (
     <MainStack.Navigator
-      initialRouteName="main"
+      initialRouteName={MainRoutes.Main}
       headerMode="screen"
       screenOptions={defaultScreenOptions}>
       <MainStack.Screen
-        name="main"
+        name={MainRoutes.Main}
         component={createTabNavigator}
         options={{
           headerShown: false,
@@ -83,62 +124,62 @@ function MainStackComponent(props: {
         }}
       />
       <MainStack.Screen
-        name="gallery"
+        name={MainRoutes.Gallery}
         component={ImageGalleryScreen}
         options={{
           headerShown: false,
           ...modalTransition,
         }}
       />
-      {createScreenCollapsibleStack(
-        'settings',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.Settings,
         MainStack,
         SettingsScreen,
         i18n.t('screens.settings.title'),
       )}
-      {createScreenCollapsibleStack(
-        'dashboard-edit',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.DashboardEdit,
         MainStack,
         DashboardEditScreen,
         i18n.t('screens.settings.dashboardEdit.title'),
       )}
-      {createScreenCollapsibleStack(
-        'about',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.About,
         MainStack,
         AboutScreen,
         i18n.t('screens.about.title'),
       )}
-      {createScreenCollapsibleStack(
-        'dependencies',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.Dependencies,
         MainStack,
         AboutDependenciesScreen,
         i18n.t('screens.about.libs'),
       )}
-      {createScreenCollapsibleStack(
-        'debug',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.Debug,
         MainStack,
         DebugScreen,
         i18n.t('screens.about.debug'),
       )}
 
-      {createScreenCollapsibleStack(
-        'game-start',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.GameStart,
         MainStack,
         GameStartScreen,
         i18n.t('screens.game.title'),
         true,
-        null,
+        undefined,
         'transparent',
       )}
       <MainStack.Screen
-        name="game-main"
+        name={MainRoutes.GameMain}
         component={GameMainScreen}
         options={{
           title: i18n.t('screens.game.title'),
         }}
       />
-      {createScreenCollapsibleStack(
-        'login',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.Login,
         MainStack,
         LoginScreen,
         i18n.t('screens.login.title'),
@@ -148,26 +189,26 @@ function MainStackComponent(props: {
       )}
       {getWebsiteStack('website', MainStack, WebsiteScreen, '')}
 
-      {createScreenCollapsibleStack(
-        'self-menu',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.SelfMenu,
         MainStack,
         SelfMenuScreen,
         i18n.t('screens.menu.title'),
       )}
-      {createScreenCollapsibleStack(
-        'proximo',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.Proximo,
         MainStack,
         ProximoMainScreen,
         i18n.t('screens.proximo.title'),
       )}
-      {createScreenCollapsibleStack(
-        'proximo-list',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.ProximoList,
         MainStack,
         ProximoListScreen,
         i18n.t('screens.proximo.articleList'),
       )}
-      {createScreenCollapsibleStack(
-        'proximo-about',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.ProximoAbout,
         MainStack,
         ProximoAboutScreen,
         i18n.t('screens.proximo.title'),
@@ -175,60 +216,60 @@ function MainStackComponent(props: {
         {...modalTransition},
       )}
 
-      {createScreenCollapsibleStack(
-        'profile',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.Profile,
         MainStack,
         ProfileScreen,
         i18n.t('screens.profile.title'),
       )}
-      {createScreenCollapsibleStack(
-        'club-list',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.ClubList,
         MainStack,
         ClubListScreen,
         i18n.t('screens.clubs.title'),
       )}
-      {createScreenCollapsibleStack(
-        'club-information',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.ClubInformation,
         MainStack,
         ClubDisplayScreen,
         i18n.t('screens.clubs.details'),
         true,
         {...modalTransition},
       )}
-      {createScreenCollapsibleStack(
-        'club-about',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.ClubAbout,
         MainStack,
         ClubAboutScreen,
         i18n.t('screens.clubs.title'),
         true,
         {...modalTransition},
       )}
-      {createScreenCollapsibleStack(
-        'equipment-list',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.EquipmentList,
         MainStack,
         EquipmentScreen,
         i18n.t('screens.equipment.title'),
       )}
-      {createScreenCollapsibleStack(
-        'equipment-rent',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.EquipmentRent,
         MainStack,
         EquipmentLendScreen,
         i18n.t('screens.equipment.book'),
       )}
-      {createScreenCollapsibleStack(
-        'equipment-confirm',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.EquipmentConfirm,
         MainStack,
         EquipmentConfirmScreen,
         i18n.t('screens.equipment.confirm'),
       )}
-      {createScreenCollapsibleStack(
-        'vote',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.Vote,
         MainStack,
         VoteScreen,
         i18n.t('screens.vote.title'),
       )}
-      {createScreenCollapsibleStack(
-        'feedback',
+      {CreateScreenCollapsibleStack(
+        MainRoutes.Feedback,
         MainStack,
         BugReportScreen,
         i18n.t('screens.feedback.title'),
@@ -238,25 +279,10 @@ function MainStackComponent(props: {
 }
 
 type PropsType = {
-  defaultHomeRoute: string | null,
-  // eslint-disable-next-line flowtype/no-weak-types
-  defaultHomeData: {[key: string]: string},
+  defaultHomeRoute: string | null;
+  defaultHomeData: {[key: string]: string};
 };
 
-export default class MainNavigator extends React.Component<PropsType> {
-  createTabNavigator: () => React.Node;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.createTabNavigator = (): React.Node => (
-      <TabNavigator
-        defaultHomeRoute={props.defaultHomeRoute}
-        defaultHomeData={props.defaultHomeData}
-      />
-    );
-  }
-
-  render(): React.Node {
-    return <MainStackComponent createTabNavigator={this.createTabNavigator} />;
-  }
+export default function MainNavigator(props: PropsType) {
+  return <MainStackComponent createTabNavigator={() => TabNavigator(props)} />;
 }
