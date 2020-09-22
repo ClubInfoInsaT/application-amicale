@@ -19,12 +19,12 @@
 
 // @flow
 
-import ICON_AMICALE from '../../assets/amicale.png';
-import ICON_CAMPUS from '../../assets/android.icon.png';
+const ICON_AMICALE = require('../../assets/amicale.png');
+const ICON_CAMPUS = require('../../assets/android.icon.png');
 
 export type NewsSourceType = {
-  icon: number,
-  name: string,
+  icon: number;
+  name: string;
 };
 
 export default {

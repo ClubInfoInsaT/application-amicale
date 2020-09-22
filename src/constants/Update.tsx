@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import i18n from 'i18n-js';
 import type {IntroSlideType} from '../components/Overrides/CustomIntroSlider';
@@ -49,16 +47,16 @@ export default class Update {
     this.updateSlides = [
       {
         key: '0',
-        title: i18n.t(`intro.updateSlide0.title`),
-        text: i18n.t(`intro.updateSlide0.text`),
-        view: (): React.Node => <MascotIntroWelcome />,
+        title: i18n.t('intro.updateSlide0.title'),
+        text: i18n.t('intro.updateSlide0.text'),
+        view: () => <MascotIntroWelcome />,
         colors: ['#be1522', '#57080e'],
       },
       {
         key: '1',
-        title: i18n.t(`intro.updateSlide1.title`),
-        text: i18n.t(`intro.updateSlide1.text`),
-        view: (): React.Node => <IntroIcon icon="account-heart-outline" />,
+        title: i18n.t('intro.updateSlide1.title'),
+        text: i18n.t('intro.updateSlide1.text'),
+        view: () => <IntroIcon icon="account-heart-outline" />,
         colors: ['#9c165b', '#3e042b'],
       },
     ];
