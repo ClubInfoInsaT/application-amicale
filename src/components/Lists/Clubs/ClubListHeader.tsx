@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Card, Chip, List, Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
@@ -26,12 +24,11 @@ import i18n from 'i18n-js';
 import AnimatedAccordion from '../../Animations/AnimatedAccordion';
 import {isItemInCategoryFilter} from '../../../utils/Search';
 import type {ClubCategoryType} from '../../../screens/Amicale/Clubs/ClubListScreen';
-import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
-  categories: Array<ClubCategoryType>,
-  onChipSelect: (id: number) => void,
-  selectedCategories: Array<number>,
+  categories: Array<ClubCategoryType>;
+  onChipSelect: (id: number) => void;
+  selectedCategories: Array<number>;
 };
 
 const styles = StyleSheet.create({
@@ -54,16 +51,8 @@ const styles = StyleSheet.create({
   },
 });
 
-class ClubListHeader extends React.Component<PropsType> {
-  shouldComponentUpdate(nextProps: PropsType): boolean {
-    const {props} = this;
-    return (
-      nextProps.selectedCategories.length !== props.selectedCategories.length
-    );
-  }
-
-  getChipRender = (category: ClubCategoryType, key: string): React.Node => {
-    const {props} = this;
+function ClubListHeader(props: PropsType) {
+  const getChipRender = (category: ClubCategoryType, key: string) => {
     const onPress = (): void => props.onChipSelect(category.id);
     return (
       <Chip
@@ -80,32 +69,39 @@ class ClubListHeader extends React.Component<PropsType> {
     );
   };
 
-  getCategoriesRender(): React.Node {
-    const {props} = this;
-    const final = [];
+  const getCategoriesRender = () => {
+    const final: Array<React.ReactNode> = [];
     props.categories.forEach((cat: ClubCategoryType) => {
-      final.push(this.getChipRender(cat, cat.id.toString()));
+      final.push(getChipRender(cat, cat.id.toString()));
     });
     return final;
-  }
+  };
 
-  render(): React.Node {
-    return (
-      <Card style={styles.card}>
-        <AnimatedAccordion
-          title={i18n.t('screens.clubs.categories')}
-          left={(props: ListIconPropsType): React.Node => (
-            <List.Icon color={props.color} style={props.style} icon="star" />
-          )}
-          opened>
-          <Text style={styles.text}>
-            {i18n.t('screens.clubs.categoriesFilterMessage')}
-          </Text>
-          <View style={styles.chipContainer}>{this.getCategoriesRender()}</View>
-        </AnimatedAccordion>
-      </Card>
-    );
-  }
+  return (
+    <Card style={styles.card}>
+      <AnimatedAccordion
+        title={i18n.t('screens.clubs.categories')}
+        left={(iconProps) => (
+          <List.Icon
+            color={iconProps.color}
+            style={iconProps.style}
+            icon="star"
+          />
+        )}
+        opened>
+        <Text style={styles.text}>
+          {i18n.t('screens.clubs.categoriesFilterMessage')}
+        </Text>
+        <View style={styles.chipContainer}>{getCategoriesRender()}</View>
+      </AnimatedAccordion>
+    </Card>
+  );
 }
 
-export default ClubListHeader;
+const areEqual = (prevProps: PropsType, nextProps: PropsType): boolean => {
+  return (
+    prevProps.selectedCategories.length === nextProps.selectedCategories.length
+  );
+};
+
+export default React.memo(ClubListHeader, areEqual);

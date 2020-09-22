@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {List, withTheme} from 'react-native-paper';
 import {FlatList, View} from 'react-native';
@@ -29,17 +27,15 @@ import type {
   PlanexGroupType,
   PlanexGroupCategoryType,
 } from '../../../screens/Planex/GroupSelectionScreen';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
-import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
-  item: PlanexGroupCategoryType,
-  favorites: Array<PlanexGroupType>,
-  onGroupPress: (PlanexGroupType) => void,
-  onFavoritePress: (PlanexGroupType) => void,
-  currentSearchString: string,
-  height: number,
-  theme: CustomThemeType,
+  item: PlanexGroupCategoryType;
+  favorites: Array<PlanexGroupType>;
+  onGroupPress: (data: PlanexGroupType) => void;
+  onFavoritePress: (data: PlanexGroupType) => void;
+  currentSearchString: string;
+  height: number;
+  theme: ReactNativePaper.Theme;
 };
 
 const LIST_ITEM_HEIGHT = 64;
@@ -55,7 +51,7 @@ class GroupListAccordion extends React.Component<PropsType> {
     );
   }
 
-  getRenderItem = ({item}: {item: PlanexGroupType}): React.Node => {
+  getRenderItem = ({item}: {item: PlanexGroupType}) => {
     const {props} = this;
     const onPress = () => {
       props.onGroupPress(item);
@@ -77,18 +73,19 @@ class GroupListAccordion extends React.Component<PropsType> {
   getData(): Array<PlanexGroupType> {
     const {props} = this;
     const originalData = props.item.content;
-    const displayData = [];
+    const displayData: Array<PlanexGroupType> = [];
     originalData.forEach((data: PlanexGroupType) => {
-      if (stringMatchQuery(data.name, props.currentSearchString))
+      if (stringMatchQuery(data.name, props.currentSearchString)) {
         displayData.push(data);
+      }
     });
     return displayData;
   }
 
   itemLayout = (
-    data: ?Array<PlanexGroupType>,
+    data: Array<PlanexGroupType> | null | undefined,
     index: number,
-  ): {length: number, offset: number, index: number} => ({
+  ): {length: number; offset: number; index: number} => ({
     length: LIST_ITEM_HEIGHT,
     offset: LIST_ITEM_HEIGHT * index,
     index,
@@ -96,7 +93,7 @@ class GroupListAccordion extends React.Component<PropsType> {
 
   keyExtractor = (item: PlanexGroupType): string => item.id.toString();
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     const {item} = this.props;
     return (
@@ -107,7 +104,7 @@ class GroupListAccordion extends React.Component<PropsType> {
             height: props.height,
             justifyContent: 'center',
           }}
-          left={(iconProps: ListIconPropsType): React.Node =>
+          left={(iconProps) =>
             item.id === 0 ? (
               <List.Icon
                 style={iconProps.style}

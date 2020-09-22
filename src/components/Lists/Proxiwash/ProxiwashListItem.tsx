@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {
   Avatar,
@@ -34,20 +32,19 @@ import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
 import ProxiwashConstants from '../../../constants/ProxiwashConstants';
 import AprilFoolsManager from '../../../managers/AprilFoolsManager';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {ProxiwashMachineType} from '../../../screens/Proxiwash/ProxiwashScreen';
 
 type PropsType = {
-  item: ProxiwashMachineType,
-  theme: CustomThemeType,
+  item: ProxiwashMachineType;
+  theme: ReactNativePaper.Theme;
   onPress: (
     title: string,
     item: ProxiwashMachineType,
     isDryer: boolean,
-  ) => void,
-  isWatched: boolean,
-  isDryer: boolean,
-  height: number,
+  ) => void;
+  isWatched: boolean;
+  isDryer: boolean;
+  height: number;
 };
 
 const AnimatedIcon = Animatable.createAnimatableComponent(Avatar.Icon);
@@ -89,10 +86,11 @@ class ProxiwashListItem extends React.Component<PropsType> {
 
     let displayNumber = props.item.number;
     const displayMaxWeight = props.item.maxWeight;
-    if (AprilFoolsManager.getInstance().isAprilFoolsEnabled())
+    if (AprilFoolsManager.getInstance().isAprilFoolsEnabled()) {
       displayNumber = AprilFoolsManager.getProxiwashMachineDisplayNumber(
         parseInt(props.item.number, 10),
       );
+    }
 
     this.title = props.isDryer
       ? i18n.t('screens.proxiwash.dryer')
@@ -159,10 +157,10 @@ class ProxiwashListItem extends React.Component<PropsType> {
       colors.proxiwashUnknownColor;
   }
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     const {colors} = props.theme;
-    const machineState = props.item.state;
+    const machineState = parseInt(props.item.state, 10);
     const isRunning = machineState === ProxiwashConstants.machineStates.RUNNING;
     const isReady = machineState === ProxiwashConstants.machineStates.AVAILABLE;
     const description = isRunning
@@ -171,10 +169,13 @@ class ProxiwashListItem extends React.Component<PropsType> {
     const stateIcon = ProxiwashConstants.stateIcons[machineState];
     const stateString = this.stateStrings[machineState];
     let progress;
-    if (isRunning && props.item.donePercent !== '')
+    if (isRunning && props.item.donePercent !== '') {
       progress = parseFloat(props.item.donePercent) / 100;
-    else if (isRunning) progress = 0;
-    else progress = 1;
+    } else if (isRunning) {
+      progress = 0;
+    } else {
+      progress = 1;
+    }
 
     const icon = props.isWatched ? (
       <AnimatedIcon
@@ -224,8 +225,8 @@ class ProxiwashListItem extends React.Component<PropsType> {
             justifyContent: 'center',
           }}
           onPress={this.onListItemPress}
-          left={(): React.Node => icon}
-          right={(): React.Node => (
+          left={() => icon}
+          right={() => (
             <View style={{flexDirection: 'row'}}>
               <View style={{justifyContent: 'center'}}>
                 <Text

@@ -17,19 +17,16 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Avatar, Text, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import i18n from 'i18n-js';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 type PropsType = {
-  theme: CustomThemeType,
-  title: string,
-  isDryer: boolean,
-  nbAvailable: number,
+  theme: ReactNativePaper.Theme;
+  title: string;
+  isDryer: boolean;
+  nbAvailable: number;
 };
 
 const styles = StyleSheet.create({
@@ -61,7 +58,7 @@ class ProxiwashListItem extends React.Component<PropsType> {
     );
   }
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     const subtitle = `${props.nbAvailable} ${
       props.nbAvailable <= 1

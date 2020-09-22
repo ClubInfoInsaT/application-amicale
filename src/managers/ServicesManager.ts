@@ -94,7 +94,7 @@ export type ServiceItemType = {
   key: string;
   title: string;
   subtitle: string;
-  image: string;
+  image: string | number;
   onPress: () => void;
   badgeFunction?: (dashboard: FullDashboardType) => number;
 };

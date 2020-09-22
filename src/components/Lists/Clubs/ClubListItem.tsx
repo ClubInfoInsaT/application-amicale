@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Avatar, Chip, List, withTheme} from 'react-native-paper';
 import {View} from 'react-native';
@@ -26,14 +24,13 @@ import type {
   ClubCategoryType,
   ClubType,
 } from '../../../screens/Amicale/Clubs/ClubListScreen';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 type PropsType = {
-  onPress: () => void,
-  categoryTranslator: (id: number) => ClubCategoryType,
-  item: ClubType,
-  height: number,
-  theme: CustomThemeType,
+  onPress: () => void;
+  categoryTranslator: (id: number) => ClubCategoryType;
+  item: ClubType;
+  height: number;
+  theme: ReactNativePaper.Theme;
 };
 
 class ClubListItem extends React.Component<PropsType> {
@@ -48,9 +45,9 @@ class ClubListItem extends React.Component<PropsType> {
     return false;
   }
 
-  getCategoriesRender(categories: Array<number | null>): React.Node {
+  getCategoriesRender(categories: Array<number | null>) {
     const {props} = this;
-    const final = [];
+    const final: Array<React.ReactNode> = [];
     categories.forEach((cat: number | null) => {
       if (cat != null) {
         const category: ClubCategoryType = props.categoryTranslator(cat);
@@ -66,9 +63,9 @@ class ClubListItem extends React.Component<PropsType> {
     return <View style={{flexDirection: 'row'}}>{final}</View>;
   }
 
-  render(): React.Node {
+  render() {
     const {props} = this;
-    const categoriesRender = (): React.Node =>
+    const categoriesRender = () =>
       this.getCategoriesRender(props.item.category);
     const {colors} = props.theme;
     return (
@@ -76,7 +73,7 @@ class ClubListItem extends React.Component<PropsType> {
         title={props.item.name}
         description={categoriesRender}
         onPress={props.onPress}
-        left={(): React.Node => (
+        left={() => (
           <Avatar.Image
             style={{
               backgroundColor: 'transparent',
@@ -87,7 +84,7 @@ class ClubListItem extends React.Component<PropsType> {
             source={{uri: props.item.logo}}
           />
         )}
-        right={(): React.Node => (
+        right={() => (
           <Avatar.Icon
             style={{
               marginTop: 'auto',

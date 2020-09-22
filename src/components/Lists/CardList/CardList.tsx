@@ -17,19 +17,16 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {Animated, Dimensions} from 'react-native';
-import type {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {Animated, Dimensions, ViewStyle} from 'react-native';
 import ImageListItem from './ImageListItem';
 import CardListItem from './CardListItem';
 import type {ServiceItemType} from '../../../managers/ServicesManager';
 
 type PropsType = {
-  dataset: Array<ServiceItemType>,
-  isHorizontal?: boolean,
-  contentContainerStyle?: ViewStyle | null,
+  dataset: Array<ServiceItemType>;
+  isHorizontal?: boolean;
+  contentContainerStyle?: ViewStyle;
 };
 
 export default class CardList extends React.Component<PropsType> {
@@ -45,12 +42,12 @@ export default class CardList extends React.Component<PropsType> {
   constructor(props: PropsType) {
     super(props);
     this.windowWidth = Dimensions.get('window').width;
-    this.horizontalItemSize = this.windowWidth / 4; // So that we can fit 3 items and a part of the 4th => user knows he can scroll
+    this.horizontalItemSize = this.windowWidth / 4; // So that we can fit 3 items, and a part of the 4th => user knows he can scroll
   }
 
-  getRenderItem = ({item}: {item: ServiceItemType}): React.Node => {
+  getRenderItem = ({item}: {item: ServiceItemType}) => {
     const {props} = this;
-    if (props.isHorizontal)
+    if (props.isHorizontal) {
       return (
         <ImageListItem
           item={item}
@@ -58,12 +55,13 @@ export default class CardList extends React.Component<PropsType> {
           width={this.horizontalItemSize}
         />
       );
+    }
     return <CardListItem item={item} key={item.title} />;
   };
 
   keyExtractor = (item: ServiceItemType): string => item.key;
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     let containerStyle = {};
     if (props.isHorizontal) {
@@ -84,7 +82,7 @@ export default class CardList extends React.Component<PropsType> {
         }
         pagingEnabled={props.isHorizontal}
         snapToInterval={
-          props.isHorizontal ? (this.horizontalItemSize + 5) * 3 : null
+          props.isHorizontal ? (this.horizontalItemSize + 5) * 3 : undefined
         }
       />
     );

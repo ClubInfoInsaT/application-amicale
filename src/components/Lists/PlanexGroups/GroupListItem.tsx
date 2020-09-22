@@ -17,23 +17,19 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {List, TouchableRipple, withTheme} from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {PlanexGroupType} from '../../../screens/Planex/GroupSelectionScreen';
-import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
-  theme: CustomThemeType,
-  onPress: () => void,
-  onStarPress: () => void,
-  item: PlanexGroupType,
-  favorites: Array<PlanexGroupType>,
-  height: number,
+  theme: ReactNativePaper.Theme;
+  onPress: () => void;
+  onStarPress: () => void;
+  item: PlanexGroupType;
+  favorites: Array<PlanexGroupType>;
+  height: number;
 };
 
 const REPLACE_REGEX = /_/g;
@@ -41,10 +37,11 @@ const REPLACE_REGEX = /_/g;
 class GroupListItem extends React.Component<PropsType> {
   isFav: boolean;
 
-  starRef: null | Animatable.View;
+  starRef: {current: null | Animatable.View};
 
   constructor(props: PropsType) {
     super(props);
+    this.starRef = React.createRef<Animatable.View>();
     this.isFav = this.isGroupInFavorites(props.favorites);
   }
 
@@ -52,7 +49,9 @@ class GroupListItem extends React.Component<PropsType> {
     const {favorites} = this.props;
     const favChanged = favorites.length !== nextProps.favorites.length;
     let newFavState = this.isFav;
-    if (favChanged) newFavState = this.isGroupInFavorites(nextProps.favorites);
+    if (favChanged) {
+      newFavState = this.isGroupInFavorites(nextProps.favorites);
+    }
     const shouldUpdate = this.isFav !== newFavState;
     this.isFav = newFavState;
     return shouldUpdate;
@@ -61,9 +60,12 @@ class GroupListItem extends React.Component<PropsType> {
   onStarPress = () => {
     const {props} = this;
     const ref = this.starRef;
-    if (ref != null) {
-      if (this.isFav) ref.rubberBand();
-      else ref.swing();
+    if (ref.current) {
+      if (this.isFav) {
+        ref.current.rubberBand();
+      } else {
+        ref.current.swing();
+      }
     }
     props.onStarPress();
   };
@@ -71,31 +73,29 @@ class GroupListItem extends React.Component<PropsType> {
   isGroupInFavorites(favorites: Array<PlanexGroupType>): boolean {
     const {item} = this.props;
     for (let i = 0; i < favorites.length; i += 1) {
-      if (favorites[i].id === item.id) return true;
+      if (favorites[i].id === item.id) {
+        return true;
+      }
     }
     return false;
   }
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     const {colors} = props.theme;
     return (
       <List.Item
         title={props.item.name.replace(REPLACE_REGEX, ' ')}
         onPress={props.onPress}
-        left={(iconProps: ListIconPropsType): React.Node => (
+        left={(iconProps) => (
           <List.Icon
             color={iconProps.color}
             style={iconProps.style}
             icon="chevron-right"
           />
         )}
-        right={(iconProps: ListIconPropsType): React.Node => (
-          <Animatable.View
-            ref={(ref: Animatable.View) => {
-              this.starRef = ref;
-            }}
-            useNativeDriver>
+        right={(iconProps) => (
+          <Animatable.View ref={this.starRef} useNativeDriver>
             <TouchableRipple
               onPress={this.onStarPress}
               style={{
