@@ -17,10 +17,14 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {
+  ListRenderItemInfo,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18n from 'i18n-js';
 import AppIntroSlider from 'react-native-app-intro-slider';
@@ -35,26 +39,27 @@ import IntroIcon from '../Intro/IconIntro';
 import MascotIntroEnd from '../Intro/MascotIntroEnd';
 
 type PropsType = {
-  onDone: () => void,
-  isUpdate: boolean,
-  isAprilFools: boolean,
+  onDone: () => void;
+  isUpdate: boolean;
+  isAprilFools: boolean;
 };
 
 type StateType = {
-  currentSlide: number,
+  currentSlide: number;
 };
 
 export type IntroSlideType = {
-  key: string,
-  title: string,
-  text: string,
-  view: () => React.Node,
-  mascotStyle?: number,
-  colors: [string, string],
+  key: string;
+  title: string;
+  text: string;
+  view: () => React.ReactNode;
+  mascotStyle?: number;
+  colors: [string, string];
 };
 
 const styles = StyleSheet.create({
   mainContent: {
+    flex: 1,
     paddingBottom: 100,
   },
   text: {
@@ -83,7 +88,7 @@ const styles = StyleSheet.create({
  */
 export default class CustomIntroSlider extends React.Component<
   PropsType,
-  StateType,
+  StateType
 > {
   sliderRef: {current: null | AppIntroSlider};
 
@@ -98,8 +103,9 @@ export default class CustomIntroSlider extends React.Component<
   /**
    * Generates intro slides
    */
-  constructor() {
-    super();
+  constructor(props: PropsType) {
+    super(props);
+    this.currentSlides = [];
     this.state = {
       currentSlide: 0,
     };
@@ -109,14 +115,14 @@ export default class CustomIntroSlider extends React.Component<
         key: '0', // Mascot
         title: i18n.t('intro.slideMain.title'),
         text: i18n.t('intro.slideMain.text'),
-        view: (): React.Node => <MascotIntroWelcome />,
+        view: () => <MascotIntroWelcome />,
         colors: ['#be1522', '#57080e'],
       },
       {
         key: '1',
         title: i18n.t('intro.slidePlanex.title'),
         text: i18n.t('intro.slidePlanex.text'),
-        view: (): React.Node => <IntroIcon icon="calendar-clock" />,
+        view: () => <IntroIcon icon="calendar-clock" />,
         mascotStyle: MASCOT_STYLE.INTELLO,
         colors: ['#be1522', '#57080e'],
       },
@@ -124,7 +130,7 @@ export default class CustomIntroSlider extends React.Component<
         key: '2',
         title: i18n.t('intro.slideEvents.title'),
         text: i18n.t('intro.slideEvents.text'),
-        view: (): React.Node => <IntroIcon icon="calendar-star" />,
+        view: () => <IntroIcon icon="calendar-star" />,
         mascotStyle: MASCOT_STYLE.HAPPY,
         colors: ['#be1522', '#57080e'],
       },
@@ -132,7 +138,7 @@ export default class CustomIntroSlider extends React.Component<
         key: '3',
         title: i18n.t('intro.slideServices.title'),
         text: i18n.t('intro.slideServices.text'),
-        view: (): React.Node => <IntroIcon icon="view-dashboard-variant" />,
+        view: () => <IntroIcon icon="view-dashboard-variant" />,
         mascotStyle: MASCOT_STYLE.CUTE,
         colors: ['#be1522', '#57080e'],
       },
@@ -140,7 +146,7 @@ export default class CustomIntroSlider extends React.Component<
         key: '4',
         title: i18n.t('intro.slideDone.title'),
         text: i18n.t('intro.slideDone.text'),
-        view: (): React.Node => <MascotIntroEnd />,
+        view: () => <MascotIntroEnd />,
         colors: ['#9c165b', '#3e042b'],
       },
     ];
@@ -152,7 +158,7 @@ export default class CustomIntroSlider extends React.Component<
         key: '1',
         title: i18n.t('intro.aprilFoolsSlide.title'),
         text: i18n.t('intro.aprilFoolsSlide.text'),
-        view: (): React.Node => <View />,
+        view: () => <View />,
         mascotStyle: MASCOT_STYLE.NORMAL,
         colors: ['#e01928', '#be1522'],
       },
@@ -162,21 +168,21 @@ export default class CustomIntroSlider extends React.Component<
   /**
    * Render item to be used for the intro introSlides
    *
-   * @param item The item to be displayed
-   * @param dimensions Dimensions of the item
+   * @param data
    */
-  getIntroRenderItem = ({
-    item,
-    dimensions,
-  }: {
-    item: IntroSlideType,
-    dimensions: {width: number, height: number},
-  }): React.Node => {
+  getIntroRenderItem = (
+    data:
+      | (ListRenderItemInfo<IntroSlideType> & {
+          dimensions: {width: number; height: number};
+        })
+      | ListRenderItemInfo<IntroSlideType>,
+  ) => {
+    const item = data.item;
     const {state} = this;
     const index = parseInt(item.key, 10);
     return (
       <LinearGradient
-        style={[styles.mainContent, dimensions]}
+        style={[styles.mainContent]}
         colors={item.colors}
         start={{x: 0, y: 0.1}}
         end={{x: 0.1, y: 1}}>
@@ -254,7 +260,9 @@ export default class CustomIntroSlider extends React.Component<
   };
 
   static setStatusBarColor(color: string) {
-    if (Platform.OS === 'android') StatusBar.setBackgroundColor(color, true);
+    if (Platform.OS === 'android') {
+      StatusBar.setBackgroundColor(color, true);
+    }
   }
 
   onSlideChange = (index: number) => {
@@ -266,8 +274,9 @@ export default class CustomIntroSlider extends React.Component<
     CustomIntroSlider.setStatusBarColor(
       this.currentSlides[this.currentSlides.length - 1].colors[0],
     );
-    if (this.sliderRef.current != null)
+    if (this.sliderRef.current != null) {
       this.sliderRef.current.goToSlide(this.currentSlides.length - 1);
+    }
   };
 
   onDone = () => {
@@ -278,7 +287,7 @@ export default class CustomIntroSlider extends React.Component<
     props.onDone();
   };
 
-  getRenderNextButton = (): React.Node => {
+  getRenderNextButton = () => {
     return (
       <Animatable.View
         useNativeDriver
@@ -293,7 +302,7 @@ export default class CustomIntroSlider extends React.Component<
     );
   };
 
-  getRenderDoneButton = (): React.Node => {
+  getRenderDoneButton = () => {
     return (
       <Animatable.View
         useNativeDriver
@@ -308,11 +317,14 @@ export default class CustomIntroSlider extends React.Component<
     );
   };
 
-  render(): React.Node {
+  render() {
     const {props, state} = this;
     this.currentSlides = this.introSlides;
-    if (props.isUpdate) this.currentSlides = this.updateSlides;
-    else if (props.isAprilFools) this.currentSlides = this.aprilFoolsSlides;
+    if (props.isUpdate) {
+      this.currentSlides = this.updateSlides;
+    } else if (props.isAprilFools) {
+      this.currentSlides = this.aprilFoolsSlides;
+    }
     CustomIntroSlider.setStatusBarColor(this.currentSlides[0].colors[0]);
     return (
       <AppIntroSlider

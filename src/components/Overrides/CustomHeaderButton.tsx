@@ -17,39 +17,31 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {HeaderButton, HeaderButtons} from 'react-navigation-header-buttons';
-import {withTheme} from 'react-native-paper';
-import type {CustomThemeType} from '../../managers/ThemeManager';
+import {
+  HeaderButton,
+  HeaderButtonProps,
+  HeaderButtons,
+  HeaderButtonsProps,
+} from 'react-navigation-header-buttons';
+import {useTheme} from 'react-native-paper';
 
-const MaterialHeaderButton = (props: {
-  theme: CustomThemeType,
-  color: string,
-}): React.Node => {
-  const {color, theme} = props;
+const MaterialHeaderButton = (props: HeaderButtonProps) => {
+  const theme = useTheme();
   return (
-    // $FlowFixMe
     <HeaderButton
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       IconComponent={MaterialCommunityIcons}
       iconSize={26}
-      color={color != null ? color : theme.colors.text}
+      color={props.color ? props.color : theme.colors.text}
     />
   );
 };
 
-const MaterialHeaderButtons = (props: {...}): React.Node => {
+const MaterialHeaderButtons = (props: HeaderButtonsProps) => {
   return (
-    // $FlowFixMe
-    <HeaderButtons
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...props}
-      HeaderButtonComponent={withTheme(MaterialHeaderButton)}
-    />
+    <HeaderButtons {...props} HeaderButtonComponent={MaterialHeaderButton} />
   );
 };
 

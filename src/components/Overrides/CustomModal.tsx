@@ -17,14 +17,11 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {withTheme} from 'react-native-paper';
+import {useTheme} from 'react-native-paper';
 import {Modalize} from 'react-native-modalize';
 import {View} from 'react-native-animatable';
 import CustomTabBar from '../Tabbar/CustomTabBar';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 
 /**
  * Abstraction layer for Modalize component, using custom configuration
@@ -33,11 +30,11 @@ import type {CustomThemeType} from '../../managers/ThemeManager';
  * @return {*}
  */
 function CustomModal(props: {
-  theme: CustomThemeType,
-  onRef: (re: Modalize) => void,
-  children?: React.Node,
-}): React.Node {
-  const {theme, onRef, children} = props;
+  onRef: (re: Modalize) => void;
+  children?: React.ReactNode;
+}) {
+  const theme = useTheme();
+  const {onRef, children} = props;
   return (
     <Modalize
       ref={onRef}
@@ -55,6 +52,4 @@ function CustomModal(props: {
   );
 }
 
-CustomModal.defaultProps = {children: null};
-
-export default withTheme(CustomModal);
+export default CustomModal;
