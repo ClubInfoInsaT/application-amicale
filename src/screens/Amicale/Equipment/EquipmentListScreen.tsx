@@ -17,42 +17,38 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {View} from 'react-native';
-import {Button, withTheme} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
 import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen';
-import type {ClubType} from '../Clubs/ClubListScreen';
 import EquipmentListItem from '../../../components/Lists/Equipment/EquipmentListItem';
 import MascotPopup from '../../../components/Mascot/MascotPopup';
 import {MASCOT_STYLE} from '../../../components/Mascot/Mascot';
 import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
-import type {ApiGenericDataType} from '../../../utils/WebData';
 
 type PropsType = {
-  navigation: StackNavigationProp,
+  navigation: StackNavigationProp<any>;
 };
 
 type StateType = {
-  mascotDialogVisible: boolean,
+  mascotDialogVisible: boolean;
 };
 
 export type DeviceType = {
-  id: number,
-  name: string,
-  caution: number,
-  booked_at: Array<{begin: string, end: string}>,
+  id: number;
+  name: string;
+  caution: number;
+  booked_at: Array<{begin: string; end: string}>;
 };
 
 export type RentedDeviceType = {
-  device_id: number,
-  device_name: string,
-  begin: string,
-  end: string,
+  device_id: number;
+  device_name: string;
+  begin: string;
+  end: string;
 };
 
 const LIST_ITEM_HEIGHT = 64;
@@ -60,12 +56,13 @@ const LIST_ITEM_HEIGHT = 64;
 class EquipmentListScreen extends React.Component<PropsType, StateType> {
   userRents: null | Array<RentedDeviceType>;
 
-  authRef: {current: null | AuthenticatedScreen};
+  authRef: {current: null | AuthenticatedScreen<any>};
 
   canRefresh: boolean;
 
   constructor(props: PropsType) {
     super(props);
+    this.userRents = null;
     this.state = {
       mascotDialogVisible: AsyncStorageManager.getBool(
         AsyncStorageManager.PREFERENCES.equipmentShowMascot.key,
@@ -77,12 +74,17 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
   }
 
   onScreenFocus = () => {
-    if (this.canRefresh && this.authRef.current != null)
+    if (
+      this.canRefresh &&
+      this.authRef.current &&
+      this.authRef.current.reload
+    ) {
       this.authRef.current.reload();
+    }
     this.canRefresh = true;
   };
 
-  getRenderItem = ({item}: {item: DeviceType}): React.Node => {
+  getRenderItem = ({item}: {item: DeviceType}) => {
     const {navigation} = this.props;
     return (
       <EquipmentListItem
@@ -94,7 +96,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  getUserDeviceRentDates(item: DeviceType): [number, number] | null {
+  getUserDeviceRentDates(item: DeviceType): [string, string] | null {
     let dates = null;
     if (this.userRents != null) {
       this.userRents.forEach((device: RentedDeviceType) => {
@@ -111,7 +113,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getListHeader(): React.Node {
+  getListHeader() {
     return (
       <View
         style={{
@@ -133,7 +135,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
     );
   }
 
-  keyExtractor = (item: ClubType): string => item.id.toString();
+  keyExtractor = (item: DeviceType): string => item.id.toString();
 
   /**
    * Gets the main screen component with the fetched data
@@ -141,15 +143,27 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
    * @param data The data fetched from the server
    * @returns {*}
    */
-  getScreen = (data: Array<ApiGenericDataType | null>): React.Node => {
+  getScreen = (
+    data: Array<
+      {devices: Array<DeviceType>} | {locations: Array<RentedDeviceType>} | null
+    >,
+  ) => {
     const [allDevices, userRents] = data;
-    if (userRents != null) this.userRents = userRents.locations;
+    if (userRents) {
+      this.userRents = (userRents as {
+        locations: Array<RentedDeviceType>;
+      }).locations;
+    }
     return (
       <CollapsibleFlatList
         keyExtractor={this.keyExtractor}
         renderItem={this.getRenderItem}
         ListHeaderComponent={this.getListHeader()}
-        data={allDevices != null ? allDevices.devices : null}
+        data={
+          allDevices
+            ? (allDevices as {devices: Array<DeviceType>}).devices
+            : null
+        }
       />
     );
   };
@@ -166,7 +180,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
     this.setState({mascotDialogVisible: false});
   };
 
-  render(): React.Node {
+  render() {
     const {props, state} = this;
     return (
       <View style={{flex: 1}}>
@@ -193,7 +207,6 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
           message={i18n.t('screens.equipment.mascotDialog.message')}
           icon="vote"
           buttons={{
-            action: null,
             cancel: {
               message: i18n.t('screens.equipment.mascotDialog.button'),
               icon: 'check',
@@ -207,4 +220,4 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
   }
 }
 
-export default withTheme(EquipmentListScreen);
+export default EquipmentListScreen;

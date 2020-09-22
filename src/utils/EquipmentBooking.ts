@@ -21,6 +21,7 @@ import i18n from 'i18n-js';
 import type {DeviceType} from '../screens/Amicale/Equipment/EquipmentListScreen';
 import DateManager from '../managers/DateManager';
 import type {MarkedDatesObjectType} from '../screens/Amicale/Equipment/EquipmentRentScreen';
+import {PeriodMarking} from 'react-native-calendars';
 
 /**
  * Gets the current day at midnight
@@ -189,11 +190,7 @@ export function generateMarkedDates(
   range: Array<string>,
 ): MarkedDatesObjectType {
   const markedDates: {
-    [key: string]: {
-      startingDay: boolean;
-      endingDay: boolean;
-      color: string;
-    };
+    [key: string]: PeriodMarking;
   } = {};
   for (let i = 0; i < range.length; i += 1) {
     const isStart = i === 0;

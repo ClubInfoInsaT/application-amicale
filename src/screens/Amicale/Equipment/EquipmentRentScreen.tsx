@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {
   Button,
@@ -28,13 +26,12 @@ import {
   Subheading,
   withTheme,
 } from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {BackHandler, View} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import i18n from 'i18n-js';
-import {CalendarList} from 'react-native-calendars';
+import {CalendarList, PeriodMarking} from 'react-native-calendars';
 import type {DeviceType} from './EquipmentListScreen';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import LoadingConfirmDialog from '../../../components/Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../../components/Dialogs/ErrorDialog';
 import {
@@ -47,43 +44,46 @@ import {
 } from '../../../utils/EquipmentBooking';
 import ConnectionManager from '../../../managers/ConnectionManager';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import {MainStackParamsList} from '../../../navigation/MainNavigator';
 
-type PropsType = {
-  navigation: StackNavigationProp,
-  route: {
-    params?: {
-      item?: DeviceType,
-    },
-  },
-  theme: CustomThemeType,
+type EquipmentRentScreenNavigationProp = StackScreenProps<
+  MainStackParamsList,
+  'equipment-rent'
+>;
+
+type Props = EquipmentRentScreenNavigationProp & {
+  navigation: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
 };
 
 export type MarkedDatesObjectType = {
-  [key: string]: {startingDay: boolean, endingDay: boolean, color: string},
+  [key: string]: PeriodMarking;
 };
 
 type StateType = {
-  dialogVisible: boolean,
-  errorDialogVisible: boolean,
-  markedDates: MarkedDatesObjectType,
-  currentError: number,
+  dialogVisible: boolean;
+  errorDialogVisible: boolean;
+  markedDates: MarkedDatesObjectType;
+  currentError: number;
 };
 
-class EquipmentRentScreen extends React.Component<PropsType, StateType> {
+class EquipmentRentScreen extends React.Component<Props, StateType> {
   item: DeviceType | null;
 
   bookedDates: Array<string>;
 
-  bookRef: {current: null | Animatable.View};
+  bookRef: {current: null | (Animatable.View & View)};
 
   canBookEquipment: boolean;
 
   lockedDates: {
-    [key: string]: {startingDay: boolean, endingDay: boolean, color: string},
+    [key: string]: PeriodMarking;
   };
 
-  constructor(props: PropsType) {
+  constructor(props: Props) {
     super(props);
+    this.item = null;
+    this.lockedDates = {};
     this.state = {
       dialogVisible: false,
       errorDialogVisible: false,
@@ -95,13 +95,16 @@ class EquipmentRentScreen extends React.Component<PropsType, StateType> {
     this.canBookEquipment = false;
     this.bookedDates = [];
     if (props.route.params != null) {
-      if (props.route.params.item != null) this.item = props.route.params.item;
-      else this.item = null;
+      if (props.route.params.item != null) {
+        this.item = props.route.params.item;
+      } else {
+        this.item = null;
+      }
     }
     const {item} = this;
     if (item != null) {
       this.lockedDates = {};
-      item.booked_at.forEach((date: {begin: string, end: string}) => {
+      item.booked_at.forEach((date: {begin: string; end: string}) => {
         const range = getValidRange(
           new Date(date.begin),
           new Date(date.end),
@@ -211,11 +214,11 @@ class EquipmentRentScreen extends React.Component<PropsType, StateType> {
    * @param day The day selected
    */
   selectNewDate = (day: {
-    dateString: string,
-    day: number,
-    month: number,
-    timestamp: number,
-    year: number,
+    dateString: string;
+    day: number;
+    month: number;
+    timestamp: number;
+    year: number;
   }) => {
     const selected = new Date(day.dateString);
     const start = this.getBookStartDate();
@@ -229,7 +232,9 @@ class EquipmentRentScreen extends React.Component<PropsType, StateType> {
       } else if (this.bookedDates.length === 1) {
         this.updateSelectionRange(start, selected);
         this.enableBooking();
-      } else this.resetSelection();
+      } else {
+        this.resetSelection();
+      }
       this.updateMarkedSelection();
     }
   };
@@ -249,7 +254,7 @@ class EquipmentRentScreen extends React.Component<PropsType, StateType> {
    * Shows the book button by plying a fade animation
    */
   showBookButton() {
-    if (this.bookRef.current != null) {
+    if (this.bookRef.current && this.bookRef.current.fadeInUp) {
       this.bookRef.current.fadeInUp(500);
     }
   }
@@ -258,7 +263,7 @@ class EquipmentRentScreen extends React.Component<PropsType, StateType> {
    * Hides the book button by plying a fade animation
    */
   hideBookButton() {
-    if (this.bookRef.current != null) {
+    if (this.bookRef.current && this.bookRef.current.fadeOutDown) {
       this.bookRef.current.fadeOutDown(500);
     }
   }
@@ -271,7 +276,9 @@ class EquipmentRentScreen extends React.Component<PropsType, StateType> {
   }
 
   resetSelection() {
-    if (this.canBookEquipment) this.hideBookButton();
+    if (this.canBookEquipment) {
+      this.hideBookButton();
+    }
     this.canBookEquipment = false;
     this.bookedDates = [];
   }
@@ -287,21 +294,23 @@ class EquipmentRentScreen extends React.Component<PropsType, StateType> {
     });
   }
 
-  render(): React.Node {
+  render() {
     const {item, props, state} = this;
     const start = this.getBookStartDate();
     const end = this.getBookEndDate();
     let subHeadingText;
-    if (start == null) subHeadingText = i18n.t('screens.equipment.booking');
-    else if (end != null && start.getTime() !== end.getTime())
+    if (start == null) {
+      subHeadingText = i18n.t('screens.equipment.booking');
+    } else if (end != null && start.getTime() !== end.getTime()) {
       subHeadingText = i18n.t('screens.equipment.bookingPeriod', {
         begin: getRelativeDateString(start),
         end: getRelativeDateString(end),
       });
-    else
+    } else {
       subHeadingText = i18n.t('screens.equipment.bookingDay', {
         date: getRelativeDateString(start),
       });
+    }
     if (item != null) {
       const isAvailable = isEquipmentAvailable(item);
       const firstAvailability = getFirstEquipmentAvailability(item);
@@ -369,12 +378,10 @@ class EquipmentRentScreen extends React.Component<PropsType, StateType> {
               onDayPress={this.selectNewDate}
               // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
               firstDay={1}
-              // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-              disableAllTouchEventsForDisabledDays
               // Hide month navigation arrows.
               hideArrows={false}
               // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-              markingType="period"
+              markingType={'period'}
               markedDates={{...this.lockedDates, ...state.markedDates}}
               theme={{
                 backgroundColor: props.theme.colors.agendaBackgroundColor,

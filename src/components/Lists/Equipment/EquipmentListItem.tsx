@@ -30,7 +30,7 @@ import {
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
-  userDeviceRentDates: [string, string];
+  userDeviceRentDates: [string, string] | null;
   item: DeviceType;
   height: number;
 };
@@ -57,7 +57,7 @@ function EquipmentListItem(props: PropsType) {
   }
 
   let description;
-  if (isRented) {
+  if (isRented && userDeviceRentDates) {
     const start = new Date(userDeviceRentDates[0]);
     const end = new Date(userDeviceRentDates[1]);
     if (start.getTime() !== end.getTime()) {
