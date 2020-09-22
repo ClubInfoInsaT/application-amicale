@@ -17,12 +17,15 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import i18n from 'i18n-js';
 import {Snackbar} from 'react-native-paper';
-import {RefreshControl, View} from 'react-native';
+import {
+  NativeSyntheticEvent,
+  RefreshControl,
+  SectionListData,
+  View,
+} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import {Collapsible} from 'react-navigation-collapsible';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -32,42 +35,43 @@ import withCollapsible from '../../utils/withCollapsible';
 import CustomTabBar from '../Tabbar/CustomTabBar';
 import {ERROR_TYPE, readData} from '../../utils/WebData';
 import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
-import type {ApiGenericDataType} from '../../utils/WebData';
 
-export type SectionListDataType<T> = Array<{
-  title: string,
-  data: Array<T>,
-  keyExtractor?: (T) => string,
+export type SectionListDataType<ItemT> = Array<{
+  title: string;
+  data: Array<ItemT>;
+  keyExtractor?: (data: ItemT) => string;
 }>;
 
-type PropsType<T> = {
-  navigation: StackNavigationProp,
-  fetchUrl: string,
-  autoRefreshTime: number,
-  refreshOnFocus: boolean,
-  renderItem: (data: {item: T}) => React.Node,
+type PropsType<ItemT, RawData> = {
+  navigation: StackNavigationProp<any>;
+  fetchUrl: string;
+  autoRefreshTime: number;
+  refreshOnFocus: boolean;
+  renderItem: (data: {item: ItemT}) => React.ReactNode;
   createDataset: (
-    data: ApiGenericDataType | null,
+    data: RawData | null,
     isLoading?: boolean,
-  ) => SectionListDataType<T>,
-  onScroll: (event: SyntheticEvent<EventTarget>) => void,
-  collapsibleStack: Collapsible,
+  ) => SectionListDataType<ItemT>;
+  onScroll: (event: NativeSyntheticEvent<EventTarget>) => void;
+  collapsibleStack: Collapsible;
 
-  showError?: boolean,
-  itemHeight?: number | null,
-  updateData?: number,
-  renderListHeaderComponent?: (data: ApiGenericDataType | null) => React.Node,
+  showError?: boolean;
+  itemHeight?: number | null;
+  updateData?: number;
+  renderListHeaderComponent?: (
+    data: RawData | null,
+  ) => React.ComponentType<any> | React.ReactElement | null;
   renderSectionHeader?: (
-    data: {section: {title: string}},
+    data: {section: SectionListData<ItemT>},
     isLoading?: boolean,
-  ) => React.Node,
-  stickyHeader?: boolean,
+  ) => React.ReactElement | null;
+  stickyHeader?: boolean;
 };
 
-type StateType = {
-  refreshing: boolean,
-  fetchedData: ApiGenericDataType | null,
-  snackbarVisible: boolean,
+type StateType<RawData> = {
+  refreshing: boolean;
+  fetchedData: RawData | null;
+  snackbarVisible: boolean;
 };
 
 const MIN_REFRESH_TIME = 5 * 1000;
@@ -78,22 +82,25 @@ const MIN_REFRESH_TIME = 5 * 1000;
  * This is a pure component, meaning it will only update if a shallow comparison of state and props is different.
  * To force the component to update, change the value of updateData.
  */
-class WebSectionList<T> extends React.PureComponent<PropsType<T>, StateType> {
+class WebSectionList<ItemT, RawData> extends React.PureComponent<
+  PropsType<ItemT, RawData>,
+  StateType<RawData>
+> {
   static defaultProps = {
     showError: true,
     itemHeight: null,
     updateData: 0,
-    renderListHeaderComponent: (): React.Node => null,
-    renderSectionHeader: (): React.Node => null,
+    renderListHeaderComponent: () => null,
+    renderSectionHeader: () => null,
     stickyHeader: false,
   };
 
-  refreshInterval: IntervalID;
+  refreshInterval: NodeJS.Timeout | undefined;
 
-  lastRefresh: Date | null;
+  lastRefresh: Date | undefined;
 
-  constructor() {
-    super();
+  constructor(props: PropsType<ItemT, RawData>) {
+    super(props);
     this.state = {
       refreshing: false,
       fetchedData: null,
@@ -109,7 +116,7 @@ class WebSectionList<T> extends React.PureComponent<PropsType<T>, StateType> {
     const {navigation} = this.props;
     navigation.addListener('focus', this.onScreenFocus);
     navigation.addListener('blur', this.onScreenBlur);
-    this.lastRefresh = null;
+    this.lastRefresh = undefined;
     this.onRefresh();
   }
 
@@ -121,15 +128,18 @@ class WebSectionList<T> extends React.PureComponent<PropsType<T>, StateType> {
     if (props.refreshOnFocus && this.lastRefresh) {
       setTimeout(this.onRefresh, 200);
     }
-    if (props.autoRefreshTime > 0)
+    if (props.autoRefreshTime > 0) {
       this.refreshInterval = setInterval(this.onRefresh, props.autoRefreshTime);
+    }
   };
 
   /**
    * Removes any interval on un-focus
    */
   onScreenBlur = () => {
-    clearInterval(this.refreshInterval);
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+    }
   };
 
   /**
@@ -138,7 +148,7 @@ class WebSectionList<T> extends React.PureComponent<PropsType<T>, StateType> {
    *
    * @param fetchedData The newly fetched data
    */
-  onFetchSuccess = (fetchedData: ApiGenericDataType) => {
+  onFetchSuccess = (fetchedData: RawData) => {
     this.setState({
       fetchedData,
       refreshing: false,
@@ -167,7 +177,9 @@ class WebSectionList<T> extends React.PureComponent<PropsType<T>, StateType> {
     if (this.lastRefresh != null) {
       const last = this.lastRefresh;
       canRefresh = new Date().getTime() - last.getTime() > MIN_REFRESH_TIME;
-    } else canRefresh = true;
+    } else {
+      canRefresh = true;
+    }
     if (canRefresh) {
       this.setState({refreshing: true});
       readData(fetchUrl).then(this.onFetchSuccess).catch(this.onFetchError);
@@ -189,19 +201,18 @@ class WebSectionList<T> extends React.PureComponent<PropsType<T>, StateType> {
   };
 
   getItemLayout = (
-    data: T,
+    height: number,
+    data: Array<SectionListData<ItemT>> | null,
     index: number,
-  ): {length: number, offset: number, index: number} | null => {
-    const {itemHeight} = this.props;
-    if (itemHeight == null) return null;
+  ): {length: number; offset: number; index: number} => {
     return {
-      length: itemHeight,
-      offset: itemHeight * index,
+      length: height,
+      offset: height * index,
       index,
     };
   };
 
-  getRenderSectionHeader = (data: {section: {title: string}}): React.Node => {
+  getRenderSectionHeader = (data: {section: SectionListData<ItemT>}) => {
     const {renderSectionHeader} = this.props;
     const {refreshing} = this.state;
     if (renderSectionHeader != null) {
@@ -214,7 +225,7 @@ class WebSectionList<T> extends React.PureComponent<PropsType<T>, StateType> {
     return null;
   };
 
-  getRenderItem = (data: {item: T}): React.Node => {
+  getRenderItem = (data: {item: ItemT}) => {
     const {renderItem} = this.props;
     return (
       <Animatable.View animation="fadeInUp" duration={500} useNativeDriver>
@@ -223,19 +234,23 @@ class WebSectionList<T> extends React.PureComponent<PropsType<T>, StateType> {
     );
   };
 
-  onScroll = (event: SyntheticEvent<EventTarget>) => {
+  onScroll = (event: NativeSyntheticEvent<EventTarget>) => {
     const {onScroll} = this.props;
-    if (onScroll != null) onScroll(event);
+    if (onScroll != null) {
+      onScroll(event);
+    }
   };
 
-  render(): React.Node {
+  render() {
     const {props, state} = this;
-    let dataset = [];
+    const {itemHeight} = props;
+    let dataset: SectionListDataType<ItemT> = [];
     if (
       state.fetchedData != null ||
       (state.fetchedData == null && !props.showError)
-    )
+    ) {
       dataset = props.createDataset(state.fetchedData, state.refreshing);
+    }
 
     const {containerPaddingTop} = props.collapsibleStack;
     return (
@@ -270,7 +285,11 @@ class WebSectionList<T> extends React.PureComponent<PropsType<T>, StateType> {
               />
             )
           }
-          getItemLayout={props.itemHeight != null ? this.getItemLayout : null}
+          getItemLayout={
+            itemHeight
+              ? (data, index) => this.getItemLayout(itemHeight, data, index)
+              : undefined
+          }
           onScroll={this.onScroll}
           hasTab
         />

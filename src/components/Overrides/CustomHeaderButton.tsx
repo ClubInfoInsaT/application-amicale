@@ -39,7 +39,9 @@ const MaterialHeaderButton = (props: HeaderButtonProps) => {
   );
 };
 
-const MaterialHeaderButtons = (props: HeaderButtonsProps) => {
+const MaterialHeaderButtons = (
+  props: HeaderButtonsProps & {children?: React.ReactNode},
+) => {
   return (
     <HeaderButtons {...props} HeaderButtonComponent={MaterialHeaderButton} />
   );
