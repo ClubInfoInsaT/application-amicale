@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {List} from 'react-native-paper';
 import {View} from 'react-native-animatable';
@@ -26,8 +24,8 @@ import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatLis
 import packageJson from '../../../package.json';
 
 type ListItemType = {
-  name: string,
-  version: string,
+  name: string;
+  version: string;
 };
 
 /**
@@ -37,9 +35,9 @@ type ListItemType = {
  * @return {Array<ListItemType>}
  */
 function generateListFromObject(object: {
-  [key: string]: string,
+  [key: string]: string;
 }): Array<ListItemType> {
-  const list = [];
+  const list: Array<ListItemType> = [];
   const keys = Object.keys(object);
   keys.forEach((key: string) => {
     list.push({name: key, version: object[key]});
@@ -56,13 +54,13 @@ export default class AboutDependenciesScreen extends React.Component<null> {
   data: Array<ListItemType>;
 
   constructor() {
-    super();
+    super(null);
     this.data = generateListFromObject(packageJson.dependencies);
   }
 
   keyExtractor = (item: ListItemType): string => item.name;
 
-  getRenderItem = ({item}: {item: ListItemType}): React.Node => (
+  getRenderItem = ({item}: {item: ListItemType}) => (
     <List.Item
       title={item.name}
       description={item.version.replace('^', '').replace('~', '')}
@@ -71,15 +69,15 @@ export default class AboutDependenciesScreen extends React.Component<null> {
   );
 
   getItemLayout = (
-    data: ListItemType,
+    data: Array<ListItemType> | null | undefined,
     index: number,
-  ): {length: number, offset: number, index: number} => ({
+  ): {length: number; offset: number; index: number} => ({
     length: LIST_ITEM_HEIGHT,
     offset: LIST_ITEM_HEIGHT * index,
     index,
   });
 
-  render(): React.Node {
+  render() {
     return (
       <View>
         <CollapsibleFlatList

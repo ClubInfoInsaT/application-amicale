@@ -17,37 +17,32 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {FlatList, Linking, Platform, Image, View} from 'react-native';
 import i18n from 'i18n-js';
-import {Avatar, Card, List, withTheme} from 'react-native-paper';
+import {Avatar, Card, List} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import packageJson from '../../../package.json';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
-import APP_LOGO from '../../../assets/android.icon.round.png';
-import type {
-  CardTitleIconPropsType,
-  ListIconPropsType,
-} from '../../constants/PaperStyles';
 import OptionsDialog from '../../components/Dialogs/OptionsDialog';
 import type {OptionsDialogButtonType} from '../../components/Dialogs/OptionsDialog';
 
+const APP_LOGO = require('../../../assets/android.icon.round.png');
+
 type ListItemType = {
-  onPressCallback: () => void,
-  icon: string,
-  text: string,
-  showChevron: boolean,
+  onPressCallback: () => void;
+  icon: string;
+  text: string;
+  showChevron: boolean;
 };
 
 type MemberItemType = {
-  name: string,
-  message: string,
-  icon: string,
-  trollLink?: string,
-  linkedin?: string,
-  mail?: string,
+  name: string;
+  message: string;
+  icon: string;
+  trollLink?: string;
+  linkedin?: string;
+  mail?: string;
 };
 
 const links = {
@@ -64,14 +59,14 @@ const links = {
 };
 
 type PropsType = {
-  navigation: StackNavigationProp,
+  navigation: StackNavigationProp<any>;
 };
 
 type StateType = {
-  dialogVisible: boolean,
-  dialogTitle: string,
-  dialogMessage: string,
-  dialogButtons: Array<OptionsDialogButtonType>,
+  dialogVisible: boolean;
+  dialogTitle: string;
+  dialogMessage: string;
+  dialogButtons: Array<OptionsDialogButtonType>;
 };
 
 /**
@@ -86,7 +81,6 @@ function openWebLink(link: string) {
  * Class defining an about screen. This screen shows the user information about the app and it's author.
  */
 class AboutScreen extends React.Component<PropsType, StateType> {
-
   /**
    * Object containing data relative to major contributors
    */
@@ -109,7 +103,8 @@ class AboutScreen extends React.Component<PropsType, StateType> {
       message: i18n.t('screens.about.user.yohan'),
       icon: 'xml',
       linkedin: 'https://www.linkedin.com/in/yohan-simard',
-      mail: 'mailto:ysimard@etud.insa-toulouse.fr?' +
+      mail:
+        'mailto:ysimard@etud.insa-toulouse.fr?' +
         'subject=' +
         'Application Amicale INSA Toulouse' +
         '&body=' +
@@ -333,7 +328,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    * @param user The member to show information for
    */
   onContributorListItemPress(user: MemberItemType) {
-    const dialogBtn = [
+    const dialogBtn: Array<OptionsDialogButtonType> = [
       {
         title: 'OK',
         onPress: this.onDialogDismiss,
@@ -379,15 +374,14 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getAppCard(): React.Node {
+  getAppCard() {
     return (
       <Card style={{marginBottom: 10}}>
         <Card.Title
           title="Campus"
           subtitle={packageJson.version}
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
+          left={(iconProps) => (
             <Image
-              size={iconProps.size}
               source={APP_LOGO}
               style={{width: iconProps.size, height: iconProps.size}}
             />
@@ -409,12 +403,12 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getTeamCard(): React.Node {
+  getTeamCard() {
     return (
       <Card style={{marginBottom: 10}}>
         <Card.Title
           title={i18n.t('screens.about.team')}
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
+          left={(iconProps) => (
             <Avatar.Icon size={iconProps.size} icon="account-multiple" />
           )}
         />
@@ -434,12 +428,12 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getThanksCard(): React.Node {
+  getThanksCard() {
     return (
       <Card style={{marginBottom: 10}}>
         <Card.Title
           title={i18n.t('screens.about.thanks')}
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
+          left={(iconProps) => (
             <Avatar.Icon size={iconProps.size} icon="hand-heart" />
           )}
         />
@@ -459,12 +453,12 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getTechnoCard(): React.Node {
+  getTechnoCard() {
     return (
       <Card style={{marginBottom: 10}}>
         <Card.Title
           title={i18n.t('screens.about.technologies')}
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
+          left={(iconProps) => (
             <Avatar.Icon size={iconProps.size} icon="wrench" />
           )}
         />
@@ -485,7 +479,13 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    * @param props
    * @return {*}
    */
-  static getChevronIcon(props: ListIconPropsType): React.Node {
+  static getChevronIcon(props: {
+    color: string;
+    style?: {
+      marginRight: number;
+      marginVertical?: number;
+    };
+  }) {
     return (
       <List.Icon color={props.color} style={props.style} icon="chevron-right" />
     );
@@ -498,7 +498,16 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    * @param props
    * @return {*}
    */
-  static getItemIcon(item: ListItemType, props: ListIconPropsType): React.Node {
+  static getItemIcon(
+    item: ListItemType,
+    props: {
+      color: string;
+      style?: {
+        marginRight: number;
+        marginVertical?: number;
+      };
+    },
+  ) {
     return (
       <List.Icon color={props.color} style={props.style} icon={item.icon} />
     );
@@ -509,9 +518,14 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getCardItem = ({item}: {item: ListItemType}): React.Node => {
-    const getItemIcon = (props: ListIconPropsType): React.Node =>
-      AboutScreen.getItemIcon(item, props);
+  getCardItem = ({item}: {item: ListItemType}) => {
+    const getItemIcon = (props: {
+      color: string;
+      style?: {
+        marginRight: number;
+        marginVertical?: number;
+      };
+    }) => AboutScreen.getItemIcon(item, props);
     if (item.showChevron) {
       return (
         <List.Item
@@ -537,7 +551,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    * @param item The item to show
    * @return {*}
    */
-  getMainCard = ({item}: {item: {id: string}}): React.Node => {
+  getMainCard = ({item}: {item: {id: string}}) => {
     switch (item.id) {
       case 'app':
         return this.getAppCard();
@@ -564,7 +578,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    */
   keyExtractor = (item: ListItemType): string => item.icon;
 
-  render(): React.Node {
+  render() {
     const {state} = this;
     return (
       <View
@@ -588,4 +602,4 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   }
 }
 
-export default withTheme(AboutScreen);
+export default AboutScreen;

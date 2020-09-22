@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {View} from 'react-native';
 import {
@@ -32,22 +30,21 @@ import {
 import {Modalize} from 'react-native-modalize';
 import CustomModal from '../../components/Overrides/CustomModal';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 
 type PreferenceItemType = {
-  key: string,
-  default: string,
-  current: string,
+  key: string;
+  default: string;
+  current: string;
 };
 
 type PropsType = {
-  theme: CustomThemeType,
+  theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
-  modalCurrentDisplayItem: PreferenceItemType,
-  currentPreferences: Array<PreferenceItemType>,
+  modalCurrentDisplayItem: PreferenceItemType | null;
+  currentPreferences: Array<PreferenceItemType>;
 };
 
 /**
@@ -55,7 +52,7 @@ type StateType = {
  * This screen allows the user to get and modify information on the app/device.
  */
 class DebugScreen extends React.Component<PropsType, StateType> {
-  modalRef: Modalize;
+  modalRef: Modalize | null;
 
   modalInputValue: string;
 
@@ -66,16 +63,16 @@ class DebugScreen extends React.Component<PropsType, StateType> {
    */
   constructor(props: PropsType) {
     super(props);
+    this.modalRef = null;
     this.modalInputValue = '';
     const currentPreferences: Array<PreferenceItemType> = [];
-    // eslint-disable-next-line flowtype/no-weak-types
     Object.values(AsyncStorageManager.PREFERENCES).forEach((object: any) => {
       const newObject: PreferenceItemType = {...object};
       newObject.current = AsyncStorageManager.getString(newObject.key);
       currentPreferences.push(newObject);
     });
     this.state = {
-      modalCurrentDisplayItem: {},
+      modalCurrentDisplayItem: null,
       currentPreferences,
     };
   }
@@ -85,21 +82,27 @@ class DebugScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getModalContent(): React.Node {
+  getModalContent() {
     const {props, state} = this;
+    let key = '';
+    let defaultValue = '';
+    let current = '';
+    if (state.modalCurrentDisplayItem) {
+      key = state.modalCurrentDisplayItem.key;
+      defaultValue = state.modalCurrentDisplayItem.default;
+      defaultValue = state.modalCurrentDisplayItem.default;
+      current = state.modalCurrentDisplayItem.current;
+    }
+
     return (
       <View
         style={{
           flex: 1,
           padding: 20,
         }}>
-        <Title>{state.modalCurrentDisplayItem.key}</Title>
-        <Subheading>
-          Default: {state.modalCurrentDisplayItem.default}
-        </Subheading>
-        <Subheading>
-          Current: {state.modalCurrentDisplayItem.current}
-        </Subheading>
+        <Title>{key}</Title>
+        <Subheading>Default: {defaultValue}</Subheading>
+        <Subheading>Current: {current}</Subheading>
         <TextInput
           label="New Value"
           onChangeText={(text: string) => {
@@ -116,10 +119,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
             dark
             color={props.theme.colors.success}
             onPress={() => {
-              this.saveNewPrefs(
-                state.modalCurrentDisplayItem.key,
-                this.modalInputValue,
-              );
+              this.saveNewPrefs(key, this.modalInputValue);
             }}>
             Save new value
           </Button>
@@ -128,10 +128,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
             dark
             color={props.theme.colors.danger}
             onPress={() => {
-              this.saveNewPrefs(
-                state.modalCurrentDisplayItem.key,
-                state.modalCurrentDisplayItem.default,
-              );
+              this.saveNewPrefs(key, defaultValue);
             }}>
             Reset to default
           </Button>
@@ -140,7 +137,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
     );
   }
 
-  getRenderItem = ({item}: {item: PreferenceItemType}): React.Node => {
+  getRenderItem = ({item}: {item: PreferenceItemType}) => {
     return (
       <List.Item
         title={item.key}
@@ -170,7 +167,9 @@ class DebugScreen extends React.Component<PropsType, StateType> {
     this.setState({
       modalCurrentDisplayItem: item,
     });
-    if (this.modalRef) this.modalRef.open();
+    if (this.modalRef) {
+      this.modalRef.open();
+    }
   }
 
   /**
@@ -199,24 +198,25 @@ class DebugScreen extends React.Component<PropsType, StateType> {
    */
   saveNewPrefs(key: string, value: string) {
     this.setState((prevState: StateType): {
-      currentPreferences: Array<PreferenceItemType>,
+      currentPreferences: Array<PreferenceItemType>;
     } => {
       const currentPreferences = [...prevState.currentPreferences];
       currentPreferences[this.findIndexOfKey(key)].current = value;
       return {currentPreferences};
     });
     AsyncStorageManager.set(key, value);
-    this.modalRef.close();
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
   }
 
-  render(): React.Node {
+  render() {
     const {state} = this;
     return (
       <View>
         <CustomModal onRef={this.onModalRef}>
           {this.getModalContent()}
         </CustomModal>
-        {/* $FlowFixMe */}
         <CollapsibleFlatList
           data={state.currentPreferences}
           extraData={state.currentPreferences}
