@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {BackHandler, View} from 'react-native';
 import i18n from 'i18n-js';
@@ -26,12 +24,12 @@ import {Agenda, LocaleConfig} from 'react-native-calendars';
 import {Avatar, Divider, List} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {readData} from '../../utils/WebData';
-import type {PlanningEventType} from '../../utils/Planning';
 import {
   generateEventAgenda,
   getCurrentDateString,
   getDateOnlyString,
   getTimeOnlyString,
+  PlanningEventType,
 } from '../../utils/Planning';
 import CustomAgenda from '../../components/Overrides/CustomAgenda';
 import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
@@ -77,17 +75,16 @@ LocaleConfig.locales.fr = {
     'Samedi',
   ],
   dayNamesShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-  today: "Aujourd'hui",
 };
 
 type PropsType = {
-  navigation: StackNavigationProp,
+  navigation: StackNavigationProp<any>;
 };
 
 type StateType = {
-  refreshing: boolean,
-  agendaItems: {[key: string]: Array<PlanningEventType>},
-  calendarShowing: boolean,
+  refreshing: boolean;
+  agendaItems: {[key: string]: Array<PlanningEventType>};
+  calendarShowing: boolean;
 };
 
 const FETCH_URL = 'https://www.amicale-insat.fr/api/event/list';
@@ -97,19 +94,22 @@ const AGENDA_MONTH_SPAN = 3;
  * Class defining the app's planning screen
  */
 class PlanningScreen extends React.Component<PropsType, StateType> {
-  agendaRef: null | Agenda;
+  agendaRef: null | Agenda<any>;
 
-  lastRefresh: Date;
+  lastRefresh: Date | null;
 
   minTimeBetweenRefresh = 60;
 
-  currentDate = getDateOnlyString(getCurrentDateString());
+  currentDate: string | null;
 
   constructor(props: PropsType) {
     super(props);
     if (i18n.currentLocale().startsWith('fr')) {
       LocaleConfig.defaultLocale = 'fr';
     }
+    this.agendaRef = null;
+    this.currentDate = getDateOnlyString(getCurrentDateString());
+    this.lastRefresh = null;
     this.state = {
       refreshing: false,
       agendaItems: {},
@@ -145,6 +145,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
   onBackButtonPressAndroid = (): boolean => {
     const {calendarShowing} = this.state;
     if (calendarShowing && this.agendaRef != null) {
+      // @ts-ignore
       this.agendaRef.chooseDay(this.agendaRef.state.selectedDay);
       return true;
     }
@@ -156,11 +157,13 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    */
   onRefresh = () => {
     let canRefresh;
-    if (this.lastRefresh !== undefined)
+    if (this.lastRefresh) {
       canRefresh =
         (new Date().getTime() - this.lastRefresh.getTime()) / 1000 >
         this.minTimeBetweenRefresh;
-    else canRefresh = true;
+    } else {
+      canRefresh = true;
+    }
 
     if (canRefresh) {
       this.setState({refreshing: true});
@@ -185,7 +188,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    *
    * @param ref
    */
-  onAgendaRef = (ref: Agenda) => {
+  onAgendaRef = (ref: Agenda<any>) => {
     this.agendaRef = ref;
   };
 
@@ -204,23 +207,24 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    * @param item The current event to render
    * @return {*}
    */
-  getRenderItem = (item: PlanningEventType): React.Node => {
+  getRenderItem = (item: PlanningEventType) => {
     const {navigation} = this.props;
     const onPress = () => {
       navigation.navigate('planning-information', {
         data: item,
       });
     };
-    if (item.logo !== null) {
+    const logo = item.logo;
+    if (logo) {
       return (
         <View>
           <Divider />
           <List.Item
             title={item.title}
             description={getTimeOnlyString(item.date_begin)}
-            left={(): React.Node => (
+            left={() => (
               <Avatar.Image
-                source={{uri: item.logo}}
+                source={{uri: logo}}
                 style={{backgroundColor: 'transparent'}}
               />
             )}
@@ -246,23 +250,22 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getRenderEmptyDate = (): React.Node => <Divider />;
+  getRenderEmptyDate = () => <Divider />;
 
-  render(): React.Node {
+  render() {
     const {state, props} = this;
     return (
       <View style={{flex: 1}}>
         <CustomAgenda
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...props}
           // the list of items that have to be displayed in agenda. If you want to render item as empty date
           // the value of date key kas to be an empty array []. If there exists no value for date key it is
           // considered that the date in question is not yet loaded
           items={state.agendaItems}
           // initially selected day
-          selected={this.currentDate}
+          selected={this.currentDate ? this.currentDate : undefined}
           // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-          minDate={this.currentDate}
+          minDate={this.currentDate ? this.currentDate : undefined}
           // Max amount of months allowed to scroll to the past. Default = 50
           pastScrollRange={1}
           // Max amount of months allowed to scroll to the future. Default = 50
@@ -279,6 +282,9 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
           firstDay={1}
           // ref to this agenda in order to handle back button event
           onRef={this.onAgendaRef}
+          rowHasChanged={(r1: PlanningEventType, r2: PlanningEventType) =>
+            r1.id !== r2.id
+          }
         />
         <MascotPopup
           prefKey={AsyncStorageManager.PREFERENCES.eventsShowMascot.key}
@@ -286,7 +292,6 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
           message={i18n.t('screens.planning.mascotDialog.message')}
           icon="party-popper"
           buttons={{
-            action: null,
             cancel: {
               message: i18n.t('screens.planning.mascotDialog.button'),
               icon: 'check',

@@ -36,12 +36,12 @@ import type {PlanningEventType} from '../../utils/Planning';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  route: {params: {data: PlanningEventType, id: number, eventId: number}},
+  navigation: StackNavigationProp<any>;
+  route: {params: {data: PlanningEventType; id: number; eventId: number}};
 };
 
 type StateType = {
-  loading: boolean,
+  loading: boolean;
 };
 
 const EVENT_INFO_URL = 'event/info';
@@ -111,22 +111,23 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getContent(): React.Node {
-    const {navigation} = this.props;
+  getContent() {
     const {displayData} = this;
-    if (displayData == null) return null;
+    if (displayData == null) {
+      return null;
+    }
     let subtitle = getTimeOnlyString(displayData.date_begin);
     const dateString = getDateOnlyString(displayData.date_begin);
-    if (dateString !== null && subtitle != null)
+    if (dateString !== null && subtitle != null) {
       subtitle += ` | ${DateManager.getInstance().getTranslatedDate(
         dateString,
       )}`;
+    }
     return (
       <CollapsibleScrollView style={{paddingLeft: 5, paddingRight: 5}} hasTab>
         <Card.Title title={displayData.title} subtitle={subtitle} />
         {displayData.logo !== null ? (
           <ImageGalleryButton
-            navigation={navigation}
             images={[{url: displayData.logo}]}
             style={{
               width: 300,
@@ -154,9 +155,9 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getErrorView(): React.Node {
+  getErrorView() {
     const {navigation} = this.props;
-    if (this.errorCode === ERROR_TYPE.BAD_INPUT)
+    if (this.errorCode === ERROR_TYPE.BAD_INPUT) {
       return (
         <ErrorView
           navigation={navigation}
@@ -165,6 +166,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
           icon="calendar-remove"
         />
       );
+    }
     return (
       <ErrorView
         navigation={navigation}
@@ -179,15 +181,19 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    */
   fetchData = () => {
     this.setState({loading: true});
-    apiRequest(EVENT_INFO_URL, 'POST', {id: this.eventId})
+    apiRequest<PlanningEventType>(EVENT_INFO_URL, 'POST', {id: this.eventId})
       .then(this.onFetchSuccess)
       .catch(this.onFetchError);
   };
 
-  render(): React.Node {
+  render() {
     const {loading} = this.state;
-    if (loading) return <BasicLoadingScreen />;
-    if (this.errorCode === 0) return this.getContent();
+    if (loading) {
+      return <BasicLoadingScreen />;
+    }
+    if (this.errorCode === 0) {
+      return this.getContent();
+    }
     return this.getErrorView();
   }
 }
