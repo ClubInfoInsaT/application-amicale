@@ -17,42 +17,37 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {View} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import {List, withTheme} from 'react-native-paper';
 import Collapsible from 'react-native-collapsible';
 import * as Animatable from 'react-native-animatable';
-import type {CustomThemeType} from '../../managers/ThemeManager';
-import type {ListIconPropsType} from '../../constants/PaperStyles';
 
 type PropsType = {
-  theme: CustomThemeType,
-  title: string,
-  subtitle?: string,
-  left?: () => React.Node,
-  opened?: boolean,
-  unmountWhenCollapsed?: boolean,
-  children?: React.Node,
+  theme: ReactNativePaper.Theme;
+  title: string;
+  subtitle?: string;
+  style: ViewStyle;
+  left?: (props: {
+    color: string;
+    style?: {
+      marginRight: number;
+      marginVertical?: number;
+    };
+  }) => React.ReactNode;
+  opened?: boolean;
+  unmountWhenCollapsed?: boolean;
+  children?: React.ReactNode;
 };
 
 type StateType = {
-  expanded: boolean,
+  expanded: boolean;
 };
 
 const AnimatedListIcon = Animatable.createAnimatableComponent(List.Icon);
 
 class AnimatedAccordion extends React.Component<PropsType, StateType> {
-  static defaultProps = {
-    subtitle: '',
-    left: null,
-    opened: null,
-    unmountWhenCollapsed: false,
-    children: null,
-  };
-
-  chevronRef: {current: null | AnimatedListIcon};
+  chevronRef: {current: null | (typeof AnimatedListIcon & List.Icon)};
 
   chevronIcon: string;
 
@@ -62,6 +57,9 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
+    this.chevronIcon = '';
+    this.animStart = '';
+    this.animEnd = '';
     this.state = {
       expanded: props.opened != null ? props.opened : false,
     };
@@ -71,8 +69,9 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
 
   shouldComponentUpdate(nextProps: PropsType): boolean {
     const {state, props} = this;
-    if (nextProps.opened != null && nextProps.opened !== props.opened)
+    if (nextProps.opened != null && nextProps.opened !== props.opened) {
       state.expanded = nextProps.opened;
+    }
     return true;
   }
 
@@ -101,17 +100,17 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
     }
   };
 
-  render(): React.Node {
+  render() {
     const {props, state} = this;
     const {colors} = props.theme;
     return (
-      <View>
+      <View style={props.style}>
         <List.Item
           title={props.title}
-          subtitle={props.subtitle}
+          description={props.subtitle}
           titleStyle={state.expanded ? {color: colors.primary} : null}
           onPress={this.toggleAccordion}
-          right={(iconProps: ListIconPropsType): React.Node => (
+          right={(iconProps) => (
             <AnimatedListIcon
               ref={this.chevronRef}
               style={iconProps.style}

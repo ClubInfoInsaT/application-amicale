@@ -17,29 +17,30 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {FAB, IconButton, Surface, withTheme} from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AutoHideHandler from '../../utils/AutoHideHandler';
 import CustomTabBar from '../Tabbar/CustomTabBar';
-import type {CustomThemeType} from '../../managers/ThemeManager';
-import type {OnScrollType} from '../../utils/AutoHideHandler';
 
 const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  theme: CustomThemeType,
-  onPress: (action: string, data?: string) => void,
-  seekAttention: boolean,
+  navigation: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
+  onPress: (action: string, data?: string) => void;
+  seekAttention: boolean;
 };
 
 type StateType = {
-  currentMode: string,
+  currentMode: string;
 };
 
 const DISPLAY_MODES = {
@@ -78,14 +79,14 @@ const styles = StyleSheet.create({
 });
 
 class AnimatedBottomBar extends React.Component<PropsType, StateType> {
-  ref: {current: null | Animatable.View};
+  ref: {current: null | (Animatable.View & View)};
 
   hideHandler: AutoHideHandler;
 
   displayModeIcons: {[key: string]: string};
 
-  constructor() {
-    super();
+  constructor(props: PropsType) {
+    super(props);
     this.state = {
       currentMode: DISPLAY_MODES.WEEK,
     };
@@ -108,13 +109,17 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
   }
 
   onHideChange = (shouldHide: boolean) => {
-    if (this.ref.current != null) {
-      if (shouldHide) this.ref.current.fadeOutDown(500);
-      else this.ref.current.fadeInUp(500);
+    const ref = this.ref;
+    if (ref && ref.current && ref.current.fadeOutDown && ref.current.fadeInUp) {
+      if (shouldHide) {
+        ref.current.fadeOutDown(500);
+      } else {
+        ref.current.fadeInUp(500);
+      }
     }
   };
 
-  onScroll = (event: OnScrollType) => {
+  onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     this.hideHandler.onScroll(event);
   };
 
@@ -139,7 +144,7 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
     props.onPress('changeView', newMode);
   };
 
-  render(): React.Node {
+  render() {
     const {props, state} = this;
     const buttonColor = props.theme.colors.primary;
     return (
