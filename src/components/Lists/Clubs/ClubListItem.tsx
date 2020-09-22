@@ -27,7 +27,7 @@ import type {
 
 type PropsType = {
   onPress: () => void;
-  categoryTranslator: (id: number) => ClubCategoryType;
+  categoryTranslator: (id: number) => ClubCategoryType | null;
   item: ClubType;
   height: number;
   theme: ReactNativePaper.Theme;
@@ -50,14 +50,16 @@ class ClubListItem extends React.Component<PropsType> {
     const final: Array<React.ReactNode> = [];
     categories.forEach((cat: number | null) => {
       if (cat != null) {
-        const category: ClubCategoryType = props.categoryTranslator(cat);
-        final.push(
-          <Chip
-            style={{marginRight: 5, marginBottom: 5}}
-            key={`${props.item.id}:${category.id}`}>
-            {category.name}
-          </Chip>,
-        );
+        const category = props.categoryTranslator(cat);
+        if (category) {
+          final.push(
+            <Chip
+              style={{marginRight: 5, marginBottom: 5}}
+              key={`${props.item.id}:${category.id}`}>
+              {category.name}
+            </Chip>,
+          );
+        }
       }
     });
     return <View style={{flexDirection: 'row'}}>{final}</View>;

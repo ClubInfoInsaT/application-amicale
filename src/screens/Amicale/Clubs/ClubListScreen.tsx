@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Platform} from 'react-native';
 import {Searchbar} from 'react-native-paper';
@@ -34,27 +32,27 @@ import MaterialHeaderButtons, {
 import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
 
 export type ClubCategoryType = {
-  id: number,
-  name: string,
+  id: number;
+  name: string;
 };
 
 export type ClubType = {
-  id: number,
-  name: string,
-  description: string,
-  logo: string,
-  email: string | null,
-  category: Array<number | null>,
-  responsibles: Array<string>,
+  id: number;
+  name: string;
+  description: string;
+  logo: string;
+  email: string | null;
+  category: Array<number | null>;
+  responsibles: Array<string>;
 };
 
 type PropsType = {
-  navigation: StackNavigationProp,
+  navigation: StackNavigationProp<any>;
 };
 
 type StateType = {
-  currentlySelectedCategories: Array<number>,
-  currentSearchString: string,
+  currentlySelectedCategories: Array<number>;
+  currentSearchString: string;
 };
 
 const LIST_ITEM_HEIGHT = 96;
@@ -62,8 +60,9 @@ const LIST_ITEM_HEIGHT = 96;
 class ClubListScreen extends React.Component<PropsType, StateType> {
   categories: Array<ClubCategoryType>;
 
-  constructor() {
-    super();
+  constructor(props: PropsType) {
+    super(props);
+    this.categories = [];
     this.state = {
       currentlySelectedCategories: [],
       currentSearchString: '',
@@ -114,7 +113,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getSearchBar = (): React.Node => {
+  getSearchBar = () => {
     return (
       <Searchbar
         placeholder={i18n.t('screens.proximo.search')}
@@ -131,7 +130,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    * Gets the header button
    * @return {*}
    */
-  getHeaderButtons = (): React.Node => {
+  getHeaderButtons = () => {
     const onPress = () => {
       const {props} = this;
       props.navigation.navigate('club-about');
@@ -145,12 +144,12 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
 
   getScreen = (
     data: Array<{
-      categories: Array<ClubCategoryType>,
-      clubs: Array<ClubType>,
+      categories: Array<ClubCategoryType>;
+      clubs: Array<ClubType>;
     } | null>,
-  ): React.Node => {
-    let categoryList = [];
-    let clubList = [];
+  ) => {
+    let categoryList: Array<ClubCategoryType> = [];
+    let clubList: Array<ClubType> = [];
     if (data[0] != null) {
       categoryList = data[0].categories;
       clubList = data[0].clubs;
@@ -174,7 +173,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getListHeader(): React.Node {
+  getListHeader() {
     const {state} = this;
     return (
       <ClubListHeader
@@ -194,12 +193,14 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
   getCategoryOfId = (id: number): ClubCategoryType | null => {
     let cat = null;
     this.categories.forEach((item: ClubCategoryType) => {
-      if (id === item.id) cat = item;
+      if (id === item.id) {
+        cat = item;
+      }
     });
     return cat;
   };
 
-  getRenderItem = ({item}: {item: ClubType}): React.Node => {
+  getRenderItem = ({item}: {item: ClubType}) => {
     const onPress = () => {
       this.onListItemPress(item);
     };
@@ -219,9 +220,9 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
   keyExtractor = (item: ClubType): string => item.id.toString();
 
   itemLayout = (
-    data: {...},
+    data: Array<ClubType> | null | undefined,
     index: number,
-  ): {length: number, offset: number, index: number} => ({
+  ): {length: number; offset: number; index: number} => ({
     length: LIST_ITEM_HEIGHT,
     offset: LIST_ITEM_HEIGHT * index,
     index,
@@ -240,17 +241,23 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
     const {state} = this;
     const newCategoriesState = [...state.currentlySelectedCategories];
     let newStrState = state.currentSearchString;
-    if (filterStr !== null) newStrState = filterStr;
+    if (filterStr !== null) {
+      newStrState = filterStr;
+    }
     if (categoryId !== null) {
       const index = newCategoriesState.indexOf(categoryId);
-      if (index === -1) newCategoriesState.push(categoryId);
-      else newCategoriesState.splice(index, 1);
+      if (index === -1) {
+        newCategoriesState.push(categoryId);
+      } else {
+        newCategoriesState.splice(index, 1);
+      }
     }
-    if (filterStr !== null || categoryId !== null)
+    if (filterStr !== null || categoryId !== null) {
       this.setState({
         currentSearchString: newStrState,
         currentlySelectedCategories: newCategoriesState,
       });
+    }
   }
 
   /**
@@ -264,12 +271,13 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
     let shouldRender =
       state.currentlySelectedCategories.length === 0 ||
       isItemInCategoryFilter(state.currentlySelectedCategories, item.category);
-    if (shouldRender)
+    if (shouldRender) {
       shouldRender = stringMatchQuery(item.name, state.currentSearchString);
+    }
     return shouldRender;
   }
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     return (
       <AuthenticatedScreen

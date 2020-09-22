@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Linking, View} from 'react-native';
 import {
@@ -35,24 +33,20 @@ import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen
 import CustomHTML from '../../../components/Overrides/CustomHTML';
 import CustomTabBar from '../../../components/Tabbar/CustomTabBar';
 import type {ClubCategoryType, ClubType} from './ClubListScreen';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import {ERROR_TYPE} from '../../../utils/WebData';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
-import type {ApiGenericDataType} from '../../../utils/WebData';
-import type {CardTitleIconPropsType} from '../../../constants/PaperStyles';
 import ImageGalleryButton from '../../../components/Media/ImageGalleryButton';
 
 type PropsType = {
-  navigation: StackNavigationProp,
+  navigation: StackNavigationProp<any>;
   route: {
     params?: {
-      data?: ClubType,
-      categories?: Array<ClubCategoryType>,
-      clubId?: number,
-    },
-    ...
-  },
-  theme: CustomThemeType,
+      data?: ClubType;
+      categories?: Array<ClubCategoryType>;
+      clubId?: number;
+    };
+  };
+  theme: ReactNativePaper.Theme;
 };
 
 const AMICALE_MAIL = 'clubs@amicale-insat.fr';
@@ -73,21 +67,20 @@ class ClubDisplayScreen extends React.Component<PropsType> {
 
   constructor(props: PropsType) {
     super(props);
-    if (props.route.params != null) {
-      if (
-        props.route.params.data != null &&
-        props.route.params.categories != null
-      ) {
-        this.displayData = props.route.params.data;
-        this.categories = props.route.params.categories;
-        this.clubId = props.route.params.data.id;
-        this.shouldFetchData = false;
-      } else if (props.route.params.clubId != null) {
-        this.displayData = null;
-        this.categories = null;
-        this.clubId = props.route.params.clubId;
-        this.shouldFetchData = true;
-      }
+    this.displayData = null;
+    this.categories = null;
+    this.clubId = props.route.params?.clubId ? props.route.params.clubId : 0;
+    this.shouldFetchData = true;
+
+    if (
+      props.route.params &&
+      props.route.params.data &&
+      props.route.params.categories
+    ) {
+      this.displayData = props.route.params.data;
+      this.categories = props.route.params.categories;
+      this.clubId = props.route.params.data.id;
+      this.shouldFetchData = false;
     }
   }
 
@@ -101,7 +94,9 @@ class ClubDisplayScreen extends React.Component<PropsType> {
     let categoryName = '';
     if (this.categories !== null) {
       this.categories.forEach((item: ClubCategoryType) => {
-        if (id === item.id) categoryName = item.name;
+        if (id === item.id) {
+          categoryName = item.name;
+        }
       });
     }
     return categoryName;
@@ -113,10 +108,12 @@ class ClubDisplayScreen extends React.Component<PropsType> {
    * @param categories The categories to display (max 2)
    * @returns {null|*}
    */
-  getCategoriesRender(categories: Array<number | null>): React.Node {
-    if (this.categories == null) return null;
+  getCategoriesRender(categories: Array<number | null>) {
+    if (this.categories == null) {
+      return null;
+    }
 
-    const final = [];
+    const final: Array<React.ReactNode> = [];
     categories.forEach((cat: number | null) => {
       if (cat != null) {
         final.push(
@@ -136,9 +133,9 @@ class ClubDisplayScreen extends React.Component<PropsType> {
    * @param email The club contact email
    * @returns {*}
    */
-  getManagersRender(managers: Array<string>, email: string | null): React.Node {
+  getManagersRender(managers: Array<string>, email: string | null) {
     const {props} = this;
-    const managersListView = [];
+    const managersListView: Array<React.ReactNode> = [];
     managers.forEach((item: string) => {
       managersListView.push(<Paragraph key={item}>{item}</Paragraph>);
     });
@@ -153,7 +150,7 @@ class ClubDisplayScreen extends React.Component<PropsType> {
               ? i18n.t('screens.clubs.managersSubtitle')
               : i18n.t('screens.clubs.managersUnavailable')
           }
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
+          left={(iconProps) => (
             <Avatar.Icon
               size={iconProps.size}
               style={{backgroundColor: 'transparent'}}
@@ -181,10 +178,7 @@ class ClubDisplayScreen extends React.Component<PropsType> {
    * @param hasManagers True if the club has managers
    * @returns {*}
    */
-  static getEmailButton(
-    email: string | null,
-    hasManagers: boolean,
-  ): React.Node {
+  static getEmailButton(email: string | null, hasManagers: boolean) {
     const destinationEmail =
       email != null && hasManagers ? email : AMICALE_MAIL;
     const text =
@@ -206,20 +200,15 @@ class ClubDisplayScreen extends React.Component<PropsType> {
     );
   }
 
-  getScreen = (response: Array<ApiGenericDataType | null>): React.Node => {
-    const {navigation} = this.props;
-    let data: ClubType | null = null;
-    if (response[0] != null) {
-      [data] = response;
-      this.updateHeaderTitle(data);
-    }
+  getScreen = (response: Array<ClubType | null>) => {
+    let data: ClubType | null = response[0];
     if (data != null) {
+      this.updateHeaderTitle(data);
       return (
         <CollapsibleScrollView style={{paddingLeft: 5, paddingRight: 5}} hasTab>
           {this.getCategoriesRender(data.category)}
           {data.logo !== null ? (
             <ImageGalleryButton
-              navigation={navigation}
               images={[{url: data.logo}]}
               style={{
                 width: 300,
@@ -259,9 +248,9 @@ class ClubDisplayScreen extends React.Component<PropsType> {
     props.navigation.setOptions({title: data.name});
   }
 
-  render(): React.Node {
+  render() {
     const {props} = this;
-    if (this.shouldFetchData)
+    if (this.shouldFetchData) {
       return (
         <AuthenticatedScreen
           navigation={props.navigation}
@@ -283,6 +272,7 @@ class ClubDisplayScreen extends React.Component<PropsType> {
           ]}
         />
       );
+    }
     return this.getScreen([this.displayData]);
   }
 }
