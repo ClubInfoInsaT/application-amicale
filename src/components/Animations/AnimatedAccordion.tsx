@@ -27,7 +27,7 @@ type PropsType = {
   theme: ReactNativePaper.Theme;
   title: string;
   subtitle?: string;
-  style: ViewStyle;
+  style?: ViewStyle;
   left?: (props: {
     color: string;
     style?: {

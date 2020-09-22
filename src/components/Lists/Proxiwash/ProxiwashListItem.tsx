@@ -30,7 +30,9 @@ import {
 import {StyleSheet, View} from 'react-native';
 import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
-import ProxiwashConstants from '../../../constants/ProxiwashConstants';
+import ProxiwashConstants, {
+  MachineStates,
+} from '../../../constants/ProxiwashConstants';
 import AprilFoolsManager from '../../../managers/AprilFoolsManager';
 import type {ProxiwashMachineType} from '../../../screens/Proxiwash/ProxiwashScreen';
 
@@ -65,13 +67,23 @@ const styles = StyleSheet.create({
   },
 });
 
+const stateStrings: {[key in MachineStates]: string} = {
+  [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.states.ready'),
+  [MachineStates.RUNNING]: i18n.t('screens.proxiwash.states.running'),
+  [MachineStates.RUNNING_NOT_STARTED]: i18n.t(
+    'screens.proxiwash.states.runningNotStarted',
+  ),
+  [MachineStates.FINISHED]: i18n.t('screens.proxiwash.states.finished'),
+  [MachineStates.UNAVAILABLE]: i18n.t('screens.proxiwash.states.broken'),
+  [MachineStates.ERROR]: i18n.t('screens.proxiwash.states.error'),
+  [MachineStates.UNKNOWN]: i18n.t('screens.proxiwash.states.unknown'),
+};
+
 /**
  * Component used to display a proxiwash item, showing machine progression and state
  */
 class ProxiwashListItem extends React.Component<PropsType> {
   stateColors: {[key: string]: string};
-
-  stateStrings: {[key: string]: string};
 
   title: string;
 
@@ -80,9 +92,6 @@ class ProxiwashListItem extends React.Component<PropsType> {
   constructor(props: PropsType) {
     super(props);
     this.stateColors = {};
-    this.stateStrings = {};
-
-    this.updateStateStrings();
 
     let displayNumber = props.item.number;
     const displayMaxWeight = props.item.maxWeight;
@@ -114,60 +123,30 @@ class ProxiwashListItem extends React.Component<PropsType> {
     props.onPress(this.titlePopUp, props.item, props.isDryer);
   };
 
-  updateStateStrings() {
-    this.stateStrings[ProxiwashConstants.machineStates.AVAILABLE] = i18n.t(
-      'screens.proxiwash.states.ready',
-    );
-    this.stateStrings[ProxiwashConstants.machineStates.RUNNING] = i18n.t(
-      'screens.proxiwash.states.running',
-    );
-    this.stateStrings[
-      ProxiwashConstants.machineStates.RUNNING_NOT_STARTED
-    ] = i18n.t('screens.proxiwash.states.runningNotStarted');
-    this.stateStrings[ProxiwashConstants.machineStates.FINISHED] = i18n.t(
-      'screens.proxiwash.states.finished',
-    );
-    this.stateStrings[ProxiwashConstants.machineStates.UNAVAILABLE] = i18n.t(
-      'screens.proxiwash.states.broken',
-    );
-    this.stateStrings[ProxiwashConstants.machineStates.ERROR] = i18n.t(
-      'screens.proxiwash.states.error',
-    );
-    this.stateStrings[ProxiwashConstants.machineStates.UNKNOWN] = i18n.t(
-      'screens.proxiwash.states.unknown',
-    );
-  }
-
   updateStateColors() {
     const {props} = this;
     const {colors} = props.theme;
-    this.stateColors[ProxiwashConstants.machineStates.AVAILABLE] =
-      colors.proxiwashReadyColor;
-    this.stateColors[ProxiwashConstants.machineStates.RUNNING] =
-      colors.proxiwashRunningColor;
-    this.stateColors[ProxiwashConstants.machineStates.RUNNING_NOT_STARTED] =
+    this.stateColors[MachineStates.AVAILABLE] = colors.proxiwashReadyColor;
+    this.stateColors[MachineStates.RUNNING] = colors.proxiwashRunningColor;
+    this.stateColors[MachineStates.RUNNING_NOT_STARTED] =
       colors.proxiwashRunningNotStartedColor;
-    this.stateColors[ProxiwashConstants.machineStates.FINISHED] =
-      colors.proxiwashFinishedColor;
-    this.stateColors[ProxiwashConstants.machineStates.UNAVAILABLE] =
-      colors.proxiwashBrokenColor;
-    this.stateColors[ProxiwashConstants.machineStates.ERROR] =
-      colors.proxiwashErrorColor;
-    this.stateColors[ProxiwashConstants.machineStates.UNKNOWN] =
-      colors.proxiwashUnknownColor;
+    this.stateColors[MachineStates.FINISHED] = colors.proxiwashFinishedColor;
+    this.stateColors[MachineStates.UNAVAILABLE] = colors.proxiwashBrokenColor;
+    this.stateColors[MachineStates.ERROR] = colors.proxiwashErrorColor;
+    this.stateColors[MachineStates.UNKNOWN] = colors.proxiwashUnknownColor;
   }
 
   render() {
     const {props} = this;
     const {colors} = props.theme;
-    const machineState = parseInt(props.item.state, 10);
-    const isRunning = machineState === ProxiwashConstants.machineStates.RUNNING;
-    const isReady = machineState === ProxiwashConstants.machineStates.AVAILABLE;
+    const machineState = props.item.state;
+    const isRunning = machineState === MachineStates.RUNNING;
+    const isReady = machineState === MachineStates.AVAILABLE;
     const description = isRunning
       ? `${props.item.startTime}/${props.item.endTime}`
       : '';
     const stateIcon = ProxiwashConstants.stateIcons[machineState];
-    const stateString = this.stateStrings[machineState];
+    const stateString = stateStrings[machineState];
     let progress;
     if (isRunning && props.item.donePercent !== '') {
       progress = parseFloat(props.item.donePercent) / 100;
@@ -231,13 +210,13 @@ class ProxiwashListItem extends React.Component<PropsType> {
               <View style={{justifyContent: 'center'}}>
                 <Text
                   style={
-                    machineState === ProxiwashConstants.machineStates.FINISHED
+                    machineState === MachineStates.FINISHED
                       ? {fontWeight: 'bold'}
                       : {}
                   }>
                   {stateString}
                 </Text>
-                {machineState === ProxiwashConstants.machineStates.RUNNING ? (
+                {machineState === MachineStates.RUNNING ? (
                   <Caption>{props.item.remainingTime} min</Caption>
                 ) : null}
               </View>

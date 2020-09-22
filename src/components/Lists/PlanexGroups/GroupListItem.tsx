@@ -22,6 +22,7 @@ import {List, TouchableRipple, withTheme} from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import type {PlanexGroupType} from '../../../screens/Planex/GroupSelectionScreen';
+import {View} from 'react-native';
 
 type PropsType = {
   theme: ReactNativePaper.Theme;
@@ -37,11 +38,11 @@ const REPLACE_REGEX = /_/g;
 class GroupListItem extends React.Component<PropsType> {
   isFav: boolean;
 
-  starRef: {current: null | Animatable.View};
+  starRef: {current: null | (Animatable.View & View)};
 
   constructor(props: PropsType) {
     super(props);
-    this.starRef = React.createRef<Animatable.View>();
+    this.starRef = React.createRef();
     this.isFav = this.isGroupInFavorites(props.favorites);
   }
 
@@ -60,7 +61,7 @@ class GroupListItem extends React.Component<PropsType> {
   onStarPress = () => {
     const {props} = this;
     const ref = this.starRef;
-    if (ref.current) {
+    if (ref.current && ref.current.rubberBand && ref.current.swing) {
       if (this.isFav) {
         ref.current.rubberBand();
       } else {
