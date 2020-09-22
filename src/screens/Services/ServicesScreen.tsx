@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Image, View} from 'react-native';
 import {
@@ -32,7 +30,6 @@ import {
 import i18n from 'i18n-js';
 import {StackNavigationProp} from '@react-navigation/stack';
 import CardList from '../../components/Lists/CardList/CardList';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
@@ -46,8 +43,8 @@ import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatLis
 import type {ServiceCategoryType} from '../../managers/ServicesManager';
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  theme: CustomThemeType,
+  navigation: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
 };
 
 class ServicesScreen extends React.Component<PropsType> {
@@ -68,7 +65,7 @@ class ServicesScreen extends React.Component<PropsType> {
     });
   }
 
-  getAboutButton = (): React.Node => (
+  getAboutButton = () => (
     <MaterialHeaderButtons>
       <Item
         title="information"
@@ -92,12 +89,11 @@ class ServicesScreen extends React.Component<PropsType> {
    * @param source The source image to display. Can be a string for icons or a number for local images
    * @returns {*}
    */
-  getListTitleImage(source: string | number): React.Node {
+  getListTitleImage(source: string | number) {
     const {props} = this;
-    if (typeof source === 'number')
+    if (typeof source === 'number') {
       return (
         <Image
-          size={48}
           source={source}
           style={{
             width: 48,
@@ -105,6 +101,7 @@ class ServicesScreen extends React.Component<PropsType> {
           }}
         />
       );
+    }
     return (
       <Avatar.Icon
         size={48}
@@ -121,7 +118,7 @@ class ServicesScreen extends React.Component<PropsType> {
    * @param item
    * @returns {*}
    */
-  getRenderItem = ({item}: {item: ServiceCategoryType}): React.Node => {
+  getRenderItem = ({item}: {item: ServiceCategoryType}) => {
     const {props} = this;
     return (
       <TouchableRipple
@@ -136,8 +133,8 @@ class ServicesScreen extends React.Component<PropsType> {
           <Card.Title
             title={item.title}
             subtitle={item.subtitle}
-            left={(): React.Node => this.getListTitleImage(item.image)}
-            right={(): React.Node => <List.Icon icon="chevron-right" />}
+            left={() => this.getListTitleImage(item.image)}
+            right={() => <List.Icon icon="chevron-right" />}
           />
           <CardList dataset={item.content} isHorizontal />
         </View>
@@ -147,14 +144,14 @@ class ServicesScreen extends React.Component<PropsType> {
 
   keyExtractor = (item: ServiceCategoryType): string => item.title;
 
-  render(): React.Node {
+  render() {
     return (
       <View>
         <CollapsibleFlatList
           data={this.finalDataset}
           renderItem={this.getRenderItem}
           keyExtractor={this.keyExtractor}
-          ItemSeparatorComponent={(): React.Node => <Divider />}
+          ItemSeparatorComponent={() => <Divider />}
           hasTab
         />
         <MascotPopup
@@ -163,7 +160,6 @@ class ServicesScreen extends React.Component<PropsType> {
           message={i18n.t('screens.services.mascotDialog.message')}
           icon="cloud-question"
           buttons={{
-            action: null,
             cancel: {
               message: i18n.t('screens.services.mascotDialog.button'),
               icon: 'check',

@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {View} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-paper';
@@ -26,32 +24,31 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import i18n from 'i18n-js';
 import DateManager from '../../managers/DateManager';
 import WebSectionList from '../../components/Screens/WebSectionList';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 import type {SectionListDataType} from '../../components/Screens/WebSectionList';
 
 const DATA_URL =
   'https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json';
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  theme: CustomThemeType,
+  navigation: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
 };
 
 export type RuFoodCategoryType = {
-  name: string,
-  dishes: Array<{name: string}>,
+  name: string;
+  dishes: Array<{name: string}>;
 };
 
 type RuMealType = {
-  name: string,
-  foodcategory: Array<RuFoodCategoryType>,
+  name: string;
+  foodcategory: Array<RuFoodCategoryType>;
 };
 
 type RawRuMenuType = {
-  restaurant_id: number,
-  id: number,
-  date: string,
-  meal: Array<RuMealType>,
+  restaurant_id: number;
+  id: number;
+  date: string;
+  meal: Array<RuMealType>;
 };
 
 /**
@@ -77,7 +74,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
   createDataset = (
     fetchedData: Array<RawRuMenuType>,
   ): SectionListDataType<RuFoodCategoryType> => {
-    let result = [];
+    let result: SectionListDataType<RuFoodCategoryType> = [];
     if (fetchedData == null || fetchedData.length === 0) {
       result = [
         {
@@ -104,11 +101,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @param section The section to render the header from
    * @return {*}
    */
-  getRenderSectionHeader = ({
-    section,
-  }: {
-    section: {title: string},
-  }): React.Node => {
+  getRenderSectionHeader = ({section}: {section: {title: string}}) => {
     return (
       <Card
         style={{
@@ -141,7 +134,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @param item The item to render
    * @return {*}
    */
-  getRenderItem = ({item}: {item: RuFoodCategoryType}): React.Node => {
+  getRenderItem = ({item}: {item: RuFoodCategoryType}) => {
     const {theme} = this.props;
     return (
       <Card
@@ -163,7 +156,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
           }}
         />
         <Card.Content>
-          {item.dishes.map((object: {name: string}): React.Node =>
+          {item.dishes.map((object: {name: string}) =>
             object.name !== '' ? (
               <Text
                 style={{
@@ -188,7 +181,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
    */
   getKeyExtractor = (item: RuFoodCategoryType): string => item.name;
 
-  render(): React.Node {
+  render() {
     const {navigation} = this.props;
     return (
       <WebSectionList
