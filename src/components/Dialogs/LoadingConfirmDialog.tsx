@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {
   ActivityIndicator,
@@ -30,20 +28,23 @@ import {
 import i18n from 'i18n-js';
 
 type PropsType = {
-  visible: boolean,
-  onDismiss?: () => void,
-  onAccept?: () => Promise<void>, // async function to be executed
-  title?: string,
-  titleLoading?: string,
-  message?: string,
-  startLoading?: boolean,
+  visible: boolean;
+  onDismiss?: () => void;
+  onAccept?: () => Promise<void>; // async function to be executed
+  title?: string;
+  titleLoading?: string;
+  message?: string;
+  startLoading?: boolean;
 };
 
 type StateType = {
-  loading: boolean,
+  loading: boolean;
 };
 
-class LoadingConfirmDialog extends React.PureComponent<PropsType, StateType> {
+export default class LoadingConfirmDialog extends React.PureComponent<
+  PropsType,
+  StateType
+> {
   static defaultProps = {
     onDismiss: () => {},
     onAccept: (): Promise<void> => {
@@ -71,14 +72,16 @@ class LoadingConfirmDialog extends React.PureComponent<PropsType, StateType> {
   onClickAccept = () => {
     const {props} = this;
     this.setState({loading: true});
-    if (props.onAccept != null) props.onAccept().then(this.hideLoading);
+    if (props.onAccept != null) {
+      props.onAccept().then(this.hideLoading);
+    }
   };
 
   /**
    * Waits for fade out animations to finish before hiding loading
-   * @returns {TimeoutID}
+   * @returns {NodeJS.Timeout}
    */
-  hideLoading = (): TimeoutID =>
+  hideLoading = (): NodeJS.Timeout =>
     setTimeout(() => {
       this.setState({loading: false});
     }, 200);
@@ -88,10 +91,12 @@ class LoadingConfirmDialog extends React.PureComponent<PropsType, StateType> {
    */
   onDismiss = () => {
     const {state, props} = this;
-    if (!state.loading && props.onDismiss != null) props.onDismiss();
+    if (!state.loading && props.onDismiss != null) {
+      props.onDismiss();
+    }
   };
 
-  render(): React.Node {
+  render() {
     const {state, props} = this;
     return (
       <Portal>
@@ -121,5 +126,3 @@ class LoadingConfirmDialog extends React.PureComponent<PropsType, StateType> {
     );
   }
 }
-
-export default LoadingConfirmDialog;

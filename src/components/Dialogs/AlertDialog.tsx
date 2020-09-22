@@ -17,36 +17,31 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Button, Dialog, Paragraph, Portal} from 'react-native-paper';
 import i18n from 'i18n-js';
 
 type PropsType = {
-  visible: boolean,
-  onDismiss: () => void,
-  title: string | React.Node,
-  message: string | React.Node,
+  visible: boolean;
+  onDismiss: () => void;
+  title: string | React.ReactNode;
+  message: string | React.ReactNode;
 };
 
-class AlertDialog extends React.PureComponent<PropsType> {
-  render(): React.Node {
-    const {props} = this;
-    return (
-      <Portal>
-        <Dialog visible={props.visible} onDismiss={props.onDismiss}>
-          <Dialog.Title>{props.title}</Dialog.Title>
-          <Dialog.Content>
-            <Paragraph>{props.message}</Paragraph>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={props.onDismiss}>{i18n.t('dialog.ok')}</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    );
-  }
+function AlertDialog(props: PropsType) {
+  return (
+    <Portal>
+      <Dialog visible={props.visible} onDismiss={props.onDismiss}>
+        <Dialog.Title>{props.title}</Dialog.Title>
+        <Dialog.Content>
+          <Paragraph>{props.message}</Paragraph>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={props.onDismiss}>{i18n.t('dialog.ok')}</Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
+  );
 }
 
 export default AlertDialog;
