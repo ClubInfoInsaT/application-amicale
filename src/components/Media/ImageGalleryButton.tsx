@@ -17,41 +17,36 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {TouchableRipple} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {Image} from 'react-native-animatable';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {useNavigation} from '@react-navigation/native';
+import {ViewStyle} from 'react-native';
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  images: Array<{url: string}>,
-  style: ViewStyleProp,
+  images: Array<{url: string}>;
+  style: ViewStyle;
 };
 
-class ImageGalleryButton extends React.Component<PropsType> {
-  onPress = () => {
-    const {navigation, images} = this.props;
-    navigation.navigate('gallery', {images});
+function ImageGalleryButton(props: PropsType) {
+  const navigation = useNavigation();
+
+  const onPress = () => {
+    navigation.navigate('gallery', {images: props.images});
   };
 
-  render(): React.Node {
-    const {style, images} = this.props;
-    return (
-      <TouchableRipple onPress={this.onPress} style={style}>
-        <Image
-          resizeMode="contain"
-          source={{uri: images[0].url}}
-          style={{
-            width: '100%',
-            height: '100%',
-          }}
-        />
-      </TouchableRipple>
-    );
-  }
+  return (
+    <TouchableRipple onPress={onPress} style={props.style}>
+      <Image
+        resizeMode="contain"
+        source={{uri: props.images[0].url}}
+        style={{
+          width: '100%',
+          height: '100%',
+        }}
+      />
+    </TouchableRipple>
+  );
 }
 
 export default ImageGalleryButton;
