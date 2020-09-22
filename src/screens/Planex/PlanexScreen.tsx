@@ -22,11 +22,10 @@
 import * as React from 'react';
 import {Title, withTheme} from 'react-native-paper';
 import i18n from 'i18n-js';
-import {View} from 'react-native';
+import {NativeScrollEvent, NativeSyntheticEvent, View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Autolink from 'react-native-autolink';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 import ThemeManager from '../../managers/ThemeManager';
 import WebViewScreen from '../../components/Screens/WebViewScreen';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
@@ -40,16 +39,16 @@ import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  route: {params: {group: PlanexGroupType}},
-  theme: CustomThemeType,
+  navigation: StackNavigationProp<any>;
+  route: {params: {group: PlanexGroupType}};
+  theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
-  dialogVisible: boolean,
-  dialogTitle: string | React.Node,
-  dialogMessage: string,
-  currentGroup: PlanexGroupType,
+  dialogVisible: boolean;
+  dialogTitle: string | React.ReactNode;
+  dialogMessage: string;
+  currentGroup: PlanexGroupType;
 };
 
 const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
@@ -154,14 +153,15 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
     super(props);
     this.webScreenRef = React.createRef();
     this.barRef = React.createRef();
-
-    let currentGroup = AsyncStorageManager.getString(
+    this.customInjectedJS = '';
+    let currentGroupString = AsyncStorageManager.getString(
       AsyncStorageManager.PREFERENCES.planexCurrentGroup.key,
     );
-    if (currentGroup === '')
-      currentGroup = {name: 'SELECT GROUP', id: -1, isFav: false};
-    else {
-      currentGroup = JSON.parse(currentGroup);
+    let currentGroup: PlanexGroupType;
+    if (currentGroupString === '') {
+      currentGroup = {name: 'SELECT GROUP', id: -1};
+    } else {
+      currentGroup = JSON.parse(currentGroupString);
       props.navigation.setOptions({title: currentGroup.name});
     }
     this.state = {
@@ -189,8 +189,9 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    */
   shouldComponentUpdate(nextProps: PropsType): boolean {
     const {props, state} = this;
-    if (nextProps.theme.dark !== props.theme.dark)
+    if (nextProps.theme.dark !== props.theme.dark) {
       this.generateInjectedJS(state.currentGroup.id);
+    }
     return true;
   }
 
@@ -199,7 +200,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getWebView(): React.Node {
+  getWebView() {
     const {props, state} = this;
     const showWebview = state.currentGroup.id !== -1;
 
@@ -246,12 +247,16 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * Or "setGroup" with the group id as data to set the selected group
    * @param data Data to pass to the action
    */
-  sendMessage = (action: string, data: string) => {
+  sendMessage = (action: string, data?: string) => {
     let command;
-    if (action === 'setGroup') command = `displayAde(${data})`;
-    else command = `$('#calendar').fullCalendar('${action}', '${data}')`;
-    if (this.webScreenRef.current != null)
-      this.webScreenRef.current.injectJavaScript(`${command};true;`); // Injected javascript must end with true
+    if (action === 'setGroup') {
+      command = `displayAde(${data})`;
+    } else {
+      command = `$('#calendar').fullCalendar('${action}', '${data}')`;
+    }
+    if (this.webScreenRef.current != null) {
+      this.webScreenRef.current.injectJavaScript(`${command};true;`);
+    } // Injected javascript must end with true
   };
 
   /**
@@ -261,10 +266,10 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    */
   onMessage = (event: {nativeEvent: {data: string}}) => {
     const data: {
-      start: string,
-      end: string,
-      title: string,
-      color: string,
+      start: string;
+      end: string;
+      title: string;
+      color: string;
     } = JSON.parse(event.nativeEvent.data);
     const startDate = dateToString(new Date(data.start), true);
     const endDate = dateToString(new Date(data.end), true);
@@ -272,8 +277,9 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
     const endString = getTimeOnlyString(endDate);
 
     let msg = `${DateManager.getInstance().getTranslatedDate(startDate)}\n`;
-    if (startString != null && endString != null)
+    if (startString != null && endString != null) {
       msg += `${startString} - ${endString}`;
+    }
     this.showDialog(data.title, msg);
   };
 
@@ -286,7 +292,8 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
   showDialog = (title: string, message: string) => {
     this.setState({
       dialogVisible: true,
-      dialogTitle: <Autolink text={title} component={Title}/>,
+      // @ts-ignore
+      dialogTitle: <Autolink text={title} component={Title} />,
       dialogMessage: message,
     });
   };
@@ -305,8 +312,10 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    *
    * @param event
    */
-  onScroll = (event: SyntheticEvent<EventTarget>) => {
-    if (this.barRef.current != null) this.barRef.current.onScroll(event);
+  onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (this.barRef.current != null) {
+      this.barRef.current.onScroll(event);
+    }
   };
 
   /**
@@ -354,13 +363,14 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
       DateManager.isWeekend(new Date()) ? 'calendar.next()' : ''
     }${INJECT_STYLE}`;
 
-    if (ThemeManager.getNightMode())
+    if (ThemeManager.getNightMode()) {
       this.customInjectedJS += `$('head').append('<style>${CUSTOM_CSS_DARK}</style>');`;
+    }
 
     this.customInjectedJS += 'removeAlpha();});true;'; // Prevents crash on ios
   }
 
-  render(): React.Node {
+  render() {
     const {props, state} = this;
     return (
       <View style={{flex: 1}}>
