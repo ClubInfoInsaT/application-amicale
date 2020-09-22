@@ -17,10 +17,8 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import i18n from 'i18n-js';
 import {ActivityIndicator, Headline, withTheme} from 'react-native-paper';
 import {CommonActions} from '@react-navigation/native';
@@ -38,7 +36,6 @@ import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
 import AnimatedFAB from '../../components/Animations/AnimatedFAB';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 import ConnectionManager from '../../managers/ConnectionManager';
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
@@ -59,40 +56,40 @@ const SECTIONS_ID = ['dashboard', 'news_feed'];
 const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
 export type FeedItemType = {
-  id: string,
-  message: string,
-  url: string,
-  image: string | null,
-  video: string | null,
-  link: string | null,
-  time: number,
-  page_id: string,
+  id: string;
+  message: string;
+  url: string;
+  image: string | null;
+  video: string | null;
+  link: string | null;
+  time: number;
+  page_id: string;
 };
 
 export type FullDashboardType = {
-  today_menu: Array<{[key: string]: {...}}>,
-  proximo_articles: number,
-  available_dryers: number,
-  available_washers: number,
-  today_events: Array<PlanningEventType>,
-  available_tutorials: number,
+  today_menu: Array<{[key: string]: object}>;
+  proximo_articles: number;
+  available_dryers: number;
+  available_washers: number;
+  today_events: Array<PlanningEventType>;
+  available_tutorials: number;
 };
 
 type RawNewsFeedType = {[key: string]: Array<FeedItemType>};
 
 type RawDashboardType = {
-  news_feed: RawNewsFeedType,
-  dashboard: FullDashboardType,
+  news_feed: RawNewsFeedType;
+  dashboard: FullDashboardType;
 };
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  route: {params: {nextScreen: string, data: {...}}},
-  theme: CustomThemeType,
+  navigation: StackNavigationProp<any>;
+  route: {params: {nextScreen: string; data: object}};
+  theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
-  dialogVisible: boolean,
+  dialogVisible: boolean;
 };
 
 /**
@@ -103,10 +100,12 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     b.time - a.time;
 
   static generateNewsFeed(rawFeed: RawNewsFeedType): Array<FeedItemType> {
-    const finalFeed = [];
+    const finalFeed: Array<FeedItemType> = [];
     Object.keys(rawFeed).forEach((key: string) => {
       const category: Array<FeedItemType> | null = rawFeed[key];
-      if (category != null && category.length > 0) finalFeed.push(...category);
+      if (category != null && category.length > 0) {
+        finalFeed.push(...category);
+      }
     });
     finalFeed.sort(HomeScreen.sortFeedTime);
     return finalFeed;
@@ -164,7 +163,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getHeaderButton = (): React.Node => {
+  getHeaderButton = () => {
     const {props} = this;
     let onPressLog = (): void =>
       props.navigation.navigate('login', {nextScreen: 'profile'});
@@ -201,7 +200,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param content
    * @return {*}
    */
-  getDashboardEvent(content: Array<PlanningEventType>): React.Node {
+  getDashboardEvent(content: Array<PlanningEventType>) {
     const futureEvents = getFutureEvents(content);
     const displayEvent = getDisplayEvent(futureEvents);
     // const clickPreviewAction = () =>
@@ -222,29 +221,13 @@ class HomeScreen extends React.Component<PropsType, StateType> {
   }
 
   /**
-   * Gets a dashboard item with action buttons
-   *
-   * @returns {*}
-   */
-  getDashboardActions(): React.Node {
-    const {props} = this;
-    return (
-      <ActionsDashBoardItem
-        navigation={props.navigation}
-        isLoggedIn={this.isLoggedIn}
-      />
-    );
-  }
-
-  /**
    * Gets a dashboard item with a row of shortcut buttons.
    *
    * @param content
    * @return {*}
    */
-  getDashboardRow(content: Array<ServiceItemType | null>): React.Node {
+  getDashboardRow(content: Array<ServiceItemType | null>) {
     return (
-      // $FlowFixMe
       <FlatList
         data={content}
         renderItem={this.getDashboardRowRenderItem}
@@ -265,12 +248,8 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param item
    * @returns {*}
    */
-  getDashboardRowRenderItem = ({
-    item,
-  }: {
-    item: ServiceItemType | null,
-  }): React.Node => {
-    if (item != null)
+  getDashboardRowRenderItem = ({item}: {item: ServiceItemType | null}) => {
+    if (item != null) {
       return (
         <SmallDashboardItem
           image={item.image}
@@ -278,11 +257,12 @@ class HomeScreen extends React.Component<PropsType, StateType> {
           badgeCount={
             this.currentDashboard != null && item.badgeFunction != null
               ? item.badgeFunction(this.currentDashboard)
-              : null
+              : undefined
           }
         />
       );
-    return <SmallDashboardItem image={null} onPress={null} badgeCount={null} />;
+    }
+    return <SmallDashboardItem />;
   };
 
   /**
@@ -291,15 +271,8 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param item The feed item to display
    * @return {*}
    */
-  getFeedItem(item: FeedItemType): React.Node {
-    const {props} = this;
-    return (
-      <FeedItem
-        navigation={props.navigation}
-        item={item}
-        height={FEED_ITEM_HEIGHT}
-      />
-    );
+  getFeedItem(item: FeedItemType) {
+    return <FeedItem item={item} height={FEED_ITEM_HEIGHT} />;
   }
 
   /**
@@ -309,20 +282,19 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param section The current section
    * @return {*}
    */
-  getRenderItem = ({item}: {item: FeedItemType}): React.Node =>
-    this.getFeedItem(item);
+  getRenderItem = ({item}: {item: FeedItemType}) => this.getFeedItem(item);
 
   getRenderSectionHeader = (
     data: {
       section: {
-        data: Array<{...}>,
-        title: string,
-      },
+        data: Array<object>;
+        title: string;
+      };
     },
     isLoading: boolean,
-  ): React.Node => {
+  ) => {
     const {props} = this;
-    if (data.section.data.length > 0)
+    if (data.section.data.length > 0) {
       return (
         <Headline
           style={{
@@ -333,6 +305,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
           {data.section.title}
         </Headline>
       );
+    }
     return (
       <View>
         <Headline
@@ -367,12 +340,14 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  getListHeader = (fetchedData: RawDashboardType): React.Node => {
+  getListHeader = (fetchedData: RawDashboardType) => {
     let dashboard = null;
-    if (fetchedData != null) dashboard = fetchedData.dashboard;
+    if (fetchedData != null) {
+      dashboard = fetchedData.dashboard;
+    }
     return (
       <Animatable.View animation="fadeInDown" duration={500} useNativeDriver>
-        {this.getDashboardActions()}
+        <ActionsDashBoardItem />
         {this.getDashboardRow(this.dashboardManager.getCurrentDashboard())}
         {this.getDashboardEvent(
           dashboard == null ? [] : dashboard.today_events,
@@ -418,20 +393,22 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     fetchedData: RawDashboardType | null,
     isLoading: boolean,
   ): Array<{
-    title: string,
-    data: [] | Array<FeedItemType>,
-    id: string,
+    title: string;
+    data: [] | Array<FeedItemType>;
+    id: string;
   }> => {
     // fetchedData = DATA;
     if (fetchedData != null) {
-      if (fetchedData.news_feed != null)
+      if (fetchedData.news_feed != null) {
         this.currentNewFeed = HomeScreen.generateNewsFeed(
           fetchedData.news_feed,
         );
-      if (fetchedData.dashboard != null)
+      }
+      if (fetchedData.dashboard != null) {
         this.currentDashboard = fetchedData.dashboard;
+      }
     }
-    if (this.currentNewFeed.length > 0)
+    if (this.currentNewFeed.length > 0) {
       return [
         {
           title: i18n.t('screens.home.feedTitle'),
@@ -439,6 +416,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
           id: SECTIONS_ID[1],
         },
       ];
+    }
     return [
       {
         title: isLoading
@@ -455,8 +433,10 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     props.navigation.navigate('planning');
   };
 
-  onScroll = (event: SyntheticEvent<EventTarget>) => {
-    if (this.fabRef.current != null) this.fabRef.current.onScroll(event);
+  onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (this.fabRef.current) {
+      this.fabRef.current.onScroll(event);
+    }
   };
 
   /**
@@ -470,7 +450,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     });
   };
 
-  render(): React.Node {
+  render() {
     const {props, state} = this;
     return (
       <View style={{flex: 1}}>
@@ -521,7 +501,6 @@ class HomeScreen extends React.Component<PropsType, StateType> {
           onPress={this.openScanner}
         />
         <LogoutDialog
-          navigation={props.navigation}
           visible={state.dialogVisible}
           onDismiss={this.hideDisconnectDialog}
         />

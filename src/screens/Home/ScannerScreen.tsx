@@ -17,11 +17,9 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Linking, Platform, StyleSheet, View} from 'react-native';
-import {Button, Text, withTheme} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {RNCamera} from 'react-native-camera';
 import {BarcodeMask} from '@nartc/react-native-barcode-mask';
 import i18n from 'i18n-js';
@@ -34,11 +32,11 @@ import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 
 type StateType = {
-  hasPermission: boolean,
-  scanned: boolean,
-  dialogVisible: boolean,
-  mascotDialogVisible: boolean,
-  loading: boolean,
+  hasPermission: boolean;
+  scanned: boolean;
+  dialogVisible: boolean;
+  mascotDialogVisible: boolean;
+  loading: boolean;
 };
 
 const styles = StyleSheet.create({
@@ -54,9 +52,11 @@ const styles = StyleSheet.create({
   },
 });
 
-class ScannerScreen extends React.Component<null, StateType> {
+type PermissionResults = 'unavailable' | 'denied' | 'blocked' | 'granted';
+
+class ScannerScreen extends React.Component<{}, StateType> {
   constructor() {
-    super();
+    super({});
     this.state = {
       hasPermission: false,
       scanned: false,
@@ -75,7 +75,7 @@ class ScannerScreen extends React.Component<null, StateType> {
    *
    * @returns {*}
    */
-  getPermissionScreen(): React.Node {
+  getPermissionScreen() {
     return (
       <View style={{marginLeft: 10, marginRight: 10}}>
         <Text>{i18n.t('screens.scanner.permissions.error')}</Text>
@@ -101,15 +101,13 @@ class ScannerScreen extends React.Component<null, StateType> {
    *
    * @returns {*}
    */
-  getScanner(): React.Node {
+  getScanner() {
     const {state} = this;
     return (
       <RNCamera
-        onBarCodeRead={state.scanned ? null : this.onCodeScanned}
+        onBarCodeRead={state.scanned ? undefined : this.onCodeScanned}
         type={RNCamera.Constants.Type.back}
-        barCodeScannerSettings={{
-          barCodeTypes: [RNCamera.Constants.BarCodeType.qr],
-        }}
+        barCodeTypes={['qr']}
         style={StyleSheet.absoluteFill}
         captureAudio={false}>
         <BarcodeMask
@@ -128,9 +126,11 @@ class ScannerScreen extends React.Component<null, StateType> {
    * Requests permission to use the camera
    */
   requestPermissions = () => {
-    if (Platform.OS === 'android')
+    if (Platform.OS === 'android') {
       request(PERMISSIONS.ANDROID.CAMERA).then(this.updatePermissionStatus);
-    else request(PERMISSIONS.IOS.CAMERA).then(this.updatePermissionStatus);
+    } else {
+      request(PERMISSIONS.IOS.CAMERA).then(this.updatePermissionStatus);
+    }
   };
 
   /**
@@ -138,7 +138,7 @@ class ScannerScreen extends React.Component<null, StateType> {
    *
    * @param result
    */
-  updatePermissionStatus = (result: RESULTS) => {
+  updatePermissionStatus = (result: PermissionResults) => {
     this.setState({
       hasPermission: result === RESULTS.GRANTED,
     });
@@ -147,7 +147,6 @@ class ScannerScreen extends React.Component<null, StateType> {
   /**
    * Shows a dialog indicating the user the scanned code was invalid
    */
-  // eslint-disable-next-line react/sort-comp
   showErrorDialog() {
     this.setState({
       dialogVisible: true,
@@ -199,14 +198,15 @@ class ScannerScreen extends React.Component<null, StateType> {
    * @param data The scanned value
    */
   onCodeScanned = ({data}: {data: string}) => {
-    if (!URLHandler.isUrlValid(data)) this.showErrorDialog();
-    else {
+    if (!URLHandler.isUrlValid(data)) {
+      this.showErrorDialog();
+    } else {
       this.showOpeningDialog();
       Linking.openURL(data);
     }
   };
 
-  render(): React.Node {
+  render() {
     const {state} = this;
     return (
       <View
@@ -228,7 +228,6 @@ class ScannerScreen extends React.Component<null, StateType> {
           message={i18n.t('screens.scanner.mascotDialog.message')}
           icon="camera-iris"
           buttons={{
-            action: null,
             cancel: {
               message: i18n.t('screens.scanner.mascotDialog.button'),
               icon: 'check',
@@ -253,4 +252,4 @@ class ScannerScreen extends React.Component<null, StateType> {
   }
 }
 
-export default withTheme(ScannerScreen);
+export default ScannerScreen;

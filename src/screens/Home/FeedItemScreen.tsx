@@ -17,11 +17,9 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Linking, Image} from 'react-native';
-import {Card, Text, withTheme} from 'react-native-paper';
+import {Card, Text} from 'react-native-paper';
 import Autolink from 'react-native-autolink';
 import {StackNavigationProp} from '@react-navigation/stack';
 import MaterialHeaderButtons, {
@@ -31,12 +29,14 @@ import CustomTabBar from '../../components/Tabbar/CustomTabBar';
 import type {FeedItemType} from './HomeScreen';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
-import NewsSourcesConstants from '../../constants/NewsSourcesConstants';
+import NewsSourcesConstants, {
+  AvailablePages,
+} from '../../constants/NewsSourcesConstants';
 import type {NewsSourceType} from '../../constants/NewsSourcesConstants';
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  route: {params: {data: FeedItemType, date: string}},
+  navigation: StackNavigationProp<any>;
+  route: {params: {data: FeedItemType; date: string}};
 };
 
 /**
@@ -72,7 +72,7 @@ class FeedItemScreen extends React.Component<PropsType> {
    *
    * @returns {*}
    */
-  getHeaderButton = (): React.Node => {
+  getHeaderButton = () => {
     return (
       <MaterialHeaderButtons>
         <Item
@@ -85,20 +85,16 @@ class FeedItemScreen extends React.Component<PropsType> {
     );
   };
 
-  render(): React.Node {
-    const {navigation} = this.props;
-    const hasImage =
-      this.displayData.image !== '' && this.displayData.image != null;
+  render() {
     const pageSource: NewsSourceType =
-      NewsSourcesConstants[this.displayData.page_id];
+      NewsSourcesConstants[this.displayData.page_id as AvailablePages];
     return (
       <CollapsibleScrollView style={{margin: 5}} hasTab>
         <Card.Title
           title={pageSource.name}
           subtitle={this.date}
-          left={(): React.Node => (
+          left={() => (
             <Image
-              size={48}
               source={pageSource.icon}
               style={{
                 width: 48,
@@ -107,9 +103,8 @@ class FeedItemScreen extends React.Component<PropsType> {
             />
           )}
         />
-        {hasImage ? (
+        {this.displayData.image ? (
           <ImageGalleryButton
-            navigation={navigation}
             images={[{url: this.displayData.image}]}
             style={{
               width: 250,
@@ -124,6 +119,7 @@ class FeedItemScreen extends React.Component<PropsType> {
             <Autolink
               text={this.displayData.message}
               hashtag="facebook"
+              // @ts-ignore
               component={Text}
             />
           ) : null}
@@ -133,4 +129,4 @@ class FeedItemScreen extends React.Component<PropsType> {
   }
 }
 
-export default withTheme(FeedItemScreen);
+export default FeedItemScreen;

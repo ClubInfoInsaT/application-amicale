@@ -23,9 +23,9 @@ import {Dimensions, Image, View} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 type PropsType = {
-  image: string | null;
-  onPress: () => void | null;
-  badgeCount: number | null;
+  image?: string | number;
+  onPress?: () => void;
+  badgeCount?: number;
 };
 
 /**
@@ -50,7 +50,7 @@ function SmallDashboardItem(props: PropsType) {
         }}>
         {image ? (
           <Image
-            source={{uri: image}}
+            source={typeof image === 'string' ? {uri: image} : image}
             style={{
               width: '80%',
               height: '80%',
