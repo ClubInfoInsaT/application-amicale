@@ -27,6 +27,8 @@ export type NewsSourceType = {
   name: string;
 };
 
+export type AvailablePages = 'amicale.deseleves' | 'campus.insat';
+
 export default {
   'amicale.deseleves': {
     icon: ICON_AMICALE,
