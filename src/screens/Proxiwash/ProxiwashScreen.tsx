@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Alert, View} from 'react-native';
 import i18n from 'i18n-js';
@@ -29,14 +27,15 @@ import WebSectionList from '../../components/Screens/WebSectionList';
 import * as Notifications from '../../utils/Notifications';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import ProxiwashListItem from '../../components/Lists/Proxiwash/ProxiwashListItem';
-import ProxiwashConstants from '../../constants/ProxiwashConstants';
+import ProxiwashConstants, {
+  MachineStates,
+} from '../../constants/ProxiwashConstants';
 import CustomModal from '../../components/Overrides/CustomModal';
 import AprilFoolsManager from '../../managers/AprilFoolsManager';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
 import ProxiwashSectionHeader from '../../components/Lists/Proxiwash/ProxiwashSectionHeader';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 import {
   getCleanedMachineWatched,
   getMachineEndDate,
@@ -47,31 +46,41 @@ import MascotPopup from '../../components/Mascot/MascotPopup';
 import type {SectionListDataType} from '../../components/Screens/WebSectionList';
 import type {LaundromatType} from './ProxiwashAboutScreen';
 
-const modalStateStrings = {};
+const modalStateStrings: {[key in MachineStates]: string} = {
+  [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.modal.ready'),
+  [MachineStates.RUNNING]: i18n.t('screens.proxiwash.modal.running'),
+  [MachineStates.RUNNING_NOT_STARTED]: i18n.t(
+    'screens.proxiwash.modal.runningNotStarted',
+  ),
+  [MachineStates.FINISHED]: i18n.t('screens.proxiwash.modal.finished'),
+  [MachineStates.UNAVAILABLE]: i18n.t('screens.proxiwash.modal.broken'),
+  [MachineStates.ERROR]: i18n.t('screens.proxiwash.modal.error'),
+  [MachineStates.UNKNOWN]: i18n.t('screens.proxiwash.modal.unknown'),
+};
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
 
 export type ProxiwashMachineType = {
-  number: string,
-  state: string,
-  maxWeight: number,
-  startTime: string,
-  endTime: string,
-  donePercent: string,
-  remainingTime: string,
-  program: string,
+  number: string;
+  state: MachineStates;
+  maxWeight: number;
+  startTime: string;
+  endTime: string;
+  donePercent: string;
+  remainingTime: string;
+  program: string;
 };
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  theme: CustomThemeType,
+  navigation: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
-  modalCurrentDisplayItem: React.Node,
-  machinesWatched: Array<ProxiwashMachineType>,
-  selectedWash: string,
+  modalCurrentDisplayItem: React.ReactNode;
+  machinesWatched: Array<ProxiwashMachineType>;
+  selectedWash: string;
 };
 
 /**
@@ -92,15 +101,17 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   modalRef: null | Modalize;
 
   fetchedData: {
-    dryers: Array<ProxiwashMachineType>,
-    washers: Array<ProxiwashMachineType>,
+    dryers: Array<ProxiwashMachineType>;
+    washers: Array<ProxiwashMachineType>;
   };
 
   /**
    * Creates machine state parameters using current theme and translations
    */
-  constructor() {
-    super();
+  constructor(props: PropsType) {
+    super(props);
+    this.modalRef = null;
+    this.fetchedData = {dryers: [], washers: []};
     this.state = {
       modalCurrentDisplayItem: null,
       machinesWatched: AsyncStorageManager.getObject(
@@ -110,27 +121,6 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
         AsyncStorageManager.PREFERENCES.selectedWash.key,
       ),
     };
-    modalStateStrings[ProxiwashConstants.machineStates.AVAILABLE] = i18n.t(
-      'screens.proxiwash.modal.ready',
-    );
-    modalStateStrings[ProxiwashConstants.machineStates.RUNNING] = i18n.t(
-      'screens.proxiwash.modal.running',
-    );
-    modalStateStrings[
-      ProxiwashConstants.machineStates.RUNNING_NOT_STARTED
-    ] = i18n.t('screens.proxiwash.modal.runningNotStarted');
-    modalStateStrings[ProxiwashConstants.machineStates.FINISHED] = i18n.t(
-      'screens.proxiwash.modal.finished',
-    );
-    modalStateStrings[ProxiwashConstants.machineStates.UNAVAILABLE] = i18n.t(
-      'screens.proxiwash.modal.broken',
-    );
-    modalStateStrings[ProxiwashConstants.machineStates.ERROR] = i18n.t(
-      'screens.proxiwash.modal.error',
-    );
-    modalStateStrings[ProxiwashConstants.machineStates.UNKNOWN] = i18n.t(
-      'screens.proxiwash.modal.unknown',
-    );
   }
 
   /**
@@ -139,12 +129,12 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   componentDidMount() {
     const {navigation} = this.props;
     navigation.setOptions({
-      headerRight: (): React.Node => (
+      headerRight: () => (
         <MaterialHeaderButtons>
           <Item
             title="switch"
             iconName="swap-horizontal"
-            onPress={():void => navigation.navigate('settings')}
+            onPress={(): void => navigation.navigate('settings')}
           />
           <Item
             title="information"
@@ -164,10 +154,10 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     );
     if (selected !== state.selectedWash) {
       this.setState({
-        selectedWash: selected
+        selectedWash: selected,
       });
     }
-  }
+  };
 
   /**
    * Callback used when pressing the about button.
@@ -208,29 +198,27 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @param isDryer True if the given item is a dryer
    * @return {*}
    */
-  getModalContent(
-    title: string,
-    item: ProxiwashMachineType,
-    isDryer: boolean,
-  ): React.Node {
+  getModalContent(title: string, item: ProxiwashMachineType, isDryer: boolean) {
     const {props, state} = this;
-    let button = {
+    let button: {text: string; icon: string; onPress: () => void} = {
       text: i18n.t('screens.proxiwash.modal.ok'),
       icon: '',
-      onPress: undefined,
+      onPress: () => undefined,
     };
     let message = modalStateStrings[item.state];
-    const onPress = this.onSetupNotificationsPress.bind(this, item);
-    if (item.state === ProxiwashConstants.machineStates.RUNNING) {
+    const onPress = () => this.onSetupNotificationsPress(item);
+    if (item.state === MachineStates.RUNNING) {
       let remainingTime = parseInt(item.remainingTime, 10);
-      if (remainingTime < 0) remainingTime = 0;
+      if (remainingTime < 0) {
+        remainingTime = 0;
+      }
 
       button = {
         text: isMachineWatched(item, state.machinesWatched)
           ? i18n.t('screens.proxiwash.modal.disableNotifications')
           : i18n.t('screens.proxiwash.modal.enableNotifications'),
         icon: '',
-        onPress,
+        onPress: onPress,
       };
       message = i18n.t('screens.proxiwash.modal.running', {
         start: item.startTime,
@@ -247,7 +235,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
         }}>
         <Card.Title
           title={title}
-          left={(): React.Node => (
+          left={() => (
             <Avatar.Icon
               icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
               color={props.theme.colors.text}
@@ -259,7 +247,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
           <Text>{message}</Text>
         </Card.Content>
 
-        {button.onPress !== undefined ? (
+        {button.onPress ? (
           <Card.Actions>
             <Button
               icon={button.icon}
@@ -280,11 +268,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @param section The section to render
    * @return {*}
    */
-  getRenderSectionHeader = ({
-    section,
-  }: {
-    section: {title: string},
-  }): React.Node => {
+  getRenderSectionHeader = ({section}: {section: {title: string}}) => {
     const isDryer = section.title === i18n.t('screens.proxiwash.dryers');
     const nbAvailable = this.getMachineAvailableNumber(isDryer);
     return (
@@ -307,9 +291,9 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     item,
     section,
   }: {
-    item: ProxiwashMachineType,
-    section: {title: string},
-  }): React.Node => {
+    item: ProxiwashMachineType;
+    section: {title: string};
+  }) => {
     const {machinesWatched} = this.state;
     const isDryer = section.title === i18n.t('screens.proxiwash.dryers');
     return (
@@ -369,12 +353,16 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    */
   getMachineAvailableNumber(isDryer: boolean): number {
     let data;
-    if (isDryer) data = this.fetchedData.dryers;
-    else data = this.fetchedData.washers;
+    if (isDryer) {
+      data = this.fetchedData.dryers;
+    } else {
+      data = this.fetchedData.washers;
+    }
     let count = 0;
     data.forEach((machine: ProxiwashMachineType) => {
-      if (machine.state === ProxiwashConstants.machineStates.AVAILABLE)
+      if (machine.state === MachineStates.AVAILABLE) {
         count += 1;
+      }
     });
     return count;
   }
@@ -386,8 +374,8 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @return {*}
    */
   createDataset = (fetchedData: {
-    dryers: Array<ProxiwashMachineType>,
-    washers: Array<ProxiwashMachineType>,
+    dryers: Array<ProxiwashMachineType>;
+    washers: Array<ProxiwashMachineType>;
   }): SectionListDataType<ProxiwashMachineType> => {
     const {state} = this;
     let data = fetchedData;
@@ -466,8 +454,9 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
       if (
         machine.number === selectedMachine.number &&
         machine.endTime === selectedMachine.endTime
-      )
+      ) {
         newList.splice(index, 1);
+      }
     });
     this.saveNewWatchedList(newList);
   }
@@ -480,7 +469,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     );
   }
 
-  render(): React.Node {
+  render() {
     const {state} = this;
     const {navigation} = this.props;
     let data: LaundromatType;

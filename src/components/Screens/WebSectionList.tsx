@@ -38,6 +38,7 @@ import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
 
 export type SectionListDataType<ItemT> = Array<{
   title: string;
+  icon?: string;
   data: Array<ItemT>;
   keyExtractor?: (data: ItemT) => string;
 }>;

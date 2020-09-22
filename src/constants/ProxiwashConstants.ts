@@ -17,16 +17,17 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+export enum MachineStates {
+  AVAILABLE,
+  RUNNING,
+  RUNNING_NOT_STARTED,
+  FINISHED,
+  UNAVAILABLE,
+  ERROR,
+  UNKNOWN,
+}
+
 export default {
-  machineStates: {
-    AVAILABLE: 0,
-    RUNNING: 1,
-    RUNNING_NOT_STARTED: 2,
-    FINISHED: 3,
-    UNAVAILABLE: 4,
-    ERROR: 5,
-    UNKNOWN: 6,
-  },
   stateIcons: [
     'radiobox-blank',
     'progress-check',
