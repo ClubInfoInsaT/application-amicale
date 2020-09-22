@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Image, Platform, ScrollView, View} from 'react-native';
 import i18n from 'i18n-js';
@@ -38,7 +36,6 @@ import ProximoListItem from '../../../components/Lists/Proximo/ProximoListItem';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
 import type {ProximoArticleType} from './ProximoMainScreen';
 
@@ -54,34 +51,42 @@ function sortPriceReverse(
 }
 
 function sortName(a: ProximoArticleType, b: ProximoArticleType): number {
-  if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-  if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+  if (a.name.toLowerCase() < b.name.toLowerCase()) {
+    return -1;
+  }
+  if (a.name.toLowerCase() > b.name.toLowerCase()) {
+    return 1;
+  }
   return 0;
 }
 
 function sortNameReverse(a: ProximoArticleType, b: ProximoArticleType): number {
-  if (a.name.toLowerCase() < b.name.toLowerCase()) return 1;
-  if (a.name.toLowerCase() > b.name.toLowerCase()) return -1;
+  if (a.name.toLowerCase() < b.name.toLowerCase()) {
+    return 1;
+  }
+  if (a.name.toLowerCase() > b.name.toLowerCase()) {
+    return -1;
+  }
   return 0;
 }
 
 const LIST_ITEM_HEIGHT = 84;
 
 type PropsType = {
-  navigation: StackNavigationProp,
+  navigation: StackNavigationProp<any>;
   route: {
     params: {
-      data: {data: Array<ProximoArticleType>},
-      shouldFocusSearchBar: boolean,
-    },
-  },
-  theme: CustomThemeType,
+      data: {data: Array<ProximoArticleType>};
+      shouldFocusSearchBar: boolean;
+    };
+  };
+  theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
-  currentSortMode: number,
-  modalCurrentDisplayItem: React.Node,
-  currentSearchString: string,
+  currentSortMode: number;
+  modalCurrentDisplayItem: React.ReactNode;
+  currentSearchString: string;
 };
 
 /**
@@ -96,6 +101,7 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
+    this.modalRef = null;
     this.listData = props.route.params.data.data.sort(sortName);
     this.shouldFocusSearchBar = props.route.params.shouldFocusSearchBar;
     this.state = {
@@ -186,7 +192,9 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
         this.listData.sort(sortName);
         break;
     }
-    if (this.modalRef && currentMode !== currentSortMode) this.modalRef.close();
+    if (this.modalRef && currentMode !== currentSortMode) {
+      this.modalRef.close();
+    }
   }
 
   /**
@@ -198,9 +206,13 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
   getStockColor(availableStock: number): string {
     const {theme} = this.props;
     let color: string;
-    if (availableStock > 3) color = theme.colors.success;
-    else if (availableStock > 0) color = theme.colors.warning;
-    else color = theme.colors.danger;
+    if (availableStock > 3) {
+      color = theme.colors.success;
+    } else if (availableStock > 0) {
+      color = theme.colors.warning;
+    } else {
+      color = theme.colors.danger;
+    }
     return color;
   }
 
@@ -209,7 +221,7 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getSortMenuButton = (): React.Node => {
+  getSortMenuButton = () => {
     return (
       <MaterialHeaderButtons>
         <Item title="main" iconName="sort" onPress={this.onSortMenuPress} />
@@ -222,8 +234,9 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getSearchBar = (): React.Node => {
+  getSearchBar = () => {
     return (
+      // @ts-ignore
       <Searchbar
         placeholder={i18n.t('screens.proximo.search')}
         onChangeText={this.onSearchStringChange}
@@ -237,7 +250,7 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    * @param item The article to display
    * @return {*}
    */
-  getModalItemContent(item: ProximoArticleType): React.Node {
+  getModalItemContent(item: ProximoArticleType) {
     return (
       <View
         style={{
@@ -284,7 +297,7 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getModalSortMenu(): React.Node {
+  getModalSortMenu() {
     const {currentSortMode} = this.state;
     return (
       <View
@@ -299,22 +312,22 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
           onValueChange={(value: string) => {
             this.setSortMode(value);
           }}
-          value={currentSortMode}>
+          value={currentSortMode.toString()}>
           <RadioButton.Item
             label={i18n.t('screens.proximo.sortPrice')}
-            value={1}
+            value={'1'}
           />
           <RadioButton.Item
             label={i18n.t('screens.proximo.sortPriceReverse')}
-            value={2}
+            value={'2'}
           />
           <RadioButton.Item
             label={i18n.t('screens.proximo.sortName')}
-            value={3}
+            value={'3'}
           />
           <RadioButton.Item
             label={i18n.t('screens.proximo.sortNameReverse')}
-            value={4}
+            value={'4'}
           />
         </RadioButton.Group>
       </View>
@@ -327,7 +340,7 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    * @param item The article to render
    * @return {*}
    */
-  getRenderItem = ({item}: {item: ProximoArticleType}): React.Node => {
+  getRenderItem = ({item}: {item: ProximoArticleType}) => {
     const {currentSearchString} = this.state;
     if (stringMatchQuery(item.name, currentSearchString)) {
       const onPress = () => {
@@ -364,15 +377,15 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
   };
 
   itemLayout = (
-    data: ProximoArticleType,
+    data: Array<ProximoArticleType> | null | undefined,
     index: number,
-  ): {length: number, offset: number, index: number} => ({
+  ): {length: number; offset: number; index: number} => ({
     length: LIST_ITEM_HEIGHT,
     offset: LIST_ITEM_HEIGHT * index,
     index,
   });
 
-  render(): React.Node {
+  render() {
     const {state} = this;
     return (
       <View

@@ -27,43 +27,41 @@ import WebSectionList from '../../../components/Screens/WebSectionList';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {SectionListDataType} from '../../../components/Screens/WebSectionList';
-import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 const DATA_URL = 'https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json';
 const LIST_ITEM_HEIGHT = 84;
 
 export type ProximoCategoryType = {
-  name: string,
-  icon: string,
-  id: string,
+  name: string;
+  icon: string;
+  id: string;
 };
 
 export type ProximoArticleType = {
-  name: string,
-  description: string,
-  quantity: string,
-  price: string,
-  code: string,
-  id: string,
-  type: Array<string>,
-  image: string,
+  name: string;
+  description: string;
+  quantity: string;
+  price: string;
+  code: string;
+  id: string;
+  type: Array<string>;
+  image: string;
 };
 
 export type ProximoMainListItemType = {
-  type: ProximoCategoryType,
-  data: Array<ProximoArticleType>,
+  type: ProximoCategoryType;
+  data: Array<ProximoArticleType>;
 };
 
 export type ProximoDataType = {
-  types: Array<ProximoCategoryType>,
-  articles: Array<ProximoArticleType>,
+  types: Array<ProximoCategoryType>;
+  articles: Array<ProximoArticleType>;
 };
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  theme: CustomThemeType,
+  navigation: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
 };
 
 /**
@@ -87,12 +85,20 @@ class ProximoMainScreen extends React.Component<PropsType> {
     const str2 = b.type.name.toLowerCase();
 
     // Make 'All' category with id -1 stick to the top
-    if (a.type.id === -1) return -1;
-    if (b.type.id === -1) return 1;
+    if (a.type.id === '-1') {
+      return -1;
+    }
+    if (b.type.id === '-1') {
+      return 1;
+    }
 
     // Sort others by name ascending
-    if (str1 < str2) return -1;
-    if (str1 > str2) return 1;
+    if (str1 < str2) {
+      return -1;
+    }
+    if (str1 > str2) {
+      return 1;
+    }
     return 0;
   }
 
@@ -105,16 +111,17 @@ class ProximoMainScreen extends React.Component<PropsType> {
    */
   static getAvailableArticles(
     articles: Array<ProximoArticleType> | null,
-    type: ?ProximoCategoryType,
+    type?: ProximoCategoryType,
   ): Array<ProximoArticleType> {
-    const availableArticles = [];
+    const availableArticles: Array<ProximoArticleType> = [];
     if (articles != null) {
       articles.forEach((article: ProximoArticleType) => {
         if (
           ((type != null && article.type.includes(type.id)) || type == null) &&
           parseInt(article.quantity, 10) > 0
-        )
+        ) {
           availableArticles.push(article);
+        }
       });
     }
     return availableArticles;
@@ -122,13 +129,18 @@ class ProximoMainScreen extends React.Component<PropsType> {
 
   articles: Array<ProximoArticleType> | null;
 
+  constructor(props: PropsType) {
+    super(props);
+    this.articles = null;
+  }
+
   /**
    * Creates header button
    */
   componentDidMount() {
     const {navigation} = this.props;
     navigation.setOptions({
-      headerRight: (): React.Node => this.getHeaderButtons(),
+      headerRight: () => this.getHeaderButtons(),
     });
   }
 
@@ -168,7 +180,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * Gets the header buttons
    * @return {*}
    */
-  getHeaderButtons(): React.Node {
+  getHeaderButtons() {
     return (
       <MaterialHeaderButtons>
         <Item
@@ -199,7 +211,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * @param item The category to render
    * @return {*}
    */
-  getRenderItem = ({item}: {item: ProximoMainListItemType}): React.Node => {
+  getRenderItem = ({item}: {item: ProximoMainListItemType}) => {
     const {navigation, theme} = this.props;
     const dataToSend = {
       shouldFocusSearchBar: false,
@@ -219,14 +231,14 @@ class ProximoMainScreen extends React.Component<PropsType> {
           title={item.type.name}
           description={subtitle}
           onPress={onPress}
-          left={(props: ListIconPropsType): React.Node => (
+          left={(props) => (
             <List.Icon
               style={props.style}
               icon={item.type.icon}
               color={theme.colors.primary}
             />
           )}
-          right={(props: ListIconPropsType): React.Node => (
+          right={(props) => (
             <List.Icon
               color={props.color}
               style={props.style}
@@ -295,7 +307,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
     return finalData;
   }
 
-  render(): React.Node {
+  render() {
     const {navigation} = this.props;
     return (
       <WebSectionList
