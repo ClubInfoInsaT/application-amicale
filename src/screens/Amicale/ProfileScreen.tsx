@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {
@@ -38,42 +36,37 @@ import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
 import CardList from '../../components/Lists/CardList/CardList';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 import AvailableWebsites from '../../constants/AvailableWebsites';
 import Mascot, {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import ServicesManager, {SERVICES_KEY} from '../../managers/ServicesManager';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import type {ServiceItemType} from '../../managers/ServicesManager';
-import type {
-  CardTitleIconPropsType,
-  ListIconPropsType,
-} from '../../constants/PaperStyles';
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  theme: CustomThemeType,
+  navigation: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
-  dialogVisible: boolean,
+  dialogVisible: boolean;
 };
 
 type ClubType = {
-  id: number,
-  name: string,
-  is_manager: boolean,
+  id: number;
+  name: string;
+  is_manager: boolean;
 };
 
 type ProfileDataType = {
-  first_name: string,
-  last_name: string,
-  email: string,
-  birthday: string,
-  phone: string,
-  branch: string,
-  link: string,
-  validity: boolean,
-  clubs: Array<ClubType>,
+  first_name: string;
+  last_name: string;
+  email: string;
+  birthday: string;
+  phone: string;
+  branch: string;
+  link: string;
+  validity: boolean;
+  clubs: Array<ClubType>;
 };
 
 const styles = StyleSheet.create({
@@ -89,7 +82,7 @@ const styles = StyleSheet.create({
 });
 
 class ProfileScreen extends React.Component<PropsType, StateType> {
-  data: ProfileDataType;
+  data: ProfileDataType | null;
 
   flatListData: Array<{id: string}>;
 
@@ -97,6 +90,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
+    this.data = null;
     this.flatListData = [{id: '0'}, {id: '1'}, {id: '2'}, {id: '3'}];
     const services = new ServicesManager(props.navigation);
     this.amicaleDataset = services.getAmicaleServices([SERVICES_KEY.PROFILE]);
@@ -117,7 +111,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getHeaderButton = (): React.Node => (
+  getHeaderButton = () => (
     <MaterialHeaderButtons>
       <Item
         title="logout"
@@ -133,12 +127,9 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @param data The data fetched from the server
    * @returns {*}
    */
-  getScreen = (data: Array<ProfileDataType | null>): React.Node => {
+  getScreen = (data: Array<ProfileDataType | null>) => {
     const {dialogVisible} = this.state;
-    const {navigation} = this.props;
-    // eslint-disable-next-line prefer-destructuring
-    if (data[0] != null) this.data = data[0];
-
+    this.data = data[0];
     return (
       <View style={{flex: 1}}>
         <CollapsibleFlatList
@@ -146,7 +137,6 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
           data={this.flatListData}
         />
         <LogoutDialog
-          navigation={navigation}
           visible={dialogVisible}
           onDismiss={this.hideDisconnectDialog}
         />
@@ -154,7 +144,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  getRenderItem = ({item}: {item: {id: string}}): React.Node => {
+  getRenderItem = ({item}: {item: {id: string}}) => {
     switch (item.id) {
       case '0':
         return this.getWelcomeCard();
@@ -172,7 +162,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getServicesList(): React.Node {
+  getServicesList() {
     return <CardList dataset={this.amicaleDataset} isHorizontal />;
   }
 
@@ -181,15 +171,15 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getWelcomeCard(): React.Node {
+  getWelcomeCard() {
     const {navigation} = this.props;
     return (
       <Card style={styles.card}>
         <Card.Title
           title={i18n.t('screens.profile.welcomeTitle', {
-            name: this.data.first_name,
+            name: this.data?.first_name,
           })}
-          left={(): React.Node => (
+          left={() => (
             <Mascot
               style={{
                 width: 60,
@@ -233,8 +223,8 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @param field The field to get the value from
    * @return {*}
    */
-  static getFieldValue(field: ?string): string {
-    return field != null ? field : i18n.t('screens.profile.noData');
+  static getFieldValue(field?: string): string {
+    return field ? field : i18n.t('screens.profile.noData');
   }
 
   /**
@@ -244,7 +234,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @param icon The icon to use
    * @return {*}
    */
-  getPersonalListItem(field: ?string, icon: string): React.Node {
+  getPersonalListItem(field: string | undefined, icon: string) {
     const {theme} = this.props;
     const title = field != null ? ProfileScreen.getFieldValue(field) : ':(';
     const subtitle = field != null ? '' : ProfileScreen.getFieldValue(field);
@@ -252,7 +242,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
       <List.Item
         title={title}
         description={subtitle}
-        left={(props: ListIconPropsType): React.Node => (
+        left={(props) => (
           <List.Icon
             style={props.style}
             icon={icon}
@@ -268,14 +258,14 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getPersonalCard(): React.Node {
+  getPersonalCard() {
     const {theme, navigation} = this.props;
     return (
       <Card style={styles.card}>
         <Card.Title
-          title={`${this.data.first_name} ${this.data.last_name}`}
-          subtitle={this.data.email}
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
+          title={`${this.data?.first_name} ${this.data?.last_name}`}
+          subtitle={this.data?.email}
+          left={(iconProps) => (
             <Avatar.Icon
               size={iconProps.size}
               icon="account"
@@ -290,10 +280,10 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
             <List.Subheader>
               {i18n.t('screens.profile.personalInformation')}
             </List.Subheader>
-            {this.getPersonalListItem(this.data.birthday, 'cake-variant')}
-            {this.getPersonalListItem(this.data.phone, 'phone')}
-            {this.getPersonalListItem(this.data.email, 'email')}
-            {this.getPersonalListItem(this.data.branch, 'school')}
+            {this.getPersonalListItem(this.data?.birthday, 'cake-variant')}
+            {this.getPersonalListItem(this.data?.phone, 'phone')}
+            {this.getPersonalListItem(this.data?.email, 'email')}
+            {this.getPersonalListItem(this.data?.branch, 'school')}
           </List.Section>
           <Divider />
           <Card.Actions>
@@ -303,7 +293,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
               onPress={() => {
                 navigation.navigate('website', {
                   host: AvailableWebsites.websites.AMICALE,
-                  path: this.data.link,
+                  path: this.data?.link,
                   title: i18n.t('screens.websites.amicale'),
                 });
               }}
@@ -321,14 +311,14 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getClubCard(): React.Node {
+  getClubCard() {
     const {theme} = this.props;
     return (
       <Card style={styles.card}>
         <Card.Title
           title={i18n.t('screens.profile.clubs')}
           subtitle={i18n.t('screens.profile.clubsSubtitle')}
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
+          left={(iconProps) => (
             <Avatar.Icon
               size={iconProps.size}
               icon="account-group"
@@ -339,7 +329,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
         />
         <Card.Content>
           <Divider />
-          {this.getClubList(this.data.clubs)}
+          {this.getClubList(this.data?.clubs)}
         </Card.Content>
       </Card>
     );
@@ -350,14 +340,14 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getMembershipCar(): React.Node {
+  getMembershipCar() {
     const {theme} = this.props;
     return (
       <Card style={styles.card}>
         <Card.Title
           title={i18n.t('screens.profile.membership')}
           subtitle={i18n.t('screens.profile.membershipSubtitle')}
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
+          left={(iconProps) => (
             <Avatar.Icon
               size={iconProps.size}
               icon="credit-card"
@@ -368,7 +358,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
         />
         <Card.Content>
           <List.Section>
-            {this.getMembershipItem(this.data.validity)}
+            {this.getMembershipItem(this.data?.validity === true)}
           </List.Section>
         </Card.Content>
       </Card>
@@ -380,7 +370,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getMembershipItem(state: boolean): React.Node {
+  getMembershipItem(state: boolean) {
     const {theme} = this.props;
     return (
       <List.Item
@@ -389,7 +379,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
             ? i18n.t('screens.profile.membershipPayed')
             : i18n.t('screens.profile.membershipNotPayed')
         }
-        left={(props: ListIconPropsType): React.Node => (
+        left={(props) => (
           <List.Icon
             style={props.style}
             color={state ? theme.colors.success : theme.colors.danger}
@@ -406,18 +396,25 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @param item The club to render
    * @return {*}
    */
-  getClubListItem = ({item}: {item: ClubType}): React.Node => {
+  getClubListItem = ({item}: {item: ClubType}) => {
     const {theme} = this.props;
     const onPress = () => {
       this.openClubDetailsScreen(item.id);
     };
     let description = i18n.t('screens.profile.isMember');
-    let icon = (props: ListIconPropsType): React.Node => (
+    let icon = (props: {
+      color: string;
+      style: {
+        marginLeft: number;
+        marginRight: number;
+        marginVertical?: number;
+      };
+    }) => (
       <List.Icon color={props.color} style={props.style} icon="chevron-right" />
     );
     if (item.is_manager) {
       description = i18n.t('screens.profile.isManager');
-      icon = (props: ListIconPropsType): React.Node => (
+      icon = (props) => (
         <List.Icon
           style={props.style}
           icon="star"
@@ -441,7 +438,11 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @param list The club list
    * @return {*}
    */
-  getClubList(list: Array<ClubType>): React.Node {
+  getClubList(list: Array<ClubType> | undefined) {
+    if (!list) {
+      return null;
+    }
+
     list.sort(this.sortClubList);
     return (
       <FlatList
@@ -473,7 +474,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
     navigation.navigate('club-information', {clubId: id});
   }
 
-  render(): React.Node {
+  render() {
     const {navigation} = this.props;
     return (
       <AuthenticatedScreen

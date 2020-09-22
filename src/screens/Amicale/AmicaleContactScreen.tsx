@@ -17,24 +17,18 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {FlatList, Image, Linking, View} from 'react-native';
-import {Card, List, Text, withTheme, Avatar} from 'react-native-paper';
+import {Avatar, Card, List, Text} from 'react-native-paper';
 import i18n from 'i18n-js';
-import type {MaterialCommunityIconsGlyphs} from 'react-native-vector-icons/MaterialCommunityIcons';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
-import AMICALE_LOGO from '../../../assets/amicale.png';
-import type {
-  CardTitleIconPropsType,
-  ListIconPropsType,
-} from '../../constants/PaperStyles';
+
+const AMICALE_LOGO = require('../../../assets/amicale.png');
 
 type DatasetItemType = {
-  name: string,
-  email: string,
-  icon: MaterialCommunityIconsGlyphs,
+  name: string;
+  email: string;
+  icon: string;
 };
 
 /**
@@ -45,7 +39,7 @@ class AmicaleContactScreen extends React.Component<null> {
   CONTACT_DATASET: Array<DatasetItemType>;
 
   constructor() {
-    super();
+    super(null);
     this.CONTACT_DATASET = [
       {
         name: i18n.t('screens.amicaleAbout.roles.interSchools'),
@@ -97,7 +91,13 @@ class AmicaleContactScreen extends React.Component<null> {
 
   keyExtractor = (item: DatasetItemType): string => item.email;
 
-  getChevronIcon = (iconProps: ListIconPropsType): React.Node => (
+  getChevronIcon = (iconProps: {
+    color: string;
+    style?: {
+      marginRight: number;
+      marginVertical?: number;
+    };
+  }) => (
     <List.Icon
       color={iconProps.color}
       style={iconProps.style}
@@ -105,7 +105,7 @@ class AmicaleContactScreen extends React.Component<null> {
     />
   );
 
-  getRenderItem = ({item}: {item: DatasetItemType}): React.Node => {
+  getRenderItem = ({item}: {item: DatasetItemType}) => {
     const onPress = () => {
       Linking.openURL(`mailto:${item.email}`);
     };
@@ -113,7 +113,7 @@ class AmicaleContactScreen extends React.Component<null> {
       <List.Item
         title={item.name}
         description={item.email}
-        left={(iconProps: ListIconPropsType): React.Node => (
+        left={(iconProps) => (
           <List.Icon
             color={iconProps.color}
             style={iconProps.style}
@@ -126,7 +126,7 @@ class AmicaleContactScreen extends React.Component<null> {
     );
   };
 
-  getScreen = (): React.Node => {
+  getScreen = () => {
     return (
       <View>
         <View
@@ -148,7 +148,7 @@ class AmicaleContactScreen extends React.Component<null> {
           <Card.Title
             title={i18n.t('screens.amicaleAbout.title')}
             subtitle={i18n.t('screens.amicaleAbout.subtitle')}
-            left={(iconProps: CardTitleIconPropsType): React.Node => (
+            left={(iconProps) => (
               <Avatar.Icon size={iconProps.size} icon="information" />
             )}
           />
@@ -165,7 +165,7 @@ class AmicaleContactScreen extends React.Component<null> {
     );
   };
 
-  render(): React.Node {
+  render() {
     return (
       <CollapsibleFlatList
         data={[{key: '1'}]}
@@ -176,4 +176,4 @@ class AmicaleContactScreen extends React.Component<null> {
   }
 }
 
-export default withTheme(AmicaleContactScreen);
+export default AmicaleContactScreen;

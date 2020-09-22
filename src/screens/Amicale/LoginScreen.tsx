@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Image, KeyboardAvoidingView, StyleSheet, View} from 'react-native';
 import {
@@ -29,32 +27,33 @@ import {
   withTheme,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import LinearGradient from 'react-native-linear-gradient';
 import ConnectionManager from '../../managers/ConnectionManager';
 import ErrorDialog from '../../components/Dialogs/ErrorDialog';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import AvailableWebsites from '../../constants/AvailableWebsites';
 import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
+import {MainStackParamsList} from '../../navigation/MainNavigator';
 
-type PropsType = {
-  navigation: StackNavigationProp,
-  route: {params: {nextScreen: string}},
-  theme: CustomThemeType,
+type LoginScreenNavigationProp = StackScreenProps<MainStackParamsList, 'login'>;
+
+type Props = LoginScreenNavigationProp & {
+  navigation: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
-  email: string,
-  password: string,
-  isEmailValidated: boolean,
-  isPasswordValidated: boolean,
-  loading: boolean,
-  dialogVisible: boolean,
-  dialogError: number,
-  mascotDialogVisible: boolean,
+  email: string;
+  password: string;
+  isEmailValidated: boolean;
+  isPasswordValidated: boolean;
+  loading: boolean;
+  dialogVisible: boolean;
+  dialogError: number;
+  mascotDialogVisible: boolean;
 };
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
@@ -82,17 +81,21 @@ const styles = StyleSheet.create({
   },
 });
 
-class LoginScreen extends React.Component<PropsType, StateType> {
+class LoginScreen extends React.Component<Props, StateType> {
   onEmailChange: (value: string) => void;
 
   onPasswordChange: (value: string) => void;
 
-  passwordInputRef: {current: null | TextInput};
+  passwordInputRef: {
+    // @ts-ignore
+    current: null | TextInput;
+  };
 
   nextScreen: string | null;
 
-  constructor(props: PropsType) {
+  constructor(props: Props) {
     super(props);
+    this.nextScreen = null;
     this.passwordInputRef = React.createRef();
     this.onEmailChange = (value: string) => {
       this.onInputChange(true, value);
@@ -158,8 +161,9 @@ class LoginScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   onEmailSubmit = () => {
-    if (this.passwordInputRef.current != null)
+    if (this.passwordInputRef.current != null) {
       this.passwordInputRef.current.focus();
+    }
   };
 
   /**
@@ -188,7 +192,7 @@ class LoginScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getFormInput(): React.Node {
+  getFormInput() {
     const {email, password} = this.state;
     return (
       <View>
@@ -239,7 +243,7 @@ class LoginScreen extends React.Component<PropsType, StateType> {
    * Gets the card containing the input form
    * @returns {*}
    */
-  getMainCard(): React.Node {
+  getMainCard() {
     const {props, state} = this;
     return (
       <View style={styles.card}>
@@ -248,7 +252,7 @@ class LoginScreen extends React.Component<PropsType, StateType> {
           titleStyle={{color: '#fff'}}
           subtitle={i18n.t('screens.login.subtitle')}
           subtitleStyle={{color: '#fff'}}
-          left={({size}: {size: number}): React.Node => (
+          left={({size}) => (
             <Image
               source={ICON_AMICALE}
               style={{
@@ -349,20 +353,18 @@ class LoginScreen extends React.Component<PropsType, StateType> {
       AsyncStorageManager.PREFERENCES.homeShowMascot.key,
       false,
     );
-    if (this.nextScreen == null) navigation.goBack();
-    else navigation.replace(this.nextScreen);
+    if (this.nextScreen == null) {
+      navigation.goBack();
+    } else {
+      navigation.replace(this.nextScreen);
+    }
   };
 
   /**
    * Saves the screen to navigate to after a successful login if one was provided in navigation parameters
    */
   handleNavigationParams() {
-    const {route} = this.props;
-    if (route.params != null) {
-      if (route.params.nextScreen != null)
-        this.nextScreen = route.params.nextScreen;
-      else this.nextScreen = null;
-    }
+    this.nextScreen = this.props.route.params.nextScreen;
   }
 
   /**
@@ -417,7 +419,7 @@ class LoginScreen extends React.Component<PropsType, StateType> {
     return this.isEmailValid() && this.isPasswordValid() && !loading;
   }
 
-  render(): React.Node {
+  render() {
     const {mascotDialogVisible, dialogVisible, dialogError} = this.state;
     return (
       <LinearGradient
@@ -441,7 +443,6 @@ class LoginScreen extends React.Component<PropsType, StateType> {
               message={i18n.t('screens.login.mascotDialog.message')}
               icon="help"
               buttons={{
-                action: null,
                 cancel: {
                   message: i18n.t('screens.login.mascotDialog.button'),
                   icon: 'check',
