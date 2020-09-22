@@ -17,20 +17,18 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Image, View} from 'react-native';
 import {FAB} from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
-import FOCUSED_ICON from '../../../assets/tab-icon.png';
-import UNFOCUSED_ICON from '../../../assets/tab-icon-outline.png';
+const FOCUSED_ICON = require('../../../assets/tab-icon.png');
+const UNFOCUSED_ICON = require('../../../assets/tab-icon-outline.png');
 
 type PropsType = {
-  focused: boolean,
-  onPress: () => void,
-  onLongPress: () => void,
-  tabBarHeight: number,
+  focused: boolean;
+  onPress: () => void;
+  onLongPress: () => void;
+  tabBarHeight: number;
 };
 
 const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
@@ -44,6 +42,7 @@ class TabHomeIcon extends React.Component<PropsType> {
     Animatable.initializeRegistryWithDefinitions({
       fabFocusIn: {
         '0': {
+          // @ts-ignore
           scale: 1,
           translateY: 0,
         },
@@ -58,6 +57,7 @@ class TabHomeIcon extends React.Component<PropsType> {
       },
       fabFocusOut: {
         '0': {
+          // @ts-ignore
           scale: 1.1,
           translateY: -6,
         },
@@ -74,13 +74,7 @@ class TabHomeIcon extends React.Component<PropsType> {
     return nextProps.focused !== focused;
   }
 
-  getIconRender = ({
-    size,
-    color,
-  }: {
-    size: number,
-    color: string,
-  }): React.Node => {
+  getIconRender = ({size, color}: {size: number; color: string}) => {
     const {focused} = this.props;
     return (
       <Image
@@ -94,7 +88,7 @@ class TabHomeIcon extends React.Component<PropsType> {
     );
   };
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     return (
       <View

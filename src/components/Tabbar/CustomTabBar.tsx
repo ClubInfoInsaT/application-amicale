@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Animated} from 'react-native';
 import {withTheme} from 'react-native-paper';
@@ -26,39 +24,39 @@ import {Collapsible} from 'react-navigation-collapsible';
 import {StackNavigationProp} from '@react-navigation/stack';
 import TabIcon from './TabIcon';
 import TabHomeIcon from './TabHomeIcon';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type RouteType = {
-  name: string,
-  key: string,
-  params: {collapsible: Collapsible},
+  name: string;
+  key: string;
+  params: {collapsible: Collapsible};
   state: {
-    index: number,
-    routes: Array<RouteType>,
-  },
+    index: number;
+    routes: Array<RouteType>;
+  };
 };
 
 type PropsType = {
   state: {
-    index: number,
-    routes: Array<RouteType>,
-  },
+    index: number;
+    routes: Array<RouteType>;
+  };
   descriptors: {
     [key: string]: {
       options: {
-        tabBarLabel: string,
-        title: string,
-      },
-    },
-  },
-  navigation: StackNavigationProp,
-  theme: CustomThemeType,
+        tabBarLabel: string;
+        title: string;
+      };
+    };
+  };
+  navigation: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
-  // eslint-disable-next-line flowtype/no-weak-types
-  translateY: any,
+  translateY: any;
 };
+
+type validRoutes = 'proxiwash' | 'services' | 'planning' | 'planex';
 
 const TAB_ICONS = {
   proxiwash: 'tshirt-crew',
@@ -70,8 +68,8 @@ const TAB_ICONS = {
 class CustomTabBar extends React.Component<PropsType, StateType> {
   static TAB_BAR_HEIGHT = 48;
 
-  constructor() {
-    super();
+  constructor(props: PropsType) {
+    super(props);
     this.state = {
       translateY: new Animated.Value(0),
     };
@@ -86,13 +84,9 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
    */
   onItemPress(route: RouteType, currentIndex: number, destIndex: number) {
     const {navigation} = this.props;
-    const event = navigation.emit({
-      type: 'tabPress',
-      target: route.key,
-      canPreventDefault: true,
-    });
-    if (currentIndex !== destIndex && !event.defaultPrevented)
+    if (currentIndex !== destIndex) {
       navigation.navigate(route.name);
+    }
   }
 
   /**
@@ -102,13 +96,9 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
    */
   onItemLongPress(route: RouteType) {
     const {navigation} = this.props;
-    const event = navigation.emit({
-      type: 'tabLongPress',
-      target: route.key,
-      canPreventDefault: true,
-    });
-    if (route.name === 'home' && !event.defaultPrevented)
+    if (route.name === 'home') {
       navigation.navigate('game-start');
+    }
   }
 
   /**
@@ -126,11 +116,13 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
    * @param focused
    * @returns {null}
    */
-  getTabBarIcon = (route: RouteType, focused: boolean): React.Node => {
-    let icon = TAB_ICONS[route.name];
+  getTabBarIcon = (route: RouteType, focused: boolean) => {
+    let icon = TAB_ICONS[route.name as validRoutes];
     icon = focused ? icon : `${icon}-outline`;
-    if (route.name !== 'home') return icon;
-    return null;
+    if (route.name !== 'home') {
+      return icon;
+    }
+    return '';
   };
 
   /**
@@ -141,14 +133,18 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
    * @param index The index of the current route
    * @returns {*}
    */
-  getRenderIcon = (route: RouteType, index: number): React.Node => {
+  getRenderIcon = (route: RouteType, index: number) => {
     const {props} = this;
     const {state} = props;
     const {options} = props.descriptors[route.key];
     let label;
-    if (options.tabBarLabel != null) label = options.tabBarLabel;
-    else if (options.title != null) label = options.title;
-    else label = route.name;
+    if (options.tabBarLabel != null) {
+      label = options.tabBarLabel;
+    } else if (options.title != null) {
+      label = options.title;
+    } else {
+      label = route.name;
+    }
 
     const onPress = () => {
       this.onItemPress(route, state.index, index);
@@ -186,7 +182,7 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
     );
   };
 
-  getIcons(): React.Node {
+  getIcons() {
     const {props} = this;
     return props.state.routes.map(this.getRenderIcon);
   }
@@ -209,14 +205,12 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
     }
   };
 
-  render(): React.Node {
+  render() {
     const {props, state} = this;
     props.navigation.addListener('state', this.onRouteChange);
     const icons = this.getIcons();
     return (
-      // $FlowFixMe
       <Animated.View
-        useNativeDriver
         style={{
           flexDirection: 'row',
           height: CustomTabBar.TAB_BAR_HEIGHT,

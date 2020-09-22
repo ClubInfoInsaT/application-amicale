@@ -17,25 +17,21 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {View} from 'react-native';
 import {TouchableRipple, withTheme} from 'react-native-paper';
-import type {MaterialCommunityIconsGlyphs} from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
-  focused: boolean,
-  color: string,
-  label: string,
-  icon: MaterialCommunityIconsGlyphs,
-  onPress: () => void,
-  onLongPress: () => void,
-  theme: CustomThemeType,
-  extraData: null | boolean | number | string,
+  focused: boolean;
+  color: string;
+  label: string;
+  icon: string;
+  onPress: () => void;
+  onLongPress: () => void;
+  theme: ReactNativePaper.Theme;
+  extraData: null | boolean | number | string;
 };
 
 /**
@@ -49,6 +45,7 @@ class TabIcon extends React.Component<PropsType> {
     Animatable.initializeRegistryWithDefinitions({
       focusIn: {
         '0': {
+          // @ts-ignore
           scale: 1,
           translateY: 0,
         },
@@ -63,6 +60,7 @@ class TabIcon extends React.Component<PropsType> {
       },
       focusOut: {
         '0': {
+          // @ts-ignore
           scale: 1.2,
           translateY: 6,
         },
@@ -88,7 +86,7 @@ class TabIcon extends React.Component<PropsType> {
     );
   }
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     return (
       <TouchableRipple
@@ -99,7 +97,7 @@ class TabIcon extends React.Component<PropsType> {
         style={{
           flex: 1,
           justifyContent: 'center',
-          borderRadius: 10
+          borderRadius: 10,
         }}>
         <View>
           <Animatable.View
