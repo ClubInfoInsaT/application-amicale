@@ -17,11 +17,9 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Button, Card, Paragraph, withTheme} from 'react-native-paper';
+import {Button, Card, Paragraph} from 'react-native-paper';
 import {FlatList} from 'react-native';
 import {View} from 'react-native-animatable';
 import i18n from 'i18n-js';
@@ -30,20 +28,19 @@ import type {
   ServiceItemType,
 } from '../../../managers/ServicesManager';
 import DashboardManager from '../../../managers/DashboardManager';
-import DashboardItem from '../../../components/Home/EventDashboardItem';
 import DashboardEditAccordion from '../../../components/Lists/DashboardEdit/DashboardEditAccordion';
 import DashboardEditPreviewItem from '../../../components/Lists/DashboardEdit/DashboardEditPreviewItem';
 import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
 
 type PropsType = {
-  navigation: StackNavigationProp,
+  navigation: StackNavigationProp<any>;
 };
 
 type StateType = {
-  currentDashboard: Array<ServiceItemType | null>,
-  currentDashboardIdList: Array<string>,
-  activeItem: number,
+  currentDashboard: Array<ServiceItemType | null>;
+  currentDashboardIdList: Array<string>;
+  activeItem: number;
 };
 
 /**
@@ -75,13 +72,13 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
     item,
     index,
   }: {
-    item: DashboardItem,
-    index: number,
-  }): React.Node => {
+    item: ServiceItemType | null;
+    index: number;
+  }) => {
     const {activeItem} = this.state;
     return (
       <DashboardEditPreviewItem
-        image={item.image}
+        image={item?.image}
         onPress={() => {
           this.setState({activeItem: index});
         }}
@@ -90,7 +87,7 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  getDashboard(content: Array<DashboardItem>): React.Node {
+  getDashboard(content: Array<ServiceItemType | null>) {
     return (
       <FlatList
         data={content}
@@ -106,7 +103,7 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
     );
   }
 
-  getRenderItem = ({item}: {item: ServiceCategoryType}): React.Node => {
+  getRenderItem = ({item}: {item: ServiceCategoryType}) => {
     const {currentDashboardIdList} = this.state;
     return (
       <DashboardEditAccordion
@@ -117,7 +114,7 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  getListHeader(): React.Node {
+  getListHeader() {
     const {currentDashboard} = this.state;
     return (
       <Card style={{margin: 5}}>
@@ -170,7 +167,7 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  render(): React.Node {
+  render() {
     return (
       <CollapsibleFlatList
         data={this.content}
@@ -182,4 +179,4 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
   }
 }
 
-export default withTheme(DashboardEditScreen);
+export default DashboardEditScreen;

@@ -22,7 +22,7 @@ import {TouchableRipple, useTheme} from 'react-native-paper';
 import {Dimensions, Image, View} from 'react-native';
 
 type PropsType = {
-  image: string;
+  image?: string | number;
   isActive: boolean;
   onPress: () => void;
 };
@@ -51,13 +51,17 @@ function DashboardEditPreviewItem(props: PropsType) {
           width: itemSize,
           height: itemSize,
         }}>
-        <Image
-          source={{uri: props.image}}
-          style={{
-            width: '100%',
-            height: '100%',
-          }}
-        />
+        {props.image ? (
+          <Image
+            source={
+              typeof props.image === 'string' ? {uri: props.image} : props.image
+            }
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          />
+        ) : null}
       </View>
     </TouchableRipple>
   );

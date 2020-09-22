@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {View} from 'react-native';
 import i18n from 'i18n-js';
@@ -32,24 +30,22 @@ import {
 } from 'react-native-paper';
 import {Appearance} from 'react-native-appearance';
 import {StackNavigationProp} from '@react-navigation/stack';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import ThemeManager from '../../../managers/ThemeManager';
 import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import CustomSlider from '../../../components/Overrides/CustomSlider';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
-import type {ListIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  theme: CustomThemeType,
+  navigation: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
-  nightMode: boolean,
-  nightModeFollowSystem: boolean,
-  startScreenPickerSelected: string,
-  selectedWash: string,
-  isDebugUnlocked: boolean,
+  nightMode: boolean;
+  nightModeFollowSystem: boolean;
+  startScreenPickerSelected: string;
+  selectedWash: string;
+  isDebugUnlocked: boolean;
 };
 
 /**
@@ -61,14 +57,15 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
   /**
    * Loads user preferences into state
    */
-  constructor() {
-    super();
+  constructor(props: PropsType) {
+    super(props);
     const notifReminder = AsyncStorageManager.getString(
       AsyncStorageManager.PREFERENCES.proxiwashNotifications.key,
     );
     this.savedNotificationReminder = parseInt(notifReminder, 10);
-    if (Number.isNaN(this.savedNotificationReminder))
+    if (Number.isNaN(this.savedNotificationReminder)) {
       this.savedNotificationReminder = 0;
+    }
 
     this.state = {
       nightMode: ThemeManager.getNightMode(),
@@ -120,7 +117,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {React.Node}
    */
-  getProxiwashNotifPicker(): React.Node {
+  getProxiwashNotifPicker() {
     const {theme} = this.props;
     return (
       <CustomSlider
@@ -141,7 +138,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {React.Node}
    */
-  getProxiwashChangePicker(): React.Node {
+  getProxiwashChangePicker() {
     const {selectedWash} = this.state;
     return (
       <RadioButton.Group
@@ -164,7 +161,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {React.Node}
    */
-  getStartScreenPicker(): React.Node {
+  getStartScreenPicker() {
     const {startScreenPickerSelected} = this.state;
     return (
       <ToggleButton.Row
@@ -220,17 +217,15 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
     title: string,
     subtitle: string,
     state: boolean,
-  ): React.Node {
+  ) {
     return (
       <List.Item
         title={title}
         description={subtitle}
-        left={(props: ListIconPropsType): React.Node => (
+        left={(props) => (
           <List.Icon color={props.color} style={props.style} icon={icon} />
         )}
-        right={(): React.Node => (
-          <Switch value={state} onValueChange={onPressCallback} />
-        )}
+        right={() => <Switch value={state} onValueChange={onPressCallback} />}
       />
     );
   }
@@ -241,7 +236,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
     title: string,
     subtitle: string,
     onLongPress?: () => void,
-  ): React.Node {
+  ) {
     const {navigation} = this.props;
     return (
       <List.Item
@@ -250,10 +245,10 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
         onPress={() => {
           navigation.navigate(route);
         }}
-        left={(props: ListIconPropsType): React.Node => (
+        left={(props) => (
           <List.Icon color={props.color} style={props.style} icon={icon} />
         )}
-        right={(props: ListIconPropsType): React.Node => (
+        right={(props) => (
           <List.Icon
             color={props.color}
             style={props.style}
@@ -291,7 +286,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  render(): React.Node {
+  render() {
     const {nightModeFollowSystem, nightMode, isDebugUnlocked} = this.state;
     return (
       <CollapsibleScrollView>
@@ -322,7 +317,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
             <List.Item
               title={i18n.t('screens.settings.startScreen')}
               description={i18n.t('screens.settings.startScreenSub')}
-              left={(props: ListIconPropsType): React.Node => (
+              left={(props) => (
                 <List.Icon
                   color={props.color}
                   style={props.style}
@@ -345,7 +340,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
             <List.Item
               title={i18n.t('screens.settings.proxiwashNotifReminder')}
               description={i18n.t('screens.settings.proxiwashNotifReminderSub')}
-              left={(props: ListIconPropsType): React.Node => (
+              left={(props) => (
                 <List.Icon
                   color={props.color}
                   style={props.style}
@@ -359,7 +354,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
             <List.Item
               title={i18n.t('screens.settings.proxiwashChangeWash')}
               description={i18n.t('screens.settings.proxiwashChangeWashSub')}
-              left={(props: ListIconPropsType): React.Node => (
+              left={(props) => (
                 <List.Icon
                   color={props.color}
                   style={props.style}
