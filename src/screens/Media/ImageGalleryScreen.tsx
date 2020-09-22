@@ -17,34 +17,42 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {IconButton, Text} from 'react-native-paper';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
+import {View} from 'react-native';
+import {MainStackParamsList} from '../../navigation/MainNavigator';
 
-type PropsType = {
-  navigation: StackNavigationProp,
-  route: {params: {images: Array<{url: string}>}},
+type ImageGalleryScreenNavigationProp = StackScreenProps<
+  MainStackParamsList,
+  'gallery'
+>;
+
+type Props = ImageGalleryScreenNavigationProp & {
+  navigation: StackNavigationProp<any>;
 };
 
-class ImageGalleryScreen extends React.Component<PropsType> {
+class ImageGalleryScreen extends React.Component<Props> {
   images: Array<{url: string}>;
 
-  closeButtonRef: {current: null | Animatable.View};
+  closeButtonRef: {current: null | (Animatable.View & View)};
 
-  indicatorRef: {current: null | Animatable.View};
+  indicatorRef: {current: null | (Animatable.View & View)};
 
   controlsShown: boolean;
 
-  constructor(props: PropsType) {
+  constructor(props: Props) {
     super(props);
     this.closeButtonRef = React.createRef();
     this.indicatorRef = React.createRef();
     this.controlsShown = true;
-    if (props.route.params != null) this.images = props.route.params.images;
+    if (props.route.params) {
+      this.images = props.route.params.images;
+    } else {
+      this.images = [];
+    }
   }
 
   goBack = () => {
@@ -52,7 +60,7 @@ class ImageGalleryScreen extends React.Component<PropsType> {
     navigation.goBack();
   };
 
-  getRenderHeader = (): React.Node => {
+  getRenderHeader = () => {
     return (
       <Animatable.View
         ref={this.closeButtonRef}
@@ -73,11 +81,8 @@ class ImageGalleryScreen extends React.Component<PropsType> {
     );
   };
 
-  getRenderIndicator = (
-    currentIndex?: number,
-    allSize?: number,
-  ): React.Node => {
-    if (currentIndex != null && allSize != null && allSize !== 1)
+  getRenderIndicator = (currentIndex?: number, allSize?: number) => {
+    if (currentIndex != null && allSize != null && allSize !== 1) {
       return (
         <Animatable.View
           ref={this.indicatorRef}
@@ -102,30 +107,38 @@ class ImageGalleryScreen extends React.Component<PropsType> {
           </Text>
         </Animatable.View>
       );
-    return null;
+    }
+    return <View />;
   };
 
   onImageClick = () => {
-    if (this.controlsShown) this.hideControls();
-    else this.showControls();
+    if (this.controlsShown) {
+      this.hideControls();
+    } else {
+      this.showControls();
+    }
     this.controlsShown = !this.controlsShown;
   };
 
   hideControls() {
-    if (this.closeButtonRef.current != null)
+    if (this.closeButtonRef.current && this.closeButtonRef.current.fadeOutUp) {
       this.closeButtonRef.current.fadeOutUp(200);
-    if (this.indicatorRef.current != null)
+    }
+    if (this.indicatorRef.current && this.indicatorRef.current.fadeOutUp) {
       this.indicatorRef.current.fadeOutUp(300);
+    }
   }
 
   showControls() {
-    if (this.closeButtonRef.current != null)
+    if (this.closeButtonRef.current && this.closeButtonRef.current.fadeInDown) {
       this.closeButtonRef.current.fadeInDown(300);
-    if (this.indicatorRef.current != null)
+    }
+    if (this.indicatorRef.current && this.indicatorRef.current.fadeInDown) {
       this.indicatorRef.current.fadeInDown(400);
+    }
   }
 
-  render(): React.Node {
+  render() {
     return (
       <ImageViewer
         useNativeDriver
