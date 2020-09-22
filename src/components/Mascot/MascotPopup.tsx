@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {
   Avatar,
@@ -37,48 +35,42 @@ import {
   View,
 } from 'react-native';
 import Mascot from './Mascot';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 import SpeechArrow from './SpeechArrow';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 
 type PropsType = {
-  theme: CustomThemeType,
-  icon: string,
-  title: string,
-  message: string,
+  theme: ReactNativePaper.Theme;
+  icon: string;
+  title: string;
+  message: string;
   buttons: {
-    action: {
-      message: string,
-      icon: string | null,
-      color: string | null,
-      onPress?: () => void,
-    },
-    cancel: {
-      message: string,
-      icon: string | null,
-      color: string | null,
-      onPress?: () => void,
-    },
-  },
-  emotion: number,
-  visible?: boolean,
-  prefKey?: string,
+    action?: {
+      message: string;
+      icon?: string;
+      color?: string;
+      onPress?: () => void;
+    };
+    cancel?: {
+      message: string;
+      icon?: string;
+      color?: string;
+      onPress?: () => void;
+    };
+  };
+  emotion: number;
+  visible?: boolean;
+  prefKey?: string;
 };
 
 type StateType = {
-  shouldRenderDialog: boolean, // Used to stop rendering after hide animation
-  dialogVisible: boolean,
+  shouldRenderDialog: boolean; // Used to stop rendering after hide animation
+  dialogVisible: boolean;
 };
 
 /**
  * Component used to display a popup with the mascot.
  */
 class MascotPopup extends React.Component<PropsType, StateType> {
-  static defaultProps = {
-    visible: null,
-    prefKey: null,
-  };
-
   mascotSize: number;
 
   windowWidth: number;
@@ -112,7 +104,7 @@ class MascotPopup extends React.Component<PropsType, StateType> {
     }
   }
 
-  componentDidMount(): * {
+  componentDidMount() {
     BackHandler.addEventListener(
       'hardwareBackPress',
       this.onBackButtonPressAndroid,
@@ -146,14 +138,20 @@ class MascotPopup extends React.Component<PropsType, StateType> {
     if (state.dialogVisible) {
       const {cancel} = props.buttons;
       const {action} = props.buttons;
-      if (cancel != null) this.onDismiss(cancel.onPress);
-      else this.onDismiss(action.onPress);
+      if (cancel) {
+        this.onDismiss(cancel.onPress);
+      } else if (action) {
+        this.onDismiss(action.onPress);
+      } else {
+        this.onDismiss();
+      }
+
       return true;
     }
     return false;
   };
 
-  getSpeechBubble(): React.Node {
+  getSpeechBubble() {
     const {state, props} = this;
     return (
       <Animatable.View
@@ -179,7 +177,7 @@ class MascotPopup extends React.Component<PropsType, StateType> {
             title={props.title}
             left={
               props.icon != null
-                ? (): React.Node => (
+                ? () => (
                     <Avatar.Icon
                       size={48}
                       style={{backgroundColor: 'transparent'}}
@@ -187,7 +185,7 @@ class MascotPopup extends React.Component<PropsType, StateType> {
                       icon={props.icon}
                     />
                   )
-                : null
+                : undefined
             }
           />
           <Card.Content
@@ -207,7 +205,7 @@ class MascotPopup extends React.Component<PropsType, StateType> {
     );
   }
 
-  getMascot(): React.Node {
+  getMascot() {
     const {props, state} = this;
     return (
       <Animatable.View
@@ -223,7 +221,7 @@ class MascotPopup extends React.Component<PropsType, StateType> {
     );
   }
 
-  getButtons(): React.Node {
+  getButtons() {
     const {props} = this;
     const {action} = props.buttons;
     const {cancel} = props.buttons;
@@ -270,12 +268,12 @@ class MascotPopup extends React.Component<PropsType, StateType> {
     );
   }
 
-  getBackground(): React.Node {
+  getBackground() {
     const {props, state} = this;
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          this.onDismiss(props.buttons.cancel.onPress);
+          this.onDismiss(props.buttons.cancel?.onPress);
         }}>
         <Animatable.View
           style={{
@@ -298,10 +296,12 @@ class MascotPopup extends React.Component<PropsType, StateType> {
       AsyncStorageManager.set(prefKey, false);
       this.setState({dialogVisible: false});
     }
-    if (callback != null) callback();
+    if (callback != null) {
+      callback();
+    }
   };
 
-  render(): React.Node {
+  render() {
     const {shouldRenderDialog} = this.state;
     if (shouldRenderDialog) {
       return (

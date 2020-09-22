@@ -17,15 +17,32 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
+import * as React from 'react';
+import {View, ViewStyle} from 'react-native';
 
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
-export type ListIconPropsType = {
-  color: string,
-  style: ViewStyleProp,
+type PropsType = {
+  style?: ViewStyle;
+  size: number;
+  color: string;
 };
 
-export type CardTitleIconPropsType = {
-  size: number,
-};
+export default function SpeechArrow(props: PropsType) {
+  return (
+    <View style={props.style}>
+      <View
+        style={{
+          width: 0,
+          height: 0,
+          borderLeftWidth: 0,
+          borderRightWidth: props.size,
+          borderBottomWidth: props.size,
+          borderStyle: 'solid',
+          backgroundColor: 'transparent',
+          borderLeftColor: 'transparent',
+          borderRightColor: 'transparent',
+          borderBottomColor: props.color,
+        }}
+      />
+    </View>
+  );
+}
