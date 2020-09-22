@@ -17,14 +17,11 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import Piece from './Piece';
 import ScoreManager from './ScoreManager';
 import type {CoordinatesType} from '../Shapes/BaseShape';
 import type {GridType} from '../components/GridComponent';
 import type {CellType} from '../components/CellComponent';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 /**
  * Class used to manage the game grid
@@ -32,7 +29,7 @@ import type {CustomThemeType} from '../../../managers/ThemeManager';
 export default class GridManager {
   #currentGrid: GridType;
 
-  #theme: CustomThemeType;
+  #theme: ReactNativePaper.Theme;
 
   /**
    * Initializes a grid of the given size
@@ -41,7 +38,7 @@ export default class GridManager {
    * @param height The grid height
    * @param theme Object containing current theme
    */
-  constructor(width: number, height: number, theme: CustomThemeType) {
+  constructor(width: number, height: number, theme: ReactNativePaper.Theme) {
     this.#theme = theme;
     this.#currentGrid = this.getEmptyGrid(height, width);
   }
@@ -121,7 +118,9 @@ export default class GridManager {
           break;
         }
       }
-      if (isLineFull && rows.indexOf(pos[i].y) === -1) rows.push(pos[i].y);
+      if (isLineFull && rows.indexOf(pos[i].y) === -1) {
+        rows.push(pos[i].y);
+      }
     }
     return rows;
   }

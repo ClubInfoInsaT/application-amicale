@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {View} from 'react-native';
 import {Caption, IconButton, Text, withTheme} from 'react-native-paper';
@@ -32,27 +30,26 @@ import Preview from '../components/Preview';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {OptionsDialogButtonType} from '../../../components/Dialogs/OptionsDialog';
 import OptionsDialog from '../../../components/Dialogs/OptionsDialog';
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  route: {params: {highScore: number}},
-  theme: CustomThemeType,
+  navigation: StackNavigationProp<any>;
+  route: {params: {highScore: number}};
+  theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
-  grid: GridType,
-  gameTime: number,
-  gameScore: number,
-  gameLevel: number,
+  grid: GridType;
+  gameTime: number;
+  gameScore: number;
+  gameLevel: number;
 
-  dialogVisible: boolean,
-  dialogTitle: string,
-  dialogMessage: string,
-  dialogButtons: Array<OptionsDialogButtonType>,
-  onDialogDismiss: () => void,
+  dialogVisible: boolean;
+  dialogTitle: string;
+  dialogMessage: string;
+  dialogButtons: Array<OptionsDialogButtonType>;
+  onDialogDismiss: () => void;
 };
 
 class GameMainScreen extends React.Component<PropsType, StateType> {
@@ -62,11 +59,13 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
     date.setMinutes(0);
     date.setSeconds(seconds);
     let format;
-    if (date.getHours())
+    if (date.getHours()) {
       format = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-    else if (date.getMinutes())
+    } else if (date.getMinutes()) {
       format = `${date.getMinutes()}:${date.getSeconds()}`;
-    else format = date.getSeconds().toString();
+    } else {
+      format = date.getSeconds().toString();
+    }
     return format;
   }
 
@@ -76,6 +75,7 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
+    this.highScore = null;
     this.logic = new GameLogic(20, 10, props.theme);
     this.state = {
       grid: this.logic.getCurrentGrid(),
@@ -88,8 +88,9 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
       dialogButtons: [],
       onDialogDismiss: () => {},
     };
-    if (props.route.params != null)
+    if (props.route.params != null) {
       this.highScore = props.route.params.highScore;
+    }
   }
 
   componentDidMount() {
@@ -104,7 +105,7 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
     this.logic.endGame(true);
   }
 
-  getRightButton = (): React.Node => {
+  getRightButton = () => {
     return (
       <MaterialHeaderButtons>
         <Item title="pause" iconName="pause" onPress={this.togglePause} />
@@ -136,15 +137,16 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
       gameTime: time,
       gameScore: score,
     });
-    if (!isRestart)
+    if (!isRestart) {
       props.navigation.replace('game-start', {
         score: state.gameScore,
         level: state.gameLevel,
         time: state.gameTime,
       });
+    }
   };
 
-  getStatusIcons(): React.Node {
+  getStatusIcons() {
     const {props, state} = this;
     return (
       <View
@@ -219,7 +221,7 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
     );
   }
 
-  getScoreIcon(): React.Node {
+  getScoreIcon() {
     const {props, state} = this;
     const highScore =
       this.highScore == null || state.gameScore > this.highScore
@@ -285,7 +287,7 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
     );
   }
 
-  getControlButtons(): React.Node {
+  getControlButtons() {
     const {props} = this;
     return (
       <View
@@ -353,8 +355,8 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
 
   updateGridScore = (newGrid: GridType, score?: number) => {
     this.setState((prevState: StateType): {
-      grid: GridType,
-      gameScore: number,
+      grid: GridType;
+      gameScore: number;
     } => ({
       grid: newGrid,
       gameScore: score != null ? score : prevState.gameScore,
@@ -363,7 +365,9 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
 
   togglePause = () => {
     this.logic.togglePause();
-    if (this.logic.isGamePaused()) this.showPausePopup();
+    if (this.logic.isGamePaused()) {
+      this.showPausePopup();
+    }
   };
 
   showPausePopup = () => {
@@ -415,7 +419,7 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
     this.logic.startGame(this.onTick, this.onClock, this.onGameEnd);
   };
 
-  render(): React.Node {
+  render() {
     const {props, state} = this;
     return (
       <View style={{flex: 1}}>

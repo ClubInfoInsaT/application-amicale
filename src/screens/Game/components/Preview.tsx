@@ -17,53 +17,48 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {View} from 'react-native';
-import {withTheme} from 'react-native-paper';
-import type {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {View, ViewStyle} from 'react-native';
 import type {GridType} from './GridComponent';
 import GridComponent from './GridComponent';
 
 type PropsType = {
-  items: Array<GridType>,
-  style: ViewStyle,
+  items: Array<GridType>;
+  style: ViewStyle;
 };
 
+function getGridRender(item: GridType, index: number) {
+  return (
+    <GridComponent
+      width={item[0].length}
+      height={item.length}
+      grid={item}
+      style={{
+        marginRight: 5,
+        marginLeft: 5,
+        marginBottom: 5,
+      }}
+      key={index.toString()}
+    />
+  );
+}
+
+function getGrids(items: Array<GridType>) {
+  const grids: Array<React.ReactNode> = [];
+  items.forEach((item: GridType, index: number) => {
+    grids.push(getGridRender(item, index));
+  });
+  return grids;
+}
+
 class Preview extends React.PureComponent<PropsType> {
-  getGrids(): React.Node {
-    const {items} = this.props;
-    const grids = [];
-    items.forEach((item: GridType, index: number) => {
-      grids.push(Preview.getGridRender(item, index));
-    });
-    return grids;
-  }
-
-  static getGridRender(item: GridType, index: number): React.Node {
-    return (
-      <GridComponent
-        width={item[0].length}
-        height={item.length}
-        grid={item}
-        style={{
-          marginRight: 5,
-          marginLeft: 5,
-          marginBottom: 5,
-        }}
-        key={index.toString()}
-      />
-    );
-  }
-
-  render(): React.Node {
+  render() {
     const {style, items} = this.props;
     if (items.length > 0) {
-      return <View style={style}>{this.getGrids()}</View>;
+      return <View style={style}>{getGrids(items)}</View>;
     }
     return null;
   }
 }
 
-export default withTheme(Preview);
+export default Preview;

@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {
@@ -35,7 +33,6 @@ import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import Mascot, {MASCOT_STYLE} from '../../../components/Mascot/Mascot';
 import MascotPopup from '../../../components/Mascot/MascotPopup';
 import AsyncStorageManager from '../../../managers/AsyncStorageManager';
@@ -47,17 +44,17 @@ import SpeechArrow from '../../../components/Mascot/SpeechArrow';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 
 type GameStatsType = {
-  score: number,
-  level: number,
-  time: number,
+  score: number;
+  level: number;
+  time: number;
 };
 
 type PropsType = {
-  navigation: StackNavigationProp,
+  navigation: StackNavigationProp<any>;
   route: {
-    params: GameStatsType,
-  },
-  theme: CustomThemeType,
+    params: GameStatsType;
+  };
+  theme: ReactNativePaper.Theme;
 };
 
 class GameStartScreen extends React.Component<PropsType> {
@@ -65,21 +62,24 @@ class GameStartScreen extends React.Component<PropsType> {
 
   scores: Array<number>;
 
-  gameStats: GameStatsType | null;
+  gameStats?: GameStatsType;
 
   isHighScore: boolean;
 
   constructor(props: PropsType) {
     super(props);
+    this.isHighScore = false;
     this.gridManager = new GridManager(4, 4, props.theme);
     this.scores = AsyncStorageManager.getObject(
       AsyncStorageManager.PREFERENCES.gameScores.key,
     );
     this.scores.sort((a: number, b: number): number => b - a);
-    if (props.route.params != null) this.recoverGameScore();
+    if (props.route.params != null) {
+      this.recoverGameScore();
+    }
   }
 
-  getPiecesBackground(): React.Node {
+  getPiecesBackground() {
     const {theme} = this.props;
     const gridList = [];
     for (let i = 0; i < 18; i += 1) {
@@ -94,7 +94,7 @@ class GameStartScreen extends React.Component<PropsType> {
           width: '100%',
           height: '100%',
         }}>
-        {gridList.map((item: GridType, index: number): React.Node => {
+        {gridList.map((item: GridType, index: number) => {
           const size = 10 + Math.floor(Math.random() * 30);
           const top = Math.floor(Math.random() * 100);
           const rot = Math.floor(Math.random() * 360);
@@ -129,7 +129,7 @@ class GameStartScreen extends React.Component<PropsType> {
     );
   }
 
-  getPostGameContent(stats: GameStatsType): React.Node {
+  getPostGameContent(stats: GameStatsType) {
     const {props} = this;
     return (
       <View
@@ -141,8 +141,8 @@ class GameStartScreen extends React.Component<PropsType> {
           animated={this.isHighScore}
           style={{
             width: this.isHighScore ? '50%' : '30%',
-            marginLeft: this.isHighScore ? 'auto' : null,
-            marginRight: this.isHighScore ? 'auto' : null,
+            marginLeft: this.isHighScore ? 'auto' : undefined,
+            marginRight: this.isHighScore ? 'auto' : undefined,
           }}
         />
         <SpeechArrow
@@ -235,7 +235,7 @@ class GameStartScreen extends React.Component<PropsType> {
     );
   }
 
-  getWelcomeText(): React.Node {
+  getWelcomeText() {
     const {props} = this;
     return (
       <View>
@@ -281,7 +281,7 @@ class GameStartScreen extends React.Component<PropsType> {
     );
   }
 
-  getPodiumRender(place: 1 | 2 | 3, score: string): React.Node {
+  getPodiumRender(place: 1 | 2 | 3, score: string) {
     const {props} = this;
     let icon = 'podium-gold';
     let color = props.theme.colors.gameGold;
@@ -338,7 +338,7 @@ class GameStartScreen extends React.Component<PropsType> {
         <Text
           style={{
             textAlign: 'center',
-            fontWeight: place === 1 ? 'bold' : null,
+            fontWeight: place === 1 ? 'bold' : undefined,
             fontSize,
           }}>
           {score}
@@ -347,7 +347,7 @@ class GameStartScreen extends React.Component<PropsType> {
     );
   }
 
-  getTopScoresRender(): React.Node {
+  getTopScoresRender() {
     const gold = this.scores.length > 0 ? this.scores[0] : '-';
     const silver = this.scores.length > 1 ? this.scores[1] : '-';
     const bronze = this.scores.length > 2 ? this.scores[2] : '-';
@@ -371,7 +371,7 @@ class GameStartScreen extends React.Component<PropsType> {
     );
   }
 
-  getMainContent(): React.Node {
+  getMainContent() {
     const {props} = this;
     return (
       <View style={{flex: 1}}>
@@ -415,7 +415,9 @@ class GameStartScreen extends React.Component<PropsType> {
           break;
         }
       }
-      if (this.scores.length > 3) this.scores.splice(3, 1);
+      if (this.scores.length > 3) {
+        this.scores.splice(3, 1);
+      }
       AsyncStorageManager.set(
         AsyncStorageManager.PREFERENCES.gameScores.key,
         this.scores,
@@ -423,7 +425,7 @@ class GameStartScreen extends React.Component<PropsType> {
     }
   }
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     return (
       <View style={{flex: 1}}>
@@ -444,7 +446,6 @@ class GameStartScreen extends React.Component<PropsType> {
               message={i18n.t('screens.game.mascotDialog.message')}
               icon="gamepad-variant"
               buttons={{
-                action: null,
                 cancel: {
                   message: i18n.t('screens.game.mascotDialog.button'),
                   icon: 'check',

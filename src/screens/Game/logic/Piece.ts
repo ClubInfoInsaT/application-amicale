@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import ShapeL from '../Shapes/ShapeL';
 import ShapeI from '../Shapes/ShapeI';
 import ShapeJ from '../Shapes/ShapeJ';
@@ -29,7 +27,6 @@ import ShapeZ from '../Shapes/ShapeZ';
 import type {CoordinatesType} from '../Shapes/BaseShape';
 import BaseShape from '../Shapes/BaseShape';
 import type {GridType} from '../components/GridComponent';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 
 /**
  * Class used as an abstraction layer for shapes.
@@ -41,14 +38,14 @@ export default class Piece {
 
   currentShape: BaseShape;
 
-  theme: CustomThemeType;
+  theme: ReactNativePaper.Theme;
 
   /**
    * Initializes this piece's color and shape
    *
    * @param theme Object containing current theme
    */
-  constructor(theme: CustomThemeType) {
+  constructor(theme: ReactNativePaper.Theme) {
     this.currentShape = this.getRandomShape(theme);
     this.theme = theme;
   }
@@ -58,7 +55,7 @@ export default class Piece {
    *
    * @param theme Object containing current theme
    */
-  getRandomShape(theme: CustomThemeType): BaseShape {
+  getRandomShape(theme: ReactNativePaper.Theme): BaseShape {
     return new this.shapes[Math.floor(Math.random() * 7)](theme);
   }
 
@@ -72,7 +69,6 @@ export default class Piece {
       true,
     );
     pos.forEach((coordinates: CoordinatesType) => {
-      // eslint-disable-next-line no-param-reassign
       grid[coordinates.y][coordinates.x] = {
         color: this.theme.colors.tetrisBackground,
         isEmpty: true,
@@ -92,7 +88,6 @@ export default class Piece {
       !isPreview,
     );
     pos.forEach((coordinates: CoordinatesType) => {
-      // eslint-disable-next-line no-param-reassign
       grid[coordinates.y][coordinates.x] = {
         color: this.currentShape.getColor(),
         isEmpty: false,
@@ -150,21 +145,35 @@ export default class Piece {
   ): boolean {
     let newX = x;
     let newY = y;
-    if (x > 1) newX = 1; // Prevent moving from more than one tile
-    if (x < -1) newX = -1;
-    if (y > 1) newY = 1;
-    if (y < -1) newY = -1;
-    if (x !== 0 && y !== 0) newY = 0; // Prevent diagonal movement
+    if (x > 1) {
+      newX = 1;
+    } // Prevent moving from more than one tile
+    if (x < -1) {
+      newX = -1;
+    }
+    if (y > 1) {
+      newY = 1;
+    }
+    if (y < -1) {
+      newY = -1;
+    }
+    if (x !== 0 && y !== 0) {
+      newY = 0;
+    } // Prevent diagonal movement
 
     this.removeFromGrid(grid);
     this.currentShape.move(newX, newY);
     const isValid = this.isPositionValid(grid, width, height);
 
-    if (!isValid) this.currentShape.move(-newX, -newY);
+    if (!isValid) {
+      this.currentShape.move(-newX, -newY);
+    }
 
     const shouldFreeze = !isValid && newY !== 0;
     this.toGrid(grid, false);
-    if (shouldFreeze) freezeCallback();
+    if (shouldFreeze) {
+      freezeCallback();
+    }
     return isValid;
   }
 

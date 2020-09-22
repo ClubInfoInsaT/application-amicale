@@ -17,44 +17,36 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import BaseShape from './BaseShape';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {ShapeType} from './BaseShape';
 
-export default class ShapeJ extends BaseShape {
-  constructor(theme: CustomThemeType) {
+export default class ShapeO extends BaseShape {
+  constructor(theme: ReactNativePaper.Theme) {
     super(theme);
-    this.position.x = 3;
+    this.position.x = 4;
   }
 
   getColor(): string {
-    return this.theme.colors.tetrisJ;
+    return this.theme.colors.tetrisO;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getShapes(): Array<ShapeType> {
     return [
       [
-        [1, 0, 0],
-        [1, 1, 1],
-        [0, 0, 0],
+        [1, 1],
+        [1, 1],
       ],
       [
-        [0, 1, 1],
-        [0, 1, 0],
-        [0, 1, 0],
+        [1, 1],
+        [1, 1],
       ],
       [
-        [0, 0, 0],
-        [1, 1, 1],
-        [0, 0, 1],
+        [1, 1],
+        [1, 1],
       ],
       [
-        [0, 1, 0],
-        [0, 1, 0],
-        [1, 1, 0],
+        [1, 1],
+        [1, 1],
       ],
     ];
   }

@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 /**
  * Class used to manage game score
  */
@@ -83,7 +81,9 @@ export default class ScoreManager {
    * @param numberRemoved The number of lines removed at the same time
    */
   addLinesRemovedPoints(numberRemoved: number) {
-    if (numberRemoved < 1 || numberRemoved > 4) return;
+    if (numberRemoved < 1 || numberRemoved > 4) {
+      return;
+    }
     this.#score +=
       this.#scoreLinesModifier[numberRemoved - 1] * (this.#level + 1);
     switch (numberRemoved) {

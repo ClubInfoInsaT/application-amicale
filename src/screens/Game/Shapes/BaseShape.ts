@@ -19,11 +19,9 @@
 
 // @flow
 
-import type {CustomThemeType} from '../../../managers/ThemeManager';
-
 export type CoordinatesType = {
-  x: number,
-  y: number,
+  x: number;
+  y: number;
 };
 
 export type ShapeType = Array<Array<number>>;
@@ -40,14 +38,15 @@ export default class BaseShape {
 
   position: CoordinatesType;
 
-  theme: CustomThemeType;
+  theme: ReactNativePaper.Theme;
 
   /**
    * Prevent instantiation if classname is BaseShape to force class to be abstract
    */
-  constructor(theme: CustomThemeType) {
-    if (this.constructor === BaseShape)
+  constructor(theme: ReactNativePaper.Theme) {
+    if (this.constructor === BaseShape) {
       throw new Error("Abstract class can't be instantiated");
+    }
     this.theme = theme;
     this.#rotation = 0;
     this.position = {x: 0, y: 0};
@@ -58,7 +57,6 @@ export default class BaseShape {
    * Gets this shape's color.
    * Must be implemented by child class
    */
-  // eslint-disable-next-line class-methods-use-this
   getColor(): string {
     throw new Error("Method 'getColor()' must be implemented");
   }
@@ -69,7 +67,6 @@ export default class BaseShape {
    *
    * Used by tests to read private fields
    */
-  // eslint-disable-next-line class-methods-use-this
   getShapes(): Array<ShapeType> {
     throw new Error("Method 'getShapes()' must be implemented");
   }
@@ -98,7 +95,9 @@ export default class BaseShape {
               x: this.position.x + col,
               y: this.position.y + row,
             });
-          } else coordinates.push({x: col, y: row});
+          } else {
+            coordinates.push({x: col, y: row});
+          }
         }
       }
     }
@@ -111,10 +110,16 @@ export default class BaseShape {
    * @param isForward Should we rotate clockwise?
    */
   rotate(isForward: boolean) {
-    if (isForward) this.#rotation += 1;
-    else this.#rotation -= 1;
-    if (this.#rotation > 3) this.#rotation = 0;
-    else if (this.#rotation < 0) this.#rotation = 3;
+    if (isForward) {
+      this.#rotation += 1;
+    } else {
+      this.#rotation -= 1;
+    }
+    if (this.#rotation > 3) {
+      this.#rotation = 0;
+    } else if (this.#rotation < 0) {
+      this.#rotation = 3;
+    }
     this.#currentShape = this.getShapes()[this.#rotation];
   }
 

@@ -17,12 +17,9 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import Piece from './Piece';
 import ScoreManager from './ScoreManager';
 import GridManager from './GridManager';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
 import type {GridType} from '../components/GridComponent';
 
 export type TickCallbackType = (
@@ -58,15 +55,15 @@ export default class GameLogic {
 
   gameTime: number;
 
-  currentObject: Piece;
+  currentObject?: Piece;
 
   gameTick: number;
 
-  gameTickInterval: IntervalID;
+  gameTickInterval?: NodeJS.Timeout;
 
-  gameTimeInterval: IntervalID;
+  gameTimeInterval?: NodeJS.Timeout;
 
-  pressInInterval: TimeoutID;
+  pressInInterval?: NodeJS.Timeout;
 
   isPressedIn: boolean;
 
@@ -78,15 +75,19 @@ export default class GameLogic {
 
   nextPiecesCount: number;
 
-  tickCallback: TickCallbackType;
+  tickCallback?: TickCallbackType;
 
-  clockCallback: ClockCallbackType;
+  clockCallback?: ClockCallbackType;
 
-  endCallback: EndCallbackType;
+  endCallback?: EndCallbackType;
 
-  theme: CustomThemeType;
+  theme: ReactNativePaper.Theme;
 
-  constructor(height: number, width: number, theme: CustomThemeType) {
+  constructor(height: number, width: number, theme: ReactNativePaper.Theme) {
+    this.gameTime = 0;
+    this.gameTick = 0;
+    this.isPressedIn = false;
+
     this.height = height;
     this.width = width;
     this.gameRunning = false;
@@ -121,12 +122,16 @@ export default class GameLogic {
   }
 
   onFreeze = () => {
-    this.gridManager.freezeTetromino(this.currentObject, this.scoreManager);
+    if (this.currentObject) {
+      this.gridManager.freezeTetromino(this.currentObject, this.scoreManager);
+    }
     this.createTetromino();
   };
 
   setNewGameTick(level: number) {
-    if (level >= GameLogic.levelTicks.length) return;
+    if (level >= GameLogic.levelTicks.length) {
+      return;
+    }
     this.gameTick = GameLogic.levelTicks[level];
     this.stopTick();
     this.startTick();
@@ -145,11 +150,15 @@ export default class GameLogic {
   }
 
   stopClock() {
-    clearInterval(this.gameTimeInterval);
+    if (this.gameTimeInterval) {
+      clearInterval(this.gameTimeInterval);
+    }
   }
 
   stopTick() {
-    clearInterval(this.gameTickInterval);
+    if (this.gameTickInterval) {
+      clearInterval(this.gameTickInterval);
+    }
   }
 
   stopGameTime() {
@@ -162,27 +171,34 @@ export default class GameLogic {
     this.startTick();
   }
 
-  onTick(callback: TickCallbackType) {
-    this.currentObject.tryMove(
-      0,
-      1,
-      this.gridManager.getCurrentGrid(),
-      this.getWidth(),
-      this.getHeight(),
-      this.onFreeze,
-    );
-    callback(
-      this.scoreManager.getScore(),
-      this.scoreManager.getLevel(),
-      this.gridManager.getCurrentGrid(),
-    );
-    if (this.scoreManager.canLevelUp())
+  onTick(callback?: TickCallbackType) {
+    if (this.currentObject) {
+      this.currentObject.tryMove(
+        0,
+        1,
+        this.gridManager.getCurrentGrid(),
+        this.getWidth(),
+        this.getHeight(),
+        this.onFreeze,
+      );
+    }
+    if (callback) {
+      callback(
+        this.scoreManager.getScore(),
+        this.scoreManager.getLevel(),
+        this.gridManager.getCurrentGrid(),
+      );
+    }
+    if (this.scoreManager.canLevelUp()) {
       this.setNewGameTick(this.scoreManager.getLevel());
+    }
   }
 
-  onClock(callback: ClockCallbackType) {
+  onClock(callback?: ClockCallbackType) {
     this.gameTime += 1;
-    callback(this.gameTime);
+    if (callback) {
+      callback(this.gameTime);
+    }
   }
 
   canUseInput(): boolean {
@@ -210,15 +226,19 @@ export default class GameLogic {
     x: number,
     y: number,
   ) {
-    if (!this.canUseInput() || !this.isPressedIn) return;
-    const moved = this.currentObject.tryMove(
-      x,
-      y,
-      this.gridManager.getCurrentGrid(),
-      this.getWidth(),
-      this.getHeight(),
-      this.onFreeze,
-    );
+    if (!this.canUseInput() || !this.isPressedIn) {
+      return;
+    }
+    const moved =
+      this.currentObject &&
+      this.currentObject.tryMove(
+        x,
+        y,
+        this.gridManager.getCurrentGrid(),
+        this.getWidth(),
+        this.getHeight(),
+        this.onFreeze,
+      );
     if (moved) {
       if (y === 1) {
         this.scoreManager.incrementScore();
@@ -226,7 +246,9 @@ export default class GameLogic {
           this.gridManager.getCurrentGrid(),
           this.scoreManager.getScore(),
         );
-      } else callback(this.gridManager.getCurrentGrid());
+      } else {
+        callback(this.gridManager.getCurrentGrid());
+      }
     }
     this.pressInInterval = setTimeout(
       () => {
@@ -238,20 +260,26 @@ export default class GameLogic {
 
   pressedOut() {
     this.isPressedIn = false;
-    clearTimeout(this.pressInInterval);
+    if (this.pressInInterval) {
+      clearTimeout(this.pressInInterval);
+    }
   }
 
   rotatePressed(callback: MovementCallbackType) {
-    if (!this.canUseInput()) return;
+    if (!this.canUseInput()) {
+      return;
+    }
 
     if (
+      this.currentObject &&
       this.currentObject.tryRotate(
         this.gridManager.getCurrentGrid(),
         this.getWidth(),
         this.getHeight(),
       )
-    )
+    ) {
       callback(this.gridManager.getCurrentGrid());
+    }
   }
 
   getNextPiecesPreviews(): Array<GridType> {
@@ -266,7 +294,10 @@ export default class GameLogic {
   }
 
   recoverNextPiece() {
-    this.currentObject = this.nextPieces.shift();
+    const next = this.nextPieces.shift();
+    if (next) {
+      this.currentObject = next;
+    }
     this.generateNextPieces();
   }
 
@@ -280,27 +311,36 @@ export default class GameLogic {
     this.pressedOut();
     this.recoverNextPiece();
     if (
+      this.currentObject &&
       !this.currentObject.isPositionValid(
         this.gridManager.getCurrentGrid(),
         this.getWidth(),
         this.getHeight(),
       )
-    )
+    ) {
       this.endGame(false);
+    }
   }
 
   togglePause() {
-    if (!this.gameRunning) return;
+    if (!this.gameRunning) {
+      return;
+    }
     this.gamePaused = !this.gamePaused;
-    if (this.gamePaused) this.stopGameTime();
-    else this.startGameTime();
+    if (this.gamePaused) {
+      this.stopGameTime();
+    } else {
+      this.startGameTime();
+    }
   }
 
   endGame(isRestart: boolean) {
     this.gameRunning = false;
     this.gamePaused = false;
     this.stopGameTime();
-    this.endCallback(this.gameTime, this.scoreManager.getScore(), isRestart);
+    if (this.endCallback) {
+      this.endCallback(this.gameTime, this.scoreManager.getScore(), isRestart);
+    }
   }
 
   startGame(
@@ -308,7 +348,9 @@ export default class GameLogic {
     clockCallback: ClockCallbackType,
     endCallback: EndCallbackType,
   ) {
-    if (this.gameRunning) this.endGame(true);
+    if (this.gameRunning) {
+      this.endGame(true);
+    }
     this.gameRunning = true;
     this.gamePaused = false;
     this.gameTime = 0;
