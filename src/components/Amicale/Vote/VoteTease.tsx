@@ -17,16 +17,13 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Avatar, Card, Paragraph} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
 import i18n from 'i18n-js';
-import type {CardTitleIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
-  startDate: string,
+  startDate: string;
 };
 
 const styles = StyleSheet.create({
@@ -38,28 +35,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class VoteTease extends React.Component<PropsType> {
-  shouldComponentUpdate(): boolean {
-    return false;
-  }
-
-  render(): React.Node {
-    const {props} = this;
-    return (
-      <Card style={styles.card}>
-        <Card.Title
-          title={i18n.t('screens.vote.tease.title')}
-          subtitle={i18n.t('screens.vote.tease.subtitle')}
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
-            <Avatar.Icon size={iconProps.size} icon="vote" />
-          )}
-        />
-        <Card.Content>
-          <Paragraph>
-            {`${i18n.t('screens.vote.tease.message')} ${props.startDate}`}
-          </Paragraph>
-        </Card.Content>
-      </Card>
-    );
-  }
+export default function VoteTease(props: PropsType) {
+  return (
+    <Card style={styles.card}>
+      <Card.Title
+        title={i18n.t('screens.vote.tease.title')}
+        subtitle={i18n.t('screens.vote.tease.subtitle')}
+        left={(iconProps) => <Avatar.Icon size={iconProps.size} icon="vote" />}
+      />
+      <Card.Content>
+        <Paragraph>
+          {`${i18n.t('screens.vote.tease.message')} ${props.startDate}`}
+        </Paragraph>
+      </Card.Content>
+    </Card>
+  );
 }

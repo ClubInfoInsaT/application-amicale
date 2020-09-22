@@ -35,8 +35,6 @@ export type ApiDataLoginType = {
   token: string;
 };
 
-export type ApiGenericDataType = {[key: string]: any};
-
 type ApiResponseType<T> = {
   error: number;
   data: T;
@@ -70,7 +68,7 @@ export function isApiResponseValid<T>(response: ApiResponseType<T>): boolean {
  * @param path The API path from the API endpoint
  * @param method The HTTP method to use (GET or POST)
  * @param params The params to use for this request
- * @returns {Promise<ApiGenericDataType>}
+ * @returns {Promise<T>}
  */
 export async function apiRequest<T>(
   path: string,

@@ -17,29 +17,19 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {Animated} from 'react-native';
+import {Animated, SectionListProps} from 'react-native';
 import type {CollapsibleComponentPropsType} from './CollapsibleComponent';
 import CollapsibleComponent from './CollapsibleComponent';
 
-type PropsType = {
-  ...CollapsibleComponentPropsType,
-};
+type Props<T> = SectionListProps<T> & CollapsibleComponentPropsType;
 
-// eslint-disable-next-line react/prefer-stateless-function
-class CollapsibleSectionList extends React.Component<PropsType> {
-  render(): React.Node {
-    const {props} = this;
-    return (
-      <CollapsibleComponent // eslint-disable-next-line react/jsx-props-no-spreading
-        {...props}
-        component={Animated.SectionList}>
-        {props.children}
-      </CollapsibleComponent>
-    );
-  }
+function CollapsibleSectionList<T>(props: Props<T>) {
+  return (
+    <CollapsibleComponent {...props} component={Animated.SectionList}>
+      {props.children}
+    </CollapsibleComponent>
+  );
 }
 
 export default CollapsibleSectionList;

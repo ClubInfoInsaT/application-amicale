@@ -17,42 +17,29 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
-import * as React from 'react';
+import React from 'react';
 import {View} from 'react-native';
-import {ActivityIndicator, withTheme} from 'react-native-paper';
-import type {CustomThemeType} from '../../managers/ThemeManager';
+import {Headline, useTheme} from 'react-native-paper';
+import i18n from 'i18n-js';
 
-/**
- * Component used to display a header button
- *
- * @param props Props to pass to the component
- * @return {*}
- */
-function BasicLoadingScreen(props: {
-  theme: CustomThemeType,
-  isAbsolute: boolean,
-}): React.Node {
-  const {theme, isAbsolute} = props;
-  const {colors} = theme;
-  let position;
-  if (isAbsolute != null && isAbsolute) position = 'absolute';
-
+function VoteNotAvailable() {
+  const theme = useTheme();
   return (
     <View
       style={{
-        backgroundColor: colors.background,
-        position,
-        top: 0,
-        right: 0,
         width: '100%',
-        height: '100%',
-        justifyContent: 'center',
+        marginTop: 10,
+        marginBottom: 10,
       }}>
-      <ActivityIndicator animating size="large" color={colors.primary} />
+      <Headline
+        style={{
+          color: theme.colors.textDisabled,
+          textAlign: 'center',
+        }}>
+        {i18n.t('screens.vote.noVote')}
+      </Headline>
     </View>
   );
 }
 
-export default withTheme(BasicLoadingScreen);
+export default VoteNotAvailable;

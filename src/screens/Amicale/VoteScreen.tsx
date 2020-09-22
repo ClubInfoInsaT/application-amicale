@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {RefreshControl, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -35,31 +33,30 @@ import MascotPopup from '../../components/Mascot/MascotPopup';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import VoteNotAvailable from '../../components/Amicale/Vote/VoteNotAvailable';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
-import type {ApiGenericDataType} from '../../utils/WebData';
 
 export type VoteTeamType = {
-  id: number,
-  name: string,
-  votes: number,
+  id: number;
+  name: string;
+  votes: number;
 };
 
 type TeamResponseType = {
-  has_voted: boolean,
-  teams: Array<VoteTeamType>,
+  has_voted: boolean;
+  teams: Array<VoteTeamType>;
 };
 
 type VoteDatesStringType = {
-  date_begin: string,
-  date_end: string,
-  date_result_begin: string,
-  date_result_end: string,
+  date_begin: string;
+  date_end: string;
+  date_result_begin: string;
+  date_result_end: string;
 };
 
 type VoteDatesObjectType = {
-  date_begin: Date,
-  date_end: Date,
-  date_result_begin: Date,
-  date_result_end: Date,
+  date_begin: Date;
+  date_end: Date;
+  date_result_begin: Date;
+  date_result_end: Date;
 };
 
 // const FAKE_DATE = {
@@ -113,12 +110,12 @@ type VoteDatesObjectType = {
 const MIN_REFRESH_TIME = 5 * 1000;
 
 type PropsType = {
-  navigation: StackNavigationProp,
+  navigation: StackNavigationProp<any>;
 };
 
 type StateType = {
-  hasVoted: boolean,
-  mascotDialogVisible: boolean,
+  hasVoted: boolean;
+  mascotDialogVisible: boolean;
 };
 
 /**
@@ -139,10 +136,13 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
 
   lastRefresh: Date | null;
 
-  authRef: {current: null | AuthenticatedScreen};
+  authRef: {current: null | AuthenticatedScreen<any>};
 
-  constructor() {
-    super();
+  constructor(props: PropsType) {
+    super(props);
+    this.teams = [];
+    this.datesString = null;
+    this.dates = null;
     this.state = {
       hasVoted: false,
       mascotDialogVisible: AsyncStorageManager.getBool(
@@ -174,8 +174,8 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
     return dateString;
   }
 
-  getMainRenderItem = ({item}: {item: {key: string}}): React.Node => {
-    if (item.key === 'info')
+  getMainRenderItem = ({item}: {item: {key: string}}) => {
+    if (item.key === 'info') {
       return (
         <View>
           <Button
@@ -191,21 +191,24 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
           </Button>
         </View>
       );
+    }
     return this.getContent();
   };
 
-  getScreen = (data: Array<ApiGenericDataType | null>): React.Node => {
+  getScreen = (data: Array<TeamResponseType | VoteDatesStringType | null>) => {
     const {state} = this;
     // data[0] = FAKE_TEAMS2;
     // data[1] = FAKE_DATE;
     this.lastRefresh = new Date();
 
-    const teams: TeamResponseType | null = data[0];
-    const dateStrings: VoteDatesStringType | null = data[1];
+    const teams = data[0] as TeamResponseType | null;
+    const dateStrings = data[1] as VoteDatesStringType | null;
 
-    if (dateStrings != null && dateStrings.date_begin == null)
+    if (dateStrings != null && dateStrings.date_begin == null) {
       this.datesString = null;
-    else this.datesString = dateStrings;
+    } else {
+      this.datesString = dateStrings;
+    }
 
     if (teams != null) {
       this.teams = teams.teams;
@@ -225,13 +228,20 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  getContent(): React.Node {
+  getContent() {
     const {state} = this;
-    if (!this.isVoteStarted()) return this.getTeaseVoteCard();
-    if (this.isVoteRunning() && !this.hasVoted && !state.hasVoted)
+    if (!this.isVoteStarted()) {
+      return this.getTeaseVoteCard();
+    }
+    if (this.isVoteRunning() && !this.hasVoted && !state.hasVoted) {
       return this.getVoteCard();
-    if (!this.isResultStarted()) return this.getWaitVoteCard();
-    if (this.isResultRunning()) return this.getVoteResultCard();
+    }
+    if (!this.isResultStarted()) {
+      return this.getWaitVoteCard();
+    }
+    if (this.isResultRunning()) {
+      return this.getVoteResultCard();
+    }
     return <VoteNotAvailable />;
   }
 
@@ -240,7 +250,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
   /**
    * The user has not voted yet, and the votes are open
    */
-  getVoteCard(): React.Node {
+  getVoteCard() {
     return (
       <VoteSelect
         teams={this.teams}
@@ -253,8 +263,8 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
   /**
    * Votes have ended, results can be displayed
    */
-  getVoteResultCard(): React.Node {
-    if (this.dates != null && this.datesString != null)
+  getVoteResultCard() {
+    if (this.dates != null && this.datesString != null) {
       return (
         <VoteResults
           teams={this.teams}
@@ -264,14 +274,15 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
           )}
         />
       );
+    }
     return <VoteNotAvailable />;
   }
 
   /**
    * Vote will open shortly
    */
-  getTeaseVoteCard(): React.Node {
-    if (this.dates != null && this.datesString != null)
+  getTeaseVoteCard() {
+    if (this.dates != null && this.datesString != null) {
       return (
         <VoteTease
           startDate={this.getDateString(
@@ -280,24 +291,26 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
           )}
         />
       );
+    }
     return <VoteNotAvailable />;
   }
 
   /**
    * Votes have ended, or user has voted waiting for results
    */
-  getWaitVoteCard(): React.Node {
+  getWaitVoteCard() {
     const {state} = this;
     let startDate = null;
     if (
       this.dates != null &&
       this.datesString != null &&
       this.dates.date_result_begin != null
-    )
+    ) {
       startDate = this.getDateString(
         this.dates.date_result_begin,
         this.datesString.date_result_begin,
       );
+    }
     return (
       <VoteWait
         startDate={startDate}
@@ -314,12 +327,15 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
   reloadData = () => {
     let canRefresh;
     const {lastRefresh} = this;
-    if (lastRefresh != null)
+    if (lastRefresh != null) {
       canRefresh =
         new Date().getTime() - lastRefresh.getTime() > MIN_REFRESH_TIME;
-    else canRefresh = true;
-    if (canRefresh && this.authRef.current != null)
+    } else {
+      canRefresh = true;
+    }
+    if (canRefresh && this.authRef.current != null) {
       this.authRef.current.reload();
+    }
   };
 
   showMascotDialog = () => {
@@ -380,8 +396,12 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
           date_result_begin: dateResultBegin,
           date_result_end: dateResultEnd,
         };
-      } else this.dates = null;
-    } else this.dates = null;
+      } else {
+        this.dates = null;
+      }
+    } else {
+      this.dates = null;
+    }
   }
 
   /**
@@ -391,11 +411,11 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  render(): React.Node {
+  render() {
     const {props, state} = this;
     return (
       <View style={{flex: 1}}>
-        <AuthenticatedScreen
+        <AuthenticatedScreen<TeamResponseType | VoteDatesStringType>
           navigation={props.navigation}
           ref={this.authRef}
           requests={[
@@ -418,7 +438,6 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
           message={i18n.t('screens.vote.mascotDialog.message')}
           icon="vote"
           buttons={{
-            action: null,
             cancel: {
               message: i18n.t('screens.vote.mascotDialog.button'),
               icon: 'check',

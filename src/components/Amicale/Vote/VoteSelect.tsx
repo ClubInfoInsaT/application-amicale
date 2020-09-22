@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Avatar, Button, Card, RadioButton} from 'react-native-paper';
 import {FlatList, StyleSheet, View} from 'react-native';
@@ -27,19 +25,18 @@ import ConnectionManager from '../../../managers/ConnectionManager';
 import LoadingConfirmDialog from '../../Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../Dialogs/ErrorDialog';
 import type {VoteTeamType} from '../../../screens/Amicale/VoteScreen';
-import type {CardTitleIconPropsType} from '../../../constants/PaperStyles';
 
 type PropsType = {
-  teams: Array<VoteTeamType>,
-  onVoteSuccess: () => void,
-  onVoteError: () => void,
+  teams: Array<VoteTeamType>;
+  onVoteSuccess: () => void;
+  onVoteError: () => void;
 };
 
 type StateType = {
-  selectedTeam: string,
-  voteDialogVisible: boolean,
-  errorDialogVisible: boolean,
-  currentError: number,
+  selectedTeam: string;
+  voteDialogVisible: boolean;
+  errorDialogVisible: boolean;
+  currentError: number;
 };
 
 const styles = StyleSheet.create({
@@ -53,10 +50,10 @@ const styles = StyleSheet.create({
 
 export default class VoteSelect extends React.PureComponent<
   PropsType,
-  StateType,
+  StateType
 > {
-  constructor() {
-    super();
+  constructor(props: PropsType) {
+    super(props);
     this.state = {
       selectedTeam: 'none',
       voteDialogVisible: false,
@@ -70,7 +67,7 @@ export default class VoteSelect extends React.PureComponent<
 
   voteKeyExtractor = (item: VoteTeamType): string => item.id.toString();
 
-  voteRenderItem = ({item}: {item: VoteTeamType}): React.Node => (
+  voteRenderItem = ({item}: {item: VoteTeamType}) => (
     <RadioButton.Item label={item.name} value={item.id.toString()} />
   );
 
@@ -111,7 +108,7 @@ export default class VoteSelect extends React.PureComponent<
     props.onVoteError();
   };
 
-  render(): React.Node {
+  render() {
     const {state, props} = this;
     return (
       <View>
@@ -119,7 +116,7 @@ export default class VoteSelect extends React.PureComponent<
           <Card.Title
             title={i18n.t('screens.vote.select.title')}
             subtitle={i18n.t('screens.vote.select.subtitle')}
-            left={(iconProps: CardTitleIconPropsType): React.Node => (
+            left={(iconProps) => (
               <Avatar.Icon size={iconProps.size} icon="alert-decagram" />
             )}
           />
@@ -127,7 +124,6 @@ export default class VoteSelect extends React.PureComponent<
             <RadioButton.Group
               onValueChange={this.onVoteSelectionChange}
               value={state.selectedTeam}>
-              {/* $FlowFixMe */}
               <FlatList
                 data={props.teams}
                 keyExtractor={this.voteKeyExtractor}

@@ -21,38 +21,33 @@
 
 import * as React from 'react';
 import {View} from 'react-native';
-import {Headline, withTheme} from 'react-native-paper';
-import i18n from 'i18n-js';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
+import {ActivityIndicator, useTheme} from 'react-native-paper';
 
-type PropsType = {
-  theme: CustomThemeType,
+type Props = {
+  isAbsolute?: boolean;
 };
 
-class VoteNotAvailable extends React.Component<PropsType> {
-  shouldComponentUpdate(): boolean {
-    return false;
-  }
-
-  render(): React.Node {
-    const {props} = this;
-    return (
-      <View
-        style={{
-          width: '100%',
-          marginTop: 10,
-          marginBottom: 10,
-        }}>
-        <Headline
-          style={{
-            color: props.theme.colors.textDisabled,
-            textAlign: 'center',
-          }}>
-          {i18n.t('screens.vote.noVote')}
-        </Headline>
-      </View>
-    );
-  }
+/**
+ * Component used to display a header button
+ *
+ * @param props Props to pass to the component
+ * @return {*}
+ */
+export default function BasicLoadingScreen(props: Props) {
+  const theme = useTheme();
+  const {isAbsolute} = props;
+  return (
+    <View
+      style={{
+        backgroundColor: theme.colors.background,
+        position: isAbsolute ? 'absolute' : 'relative',
+        top: 0,
+        right: 0,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+      }}>
+      <ActivityIndicator animating size="large" color={theme.colors.primary} />
+    </View>
+  );
 }
-
-export default withTheme(VoteNotAvailable);

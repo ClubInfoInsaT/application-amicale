@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {
   Avatar,
@@ -31,16 +29,11 @@ import {
 import {FlatList, StyleSheet} from 'react-native';
 import i18n from 'i18n-js';
 import type {VoteTeamType} from '../../../screens/Amicale/VoteScreen';
-import type {CustomThemeType} from '../../../managers/ThemeManager';
-import type {
-  CardTitleIconPropsType,
-  ListIconPropsType,
-} from '../../../constants/PaperStyles';
 
 type PropsType = {
-  teams: Array<VoteTeamType>,
-  dateEnd: string,
-  theme: CustomThemeType,
+  teams: Array<VoteTeamType>;
+  dateEnd: string;
+  theme: ReactNativePaper.Theme;
 };
 
 const styles = StyleSheet.create({
@@ -58,10 +51,10 @@ class VoteResults extends React.Component<PropsType> {
   winnerIds: Array<number>;
 
   constructor(props: PropsType) {
-    super();
+    super(props);
     props.teams.sort(this.sortByVotes);
-    this.getTotalVotes(props.teams);
-    this.getWinnerIds(props.teams);
+    this.totalVotes = this.getTotalVotes(props.teams);
+    this.winnerIds = this.getWinnerIds(props.teams);
   }
 
   shouldComponentUpdate(): boolean {
@@ -69,26 +62,31 @@ class VoteResults extends React.Component<PropsType> {
   }
 
   getTotalVotes(teams: Array<VoteTeamType>) {
-    this.totalVotes = 0;
+    let totalVotes = 0;
     for (let i = 0; i < teams.length; i += 1) {
-      this.totalVotes += teams[i].votes;
+      totalVotes += teams[i].votes;
     }
+    return totalVotes;
   }
 
   getWinnerIds(teams: Array<VoteTeamType>) {
     const max = teams[0].votes;
-    this.winnerIds = [];
+    let winnerIds = [];
     for (let i = 0; i < teams.length; i += 1) {
-      if (teams[i].votes === max) this.winnerIds.push(teams[i].id);
-      else break;
+      if (teams[i].votes === max) {
+        winnerIds.push(teams[i].id);
+      } else {
+        break;
+      }
     }
+    return winnerIds;
   }
 
   sortByVotes = (a: VoteTeamType, b: VoteTeamType): number => b.votes - a.votes;
 
   voteKeyExtractor = (item: VoteTeamType): string => item.id.toString();
 
-  resultRenderItem = ({item}: {item: VoteTeamType}): React.Node => {
+  resultRenderItem = ({item}: {item: VoteTeamType}) => {
     const isWinner = this.winnerIds.indexOf(item.id) !== -1;
     const isDraw = this.winnerIds.length > 1;
     const {props} = this;
@@ -101,7 +99,7 @@ class VoteResults extends React.Component<PropsType> {
         <List.Item
           title={item.name}
           description={`${item.votes} ${i18n.t('screens.vote.results.votes')}`}
-          left={(iconProps: ListIconPropsType): React.Node =>
+          left={(iconProps) =>
             isWinner ? (
               <List.Icon
                 style={iconProps.style}
@@ -125,7 +123,7 @@ class VoteResults extends React.Component<PropsType> {
     );
   };
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     return (
       <Card style={styles.card}>
@@ -134,15 +132,14 @@ class VoteResults extends React.Component<PropsType> {
           subtitle={`${i18n.t('screens.vote.results.subtitle')} ${
             props.dateEnd
           }`}
-          left={(iconProps: CardTitleIconPropsType): React.Node => (
+          left={(iconProps) => (
             <Avatar.Icon size={iconProps.size} icon="podium-gold" />
           )}
         />
         <Card.Content>
-          <Subheading>{`${i18n.t('screens.vote.results.totalVotes')} ${
-            this.totalVotes
-          }`}</Subheading>
-          {/* $FlowFixMe */}
+          <Subheading>
+            {`${i18n.t('screens.vote.results.totalVotes')} ${this.totalVotes}`}
+          </Subheading>
           <FlatList
             data={props.teams}
             keyExtractor={this.voteKeyExtractor}

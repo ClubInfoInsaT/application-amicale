@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {Button, Subheading, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
@@ -27,17 +25,16 @@ import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {ERROR_TYPE} from '../../utils/WebData';
-import type {CustomThemeType} from '../../managers/ThemeManager';
 
 type PropsType = {
-  navigation: StackNavigationProp,
-  theme: CustomThemeType,
-  route: {name: string},
-  onRefresh?: () => void,
-  errorCode?: number,
-  icon?: string,
-  message?: string,
-  showRetryButton?: boolean,
+  navigation?: StackNavigationProp<any>;
+  theme: ReactNativePaper.Theme;
+  route?: {name: string};
+  onRefresh?: () => void;
+  errorCode?: number;
+  icon?: string;
+  message?: string;
+  showRetryButton?: boolean;
 };
 
 const styles = StyleSheet.create({
@@ -82,9 +79,11 @@ class ErrorView extends React.PureComponent<PropsType> {
   constructor(props: PropsType) {
     super(props);
     this.icon = '';
+    this.showLoginButton = false;
+    this.message = '';
   }
 
-  getRetryButton(): React.Node {
+  getRetryButton() {
     const {props} = this;
     return (
       <Button
@@ -97,7 +96,7 @@ class ErrorView extends React.PureComponent<PropsType> {
     );
   }
 
-  getLoginButton(): React.Node {
+  getLoginButton() {
     return (
       <Button
         mode="contained"
@@ -111,10 +110,12 @@ class ErrorView extends React.PureComponent<PropsType> {
 
   goToLogin = () => {
     const {props} = this;
-    props.navigation.navigate('login', {
-      screen: 'login',
-      params: {nextScreen: props.route.name},
-    });
+    if (props.navigation) {
+      props.navigation.navigate('login', {
+        screen: 'login',
+        params: {nextScreen: props.route ? props.route.name : undefined},
+      });
+    }
   };
 
   generateMessage() {
@@ -169,13 +170,17 @@ class ErrorView extends React.PureComponent<PropsType> {
     }
   }
 
-  render(): React.Node {
+  render() {
     const {props} = this;
     this.generateMessage();
     let button;
-    if (this.showLoginButton) button = this.getLoginButton();
-    else if (props.showRetryButton) button = this.getRetryButton();
-    else button = null;
+    if (this.showLoginButton) {
+      button = this.getLoginButton();
+    } else if (props.showRetryButton) {
+      button = this.getRetryButton();
+    } else {
+      button = null;
+    }
 
     return (
       <Animatable.View

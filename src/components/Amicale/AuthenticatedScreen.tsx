@@ -17,37 +17,34 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import ConnectionManager from '../../managers/ConnectionManager';
-import type {ApiGenericDataType} from '../../utils/WebData';
 import {ERROR_TYPE} from '../../utils/WebData';
 import ErrorView from '../Screens/ErrorView';
 import BasicLoadingScreen from '../Screens/BasicLoadingScreen';
 
-type PropsType = {
-  navigation: StackNavigationProp,
+type PropsType<T> = {
+  navigation: StackNavigationProp<any>;
   requests: Array<{
-    link: string,
-    params: {...},
-    mandatory: boolean,
-  }>,
-  renderFunction: (Array<ApiGenericDataType | null>) => React.Node,
+    link: string;
+    params: object;
+    mandatory: boolean;
+  }>;
+  renderFunction: (data: Array<T | null>) => React.ReactNode;
   errorViewOverride?: Array<{
-    errorCode: number,
-    message: string,
-    icon: string,
-    showRetryButton: boolean,
-  }> | null,
+    errorCode: number;
+    message: string;
+    icon: string;
+    showRetryButton: boolean;
+  }> | null;
 };
 
 type StateType = {
-  loading: boolean,
+  loading: boolean;
 };
 
-class AuthenticatedScreen extends React.Component<PropsType, StateType> {
+class AuthenticatedScreen<T> extends React.Component<PropsType<T>, StateType> {
   static defaultProps = {
     errorViewOverride: null,
   };
@@ -58,13 +55,14 @@ class AuthenticatedScreen extends React.Component<PropsType, StateType> {
 
   errors: Array<number>;
 
-  fetchedData: Array<ApiGenericDataType | null>;
+  fetchedData: Array<T | null>;
 
-  constructor(props: PropsType) {
+  constructor(props: PropsType<T>) {
     super(props);
     this.state = {
       loading: true,
     };
+    this.currentUserToken = null;
     this.connectionManager = ConnectionManager.getInstance();
     props.navigation.addListener('focus', this.onScreenFocus);
     this.fetchedData = new Array(props.requests.length);
@@ -91,20 +89,20 @@ class AuthenticatedScreen extends React.Component<PropsType, StateType> {
    * @param index The index for the data
    * @param error The error code received
    */
-  onRequestFinished(
-    data: ApiGenericDataType | null,
-    index: number,
-    error?: number,
-  ) {
+  onRequestFinished(data: T | null, index: number, error?: number) {
     const {props} = this;
     if (index >= 0 && index < props.requests.length) {
       this.fetchedData[index] = data;
       this.errors[index] = error != null ? error : ERROR_TYPE.SUCCESS;
     }
     // Token expired, logout user
-    if (error === ERROR_TYPE.BAD_TOKEN) this.connectionManager.disconnect();
+    if (error === ERROR_TYPE.BAD_TOKEN) {
+      this.connectionManager.disconnect();
+    }
 
-    if (this.allRequestsFinished()) this.setState({loading: false});
+    if (this.allRequestsFinished()) {
+      this.setState({loading: false});
+    }
   }
 
   /**
@@ -132,7 +130,7 @@ class AuthenticatedScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getErrorRender(): React.Node {
+  getErrorRender() {
     const {props} = this;
     const errorCode = this.getError();
     let shouldOverride = false;
@@ -169,18 +167,18 @@ class AuthenticatedScreen extends React.Component<PropsType, StateType> {
    */
   fetchData = () => {
     const {state, props} = this;
-    if (!state.loading) this.setState({loading: true});
+    if (!state.loading) {
+      this.setState({loading: true});
+    }
 
     if (this.connectionManager.isLoggedIn()) {
       for (let i = 0; i < props.requests.length; i += 1) {
         this.connectionManager
-          .authenticatedRequest(
+          .authenticatedRequest<T>(
             props.requests[i].link,
             props.requests[i].params,
           )
-          .then((response: ApiGenericDataType): void =>
-            this.onRequestFinished(response, i),
-          )
+          .then((response: T): void => this.onRequestFinished(response, i))
           .catch((error: number): void =>
             this.onRequestFinished(null, i, error),
           );
@@ -200,7 +198,9 @@ class AuthenticatedScreen extends React.Component<PropsType, StateType> {
   allRequestsFinished(): boolean {
     let finished = true;
     this.errors.forEach((error: number | null) => {
-      if (error == null) finished = false;
+      if (error == null) {
+        finished = false;
+      }
     });
     return finished;
   }
@@ -212,11 +212,14 @@ class AuthenticatedScreen extends React.Component<PropsType, StateType> {
     this.fetchData();
   }
 
-  render(): React.Node {
+  render() {
     const {state, props} = this;
-    if (state.loading) return <BasicLoadingScreen />;
-    if (this.getError() === ERROR_TYPE.SUCCESS)
+    if (state.loading) {
+      return <BasicLoadingScreen />;
+    }
+    if (this.getError() === ERROR_TYPE.SUCCESS) {
       return props.renderFunction(this.fetchedData);
+    }
     return this.getErrorRender();
   }
 }
