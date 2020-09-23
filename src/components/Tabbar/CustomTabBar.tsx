@@ -59,6 +59,8 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
     this.state = {
       translateY: new Animated.Value(0),
     };
+    // @ts-ignore
+    props.navigation.addListener('state', this.onRouteChange);
   }
 
   /**
@@ -179,7 +181,7 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
     if (isFocused) {
       const stackState = route.state;
       const stackRoute =
-        stackState && stackState.index
+        stackState && stackState.index != null
           ? stackState.routes[stackState.index]
           : null;
       const params: {collapsible: Collapsible} | null | undefined = stackRoute
@@ -196,7 +198,6 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
 
   render() {
     const {props, state} = this;
-    props.navigation.addListener('state', this.onRouteChange);
     const icons = this.getIcons();
     return (
       <Animated.View
