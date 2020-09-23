@@ -77,15 +77,14 @@ export default class AnimatedFAB extends React.Component<PropsType> {
   render() {
     const {props} = this;
     return (
-      <Animatable.View ref={this.ref} useNativeDriver={true}>
-        <FAB
-          icon={props.icon}
-          onPress={props.onPress}
-          style={{
-            ...styles.fab,
-            bottom: CustomTabBar.TAB_BAR_HEIGHT,
-          }}
-        />
+      <Animatable.View
+        ref={this.ref}
+        useNativeDriver={true}
+        style={{
+          ...styles.fab,
+          bottom: CustomTabBar.TAB_BAR_HEIGHT,
+        }}>
+        <FAB icon={props.icon} onPress={props.onPress} />
       </Animatable.View>
     );
   }
