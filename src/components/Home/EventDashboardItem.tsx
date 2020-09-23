@@ -98,7 +98,7 @@ function EventDashBoardItem(props: PropsType) {
 }
 
 const areEqual = (prevProps: PropsType, nextProps: PropsType): boolean => {
-  return nextProps.eventNumber !== prevProps.eventNumber;
+  return nextProps.eventNumber === prevProps.eventNumber;
 };
 
 export default React.memo(EventDashBoardItem, areEqual);

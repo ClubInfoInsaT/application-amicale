@@ -88,7 +88,7 @@ function SmallDashboardItem(props: PropsType) {
 }
 
 const areEqual = (prevProps: PropsType, nextProps: PropsType): boolean => {
-  return nextProps.badgeCount !== prevProps.badgeCount;
+  return nextProps.badgeCount === prevProps.badgeCount;
 };
 
 export default React.memo(SmallDashboardItem, areEqual);

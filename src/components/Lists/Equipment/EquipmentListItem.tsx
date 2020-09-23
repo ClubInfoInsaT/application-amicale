@@ -130,7 +130,7 @@ function EquipmentListItem(props: PropsType) {
 }
 
 const areEqual = (prevProps: PropsType, nextProps: PropsType): boolean => {
-  return nextProps.userDeviceRentDates !== prevProps.userDeviceRentDates;
+  return nextProps.userDeviceRentDates === prevProps.userDeviceRentDates;
 };
 
 export default React.memo(EquipmentListItem, areEqual);
