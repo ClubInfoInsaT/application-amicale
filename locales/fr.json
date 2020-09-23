@@ -475,8 +475,8 @@
     "loading": "Chargement...",
     "retry": "Réessayer",
     "networkError": "Impossible de contacter les serveurs. Assure-toi d'être connecté à Internet.",
-    "goBack": "Suivant",
-    "goForward": "Précédent",
+    "goBack": "Précédent",
+    "goForward": "Suivant",
     "openInBrowser": "Ouvrir dans le navigateur",
     "notAvailable": "Non disponible",
     "listUpdateFail": "Erreur lors de la mise à jour de la liste"
