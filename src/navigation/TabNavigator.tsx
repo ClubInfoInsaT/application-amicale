@@ -142,7 +142,7 @@ function HomeStackComponent(
   defaultData: {[key: string]: string},
 ) {
   let params;
-  if (initialRoute != null) {
+  if (initialRoute) {
     params = {data: defaultData, nextScreen: initialRoute, shouldOpen: true};
   }
   const {colors} = useTheme();
@@ -255,45 +255,53 @@ type PropsType = {
   defaultHomeData: {[key: string]: string};
 };
 
-export default function TabNavigator(props: PropsType) {
-  let defaultRoute = 'home';
-  if (!props.defaultHomeRoute) {
-    defaultRoute = AsyncStorageManager.getString(
-      AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
-    ).toLowerCase();
-  }
-  const createHomeStackComponent = () =>
-    HomeStackComponent(props.defaultHomeRoute, props.defaultHomeData);
+export default class TabNavigator extends React.Component<PropsType> {
+  defaultRoute: string;
+  createHomeStackComponent: () => any;
 
-  return (
-    <Tab.Navigator
-      initialRouteName={defaultRoute}
-      tabBar={(tabProps) => <CustomTabBar {...tabProps} />}>
-      <Tab.Screen
-        name="services"
-        component={ServicesStackComponent}
-        options={{title: i18n.t('screens.services.title')}}
-      />
-      <Tab.Screen
-        name="proxiwash"
-        component={ProxiwashStackComponent}
-        options={{title: i18n.t('screens.proxiwash.title')}}
-      />
-      <Tab.Screen
-        name="home"
-        component={createHomeStackComponent}
-        options={{title: i18n.t('screens.home.title')}}
-      />
-      <Tab.Screen
-        name="planning"
-        component={PlanningStackComponent}
-        options={{title: i18n.t('screens.planning.title')}}
-      />
-      <Tab.Screen
-        name="planex"
-        component={PlanexStackComponent}
-        options={{title: i18n.t('screens.planex.title')}}
-      />
-    </Tab.Navigator>
-  );
+  constructor(props: PropsType) {
+    super(props);
+    this.defaultRoute = 'home';
+    if (!props.defaultHomeRoute) {
+      this.defaultRoute = AsyncStorageManager.getString(
+        AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
+      ).toLowerCase();
+    }
+    this.createHomeStackComponent = () =>
+      HomeStackComponent(props.defaultHomeRoute, props.defaultHomeData);
+  }
+
+  render() {
+    return (
+      <Tab.Navigator
+        initialRouteName={this.defaultRoute}
+        tabBar={(tabProps) => <CustomTabBar {...tabProps} />}>
+        <Tab.Screen
+          name="services"
+          component={ServicesStackComponent}
+          options={{title: i18n.t('screens.services.title')}}
+        />
+        <Tab.Screen
+          name="proxiwash"
+          component={ProxiwashStackComponent}
+          options={{title: i18n.t('screens.proxiwash.title')}}
+        />
+        <Tab.Screen
+          name="home"
+          component={this.createHomeStackComponent}
+          options={{title: i18n.t('screens.home.title')}}
+        />
+        <Tab.Screen
+          name="planning"
+          component={PlanningStackComponent}
+          options={{title: i18n.t('screens.planning.title')}}
+        />
+        <Tab.Screen
+          name="planex"
+          component={PlanexStackComponent}
+          options={{title: i18n.t('screens.planex.title')}}
+        />
+      </Tab.Navigator>
+    );
+  }
 }

@@ -38,8 +38,8 @@ class AmicaleContactScreen extends React.Component<{}> {
   // Dataset containing information about contacts
   CONTACT_DATASET: Array<DatasetItemType>;
 
-  constructor() {
-    super({});
+  constructor(props: {}) {
+    super(props);
     this.CONTACT_DATASET = [
       {
         name: i18n.t('screens.amicaleAbout.roles.interSchools'),

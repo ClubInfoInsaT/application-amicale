@@ -55,7 +55,7 @@ type StateType = {
   currentTheme: ReactNativePaper.Theme | undefined;
 };
 
-export default class App extends React.Component<null, StateType> {
+export default class App extends React.Component<{}, StateType> {
   navigatorRef: {current: null | NavigationContainerRef};
 
   defaultHomeRoute: string | null;
@@ -64,8 +64,8 @@ export default class App extends React.Component<null, StateType> {
 
   urlHandler: URLHandler;
 
-  constructor() {
-    super(null);
+  constructor(props: {}) {
+    super(props);
     this.state = {
       isLoading: true,
       showIntro: true,

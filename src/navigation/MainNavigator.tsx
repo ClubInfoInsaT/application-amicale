@@ -284,5 +284,9 @@ type PropsType = {
 };
 
 export default function MainNavigator(props: PropsType) {
-  return <MainStackComponent createTabNavigator={() => TabNavigator(props)} />;
+  return (
+    <MainStackComponent
+      createTabNavigator={() => <TabNavigator {...props} />}
+    />
+  );
 }

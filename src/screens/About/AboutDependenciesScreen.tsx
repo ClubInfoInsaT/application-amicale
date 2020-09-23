@@ -53,8 +53,8 @@ const LIST_ITEM_HEIGHT = 64;
 export default class AboutDependenciesScreen extends React.Component<{}> {
   data: Array<ListItemType>;
 
-  constructor() {
-    super({});
+  constructor(props: {}) {
+    super(props);
     this.data = generateListFromObject(packageJson.dependencies);
   }
 

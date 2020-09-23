@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
 type PermissionResults = 'unavailable' | 'denied' | 'blocked' | 'granted';
 
 class ScannerScreen extends React.Component<{}, StateType> {
-  constructor() {
-    super({});
+  constructor(props: {}) {
+    super(props);
     this.state = {
       hasPermission: false,
       scanned: false,
