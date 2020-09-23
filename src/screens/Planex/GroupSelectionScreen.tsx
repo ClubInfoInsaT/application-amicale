@@ -27,8 +27,6 @@ import WebSectionList from '../../components/Screens/WebSectionList';
 import GroupListAccordion from '../../components/Lists/PlanexGroups/GroupListAccordion';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 
-const LIST_ITEM_HEIGHT = 70;
-
 export type PlanexGroupType = {
   name: string;
   id: number;
@@ -127,7 +125,6 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
           onGroupPress={this.onListItemPress}
           onFavoritePress={this.onListFavoritePress}
           currentSearchString={currentSearchString}
-          height={LIST_ITEM_HEIGHT}
         />
       );
     }
@@ -311,7 +308,6 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
         fetchUrl={GROUPS_URL}
         renderItem={this.getRenderItem}
         updateData={state.currentSearchString + state.favoriteGroups.length}
-        itemHeight={LIST_ITEM_HEIGHT}
       />
     );
   }

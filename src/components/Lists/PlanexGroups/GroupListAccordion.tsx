@@ -34,7 +34,6 @@ type PropsType = {
   onGroupPress: (data: PlanexGroupType) => void;
   onFavoritePress: (data: PlanexGroupType) => void;
   currentSearchString: string;
-  height: number;
   theme: ReactNativePaper.Theme;
 };
 
@@ -101,7 +100,6 @@ class GroupListAccordion extends React.Component<PropsType> {
         <AnimatedAccordion
           title={item.name.replace(REPLACE_REGEX, ' ')}
           style={{
-            height: props.height,
             justifyContent: 'center',
           }}
           left={(iconProps) =>
