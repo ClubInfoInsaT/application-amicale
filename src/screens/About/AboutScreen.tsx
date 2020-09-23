@@ -84,7 +84,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   /**
    * Object containing data relative to major contributors
    */
-  static majorContributors: {[key: string]: MemberItemType} = {
+  majorContributors: {[key: string]: MemberItemType} = {
     arnaud: {
       name: 'Arnaud Vergnet',
       message: i18n.t('screens.about.user.arnaud'),
@@ -115,7 +115,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   /**
    * Object containing data relative to users who helped during development
    */
-  static helpfulUsers: {[key: string]: MemberItemType} = {
+  helpfulUsers: {[key: string]: MemberItemType} = {
     beranger: {
       name: 'Béranger Quintana Y Arciosana',
       message: i18n.t('screens.about.user.beranger'),
@@ -199,18 +199,18 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   teamData: Array<ListItemType> = [
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(AboutScreen.majorContributors.arnaud);
+        this.onContributorListItemPress(this.majorContributors.arnaud);
       },
-      icon: AboutScreen.majorContributors.arnaud.icon,
-      text: AboutScreen.majorContributors.arnaud.name,
+      icon: this.majorContributors.arnaud.icon,
+      text: this.majorContributors.arnaud.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(AboutScreen.majorContributors.yohan);
+        this.onContributorListItemPress(this.majorContributors.yohan);
       },
-      icon: AboutScreen.majorContributors.yohan.icon,
-      text: AboutScreen.majorContributors.yohan.name,
+      icon: this.majorContributors.yohan.icon,
+      text: this.majorContributors.yohan.name,
       showChevron: false,
     },
     {
@@ -230,42 +230,42 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   thanksData: Array<ListItemType> = [
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(AboutScreen.helpfulUsers.beranger);
+        this.onContributorListItemPress(this.helpfulUsers.beranger);
       },
-      icon: AboutScreen.helpfulUsers.beranger.icon,
-      text: AboutScreen.helpfulUsers.beranger.name,
+      icon: this.helpfulUsers.beranger.icon,
+      text: this.helpfulUsers.beranger.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(AboutScreen.helpfulUsers.celine);
+        this.onContributorListItemPress(this.helpfulUsers.celine);
       },
-      icon: AboutScreen.helpfulUsers.celine.icon,
-      text: AboutScreen.helpfulUsers.celine.name,
+      icon: this.helpfulUsers.celine.icon,
+      text: this.helpfulUsers.celine.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(AboutScreen.helpfulUsers.damien);
+        this.onContributorListItemPress(this.helpfulUsers.damien);
       },
-      icon: AboutScreen.helpfulUsers.damien.icon,
-      text: AboutScreen.helpfulUsers.damien.name,
+      icon: this.helpfulUsers.damien.icon,
+      text: this.helpfulUsers.damien.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(AboutScreen.helpfulUsers.titouan);
+        this.onContributorListItemPress(this.helpfulUsers.titouan);
       },
-      icon: AboutScreen.helpfulUsers.titouan.icon,
-      text: AboutScreen.helpfulUsers.titouan.name,
+      icon: this.helpfulUsers.titouan.icon,
+      text: this.helpfulUsers.titouan.name,
       showChevron: false,
     },
     {
       onPressCallback: () => {
-        this.onContributorListItemPress(AboutScreen.helpfulUsers.theo);
+        this.onContributorListItemPress(this.helpfulUsers.theo);
       },
-      icon: AboutScreen.helpfulUsers.theo.icon,
-      text: AboutScreen.helpfulUsers.theo.name,
+      icon: this.helpfulUsers.theo.icon,
+      text: this.helpfulUsers.theo.name,
       showChevron: false,
     },
   ];

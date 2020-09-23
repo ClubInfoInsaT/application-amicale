@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
  * Component used to display a proxiwash item, showing machine progression and state
  */
 class ProxiwashListItem extends React.Component<PropsType> {
-  static stateStrings: {[key in MachineStates]: string} = {
+  stateStrings: {[key in MachineStates]: string} = {
     [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.states.ready'),
     [MachineStates.RUNNING]: i18n.t('screens.proxiwash.states.running'),
     [MachineStates.RUNNING_NOT_STARTED]: i18n.t(
@@ -146,7 +146,7 @@ class ProxiwashListItem extends React.Component<PropsType> {
       ? `${props.item.startTime}/${props.item.endTime}`
       : '';
     const stateIcon = ProxiwashConstants.stateIcons[machineState];
-    const stateString = ProxiwashListItem.stateStrings[machineState];
+    const stateString = this.stateStrings[machineState];
     let progress;
     if (isRunning && props.item.donePercent !== '') {
       progress = parseFloat(props.item.donePercent) / 100;

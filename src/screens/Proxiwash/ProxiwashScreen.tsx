@@ -86,7 +86,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     );
   }
 
-  static modalStateStrings: {[key in MachineStates]: string} = {
+  modalStateStrings: {[key in MachineStates]: string} = {
     [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.modal.ready'),
     [MachineStates.RUNNING]: i18n.t('screens.proxiwash.modal.running'),
     [MachineStates.RUNNING_NOT_STARTED]: i18n.t(
@@ -205,7 +205,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
       icon: '',
       onPress: () => undefined,
     };
-    let message = ProxiwashScreen.modalStateStrings[item.state];
+    let message = this.modalStateStrings[item.state];
     const onPress = () => this.onSetupNotificationsPress(item);
     if (item.state === MachineStates.RUNNING) {
       let remainingTime = parseInt(item.remainingTime, 10);
