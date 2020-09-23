@@ -67,22 +67,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const stateStrings: {[key in MachineStates]: string} = {
-  [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.states.ready'),
-  [MachineStates.RUNNING]: i18n.t('screens.proxiwash.states.running'),
-  [MachineStates.RUNNING_NOT_STARTED]: i18n.t(
-    'screens.proxiwash.states.runningNotStarted',
-  ),
-  [MachineStates.FINISHED]: i18n.t('screens.proxiwash.states.finished'),
-  [MachineStates.UNAVAILABLE]: i18n.t('screens.proxiwash.states.broken'),
-  [MachineStates.ERROR]: i18n.t('screens.proxiwash.states.error'),
-  [MachineStates.UNKNOWN]: i18n.t('screens.proxiwash.states.unknown'),
-};
-
 /**
  * Component used to display a proxiwash item, showing machine progression and state
  */
 class ProxiwashListItem extends React.Component<PropsType> {
+  static stateStrings: {[key in MachineStates]: string} = {
+    [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.states.ready'),
+    [MachineStates.RUNNING]: i18n.t('screens.proxiwash.states.running'),
+    [MachineStates.RUNNING_NOT_STARTED]: i18n.t(
+      'screens.proxiwash.states.runningNotStarted',
+    ),
+    [MachineStates.FINISHED]: i18n.t('screens.proxiwash.states.finished'),
+    [MachineStates.UNAVAILABLE]: i18n.t('screens.proxiwash.states.broken'),
+    [MachineStates.ERROR]: i18n.t('screens.proxiwash.states.error'),
+    [MachineStates.UNKNOWN]: i18n.t('screens.proxiwash.states.unknown'),
+  };
+
   stateColors: {[key: string]: string};
 
   title: string;
@@ -146,7 +146,7 @@ class ProxiwashListItem extends React.Component<PropsType> {
       ? `${props.item.startTime}/${props.item.endTime}`
       : '';
     const stateIcon = ProxiwashConstants.stateIcons[machineState];
-    const stateString = stateStrings[machineState];
+    const stateString = ProxiwashListItem.stateStrings[machineState];
     let progress;
     if (isRunning && props.item.donePercent !== '') {
       progress = parseFloat(props.item.donePercent) / 100;

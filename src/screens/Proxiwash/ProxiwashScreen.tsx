@@ -46,18 +46,6 @@ import MascotPopup from '../../components/Mascot/MascotPopup';
 import type {SectionListDataType} from '../../components/Screens/WebSectionList';
 import type {LaundromatType} from './ProxiwashAboutScreen';
 
-const modalStateStrings: {[key in MachineStates]: string} = {
-  [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.modal.ready'),
-  [MachineStates.RUNNING]: i18n.t('screens.proxiwash.modal.running'),
-  [MachineStates.RUNNING_NOT_STARTED]: i18n.t(
-    'screens.proxiwash.modal.runningNotStarted',
-  ),
-  [MachineStates.FINISHED]: i18n.t('screens.proxiwash.modal.finished'),
-  [MachineStates.UNAVAILABLE]: i18n.t('screens.proxiwash.modal.broken'),
-  [MachineStates.ERROR]: i18n.t('screens.proxiwash.modal.error'),
-  [MachineStates.UNKNOWN]: i18n.t('screens.proxiwash.modal.unknown'),
-};
-
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
 
@@ -97,6 +85,18 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
       i18n.t('screens.proxiwash.modal.notificationErrorDescription'),
     );
   }
+
+  static modalStateStrings: {[key in MachineStates]: string} = {
+    [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.modal.ready'),
+    [MachineStates.RUNNING]: i18n.t('screens.proxiwash.modal.running'),
+    [MachineStates.RUNNING_NOT_STARTED]: i18n.t(
+      'screens.proxiwash.modal.runningNotStarted',
+    ),
+    [MachineStates.FINISHED]: i18n.t('screens.proxiwash.modal.finished'),
+    [MachineStates.UNAVAILABLE]: i18n.t('screens.proxiwash.modal.broken'),
+    [MachineStates.ERROR]: i18n.t('screens.proxiwash.modal.error'),
+    [MachineStates.UNKNOWN]: i18n.t('screens.proxiwash.modal.unknown'),
+  };
 
   modalRef: null | Modalize;
 
@@ -205,7 +205,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
       icon: '',
       onPress: () => undefined,
     };
-    let message = modalStateStrings[item.state];
+    let message = ProxiwashScreen.modalStateStrings[item.state];
     const onPress = () => this.onSetupNotificationsPress(item);
     if (item.state === MachineStates.RUNNING) {
       let remainingTime = parseInt(item.remainingTime, 10);
