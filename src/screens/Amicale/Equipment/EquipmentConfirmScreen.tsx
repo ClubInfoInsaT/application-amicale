@@ -61,7 +61,6 @@ function EquipmentConfirmScreen(props: Props) {
         date: getRelativeDateString(start),
       });
     }
-    console.log(buttonText);
     return (
       <CollapsibleScrollView>
         <Card style={{margin: 5}}>
