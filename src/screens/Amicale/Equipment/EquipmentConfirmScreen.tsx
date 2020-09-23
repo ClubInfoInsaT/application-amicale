@@ -19,11 +19,11 @@
 
 import * as React from 'react';
 import {
-  Button,
   Caption,
   Card,
   Headline,
   Paragraph,
+  Title,
   useTheme,
 } from 'react-native-paper';
 import {View} from 'react-native';
@@ -61,6 +61,7 @@ function EquipmentConfirmScreen(props: Props) {
         date: getRelativeDateString(start),
       });
     }
+    console.log(buttonText);
     return (
       <CollapsibleScrollView>
         <Card style={{margin: 5}}>
@@ -84,12 +85,9 @@ function EquipmentConfirmScreen(props: Props) {
                 </Caption>
               </View>
             </View>
-            <Button
-              icon="check-circle-outline"
-              color={theme.colors.success}
-              mode="text">
+            <Title style={{color: theme.colors.success, textAlign: 'center'}}>
               {buttonText}
-            </Button>
+            </Title>
             <Paragraph style={{textAlign: 'center'}}>
               {i18n.t('screens.equipment.bookingConfirmedMessage')}
             </Paragraph>
