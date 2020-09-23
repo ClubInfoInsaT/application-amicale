@@ -66,6 +66,8 @@ class WebViewScreen extends React.PureComponent<PropsType> {
     customPaddingFunction: null,
   };
 
+  currentUrl: string;
+
   webviewRef: {current: null | WebView};
 
   canGoBack: boolean;
@@ -74,6 +76,7 @@ class WebViewScreen extends React.PureComponent<PropsType> {
     super(props);
     this.webviewRef = React.createRef();
     this.canGoBack = false;
+    this.currentUrl = props.url;
   }
 
   /**
@@ -222,8 +225,7 @@ class WebViewScreen extends React.PureComponent<PropsType> {
   };
 
   onOpenClicked = () => {
-    const {url} = this.props;
-    Linking.openURL(url);
+    Linking.openURL(this.currentUrl);
   };
 
   onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -261,7 +263,8 @@ class WebViewScreen extends React.PureComponent<PropsType> {
             onRefresh={this.onRefreshClicked}
           />
         )}
-        onNavigationStateChange={(navState: {canGoBack: boolean}) => {
+        onNavigationStateChange={(navState) => {
+          this.currentUrl = navState.url;
           this.canGoBack = navState.canGoBack;
         }}
         onMessage={props.onMessage}
