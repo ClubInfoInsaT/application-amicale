@@ -4,6 +4,16 @@ Ce fichier permet de regrouper les différentes informations sur des décisions 
 
 Ces notes pouvant évoluer dans le temps, leur date d'écriture est aussi indiquée.
 
+## _2020-09-24_ | Flow
+
+Flow est un système d'annotation permettant de rendre JavaScript typé statique. Développée par Facebook, cette technologie à initialement été adoptée. En revanche, de nombreux problèmes sont apparus :
+* Système très complexe donnant de nombreuses erreurs inconnues, rendant la contribution complexe pour les non-initiés
+* Manque de compatibilité avec les librairies existantes (la majorité utilisant TypeScript)
+* Utilisation excessive du système lors du développement
+* Plantage régulier du service Flow, nécessitant un redémarrage manuel
+
+Ainsi, il a été décidé de migrer le projet vers Typescript.
+
 ## _2020-06-23_ | Expo
 
 Expo est une surcouche à react native permettant de simplifier le processus de build. Le projet à commencé en l'utilisant, mais de nombreux problèmes ont été rencontrés :
