@@ -22,7 +22,7 @@ import {IconButton, Text} from 'react-native-paper';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {MainStackParamsList} from '../../navigation/MainNavigator';
 
 type ImageGalleryScreenNavigationProp = StackScreenProps<
@@ -33,6 +33,34 @@ type ImageGalleryScreenNavigationProp = StackScreenProps<
 type Props = ImageGalleryScreenNavigationProp & {
   navigation: StackNavigationProp<any>;
 };
+
+const styles = StyleSheet.create({
+  closeButtonContainer: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 1000,
+  },
+  closeButtonIcon: {
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  indicatorContainer: {
+    width: '100%',
+    height: 50,
+    position: 'absolute',
+  },
+  indicatorText: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    fontSize: 15,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    color: 'white',
+    padding: 10,
+    borderRadius: 20,
+  },
+});
 
 class ImageGalleryScreen extends React.Component<Props> {
   images: Array<{url: string}>;
@@ -65,17 +93,13 @@ class ImageGalleryScreen extends React.Component<Props> {
       <Animatable.View
         ref={this.closeButtonRef}
         useNativeDriver
-        style={{
-          position: 'absolute',
-          top: 10,
-          left: 10,
-          zIndex: 1000,
-        }}>
+        style={styles.closeButtonContainer}>
         <IconButton
           onPress={this.goBack}
           icon="close"
           size={30}
-          style={{backgroundColor: 'rgba(0,0,0,0.6)'}}
+          color={'white'}
+          style={styles.closeButtonIcon}
         />
       </Animatable.View>
     );
@@ -87,22 +111,8 @@ class ImageGalleryScreen extends React.Component<Props> {
         <Animatable.View
           ref={this.indicatorRef}
           useNativeDriver
-          style={{
-            width: '100%',
-            height: 50,
-            position: 'absolute',
-          }}>
-          <Text
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: 'auto',
-              marginBottom: 'auto',
-              fontSize: 15,
-              backgroundColor: 'rgba(0,0,0,0.6)',
-              padding: 10,
-              borderRadius: 20,
-            }}>
+          style={styles.indicatorContainer}>
+          <Text style={styles.indicatorText}>
             {currentIndex}/{allSize}
           </Text>
         </Animatable.View>
