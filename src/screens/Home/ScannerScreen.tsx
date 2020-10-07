@@ -20,7 +20,7 @@
 import * as React from 'react';
 import {Linking, Platform, StyleSheet, View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
-import {RNCamera} from 'react-native-camera';
+import {BarCodeReadEvent, RNCamera} from 'react-native-camera';
 import {BarcodeMask} from '@nartc/react-native-barcode-mask';
 import i18n from 'i18n-js';
 import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
@@ -107,7 +107,7 @@ class ScannerScreen extends React.Component<{}, StateType> {
       <RNCamera
         onBarCodeRead={state.scanned ? undefined : this.onCodeScanned}
         type={RNCamera.Constants.Type.back}
-        barCodeTypes={['qr']}
+        barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
         style={StyleSheet.absoluteFill}
         captureAudio={false}>
         <BarcodeMask
@@ -194,15 +194,14 @@ class ScannerScreen extends React.Component<{}, StateType> {
   /**
    * Opens scanned link if it is a valid app link or shows and error dialog
    *
-   * @param type The barcode type
-   * @param data The scanned value
+   * @param event
    */
-  onCodeScanned = ({data}: {data: string}) => {
-    if (!URLHandler.isUrlValid(data)) {
+  onCodeScanned = (event: BarCodeReadEvent) => {
+    if (!URLHandler.isUrlValid(event.data)) {
       this.showErrorDialog();
     } else {
       this.showOpeningDialog();
-      Linking.openURL(data);
+      Linking.openURL(event.data);
     }
   };
 
