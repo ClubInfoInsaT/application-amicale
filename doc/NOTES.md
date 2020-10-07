@@ -4,6 +4,12 @@ Ce fichier permet de regrouper les différentes informations sur des décisions 
 
 Ces notes pouvant évoluer dans le temps, leur date d'écriture est aussi indiquée.
 
+## _2020-10-07_ | react-native-keychain
+
+Bloquée en 4.0.5 à cause d'un problème de performances. Au dessus de cette version, la récupération du token prend plusieurs secondes, ce qui n'est pas acceptable.
+
+[Référence](https://github.com/oblador/react-native-keychain/issues/337)
+
 ## _2020-09-24_ | Flow
 
 Flow est un système d'annotation permettant de rendre JavaScript typé statique. Développée par Facebook, cette technologie à initialement été adoptée. En revanche, de nombreux problèmes sont apparus :
