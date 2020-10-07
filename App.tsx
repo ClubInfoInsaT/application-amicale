@@ -80,9 +80,7 @@ export default class App extends React.Component<{}, StateType> {
     this.urlHandler = new URLHandler(this.onInitialURLParsed, this.onDetectURL);
     this.urlHandler.listen();
     setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 20);
-    this.loadAssetsAsync().finally(() => {
-      this.onLoadFinished();
-    });
+    this.loadAssetsAsync();
   }
 
   /**
@@ -149,7 +147,7 @@ export default class App extends React.Component<{}, StateType> {
   /**
    * Async loading is done, finish processing startup data
    */
-  onLoadFinished() {
+  onLoadFinished = () => {
     // Only show intro if this is the first time starting the app
     ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
     // Status bar goes dark if set too fast on ios
@@ -176,19 +174,21 @@ export default class App extends React.Component<{}, StateType> {
         ),
     });
     SplashScreen.hide();
-  }
+  };
 
   /**
    * Loads every async data
    *
    * @returns {Promise<void>}
    */
-  loadAssetsAsync = async () => {
-    await AsyncStorageManager.getInstance().loadPreferences();
-    await ConnectionManager.getInstance()
-      .recoverLogin()
-      .catch(() => {});
-  };
+  loadAssetsAsync() {
+    Promise.all([
+      AsyncStorageManager.getInstance().loadPreferences(),
+      ConnectionManager.getInstance().recoverLogin(),
+    ])
+      .then(this.onLoadFinished)
+      .catch(this.onLoadFinished);
+  }
 
   /**
    * Renders the app based on loading state

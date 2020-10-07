@@ -73,25 +73,21 @@ export default class ConnectionManager {
    * @returns Promise<string>
    */
   async recoverLogin(): Promise<string> {
-    return new Promise(
-      (resolve: (token: string) => void, reject: () => void) => {
-        const token = this.getToken();
-        if (token != null) {
-          resolve(token);
-        } else {
-          Keychain.getInternetCredentials(SERVER_NAME)
-            .then((data: Keychain.UserCredentials | false) => {
-              if (data && data.password != null) {
-                this.token = data.password;
-                resolve(this.token);
-              } else {
-                reject();
-              }
-            })
-            .catch((): void => reject());
-        }
-      },
-    );
+    return new Promise((resolve: () => void) => {
+      const token = this.getToken();
+      if (token != null) {
+        resolve();
+      } else {
+        Keychain.getInternetCredentials(SERVER_NAME)
+          .then((data: Keychain.UserCredentials | false) => {
+            if (data && data.password != null) {
+              this.token = data.password;
+            }
+            resolve();
+          })
+          .catch(resolve);
+      }
+    });
   }
 
   /**

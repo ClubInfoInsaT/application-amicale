@@ -209,21 +209,25 @@ export default class AsyncStorageManager {
    * @return {Promise<void>}
    */
   async loadPreferences() {
-    const prefKeys: Array<string> = [];
-    // Get all available keys
-    Object.keys(AsyncStorageManager.PREFERENCES).forEach((key: string) => {
-      prefKeys.push(key);
-    });
-    // Get corresponding values
-    const resultArray = await AsyncStorage.multiGet(prefKeys);
-    // Save those values for later use
-    resultArray.forEach((item: [string, string | null]) => {
-      const key = item[0];
-      let val = item[1];
-      if (val === null) {
-        val = AsyncStorageManager.PREFERENCES[key].default;
-      }
-      this.currentPreferences[key] = val;
+    return new Promise((resolve: () => void) => {
+      const prefKeys: Array<string> = [];
+      // Get all available keys
+      Object.keys(AsyncStorageManager.PREFERENCES).forEach((key: string) => {
+        prefKeys.push(key);
+      });
+      // Get corresponding values
+      AsyncStorage.multiGet(prefKeys).then((resultArray) => {
+        // Save those values for later use
+        resultArray.forEach((item: [string, string | null]) => {
+          const key = item[0];
+          let val = item[1];
+          if (val === null) {
+            val = AsyncStorageManager.PREFERENCES[key].default;
+          }
+          this.currentPreferences[key] = val;
+        });
+        resolve();
+      });
     });
   }
 
