@@ -364,13 +364,14 @@
       "thanks": "Thanks",
       "user": {
         "you": "You ?",
-        "arnaud": "Student in IR (2020). He is the creator of this beautiful app you use everyday. Some say he is handsome as well.",
-        "yohan":  "Student in IR (2020). He helped to fix bugs. I think he is handsome as well but I don't know him personally.",
-        "beranger": "Student in AE (2020) and president of the Amicale when the app was created. The app was his idea. He helped a lot to find bugs, new features and communication.",
-        "celine": "Student in GPE (2020). Without her, everything would be less cute. She helped to write the text, for communication, and also to create the mascot 🦊.",
-        "damien": "Student in IR (2020) and creator of the 2020 version of the Amicale's website. Thanks to his help, integrating Amicale's services into the app was child's play.",
-        "titouan": "Student in IR (2020). He helped a lot in finding bugs and new features.",
-        "theo": "Student in AE (2020). If the app works on iOS, this is all thanks to his help during his numerous tests."
+        "arnaud": "Student in 4IR (2020). He is the creator of this app you use everyday.",
+        "docjyj":  "Student in 2MIC FAS (2020). He added some new features and fixed some bugs.",
+        "yohan":  "Student in 4IR (2020). He helped to fix bugs and gave some ideas.",
+        "beranger": "Student in 4AE (2020) and president of the Amicale when the app was created. The app was his idea. He helped a lot to find bugs, new features and communication.",
+        "celine": "Student in 4GPE (2020). Without her, everything would be less cute. She helped to write the text, for communication, and also to create the mascot 🦊.",
+        "damien": "Student in 4IR (2020) and creator of the 2020 version of the Amicale's website. Thanks to his help, integrating Amicale's services into the app was child's play.",
+        "titouan": "Student in 4IR (2020). He helped a lot in finding bugs and new features.",
+        "theo": "Student in 4AE (2020). If the app works on iOS, this is all thanks to his help during his numerous tests."
       }
     },
     "feedback": {

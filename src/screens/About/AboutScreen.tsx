@@ -84,8 +84,8 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   /**
    * Object containing data relative to major contributors
    */
-  majorContributors: {[key: string]: MemberItemType} = {
-    arnaud: {
+  majorContributors: Array<MemberItemType> = [
+    {
       name: 'Arnaud Vergnet',
       message: i18n.t('screens.about.user.arnaud'),
       icon: 'crown',
@@ -98,7 +98,18 @@ class AboutScreen extends React.Component<PropsType, StateType> {
         '&body=' +
         'Coucou !\n\n',
     },
-    yohan: {
+    {
+      name: 'Jean-Yves Saint-Loubert',
+      message: i18n.t('screens.about.user.docjyj'),
+      icon: 'xml',
+      mail:
+        'mailto:saint-lo@etud.insa-toulouse.fr?' +
+        'subject=' +
+        'Application Amicale INSA Toulouse' +
+        '&body=' +
+        'Coucou !\n\n',
+    },
+    {
       name: 'Yohan Simard',
       message: i18n.t('screens.about.user.yohan'),
       icon: 'xml',
@@ -110,38 +121,38 @@ class AboutScreen extends React.Component<PropsType, StateType> {
         '&body=' +
         'Coucou !\n\n',
     },
-  };
+  ];
 
   /**
    * Object containing data relative to users who helped during development
    */
-  helpfulUsers: {[key: string]: MemberItemType} = {
-    beranger: {
+  helpfulUsers: Array<MemberItemType> = [
+    {
       name: 'Béranger Quintana Y Arciosana',
       message: i18n.t('screens.about.user.beranger'),
       icon: 'account-heart',
     },
-    celine: {
+    {
       name: 'Céline Tassin',
       message: i18n.t('screens.about.user.celine'),
       icon: 'brush',
     },
-    damien: {
+    {
       name: 'Damien Molina',
       message: i18n.t('screens.about.user.damien'),
       icon: 'web',
     },
-    titouan: {
+    {
       name: 'Titouan Labourdette',
       message: i18n.t('screens.about.user.titouan'),
       icon: 'shield-bug',
     },
-    theo: {
+    {
       name: 'Théo Tami',
       message: i18n.t('screens.about.user.theo'),
       icon: 'food-apple',
     },
-  };
+  ];
 
   /**
    * Data to be displayed in the app card
@@ -196,79 +207,12 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   /**
    * Data to be displayed in the team card
    */
-  teamData: Array<ListItemType> = [
-    {
-      onPressCallback: () => {
-        this.onContributorListItemPress(this.majorContributors.arnaud);
-      },
-      icon: this.majorContributors.arnaud.icon,
-      text: this.majorContributors.arnaud.name,
-      showChevron: false,
-    },
-    {
-      onPressCallback: () => {
-        this.onContributorListItemPress(this.majorContributors.yohan);
-      },
-      icon: this.majorContributors.yohan.icon,
-      text: this.majorContributors.yohan.name,
-      showChevron: false,
-    },
-    {
-      onPressCallback: () => {
-        const {navigation} = this.props;
-        navigation.navigate('feedback');
-      },
-      icon: 'hand-pointing-right',
-      text: i18n.t('screens.about.user.you'),
-      showChevron: true,
-    },
-  ];
+  teamData: Array<ListItemType>;
 
   /**
    * Data to be displayed in the thanks card
    */
-  thanksData: Array<ListItemType> = [
-    {
-      onPressCallback: () => {
-        this.onContributorListItemPress(this.helpfulUsers.beranger);
-      },
-      icon: this.helpfulUsers.beranger.icon,
-      text: this.helpfulUsers.beranger.name,
-      showChevron: false,
-    },
-    {
-      onPressCallback: () => {
-        this.onContributorListItemPress(this.helpfulUsers.celine);
-      },
-      icon: this.helpfulUsers.celine.icon,
-      text: this.helpfulUsers.celine.name,
-      showChevron: false,
-    },
-    {
-      onPressCallback: () => {
-        this.onContributorListItemPress(this.helpfulUsers.damien);
-      },
-      icon: this.helpfulUsers.damien.icon,
-      text: this.helpfulUsers.damien.name,
-      showChevron: false,
-    },
-    {
-      onPressCallback: () => {
-        this.onContributorListItemPress(this.helpfulUsers.titouan);
-      },
-      icon: this.helpfulUsers.titouan.icon,
-      text: this.helpfulUsers.titouan.name,
-      showChevron: false,
-    },
-    {
-      onPressCallback: () => {
-        this.onContributorListItemPress(this.helpfulUsers.theo);
-      },
-      icon: this.helpfulUsers.theo.icon,
-      text: this.helpfulUsers.theo.name,
-      showChevron: false,
-    },
-  ];
+  thanksData: Array<ListItemType>;
 
   /**
    * Data to be displayed in the technologies card
@@ -319,6 +263,34 @@ class AboutScreen extends React.Component<PropsType, StateType> {
       dialogMessage: '',
       dialogButtons: [],
     };
+    this.teamData = [
+      ...this.getMemberData(this.majorContributors),
+      {
+        onPressCallback: () => {
+          const {navigation} = this.props;
+          navigation.navigate('feedback');
+        },
+        icon: 'hand-pointing-right',
+        text: i18n.t('screens.about.user.you'),
+        showChevron: true,
+      },
+    ];
+    this.thanksData = this.getMemberData(this.helpfulUsers);
+  }
+
+  getMemberData(data: Array<MemberItemType>): Array<ListItemType> {
+    const final: Array<ListItemType> = [];
+    data.forEach((item) => {
+      final.push({
+        onPressCallback: () => {
+          this.onContributorListItemPress(item);
+        },
+        icon: item.icon,
+        text: item.name,
+        showChevron: false,
+      });
+    });
+    return final;
   }
 
   /**
@@ -355,7 +327,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
     }
     if (trollLink) {
       dialogBtn.push({
-        title: 'SWAG',
+        title: 'Coucou',
         onPress: () => {
           openWebLink(trollLink);
         },
