@@ -34,7 +34,6 @@ import {apiRequest, ERROR_TYPE} from '../utils/WebData';
  * 500 : SERVER_ERROR -> pb coté serveur
  */
 
-const SERVER_NAME = 'amicale-insat.fr';
 const AUTH_PATH = 'password';
 
 export default class ConnectionManager {
@@ -78,7 +77,7 @@ export default class ConnectionManager {
       if (token != null) {
         resolve();
       } else {
-        Keychain.getInternetCredentials(SERVER_NAME)
+        Keychain.getGenericPassword()
           .then((data: Keychain.UserCredentials | false) => {
             if (data && data.password != null) {
               this.token = data.password;
@@ -108,7 +107,7 @@ export default class ConnectionManager {
    */
   async saveLogin(email: string, token: string): Promise<void> {
     return new Promise((resolve: () => void, reject: () => void) => {
-      Keychain.setInternetCredentials(SERVER_NAME, 'token', token)
+      Keychain.setGenericPassword('token', token)
         .then(() => {
           this.token = token;
           resolve();
@@ -124,7 +123,7 @@ export default class ConnectionManager {
    */
   async disconnect(): Promise<void> {
     return new Promise((resolve: () => void, reject: () => void) => {
-      Keychain.resetInternetCredentials(SERVER_NAME)
+      Keychain.resetGenericPassword()
         .then(() => {
           this.token = null;
           resolve();
