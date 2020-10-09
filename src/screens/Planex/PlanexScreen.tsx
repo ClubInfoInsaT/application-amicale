@@ -37,6 +37,7 @@ import ErrorView from '../../components/Screens/ErrorView';
 import type {PlanexGroupType} from './GroupSelectionScreen';
 import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
+import {getPrettierPlanexGroupName} from '../../utils/Utils';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -162,7 +163,9 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
       currentGroup = {name: 'SELECT GROUP', id: -1};
     } else {
       currentGroup = JSON.parse(currentGroupString);
-      props.navigation.setOptions({title: currentGroup.name});
+      props.navigation.setOptions({
+        title: getPrettierPlanexGroupName(currentGroup.name),
+      });
     }
     this.state = {
       dialogVisible: false,
@@ -348,7 +351,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
       AsyncStorageManager.PREFERENCES.planexCurrentGroup.key,
       group,
     );
-    navigation.setOptions({title: group.name});
+    navigation.setOptions({title: getPrettierPlanexGroupName(group.name)});
     this.generateInjectedJS(group.id);
   }
 

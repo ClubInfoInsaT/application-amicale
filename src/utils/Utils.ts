@@ -37,3 +37,9 @@ export function setupStatusBar() {
     );
   }
 }
+
+const REPLACE_REGEX = /_/g;
+
+export function getPrettierPlanexGroupName(name: string) {
+  return name.replace(REPLACE_REGEX, ' ');
+}

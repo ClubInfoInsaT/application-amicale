@@ -23,6 +23,7 @@ import * as Animatable from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import type {PlanexGroupType} from '../../../screens/Planex/GroupSelectionScreen';
 import {View} from 'react-native';
+import {getPrettierPlanexGroupName} from '../../../utils/Utils';
 
 type PropsType = {
   theme: ReactNativePaper.Theme;
@@ -32,8 +33,6 @@ type PropsType = {
   favorites: Array<PlanexGroupType>;
   height: number;
 };
-
-const REPLACE_REGEX = /_/g;
 
 class GroupListItem extends React.Component<PropsType> {
   isFav: boolean;
@@ -86,7 +85,7 @@ class GroupListItem extends React.Component<PropsType> {
     const {colors} = props.theme;
     return (
       <List.Item
-        title={props.item.name.replace(REPLACE_REGEX, ' ')}
+        title={getPrettierPlanexGroupName(props.item.name)}
         onPress={props.onPress}
         left={(iconProps) => (
           <List.Icon
