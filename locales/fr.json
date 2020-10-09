@@ -70,7 +70,6 @@
       "modal": {
         "enableNotifications": "Me Notifier",
         "disableNotifications": "Désactiver les  notifications",
-        "ok": "OK",
         "cancel": "Annuler",
         "finished": "Cette machine est terminée. Si tu l'as démarrée, tu peux récupérer ton linge.",
         "ready": "Cette machine est vide et prête à être utilisée.",

@@ -200,11 +200,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    */
   getModalContent(title: string, item: ProxiwashMachineType, isDryer: boolean) {
     const {props, state} = this;
-    let button: {text: string; icon: string; onPress: () => void} = {
-      text: i18n.t('screens.proxiwash.modal.ok'),
-      icon: '',
-      onPress: () => undefined,
-    };
+    let button: {text: string; icon: string; onPress: () => void} | undefined;
     let message = this.modalStateStrings[item.state];
     const onPress = () => this.onSetupNotificationsPress(item);
     if (item.state === MachineStates.RUNNING) {
@@ -247,7 +243,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
           <Text>{message}</Text>
         </Card.Content>
 
-        {button.onPress ? (
+        {button ? (
           <Card.Actions>
             <Button
               icon={button.icon}
