@@ -55,15 +55,15 @@
       "numAvailablePlural": "disponibles",
       "washinsa": {
         "title": "Laverie INSA",
-        "subtitle": "Ta laverie préférer !!",
-        "description": "C'est le service de laverie proposé par Promologis pour les résidences INSA (On t'en voudra pas si tu loges pas sur le campus et que tu fais ta machine ici). Le local situé au pied du R2 avec ses 3 sèche-linges et 9 machines est ouvert 7J/7 24h/24 ! Tu peux amener ta lessive, la prendre sur place ou encore mieux l'acheter au Proximo (moins chère qu'à la laverie directement).",
+        "subtitle": "Ta laverie préférée !!",
+        "description": "C'est le service de laverie pour les résidences INSA (On t'en voudra pas si tu loges pas sur le campus et que tu fais ta machine ici). Le local situé au pied du R2 avec ses 3 sèche-linges et 9 machines, est ouvert 7J/7 24h/24 ! Tu peux amener ta lessive, la prendre sur place ou encore mieux l'acheter au Proximo (moins chère qu'à la laverie directement).",
         "tariff": "Lave-Linges 6kg: 3€ la machine + 0.80€ avec la lessive.\nSèche-Linges 14kg: 0.35€ pour 5min de sèche linge.",
         "paymentMethods": "Toute monnaie jusqu'à 10€.\nCarte bancaire acceptée."
       },
       "tripodeB": {
         "title": "Laverie Tripode B",
-        "subtitle": "Celle de ceux qui habite prés du métro.",
-        "description": "C'est le service de laverie proposé par le CROUS pour les résidences Tripode B et C ainsi que Thalès et Pythagore. Le local situé au pied du Tripode B en face de de la résidence Pythagore avec ses 2 sèche-linges et 6 machines est ouvert 7J/7 de 7h à 23h. En plus des machine 6kg il y as une machine de 10kg.",
+        "subtitle": "Pour ceux qui habitent proche du métro.",
+        "description": "C'est le service de laverie pour les résidences Tripode B et C ainsi que Thalès et Pythagore. Le local situé au pied du Tripode B, en face de de la résidence Pythagore, avec ses 2 sèche-linges et 6 machines est ouvert 7J/7 de 7h à 23h. En plus des machine 6kg il y a une machine de 10kg.",
         "tariff": "Lave-Linges 6kg: 2.60€ la machine + 0.90€ avec la lessive.\nLave-Linges 10kg: 4.90€ la machine + 1.50€ avec la lessive.\nSèche-Linges 14kg: 0.40€ pour 5min de sèche linge.",
         "paymentMethods": "Carte bancaire acceptée."
       },
@@ -321,7 +321,7 @@
       },
       "mascotDialog": {
         "title": "Scano...quoi ?",
-        "message": "Scanotron 3000 te permet de scanner des QR codes Campus, affichés par des clubs ou des respo d'évenements, pour avoir plus d'infos !\n\nL'appareil photo ne sera jamais utilisé pour d'autres raisons.",
+        "message": "Scanotron 3000 te permet de scanner des QR codes Campus, affichés par des clubs ou des respo d'événements, pour avoir plus d'infos !\n\nL'appareil photo ne sera jamais utilisé pour d'autres raisons.",
         "button": "Oké"
       }
     },
@@ -340,11 +340,11 @@
       "proxiwashNotifReminder": "Rappel de machine en cours",
       "proxiwashNotifReminderSub": "Combien de minutes avant",
       "proxiwashChangeWash": "Sélection de la laverie",
-      "proxiwashChangeWashSub": "Quel laverie à afficher",
+      "proxiwashChangeWashSub": "Quelle laverie afficher",
       "information": "Informations",
       "dashboardEdit": {
         "title": "Modifier la dashboard",
-        "message": "Les 5 icones ci-dessus représentent ta dashboard.\nTu peux remplacer un de ses services en cliquant dessus, puis en sélectionnant le nouveau service de ton choix dans la liste ci-dessous.",
+        "message": "Les 5 icônes ci-dessus représentent ta dashboard.\nTu peux remplacer un de ses services en cliquant dessus, puis en sélectionnant le nouveau service de ton choix dans la liste ci-dessous.",
         "undo": "Annuler les changements"
       }
     },
