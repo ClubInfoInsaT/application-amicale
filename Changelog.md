@@ -1,21 +1,23 @@
-# Version actuelle - v3.0.7 - 13/06/2020
+# Version actuelle - v4.1.0 - 11/10/2020
 
 ## 🎉 Nouveautés
-- Mise à jour des écrans d'intro pour mieux refléter l'appli actuelle
-- Déplacement du bouton *À propos* dans les paramètres
-- Mode sombre par défaut parce que voilà
+- Possibilité de sélectionner la laverie des Tripodes à la place de celle de l'INSA
+- Ajout d'une icône adaptive pour Android 9+
+- Ajout des remerciements dans la page À propos
+- Amélioration des animations au clic de la barre d'onglets
 
 ## 🐛 Corrections de bugs
-- Correction de crash au démarrage sur certains appareils
-- Correction de l'affichage de certains sites web
+- Correction du démarrage très lent sur certains appareils Android
+- Correction du comportement inconsistant de la liste des groupes pour Planex
 
 ## 🖥️ Notes de développement
-- Force soloader 0.8.2
+- Migration de Flow vers TypeScript
+- Blocage de react-native-keychain à la version 4.0.5 en raison d'un bug dans la librairie
 
 
-# Prochainement - **v4.0.1**
+# Versions précédentes
 
-<details><summary>**v4.0.1**</summary>
+<details><summary>**v4.0.1** - 30/09/2020</summary>
 
 ## 🎉 Nouveautés
 - Ajout d'une mascotte !
@@ -41,7 +43,21 @@
 
 </details>
 
-# Versions précédentes
+<details><summary>**v3.0.7** - 13/06/2020</summary>
+
+## 🎉 Nouveautés
+- Mise à jour des écrans d'intro pour mieux refléter l'appli actuelle
+- Déplacement du bouton *À propos* dans les paramètres
+- Mode sombre par défaut parce que voilà
+
+## 🐛 Corrections de bugs
+- Correction de crash au démarrage sur certains appareils
+- Correction de l'affichage de certains sites web
+
+## 🖥️ Notes de développement
+- Force soloader 0.8.2
+
+</details>
 
 <details><summary>**v3.0.5** - 28/05/2020</summary>
 
