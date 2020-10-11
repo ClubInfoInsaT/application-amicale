@@ -2,6 +2,7 @@
 
 ## 🎉 Nouveautés
 - Possibilité de sélectionner la laverie des Tripodes à la place de celle de l'INSA
+- Possibilité d'ouvrir les liens zoom depuis planex !
 - Ajout d'une icône adaptive pour Android 9+
 - Ajout des remerciements dans la page À propos
 - Amélioration des animations au clic de la barre d'onglets
