@@ -307,8 +307,17 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
   showDialog = (title: string, message: string) => {
     this.setState({
       dialogVisible: true,
-      // @ts-ignore
-      dialogTitle: <Autolink text={title} component={Title} />,
+      dialogTitle: (
+        <Autolink
+          text={title}
+          hashtag={'facebook'}
+          component={Title}
+          truncate={32}
+          email={true}
+          url={true}
+          phone={true}
+        />
+      ),
       dialogMessage: message,
     });
   };

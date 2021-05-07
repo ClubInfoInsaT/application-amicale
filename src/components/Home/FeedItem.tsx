@@ -115,9 +115,13 @@ function FeedItem(props: PropsType) {
             {item.message !== undefined ? (
               <Autolink<typeof Text>
                 text={item.message}
-                hashtag="facebook"
+                hashtag={'facebook'}
                 component={Text}
                 style={{ height: textHeight }}
+                truncate={32}
+                email={true}
+                url={true}
+                phone={true}
               />
             ) : null}
           </Card.Content>

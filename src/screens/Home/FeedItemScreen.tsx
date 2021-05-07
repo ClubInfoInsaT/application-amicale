@@ -123,9 +123,12 @@ class FeedItemScreen extends React.Component<PropsType> {
           {this.displayData.message !== undefined ? (
             <Autolink
               text={this.displayData.message}
-              hashtag="facebook"
-              // @ts-ignore
+              hashtag={'facebook'}
               component={Text}
+              truncate={32}
+              email={true}
+              url={true}
+              phone={true}
             />
           ) : null}
         </Card.Content>

@@ -69,7 +69,15 @@ function ClubAboutScreen() {
         />
         <Card.Content>
           <Text>{i18n.t('screens.clubs.about.message')}</Text>
-          <Autolink<typeof Text> text={CONTACT_LINK} component={Text} />
+          <Autolink<typeof Text>
+            text={CONTACT_LINK}
+            hashtag={'facebook'}
+            component={Text}
+            truncate={32}
+            email={true}
+            url={true}
+            phone={true}
+          />
         </Card.Content>
       </Card>
     </CollapsibleScrollView>

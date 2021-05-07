@@ -16,8 +16,8 @@ target 'Campus' do
   # Permissions
   permissions_path = '../node_modules/react-native-permissions/ios'
 
-  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
-  pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
+  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
 
   # Enables Flipper.
   #
