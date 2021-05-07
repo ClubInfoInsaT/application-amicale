@@ -17,15 +17,23 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {View} from 'react-native';
-import {ActivityIndicator, useTheme} from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 
 type Props = {
   isAbsolute?: boolean;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    top: 0,
+    right: 0,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  },
+});
 
 /**
  * Component used to display a header button
@@ -35,18 +43,16 @@ type Props = {
  */
 export default function BasicLoadingScreen(props: Props) {
   const theme = useTheme();
-  const {isAbsolute} = props;
+  const { isAbsolute } = props;
+  const position = isAbsolute ? 'absolute' : 'relative';
   return (
     <View
       style={{
         backgroundColor: theme.colors.background,
-        position: isAbsolute ? 'absolute' : 'relative',
-        top: 0,
-        right: 0,
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-      }}>
+        position: position,
+        ...styles.container,
+      }}
+    >
       <ActivityIndicator animating size="large" color={theme.colors.primary} />
     </View>
   );

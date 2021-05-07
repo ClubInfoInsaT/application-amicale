@@ -18,46 +18,50 @@
  */
 
 import * as React from 'react';
-import {Text, TouchableRipple} from 'react-native-paper';
-import {Image, View} from 'react-native';
-import type {ServiceItemType} from '../../../managers/ServicesManager';
+import { Text, TouchableRipple } from 'react-native-paper';
+import { Image, StyleSheet, View } from 'react-native';
+import type { ServiceItemType } from '../../../managers/ServicesManager';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type PropsType = {
   item: ServiceItemType;
   width: number;
 };
 
+const styles = StyleSheet.create({
+  ripple: {
+    margin: 5,
+  },
+  text: {
+    ...GENERAL_STYLES.centerHorizontal,
+    marginTop: 5,
+    textAlign: 'center',
+  },
+});
+
 function ImageListItem(props: PropsType) {
-  const {item} = props;
+  const { item } = props;
   const source =
-    typeof item.image === 'number' ? item.image : {uri: item.image};
+    typeof item.image === 'number' ? item.image : { uri: item.image };
   return (
     <TouchableRipple
       style={{
         width: props.width,
         height: props.width + 40,
-        margin: 5,
+        ...styles.ripple,
       }}
-      onPress={item.onPress}>
+      onPress={item.onPress}
+    >
       <View>
         <Image
           style={{
             width: props.width - 20,
             height: props.width - 20,
-            marginLeft: 'auto',
-            marginRight: 'auto',
+            ...GENERAL_STYLES.centerHorizontal,
           }}
           source={source}
         />
-        <Text
-          style={{
-            marginTop: 5,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            textAlign: 'center',
-          }}>
-          {item.title}
-        </Text>
+        <Text style={styles.text}>{item.title}</Text>
       </View>
     </TouchableRipple>
   );

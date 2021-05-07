@@ -21,7 +21,7 @@ import * as React from 'react';
 import i18n from 'i18n-js';
 import LoadingConfirmDialog from '../Dialogs/LoadingConfirmDialog';
 import ConnectionManager from '../../managers/ConnectionManager';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 type PropsType = {
   visible: boolean;
@@ -37,7 +37,7 @@ function LogoutDialog(props: PropsType) {
         .then(() => {
           navigation.reset({
             index: 0,
-            routes: [{name: 'main'}],
+            routes: [{ name: 'main' }],
           });
           props.onDismiss();
           resolve();

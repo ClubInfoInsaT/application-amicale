@@ -18,13 +18,13 @@
  */
 
 import * as React from 'react';
-import {Avatar, Button, Card, RadioButton} from 'react-native-paper';
-import {FlatList, StyleSheet, View} from 'react-native';
+import { Avatar, Button, Card, RadioButton } from 'react-native-paper';
+import { FlatList, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import ConnectionManager from '../../../managers/ConnectionManager';
 import LoadingConfirmDialog from '../../Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../Dialogs/ErrorDialog';
-import type {VoteTeamType} from '../../../screens/Amicale/VoteScreen';
+import type { VoteTeamType } from '../../../screens/Amicale/VoteScreen';
 
 type PropsType = {
   teams: Array<VoteTeamType>;
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
   card: {
     margin: 10,
   },
-  icon: {
-    backgroundColor: 'transparent',
+  button: {
+    marginLeft: 'auto',
   },
 });
 
@@ -63,28 +63,28 @@ export default class VoteSelect extends React.PureComponent<
   }
 
   onVoteSelectionChange = (teamName: string): void =>
-    this.setState({selectedTeam: teamName});
+    this.setState({ selectedTeam: teamName });
 
   voteKeyExtractor = (item: VoteTeamType): string => item.id.toString();
 
-  voteRenderItem = ({item}: {item: VoteTeamType}) => (
+  voteRenderItem = ({ item }: { item: VoteTeamType }) => (
     <RadioButton.Item label={item.name} value={item.id.toString()} />
   );
 
-  showVoteDialog = (): void => this.setState({voteDialogVisible: true});
+  showVoteDialog = (): void => this.setState({ voteDialogVisible: true });
 
-  onVoteDialogDismiss = (): void => this.setState({voteDialogVisible: false});
+  onVoteDialogDismiss = (): void => this.setState({ voteDialogVisible: false });
 
   onVoteDialogAccept = async (): Promise<void> => {
     return new Promise((resolve: () => void) => {
-      const {state} = this;
+      const { state } = this;
       ConnectionManager.getInstance()
         .authenticatedRequest('elections/vote', {
           team: parseInt(state.selectedTeam, 10),
         })
         .then(() => {
           this.onVoteDialogDismiss();
-          const {props} = this;
+          const { props } = this;
           props.onVoteSuccess();
           resolve();
         })
@@ -103,13 +103,13 @@ export default class VoteSelect extends React.PureComponent<
     });
 
   onErrorDialogDismiss = () => {
-    this.setState({errorDialogVisible: false});
-    const {props} = this;
+    this.setState({ errorDialogVisible: false });
+    const { props } = this;
     props.onVoteError();
   };
 
   render() {
-    const {state, props} = this;
+    const { state, props } = this;
     return (
       <View>
         <Card style={styles.card}>
@@ -123,7 +123,8 @@ export default class VoteSelect extends React.PureComponent<
           <Card.Content>
             <RadioButton.Group
               onValueChange={this.onVoteSelectionChange}
-              value={state.selectedTeam}>
+              value={state.selectedTeam}
+            >
               <FlatList
                 data={props.teams}
                 keyExtractor={this.voteKeyExtractor}
@@ -137,8 +138,9 @@ export default class VoteSelect extends React.PureComponent<
               icon="send"
               mode="contained"
               onPress={this.showVoteDialog}
-              style={{marginLeft: 'auto'}}
-              disabled={state.selectedTeam === 'none'}>
+              style={styles.button}
+              disabled={state.selectedTeam === 'none'}
+            >
               {i18n.t('screens.vote.select.sendButton')}
             </Button>
           </Card.Actions>

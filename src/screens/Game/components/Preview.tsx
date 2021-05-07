@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {View, ViewStyle} from 'react-native';
-import type {GridType} from './GridComponent';
+import { StyleSheet, View, ViewStyle } from 'react-native';
+import type { GridType } from './GridComponent';
 import GridComponent from './GridComponent';
 
 type PropsType = {
@@ -27,17 +27,21 @@ type PropsType = {
   style: ViewStyle;
 };
 
+const styles = StyleSheet.create({
+  grid: {
+    marginRight: 5,
+    marginLeft: 5,
+    marginBottom: 5,
+  },
+});
+
 function getGridRender(item: GridType, index: number) {
   return (
     <GridComponent
       width={item[0].length}
       height={item.length}
       grid={item}
-      style={{
-        marginRight: 5,
-        marginLeft: 5,
-        marginBottom: 5,
-      }}
+      style={styles.grid}
       key={index.toString()}
     />
   );
@@ -53,7 +57,7 @@ function getGrids(items: Array<GridType>) {
 
 class Preview extends React.PureComponent<PropsType> {
   render() {
-    const {style, items} = this.props;
+    const { style, items } = this.props;
     if (items.length > 0) {
       return <View style={style}>{getGrids(items)}</View>;
     }

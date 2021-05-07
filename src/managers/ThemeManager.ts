@@ -17,8 +17,8 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DarkTheme, DefaultTheme} from 'react-native-paper';
-import {Appearance} from 'react-native-appearance';
+import { DarkTheme, DefaultTheme } from 'react-native-paper';
+import { Appearance } from 'react-native-appearance';
 import AsyncStorageManager from './AsyncStorageManager';
 import AprilFoolsManager from './AprilFoolsManager';
 
@@ -235,14 +235,14 @@ export default class ThemeManager {
   static getNightMode(): boolean {
     return (
       (AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.nightMode.key,
+        AsyncStorageManager.PREFERENCES.nightMode.key
       ) &&
         (!AsyncStorageManager.getBool(
-          AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key,
+          AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key
         ) ||
           colorScheme === 'no-preference')) ||
       (AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key,
+        AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key
       ) &&
         colorScheme === 'dark')
     );
@@ -289,7 +289,7 @@ export default class ThemeManager {
   setNightMode(isNightMode: boolean) {
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.nightMode.key,
-      isNightMode,
+      isNightMode
     );
     if (this.updateThemeCallback != null) {
       this.updateThemeCallback();

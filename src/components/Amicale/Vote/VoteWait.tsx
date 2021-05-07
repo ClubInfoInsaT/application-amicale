@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {Avatar, Card, Paragraph, useTheme} from 'react-native-paper';
-import {StyleSheet} from 'react-native';
+import { Avatar, Card, Paragraph, useTheme } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
 
 type PropsType = {
@@ -33,14 +33,11 @@ const styles = StyleSheet.create({
   card: {
     margin: 10,
   },
-  icon: {
-    backgroundColor: 'transparent',
-  },
 });
 
 export default function VoteWait(props: PropsType) {
   const theme = useTheme();
-  const {startDate} = props;
+  const { startDate } = props;
   return (
     <Card style={styles.card}>
       <Card.Title
@@ -56,12 +53,12 @@ export default function VoteWait(props: PropsType) {
       />
       <Card.Content>
         {props.justVoted ? (
-          <Paragraph style={{color: theme.colors.success}}>
+          <Paragraph style={{ color: theme.colors.success }}>
             {i18n.t('screens.vote.wait.messageSubmitted')}
           </Paragraph>
         ) : null}
         {props.hasVoted ? (
-          <Paragraph style={{color: theme.colors.success}}>
+          <Paragraph style={{ color: theme.colors.success }}>
             {i18n.t('screens.vote.wait.messageVoted')}
           </Paragraph>
         ) : null}

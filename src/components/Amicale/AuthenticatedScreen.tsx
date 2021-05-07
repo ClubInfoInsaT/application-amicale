@@ -18,9 +18,9 @@
  */
 
 import * as React from 'react';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import ConnectionManager from '../../managers/ConnectionManager';
-import {ERROR_TYPE} from '../../utils/WebData';
+import { ERROR_TYPE } from '../../utils/WebData';
 import ErrorView from '../Screens/ErrorView';
 import BasicLoadingScreen from '../Screens/BasicLoadingScreen';
 
@@ -90,7 +90,7 @@ class AuthenticatedScreen<T> extends React.Component<PropsType<T>, StateType> {
    * @param error The error code received
    */
   onRequestFinished(data: T | null, index: number, error?: number) {
-    const {props} = this;
+    const { props } = this;
     if (index >= 0 && index < props.requests.length) {
       this.fetchedData[index] = data;
       this.errors[index] = error != null ? error : ERROR_TYPE.SUCCESS;
@@ -101,7 +101,7 @@ class AuthenticatedScreen<T> extends React.Component<PropsType<T>, StateType> {
     }
 
     if (this.allRequestsFinished()) {
-      this.setState({loading: false});
+      this.setState({ loading: false });
     }
   }
 
@@ -113,7 +113,7 @@ class AuthenticatedScreen<T> extends React.Component<PropsType<T>, StateType> {
    * @return {number} The error code or ERROR_TYPE.SUCCESS if no error was found
    */
   getError(): number {
-    const {props} = this;
+    const { props } = this;
     for (let i = 0; i < this.errors.length; i += 1) {
       if (
         this.errors[i] !== ERROR_TYPE.SUCCESS &&
@@ -131,7 +131,7 @@ class AuthenticatedScreen<T> extends React.Component<PropsType<T>, StateType> {
    * @return {*}
    */
   getErrorRender() {
-    const {props} = this;
+    const { props } = this;
     const errorCode = this.getError();
     let shouldOverride = false;
     let override = null;
@@ -166,9 +166,9 @@ class AuthenticatedScreen<T> extends React.Component<PropsType<T>, StateType> {
    * If the user is logged in, send all requests.
    */
   fetchData = () => {
-    const {state, props} = this;
+    const { state, props } = this;
     if (!state.loading) {
-      this.setState({loading: true});
+      this.setState({ loading: true });
     }
 
     if (this.connectionManager.isLoggedIn()) {
@@ -176,11 +176,11 @@ class AuthenticatedScreen<T> extends React.Component<PropsType<T>, StateType> {
         this.connectionManager
           .authenticatedRequest<T>(
             props.requests[i].link,
-            props.requests[i].params,
+            props.requests[i].params
           )
           .then((response: T): void => this.onRequestFinished(response, i))
           .catch((error: number): void =>
-            this.onRequestFinished(null, i, error),
+            this.onRequestFinished(null, i, error)
           );
       }
     } else {
@@ -213,7 +213,7 @@ class AuthenticatedScreen<T> extends React.Component<PropsType<T>, StateType> {
   }
 
   render() {
-    const {state, props} = this;
+    const { state, props } = this;
     if (state.loading) {
       return <BasicLoadingScreen />;
     }

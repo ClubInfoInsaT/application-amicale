@@ -17,17 +17,15 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
-import type {ServiceItemType} from './ServicesManager';
+import type { ServiceItemType } from './ServicesManager';
 import ServicesManager from './ServicesManager';
-import {getSublistWithIds} from '../utils/Services';
+import { getSublistWithIds } from '../utils/Services';
 import AsyncStorageManager from './AsyncStorageManager';
 
 export default class DashboardManager extends ServicesManager {
   getCurrentDashboard(): Array<ServiceItemType | null> {
     const dashboardIdList = AsyncStorageManager.getObject<Array<string>>(
-      AsyncStorageManager.PREFERENCES.dashboardItems.key,
+      AsyncStorageManager.PREFERENCES.dashboardItems.key
     );
     const allDatasets = [
       ...this.amicaleDataset,

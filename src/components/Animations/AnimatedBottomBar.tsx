@@ -24,9 +24,9 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {FAB, IconButton, Surface, withTheme} from 'react-native-paper';
+import { FAB, IconButton, Surface, withTheme } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import AutoHideHandler from '../../utils/AutoHideHandler';
 import CustomTabBar from '../Tabbar/CustomTabBar';
 
@@ -76,14 +76,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     top: '-25%',
   },
+  side: {
+    flexDirection: 'row',
+  },
+  icon: {
+    marginLeft: 5,
+  },
 });
 
 class AnimatedBottomBar extends React.Component<PropsType, StateType> {
-  ref: {current: null | (Animatable.View & View)};
+  ref: { current: null | (Animatable.View & View) };
 
   hideHandler: AutoHideHandler;
 
-  displayModeIcons: {[key: string]: string};
+  displayModeIcons: { [key: string]: string };
 
   constructor(props: PropsType) {
     super(props);
@@ -101,7 +107,7 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
   }
 
   shouldComponentUpdate(nextProps: PropsType, nextState: StateType): boolean {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
       nextProps.seekAttention !== props.seekAttention ||
       nextState.currentMode !== state.currentMode
@@ -124,7 +130,7 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
   };
 
   changeDisplayMode = () => {
-    const {props, state} = this;
+    const { props, state } = this;
     let newMode;
     switch (state.currentMode) {
       case DISPLAY_MODES.DAY:
@@ -140,12 +146,12 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
         newMode = DISPLAY_MODES.WEEK;
         break;
     }
-    this.setState({currentMode: newMode});
+    this.setState({ currentMode: newMode });
     props.onPress('changeView', newMode);
   };
 
   render() {
-    const {props, state} = this;
+    const { props, state } = this;
     const buttonColor = props.theme.colors.primary;
     return (
       <Animatable.View
@@ -154,7 +160,8 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
         style={{
           ...styles.container,
           bottom: 10 + CustomTabBar.TAB_BAR_HEIGHT,
-        }}>
+        }}
+      >
         <Surface style={styles.surface}>
           <View style={styles.fabContainer}>
             <AnimatedFAB
@@ -165,10 +172,10 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
               useNativeDriver
               style={styles.fab}
               icon="account-clock"
-              onPress={(): void => props.navigation.navigate('group-select')}
+              onPress={() => props.navigation.navigate('group-select')}
             />
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={styles.side}>
             <IconButton
               icon={this.displayModeIcons[state.currentMode]}
               color={buttonColor}
@@ -177,21 +184,21 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
             <IconButton
               icon="clock-in"
               color={buttonColor}
-              style={{marginLeft: 5}}
-              onPress={(): void => props.onPress('today')}
+              style={styles.icon}
+              onPress={() => props.onPress('today')}
             />
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={styles.side}>
             <IconButton
               icon="chevron-left"
               color={buttonColor}
-              onPress={(): void => props.onPress('prev')}
+              onPress={() => props.onPress('prev')}
             />
             <IconButton
               icon="chevron-right"
               color={buttonColor}
-              style={{marginLeft: 5}}
-              onPress={(): void => props.onPress('next')}
+              style={styles.icon}
+              onPress={() => props.onPress('next')}
             />
           </View>
         </Surface>

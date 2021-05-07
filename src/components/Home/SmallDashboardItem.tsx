@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {Badge, TouchableRipple, useTheme} from 'react-native-paper';
-import {Dimensions, Image, View} from 'react-native';
+import { Badge, TouchableRipple, useTheme } from 'react-native-paper';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 type PropsType = {
@@ -28,13 +28,32 @@ type PropsType = {
   badgeCount?: number;
 };
 
+const styles = StyleSheet.create({
+  image: {
+    width: '80%',
+    height: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+  },
+  badgeContainer: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
+  badge: {
+    borderWidth: 2,
+  },
+});
+
 /**
  * Component used to render a small dashboard item
  */
 function SmallDashboardItem(props: PropsType) {
   const itemSize = Dimensions.get('window').width / 8;
   const theme = useTheme();
-  const {image} = props;
+  const { image } = props;
   return (
     <TouchableRipple
       onPress={props.onPress}
@@ -42,23 +61,18 @@ function SmallDashboardItem(props: PropsType) {
       style={{
         marginLeft: itemSize / 6,
         marginRight: itemSize / 6,
-      }}>
+      }}
+    >
       <View
         style={{
           width: itemSize,
           height: itemSize,
-        }}>
+        }}
+      >
         {image ? (
           <Image
-            source={typeof image === 'string' ? {uri: image} : image}
-            style={{
-              width: '80%',
-              height: '80%',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: 'auto',
-              marginBottom: 'auto',
-            }}
+            source={typeof image === 'string' ? { uri: image } : image}
+            style={styles.image}
           />
         ) : null}
         {props.badgeCount != null && props.badgeCount > 0 ? (
@@ -66,18 +80,16 @@ function SmallDashboardItem(props: PropsType) {
             animation="zoomIn"
             duration={300}
             useNativeDriver
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-            }}>
+            style={styles.badgeContainer}
+          >
             <Badge
               visible={true}
               style={{
                 backgroundColor: theme.colors.primary,
                 borderColor: theme.colors.background,
-                borderWidth: 2,
-              }}>
+                ...styles.badge,
+              }}
+            >
               {props.badgeCount}
             </Badge>
           </Animatable.View>

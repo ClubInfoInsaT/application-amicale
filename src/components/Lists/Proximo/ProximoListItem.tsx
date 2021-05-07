@@ -18,9 +18,10 @@
  */
 
 import * as React from 'react';
-import {Avatar, List, Text} from 'react-native-paper';
+import { Avatar, List, Text } from 'react-native-paper';
 import i18n from 'i18n-js';
-import type {ProximoArticleType} from '../../../screens/Services/Proximo/ProximoMainScreen';
+import type { ProximoArticleType } from '../../../screens/Services/Proximo/ProximoMainScreen';
+import { StyleSheet } from 'react-native';
 
 type PropsType = {
   onPress: () => void;
@@ -29,28 +30,38 @@ type PropsType = {
   height: number;
 };
 
+const styles = StyleSheet.create({
+  avatar: {
+    backgroundColor: 'transparent',
+  },
+  text: {
+    fontWeight: 'bold',
+  },
+  item: {
+    justifyContent: 'center',
+  },
+});
+
 function ProximoListItem(props: PropsType) {
   return (
     <List.Item
       title={props.item.name}
       description={`${props.item.quantity} ${i18n.t(
-        'screens.proximo.inStock',
+        'screens.proximo.inStock'
       )}`}
-      descriptionStyle={{color: props.color}}
+      descriptionStyle={{ color: props.color }}
       onPress={props.onPress}
       left={() => (
         <Avatar.Image
-          style={{backgroundColor: 'transparent'}}
+          style={styles.avatar}
           size={64}
-          source={{uri: props.item.image}}
+          source={{ uri: props.item.image }}
         />
       )}
-      right={() => (
-        <Text style={{fontWeight: 'bold'}}>{props.item.price}€</Text>
-      )}
+      right={() => <Text style={styles.text}>{props.item.price}€</Text>}
       style={{
         height: props.height,
-        justifyContent: 'center',
+        ...styles.item,
       }}
     />
   );

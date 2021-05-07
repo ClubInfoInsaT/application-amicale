@@ -24,9 +24,9 @@
  * @param sourceList The item list to use as source
  * @returns {[]}
  */
-export default function getStrippedServicesList<T extends {key: string}>(
+export default function getStrippedServicesList<T extends { key: string }>(
   idList: Array<string>,
-  sourceList: Array<T>,
+  sourceList: Array<T>
 ) {
   const newArray: Array<T> = [];
   sourceList.forEach((item: T) => {
@@ -46,9 +46,9 @@ export default function getStrippedServicesList<T extends {key: string}>(
  * @param originalList The original list
  * @returns {[]}
  */
-export function getSublistWithIds<T extends {key: string}>(
+export function getSublistWithIds<T extends { key: string }>(
   idList: Array<string>,
-  originalList: Array<T>,
+  originalList: Array<T>
 ) {
   const subList: Array<T | null> = [];
   for (let i = 0; i < idList.length; i += 1) {

@@ -17,9 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable */
-
-import React from 'react';
 import GridManager from '../logic/GridManager';
 import ScoreManager from '../logic/ScoreManager';
 import Piece from '../logic/Piece';
@@ -39,8 +36,8 @@ afterAll(() => {
 test('getEmptyLine', () => {
   let g = new GridManager(2, 2, theme);
   expect(g.getEmptyLine(2)).toStrictEqual([
-    {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
-    {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
+    { color: theme.colors.tetrisBackground, isEmpty: true, key: '0' },
+    { color: theme.colors.tetrisBackground, isEmpty: true, key: '1' },
   ]);
 
   expect(g.getEmptyLine(-1)).toStrictEqual([]);
@@ -50,12 +47,12 @@ test('getEmptyGrid', () => {
   let g = new GridManager(2, 2, theme);
   expect(g.getEmptyGrid(2, 2)).toStrictEqual([
     [
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '0' },
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '1' },
     ],
     [
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '0' },
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '1' },
     ],
   ]);
 
@@ -67,7 +64,7 @@ test('getLinesToClear', () => {
   let g = new GridManager(2, 2, theme);
   g.getCurrentGrid()[0][0].isEmpty = false;
   g.getCurrentGrid()[0][1].isEmpty = false;
-  let coord = [{x: 1, y: 0}];
+  let coord = [{ x: 1, y: 0 }];
   expect(g.getLinesToClear(coord)).toStrictEqual([0]);
 
   g.getCurrentGrid()[0][0].isEmpty = true;
@@ -75,7 +72,7 @@ test('getLinesToClear', () => {
   g.getCurrentGrid()[1][0].isEmpty = false;
   g.getCurrentGrid()[1][1].isEmpty = false;
   expect(g.getLinesToClear(coord)).toStrictEqual([]);
-  coord = [{x: 1, y: 1}];
+  coord = [{ x: 1, y: 1 }];
   expect(g.getLinesToClear(coord)).toStrictEqual([1]);
 });
 
@@ -83,12 +80,12 @@ test('clearLines', () => {
   let g = new GridManager(2, 2, theme);
   let grid = [
     [
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '0' },
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '1' },
     ],
     [
-      {color: '0', isEmpty: true, key: '0'},
-      {color: '0', isEmpty: true, key: '1'},
+      { color: '0', isEmpty: true, key: '0' },
+      { color: '0', isEmpty: true, key: '1' },
     ],
   ];
   g.getCurrentGrid()[1][0].color = '0';
@@ -98,12 +95,12 @@ test('clearLines', () => {
   g.clearLines([1], scoreManager);
   grid = [
     [
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '0' },
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '1' },
     ],
     [
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '0' },
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '1' },
     ],
   ];
   expect(g.getCurrentGrid()).toStrictEqual(grid);

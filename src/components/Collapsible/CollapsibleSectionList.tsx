@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {Animated, SectionListProps} from 'react-native';
-import type {CollapsibleComponentPropsType} from './CollapsibleComponent';
+import { Animated, SectionListProps } from 'react-native';
+import type { CollapsibleComponentPropsType } from './CollapsibleComponent';
 import CollapsibleComponent from './CollapsibleComponent';
 
 type Props<T> = SectionListProps<T> & CollapsibleComponentPropsType;

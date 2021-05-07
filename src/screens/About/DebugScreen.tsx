@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import {View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   Button,
   List,
@@ -27,7 +27,7 @@ import {
   Title,
   withTheme,
 } from 'react-native-paper';
-import {Modalize} from 'react-native-modalize';
+import { Modalize } from 'react-native-modalize';
 import CustomModal from '../../components/Overrides/CustomModal';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
@@ -46,6 +46,17 @@ type StateType = {
   modalCurrentDisplayItem: PreferenceItemType | null;
   currentPreferences: Array<PreferenceItemType>;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+});
 
 /**
  * Class defining the Debug screen.
@@ -67,7 +78,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
     this.modalInputValue = '';
     const currentPreferences: Array<PreferenceItemType> = [];
     Object.values(AsyncStorageManager.PREFERENCES).forEach((object: any) => {
-      const newObject: PreferenceItemType = {...object};
+      const newObject: PreferenceItemType = { ...object };
       newObject.current = AsyncStorageManager.getString(newObject.key);
       currentPreferences.push(newObject);
     });
@@ -83,7 +94,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
    * @return {*}
    */
   getModalContent() {
-    const {props, state} = this;
+    const { props, state } = this;
     let key = '';
     let defaultValue = '';
     let current = '';
@@ -95,11 +106,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
     }
 
     return (
-      <View
-        style={{
-          flex: 1,
-          padding: 20,
-        }}>
+      <View style={styles.container}>
         <Title>{key}</Title>
         <Subheading>Default: {defaultValue}</Subheading>
         <Subheading>Current: {current}</Subheading>
@@ -109,18 +116,15 @@ class DebugScreen extends React.Component<PropsType, StateType> {
             this.modalInputValue = text;
           }}
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 10,
-          }}>
+        <View style={styles.buttonContainer}>
           <Button
             mode="contained"
             dark
             color={props.theme.colors.success}
             onPress={() => {
               this.saveNewPrefs(key, this.modalInputValue);
-            }}>
+            }}
+          >
             Save new value
           </Button>
           <Button
@@ -129,7 +133,8 @@ class DebugScreen extends React.Component<PropsType, StateType> {
             color={props.theme.colors.danger}
             onPress={() => {
               this.saveNewPrefs(key, defaultValue);
-            }}>
+            }}
+          >
             Reset to default
           </Button>
         </View>
@@ -137,7 +142,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
     );
   }
 
-  getRenderItem = ({item}: {item: PreferenceItemType}) => {
+  getRenderItem = ({ item }: { item: PreferenceItemType }) => {
     return (
       <List.Item
         title={item.key}
@@ -179,7 +184,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
    * @returns {number}
    */
   findIndexOfKey(key: string): number {
-    const {currentPreferences} = this.state;
+    const { currentPreferences } = this.state;
     let index = -1;
     for (let i = 0; i < currentPreferences.length; i += 1) {
       if (currentPreferences[i].key === key) {
@@ -202,7 +207,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
     } => {
       const currentPreferences = [...prevState.currentPreferences];
       currentPreferences[this.findIndexOfKey(key)].current = value;
-      return {currentPreferences};
+      return { currentPreferences };
     });
     AsyncStorageManager.set(key, value);
     if (this.modalRef) {
@@ -211,7 +216,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const {state} = this;
+    const { state } = this;
     return (
       <View>
         <CustomModal onRef={this.onModalRef}>

@@ -1,8 +1,6 @@
-/* eslint-disable */
+import { isApiResponseValid } from '../../src/utils/WebData';
 
-import React from 'react';
-import {isApiResponseValid} from '../../src/utils/WebData';
-
+// eslint-disable-next-line no-unused-vars
 const fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS but in react-native
 
 test('isRequestResponseValid', () => {
@@ -23,7 +21,7 @@ test('isRequestResponseValid', () => {
   expect(isApiResponseValid(json)).toBeTrue();
   json = {
     error: 50,
-    data: {truc: 'machin'},
+    data: { truc: 'machin' },
   };
   expect(isApiResponseValid(json)).toBeTrue();
   json = {
@@ -32,7 +30,7 @@ test('isRequestResponseValid', () => {
   expect(isApiResponseValid(json)).toBeFalse();
   json = {
     error: 'coucou',
-    data: {truc: 'machin'},
+    data: { truc: 'machin' },
   };
   expect(isApiResponseValid(json)).toBeFalse();
   json = {

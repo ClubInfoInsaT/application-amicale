@@ -18,14 +18,27 @@
  */
 
 import * as React from 'react';
-import {Text} from 'react-native-paper';
-import {View} from 'react-native-animatable';
-import Slider, {SliderProps} from '@react-native-community/slider';
-import {useState} from 'react';
+import { Text } from 'react-native-paper';
+import { View } from 'react-native-animatable';
+import Slider, { SliderProps } from '@react-native-community/slider';
+import { useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 type PropsType = {
   valueSuffix?: string;
 } & SliderProps;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  text: {
+    marginHorizontal: 10,
+    marginTop: 'auto',
+    marginBottom: 'auto',
+  },
+});
 
 /**
  * Abstraction layer for Modalize component, using custom configuration
@@ -44,15 +57,8 @@ function CustomSlider(props: PropsType) {
   };
 
   return (
-    <View style={{flex: 1, flexDirection: 'row'}}>
-      <Text
-        style={{
-          marginHorizontal: 10,
-          marginTop: 'auto',
-          marginBottom: 'auto',
-        }}>
-        {currentValue}min
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>{currentValue}min</Text>
       <Slider {...props} ref={undefined} onValueChange={onValueChange} />
     </View>
   );

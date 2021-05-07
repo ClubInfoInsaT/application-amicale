@@ -18,13 +18,16 @@
  */
 
 import * as React from 'react';
-import {Platform} from 'react-native';
-import {Searchbar} from 'react-native-paper';
+import { Platform } from 'react-native';
+import { Searchbar } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen';
 import ClubListItem from '../../../components/Lists/Clubs/ClubListItem';
-import {isItemInCategoryFilter, stringMatchQuery} from '../../../utils/Search';
+import {
+  isItemInCategoryFilter,
+  stringMatchQuery,
+} from '../../../utils/Search';
 import ClubListHeader from '../../../components/Lists/Clubs/ClubListHeader';
 import MaterialHeaderButtons, {
   Item,
@@ -73,15 +76,15 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    * Creates the header content
    */
   componentDidMount() {
-    const {props} = this;
+    const { props } = this;
     props.navigation.setOptions({
       headerTitle: this.getSearchBar,
       headerRight: this.getHeaderButtons,
       headerBackTitleVisible: false,
       headerTitleContainerStyle:
         Platform.OS === 'ios'
-          ? {marginHorizontal: 0, width: '70%'}
-          : {marginHorizontal: 0, right: 50, left: 50},
+          ? { marginHorizontal: 0, width: '70%' }
+          : { marginHorizontal: 0, right: 50, left: 50 },
     });
   }
 
@@ -92,7 +95,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    * @param item The article pressed
    */
   onListItemPress(item: ClubType) {
-    const {props} = this;
+    const { props } = this;
     props.navigation.navigate('club-information', {
       data: item,
       categories: this.categories,
@@ -133,7 +136,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    */
   getHeaderButtons = () => {
     const onPress = () => {
-      const {props} = this;
+      const { props } = this;
       props.navigation.navigate('club-about');
     };
     return (
@@ -147,7 +150,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
     data: Array<{
       categories: Array<ClubCategoryType>;
       clubs: Array<ClubType>;
-    } | null>,
+    } | null>
   ) => {
     let categoryList: Array<ClubCategoryType> = [];
     let clubList: Array<ClubType> = [];
@@ -175,7 +178,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getListHeader() {
-    const {state} = this;
+    const { state } = this;
     return (
       <ClubListHeader
         categories={this.categories}
@@ -201,7 +204,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
     return cat;
   };
 
-  getRenderItem = ({item}: {item: ClubType}) => {
+  getRenderItem = ({ item }: { item: ClubType }) => {
     const onPress = () => {
       this.onListItemPress(item);
     };
@@ -222,8 +225,8 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
 
   itemLayout = (
     data: Array<ClubType> | null | undefined,
-    index: number,
-  ): {length: number; offset: number; index: number} => ({
+    index: number
+  ): { length: number; offset: number; index: number } => ({
     length: LIST_ITEM_HEIGHT,
     offset: LIST_ITEM_HEIGHT * index,
     index,
@@ -239,7 +242,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    * @param categoryId The category to add/remove from the filter
    */
   updateFilteredData(filterStr: string | null, categoryId: number | null) {
-    const {state} = this;
+    const { state } = this;
     const newCategoriesState = [...state.currentlySelectedCategories];
     let newStrState = state.currentSearchString;
     if (filterStr !== null) {
@@ -268,7 +271,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    * @returns {boolean}
    */
   shouldRenderItem(item: ClubType): boolean {
-    const {state} = this;
+    const { state } = this;
     let shouldRender =
       state.currentlySelectedCategories.length === 0 ||
       isItemInCategoryFilter(state.currentlySelectedCategories, item.category);
@@ -279,7 +282,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const {props} = this;
+    const { props } = this;
     return (
       <AuthenticatedScreen
         navigation={props.navigation}

@@ -17,8 +17,8 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {ProxiwashMachineType} from '../screens/Proxiwash/ProxiwashScreen';
-import type {RuFoodCategoryType} from '../screens/Services/SelfMenuScreen';
+import type { ProxiwashMachineType } from '../screens/Proxiwash/ProxiwashScreen';
+import type { RuFoodCategoryType } from '../screens/Services/SelfMenuScreen';
 
 /**
  * Singleton class used to manage april fools
@@ -67,13 +67,13 @@ export default class AprilFoolsManager {
    * @returns {Object}
    */
   static getFakeMenuItem(
-    menu: Array<RuFoodCategoryType>,
+    menu: Array<RuFoodCategoryType>
   ): Array<RuFoodCategoryType> {
-    menu[1].dishes.splice(4, 0, {name: 'Coq au vin'});
-    menu[1].dishes.splice(2, 0, {name: "Bat'Soupe"});
-    menu[1].dishes.splice(1, 0, {name: 'Pave de loup'});
-    menu[1].dishes.splice(0, 0, {name: 'Béranger à point'});
-    menu[1].dishes.splice(0, 0, {name: "Pieds d'Arnaud"});
+    menu[1].dishes.splice(4, 0, { name: 'Coq au vin' });
+    menu[1].dishes.splice(2, 0, { name: "Bat'Soupe" });
+    menu[1].dishes.splice(1, 0, { name: 'Pave de loup' });
+    menu[1].dishes.splice(0, 0, { name: 'Béranger à point' });
+    menu[1].dishes.splice(0, 0, { name: "Pieds d'Arnaud" });
     return menu;
   }
 
@@ -83,7 +83,7 @@ export default class AprilFoolsManager {
    * @param dryers
    */
   static getNewProxiwashDryerOrderedList(
-    dryers: Array<ProxiwashMachineType> | null,
+    dryers: Array<ProxiwashMachineType> | null
   ) {
     if (dryers != null) {
       const second = dryers[1];
@@ -98,7 +98,7 @@ export default class AprilFoolsManager {
    * @param washers
    */
   static getNewProxiwashWasherOrderedList(
-    washers: Array<ProxiwashMachineType> | null,
+    washers: Array<ProxiwashMachineType> | null
   ) {
     if (washers != null) {
       const first = washers[0];
@@ -129,7 +129,7 @@ export default class AprilFoolsManager {
    * @returns {{colors: {textDisabled: string, agendaDayTextColor: string, surface: string, background: string, dividerBackground: string, accent: string, agendaBackgroundColor: string, tabIcon: string, card: string, primary: string}}}
    */
   static getAprilFoolsTheme(
-    currentTheme: ReactNativePaper.Theme,
+    currentTheme: ReactNativePaper.Theme
   ): ReactNativePaper.Theme {
     return {
       ...currentTheme,

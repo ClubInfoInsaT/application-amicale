@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {Image, View} from 'react-native';
-import {FAB} from 'react-native-paper';
+import { Image, StyleSheet, View } from 'react-native';
+import { FAB } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 const FOCUSED_ICON = require('../../../assets/tab-icon.png');
 const UNFOCUSED_ICON = require('../../../assets/tab-icon-outline.png');
@@ -32,6 +32,25 @@ type PropsType = {
 };
 
 const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  subcontainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    marginBottom: -15,
+  },
+  fab: {
+    marginTop: 15,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+});
 
 /**
  * Abstraction layer for Agenda component, using custom configuration
@@ -70,12 +89,12 @@ class TabHomeIcon extends React.Component<PropsType> {
   }
 
   shouldComponentUpdate(nextProps: PropsType): boolean {
-    const {focused} = this.props;
+    const { focused } = this.props;
     return nextProps.focused !== focused;
   }
 
-  getIconRender = ({size, color}: {size: number; color: string}) => {
-    const {focused} = this.props;
+  getIconRender = ({ size, color }: { size: number; color: string }) => {
+    const { focused } = this.props;
     return (
       <Image
         source={focused ? FOCUSED_ICON : UNFOCUSED_ICON}
@@ -89,22 +108,15 @@ class TabHomeIcon extends React.Component<PropsType> {
   };
 
   render() {
-    const {props} = this;
+    const { props } = this;
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-        }}>
+      <View style={styles.container}>
         <View
           style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            width: '100%',
             height: props.tabBarHeight + 30,
-            marginBottom: -15,
-          }}>
+            ...styles.subcontainer,
+          }}
+        >
           <AnimatedFAB
             duration={200}
             easing="ease-out"
@@ -112,11 +124,7 @@ class TabHomeIcon extends React.Component<PropsType> {
             icon={this.getIconRender}
             onPress={props.onPress}
             onLongPress={props.onLongPress}
-            style={{
-              marginTop: 15,
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
+            style={styles.fab}
           />
         </View>
       </View>

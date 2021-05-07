@@ -18,7 +18,7 @@
  */
 
 import BaseShape from './BaseShape';
-import type {ShapeType} from './BaseShape';
+import type { ShapeType } from './BaseShape';
 
 export default class ShapeJ extends BaseShape {
   constructor(theme: ReactNativePaper.Theme) {

@@ -18,21 +18,22 @@
  */
 
 import * as React from 'react';
-import {RefreshControl, View} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { RefreshControl, StyleSheet, View } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'i18n-js';
-import {Button} from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import AuthenticatedScreen from '../../components/Amicale/AuthenticatedScreen';
-import {getTimeOnlyString, stringToDate} from '../../utils/Planning';
+import { getTimeOnlyString, stringToDate } from '../../utils/Planning';
 import VoteTease from '../../components/Amicale/Vote/VoteTease';
 import VoteSelect from '../../components/Amicale/Vote/VoteSelect';
 import VoteResults from '../../components/Amicale/Vote/VoteResults';
 import VoteWait from '../../components/Amicale/Vote/VoteWait';
-import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
+import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import VoteNotAvailable from '../../components/Amicale/Vote/VoteNotAvailable';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
+import GENERAL_STYLES from '../../constants/Styles';
 
 export type VoteTeamType = {
   id: number;
@@ -118,6 +119,14 @@ type StateType = {
   mascotDialogVisible: boolean;
 };
 
+const styles = StyleSheet.create({
+  button: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 20,
+  },
+});
+
 /**
  * Screen displaying vote information and controls
  */
@@ -132,11 +141,11 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
 
   today: Date;
 
-  mainFlatListData: Array<{key: string}>;
+  mainFlatListData: Array<{ key: string }>;
 
   lastRefresh: Date | null;
 
-  authRef: {current: null | AuthenticatedScreen<any>};
+  authRef: { current: null | AuthenticatedScreen<any> };
 
   constructor(props: PropsType) {
     super(props);
@@ -146,14 +155,14 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
     this.state = {
       hasVoted: false,
       mascotDialogVisible: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.voteShowMascot.key,
+        AsyncStorageManager.PREFERENCES.voteShowMascot.key
       ),
     };
     this.hasVoted = false;
     this.today = new Date();
     this.authRef = React.createRef();
     this.lastRefresh = null;
-    this.mainFlatListData = [{key: 'main'}, {key: 'info'}];
+    this.mainFlatListData = [{ key: 'main' }, { key: 'info' }];
   }
 
   /**
@@ -174,7 +183,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
     return dateString;
   }
 
-  getMainRenderItem = ({item}: {item: {key: string}}) => {
+  getMainRenderItem = ({ item }: { item: { key: string } }) => {
     if (item.key === 'info') {
       return (
         <View>
@@ -182,11 +191,8 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
             mode="contained"
             icon="help-circle"
             onPress={this.showMascotDialog}
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: 20,
-            }}>
+            style={styles.button}
+          >
             {i18n.t('screens.vote.mascotDialog.title')}
           </Button>
         </View>
@@ -196,7 +202,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
   };
 
   getScreen = (data: Array<TeamResponseType | VoteDatesStringType | null>) => {
-    const {state} = this;
+    const { state } = this;
     // data[0] = FAKE_TEAMS2;
     // data[1] = FAKE_DATE;
     this.lastRefresh = new Date();
@@ -229,7 +235,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
   };
 
   getContent() {
-    const {state} = this;
+    const { state } = this;
     if (!this.isVoteStarted()) {
       return this.getTeaseVoteCard();
     }
@@ -245,7 +251,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
     return <VoteNotAvailable />;
   }
 
-  onVoteSuccess = (): void => this.setState({hasVoted: true});
+  onVoteSuccess = (): void => this.setState({ hasVoted: true });
 
   /**
    * The user has not voted yet, and the votes are open
@@ -270,7 +276,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
           teams={this.teams}
           dateEnd={this.getDateString(
             this.dates.date_result_end,
-            this.datesString.date_result_end,
+            this.datesString.date_result_end
           )}
         />
       );
@@ -287,7 +293,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
         <VoteTease
           startDate={this.getDateString(
             this.dates.date_begin,
-            this.datesString.date_begin,
+            this.datesString.date_begin
           )}
         />
       );
@@ -299,7 +305,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
    * Votes have ended, or user has voted waiting for results
    */
   getWaitVoteCard() {
-    const {state} = this;
+    const { state } = this;
     let startDate = null;
     if (
       this.dates != null &&
@@ -308,7 +314,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
     ) {
       startDate = this.getDateString(
         this.dates.date_result_begin,
-        this.datesString.date_result_begin,
+        this.datesString.date_result_begin
       );
     }
     return (
@@ -326,7 +332,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
    */
   reloadData = () => {
     let canRefresh;
-    const {lastRefresh} = this;
+    const { lastRefresh } = this;
     if (lastRefresh != null) {
       canRefresh =
         new Date().getTime() - lastRefresh.getTime() > MIN_REFRESH_TIME;
@@ -339,15 +345,15 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
   };
 
   showMascotDialog = () => {
-    this.setState({mascotDialogVisible: true});
+    this.setState({ mascotDialogVisible: true });
   };
 
   hideMascotDialog = () => {
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.voteShowMascot.key,
-      false,
+      false
     );
-    this.setState({mascotDialogVisible: false});
+    this.setState({ mascotDialogVisible: false });
   };
 
   isVoteStarted(): boolean {
@@ -412,9 +418,9 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   render() {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
-      <View style={{flex: 1}}>
+      <View style={GENERAL_STYLES.flex}>
         <AuthenticatedScreen<TeamResponseType | VoteDatesStringType>
           navigation={props.navigation}
           ref={this.authRef}

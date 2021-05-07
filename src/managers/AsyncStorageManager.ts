@@ -18,7 +18,7 @@
  */
 
 import AsyncStorage from '@react-native-community/async-storage';
-import {SERVICES_KEY} from './ServicesManager';
+import { SERVICES_KEY } from './ServicesManager';
 
 /**
  * Singleton used to manage preferences.
@@ -29,7 +29,7 @@ import {SERVICES_KEY} from './ServicesManager';
 export default class AsyncStorageManager {
   static instance: AsyncStorageManager | null = null;
 
-  static PREFERENCES: {[key: string]: {key: string; default: string}} = {
+  static PREFERENCES: { [key: string]: { key: string; default: string } } = {
     debugUnlocked: {
       key: 'debugUnlocked',
       default: '0',
@@ -130,7 +130,7 @@ export default class AsyncStorageManager {
     },
   };
 
-  private currentPreferences: {[key: string]: string};
+  private currentPreferences: { [key: string]: string };
 
   constructor() {
     this.currentPreferences = {};
@@ -155,7 +155,7 @@ export default class AsyncStorageManager {
    */
   static set(
     key: string,
-    value: number | string | boolean | object | Array<any>,
+    value: number | string | boolean | object | Array<any>
   ) {
     AsyncStorageManager.getInstance().setPreference(key, value);
   }
@@ -209,7 +209,7 @@ export default class AsyncStorageManager {
    * @return {Promise<void>}
    */
   async loadPreferences() {
-    return new Promise((resolve: () => void) => {
+    return new Promise((resolve: (val: void) => void) => {
       const prefKeys: Array<string> = [];
       // Get all available keys
       Object.keys(AsyncStorageManager.PREFERENCES).forEach((key: string) => {
@@ -240,7 +240,7 @@ export default class AsyncStorageManager {
    */
   setPreference(
     key: string,
-    value: number | string | boolean | object | Array<any>,
+    value: number | string | boolean | object | Array<any>
   ) {
     if (AsyncStorageManager.PREFERENCES[key] != null) {
       let convertedValue;

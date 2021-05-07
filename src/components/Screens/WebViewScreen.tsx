@@ -31,14 +31,15 @@ import {
   Linking,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  StyleSheet,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {withTheme} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {Collapsible} from 'react-navigation-collapsible';
+import { withTheme } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Collapsible } from 'react-navigation-collapsible';
 import withCollapsible from '../../utils/withCollapsible';
-import MaterialHeaderButtons, {Item} from '../Overrides/CustomHeaderButton';
-import {ERROR_TYPE} from '../../utils/WebData';
+import MaterialHeaderButtons, { Item } from '../Overrides/CustomHeaderButton';
+import { ERROR_TYPE } from '../../utils/WebData';
 import ErrorView from './ErrorView';
 import BasicLoadingScreen from './BasicLoadingScreen';
 
@@ -47,7 +48,7 @@ type PropsType = {
   theme: ReactNativePaper.Theme;
   url: string;
   collapsibleStack: Collapsible;
-  onMessage: (event: {nativeEvent: {data: string}}) => void;
+  onMessage: (event: { nativeEvent: { data: string } }) => void;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   customJS?: string;
   customPaddingFunction?: null | ((padding: number) => string);
@@ -55,6 +56,12 @@ type PropsType = {
 };
 
 const AnimatedWebView = Animated.createAnimatedComponent(WebView);
+
+const styles = StyleSheet.create({
+  overflow: {
+    marginHorizontal: 10,
+  },
+});
 
 /**
  * Class defining a webview screen.
@@ -68,7 +75,7 @@ class WebViewScreen extends React.PureComponent<PropsType> {
 
   currentUrl: string;
 
-  webviewRef: {current: null | WebView};
+  webviewRef: { current: null | WebView };
 
   canGoBack: boolean;
 
@@ -83,7 +90,7 @@ class WebViewScreen extends React.PureComponent<PropsType> {
    * Creates header buttons and listens to events after mounting
    */
   componentDidMount() {
-    const {props} = this;
+    const { props } = this;
     props.navigation.setOptions({
       headerRight: props.showAdvancedControls
         ? this.getAdvancedButtons
@@ -92,13 +99,13 @@ class WebViewScreen extends React.PureComponent<PropsType> {
     props.navigation.addListener('focus', () => {
       BackHandler.addEventListener(
         'hardwareBackPress',
-        this.onBackButtonPressAndroid,
+        this.onBackButtonPressAndroid
       );
     });
     props.navigation.addListener('blur', () => {
       BackHandler.removeEventListener(
         'hardwareBackPress',
-        this.onBackButtonPressAndroid,
+        this.onBackButtonPressAndroid
       );
     });
   }
@@ -145,7 +152,7 @@ class WebViewScreen extends React.PureComponent<PropsType> {
    * @returns {*}
    */
   getAdvancedButtons = () => {
-    const {props} = this;
+    const { props } = this;
     return (
       <MaterialHeaderButtons>
         <Item
@@ -154,14 +161,15 @@ class WebViewScreen extends React.PureComponent<PropsType> {
           onPress={this.onRefreshClicked}
         />
         <OverflowMenu
-          style={{marginHorizontal: 10}}
+          style={styles.overflow}
           OverflowIcon={
             <MaterialCommunityIcons
               name="dots-vertical"
               size={26}
               color={props.theme.colors.text}
             />
-          }>
+          }
+        >
           <HiddenItem
             title={i18n.t('general.goBack')}
             onPress={this.onGoBackClicked}
@@ -195,7 +203,7 @@ class WebViewScreen extends React.PureComponent<PropsType> {
    * @returns {string}
    */
   getJavascriptPadding(padding: number): string {
-    const {props} = this;
+    const { props } = this;
     const customPadding =
       props.customPaddingFunction != null
         ? props.customPaddingFunction(padding)
@@ -229,7 +237,7 @@ class WebViewScreen extends React.PureComponent<PropsType> {
   };
 
   onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const {onScroll} = this.props;
+    const { onScroll } = this.props;
     if (onScroll) {
       onScroll(event);
     }
@@ -247,12 +255,15 @@ class WebViewScreen extends React.PureComponent<PropsType> {
   };
 
   render() {
-    const {props} = this;
-    const {containerPaddingTop, onScrollWithListener} = props.collapsibleStack;
+    const { props } = this;
+    const {
+      containerPaddingTop,
+      onScrollWithListener,
+    } = props.collapsibleStack;
     return (
       <AnimatedWebView
         ref={this.webviewRef}
-        source={{uri: props.url}}
+        source={{ uri: props.url }}
         startInLoadingState
         injectedJavaScript={props.customJS}
         javaScriptEnabled

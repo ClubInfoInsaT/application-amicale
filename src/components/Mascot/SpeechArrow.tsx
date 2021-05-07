@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import {View, ViewStyle} from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
 type PropsType = {
   style?: ViewStyle;
@@ -26,20 +26,26 @@ type PropsType = {
   color: string;
 };
 
+const styles = StyleSheet.create({
+  arrow: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 0,
+    borderStyle: 'solid',
+    backgroundColor: 'transparent',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+  },
+});
+
 export default function SpeechArrow(props: PropsType) {
   return (
     <View style={props.style}>
       <View
         style={{
-          width: 0,
-          height: 0,
-          borderLeftWidth: 0,
+          ...styles.arrow,
           borderRightWidth: props.size,
           borderBottomWidth: props.size,
-          borderStyle: 'solid',
-          backgroundColor: 'transparent',
-          borderLeftColor: 'transparent',
-          borderRightColor: 'transparent',
           borderBottomColor: props.color,
         }}
       />

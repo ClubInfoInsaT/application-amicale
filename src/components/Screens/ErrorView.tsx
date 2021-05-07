@@ -18,18 +18,18 @@
  */
 
 import * as React from 'react';
-import {Button, Subheading, withTheme} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import { Button, Subheading, withTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {ERROR_TYPE} from '../../utils/WebData';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ERROR_TYPE } from '../../utils/WebData';
 
 type PropsType = {
   navigation?: StackNavigationProp<any>;
   theme: ReactNativePaper.Theme;
-  route?: {name: string};
+  route?: { name: string };
   onRefresh?: () => void;
   errorCode?: number;
   icon?: string;
@@ -84,13 +84,14 @@ class ErrorView extends React.PureComponent<PropsType> {
   }
 
   getRetryButton() {
-    const {props} = this;
+    const { props } = this;
     return (
       <Button
         mode="contained"
         icon="refresh"
         onPress={props.onRefresh}
-        style={styles.button}>
+        style={styles.button}
+      >
         {i18n.t('general.retry')}
       </Button>
     );
@@ -102,24 +103,25 @@ class ErrorView extends React.PureComponent<PropsType> {
         mode="contained"
         icon="login"
         onPress={this.goToLogin}
-        style={styles.button}>
+        style={styles.button}
+      >
         {i18n.t('screens.login.title')}
       </Button>
     );
   }
 
   goToLogin = () => {
-    const {props} = this;
+    const { props } = this;
     if (props.navigation) {
       props.navigation.navigate('login', {
         screen: 'login',
-        params: {nextScreen: props.route ? props.route.name : undefined},
+        params: { nextScreen: props.route ? props.route.name : undefined },
       });
     }
   };
 
   generateMessage() {
-    const {props} = this;
+    const { props } = this;
     this.showLoginButton = false;
     if (props.errorCode !== 0) {
       switch (props.errorCode) {
@@ -171,7 +173,7 @@ class ErrorView extends React.PureComponent<PropsType> {
   }
 
   render() {
-    const {props} = this;
+    const { props } = this;
     this.generateMessage();
     let button;
     if (this.showLoginButton) {
@@ -190,7 +192,8 @@ class ErrorView extends React.PureComponent<PropsType> {
         }}
         animation="zoomIn"
         duration={200}
-        useNativeDriver>
+        useNativeDriver
+      >
         <View style={styles.inner}>
           <View style={styles.iconContainer}>
             <MaterialCommunityIcons
@@ -204,7 +207,8 @@ class ErrorView extends React.PureComponent<PropsType> {
             style={{
               ...styles.subheading,
               color: props.theme.colors.textDisabled,
-            }}>
+            }}
+          >
             {this.message}
           </Subheading>
           {button}

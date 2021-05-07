@@ -18,17 +18,18 @@
  */
 
 import * as React from 'react';
-import {Button, Card, Text, TouchableRipple} from 'react-native-paper';
-import {Image, View} from 'react-native';
+import { Button, Card, Text, TouchableRipple } from 'react-native-paper';
+import { Image, StyleSheet, View } from 'react-native';
 import Autolink from 'react-native-autolink';
 import i18n from 'i18n-js';
-import type {FeedItemType} from '../../screens/Home/HomeScreen';
+import type { FeedItemType } from '../../screens/Home/HomeScreen';
 import NewsSourcesConstants, {
   AvailablePages,
 } from '../../constants/NewsSourcesConstants';
-import type {NewsSourceType} from '../../constants/NewsSourcesConstants';
+import type { NewsSourceType } from '../../constants/NewsSourcesConstants';
 import ImageGalleryButton from '../Media/ImageGalleryButton';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   item: FeedItemType;
@@ -46,6 +47,20 @@ function getFormattedDate(dateString: number): string {
   return date.toLocaleString();
 }
 
+const styles = StyleSheet.create({
+  image: {
+    width: 48,
+    height: 48,
+  },
+  button: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  action: {
+    marginLeft: 'auto',
+  },
+});
+
 /**
  * Component used to display a feed item
  */
@@ -58,7 +73,7 @@ function FeedItem(props: PropsType) {
     });
   };
 
-  const {item, height} = props;
+  const { item, height } = props;
   const image = item.image !== '' && item.image != null ? item.image : null;
   const pageSource: NewsSourceType =
     NewsSourcesConstants[item.page_id as AvailablePages];
@@ -76,31 +91,23 @@ function FeedItem(props: PropsType) {
       style={{
         margin: cardMargin,
         height: cardHeight,
-      }}>
-      <TouchableRipple style={{flex: 1}} onPress={onPress}>
+      }}
+    >
+      <TouchableRipple style={GENERAL_STYLES.flex} onPress={onPress}>
         <View>
           <Card.Title
             title={pageSource.name}
             subtitle={getFormattedDate(item.time)}
-            left={() => (
-              <Image
-                source={pageSource.icon}
-                style={{
-                  width: 48,
-                  height: 48,
-                }}
-              />
-            )}
-            style={{height: titleHeight}}
+            left={() => <Image source={pageSource.icon} style={styles.image} />}
+            style={{ height: titleHeight }}
           />
           {image != null ? (
             <ImageGalleryButton
-              images={[{url: image}]}
+              images={[{ url: image }]}
               style={{
+                ...styles.button,
                 width: imageSize,
                 height: imageSize,
-                marginLeft: 'auto',
-                marginRight: 'auto',
               }}
             />
           ) : null}
@@ -110,12 +117,12 @@ function FeedItem(props: PropsType) {
                 text={item.message}
                 hashtag="facebook"
                 component={Text}
-                style={{height: textHeight}}
+                style={{ height: textHeight }}
               />
             ) : null}
           </Card.Content>
-          <Card.Actions style={{height: actionsHeight}}>
-            <Button onPress={onPress} icon="plus" style={{marginLeft: 'auto'}}>
+          <Card.Actions style={{ height: actionsHeight }}>
+            <Button onPress={onPress} icon="plus" style={styles.action}>
               {i18n.t('screens.home.dashboard.seeMore')}
             </Button>
           </Card.Actions>

@@ -63,7 +63,7 @@ export function stringToDate(dateString: string): Date | null {
     date.setFullYear(
       parseInt(dateArray[0], 10),
       parseInt(dateArray[1], 10) - 1, // Month range from 0 to 11
-      parseInt(dateArray[2], 10),
+      parseInt(dateArray[2], 10)
     );
     date.setHours(parseInt(timeArray[0], 10), parseInt(timeArray[1], 10), 0, 0);
   } else {
@@ -179,11 +179,11 @@ export function isDescriptionEmpty(description?: string): boolean {
  * @return {Object}
  */
 export function generateEmptyCalendar(
-  numberOfMonths: number,
-): {[key: string]: Array<PlanningEventType>} {
+  numberOfMonths: number
+): { [key: string]: Array<PlanningEventType> } {
   const end = new Date(Date.now());
   end.setMonth(end.getMonth() + numberOfMonths);
-  const daysOfYear: {[key: string]: Array<PlanningEventType>} = {};
+  const daysOfYear: { [key: string]: Array<PlanningEventType> } = {};
   for (let d = new Date(Date.now()); d <= end; d.setDate(d.getDate() + 1)) {
     const dateString = getDateOnlyString(dateToString(new Date(d), false));
     if (dateString !== null) {
@@ -203,7 +203,7 @@ export function generateEmptyCalendar(
  */
 export function pushEventInOrder(
   eventArray: Array<PlanningEventType>,
-  event: PlanningEventType,
+  event: PlanningEventType
 ) {
   if (eventArray.length === 0) {
     eventArray.push(event);
@@ -233,8 +233,8 @@ export function pushEventInOrder(
  */
 export function generateEventAgenda(
   eventList: Array<PlanningEventType>,
-  numberOfMonths: number,
-): {[key: string]: Array<PlanningEventType>} {
+  numberOfMonths: number
+): { [key: string]: Array<PlanningEventType> } {
   const agendaItems = generateEmptyCalendar(numberOfMonths);
   for (let i = 0; i < eventList.length; i += 1) {
     const dateString = getDateOnlyString(eventList[i].date_begin);

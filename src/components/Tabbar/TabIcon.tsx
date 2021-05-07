@@ -18,10 +18,11 @@
  */
 
 import * as React from 'react';
-import {View} from 'react-native';
-import {TouchableRipple, withTheme} from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { TouchableRipple, withTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   focused: boolean;
@@ -33,6 +34,19 @@ type PropsType = {
   theme: ReactNativePaper.Theme;
   extraData: null | boolean | number | string;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  text: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    fontSize: 10,
+  },
+});
 
 /**
  * Abstraction layer for Agenda component, using custom configuration
@@ -78,7 +92,7 @@ class TabIcon extends React.Component<PropsType> {
   }
 
   shouldComponentUpdate(nextProps: PropsType): boolean {
-    const {props} = this;
+    const { props } = this;
     return (
       nextProps.focused !== props.focused ||
       nextProps.theme.dark !== props.theme.dark ||
@@ -87,32 +101,27 @@ class TabIcon extends React.Component<PropsType> {
   }
 
   render() {
-    const {props} = this;
+    const { props } = this;
     return (
       <TouchableRipple
         onPress={props.onPress}
         onLongPress={props.onLongPress}
         rippleColor={props.theme.colors.primary}
-        borderless
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          borderRadius: 10,
-        }}>
+        borderless={true}
+        style={styles.container}
+      >
         <View>
           <Animatable.View
             duration={200}
             easing="ease-out"
             animation={props.focused ? 'focusIn' : 'focusOut'}
-            useNativeDriver>
+            useNativeDriver
+          >
             <MaterialCommunityIcons
               name={props.icon}
               color={props.color}
               size={26}
-              style={{
-                marginLeft: 'auto',
-                marginRight: 'auto',
-              }}
+              style={GENERAL_STYLES.centerHorizontal}
             />
           </Animatable.View>
           <Animatable.Text
@@ -120,10 +129,9 @@ class TabIcon extends React.Component<PropsType> {
             useNativeDriver
             style={{
               color: props.color,
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              fontSize: 10,
-            }}>
+              ...styles.text,
+            }}
+          >
             {props.label}
           </Animatable.Text>
         </View>

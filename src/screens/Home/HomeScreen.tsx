@@ -18,13 +18,18 @@
  */
 
 import * as React from 'react';
-import {FlatList, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import {
+  FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleSheet,
+} from 'react-native';
 import i18n from 'i18n-js';
-import {ActivityIndicator, Headline, withTheme} from 'react-native-paper';
-import {CommonActions} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { ActivityIndicator, Headline, withTheme } from 'react-native-paper';
+import { CommonActions } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
-import {View} from 'react-native-animatable';
+import { View } from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashboardItem from '../../components/Home/EventDashboardItem';
 import WebSectionList from '../../components/Screens/WebSectionList';
@@ -39,12 +44,13 @@ import AnimatedFAB from '../../components/Animations/AnimatedFAB';
 import ConnectionManager from '../../managers/ConnectionManager';
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
-import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
+import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import DashboardManager from '../../managers/DashboardManager';
-import type {ServiceItemType} from '../../managers/ServicesManager';
-import {getDisplayEvent, getFutureEvents} from '../../utils/Home';
-import type {PlanningEventType} from '../../utils/Planning';
+import type { ServiceItemType } from '../../managers/ServicesManager';
+import { getDisplayEvent, getFutureEvents } from '../../utils/Home';
+import type { PlanningEventType } from '../../utils/Planning';
+import GENERAL_STYLES from '../../constants/Styles';
 // import DATA from "../dashboard_data.json";
 
 const DATA_URL =
@@ -67,7 +73,7 @@ export type FeedItemType = {
 };
 
 export type FullDashboardType = {
-  today_menu: Array<{[key: string]: object}>;
+  today_menu: Array<{ [key: string]: object }>;
   proximo_articles: number;
   available_dryers: number;
   available_washers: number;
@@ -75,7 +81,7 @@ export type FullDashboardType = {
   available_tutorials: number;
 };
 
-type RawNewsFeedType = {[key: string]: Array<FeedItemType>};
+type RawNewsFeedType = { [key: string]: Array<FeedItemType> };
 
 type RawDashboardType = {
   news_feed: RawNewsFeedType;
@@ -84,13 +90,42 @@ type RawDashboardType = {
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
-  route: {params: {nextScreen: string; data: object}};
+  route: { params: { nextScreen: string; data: object } };
   theme: ReactNativePaper.Theme;
 };
 
 type StateType = {
   dialogVisible: boolean;
 };
+
+const styles = StyleSheet.create({
+  dashboardRow: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  sectionHeader: {
+    textAlign: 'center',
+    marginTop: 50,
+    marginBottom: 10,
+  },
+  sectionHeaderEmpty: {
+    textAlign: 'center',
+    marginTop: 50,
+    marginBottom: 10,
+    marginLeft: 20,
+    marginRight: 20,
+  },
+  activityIndicator: {
+    marginTop: 10,
+  },
+  content: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+});
 
 /**
  * Class defining the app's home screen
@@ -113,7 +148,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
 
   isLoggedIn: boolean | null;
 
-  fabRef: {current: null | AnimatedFAB};
+  fabRef: { current: null | AnimatedFAB };
 
   currentNewFeed: Array<FeedItemType>;
 
@@ -137,7 +172,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
   }
 
   componentDidMount() {
-    const {props} = this;
+    const { props } = this;
     props.navigation.addListener('focus', this.onScreenFocus);
     // Handle link open when home is focused
     props.navigation.addListener('state', this.handleNavigationParams);
@@ -147,7 +182,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * Updates login state and navigation parameters on screen focus
    */
   onScreenFocus = () => {
-    const {props} = this;
+    const { props } = this;
     if (ConnectionManager.getInstance().isLoggedIn() !== this.isLoggedIn) {
       this.isLoggedIn = ConnectionManager.getInstance().isLoggedIn();
       props.navigation.setOptions({
@@ -164,9 +199,9 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getHeaderButton = () => {
-    const {props} = this;
+    const { props } = this;
     let onPressLog = (): void =>
-      props.navigation.navigate('login', {nextScreen: 'profile'});
+      props.navigation.navigate('login', { nextScreen: 'profile' });
     let logIcon = 'login';
     let logColor = props.theme.colors.primary;
     if (this.isLoggedIn) {
@@ -211,7 +246,8 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     return (
       <DashboardItem
         eventNumber={futureEvents.length}
-        clickAction={this.onEventContainerClick}>
+        clickAction={this.onEventContainerClick}
+      >
         <PreviewEventDashboardItem
           event={displayEvent}
           clickAction={this.onEventContainerClick}
@@ -232,12 +268,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
         data={content}
         renderItem={this.getDashboardRowRenderItem}
         horizontal
-        contentContainerStyle={{
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          marginTop: 10,
-          marginBottom: 10,
-        }}
+        contentContainerStyle={styles.dashboardRow}
       />
     );
   }
@@ -248,7 +279,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param item
    * @returns {*}
    */
-  getDashboardRowRenderItem = ({item}: {item: ServiceItemType | null}) => {
+  getDashboardRowRenderItem = ({ item }: { item: ServiceItemType | null }) => {
     if (item != null) {
       return (
         <SmallDashboardItem
@@ -282,7 +313,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param section The current section
    * @return {*}
    */
-  getRenderItem = ({item}: {item: FeedItemType}) => this.getFeedItem(item);
+  getRenderItem = ({ item }: { item: FeedItemType }) => this.getFeedItem(item);
 
   getRenderSectionHeader = (
     data: {
@@ -291,49 +322,32 @@ class HomeScreen extends React.Component<PropsType, StateType> {
         title: string;
       };
     },
-    isLoading: boolean,
+    isLoading: boolean
   ) => {
-    const {props} = this;
+    const { props } = this;
     if (data.section.data.length > 0) {
       return (
-        <Headline
-          style={{
-            textAlign: 'center',
-            marginTop: 50,
-            marginBottom: 10,
-          }}>
-          {data.section.title}
-        </Headline>
+        <Headline style={styles.sectionHeader}>{data.section.title}</Headline>
       );
     }
     return (
       <View>
         <Headline
           style={{
-            textAlign: 'center',
-            marginTop: 50,
-            marginBottom: 10,
-            marginLeft: 20,
-            marginRight: 20,
+            ...styles.sectionHeaderEmpty,
             color: props.theme.colors.textDisabled,
-          }}>
+          }}
+        >
           {data.section.title}
         </Headline>
         {isLoading ? (
-          <ActivityIndicator
-            style={{
-              marginTop: 10,
-            }}
-          />
+          <ActivityIndicator style={styles.activityIndicator} />
         ) : (
           <MaterialCommunityIcons
             name="access-point-network-off"
             size={100}
             color={props.theme.colors.textDisabled}
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
+            style={GENERAL_STYLES.center}
           />
         )}
       </View>
@@ -350,7 +364,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
         <ActionsDashBoardItem />
         {this.getDashboardRow(this.dashboardManager.getCurrentDashboard())}
         {this.getDashboardEvent(
-          dashboard == null ? [] : dashboard.today_events,
+          dashboard == null ? [] : dashboard.today_events
         )}
       </Animatable.View>
     );
@@ -360,25 +374,27 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * Navigates to the a new screen if navigation parameters specify one
    */
   handleNavigationParams = () => {
-    const {props} = this;
+    const { props } = this;
     if (props.route.params != null) {
       if (props.route.params.nextScreen != null) {
         props.navigation.navigate(
           props.route.params.nextScreen,
-          props.route.params.data,
+          props.route.params.data
         );
         // reset params to prevent infinite loop
-        props.navigation.dispatch(CommonActions.setParams({nextScreen: null}));
+        props.navigation.dispatch(
+          CommonActions.setParams({ nextScreen: null })
+        );
       }
     }
   };
 
-  showDisconnectDialog = (): void => this.setState({dialogVisible: true});
+  showDisconnectDialog = (): void => this.setState({ dialogVisible: true });
 
-  hideDisconnectDialog = (): void => this.setState({dialogVisible: false});
+  hideDisconnectDialog = (): void => this.setState({ dialogVisible: false });
 
   openScanner = () => {
-    const {props} = this;
+    const { props } = this;
     props.navigation.navigate('scanner');
   };
 
@@ -391,7 +407,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    */
   createDataset = (
     fetchedData: RawDashboardType | null,
-    isLoading: boolean,
+    isLoading: boolean
   ): Array<{
     title: string;
     data: [] | Array<FeedItemType>;
@@ -401,7 +417,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     if (fetchedData != null) {
       if (fetchedData.news_feed != null) {
         this.currentNewFeed = HomeScreen.generateNewsFeed(
-          fetchedData.news_feed,
+          fetchedData.news_feed
         );
       }
       if (fetchedData.dashboard != null) {
@@ -429,7 +445,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
   };
 
   onEventContainerClick = () => {
-    const {props} = this;
+    const { props } = this;
     props.navigation.navigate('planning');
   };
 
@@ -444,22 +460,17 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * This hides the banner and takes the user to the login page.
    */
   onLogin = () => {
-    const {props} = this;
+    const { props } = this;
     props.navigation.navigate('login', {
       nextScreen: 'profile',
     });
   };
 
   render() {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
-      <View style={{flex: 1}}>
-        <View
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}>
+      <View style={GENERAL_STYLES.flex}>
+        <View style={styles.content}>
           <WebSectionList
             navigation={props.navigation}
             createDataset={this.createDataset}

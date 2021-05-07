@@ -17,11 +17,9 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as Keychain from 'react-native-keychain';
-import type {ApiDataLoginType} from '../utils/WebData';
-import {apiRequest, ERROR_TYPE} from '../utils/WebData';
+import type { ApiDataLoginType } from '../utils/WebData';
+import { apiRequest, ERROR_TYPE } from '../utils/WebData';
 
 /**
  * champ: error
@@ -84,7 +82,7 @@ export default class ConnectionManager {
             }
             resolve();
           })
-          .catch(resolve);
+          .catch(() => resolve());
       }
     });
   }
@@ -159,7 +157,7 @@ export default class ConnectionManager {
             }
           })
           .catch((error: number): void => reject(error));
-      },
+      }
     );
   }
 
@@ -172,7 +170,7 @@ export default class ConnectionManager {
    */
   async authenticatedRequest<T>(
     path: string,
-    params: {[key: string]: any},
+    params: { [key: string]: any }
   ): Promise<T> {
     return new Promise(
       (resolve: (response: T) => void, reject: (error: number) => void) => {
@@ -187,7 +185,7 @@ export default class ConnectionManager {
         } else {
           reject(ERROR_TYPE.TOKEN_RETRIEVE);
         }
-      },
+      }
     );
   }
 }

@@ -26,12 +26,13 @@ import {
   Title,
   useTheme,
 } from 'react-native-paper';
-import {View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
-import {getRelativeDateString} from '../../../utils/EquipmentBooking';
+import { getRelativeDateString } from '../../../utils/EquipmentBooking';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
-import {StackScreenProps} from '@react-navigation/stack';
-import {MainStackParamsList} from '../../../navigation/MainNavigator';
+import { StackScreenProps } from '@react-navigation/stack';
+import { MainStackParamsList } from '../../../navigation/MainNavigator';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type EquipmentConfirmScreenNavigationProp = StackScreenProps<
   MainStackParamsList,
@@ -39,6 +40,32 @@ type EquipmentConfirmScreenNavigationProp = StackScreenProps<
 >;
 
 type Props = EquipmentConfirmScreenNavigationProp;
+
+const styles = StyleSheet.create({
+  card: {
+    margin: 5,
+  },
+  titleContainer: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  title: {
+    textAlign: 'center',
+  },
+  caption: {
+    textAlign: 'center',
+    lineHeight: 35,
+    marginLeft: 10,
+  },
+  subtitle: {
+    textAlign: 'center',
+  },
+  text: {
+    textAlign: 'center',
+  },
+});
 
 function EquipmentConfirmScreen(props: Props) {
   const theme = useTheme();
@@ -63,31 +90,20 @@ function EquipmentConfirmScreen(props: Props) {
     }
     return (
       <CollapsibleScrollView>
-        <Card style={{margin: 5}}>
+        <Card style={styles.card}>
           <Card.Content>
-            <View style={{flex: 1}}>
-              <View
-                style={{
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                }}>
-                <Headline style={{textAlign: 'center'}}>{item.name}</Headline>
-                <Caption
-                  style={{
-                    textAlign: 'center',
-                    lineHeight: 35,
-                    marginLeft: 10,
-                  }}>
-                  ({i18n.t('screens.equipment.bail', {cost: item.caution})})
+            <View style={GENERAL_STYLES.flex}>
+              <View style={styles.titleContainer}>
+                <Headline style={styles.title}>{item.name}</Headline>
+                <Caption style={styles.caption}>
+                  ({i18n.t('screens.equipment.bail', { cost: item.caution })})
                 </Caption>
               </View>
             </View>
-            <Title style={{color: theme.colors.success, textAlign: 'center'}}>
+            <Title style={{ color: theme.colors.success, ...styles.subtitle }}>
               {buttonText}
             </Title>
-            <Paragraph style={{textAlign: 'center'}}>
+            <Paragraph style={styles.text}>
               {i18n.t('screens.equipment.bookingConfirmedMessage')}
             </Paragraph>
           </Card.Content>

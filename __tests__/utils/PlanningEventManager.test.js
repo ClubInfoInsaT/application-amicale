@@ -1,6 +1,3 @@
-/* eslint-disable */
-
-import React from 'react';
 import * as Planning from '../../src/utils/Planning';
 
 test('isDescriptionEmpty', () => {
@@ -24,7 +21,7 @@ test('isEventDateStringFormatValid', () => {
   expect(Planning.isEventDateStringFormatValid('3214-64-12 01:16')).toBeTrue();
 
   expect(
-    Planning.isEventDateStringFormatValid('3214-64-12 01:16:00'),
+    Planning.isEventDateStringFormatValid('3214-64-12 01:16:00')
   ).toBeFalse();
   expect(Planning.isEventDateStringFormatValid('3214-64-12 1:16')).toBeFalse();
   expect(Planning.isEventDateStringFormatValid('3214-f4-12 01:16')).toBeFalse();
@@ -32,7 +29,7 @@ test('isEventDateStringFormatValid', () => {
   expect(Planning.isEventDateStringFormatValid('2020-03-21')).toBeFalse();
   expect(Planning.isEventDateStringFormatValid('2020-03-21 truc')).toBeFalse();
   expect(
-    Planning.isEventDateStringFormatValid('3214-64-12 1:16:65'),
+    Planning.isEventDateStringFormatValid('3214-64-12 1:16:65')
   ).toBeFalse();
   expect(Planning.isEventDateStringFormatValid('garbage')).toBeFalse();
   expect(Planning.isEventDateStringFormatValid('')).toBeFalse();
@@ -65,17 +62,17 @@ test('getFormattedEventTime', () => {
   expect(Planning.getFormattedEventTime(undefined, undefined)).toBe('/ - /');
   expect(Planning.getFormattedEventTime('20:30', '23:00')).toBe('/ - /');
   expect(Planning.getFormattedEventTime('2020-03-30', '2020-03-31')).toBe(
-    '/ - /',
+    '/ - /'
   );
 
   expect(
-    Planning.getFormattedEventTime('2020-03-21 09:00', '2020-03-21 09:00'),
+    Planning.getFormattedEventTime('2020-03-21 09:00', '2020-03-21 09:00')
   ).toBe('09:00');
   expect(
-    Planning.getFormattedEventTime('2020-03-21 09:00', '2020-03-22 17:00'),
+    Planning.getFormattedEventTime('2020-03-21 09:00', '2020-03-22 17:00')
   ).toBe('09:00 - 23:59');
   expect(
-    Planning.getFormattedEventTime('2020-03-30 20:30', '2020-03-30 23:00'),
+    Planning.getFormattedEventTime('2020-03-30 20:30', '2020-03-30 23:00')
   ).toBe('20:30 - 23:00');
 });
 
@@ -90,38 +87,38 @@ test('getDateOnlyString', () => {
 
 test('isEventBefore', () => {
   expect(
-    Planning.isEventBefore('2020-03-21 09:00', '2020-03-21 10:00'),
+    Planning.isEventBefore('2020-03-21 09:00', '2020-03-21 10:00')
   ).toBeTrue();
   expect(
-    Planning.isEventBefore('2020-03-21 10:00', '2020-03-21 10:15'),
+    Planning.isEventBefore('2020-03-21 10:00', '2020-03-21 10:15')
   ).toBeTrue();
   expect(
-    Planning.isEventBefore('2020-03-21 10:15', '2021-03-21 10:15'),
+    Planning.isEventBefore('2020-03-21 10:15', '2021-03-21 10:15')
   ).toBeTrue();
   expect(
-    Planning.isEventBefore('2020-03-21 10:15', '2020-05-21 10:15'),
+    Planning.isEventBefore('2020-03-21 10:15', '2020-05-21 10:15')
   ).toBeTrue();
   expect(
-    Planning.isEventBefore('2020-03-21 10:15', '2020-03-30 10:15'),
+    Planning.isEventBefore('2020-03-21 10:15', '2020-03-30 10:15')
   ).toBeTrue();
 
   expect(
-    Planning.isEventBefore('2020-03-21 10:00', '2020-03-21 10:00'),
+    Planning.isEventBefore('2020-03-21 10:00', '2020-03-21 10:00')
   ).toBeFalse();
   expect(
-    Planning.isEventBefore('2020-03-21 10:00', '2020-03-21 09:00'),
+    Planning.isEventBefore('2020-03-21 10:00', '2020-03-21 09:00')
   ).toBeFalse();
   expect(
-    Planning.isEventBefore('2020-03-21 10:15', '2020-03-21 10:00'),
+    Planning.isEventBefore('2020-03-21 10:15', '2020-03-21 10:00')
   ).toBeFalse();
   expect(
-    Planning.isEventBefore('2021-03-21 10:15', '2020-03-21 10:15'),
+    Planning.isEventBefore('2021-03-21 10:15', '2020-03-21 10:15')
   ).toBeFalse();
   expect(
-    Planning.isEventBefore('2020-05-21 10:15', '2020-03-21 10:15'),
+    Planning.isEventBefore('2020-05-21 10:15', '2020-03-21 10:15')
   ).toBeFalse();
   expect(
-    Planning.isEventBefore('2020-03-30 10:15', '2020-03-21 10:15'),
+    Planning.isEventBefore('2020-03-30 10:15', '2020-03-21 10:15')
   ).toBeFalse();
 
   expect(Planning.isEventBefore('garbage', '2020-03-21 10:15')).toBeFalse();
@@ -162,25 +159,25 @@ test('generateEmptyCalendar', () => {
 
 test('pushEventInOrder', () => {
   let eventArray = [];
-  let event1 = {date_begin: '2020-01-14 09:15'};
+  let event1 = { date_begin: '2020-01-14 09:15' };
   Planning.pushEventInOrder(eventArray, event1);
   expect(eventArray.length).toBe(1);
   expect(eventArray[0]).toBe(event1);
 
-  let event2 = {date_begin: '2020-01-14 10:15'};
+  let event2 = { date_begin: '2020-01-14 10:15' };
   Planning.pushEventInOrder(eventArray, event2);
   expect(eventArray.length).toBe(2);
   expect(eventArray[0]).toBe(event1);
   expect(eventArray[1]).toBe(event2);
 
-  let event3 = {date_begin: '2020-01-14 10:15', title: 'garbage'};
+  let event3 = { date_begin: '2020-01-14 10:15', title: 'garbage' };
   Planning.pushEventInOrder(eventArray, event3);
   expect(eventArray.length).toBe(3);
   expect(eventArray[0]).toBe(event1);
   expect(eventArray[1]).toBe(event2);
   expect(eventArray[2]).toBe(event3);
 
-  let event4 = {date_begin: '2020-01-13 09:00'};
+  let event4 = { date_begin: '2020-01-13 09:00' };
   Planning.pushEventInOrder(eventArray, event4);
   expect(eventArray.length).toBe(4);
   expect(eventArray[0]).toBe(event4);
@@ -194,11 +191,11 @@ test('generateEventAgenda', () => {
     .spyOn(Date, 'now')
     .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
   let eventList = [
-    {date_begin: '2020-01-14 09:15'},
-    {date_begin: '2020-02-01 09:15'},
-    {date_begin: '2020-01-15 09:15'},
-    {date_begin: '2020-02-01 09:30'},
-    {date_begin: '2020-02-01 08:30'},
+    { date_begin: '2020-01-14 09:15' },
+    { date_begin: '2020-02-01 09:15' },
+    { date_begin: '2020-01-15 09:15' },
+    { date_begin: '2020-02-01 09:30' },
+    { date_begin: '2020-02-01 08:30' },
   ];
   const calendar = Planning.generateEventAgenda(eventList, 2);
   expect(calendar['2020-01-14'].length).toBe(1);

@@ -18,19 +18,29 @@
  */
 
 import * as React from 'react';
-import {useCollapsibleStack} from 'react-navigation-collapsible';
+import { useCollapsibleStack } from 'react-navigation-collapsible';
 import CustomTabBar from '../Tabbar/CustomTabBar';
-import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleSheet,
+} from 'react-native';
 
-export interface CollapsibleComponentPropsType {
+export type CollapsibleComponentPropsType = {
   children?: React.ReactNode;
   hasTab?: boolean;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-}
+};
 
-interface PropsType extends CollapsibleComponentPropsType {
+type PropsType = CollapsibleComponentPropsType & {
   component: React.ComponentType<any>;
-}
+};
+
+const styles = StyleSheet.create({
+  main: {
+    minHeight: '100%',
+  },
+});
 
 function CollapsibleComponent(props: PropsType) {
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -44,17 +54,18 @@ function CollapsibleComponent(props: PropsType) {
     scrollIndicatorInsetTop,
     onScrollWithListener,
   } = useCollapsibleStack();
-
+  const paddingBottom = props.hasTab ? CustomTabBar.TAB_BAR_HEIGHT : 0;
   return (
     <Comp
       {...props}
       onScroll={onScrollWithListener(onScroll)}
       contentContainerStyle={{
         paddingTop: containerPaddingTop,
-        paddingBottom: props.hasTab ? CustomTabBar.TAB_BAR_HEIGHT : 0,
-        minHeight: '100%',
+        paddingBottom: paddingBottom,
+        ...styles.main,
       }}
-      scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}>
+      scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
+    >
       {props.children}
     </Comp>
   );

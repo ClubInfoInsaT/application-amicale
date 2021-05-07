@@ -18,10 +18,10 @@
  */
 
 import i18n from 'i18n-js';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import AvailableWebsites from '../constants/AvailableWebsites';
 import ConnectionManager from './ConnectionManager';
-import type {FullDashboardType} from '../screens/Home/HomeScreen';
+import type { FullDashboardType } from '../screens/Home/HomeScreen';
 import getStrippedServicesList from '../utils/Services';
 
 // AMICALE
@@ -337,7 +337,7 @@ export default class ServicesManager {
     if (ConnectionManager.getInstance().isLoggedIn()) {
       this.navigation.navigate(route);
     } else {
-      this.navigation.navigate('login', {nextScreen: route});
+      this.navigation.navigate('login', { nextScreen: route });
     }
   }
 

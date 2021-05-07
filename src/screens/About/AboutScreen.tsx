@@ -18,14 +18,22 @@
  */
 
 import * as React from 'react';
-import {FlatList, Linking, Platform, Image, View} from 'react-native';
+import {
+  FlatList,
+  Linking,
+  Platform,
+  Image,
+  View,
+  StyleSheet,
+} from 'react-native';
 import i18n from 'i18n-js';
-import {Avatar, Card, List} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { Avatar, Card, List } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
 import packageJson from '../../../package.json';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import OptionsDialog from '../../components/Dialogs/OptionsDialog';
-import type {OptionsDialogButtonType} from '../../components/Dialogs/OptionsDialog';
+import type { OptionsDialogButtonType } from '../../components/Dialogs/OptionsDialog';
+import GENERAL_STYLES from '../../constants/Styles';
 
 const APP_LOGO = require('../../../assets/android.icon.round.png');
 
@@ -68,6 +76,15 @@ type StateType = {
   dialogMessage: string;
   dialogButtons: Array<OptionsDialogButtonType>;
 };
+
+const styles = StyleSheet.create({
+  card: {
+    marginBottom: 10,
+  },
+  list: {
+    padding: 5,
+  },
+});
 
 /**
  * Opens a link in the device's browser
@@ -171,7 +188,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
     },
     {
       onPressCallback: () => {
-        const {navigation} = this.props;
+        const { navigation } = this.props;
         navigation.navigate('feedback');
       },
       icon: 'bug',
@@ -228,7 +245,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
     },
     {
       onPressCallback: () => {
-        const {navigation} = this.props;
+        const { navigation } = this.props;
         navigation.navigate('dependencies');
       },
       icon: 'developer-board',
@@ -267,7 +284,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
       ...this.getMemberData(this.majorContributors),
       {
         onPressCallback: () => {
-          const {navigation} = this.props;
+          const { navigation } = this.props;
           navigation.navigate('feedback');
         },
         icon: 'hand-pointing-right',
@@ -306,7 +323,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
         onPress: this.onDialogDismiss,
       },
     ];
-    const {linkedin, trollLink, mail} = user;
+    const { linkedin, trollLink, mail } = user;
     if (linkedin != null) {
       dialogBtn.push({
         title: '',
@@ -348,14 +365,14 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    */
   getAppCard() {
     return (
-      <Card style={{marginBottom: 10}}>
+      <Card style={styles.card}>
         <Card.Title
           title="Campus"
           subtitle={packageJson.version}
           left={(iconProps) => (
             <Image
               source={APP_LOGO}
-              style={{width: iconProps.size, height: iconProps.size}}
+              style={{ width: iconProps.size, height: iconProps.size }}
             />
           )}
         />
@@ -377,7 +394,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    */
   getTeamCard() {
     return (
-      <Card style={{marginBottom: 10}}>
+      <Card style={styles.card}>
         <Card.Title
           title={i18n.t('screens.about.team')}
           left={(iconProps) => (
@@ -402,7 +419,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    */
   getThanksCard() {
     return (
-      <Card style={{marginBottom: 10}}>
+      <Card style={styles.card}>
         <Card.Title
           title={i18n.t('screens.about.thanks')}
           left={(iconProps) => (
@@ -427,7 +444,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    */
   getTechnoCard() {
     return (
-      <Card style={{marginBottom: 10}}>
+      <Card style={styles.card}>
         <Card.Title
           title={i18n.t('screens.about.technologies')}
           left={(iconProps) => (
@@ -478,7 +495,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
         marginRight: number;
         marginVertical?: number;
       };
-    },
+    }
   ) {
     return (
       <List.Icon color={props.color} style={props.style} icon={item.icon} />
@@ -490,7 +507,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getCardItem = ({item}: {item: ListItemType}) => {
+  getCardItem = ({ item }: { item: ListItemType }) => {
     const getItemIcon = (props: {
       color: string;
       style?: {
@@ -523,7 +540,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    * @param item The item to show
    * @return {*}
    */
-  getMainCard = ({item}: {item: {id: string}}) => {
+  getMainCard = ({ item }: { item: { id: string } }) => {
     switch (item.id) {
       case 'app':
         return this.getAppCard();
@@ -539,7 +556,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   };
 
   onDialogDismiss = () => {
-    this.setState({dialogVisible: false});
+    this.setState({ dialogVisible: false });
   };
 
   /**
@@ -551,14 +568,11 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   keyExtractor = (item: ListItemType): string => item.icon;
 
   render() {
-    const {state} = this;
+    const { state } = this;
     return (
-      <View
-        style={{
-          height: '100%',
-        }}>
+      <View style={GENERAL_STYLES.flex}>
         <CollapsibleFlatList
-          style={{padding: 5}}
+          style={styles.list}
           data={this.dataOrder}
           renderItem={this.getMainCard}
         />

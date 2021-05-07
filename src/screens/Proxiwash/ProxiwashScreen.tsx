@@ -18,11 +18,11 @@
  */
 
 import * as React from 'react';
-import {Alert, View} from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
-import {Avatar, Button, Card, Text, withTheme} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {Modalize} from 'react-native-modalize';
+import { Avatar, Button, Card, Text, withTheme } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Modalize } from 'react-native-modalize';
 import WebSectionList from '../../components/Screens/WebSectionList';
 import * as Notifications from '../../utils/Notifications';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
@@ -41,10 +41,11 @@ import {
   getMachineEndDate,
   isMachineWatched,
 } from '../../utils/Proxiwash';
-import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
+import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
-import type {SectionListDataType} from '../../components/Screens/WebSectionList';
-import type {LaundromatType} from './ProxiwashAboutScreen';
+import type { SectionListDataType } from '../../components/Screens/WebSectionList';
+import type { LaundromatType } from './ProxiwashAboutScreen';
+import GENERAL_STYLES from '../../constants/Styles';
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
@@ -71,6 +72,21 @@ type StateType = {
   selectedWash: string;
 };
 
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    padding: 20,
+  },
+  icon: {
+    backgroundColor: 'transparent',
+  },
+  container: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+});
+
 /**
  * Class defining the app's proxiwash screen. This screen shows information about washing machines and
  * dryers, taken from a scrapper reading proxiwash website
@@ -82,15 +98,15 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   static showNotificationsDisabledWarning() {
     Alert.alert(
       i18n.t('screens.proxiwash.modal.notificationErrorTitle'),
-      i18n.t('screens.proxiwash.modal.notificationErrorDescription'),
+      i18n.t('screens.proxiwash.modal.notificationErrorDescription')
     );
   }
 
-  modalStateStrings: {[key in MachineStates]: string} = {
+  modalStateStrings: { [key in MachineStates]: string } = {
     [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.modal.ready'),
     [MachineStates.RUNNING]: i18n.t('screens.proxiwash.modal.running'),
     [MachineStates.RUNNING_NOT_STARTED]: i18n.t(
-      'screens.proxiwash.modal.runningNotStarted',
+      'screens.proxiwash.modal.runningNotStarted'
     ),
     [MachineStates.FINISHED]: i18n.t('screens.proxiwash.modal.finished'),
     [MachineStates.UNAVAILABLE]: i18n.t('screens.proxiwash.modal.broken'),
@@ -111,14 +127,14 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.modalRef = null;
-    this.fetchedData = {dryers: [], washers: []};
+    this.fetchedData = { dryers: [], washers: [] };
     this.state = {
       modalCurrentDisplayItem: null,
       machinesWatched: AsyncStorageManager.getObject(
-        AsyncStorageManager.PREFERENCES.proxiwashWatchedMachines.key,
+        AsyncStorageManager.PREFERENCES.proxiwashWatchedMachines.key
       ),
       selectedWash: AsyncStorageManager.getString(
-        AsyncStorageManager.PREFERENCES.selectedWash.key,
+        AsyncStorageManager.PREFERENCES.selectedWash.key
       ),
     };
   }
@@ -127,7 +143,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * Setup notification channel for android and add listeners to detect notifications fired
    */
   componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.setOptions({
       headerRight: () => (
         <MaterialHeaderButtons>
@@ -148,9 +164,9 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   }
 
   onScreenFocus = () => {
-    const {state} = this;
+    const { state } = this;
     const selected = AsyncStorageManager.getString(
-      AsyncStorageManager.PREFERENCES.selectedWash.key,
+      AsyncStorageManager.PREFERENCES.selectedWash.key
     );
     if (selected !== state.selectedWash) {
       this.setState({
@@ -164,7 +180,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * This will open the ProxiwashAboutScreen.
    */
   onAboutPress = () => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.navigate('proxiwash-about');
   };
 
@@ -199,8 +215,8 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @return {*}
    */
   getModalContent(title: string, item: ProxiwashMachineType, isDryer: boolean) {
-    const {props, state} = this;
-    let button: {text: string; icon: string; onPress: () => void} | undefined;
+    const { props, state } = this;
+    let button: { text: string; icon: string; onPress: () => void } | undefined;
     let message = this.modalStateStrings[item.state];
     const onPress = () => this.onSetupNotificationsPress(item);
     if (item.state === MachineStates.RUNNING) {
@@ -224,18 +240,14 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
       });
     }
     return (
-      <View
-        style={{
-          flex: 1,
-          padding: 20,
-        }}>
+      <View style={styles.modalContainer}>
         <Card.Title
           title={title}
           left={() => (
             <Avatar.Icon
               icon={isDryer ? 'tumble-dryer' : 'washing-machine'}
               color={props.theme.colors.text}
-              style={{backgroundColor: 'transparent'}}
+              style={styles.icon}
             />
           )}
         />
@@ -249,7 +261,8 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
               icon={button.icon}
               mode="contained"
               onPress={button.onPress}
-              style={{marginLeft: 'auto', marginRight: 'auto'}}>
+              style={GENERAL_STYLES.centerHorizontal}
+            >
               {button.text}
             </Button>
           </Card.Actions>
@@ -264,7 +277,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @param section The section to render
    * @return {*}
    */
-  getRenderSectionHeader = ({section}: {section: {title: string}}) => {
+  getRenderSectionHeader = ({ section }: { section: { title: string } }) => {
     const isDryer = section.title === i18n.t('screens.proxiwash.dryers');
     const nbAvailable = this.getMachineAvailableNumber(isDryer);
     return (
@@ -288,9 +301,9 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     section,
   }: {
     item: ProxiwashMachineType;
-    section: {title: string};
+    section: { title: string };
   }) => {
-    const {machinesWatched} = this.state;
+    const { machinesWatched } = this.state;
     const isDryer = section.title === i18n.t('screens.proxiwash.dryers');
     return (
       <ProxiwashListItem
@@ -319,12 +332,12 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @param machine The machine to watch
    */
   setupNotifications(machine: ProxiwashMachineType) {
-    const {machinesWatched} = this.state;
+    const { machinesWatched } = this.state;
     if (!isMachineWatched(machine, machinesWatched)) {
       Notifications.setupMachineNotification(
         machine.number,
         true,
-        getMachineEndDate(machine),
+        getMachineEndDate(machine)
       )
         .then(() => {
           this.saveNotificationToState(machine);
@@ -336,7 +349,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
       Notifications.setupMachineNotification(machine.number, false, null).then(
         () => {
           this.removeNotificationFromState(machine);
-        },
+        }
       );
     }
   }
@@ -373,7 +386,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
     dryers: Array<ProxiwashMachineType>;
     washers: Array<ProxiwashMachineType>;
   }): SectionListDataType<ProxiwashMachineType> => {
-    const {state} = this;
+    const { state } = this;
     let data = fetchedData;
     if (AprilFoolsManager.getInstance().isAprilFoolsEnabled()) {
       data = JSON.parse(JSON.stringify(fetchedData)); // Deep copy
@@ -381,9 +394,10 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
       AprilFoolsManager.getNewProxiwashWasherOrderedList(data.washers);
     }
     this.fetchedData = data;
+    // TODO dirty, should be refactored
     this.state.machinesWatched = getCleanedMachineWatched(
       state.machinesWatched,
-      [...data.dryers, ...data.washers],
+      [...data.dryers, ...data.washers]
     );
     return [
       {
@@ -406,7 +420,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * This will hide the banner and open the SettingsScreen
    */
   onGoToSettings = () => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.navigate('settings');
   };
 
@@ -432,7 +446,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @param machine
    */
   saveNotificationToState(machine: ProxiwashMachineType) {
-    const {machinesWatched} = this.state;
+    const { machinesWatched } = this.state;
     const data = machinesWatched;
     data.push(machine);
     this.saveNewWatchedList(data);
@@ -444,7 +458,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @param selectedMachine
    */
   removeNotificationFromState(selectedMachine: ProxiwashMachineType) {
-    const {machinesWatched} = this.state;
+    const { machinesWatched } = this.state;
     const newList = [...machinesWatched];
     machinesWatched.forEach((machine: ProxiwashMachineType, index: number) => {
       if (
@@ -458,16 +472,16 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
   }
 
   saveNewWatchedList(list: Array<ProxiwashMachineType>) {
-    this.setState({machinesWatched: list});
+    this.setState({ machinesWatched: list });
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.proxiwashWatchedMachines.key,
-      list,
+      list
     );
   }
 
   render() {
-    const {state} = this;
-    const {navigation} = this.props;
+    const { state } = this;
+    const { navigation } = this.props;
     let data: LaundromatType;
     switch (state.selectedWash) {
       case 'tripodeB':
@@ -477,16 +491,8 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
         data = ProxiwashConstants.washinsa;
     }
     return (
-      <View
-        style={{
-          flex: 1,
-        }}>
-        <View
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}>
+      <View style={GENERAL_STYLES.flex}>
+        <View style={styles.container}>
           <WebSectionList
             createDataset={this.createDataset}
             navigation={navigation}

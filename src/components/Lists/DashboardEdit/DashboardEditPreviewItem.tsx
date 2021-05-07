@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {TouchableRipple, useTheme} from 'react-native-paper';
-import {Dimensions, Image, View} from 'react-native';
+import { TouchableRipple, useTheme } from 'react-native-paper';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
 
 type PropsType = {
   image?: string | number;
@@ -27,39 +27,50 @@ type PropsType = {
   onPress: () => void;
 };
 
+const styles = StyleSheet.create({
+  ripple: {
+    marginLeft: 5,
+    marginRight: 5,
+    borderRadius: 5,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+});
+
 /**
  * Component used to render a small dashboard item
  */
 function DashboardEditPreviewItem(props: PropsType) {
   const theme = useTheme();
   const itemSize = Dimensions.get('window').width / 8;
-
+  const backgroundColor = props.isActive
+    ? theme.colors.textDisabled
+    : 'transparent';
   return (
     <TouchableRipple
       onPress={props.onPress}
       borderless
       style={{
-        marginLeft: 5,
-        marginRight: 5,
-        backgroundColor: props.isActive
-          ? theme.colors.textDisabled
-          : 'transparent',
-        borderRadius: 5,
-      }}>
+        ...styles.ripple,
+        backgroundColor: backgroundColor,
+      }}
+    >
       <View
         style={{
           width: itemSize,
           height: itemSize,
-        }}>
+        }}
+      >
         {props.image ? (
           <Image
             source={
-              typeof props.image === 'string' ? {uri: props.image} : props.image
+              typeof props.image === 'string'
+                ? { uri: props.image }
+                : props.image
             }
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
+            style={styles.image}
           />
         ) : null}
       </View>

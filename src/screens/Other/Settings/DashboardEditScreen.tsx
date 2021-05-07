@@ -18,10 +18,10 @@
  */
 
 import * as React from 'react';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {Button, Card, Paragraph} from 'react-native-paper';
-import {FlatList} from 'react-native';
-import {View} from 'react-native-animatable';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Button, Card, Paragraph } from 'react-native-paper';
+import { FlatList, StyleSheet } from 'react-native';
+import { View } from 'react-native-animatable';
 import i18n from 'i18n-js';
 import type {
   ServiceCategoryType,
@@ -43,6 +43,31 @@ type StateType = {
   activeItem: number;
 };
 
+const styles = StyleSheet.create({
+  dashboardContainer: {
+    height: 50,
+  },
+  dashboard: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 5,
+  },
+  card: {
+    margin: 5,
+  },
+  buttonContainer: {
+    padding: 5,
+  },
+  button: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: 10,
+  },
+  text: {
+    textAlign: 'center',
+  },
+});
+
 /**
  * Class defining the Settings screen. This screen shows controls to modify app preferences.
  */
@@ -57,7 +82,7 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
     super(props);
     const dashboardManager = new DashboardManager(props.navigation);
     this.initialDashboardIdList = AsyncStorageManager.getObject(
-      AsyncStorageManager.PREFERENCES.dashboardItems.key,
+      AsyncStorageManager.PREFERENCES.dashboardItems.key
     );
     this.initialDashboard = dashboardManager.getCurrentDashboard();
     this.state = {
@@ -75,12 +100,12 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
     item: ServiceItemType | null;
     index: number;
   }) => {
-    const {activeItem} = this.state;
+    const { activeItem } = this.state;
     return (
       <DashboardEditPreviewItem
         image={item?.image}
         onPress={() => {
-          this.setState({activeItem: index});
+          this.setState({ activeItem: index });
         }}
         isActive={activeItem === index}
       />
@@ -94,17 +119,13 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
         extraData={this.state}
         renderItem={this.getDashboardRowRenderItem}
         horizontal
-        contentContainerStyle={{
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          marginTop: 5,
-        }}
+        contentContainerStyle={styles.dashboard}
       />
     );
   }
 
-  getRenderItem = ({item}: {item: ServiceCategoryType}) => {
-    const {currentDashboardIdList} = this.state;
+  getRenderItem = ({ item }: { item: ServiceCategoryType }) => {
+    const { currentDashboardIdList } = this.state;
     return (
       <DashboardEditAccordion
         item={item}
@@ -115,26 +136,23 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
   };
 
   getListHeader() {
-    const {currentDashboard} = this.state;
+    const { currentDashboard } = this.state;
     return (
-      <Card style={{margin: 5}}>
+      <Card style={styles.card}>
         <Card.Content>
-          <View style={{padding: 5}}>
+          <View style={styles.buttonContainer}>
             <Button
               mode="contained"
               onPress={this.undoDashboard}
-              style={{
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                marginBottom: 10,
-              }}>
+              style={styles.button}
+            >
               {i18n.t('screens.settings.dashboardEdit.undo')}
             </Button>
-            <View style={{height: 50}}>
+            <View style={styles.dashboardContainer}>
               {this.getDashboard(currentDashboard)}
             </View>
           </View>
-          <Paragraph style={{textAlign: 'center'}}>
+          <Paragraph style={styles.text}>
             {i18n.t('screens.settings.dashboardEdit.message')}
           </Paragraph>
         </Card.Content>
@@ -143,7 +161,7 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
   }
 
   updateDashboard = (service: ServiceItemType) => {
-    const {currentDashboard, currentDashboardIdList, activeItem} = this.state;
+    const { currentDashboard, currentDashboardIdList, activeItem } = this.state;
     currentDashboard[activeItem] = service;
     currentDashboardIdList[activeItem] = service.key;
     this.setState({
@@ -152,7 +170,7 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
     });
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.dashboardItems.key,
-      currentDashboardIdList,
+      currentDashboardIdList
     );
   };
 
@@ -163,7 +181,7 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
     });
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.dashboardItems.key,
-      this.initialDashboardIdList,
+      this.initialDashboardIdList
     );
   };
 

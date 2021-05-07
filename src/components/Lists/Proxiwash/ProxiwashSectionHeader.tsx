@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {Avatar, Text, withTheme} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import { Avatar, Text, withTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 
 type PropsType = {
@@ -44,6 +44,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
+  textContainer: {
+    justifyContent: 'center',
+  },
 });
 
 /**
@@ -51,7 +54,7 @@ const styles = StyleSheet.create({
  */
 class ProxiwashListItem extends React.Component<PropsType> {
   shouldComponentUpdate(nextProps: PropsType): boolean {
-    const {props} = this;
+    const { props } = this;
     return (
       nextProps.theme.dark !== props.theme.dark ||
       nextProps.nbAvailable !== props.nbAvailable
@@ -59,7 +62,7 @@ class ProxiwashListItem extends React.Component<PropsType> {
   }
 
   render() {
-    const {props} = this;
+    const { props } = this;
     const subtitle = `${props.nbAvailable} ${
       props.nbAvailable <= 1
         ? i18n.t('screens.proxiwash.numAvailable')
@@ -76,9 +79,9 @@ class ProxiwashListItem extends React.Component<PropsType> {
           color={iconColor}
           style={styles.icon}
         />
-        <View style={{justifyContent: 'center'}}>
+        <View style={styles.textContainer}>
           <Text style={styles.text}>{props.title}</Text>
-          <Text style={{color: props.theme.colors.subtitle}}>{subtitle}</Text>
+          <Text style={{ color: props.theme.colors.subtitle }}>{subtitle}</Text>
         </View>
       </View>
     );

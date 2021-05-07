@@ -18,26 +18,42 @@
  */
 
 import * as React from 'react';
-import {Linking, Image} from 'react-native';
-import {Card, Text} from 'react-native-paper';
+import { Linking, Image, StyleSheet } from 'react-native';
+import { Card, Text } from 'react-native-paper';
 import Autolink from 'react-native-autolink';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
 import CustomTabBar from '../../components/Tabbar/CustomTabBar';
-import type {FeedItemType} from './HomeScreen';
+import type { FeedItemType } from './HomeScreen';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
 import NewsSourcesConstants, {
   AvailablePages,
 } from '../../constants/NewsSourcesConstants';
-import type {NewsSourceType} from '../../constants/NewsSourcesConstants';
+import type { NewsSourceType } from '../../constants/NewsSourcesConstants';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
-  route: {params: {data: FeedItemType; date: string}};
+  route: { params: { data: FeedItemType; date: string } };
 };
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 5,
+  },
+  image: {
+    width: 48,
+    height: 48,
+  },
+  button: {
+    width: 250,
+    height: 250,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+});
 
 /**
  * Class defining a feed item page.
@@ -54,7 +70,7 @@ class FeedItemScreen extends React.Component<PropsType> {
   }
 
   componentDidMount() {
-    const {props} = this;
+    const { props } = this;
     props.navigation.setOptions({
       headerRight: this.getHeaderButton,
     });
@@ -89,32 +105,21 @@ class FeedItemScreen extends React.Component<PropsType> {
     const pageSource: NewsSourceType =
       NewsSourcesConstants[this.displayData.page_id as AvailablePages];
     return (
-      <CollapsibleScrollView style={{margin: 5}} hasTab>
+      <CollapsibleScrollView style={styles.container} hasTab>
         <Card.Title
           title={pageSource.name}
           subtitle={this.date}
-          left={() => (
-            <Image
-              source={pageSource.icon}
-              style={{
-                width: 48,
-                height: 48,
-              }}
-            />
-          )}
+          left={() => <Image source={pageSource.icon} style={styles.image} />}
         />
         {this.displayData.image ? (
           <ImageGalleryButton
-            images={[{url: this.displayData.image}]}
-            style={{
-              width: 250,
-              height: 250,
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
+            images={[{ url: this.displayData.image }]}
+            style={styles.button}
           />
         ) : null}
-        <Card.Content style={{paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
+        <Card.Content
+          style={{ paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20 }}
+        >
           {this.displayData.message !== undefined ? (
             <Autolink
               text={this.displayData.message}

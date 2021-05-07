@@ -18,10 +18,10 @@
  */
 
 import i18n from 'i18n-js';
-import type {DeviceType} from '../screens/Amicale/Equipment/EquipmentListScreen';
+import type { DeviceType } from '../screens/Amicale/Equipment/EquipmentListScreen';
 import DateManager from '../managers/DateManager';
-import type {MarkedDatesObjectType} from '../screens/Amicale/Equipment/EquipmentRentScreen';
-import {PeriodMarking} from 'react-native-calendars';
+import type { MarkedDatesObjectType } from '../screens/Amicale/Equipment/EquipmentRentScreen';
+import { PeriodMarking } from 'react-native-calendars';
 
 /**
  * Gets the current day at midnight
@@ -54,7 +54,7 @@ export function isEquipmentAvailable(item: DeviceType): boolean {
   let isAvailable = true;
   const today = getCurrentDay();
   const dates = item.booked_at;
-  dates.forEach((date: {begin: string; end: string}) => {
+  dates.forEach((date: { begin: string; end: string }) => {
     const start = new Date(date.begin);
     const end = new Date(date.end);
     if (!(today < start || today > end)) {
@@ -73,7 +73,7 @@ export function isEquipmentAvailable(item: DeviceType): boolean {
 export function getFirstEquipmentAvailability(item: DeviceType): Date {
   let firstAvailability = getCurrentDay();
   const dates = item.booked_at;
-  dates.forEach((date: {begin: string; end: string}) => {
+  dates.forEach((date: { begin: string; end: string }) => {
     const start = new Date(date.begin);
     const end = new Date(date.end);
     end.setDate(end.getDate() + 1);
@@ -134,7 +134,7 @@ export function getRelativeDateString(date: Date): string {
 export function getValidRange(
   start: Date,
   end: Date,
-  item: DeviceType | null,
+  item: DeviceType | null
 ): Array<string> {
   const direction = start <= end ? 1 : -1;
   let limit = new Date(end);
@@ -187,7 +187,7 @@ export function getValidRange(
 export function generateMarkedDates(
   isSelection: boolean,
   theme: ReactNativePaper.Theme,
-  range: Array<string>,
+  range: Array<string>
 ): MarkedDatesObjectType {
   const markedDates: {
     [key: string]: PeriodMarking;

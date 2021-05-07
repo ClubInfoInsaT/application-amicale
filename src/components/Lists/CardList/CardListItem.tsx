@@ -18,29 +18,36 @@
  */
 
 import * as React from 'react';
-import {Caption, Card, Paragraph, TouchableRipple} from 'react-native-paper';
-import {View} from 'react-native';
-import type {ServiceItemType} from '../../../managers/ServicesManager';
+import { Caption, Card, Paragraph, TouchableRipple } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import type { ServiceItemType } from '../../../managers/ServicesManager';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type PropsType = {
   item: ServiceItemType;
 };
 
+const styles = StyleSheet.create({
+  card: {
+    width: '40%',
+    margin: 5,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  cover: {
+    height: 80,
+  },
+});
+
 function CardListItem(props: PropsType) {
-  const {item} = props;
+  const { item } = props;
   const source =
-    typeof item.image === 'number' ? item.image : {uri: item.image};
+    typeof item.image === 'number' ? item.image : { uri: item.image };
   return (
-    <Card
-      style={{
-        width: '40%',
-        margin: 5,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      }}>
-      <TouchableRipple style={{flex: 1}} onPress={item.onPress}>
+    <Card style={styles.card}>
+      <TouchableRipple style={GENERAL_STYLES.flex} onPress={item.onPress}>
         <View>
-          <Card.Cover style={{height: 80}} source={source} />
+          <Card.Cover style={styles.cover} source={source} />
           <Card.Content>
             <Paragraph>{item.title}</Paragraph>
             <Caption>{item.subtitle}</Caption>

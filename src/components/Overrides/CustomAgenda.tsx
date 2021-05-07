@@ -18,9 +18,10 @@
  */
 
 import * as React from 'react';
-import {View} from 'react-native';
-import {useTheme} from 'react-native-paper';
-import {Agenda, AgendaProps} from 'react-native-calendars';
+import { View } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { Agenda, AgendaProps } from 'react-native-calendars';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   onRef: (ref: Agenda<any>) => void;
@@ -67,7 +68,7 @@ function CustomAgenda(props: PropsType) {
 
   // Completely recreate the component on theme change to force theme reload
   if (theme.dark) {
-    return <View style={{flex: 1}}>{getAgenda()}</View>;
+    return <View style={GENERAL_STYLES.flex}>{getAgenda()}</View>;
   }
   return getAgenda();
 }

@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {ProxiwashMachineType} from '../screens/Proxiwash/ProxiwashScreen';
+import type { ProxiwashMachineType } from '../screens/Proxiwash/ProxiwashScreen';
 
 /**
  * Gets the machine end Date object.
@@ -59,7 +59,7 @@ export function getMachineEndDate(machine: ProxiwashMachineType): Date | null {
  */
 export function isMachineWatched(
   machine: ProxiwashMachineType,
-  machinesWatched: Array<ProxiwashMachineType>,
+  machinesWatched: Array<ProxiwashMachineType>
 ): boolean {
   let watched = false;
   machinesWatched.forEach((watchedMachine: ProxiwashMachineType) => {
@@ -82,7 +82,7 @@ export function isMachineWatched(
  */
 export function getMachineOfId(
   id: string,
-  allMachines: Array<ProxiwashMachineType>,
+  allMachines: Array<ProxiwashMachineType>
 ): ProxiwashMachineType | null {
   let machineFound = null;
   allMachines.forEach((machine: ProxiwashMachineType) => {
@@ -104,7 +104,7 @@ export function getMachineOfId(
  */
 export function getCleanedMachineWatched(
   machineWatchedList: Array<ProxiwashMachineType>,
-  allMachines: Array<ProxiwashMachineType>,
+  allMachines: Array<ProxiwashMachineType>
 ): Array<ProxiwashMachineType> {
   const newList: Array<ProxiwashMachineType> = [];
   machineWatchedList.forEach((watchedMachine: ProxiwashMachineType) => {

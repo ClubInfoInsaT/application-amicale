@@ -1,11 +1,9 @@
-/* eslint-disable */
-
-import React from 'react';
 import ConnectionManager from '../../src/managers/ConnectionManager';
-import {ERROR_TYPE} from '../../src/utils/WebData';
+import { ERROR_TYPE } from '../../src/utils/WebData';
 
 jest.mock('react-native-keychain');
 
+// eslint-disable-next-line no-unused-vars
 const fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS but in react-native
 
 const c = ConnectionManager.getInstance();
@@ -44,7 +42,7 @@ test('connect bad credentials', () => {
     });
   });
   return expect(c.connect('email', 'password')).rejects.toBe(
-    ERROR_TYPE.BAD_CREDENTIALS,
+    ERROR_TYPE.BAD_CREDENTIALS
   );
 });
 
@@ -54,7 +52,7 @@ test('connect good credentials', () => {
       json: () => {
         return {
           error: ERROR_TYPE.SUCCESS,
-          data: {token: 'token'},
+          data: { token: 'token' },
         };
       },
     });
@@ -79,7 +77,7 @@ test('connect good credentials no consent', () => {
     });
   });
   return expect(c.connect('email', 'password')).rejects.toBe(
-    ERROR_TYPE.NO_CONSENT,
+    ERROR_TYPE.NO_CONSENT
   );
 });
 
@@ -89,7 +87,7 @@ test('connect good credentials, fail save token', () => {
       json: () => {
         return {
           error: ERROR_TYPE.SUCCESS,
-          data: {token: 'token'},
+          data: { token: 'token' },
         };
       },
     });
@@ -100,7 +98,7 @@ test('connect good credentials, fail save token', () => {
       return Promise.reject(false);
     });
   return expect(c.connect('email', 'password')).rejects.toBe(
-    ERROR_TYPE.TOKEN_SAVE,
+    ERROR_TYPE.TOKEN_SAVE
   );
 });
 
@@ -109,7 +107,7 @@ test('connect connection error', () => {
     return Promise.reject();
   });
   return expect(c.connect('email', 'password')).rejects.toBe(
-    ERROR_TYPE.CONNECTION_ERROR,
+    ERROR_TYPE.CONNECTION_ERROR
   );
 });
 
@@ -125,7 +123,7 @@ test('connect bogus response 1', () => {
     });
   });
   return expect(c.connect('email', 'password')).rejects.toBe(
-    ERROR_TYPE.SERVER_ERROR,
+    ERROR_TYPE.SERVER_ERROR
   );
 });
 
@@ -140,14 +138,14 @@ test('authenticatedRequest success', () => {
       json: () => {
         return {
           error: ERROR_TYPE.SUCCESS,
-          data: {coucou: 'toi'},
+          data: { coucou: 'toi' },
         };
       },
     });
   });
   return expect(
-    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
-  ).resolves.toStrictEqual({coucou: 'toi'});
+    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check')
+  ).resolves.toStrictEqual({ coucou: 'toi' });
 });
 
 test('authenticatedRequest error wrong token', () => {
@@ -167,7 +165,7 @@ test('authenticatedRequest error wrong token', () => {
     });
   });
   return expect(
-    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
+    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check')
   ).rejects.toBe(ERROR_TYPE.BAD_TOKEN);
 });
 
@@ -187,7 +185,7 @@ test('authenticatedRequest error bogus response', () => {
     });
   });
   return expect(
-    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
+    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check')
   ).rejects.toBe(ERROR_TYPE.SERVER_ERROR);
 });
 
@@ -201,7 +199,7 @@ test('authenticatedRequest connection error', () => {
     return Promise.reject();
   });
   return expect(
-    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
+    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check')
   ).rejects.toBe(ERROR_TYPE.CONNECTION_ERROR);
 });
 
@@ -212,6 +210,6 @@ test('authenticatedRequest error no token', () => {
       return null;
     });
   return expect(
-    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check'),
+    c.authenticatedRequest('https://www.amicale-insat.fr/api/token/check')
   ).rejects.toBe(ERROR_TYPE.TOKEN_RETRIEVE);
 });

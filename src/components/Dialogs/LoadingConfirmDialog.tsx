@@ -26,6 +26,7 @@ import {
   Portal,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
+import { StyleSheet } from 'react-native';
 
 type PropsType = {
   visible: boolean;
@@ -40,6 +41,12 @@ type PropsType = {
 type StateType = {
   loading: boolean;
 };
+
+const styles = StyleSheet.create({
+  button: {
+    marginRight: 10,
+  },
+});
 
 export default class LoadingConfirmDialog extends React.PureComponent<
   PropsType,
@@ -70,8 +77,8 @@ export default class LoadingConfirmDialog extends React.PureComponent<
    * Set the dialog into loading state and closes it when operation finishes
    */
   onClickAccept = () => {
-    const {props} = this;
-    this.setState({loading: true});
+    const { props } = this;
+    this.setState({ loading: true });
     if (props.onAccept != null) {
       props.onAccept().then(this.hideLoading);
     }
@@ -83,21 +90,21 @@ export default class LoadingConfirmDialog extends React.PureComponent<
    */
   hideLoading = (): NodeJS.Timeout =>
     setTimeout(() => {
-      this.setState({loading: false});
+      this.setState({ loading: false });
     }, 200);
 
   /**
    * Hide the dialog if it is not loading
    */
   onDismiss = () => {
-    const {state, props} = this;
+    const { state, props } = this;
     if (!state.loading && props.onDismiss != null) {
       props.onDismiss();
     }
   };
 
   render() {
-    const {state, props} = this;
+    const { state, props } = this;
     return (
       <Portal>
         <Dialog visible={props.visible} onDismiss={this.onDismiss}>
@@ -113,7 +120,7 @@ export default class LoadingConfirmDialog extends React.PureComponent<
           </Dialog.Content>
           {state.loading ? null : (
             <Dialog.Actions>
-              <Button onPress={this.onDismiss} style={{marginRight: 10}}>
+              <Button onPress={this.onDismiss} style={styles.button}>
                 {i18n.t('dialog.cancel')}
               </Button>
               <Button onPress={this.onClickAccept}>

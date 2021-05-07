@@ -73,25 +73,25 @@ export function isApiResponseValid<T>(response: ApiResponseType<T>): boolean {
 export async function apiRequest<T>(
   path: string,
   method: string,
-  params?: object,
+  params?: object
 ): Promise<T> {
   return new Promise(
     (resolve: (data: T) => void, reject: (error: number) => void) => {
       let requestParams = {};
       if (params != null) {
-        requestParams = {...params};
+        requestParams = { ...params };
       }
       fetch(API_ENDPOINT + path, {
         method,
         headers: new Headers({
-          Accept: 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
         }),
         body: JSON.stringify(requestParams),
       })
         .then(
           async (response: Response): Promise<ApiResponseType<T>> =>
-            response.json(),
+            response.json()
         )
         .then((response: ApiResponseType<T>) => {
           if (isApiResponseValid(response)) {
@@ -105,7 +105,7 @@ export async function apiRequest<T>(
           }
         })
         .catch((): void => reject(ERROR_TYPE.CONNECTION_ERROR));
-    },
+    }
   );
 }
 

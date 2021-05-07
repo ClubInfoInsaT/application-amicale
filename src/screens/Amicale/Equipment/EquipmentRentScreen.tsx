@@ -26,12 +26,12 @@ import {
   Subheading,
   withTheme,
 } from 'react-native-paper';
-import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
-import {BackHandler, View} from 'react-native';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
+import { BackHandler, StyleSheet, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import i18n from 'i18n-js';
-import {CalendarList, PeriodMarking} from 'react-native-calendars';
-import type {DeviceType} from './EquipmentListScreen';
+import { CalendarList, PeriodMarking } from 'react-native-calendars';
+import type { DeviceType } from './EquipmentListScreen';
 import LoadingConfirmDialog from '../../../components/Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../../components/Dialogs/ErrorDialog';
 import {
@@ -44,7 +44,8 @@ import {
 } from '../../../utils/EquipmentBooking';
 import ConnectionManager from '../../../managers/ConnectionManager';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
-import {MainStackParamsList} from '../../../navigation/MainNavigator';
+import { MainStackParamsList } from '../../../navigation/MainNavigator';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type EquipmentRentScreenNavigationProp = StackScreenProps<
   MainStackParamsList,
@@ -67,12 +68,56 @@ type StateType = {
   currentError: number;
 };
 
+const styles = StyleSheet.create({
+  titleContainer: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  title: {
+    textAlign: 'center',
+  },
+  caption: {
+    textAlign: 'center',
+    lineHeight: 35,
+    marginLeft: 10,
+  },
+  card: {
+    margin: 5,
+  },
+  subtitle: {
+    textAlign: 'center',
+    marginBottom: 10,
+    minHeight: 50,
+  },
+  calendar: {
+    marginBottom: 50,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    flex: 1,
+    transform: [{ translateY: 100 }],
+  },
+  button: {
+    width: '80%',
+    flex: 1,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: 20,
+    borderRadius: 10,
+  },
+});
+
 class EquipmentRentScreen extends React.Component<Props, StateType> {
   item: DeviceType | null;
 
   bookedDates: Array<string>;
 
-  bookRef: {current: null | (Animatable.View & View)};
+  bookRef: { current: null | (Animatable.View & View) };
 
   canBookEquipment: boolean;
 
@@ -101,14 +146,14 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
         this.item = null;
       }
     }
-    const {item} = this;
+    const { item } = this;
     if (item != null) {
       this.lockedDates = {};
-      item.booked_at.forEach((date: {begin: string; end: string}) => {
+      item.booked_at.forEach((date: { begin: string; end: string }) => {
         const range = getValidRange(
           new Date(date.begin),
           new Date(date.end),
-          null,
+          null
         );
         this.lockedDates = {
           ...this.lockedDates,
@@ -122,17 +167,17 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
    * Captures focus and blur events to hook on android back button
    */
   componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.addListener('focus', () => {
       BackHandler.addEventListener(
         'hardwareBackPress',
-        this.onBackButtonPressAndroid,
+        this.onBackButtonPressAndroid
       );
     });
     navigation.addListener('blur', () => {
       BackHandler.removeEventListener(
         'hardwareBackPress',
-        this.onBackButtonPressAndroid,
+        this.onBackButtonPressAndroid
       );
     });
   }
@@ -152,11 +197,11 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
   };
 
   onDialogDismiss = () => {
-    this.setState({dialogVisible: false});
+    this.setState({ dialogVisible: false });
   };
 
   onErrorDialogDismiss = () => {
-    this.setState({errorDialogVisible: false});
+    this.setState({ errorDialogVisible: false });
   };
 
   /**
@@ -168,7 +213,7 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
    */
   onDialogAccept = (): Promise<void> => {
     return new Promise((resolve: () => void) => {
-      const {item, props} = this;
+      const { item, props } = this;
       const start = this.getBookStartDate();
       const end = this.getBookEndDate();
       if (item != null && start != null && end != null) {
@@ -203,7 +248,7 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
   }
 
   getBookEndDate(): Date | null {
-    const {length} = this.bookedDates;
+    const { length } = this.bookedDates;
     return length > 0 ? new Date(this.bookedDates[length - 1]) : null;
   }
 
@@ -247,7 +292,7 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
   };
 
   showDialog = () => {
-    this.setState({dialogVisible: true});
+    this.setState({ dialogVisible: true });
   };
 
   /**
@@ -288,14 +333,14 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
   }
 
   updateMarkedSelection() {
-    const {theme} = this.props;
+    const { theme } = this.props;
     this.setState({
       markedDates: generateMarkedDates(true, theme, this.bookedDates),
     });
   }
 
   render() {
-    const {item, props, state} = this;
+    const { item, props, state } = this;
     const start = this.getBookStartDate();
     const end = this.getBookEndDate();
     let subHeadingText;
@@ -315,28 +360,17 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
       const isAvailable = isEquipmentAvailable(item);
       const firstAvailability = getFirstEquipmentAvailability(item);
       return (
-        <View style={{flex: 1}}>
+        <View style={GENERAL_STYLES.flex}>
           <CollapsibleScrollView>
-            <Card style={{margin: 5}}>
+            <Card style={styles.card}>
               <Card.Content>
-                <View style={{flex: 1}}>
-                  <View
-                    style={{
-                      marginLeft: 'auto',
-                      marginRight: 'auto',
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                    }}>
-                    <Headline style={{textAlign: 'center'}}>
-                      {item.name}
-                    </Headline>
-                    <Caption
-                      style={{
-                        textAlign: 'center',
-                        lineHeight: 35,
-                        marginLeft: 10,
-                      }}>
-                      ({i18n.t('screens.equipment.bail', {cost: item.caution})})
+                <View style={GENERAL_STYLES.flex}>
+                  <View style={styles.titleContainer}>
+                    <Headline style={styles.title}>{item.name}</Headline>
+                    <Caption style={styles.caption}>
+                      (
+                      {i18n.t('screens.equipment.bail', { cost: item.caution })}
+                      )
                     </Caption>
                   </View>
                 </View>
@@ -348,17 +382,13 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
                       ? props.theme.colors.success
                       : props.theme.colors.primary
                   }
-                  mode="text">
+                  mode="text"
+                >
                   {i18n.t('screens.equipment.available', {
                     date: getRelativeDateString(firstAvailability),
                   })}
                 </Button>
-                <Subheading
-                  style={{
-                    textAlign: 'center',
-                    marginBottom: 10,
-                    minHeight: 50,
-                  }}>
+                <Subheading style={styles.subtitle}>
                   {subHeadingText}
                 </Subheading>
               </Card.Content>
@@ -382,30 +412,30 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
               hideArrows={false}
               // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
               markingType={'period'}
-              markedDates={{...this.lockedDates, ...state.markedDates}}
+              markedDates={{ ...this.lockedDates, ...state.markedDates }}
               theme={{
-                backgroundColor: props.theme.colors.agendaBackgroundColor,
-                calendarBackground: props.theme.colors.background,
-                textSectionTitleColor: props.theme.colors.agendaDayTextColor,
-                selectedDayBackgroundColor: props.theme.colors.primary,
-                selectedDayTextColor: '#ffffff',
-                todayTextColor: props.theme.colors.text,
-                dayTextColor: props.theme.colors.text,
-                textDisabledColor: props.theme.colors.agendaDayTextColor,
-                dotColor: props.theme.colors.primary,
-                selectedDotColor: '#ffffff',
-                arrowColor: props.theme.colors.primary,
-                monthTextColor: props.theme.colors.text,
-                indicatorColor: props.theme.colors.primary,
-                textDayFontFamily: 'monospace',
-                textMonthFontFamily: 'monospace',
-                textDayHeaderFontFamily: 'monospace',
-                textDayFontWeight: '300',
-                textMonthFontWeight: 'bold',
-                textDayHeaderFontWeight: '300',
-                textDayFontSize: 16,
-                textMonthFontSize: 16,
-                textDayHeaderFontSize: 16,
+                'backgroundColor': props.theme.colors.agendaBackgroundColor,
+                'calendarBackground': props.theme.colors.background,
+                'textSectionTitleColor': props.theme.colors.agendaDayTextColor,
+                'selectedDayBackgroundColor': props.theme.colors.primary,
+                'selectedDayTextColor': '#ffffff',
+                'todayTextColor': props.theme.colors.text,
+                'dayTextColor': props.theme.colors.text,
+                'textDisabledColor': props.theme.colors.agendaDayTextColor,
+                'dotColor': props.theme.colors.primary,
+                'selectedDotColor': '#ffffff',
+                'arrowColor': props.theme.colors.primary,
+                'monthTextColor': props.theme.colors.text,
+                'indicatorColor': props.theme.colors.primary,
+                'textDayFontFamily': 'monospace',
+                'textMonthFontFamily': 'monospace',
+                'textDayHeaderFontFamily': 'monospace',
+                'textDayFontWeight': '300',
+                'textMonthFontWeight': 'bold',
+                'textDayHeaderFontWeight': '300',
+                'textDayFontSize': 16,
+                'textMonthFontSize': 16,
+                'textDayHeaderFontSize': 16,
                 'stylesheet.day.period': {
                   base: {
                     overflow: 'hidden',
@@ -415,7 +445,7 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
                   },
                 },
               }}
-              style={{marginBottom: 50}}
+              style={styles.calendar}
             />
           </CollapsibleScrollView>
           <LoadingConfirmDialog
@@ -435,26 +465,14 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
           <Animatable.View
             ref={this.bookRef}
             useNativeDriver
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-              flex: 1,
-              transform: [{translateY: 100}],
-            }}>
+            style={styles.buttonContainer}
+          >
             <Button
               icon="bookmark-check"
               mode="contained"
               onPress={this.showDialog}
-              style={{
-                width: '80%',
-                flex: 1,
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                marginBottom: 20,
-                borderRadius: 10,
-              }}>
+              style={styles.button}
+            >
               {i18n.t('screens.equipment.bookButton')}
             </Button>
           </Animatable.View>

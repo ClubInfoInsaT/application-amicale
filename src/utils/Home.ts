@@ -17,8 +17,8 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {stringToDate} from './Planning';
-import type {PlanningEventType} from './Planning';
+import { stringToDate } from './Planning';
+import type { PlanningEventType } from './Planning';
 
 /**
  * Gets the time limit depending on the current day:
@@ -48,7 +48,7 @@ export function getTodayEventTimeLimit(): Date {
  */
 export function getEventsAfterLimit(
   events: Array<PlanningEventType>,
-  limit: Date,
+  limit: Date
 ): Array<PlanningEventType> {
   const validEvents: Array<PlanningEventType> = [];
   events.forEach((event: PlanningEventType) => {
@@ -66,7 +66,7 @@ export function getEventsAfterLimit(
  * @param events
  */
 export function getFutureEvents(
-  events: Array<PlanningEventType>,
+  events: Array<PlanningEventType>
 ): Array<PlanningEventType> {
   const validEvents: Array<PlanningEventType> = [];
   const now = new Date();
@@ -86,13 +86,13 @@ export function getFutureEvents(
  * @return {PlanningEventType | null}
  */
 export function getDisplayEvent(
-  events: Array<PlanningEventType>,
+  events: Array<PlanningEventType>
 ): PlanningEventType | null {
   let displayEvent = null;
   if (events.length > 1) {
     const eventsAfterLimit = getEventsAfterLimit(
       events,
-      getTodayEventTimeLimit(),
+      getTodayEventTimeLimit()
     );
     if (eventsAfterLimit.length > 0) {
       [displayEvent] = eventsAfterLimit;

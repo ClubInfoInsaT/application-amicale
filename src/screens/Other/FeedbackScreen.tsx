@@ -18,9 +18,9 @@
  */
 
 import * as React from 'react';
-import {Avatar, Button, Card, Paragraph, withTheme} from 'react-native-paper';
+import { Avatar, Button, Card, Paragraph, withTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {Linking, View} from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 
 const links = {
@@ -32,97 +32,87 @@ const links = {
   feedbackDiscord: 'https://discord.gg/W8MeTec',
 };
 
+const styles = StyleSheet.create({
+  container: {
+    padding: 5,
+  },
+  card: {
+    flex: 1,
+    flexWrap: 'wrap',
+  },
+  content: {
+    flex: 1,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    width: '100%',
+  },
+  button: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 5,
+  },
+});
+
 function getButtons(isFeedback: boolean) {
   return (
-    <Card.Actions
-      style={{
-        flex: 1,
-        flexWrap: 'wrap',
-      }}>
+    <Card.Actions style={styles.card}>
       {isFeedback ? (
-        <View
-          style={{
-            flex: 1,
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            width: '100%',
-          }}>
+        <View style={styles.content}>
           <Button
             icon="email"
             mode="contained"
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: 5,
-            }}
+            style={styles.button}
             onPress={() => {
               Linking.openURL(links.feedbackMail);
-            }}>
+            }}
+          >
             MAIL
           </Button>
           <Button
             icon="facebook"
             mode="contained"
             color="#2e88fe"
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: 5,
-            }}
+            style={styles.button}
             onPress={() => {
               Linking.openURL(links.facebook);
-            }}>
+            }}
+          >
             Facebook
           </Button>
           <Button
             icon="discord"
             mode="contained"
             color="#7289da"
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: 5,
-            }}
+            style={styles.button}
             onPress={() => {
               Linking.openURL(links.feedbackDiscord);
-            }}>
+            }}
+          >
             Discord
           </Button>
         </View>
       ) : (
-        <View
-          style={{
-            flex: 1,
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            width: '100%',
-          }}>
+        <View style={styles.content}>
           <Button
             icon="git"
             mode="contained"
             color="#609927"
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: 5,
-            }}
+            style={styles.button}
             onPress={() => {
               Linking.openURL(links.bugsGit);
-            }}>
+            }}
+          >
             GITETUD
           </Button>
           <Button
             icon="calendar"
             mode="contained"
             color="#026AA7"
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: 5,
-            }}
+            style={styles.button}
             onPress={() => {
               Linking.openURL(links.trello);
-            }}>
+            }}
+          >
             TRELLO
           </Button>
         </View>
@@ -133,7 +123,7 @@ function getButtons(isFeedback: boolean) {
 
 function FeedbackScreen() {
   return (
-    <CollapsibleScrollView style={{padding: 5}}>
+    <CollapsibleScrollView style={styles.container}>
       <Card>
         <Card.Title
           title={i18n.t('screens.feedback.feedback')}

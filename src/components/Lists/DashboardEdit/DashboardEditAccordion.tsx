@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {useTheme} from 'react-native-paper';
-import {FlatList, Image, View} from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { FlatList, Image, StyleSheet, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashboardEditItem from './DashboardEditItem';
 import AnimatedAccordion from '../../Animations/AnimatedAccordion';
@@ -34,12 +34,19 @@ type PropsType = {
   onPress: (service: ServiceItemType) => void;
 };
 
+const styles = StyleSheet.create({
+  image: {
+    width: 40,
+    height: 40,
+  },
+});
+
 const LIST_ITEM_HEIGHT = 64;
 
 function DashboardEditAccordion(props: PropsType) {
   const theme = useTheme();
 
-  const getRenderItem = ({item}: {item: ServiceItemType}) => {
+  const getRenderItem = ({ item }: { item: ServiceItemType }) => {
     return (
       <DashboardEditItem
         height={LIST_ITEM_HEIGHT}
@@ -54,27 +61,21 @@ function DashboardEditAccordion(props: PropsType) {
 
   const getItemLayout = (
     data: Array<ServiceItemType> | null | undefined,
-    index: number,
-  ): {length: number; offset: number; index: number} => ({
+    index: number
+  ): { length: number; offset: number; index: number } => ({
     length: LIST_ITEM_HEIGHT,
     offset: LIST_ITEM_HEIGHT * index,
     index,
   });
 
-  const {item} = props;
+  const { item } = props;
   return (
     <View>
       <AnimatedAccordion
         title={item.title}
         left={() =>
           typeof item.image === 'number' ? (
-            <Image
-              source={item.image}
-              style={{
-                width: 40,
-                height: 40,
-              }}
-            />
+            <Image source={item.image} style={styles.image} />
           ) : (
             <MaterialCommunityIcons
               name={item.image}
@@ -82,7 +83,8 @@ function DashboardEditAccordion(props: PropsType) {
               size={40}
             />
           )
-        }>
+        }
+      >
         <FlatList
           data={item.content}
           extraData={props.activeDashboard.toString()}

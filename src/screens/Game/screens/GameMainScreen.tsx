@@ -18,24 +18,25 @@
  */
 
 import * as React from 'react';
-import {View} from 'react-native';
-import {Caption, IconButton, Text, withTheme} from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Caption, IconButton, Text, withTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18n from 'i18n-js';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import GameLogic from '../logic/GameLogic';
-import type {GridType} from '../components/GridComponent';
+import type { GridType } from '../components/GridComponent';
 import GridComponent from '../components/GridComponent';
 import Preview from '../components/Preview';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
-import type {OptionsDialogButtonType} from '../../../components/Dialogs/OptionsDialog';
+import type { OptionsDialogButtonType } from '../../../components/Dialogs/OptionsDialog';
 import OptionsDialog from '../../../components/Dialogs/OptionsDialog';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
-  route: {params: {highScore: number}};
+  route: { params: { highScore: number } };
   theme: ReactNativePaper.Theme;
 };
 
@@ -51,6 +52,67 @@ type StateType = {
   dialogButtons: Array<OptionsDialogButtonType>;
   onDialogDismiss: () => void;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  gridContainer: {
+    flex: 4,
+  },
+  centerSmallMargin: {
+    ...GENERAL_STYLES.centerHorizontal,
+    marginBottom: 5,
+  },
+  centerVerticalSmallMargin: {
+    ...GENERAL_STYLES.centerVertical,
+    marginLeft: 5,
+  },
+  centerBigMargin: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: 20,
+  },
+  statusContainer: {
+    flexDirection: 'row',
+  },
+  statusIcon: {
+    marginLeft: 5,
+  },
+  scoreMainContainer: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  scoreCurrentContainer: {
+    flexDirection: 'row',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  scoreText: {
+    marginLeft: 5,
+    fontSize: 20,
+  },
+  scoreBestContainer: {
+    flexDirection: 'row',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 5,
+  },
+  controlsContainer: {
+    height: 80,
+    flexDirection: 'row',
+  },
+  directionsContainer: {
+    flexDirection: 'row',
+    flex: 4,
+  },
+  preview: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 10,
+  },
+});
 
 class GameMainScreen extends React.Component<PropsType, StateType> {
   static getFormattedTime(seconds: number): string {
@@ -94,7 +156,7 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
   }
 
   componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.setOptions({
       headerRight: this.getRightButton,
     });
@@ -128,11 +190,11 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
   };
 
   onDialogDismiss = () => {
-    this.setState({dialogVisible: false});
+    this.setState({ dialogVisible: false });
   };
 
   onGameEnd = (time: number, score: number, isRestart: boolean) => {
-    const {props, state} = this;
+    const { props, state } = this;
     this.setState({
       gameTime: time,
       gameScore: score,
@@ -147,31 +209,19 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
   };
 
   getStatusIcons() {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
       <View
         style={{
-          flex: 1,
-          marginTop: 'auto',
-          marginBottom: 'auto',
-        }}>
-        <View
-          style={{
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}>
-          <Caption
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginBottom: 5,
-            }}>
+          ...GENERAL_STYLES.flex,
+          ...GENERAL_STYLES.centerVertical,
+        }}
+      >
+        <View style={GENERAL_STYLES.centerHorizontal}>
+          <Caption style={styles.centerSmallMargin}>
             {i18n.t('screens.game.time')}
           </Caption>
-          <View
-            style={{
-              flexDirection: 'row',
-            }}>
+          <View style={styles.statusContainer}>
             <MaterialCommunityIcons
               name="timer"
               color={props.theme.colors.subtitle}
@@ -179,42 +229,25 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
             />
             <Text
               style={{
-                marginLeft: 5,
+                ...styles.statusIcon,
                 color: props.theme.colors.subtitle,
-              }}>
+              }}
+            >
               {GameMainScreen.getFormattedTime(state.gameTime)}
             </Text>
           </View>
         </View>
-        <View
-          style={{
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop: 20,
-          }}>
-          <Caption
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginBottom: 5,
-            }}>
+        <View style={styles.centerBigMargin}>
+          <Caption style={styles.centerSmallMargin}>
             {i18n.t('screens.game.level')}
           </Caption>
-          <View
-            style={{
-              flexDirection: 'row',
-            }}>
+          <View style={styles.statusContainer}>
             <MaterialCommunityIcons
               name="gamepad-square"
               color={props.theme.colors.text}
               size={20}
             />
-            <Text
-              style={{
-                marginLeft: 5,
-              }}>
-              {state.gameLevel}
-            </Text>
+            <Text style={styles.statusIcon}>{state.gameLevel}</Text>
           </View>
         </View>
       </View>
@@ -222,65 +255,38 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
   }
 
   getScoreIcon() {
-    const {props, state} = this;
+    const { props, state } = this;
     const highScore =
       this.highScore == null || state.gameScore > this.highScore
         ? state.gameScore
         : this.highScore;
     return (
-      <View
-        style={{
-          marginTop: 10,
-          marginBottom: 10,
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}>
-          <Text
-            style={{
-              marginLeft: 5,
-              fontSize: 20,
-            }}>
-            {i18n.t('screens.game.score', {score: state.gameScore})}
+      <View style={styles.scoreMainContainer}>
+        <View style={styles.scoreCurrentContainer}>
+          <Text style={styles.scoreText}>
+            {i18n.t('screens.game.score', { score: state.gameScore })}
           </Text>
           <MaterialCommunityIcons
             name="star"
             color={props.theme.colors.tetrisScore}
             size={20}
-            style={{
-              marginTop: 'auto',
-              marginBottom: 'auto',
-              marginLeft: 5,
-            }}
+            style={styles.centerVerticalSmallMargin}
           />
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop: 5,
-          }}>
+        <View style={styles.scoreBestContainer}>
           <Text
             style={{
-              marginLeft: 5,
-              fontSize: 10,
+              ...styles.scoreText,
               color: props.theme.colors.textDisabled,
-            }}>
-            {i18n.t('screens.game.highScore', {score: highScore})}
+            }}
+          >
+            {i18n.t('screens.game.highScore', { score: highScore })}
           </Text>
           <MaterialCommunityIcons
             name="star"
             color={props.theme.colors.tetrisScore}
             size={10}
-            style={{
-              marginTop: 'auto',
-              marginBottom: 'auto',
-              marginLeft: 5,
-            }}
+            style={styles.centerVerticalSmallMargin}
           />
         </View>
       </View>
@@ -288,30 +294,22 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
   }
 
   getControlButtons() {
-    const {props} = this;
+    const { props } = this;
     return (
-      <View
-        style={{
-          height: 80,
-          flexDirection: 'row',
-        }}>
+      <View style={styles.controlsContainer}>
         <IconButton
           icon="rotate-right-variant"
           size={40}
           onPress={() => {
             this.logic.rotatePressed(this.updateGrid);
           }}
-          style={{flex: 1}}
+          style={GENERAL_STYLES.flex}
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            flex: 4,
-          }}>
+        <View style={styles.directionsContainer}>
           <IconButton
             icon="chevron-left"
             size={40}
-            style={{flex: 1}}
+            style={GENERAL_STYLES.flex}
             onPress={() => {
               this.logic.pressedOut();
             }}
@@ -322,7 +320,7 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
           <IconButton
             icon="chevron-right"
             size={40}
-            style={{flex: 1}}
+            style={GENERAL_STYLES.flex}
             onPress={() => {
               this.logic.pressedOut();
             }}
@@ -340,7 +338,7 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
           onPress={() => {
             this.logic.pressedOut();
           }}
-          style={{flex: 1}}
+          style={GENERAL_STYLES.flex}
           color={props.theme.colors.tetrisScore}
         />
       </View>
@@ -420,16 +418,12 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
-      <View style={{flex: 1}}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-          }}>
+      <View style={GENERAL_STYLES.flex}>
+        <View style={styles.container}>
           {this.getStatusIcons()}
-          <View style={{flex: 4}}>
+          <View style={styles.gridContainer}>
             {this.getScoreIcon()}
             <GridComponent
               width={this.logic.getWidth()}
@@ -437,21 +431,16 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
               grid={state.grid}
               style={{
                 backgroundColor: props.theme.colors.tetrisBackground,
-                flex: 1,
-                marginLeft: 'auto',
-                marginRight: 'auto',
+                ...GENERAL_STYLES.flex,
+                ...GENERAL_STYLES.centerHorizontal,
               }}
             />
           </View>
 
-          <View style={{flex: 1}}>
+          <View style={GENERAL_STYLES.flex}>
             <Preview
               items={this.logic.getNextPiecesPreviews()}
-              style={{
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                marginTop: 10,
-              }}
+              style={styles.preview}
             />
           </View>
         </View>

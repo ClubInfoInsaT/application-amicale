@@ -18,25 +18,32 @@
  */
 
 import * as React from 'react';
-import {View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-export type CellType = {color: string; isEmpty: boolean; key: string};
+export type CellType = { color: string; isEmpty: boolean; key: string };
 
 type PropsType = {
   cell: CellType;
 };
 
+const styles = StyleSheet.create({
+  cell: {
+    flex: 1,
+    borderColor: 'transparent',
+    borderRadius: 4,
+    borderWidth: 1,
+    aspectRatio: 1,
+  },
+});
+
 function CellComponent(props: PropsType) {
   const item = props.cell;
+  const backgroundColor = item.isEmpty ? 'transparent' : item.color;
   return (
     <View
       style={{
-        flex: 1,
-        backgroundColor: item.isEmpty ? 'transparent' : item.color,
-        borderColor: 'transparent',
-        borderRadius: 4,
-        borderWidth: 1,
-        aspectRatio: 1,
+        backgroundColor: backgroundColor,
+        ...styles.cell,
       }}
     />
   );

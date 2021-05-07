@@ -18,9 +18,10 @@
  */
 
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   icon: string;
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
 
 function IntroIcon(props: PropsType) {
   return (
-    <View style={{flex: 1}}>
+    <View style={GENERAL_STYLES.flex}>
       <Animatable.View useNativeDriver style={styles.center} animation="fadeIn">
         <MaterialCommunityIcons name={props.icon} color="#fff" size={200} />
       </Animatable.View>

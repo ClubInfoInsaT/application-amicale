@@ -18,12 +18,12 @@
  */
 
 import * as React from 'react';
-import {List, TouchableRipple, withTheme} from 'react-native-paper';
+import { List, TouchableRipple, withTheme } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import type {PlanexGroupType} from '../../../screens/Planex/GroupSelectionScreen';
-import {View} from 'react-native';
-import {getPrettierPlanexGroupName} from '../../../utils/Utils';
+import type { PlanexGroupType } from '../../../screens/Planex/GroupSelectionScreen';
+import { StyleSheet, View } from 'react-native';
+import { getPrettierPlanexGroupName } from '../../../utils/Utils';
 
 type PropsType = {
   theme: ReactNativePaper.Theme;
@@ -34,10 +34,25 @@ type PropsType = {
   height: number;
 };
 
+const styles = StyleSheet.create({
+  item: {
+    justifyContent: 'center',
+  },
+  icon: {
+    padding: 10,
+  },
+  iconContainer: {
+    marginRight: 10,
+    marginLeft: 'auto',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+  },
+});
+
 class GroupListItem extends React.Component<PropsType> {
   isFav: boolean;
 
-  starRef: {current: null | (Animatable.View & View)};
+  starRef: { current: null | (Animatable.View & View) };
 
   constructor(props: PropsType) {
     super(props);
@@ -46,7 +61,7 @@ class GroupListItem extends React.Component<PropsType> {
   }
 
   shouldComponentUpdate(nextProps: PropsType): boolean {
-    const {favorites} = this.props;
+    const { favorites } = this.props;
     const favChanged = favorites.length !== nextProps.favorites.length;
     let newFavState = this.isFav;
     if (favChanged) {
@@ -58,7 +73,7 @@ class GroupListItem extends React.Component<PropsType> {
   }
 
   onStarPress = () => {
-    const {props} = this;
+    const { props } = this;
     const ref = this.starRef;
     if (ref.current && ref.current.rubberBand && ref.current.swing) {
       if (this.isFav) {
@@ -71,7 +86,7 @@ class GroupListItem extends React.Component<PropsType> {
   };
 
   isGroupInFavorites(favorites: Array<PlanexGroupType>): boolean {
-    const {item} = this.props;
+    const { item } = this.props;
     for (let i = 0; i < favorites.length; i += 1) {
       if (favorites[i].id === item.id) {
         return true;
@@ -81,8 +96,8 @@ class GroupListItem extends React.Component<PropsType> {
   }
 
   render() {
-    const {props} = this;
-    const {colors} = props.theme;
+    const { props } = this;
+    const { colors } = props.theme;
     return (
       <List.Item
         title={getPrettierPlanexGroupName(props.item.name)}
@@ -98,15 +113,11 @@ class GroupListItem extends React.Component<PropsType> {
           <Animatable.View ref={this.starRef} useNativeDriver>
             <TouchableRipple
               onPress={this.onStarPress}
-              style={{
-                marginRight: 10,
-                marginLeft: 'auto',
-                marginTop: 'auto',
-                marginBottom: 'auto',
-              }}>
+              style={styles.iconContainer}
+            >
               <MaterialCommunityIcons
                 size={30}
-                style={{padding: 10}}
+                style={styles.icon}
                 name="star"
                 color={this.isFav ? colors.tetrisScore : iconProps.color}
               />
@@ -115,7 +126,7 @@ class GroupListItem extends React.Component<PropsType> {
         )}
         style={{
           height: props.height,
-          justifyContent: 'center',
+          ...styles.item,
         }}
       />
     );

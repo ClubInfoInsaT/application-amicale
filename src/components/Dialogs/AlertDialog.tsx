@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import {Button, Dialog, Paragraph, Portal} from 'react-native-paper';
+import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import i18n from 'i18n-js';
 
 type PropsType = {

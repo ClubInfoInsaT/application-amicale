@@ -18,25 +18,23 @@
  */
 
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
-import Mascot, {MASCOT_STYLE} from '../Mascot/Mascot';
+import { StyleSheet, View } from 'react-native';
+import GENERAL_STYLES from '../../constants/Styles';
+import Mascot, { MASCOT_STYLE } from '../Mascot/Mascot';
 
 const styles = StyleSheet.create({
   center: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    marginRight: 'auto',
-    marginLeft: 'auto',
+    ...GENERAL_STYLES.center,
+    width: '80%',
   },
 });
 
 function MascotIntroEnd() {
   return (
-    <View style={{flex: 1}}>
+    <View style={GENERAL_STYLES.flex}>
       <Mascot
         style={{
           ...styles.center,
-          width: '80%',
         }}
         emotion={MASCOT_STYLE.COOL}
         animated

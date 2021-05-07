@@ -17,17 +17,16 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
 import i18n from 'i18n-js';
-import {List, withTheme} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { List, withTheme } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
 import WebSectionList from '../../../components/Screens/WebSectionList';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
-import type {SectionListDataType} from '../../../components/Screens/WebSectionList';
+import type { SectionListDataType } from '../../../components/Screens/WebSectionList';
+import { StyleSheet } from 'react-native';
 
 const DATA_URL = 'https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json';
 const LIST_ITEM_HEIGHT = 84;
@@ -64,6 +63,12 @@ type PropsType = {
   theme: ReactNativePaper.Theme;
 };
 
+const styles = StyleSheet.create({
+  item: {
+    justifyContent: 'center',
+  },
+});
+
 /**
  * Class defining the main proximo screen.
  * This screen shows the different categories of articles offered by proximo.
@@ -79,7 +84,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
    */
   static sortFinalData(
     a: ProximoMainListItemType,
-    b: ProximoMainListItemType,
+    b: ProximoMainListItemType
   ): number {
     const str1 = a.type.name.toLowerCase();
     const str2 = b.type.name.toLowerCase();
@@ -111,7 +116,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
    */
   static getAvailableArticles(
     articles: Array<ProximoArticleType> | null,
-    type?: ProximoCategoryType,
+    type?: ProximoCategoryType
   ): Array<ProximoArticleType> {
     const availableArticles: Array<ProximoArticleType> = [];
     if (articles != null) {
@@ -138,7 +143,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * Creates header button
    */
   componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.setOptions({
       headerRight: () => this.getHeaderButtons(),
     });
@@ -149,7 +154,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * This will open a new ProximoListScreen with all items displayed
    */
   onPressSearchBtn = () => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     const searchScreenData = {
       shouldFocusSearchBar: true,
       data: {
@@ -172,7 +177,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * This will open the ProximoAboutScreen
    */
   onPressAboutBtn = () => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.navigate('proximo-about');
   };
 
@@ -211,8 +216,8 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * @param item The category to render
    * @return {*}
    */
-  getRenderItem = ({item}: {item: ProximoMainListItemType}) => {
-    const {navigation, theme} = this.props;
+  getRenderItem = ({ item }: { item: ProximoMainListItemType }) => {
+    const { navigation, theme } = this.props;
     const dataToSend = {
       shouldFocusSearchBar: false,
       data: item,
@@ -247,7 +252,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
           )}
           style={{
             height: LIST_ITEM_HEIGHT,
-            justifyContent: 'center',
+            ...styles.item,
           }}
         />
       );
@@ -262,7 +267,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * @return {*}
    * */
   createDataset = (
-    fetchedData: ProximoDataType | null,
+    fetchedData: ProximoDataType | null
   ): SectionListDataType<ProximoMainListItemType> => {
     return [
       {
@@ -281,12 +286,12 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * @returns {Array} The formatted dataset
    */
   generateData(
-    fetchedData: ProximoDataType | null,
+    fetchedData: ProximoDataType | null
   ): Array<ProximoMainListItemType> {
     const finalData: Array<ProximoMainListItemType> = [];
     this.articles = null;
     if (fetchedData != null) {
-      const {types} = fetchedData;
+      const { types } = fetchedData;
       this.articles = fetchedData.articles;
       finalData.push({
         type: {
@@ -308,7 +313,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
   }
 
   render() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     return (
       <WebSectionList
         createDataset={this.createDataset}

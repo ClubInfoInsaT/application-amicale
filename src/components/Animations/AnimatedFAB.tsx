@@ -24,7 +24,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {FAB} from 'react-native-paper';
+import { FAB } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import AutoHideHandler from '../../utils/AutoHideHandler';
 import CustomTabBar from '../Tabbar/CustomTabBar';
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 });
 
 export default class AnimatedFAB extends React.Component<PropsType> {
-  ref: {current: null | (Animatable.View & View)};
+  ref: { current: null | (Animatable.View & View) };
 
   hideHandler: AutoHideHandler;
 
@@ -75,7 +75,7 @@ export default class AnimatedFAB extends React.Component<PropsType> {
   };
 
   render() {
-    const {props} = this;
+    const { props } = this;
     return (
       <Animatable.View
         ref={this.ref}
@@ -83,7 +83,8 @@ export default class AnimatedFAB extends React.Component<PropsType> {
         style={{
           ...styles.fab,
           bottom: CustomTabBar.TAB_BAR_HEIGHT,
-        }}>
+        }}
+      >
         <FAB icon={props.icon} onPress={props.onPress} />
       </Animatable.View>
     );

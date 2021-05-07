@@ -19,7 +19,7 @@
 
 import * as React from 'react';
 import i18n from 'i18n-js';
-import type {IntroSlideType} from '../components/Overrides/CustomIntroSlider';
+import type { IntroSlideType } from '../components/Overrides/CustomIntroSlider';
 import MascotIntroWelcome from '../components/Intro/MascotIntroWelcome';
 import IntroIcon from '../components/Intro/IconIntro';
 

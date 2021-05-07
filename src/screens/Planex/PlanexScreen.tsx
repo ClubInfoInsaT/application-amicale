@@ -17,31 +17,35 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {Title, withTheme} from 'react-native-paper';
+import { Title, withTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {NativeScrollEvent, NativeSyntheticEvent, View} from 'react-native';
-import {CommonActions} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { CommonActions } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import Autolink from 'react-native-autolink';
 import ThemeManager from '../../managers/ThemeManager';
 import WebViewScreen from '../../components/Screens/WebViewScreen';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import AlertDialog from '../../components/Dialogs/AlertDialog';
-import {dateToString, getTimeOnlyString} from '../../utils/Planning';
+import { dateToString, getTimeOnlyString } from '../../utils/Planning';
 import DateManager from '../../managers/DateManager';
 import AnimatedBottomBar from '../../components/Animations/AnimatedBottomBar';
 import ErrorView from '../../components/Screens/ErrorView';
-import type {PlanexGroupType} from './GroupSelectionScreen';
-import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
+import type { PlanexGroupType } from './GroupSelectionScreen';
+import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
-import {getPrettierPlanexGroupName} from '../../utils/Utils';
+import { getPrettierPlanexGroupName } from '../../utils/Utils';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
-  route: {params: {group: PlanexGroupType}};
+  route: { params: { group: PlanexGroupType } };
   theme: ReactNativePaper.Theme;
 };
 
@@ -136,14 +140,22 @@ const INJECT_STYLE = `
 $('head').append('<style>${CUSTOM_CSS}</style>');
 `;
 
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+  },
+});
+
 /**
  * Class defining the app's Planex screen.
  * This screen uses a webview to render the page
  */
 class PlanexScreen extends React.Component<PropsType, StateType> {
-  webScreenRef: {current: null | WebViewScreen};
+  webScreenRef: { current: null | WebViewScreen };
 
-  barRef: {current: null | AnimatedBottomBar};
+  barRef: { current: null | AnimatedBottomBar };
 
   customInjectedJS: string;
 
@@ -156,11 +168,11 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
     this.barRef = React.createRef();
     this.customInjectedJS = '';
     let currentGroupString = AsyncStorageManager.getString(
-      AsyncStorageManager.PREFERENCES.planexCurrentGroup.key,
+      AsyncStorageManager.PREFERENCES.planexCurrentGroup.key
     );
     let currentGroup: PlanexGroupType;
     if (currentGroupString === '') {
-      currentGroup = {name: 'SELECT GROUP', id: -1};
+      currentGroup = { name: 'SELECT GROUP', id: -1 };
     } else {
       currentGroup = JSON.parse(currentGroupString);
       props.navigation.setOptions({
@@ -180,7 +192,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * Register for events and show the banner after 2 seconds
    */
   componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.addListener('focus', this.onScreenFocus);
   }
 
@@ -191,7 +203,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * @returns {boolean}
    */
   shouldComponentUpdate(nextProps: PropsType): boolean {
-    const {props, state} = this;
+    const { props, state } = this;
     if (nextProps.theme.dark !== props.theme.dark) {
       this.generateInjectedJS(state.currentGroup.id);
     }
@@ -204,11 +216,11 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getWebView() {
-    const {props, state} = this;
+    const { props, state } = this;
     const showWebview = state.currentGroup.id !== -1;
 
     return (
-      <View style={{height: '100%'}}>
+      <View style={GENERAL_STYLES.flex}>
         {!showWebview ? (
           <ErrorView
             navigation={props.navigation}
@@ -235,7 +247,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * This will hide the banner and open the SettingsScreen
    */
   onGoToSettings = () => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.navigate('settings');
   };
 
@@ -267,7 +279,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    *
    * @param event
    */
-  onMessage = (event: {nativeEvent: {data: string}}) => {
+  onMessage = (event: { nativeEvent: { data: string } }) => {
     const data: {
       start: string;
       end: string;
@@ -325,7 +337,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * If navigations parameters contain a group, set it as selected
    */
   handleNavigationParams = () => {
-    const {props} = this;
+    const { props } = this;
     if (props.route.params != null) {
       if (
         props.route.params.group !== undefined &&
@@ -333,7 +345,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
       ) {
         // reset params to prevent infinite loop
         this.selectNewGroup(props.route.params.group);
-        props.navigation.dispatch(CommonActions.setParams({group: null}));
+        props.navigation.dispatch(CommonActions.setParams({ group: null }));
       }
     }
   };
@@ -344,14 +356,14 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * @param group The group object selected
    */
   selectNewGroup(group: PlanexGroupType) {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     this.sendMessage('setGroup', group.id.toString());
-    this.setState({currentGroup: group});
+    this.setState({ currentGroup: group });
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.planexCurrentGroup.key,
-      group,
+      group
     );
-    navigation.setOptions({title: getPrettierPlanexGroupName(group.name)});
+    navigation.setOptions({ title: getPrettierPlanexGroupName(group.name) });
     this.generateInjectedJS(group.id);
   }
 
@@ -374,24 +386,19 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
-      <View style={{flex: 1}}>
+      <View style={GENERAL_STYLES.flex}>
         {/* Allow to draw webview bellow banner */}
-        <View
-          style={{
-            position: 'absolute',
-            height: '100%',
-            width: '100%',
-          }}>
+        <View style={styles.container}>
           {props.theme.dark ? ( // Force component theme update by recreating it on theme change
             this.getWebView()
           ) : (
-            <View style={{height: '100%'}}>{this.getWebView()}</View>
+            <View style={GENERAL_STYLES.flex}>{this.getWebView()}</View>
           )}
         </View>
         {AsyncStorageManager.getString(
-          AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
+          AsyncStorageManager.PREFERENCES.defaultStartScreen.key
         ).toLowerCase() !== 'planex' ? (
           <MascotPopup
             prefKey={AsyncStorageManager.PREFERENCES.planexShowMascot.key}

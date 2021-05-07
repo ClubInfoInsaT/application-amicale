@@ -18,9 +18,12 @@
  */
 
 import * as React from 'react';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack';
 import i18n from 'i18n-js';
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 import SettingsScreen from '../screens/Other/Settings/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
@@ -78,16 +81,16 @@ export enum MainRoutes {
   Feedback = 'feedback',
 }
 
-type DefaultParams = {[key in MainRoutes]: object | undefined};
+type DefaultParams = { [key in MainRoutes]: object | undefined };
 
 export interface FullParamsList extends DefaultParams {
-  login: {nextScreen: string};
+  'login': { nextScreen: string };
   'equipment-confirm': {
     item?: DeviceType;
     dates: [string, string];
   };
-  'equipment-rent': {item?: DeviceType};
-  gallery: {images: Array<{url: string}>};
+  'equipment-rent': { item?: DeviceType };
+  'gallery': { images: Array<{ url: string }> };
 }
 
 // Don't know why but TS is complaining without this
@@ -108,13 +111,14 @@ const defaultScreenOptions = {
 
 const MainStack = createStackNavigator<MainStackParamsList>();
 
-function MainStackComponent(props: {createTabNavigator: () => JSX.Element}) {
-  const {createTabNavigator} = props;
+function MainStackComponent(props: { createTabNavigator: () => JSX.Element }) {
+  const { createTabNavigator } = props;
   return (
     <MainStack.Navigator
       initialRouteName={MainRoutes.Main}
       headerMode="screen"
-      screenOptions={defaultScreenOptions}>
+      screenOptions={defaultScreenOptions}
+    >
       <MainStack.Screen
         name={MainRoutes.Main}
         component={createTabNavigator}
@@ -135,31 +139,31 @@ function MainStackComponent(props: {createTabNavigator: () => JSX.Element}) {
         MainRoutes.Settings,
         MainStack,
         SettingsScreen,
-        i18n.t('screens.settings.title'),
+        i18n.t('screens.settings.title')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.DashboardEdit,
         MainStack,
         DashboardEditScreen,
-        i18n.t('screens.settings.dashboardEdit.title'),
+        i18n.t('screens.settings.dashboardEdit.title')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.About,
         MainStack,
         AboutScreen,
-        i18n.t('screens.about.title'),
+        i18n.t('screens.about.title')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.Dependencies,
         MainStack,
         AboutDependenciesScreen,
-        i18n.t('screens.about.libs'),
+        i18n.t('screens.about.libs')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.Debug,
         MainStack,
         DebugScreen,
-        i18n.t('screens.about.debug'),
+        i18n.t('screens.about.debug')
       )}
 
       {CreateScreenCollapsibleStack(
@@ -169,7 +173,7 @@ function MainStackComponent(props: {createTabNavigator: () => JSX.Element}) {
         i18n.t('screens.game.title'),
         true,
         undefined,
-        'transparent',
+        'transparent'
       )}
       <MainStack.Screen
         name={MainRoutes.GameMain}
@@ -184,8 +188,8 @@ function MainStackComponent(props: {createTabNavigator: () => JSX.Element}) {
         LoginScreen,
         i18n.t('screens.login.title'),
         true,
-        {headerTintColor: '#fff'},
-        'transparent',
+        { headerTintColor: '#fff' },
+        'transparent'
       )}
       {getWebsiteStack('website', MainStack, WebsiteScreen, '')}
 
@@ -193,19 +197,19 @@ function MainStackComponent(props: {createTabNavigator: () => JSX.Element}) {
         MainRoutes.SelfMenu,
         MainStack,
         SelfMenuScreen,
-        i18n.t('screens.menu.title'),
+        i18n.t('screens.menu.title')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.Proximo,
         MainStack,
         ProximoMainScreen,
-        i18n.t('screens.proximo.title'),
+        i18n.t('screens.proximo.title')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.ProximoList,
         MainStack,
         ProximoListScreen,
-        i18n.t('screens.proximo.articleList'),
+        i18n.t('screens.proximo.articleList')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.ProximoAbout,
@@ -213,20 +217,20 @@ function MainStackComponent(props: {createTabNavigator: () => JSX.Element}) {
         ProximoAboutScreen,
         i18n.t('screens.proximo.title'),
         true,
-        {...modalTransition},
+        { ...modalTransition }
       )}
 
       {CreateScreenCollapsibleStack(
         MainRoutes.Profile,
         MainStack,
         ProfileScreen,
-        i18n.t('screens.profile.title'),
+        i18n.t('screens.profile.title')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.ClubList,
         MainStack,
         ClubListScreen,
-        i18n.t('screens.clubs.title'),
+        i18n.t('screens.clubs.title')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.ClubInformation,
@@ -234,7 +238,7 @@ function MainStackComponent(props: {createTabNavigator: () => JSX.Element}) {
         ClubDisplayScreen,
         i18n.t('screens.clubs.details'),
         true,
-        {...modalTransition},
+        { ...modalTransition }
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.ClubAbout,
@@ -242,37 +246,37 @@ function MainStackComponent(props: {createTabNavigator: () => JSX.Element}) {
         ClubAboutScreen,
         i18n.t('screens.clubs.title'),
         true,
-        {...modalTransition},
+        { ...modalTransition }
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.EquipmentList,
         MainStack,
         EquipmentScreen,
-        i18n.t('screens.equipment.title'),
+        i18n.t('screens.equipment.title')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.EquipmentRent,
         MainStack,
         EquipmentLendScreen,
-        i18n.t('screens.equipment.book'),
+        i18n.t('screens.equipment.book')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.EquipmentConfirm,
         MainStack,
         EquipmentConfirmScreen,
-        i18n.t('screens.equipment.confirm'),
+        i18n.t('screens.equipment.confirm')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.Vote,
         MainStack,
         VoteScreen,
-        i18n.t('screens.vote.title'),
+        i18n.t('screens.vote.title')
       )}
       {CreateScreenCollapsibleStack(
         MainRoutes.Feedback,
         MainStack,
         BugReportScreen,
-        i18n.t('screens.feedback.title'),
+        i18n.t('screens.feedback.title')
       )}
     </MainStack.Navigator>
   );
@@ -280,7 +284,7 @@ function MainStackComponent(props: {createTabNavigator: () => JSX.Element}) {
 
 type PropsType = {
   defaultHomeRoute: string | null;
-  defaultHomeData: {[key: string]: string};
+  defaultHomeData: { [key: string]: string };
 };
 
 export default function MainNavigator(props: PropsType) {

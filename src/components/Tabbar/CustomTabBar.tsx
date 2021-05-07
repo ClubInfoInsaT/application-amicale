@@ -18,13 +18,13 @@
  */
 
 import * as React from 'react';
-import {Animated} from 'react-native';
-import {withTheme} from 'react-native-paper';
-import {Collapsible} from 'react-navigation-collapsible';
+import { Animated, StyleSheet } from 'react-native';
+import { withTheme } from 'react-native-paper';
+import { Collapsible } from 'react-navigation-collapsible';
 import TabIcon from './TabIcon';
 import TabHomeIcon from './TabHomeIcon';
-import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
-import {NavigationState} from '@react-navigation/native';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { NavigationState } from '@react-navigation/native';
 import {
   PartialState,
   Route,
@@ -51,6 +51,16 @@ const TAB_ICONS = {
   planex: 'clock',
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    width: '100%',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+  },
+});
+
 class CustomTabBar extends React.Component<PropsType, StateType> {
   static TAB_BAR_HEIGHT = 48;
 
@@ -71,7 +81,7 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
    * @param destIndex The destination route index
    */
   onItemPress(route: RouteType, currentIndex: number, destIndex: number) {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     if (currentIndex !== destIndex) {
       navigation.navigate(route.name);
     }
@@ -83,7 +93,7 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
    * @param route
    */
   onItemLongPress(route: RouteType) {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     if (route.name === 'home') {
       navigation.navigate('game-start');
     }
@@ -93,7 +103,7 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
    * Finds the active route and syncs the tab bar animation with the header bar
    */
   onRouteChange = () => {
-    const {props} = this;
+    const { props } = this;
     props.state.routes.map(this.syncTabBar);
   };
 
@@ -122,9 +132,9 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getRenderIcon = (route: RouteType, index: number) => {
-    const {props} = this;
-    const {state} = props;
-    const {options} = props.descriptors[route.key];
+    const { props } = this;
+    const { state } = props;
+    const { options } = props.descriptors[route.key];
     let label;
     if (options.tabBarLabel != null) {
       label = options.tabBarLabel;
@@ -171,12 +181,12 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
   };
 
   getIcons() {
-    const {props} = this;
+    const { props } = this;
     return props.state.routes.map(this.getRenderIcon);
   }
 
   syncTabBar = (route: RouteType, index: number) => {
-    const {state} = this.props;
+    const { state } = this.props;
     const isFocused = state.index === index;
     if (isFocused) {
       const stackState = route.state;
@@ -184,8 +194,8 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
         stackState && stackState.index != null
           ? stackState.routes[stackState.index]
           : null;
-      const params: {collapsible: Collapsible} | null | undefined = stackRoute
-        ? (stackRoute.params as {collapsible: Collapsible})
+      const params: { collapsible: Collapsible } | null | undefined = stackRoute
+        ? (stackRoute.params as { collapsible: Collapsible })
         : null;
       const collapsible = params != null ? params.collapsible : null;
       if (collapsible != null) {
@@ -197,20 +207,17 @@ class CustomTabBar extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const {props, state} = this;
+    const { props, state } = this;
     const icons = this.getIcons();
     return (
       <Animated.View
         style={{
-          flexDirection: 'row',
           height: CustomTabBar.TAB_BAR_HEIGHT,
-          width: '100%',
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
           backgroundColor: props.theme.colors.surface,
-          transform: [{translateY: state.translateY}],
-        }}>
+          transform: [{ translateY: state.translateY }],
+          ...styles.container,
+        }}
+      >
         {icons}
       </Animated.View>
     );

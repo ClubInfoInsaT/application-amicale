@@ -18,9 +18,9 @@
  */
 
 import * as React from 'react';
-import {Image} from 'react-native';
-import {List, useTheme} from 'react-native-paper';
-import type {ServiceItemType} from '../../../managers/ServicesManager';
+import { Image, StyleSheet } from 'react-native';
+import { List, useTheme } from 'react-native-paper';
+import type { ServiceItemType } from '../../../managers/ServicesManager';
 
 type PropsType = {
   item: ServiceItemType;
@@ -29,9 +29,23 @@ type PropsType = {
   onPress: () => void;
 };
 
+const styles = StyleSheet.create({
+  image: {
+    width: 40,
+    height: 40,
+  },
+  item: {
+    justifyContent: 'center',
+    paddingLeft: 30,
+  },
+});
+
 function DashboardEditItem(props: PropsType) {
   const theme = useTheme();
-  const {item, onPress, height, isActive} = props;
+  const { item, onPress, height, isActive } = props;
+  const backgroundColor = isActive
+    ? theme.colors.proxiwashFinishedColor
+    : 'transparent';
   return (
     <List.Item
       title={item.title}
@@ -40,12 +54,9 @@ function DashboardEditItem(props: PropsType) {
       left={() => (
         <Image
           source={
-            typeof item.image === 'string' ? {uri: item.image} : item.image
+            typeof item.image === 'string' ? { uri: item.image } : item.image
           }
-          style={{
-            width: 40,
-            height: 40,
-          }}
+          style={styles.image}
         />
       )}
       right={(iconProps) =>
@@ -58,12 +69,9 @@ function DashboardEditItem(props: PropsType) {
         ) : null
       }
       style={{
-        height,
-        justifyContent: 'center',
-        paddingLeft: 30,
-        backgroundColor: isActive
-          ? theme.colors.proxiwashFinishedColor
-          : 'transparent',
+        ...styles.image,
+        height: height,
+        backgroundColor: backgroundColor,
       }}
     />
   );

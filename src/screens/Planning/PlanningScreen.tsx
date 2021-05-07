@@ -18,12 +18,12 @@
  */
 
 import * as React from 'react';
-import {BackHandler, View} from 'react-native';
+import { BackHandler, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
-import {Agenda, LocaleConfig} from 'react-native-calendars';
-import {Avatar, Divider, List} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {readData} from '../../utils/WebData';
+import { Agenda, LocaleConfig } from 'react-native-calendars';
+import { Avatar, Divider, List } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { readData } from '../../utils/WebData';
 import {
   generateEventAgenda,
   getCurrentDateString,
@@ -32,9 +32,10 @@ import {
   PlanningEventType,
 } from '../../utils/Planning';
 import CustomAgenda from '../../components/Overrides/CustomAgenda';
-import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
+import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
+import GENERAL_STYLES from '../../constants/Styles';
 
 LocaleConfig.locales.fr = {
   monthNames: [
@@ -83,12 +84,18 @@ type PropsType = {
 
 type StateType = {
   refreshing: boolean;
-  agendaItems: {[key: string]: Array<PlanningEventType>};
+  agendaItems: { [key: string]: Array<PlanningEventType> };
   calendarShowing: boolean;
 };
 
 const FETCH_URL = 'https://www.amicale-insat.fr/api/event/list';
 const AGENDA_MONTH_SPAN = 3;
+
+const styles = StyleSheet.create({
+  icon: {
+    backgroundColor: 'transparent',
+  },
+});
 
 /**
  * Class defining the app's planning screen
@@ -121,18 +128,18 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    * Captures focus and blur events to hook on android back button
    */
   componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     this.onRefresh();
     navigation.addListener('focus', () => {
       BackHandler.addEventListener(
         'hardwareBackPress',
-        this.onBackButtonPressAndroid,
+        this.onBackButtonPressAndroid
       );
     });
     navigation.addListener('blur', () => {
       BackHandler.removeEventListener(
         'hardwareBackPress',
-        this.onBackButtonPressAndroid,
+        this.onBackButtonPressAndroid
       );
     });
   }
@@ -143,7 +150,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    * @return {boolean}
    */
   onBackButtonPressAndroid = (): boolean => {
-    const {calendarShowing} = this.state;
+    const { calendarShowing } = this.state;
     if (calendarShowing && this.agendaRef != null) {
       // @ts-ignore
       this.agendaRef.chooseDay(this.agendaRef.state.selectedDay);
@@ -166,7 +173,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
     }
 
     if (canRefresh) {
-      this.setState({refreshing: true});
+      this.setState({ refreshing: true });
       readData(FETCH_URL)
         .then((fetchedData: Array<PlanningEventType>) => {
           this.setState({
@@ -198,7 +205,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    * @param isCalendarOpened True is the calendar is already open, false otherwise
    */
   onCalendarToggled = (isCalendarOpened: boolean) => {
-    this.setState({calendarShowing: isCalendarOpened});
+    this.setState({ calendarShowing: isCalendarOpened });
   };
 
   /**
@@ -208,7 +215,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    * @return {*}
    */
   getRenderItem = (item: PlanningEventType) => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     const onPress = () => {
       navigation.navigate('planning-information', {
         data: item,
@@ -223,10 +230,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
             title={item.title}
             description={getTimeOnlyString(item.date_begin)}
             left={() => (
-              <Avatar.Image
-                source={{uri: logo}}
-                style={{backgroundColor: 'transparent'}}
-              />
+              <Avatar.Image source={{ uri: logo }} style={styles.icon} />
             )}
             onPress={onPress}
           />
@@ -253,9 +257,9 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
   getRenderEmptyDate = () => <Divider />;
 
   render() {
-    const {state, props} = this;
+    const { state, props } = this;
     return (
-      <View style={{flex: 1}}>
+      <View style={GENERAL_STYLES.flex}>
         <CustomAgenda
           {...props}
           // the list of items that have to be displayed in agenda. If you want to render item as empty date

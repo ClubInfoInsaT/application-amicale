@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import {Image, View} from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import {
   Avatar,
   Card,
@@ -28,24 +28,38 @@ import {
   withTheme,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import CardList from '../../components/Lists/CardList/CardList';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
-import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
+import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import ServicesManager, {
   SERVICES_CATEGORIES_KEY,
 } from '../../managers/ServicesManager';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
-import type {ServiceCategoryType} from '../../managers/ServicesManager';
+import type { ServiceCategoryType } from '../../managers/ServicesManager';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
   theme: ReactNativePaper.Theme;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 5,
+    marginBottom: 20,
+  },
+  image: {
+    width: 48,
+    height: 48,
+  },
+  icon: {
+    backgroundColor: 'transparent',
+  },
+});
 
 class ServicesScreen extends React.Component<PropsType> {
   finalDataset: Array<ServiceCategoryType>;
@@ -59,7 +73,7 @@ class ServicesScreen extends React.Component<PropsType> {
   }
 
   componentDidMount() {
-    const {props} = this;
+    const { props } = this;
     props.navigation.setOptions({
       headerRight: this.getAboutButton,
     });
@@ -76,7 +90,7 @@ class ServicesScreen extends React.Component<PropsType> {
   );
 
   onAboutPress = () => {
-    const {props} = this;
+    const { props } = this;
     props.navigation.navigate('amicale-contact');
   };
 
@@ -90,24 +104,16 @@ class ServicesScreen extends React.Component<PropsType> {
    * @returns {*}
    */
   getListTitleImage(source: string | number) {
-    const {props} = this;
+    const { props } = this;
     if (typeof source === 'number') {
-      return (
-        <Image
-          source={source}
-          style={{
-            width: 48,
-            height: 48,
-          }}
-        />
-      );
+      return <Image source={source} style={styles.image} />;
     }
     return (
       <Avatar.Icon
         size={48}
         icon={source}
         color={props.theme.colors.primary}
-        style={{backgroundColor: 'transparent'}}
+        style={styles.icon}
       />
     );
   }
@@ -118,17 +124,15 @@ class ServicesScreen extends React.Component<PropsType> {
    * @param item
    * @returns {*}
    */
-  getRenderItem = ({item}: {item: ServiceCategoryType}) => {
-    const {props} = this;
+  getRenderItem = ({ item }: { item: ServiceCategoryType }) => {
+    const { props } = this;
     return (
       <TouchableRipple
-        style={{
-          margin: 5,
-          marginBottom: 20,
-        }}
+        style={styles.container}
         onPress={() => {
-          props.navigation.navigate('services-section', {data: item});
-        }}>
+          props.navigation.navigate('services-section', { data: item });
+        }}
+      >
         <View>
           <Card.Title
             title={item.title}

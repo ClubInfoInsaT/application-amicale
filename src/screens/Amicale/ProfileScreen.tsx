@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import {
   Avatar,
   Button,
@@ -29,7 +29,7 @@ import {
   withTheme,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import AuthenticatedScreen from '../../components/Amicale/AuthenticatedScreen';
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import MaterialHeaderButtons, {
@@ -37,10 +37,11 @@ import MaterialHeaderButtons, {
 } from '../../components/Overrides/CustomHeaderButton';
 import CardList from '../../components/Lists/CardList/CardList';
 import AvailableWebsites from '../../constants/AvailableWebsites';
-import Mascot, {MASCOT_STYLE} from '../../components/Mascot/Mascot';
-import ServicesManager, {SERVICES_KEY} from '../../managers/ServicesManager';
+import Mascot, { MASCOT_STYLE } from '../../components/Mascot/Mascot';
+import ServicesManager, { SERVICES_KEY } from '../../managers/ServicesManager';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
-import type {ServiceItemType} from '../../managers/ServicesManager';
+import type { ServiceItemType } from '../../managers/ServicesManager';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -79,19 +80,25 @@ const styles = StyleSheet.create({
   editButton: {
     marginLeft: 'auto',
   },
+  mascot: {
+    width: 60,
+  },
+  title: {
+    marginLeft: 10,
+  },
 });
 
 class ProfileScreen extends React.Component<PropsType, StateType> {
   data: ProfileDataType | null;
 
-  flatListData: Array<{id: string}>;
+  flatListData: Array<{ id: string }>;
 
   amicaleDataset: Array<ServiceItemType>;
 
   constructor(props: PropsType) {
     super(props);
     this.data = null;
-    this.flatListData = [{id: '0'}, {id: '1'}, {id: '2'}, {id: '3'}];
+    this.flatListData = [{ id: '0' }, { id: '1' }, { id: '2' }, { id: '3' }];
     const services = new ServicesManager(props.navigation);
     this.amicaleDataset = services.getAmicaleServices([SERVICES_KEY.PROFILE]);
     this.state = {
@@ -100,7 +107,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
   }
 
   componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.setOptions({
       headerRight: this.getHeaderButton,
     });
@@ -128,10 +135,10 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getScreen = (data: Array<ProfileDataType | null>) => {
-    const {dialogVisible} = this.state;
+    const { dialogVisible } = this.state;
     this.data = data[0];
     return (
-      <View style={{flex: 1}}>
+      <View style={GENERAL_STYLES.flex}>
         <CollapsibleFlatList
           renderItem={this.getRenderItem}
           data={this.flatListData}
@@ -144,7 +151,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  getRenderItem = ({item}: {item: {id: string}}) => {
+  getRenderItem = ({ item }: { item: { id: string } }) => {
     switch (item.id) {
       case '0':
         return this.getWelcomeCard();
@@ -172,7 +179,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getWelcomeCard() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     return (
       <Card style={styles.card}>
         <Card.Title
@@ -181,9 +188,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
           })}
           left={() => (
             <Mascot
-              style={{
-                width: 60,
-              }}
+              style={styles.mascot}
               emotion={MASCOT_STYLE.COOL}
               animated
               entryAnimation={{
@@ -192,7 +197,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
               }}
             />
           )}
-          titleStyle={{marginLeft: 10}}
+          titleStyle={styles.title}
         />
         <Card.Content>
           <Divider />
@@ -207,7 +212,8 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
               onPress={() => {
                 navigation.navigate('feedback');
               }}
-              style={styles.editButton}>
+              style={styles.editButton}
+            >
               {i18n.t('screens.feedback.homeButtonTitle')}
             </Button>
           </Card.Actions>
@@ -235,7 +241,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @return {*}
    */
   getPersonalListItem(field: string | undefined, icon: string) {
-    const {theme} = this.props;
+    const { theme } = this.props;
     const title = field != null ? ProfileScreen.getFieldValue(field) : ':(';
     const subtitle = field != null ? '' : ProfileScreen.getFieldValue(field);
     return (
@@ -259,7 +265,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @return {*}
    */
   getPersonalCard() {
-    const {theme, navigation} = this.props;
+    const { theme, navigation } = this.props;
     return (
       <Card style={styles.card}>
         <Card.Title
@@ -297,7 +303,8 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
                   title: i18n.t('screens.websites.amicale'),
                 });
               }}
-              style={styles.editButton}>
+              style={styles.editButton}
+            >
               {i18n.t('screens.profile.editInformation')}
             </Button>
           </Card.Actions>
@@ -312,7 +319,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @return {*}
    */
   getClubCard() {
-    const {theme} = this.props;
+    const { theme } = this.props;
     return (
       <Card style={styles.card}>
         <Card.Title
@@ -341,7 +348,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @return {*}
    */
   getMembershipCar() {
-    const {theme} = this.props;
+    const { theme } = this.props;
     return (
       <Card style={styles.card}>
         <Card.Title
@@ -371,7 +378,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @return {*}
    */
   getMembershipItem(state: boolean) {
-    const {theme} = this.props;
+    const { theme } = this.props;
     return (
       <List.Item
         title={
@@ -396,8 +403,8 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @param item The club to render
    * @return {*}
    */
-  getClubListItem = ({item}: {item: ClubType}) => {
-    const {theme} = this.props;
+  getClubListItem = ({ item }: { item: ClubType }) => {
+    const { theme } = this.props;
     const onPress = () => {
       this.openClubDetailsScreen(item.id);
     };
@@ -458,11 +465,11 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
   sortClubList = (a: ClubType): number => (a.is_manager ? -1 : 1);
 
   showDisconnectDialog = () => {
-    this.setState({dialogVisible: true});
+    this.setState({ dialogVisible: true });
   };
 
   hideDisconnectDialog = () => {
-    this.setState({dialogVisible: false});
+    this.setState({ dialogVisible: false });
   };
 
   /**
@@ -470,12 +477,12 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @param id The club's id to open
    */
   openClubDetailsScreen(id: number) {
-    const {navigation} = this.props;
-    navigation.navigate('club-information', {clubId: id});
+    const { navigation } = this.props;
+    navigation.navigate('club-information', { clubId: id });
   }
 
   render() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     return (
       <AuthenticatedScreen
         navigation={navigation}

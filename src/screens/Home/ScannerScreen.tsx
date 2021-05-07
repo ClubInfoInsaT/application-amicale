@@ -18,17 +18,17 @@
  */
 
 import * as React from 'react';
-import {Linking, Platform, StyleSheet, View} from 'react-native';
-import {Button, Text} from 'react-native-paper';
-import {BarCodeReadEvent, RNCamera} from 'react-native-camera';
-import {BarcodeMask} from '@nartc/react-native-barcode-mask';
+import { Linking, Platform, StyleSheet, View } from 'react-native';
+import { Button, Text } from 'react-native-paper';
+import { BarCodeReadEvent, RNCamera } from 'react-native-camera';
+import { BarcodeMask } from '@nartc/react-native-barcode-mask';
 import i18n from 'i18n-js';
-import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import URLHandler from '../../utils/URLHandler';
 import AlertDialog from '../../components/Dialogs/AlertDialog';
 import CustomTabBar from '../../components/Tabbar/CustomTabBar';
 import LoadingConfirmDialog from '../../components/Dialogs/LoadingConfirmDialog';
-import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
+import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 
 type StateType = {
@@ -49,6 +49,15 @@ const styles = StyleSheet.create({
     bottom: 20,
     width: '80%',
     left: '10%',
+  },
+  permissionContainer: {
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  permissionButton: {
+    marginTop: 10,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 });
 
@@ -77,17 +86,14 @@ class ScannerScreen extends React.Component<{}, StateType> {
    */
   getPermissionScreen() {
     return (
-      <View style={{marginLeft: 10, marginRight: 10}}>
+      <View style={styles.permissionContainer}>
         <Text>{i18n.t('screens.scanner.permissions.error')}</Text>
         <Button
           icon="camera"
           mode="contained"
           onPress={this.requestPermissions}
-          style={{
-            marginTop: 10,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}>
+          style={styles.permissionButton}
+        >
           {i18n.t('screens.scanner.permissions.button')}
         </Button>
       </View>
@@ -102,14 +108,15 @@ class ScannerScreen extends React.Component<{}, StateType> {
    * @returns {*}
    */
   getScanner() {
-    const {state} = this;
+    const { state } = this;
     return (
       <RNCamera
         onBarCodeRead={state.scanned ? undefined : this.onCodeScanned}
         type={RNCamera.Constants.Type.back}
         barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
         style={StyleSheet.absoluteFill}
-        captureAudio={false}>
+        captureAudio={false}
+      >
         <BarcodeMask
           backgroundColor="#000"
           maskOpacity={0.5}
@@ -206,19 +213,21 @@ class ScannerScreen extends React.Component<{}, StateType> {
   };
 
   render() {
-    const {state} = this;
+    const { state } = this;
     return (
       <View
         style={{
           ...styles.container,
           marginBottom: CustomTabBar.TAB_BAR_HEIGHT,
-        }}>
+        }}
+      >
         {state.hasPermission ? this.getScanner() : this.getPermissionScreen()}
         <Button
           icon="information"
           mode="contained"
           onPress={this.showHelpDialog}
-          style={styles.button}>
+          style={styles.button}
+        >
           {i18n.t('screens.scanner.help.button')}
         </Button>
         <MascotPopup

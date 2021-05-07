@@ -18,9 +18,9 @@
  */
 
 import * as React from 'react';
-import {Text} from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import HTML from 'react-native-render-html';
-import {GestureResponderEvent, Linking} from 'react-native';
+import { GestureResponderEvent, Linking } from 'react-native';
 
 type PropsType = {
   html: string;
@@ -38,7 +38,7 @@ function CustomHTML(props: PropsType) {
     htmlAttribs: any,
     children: any,
     convertedCSSStyles: any,
-    passProps: any,
+    passProps: any
   ) => {
     return <Text {...passProps}>{children}</Text>;
   };

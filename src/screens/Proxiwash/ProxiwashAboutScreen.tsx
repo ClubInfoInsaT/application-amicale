@@ -18,9 +18,9 @@
  */
 
 import * as React from 'react';
-import {Image, View} from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
-import {Card, Avatar, Paragraph, Title} from 'react-native-paper';
+import { Card, Avatar, Paragraph, Title } from 'react-native-paper';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import ProxiwashConstants from '../../constants/ProxiwashConstants';
 
@@ -37,9 +37,31 @@ export type LaundromatType = {
   url: string;
 };
 
+const styles = StyleSheet.create({
+  container: {
+    padding: 5,
+  },
+  card: {
+    margin: 5,
+  },
+  imageContainer: {
+    width: '100%',
+    height: 100,
+    marginTop: 20,
+    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    height: '100%',
+    width: '100%',
+    resizeMode: 'contain',
+  },
+});
+
 function getCardItem(item: LaundromatType) {
   return (
-    <Card style={{margin: 5}}>
+    <Card style={styles.card}>
       <Card.Title
         title={i18n.t(item.title)}
         subtitle={i18n.t(item.subtitle)}
@@ -63,27 +85,16 @@ function getCardItem(item: LaundromatType) {
  */
 export default function ProxiwashAboutScreen() {
   return (
-    <CollapsibleScrollView style={{padding: 5}} hasTab>
-      <View
-        style={{
-          width: '100%',
-          height: 100,
-          marginTop: 20,
-          marginBottom: 20,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Image
-          source={{uri: LOGO}}
-          style={{height: '100%', width: '100%', resizeMode: 'contain'}}
-        />
+    <CollapsibleScrollView style={styles.container} hasTab>
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: LOGO }} style={styles.image} />
       </View>
 
       {getCardItem(ProxiwashConstants.washinsa)}
 
       {getCardItem(ProxiwashConstants.tripodeB)}
 
-      <Card style={{margin: 5}}>
+      <Card style={styles.card}>
         <Card.Title
           title={i18n.t('screens.proxiwash.dryer')}
           left={(iconProps) => (
@@ -98,7 +109,7 @@ export default function ProxiwashAboutScreen() {
         </Card.Content>
       </Card>
 
-      <Card style={{margin: 5}}>
+      <Card style={styles.card}>
         <Card.Title
           title={i18n.t('screens.proxiwash.washer')}
           left={(iconProps) => (

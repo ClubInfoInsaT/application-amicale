@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import {Linking, View} from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import {
   Avatar,
   Button,
@@ -28,12 +28,12 @@ import {
   withTheme,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen';
 import CustomHTML from '../../../components/Overrides/CustomHTML';
 import CustomTabBar from '../../../components/Tabbar/CustomTabBar';
-import type {ClubCategoryType, ClubType} from './ClubListScreen';
-import {ERROR_TYPE} from '../../../utils/WebData';
+import type { ClubCategoryType, ClubType } from './ClubListScreen';
+import { ERROR_TYPE } from '../../../utils/WebData';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../../components/Media/ImageGalleryButton';
 
@@ -50,6 +50,37 @@ type PropsType = {
 };
 
 const AMICALE_MAIL = 'clubs@amicale-insat.fr';
+
+const styles = StyleSheet.create({
+  category: {
+    marginRight: 5,
+  },
+  categoryContainer: {
+    flexDirection: 'row',
+    marginTop: 5,
+  },
+  card: {
+    marginTop: 10,
+  },
+  icon: {
+    backgroundColor: 'transparent',
+  },
+  emailButton: {
+    marginLeft: 'auto',
+  },
+  scroll: {
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
+  imageButton: {
+    width: 300,
+    height: 300,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+});
 
 /**
  * Class defining a club event information page.
@@ -117,13 +148,13 @@ class ClubDisplayScreen extends React.Component<PropsType> {
     categories.forEach((cat: number | null) => {
       if (cat != null) {
         final.push(
-          <Chip style={{marginRight: 5}} key={cat}>
+          <Chip style={styles.category} key={cat}>
             {this.getCategoryName(cat)}
-          </Chip>,
+          </Chip>
         );
       }
     });
-    return <View style={{flexDirection: 'row', marginTop: 5}}>{final}</View>;
+    return <View style={styles.categoryContainer}>{final}</View>;
   }
 
   /**
@@ -134,7 +165,7 @@ class ClubDisplayScreen extends React.Component<PropsType> {
    * @returns {*}
    */
   getManagersRender(managers: Array<string>, email: string | null) {
-    const {props} = this;
+    const { props } = this;
     const managersListView: Array<React.ReactNode> = [];
     managers.forEach((item: string) => {
       managersListView.push(<Paragraph key={item}>{item}</Paragraph>);
@@ -142,7 +173,11 @@ class ClubDisplayScreen extends React.Component<PropsType> {
     const hasManagers = managers.length > 0;
     return (
       <Card
-        style={{marginTop: 10, marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
+        style={{
+          marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20,
+          ...styles.card,
+        }}
+      >
         <Card.Title
           title={i18n.t('screens.clubs.managers')}
           subtitle={
@@ -153,7 +188,7 @@ class ClubDisplayScreen extends React.Component<PropsType> {
           left={(iconProps) => (
             <Avatar.Icon
               size={iconProps.size}
-              style={{backgroundColor: 'transparent'}}
+              style={styles.icon}
               color={
                 hasManagers
                   ? props.theme.colors.success
@@ -193,7 +228,8 @@ class ClubDisplayScreen extends React.Component<PropsType> {
           onPress={() => {
             Linking.openURL(`mailto:${destinationEmail}`);
           }}
-          style={{marginLeft: 'auto'}}>
+          style={styles.emailButton}
+        >
           {text}
         </Button>
       </Card.Actions>
@@ -205,19 +241,12 @@ class ClubDisplayScreen extends React.Component<PropsType> {
     if (data != null) {
       this.updateHeaderTitle(data);
       return (
-        <CollapsibleScrollView style={{paddingLeft: 5, paddingRight: 5}} hasTab>
+        <CollapsibleScrollView style={styles.scroll} hasTab>
           {this.getCategoriesRender(data.category)}
           {data.logo !== null ? (
             <ImageGalleryButton
-              images={[{url: data.logo}]}
-              style={{
-                width: 300,
-                height: 300,
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                marginTop: 10,
-                marginBottom: 10,
-              }}
+              images={[{ url: data.logo }]}
+              style={styles.imageButton}
             />
           ) : (
             <View />
@@ -244,12 +273,12 @@ class ClubDisplayScreen extends React.Component<PropsType> {
    * @param data The club data
    */
   updateHeaderTitle(data: ClubType) {
-    const {props} = this;
-    props.navigation.setOptions({title: data.name});
+    const { props } = this;
+    props.navigation.setOptions({ title: data.name });
   }
 
   render() {
-    const {props} = this;
+    const { props } = this;
     if (this.shouldFetchData) {
       return (
         <AuthenticatedScreen
@@ -257,7 +286,7 @@ class ClubDisplayScreen extends React.Component<PropsType> {
           requests={[
             {
               link: 'clubs/info',
-              params: {id: this.clubId},
+              params: { id: this.clubId },
               mandatory: true,
             },
           ]}

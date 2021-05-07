@@ -18,12 +18,13 @@
  */
 
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
-import {Avatar, Button, Card, TouchableRipple} from 'react-native-paper';
-import {getTimeOnlyString, isDescriptionEmpty} from '../../utils/Planning';
+import { Avatar, Button, Card, TouchableRipple } from 'react-native-paper';
+import { getTimeOnlyString, isDescriptionEmpty } from '../../utils/Planning';
 import CustomHTML from '../Overrides/CustomHTML';
-import type {PlanningEventType} from '../../utils/Planning';
+import type { PlanningEventType } from '../../utils/Planning';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   event?: PlanningEventType | null;
@@ -52,19 +53,26 @@ const styles = StyleSheet.create({
  * Component used to display an event preview if an event is available
  */
 function PreviewEventDashboardItem(props: PropsType) {
-  const {event} = props;
+  const { event } = props;
   const isEmpty = event == null ? true : isDescriptionEmpty(event.description);
 
   if (event != null) {
     const logo = event.logo;
     const getImage = logo
       ? () => (
-          <Avatar.Image source={{uri: logo}} size={50} style={styles.avatar} />
+          <Avatar.Image
+            source={{ uri: logo }}
+            size={50}
+            style={styles.avatar}
+          />
         )
       : () => null;
     return (
       <Card style={styles.card} elevation={3}>
-        <TouchableRipple style={{flex: 1}} onPress={props.clickAction}>
+        <TouchableRipple
+          style={GENERAL_STYLES.flex}
+          onPress={props.clickAction}
+        >
           <View>
             <Card.Title
               title={event.title}

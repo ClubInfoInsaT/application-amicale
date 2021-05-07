@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {FlatList, Image, Linking, View} from 'react-native';
-import {Avatar, Card, List, Text} from 'react-native-paper';
+import { FlatList, Image, Linking, StyleSheet, View } from 'react-native';
+import { Avatar, Card, List, Text } from 'react-native-paper';
 import i18n from 'i18n-js';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 
@@ -30,6 +30,24 @@ type DatasetItemType = {
   email: string;
   icon: string;
 };
+
+const styles = StyleSheet.create({
+  imageContainer: {
+    width: '100%',
+    height: 100,
+    marginTop: 20,
+    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'contain',
+  },
+  card: {
+    margin: 5,
+  },
+});
 
 /**
  * Class defining a planning event information page.
@@ -105,7 +123,7 @@ class AmicaleContactScreen extends React.Component<{}> {
     />
   );
 
-  getRenderItem = ({item}: {item: DatasetItemType}) => {
+  getRenderItem = ({ item }: { item: DatasetItemType }) => {
     const onPress = () => {
       Linking.openURL(`mailto:${item.email}`);
     };
@@ -129,22 +147,14 @@ class AmicaleContactScreen extends React.Component<{}> {
   getScreen = () => {
     return (
       <View>
-        <View
-          style={{
-            width: '100%',
-            height: 100,
-            marginTop: 20,
-            marginBottom: 20,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+        <View style={styles.imageContainer}>
           <Image
             source={AMICALE_LOGO}
-            style={{flex: 1, resizeMode: 'contain'}}
+            style={styles.image}
             resizeMode="contain"
           />
         </View>
-        <Card style={{margin: 5}}>
+        <Card style={styles.card}>
           <Card.Title
             title={i18n.t('screens.amicaleAbout.title')}
             subtitle={i18n.t('screens.amicaleAbout.subtitle')}
@@ -168,7 +178,7 @@ class AmicaleContactScreen extends React.Component<{}> {
   render() {
     return (
       <CollapsibleFlatList
-        data={[{key: '1'}]}
+        data={[{ key: '1' }]}
         renderItem={this.getScreen}
         hasTab
       />

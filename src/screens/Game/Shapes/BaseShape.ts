@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 export type CoordinatesType = {
   x: number;
   y: number;
@@ -49,7 +47,7 @@ export default class BaseShape {
     }
     this.theme = theme;
     this.#rotation = 0;
-    this.position = {x: 0, y: 0};
+    this.position = { x: 0, y: 0 };
     this.#currentShape = this.getShapes()[this.#rotation];
   }
 
@@ -96,7 +94,7 @@ export default class BaseShape {
               y: this.position.y + row,
             });
           } else {
-            coordinates.push({x: col, y: row});
+            coordinates.push({ x: col, y: row });
           }
         }
       }

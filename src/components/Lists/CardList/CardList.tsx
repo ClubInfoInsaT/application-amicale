@@ -18,10 +18,10 @@
  */
 
 import * as React from 'react';
-import {Animated, Dimensions, ViewStyle} from 'react-native';
+import { Animated, Dimensions, ViewStyle } from 'react-native';
 import ImageListItem from './ImageListItem';
 import CardListItem from './CardListItem';
-import type {ServiceItemType} from '../../../managers/ServicesManager';
+import type { ServiceItemType } from '../../../managers/ServicesManager';
 
 type PropsType = {
   dataset: Array<ServiceItemType>;
@@ -45,8 +45,8 @@ export default class CardList extends React.Component<PropsType> {
     this.horizontalItemSize = this.windowWidth / 4; // So that we can fit 3 items, and a part of the 4th => user knows he can scroll
   }
 
-  getRenderItem = ({item}: {item: ServiceItemType}) => {
-    const {props} = this;
+  getRenderItem = ({ item }: { item: ServiceItemType }) => {
+    const { props } = this;
     if (props.isHorizontal) {
       return (
         <ImageListItem
@@ -62,7 +62,7 @@ export default class CardList extends React.Component<PropsType> {
   keyExtractor = (item: ServiceItemType): string => item.key;
 
   render() {
-    const {props} = this;
+    const { props } = this;
     let containerStyle = {};
     if (props.isHorizontal) {
       containerStyle = {

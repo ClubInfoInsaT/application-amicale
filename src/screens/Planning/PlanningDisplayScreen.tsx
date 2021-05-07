@@ -17,32 +17,43 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 import * as React from 'react';
-import {View} from 'react-native';
-import {Card} from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Card } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {getDateOnlyString, getTimeOnlyString} from '../../utils/Planning';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { getDateOnlyString, getTimeOnlyString } from '../../utils/Planning';
 import DateManager from '../../managers/DateManager';
 import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
-import {apiRequest, ERROR_TYPE} from '../../utils/WebData';
+import { apiRequest, ERROR_TYPE } from '../../utils/WebData';
 import ErrorView from '../../components/Screens/ErrorView';
 import CustomHTML from '../../components/Overrides/CustomHTML';
 import CustomTabBar from '../../components/Tabbar/CustomTabBar';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
-import type {PlanningEventType} from '../../utils/Planning';
+import type { PlanningEventType } from '../../utils/Planning';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
-  route: {params: {data: PlanningEventType; id: number; eventId: number}};
+  route: { params: { data: PlanningEventType; id: number; eventId: number } };
 };
 
 type StateType = {
   loading: boolean;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
+  button: {
+    width: 300,
+    height: 300,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+});
 
 const EVENT_INFO_URL = 'event/info';
 
@@ -93,7 +104,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    */
   onFetchSuccess = (data: PlanningEventType) => {
     this.displayData = data;
-    this.setState({loading: false});
+    this.setState({ loading: false });
   };
 
   /**
@@ -103,7 +114,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    */
   onFetchError = (error: number) => {
     this.errorCode = error;
-    this.setState({loading: false});
+    this.setState({ loading: false });
   };
 
   /**
@@ -112,7 +123,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getContent() {
-    const {displayData} = this;
+    const { displayData } = this;
     if (displayData == null) {
       return null;
     }
@@ -120,27 +131,23 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
     const dateString = getDateOnlyString(displayData.date_begin);
     if (dateString !== null && subtitle != null) {
       subtitle += ` | ${DateManager.getInstance().getTranslatedDate(
-        dateString,
+        dateString
       )}`;
     }
     return (
-      <CollapsibleScrollView style={{paddingLeft: 5, paddingRight: 5}} hasTab>
+      <CollapsibleScrollView style={styles.container} hasTab>
         <Card.Title title={displayData.title} subtitle={subtitle} />
         {displayData.logo !== null ? (
           <ImageGalleryButton
-            images={[{url: displayData.logo}]}
-            style={{
-              width: 300,
-              height: 300,
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
+            images={[{ url: displayData.logo }]}
+            style={styles.button}
           />
         ) : null}
 
         {displayData.description !== null ? (
           <Card.Content
-            style={{paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20}}>
+            style={{ paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20 }}
+          >
             <CustomHTML html={displayData.description} />
           </Card.Content>
         ) : (
@@ -156,7 +163,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getErrorView() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     if (this.errorCode === ERROR_TYPE.BAD_INPUT) {
       return (
         <ErrorView
@@ -180,14 +187,14 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    * Fetches data for the current event id from the API
    */
   fetchData = () => {
-    this.setState({loading: true});
-    apiRequest<PlanningEventType>(EVENT_INFO_URL, 'POST', {id: this.eventId})
+    this.setState({ loading: true });
+    apiRequest<PlanningEventType>(EVENT_INFO_URL, 'POST', { id: this.eventId })
       .then(this.onFetchSuccess)
       .catch(this.onFetchError);
   };
 
   render() {
-    const {loading} = this.state;
+    const { loading } = this.state;
     if (loading) {
       return <BasicLoadingScreen />;
     }

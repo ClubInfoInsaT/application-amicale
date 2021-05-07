@@ -19,21 +19,22 @@
 
 import * as React from 'react';
 import i18n from 'i18n-js';
-import {Snackbar} from 'react-native-paper';
+import { Snackbar } from 'react-native-paper';
 import {
   NativeSyntheticEvent,
   RefreshControl,
   SectionListData,
+  StyleSheet,
   View,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import {Collapsible} from 'react-navigation-collapsible';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { Collapsible } from 'react-navigation-collapsible';
+import { StackNavigationProp } from '@react-navigation/stack';
 import ErrorView from './ErrorView';
 import BasicLoadingScreen from './BasicLoadingScreen';
 import withCollapsible from '../../utils/withCollapsible';
 import CustomTabBar from '../Tabbar/CustomTabBar';
-import {ERROR_TYPE, readData} from '../../utils/WebData';
+import { ERROR_TYPE, readData } from '../../utils/WebData';
 import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
 
 export type SectionListDataType<ItemT> = Array<{
@@ -48,10 +49,10 @@ type PropsType<ItemT, RawData> = {
   fetchUrl: string;
   autoRefreshTime: number;
   refreshOnFocus: boolean;
-  renderItem: (data: {item: ItemT}) => React.ReactNode;
+  renderItem: (data: { item: ItemT }) => React.ReactNode;
   createDataset: (
     data: RawData | null,
-    isLoading?: boolean,
+    isLoading?: boolean
   ) => SectionListDataType<ItemT>;
   onScroll: (event: NativeSyntheticEvent<EventTarget>) => void;
   collapsibleStack: Collapsible;
@@ -60,11 +61,11 @@ type PropsType<ItemT, RawData> = {
   itemHeight?: number | null;
   updateData?: number;
   renderListHeaderComponent?: (
-    data: RawData | null,
+    data: RawData | null
   ) => React.ComponentType<any> | React.ReactElement | null;
   renderSectionHeader?: (
-    data: {section: SectionListData<ItemT>},
-    isLoading?: boolean,
+    data: { section: SectionListData<ItemT> },
+    isLoading?: boolean
   ) => React.ReactElement | null;
   stickyHeader?: boolean;
 };
@@ -76,6 +77,12 @@ type StateType<RawData> = {
 };
 
 const MIN_REFRESH_TIME = 5 * 1000;
+
+const styles = StyleSheet.create({
+  container: {
+    minHeight: '100%',
+  },
+});
 
 /**
  * Component used to render a SectionList with data fetched from the web
@@ -114,7 +121,7 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
    * Allows to detect when the screen is focused
    */
   componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.addListener('focus', this.onScreenFocus);
     navigation.addListener('blur', this.onScreenBlur);
     this.lastRefresh = undefined;
@@ -125,7 +132,7 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
    * Refreshes data when focusing the screen and setup a refresh interval if asked to
    */
   onScreenFocus = () => {
-    const {props} = this;
+    const { props } = this;
     if (props.refreshOnFocus && this.lastRefresh) {
       setTimeout(this.onRefresh, 200);
     }
@@ -173,7 +180,7 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
    * Refreshes data and shows an animations while doing it
    */
   onRefresh = () => {
-    const {fetchUrl} = this.props;
+    const { fetchUrl } = this.props;
     let canRefresh;
     if (this.lastRefresh != null) {
       const last = this.lastRefresh;
@@ -182,7 +189,7 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
       canRefresh = true;
     }
     if (canRefresh) {
-      this.setState({refreshing: true});
+      this.setState({ refreshing: true });
       readData(fetchUrl).then(this.onFetchSuccess).catch(this.onFetchError);
     }
   };
@@ -191,21 +198,21 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
    * Shows the error popup
    */
   showSnackBar = () => {
-    this.setState({snackbarVisible: true});
+    this.setState({ snackbarVisible: true });
   };
 
   /**
    * Hides the error popup
    */
   hideSnackBar = () => {
-    this.setState({snackbarVisible: false});
+    this.setState({ snackbarVisible: false });
   };
 
   getItemLayout = (
     height: number,
     data: Array<SectionListData<ItemT>> | null,
-    index: number,
-  ): {length: number; offset: number; index: number} => {
+    index: number
+  ): { length: number; offset: number; index: number } => {
     return {
       length: height,
       offset: height * index,
@@ -213,9 +220,9 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
     };
   };
 
-  getRenderSectionHeader = (data: {section: SectionListData<ItemT>}) => {
-    const {renderSectionHeader} = this.props;
-    const {refreshing} = this.state;
+  getRenderSectionHeader = (data: { section: SectionListData<ItemT> }) => {
+    const { renderSectionHeader } = this.props;
+    const { refreshing } = this.state;
     if (renderSectionHeader != null) {
       return (
         <Animatable.View animation="fadeInUp" duration={500} useNativeDriver>
@@ -226,8 +233,8 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
     return null;
   };
 
-  getRenderItem = (data: {item: ItemT}) => {
-    const {renderItem} = this.props;
+  getRenderItem = (data: { item: ItemT }) => {
+    const { renderItem } = this.props;
     return (
       <Animatable.View animation="fadeInUp" duration={500} useNativeDriver>
         {renderItem(data)}
@@ -236,15 +243,15 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
   };
 
   onScroll = (event: NativeSyntheticEvent<EventTarget>) => {
-    const {onScroll} = this.props;
+    const { onScroll } = this.props;
     if (onScroll != null) {
       onScroll(event);
     }
   };
 
   render() {
-    const {props, state} = this;
-    const {itemHeight} = props;
+    const { props, state } = this;
+    const { itemHeight } = props;
     let dataset: SectionListDataType<ItemT> = [];
     if (
       state.fetchedData != null ||
@@ -253,7 +260,7 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
       dataset = props.createDataset(state.fetchedData, state.refreshing);
     }
 
-    const {containerPaddingTop} = props.collapsibleStack;
+    const { containerPaddingTop } = props.collapsibleStack;
     return (
       <View>
         <CollapsibleSectionList
@@ -269,7 +276,7 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
           renderSectionHeader={this.getRenderSectionHeader}
           renderItem={this.getRenderItem}
           stickySectionHeadersEnabled={props.stickyHeader}
-          style={{minHeight: '100%'}}
+          style={styles.container}
           ListHeaderComponent={
             props.renderListHeaderComponent != null
               ? props.renderListHeaderComponent(state.fetchedData)
@@ -304,7 +311,8 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
           duration={4000}
           style={{
             bottom: CustomTabBar.TAB_BAR_HEIGHT,
-          }}>
+          }}
+        >
           {i18n.t('general.listUpdateFail')}
         </Snackbar>
       </View>

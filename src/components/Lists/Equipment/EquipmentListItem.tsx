@@ -18,15 +18,17 @@
  */
 
 import * as React from 'react';
-import {Avatar, List, useTheme} from 'react-native-paper';
+import { Avatar, List, useTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {StackNavigationProp} from '@react-navigation/stack';
-import type {DeviceType} from '../../../screens/Amicale/Equipment/EquipmentListScreen';
+import { StackNavigationProp } from '@react-navigation/stack';
+import type { DeviceType } from '../../../screens/Amicale/Equipment/EquipmentListScreen';
 import {
   getFirstEquipmentAvailability,
   getRelativeDateString,
   isEquipmentAvailable,
 } from '../../../utils/EquipmentBooking';
+import { StyleSheet } from 'react-native';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -35,9 +37,18 @@ type PropsType = {
   height: number;
 };
 
+const styles = StyleSheet.create({
+  icon: {
+    backgroundColor: 'transparent',
+  },
+  item: {
+    justifyContent: 'center',
+  },
+});
+
 function EquipmentListItem(props: PropsType) {
   const theme = useTheme();
-  const {item, userDeviceRentDates, navigation, height} = props;
+  const { item, userDeviceRentDates, navigation, height } = props;
   const isRented = userDeviceRentDates != null;
   const isAvailable = isEquipmentAvailable(item);
   const firstAvailability = getFirstEquipmentAvailability(item);
@@ -52,7 +63,7 @@ function EquipmentListItem(props: PropsType) {
     };
   } else {
     onPress = () => {
-      navigation.navigate('equipment-rent', {item});
+      navigation.navigate('equipment-rent', { item });
     };
   }
 
@@ -71,7 +82,7 @@ function EquipmentListItem(props: PropsType) {
       });
     }
   } else if (isAvailable) {
-    description = i18n.t('screens.equipment.bail', {cost: item.caution});
+    description = i18n.t('screens.equipment.bail', { cost: item.caution });
   } else {
     description = i18n.t('screens.equipment.available', {
       date: getRelativeDateString(firstAvailability),
@@ -101,21 +112,12 @@ function EquipmentListItem(props: PropsType) {
       title={item.name}
       description={description}
       onPress={onPress}
-      left={() => (
-        <Avatar.Icon
-          style={{
-            backgroundColor: 'transparent',
-          }}
-          icon={icon}
-          color={color}
-        />
-      )}
+      left={() => <Avatar.Icon style={styles.icon} icon={icon} color={color} />}
       right={() => (
         <Avatar.Icon
           style={{
-            marginTop: 'auto',
-            marginBottom: 'auto',
-            backgroundColor: 'transparent',
+            ...GENERAL_STYLES.centerVertical,
+            ...styles.icon,
           }}
           size={48}
           icon="chevron-right"
@@ -123,7 +125,7 @@ function EquipmentListItem(props: PropsType) {
       )}
       style={{
         height,
-        justifyContent: 'center',
+        ...styles.item,
       }}
     />
   );

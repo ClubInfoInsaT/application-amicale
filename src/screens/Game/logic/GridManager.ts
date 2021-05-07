@@ -19,9 +19,9 @@
 
 import Piece from './Piece';
 import ScoreManager from './ScoreManager';
-import type {CoordinatesType} from '../Shapes/BaseShape';
-import type {GridType} from '../components/GridComponent';
-import type {CellType} from '../components/CellComponent';
+import type { CoordinatesType } from '../Shapes/BaseShape';
+import type { GridType } from '../components/GridComponent';
+import type { CellType } from '../components/CellComponent';
 
 /**
  * Class used to manage the game grid
@@ -134,7 +134,7 @@ export default class GridManager {
   freezeTetromino(currentObject: Piece, scoreManager: ScoreManager) {
     this.clearLines(
       this.getLinesToClear(currentObject.getCoordinates()),
-      scoreManager,
+      scoreManager
     );
   }
 }

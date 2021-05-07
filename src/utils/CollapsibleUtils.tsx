@@ -18,15 +18,17 @@
  */
 
 import * as React from 'react';
-import {useTheme} from 'react-native-paper';
-import {createCollapsibleStack} from 'react-navigation-collapsible';
-import StackNavigator, {StackNavigationOptions} from '@react-navigation/stack';
-import {StackNavigationState, TypedNavigator} from '@react-navigation/native';
-import {StackNavigationEventMap} from '@react-navigation/stack/lib/typescript/src/types';
+import { useTheme } from 'react-native-paper';
+import { createCollapsibleStack } from 'react-navigation-collapsible';
+import StackNavigator, {
+  StackNavigationOptions,
+} from '@react-navigation/stack';
+import { StackNavigationState, TypedNavigator } from '@react-navigation/native';
+import { StackNavigationEventMap } from '@react-navigation/stack/lib/typescript/src/types';
 
 type StackNavigatorType = import('@react-navigation/native').TypedNavigator<
   Record<string, object | undefined>,
-  StackNavigationState,
+  StackNavigationState<any>,
   StackNavigationOptions,
   StackNavigationEventMap,
   typeof StackNavigator
@@ -55,9 +57,9 @@ export function CreateScreenCollapsibleStack(
   title: string,
   useNativeDriver: boolean = true,
   options: StackNavigationOptions = {},
-  headerColor?: string,
+  headerColor?: string
 ) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   return createCollapsibleStack(
     <Stack.Screen
       name={name}
@@ -73,7 +75,7 @@ export function CreateScreenCollapsibleStack(
     {
       collapsedColor: headerColor != null ? headerColor : colors.surface,
       useNativeDriver: useNativeDriver, // native driver does not work with webview
-    },
+    }
   );
 }
 
@@ -93,7 +95,7 @@ export function getWebsiteStack(
   name: string,
   Stack: TypedNavigator<any, any, any, any, any>,
   component: React.ComponentType<any>,
-  title: string,
+  title: string
 ) {
   return CreateScreenCollapsibleStack(name, Stack, component, title, false);
 }

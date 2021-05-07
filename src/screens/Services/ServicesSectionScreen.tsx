@@ -18,15 +18,15 @@
  */
 
 import * as React from 'react';
-import {Collapsible} from 'react-navigation-collapsible';
-import {CommonActions} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { Collapsible } from 'react-navigation-collapsible';
+import { CommonActions } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import CardList from '../../components/Lists/CardList/CardList';
-import type {ServiceCategoryType} from '../../managers/ServicesManager';
+import type { ServiceCategoryType } from '../../managers/ServicesManager';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
-  route: {params: {data: ServiceCategoryType | null}};
+  route: { params: { data: ServiceCategoryType | null } };
   collapsibleStack: Collapsible;
 };
 
@@ -43,11 +43,11 @@ class ServicesSectionScreen extends React.Component<PropsType> {
    * Recover the list to display from navigation parameters
    */
   handleNavigationParams() {
-    const {props} = this;
+    const { props } = this;
     if (props.route.params.data) {
       this.finalDataset = props.route.params.data;
       // reset params to prevent infinite loop
-      props.navigation.dispatch(CommonActions.setParams({data: null}));
+      props.navigation.dispatch(CommonActions.setParams({ data: null }));
       props.navigation.setOptions({
         headerTitle: this.finalDataset.title,
       });

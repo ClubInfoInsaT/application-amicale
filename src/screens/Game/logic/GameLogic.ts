@@ -20,12 +20,12 @@
 import Piece from './Piece';
 import ScoreManager from './ScoreManager';
 import GridManager from './GridManager';
-import type {GridType} from '../components/GridComponent';
+import type { GridType } from '../components/GridComponent';
 
 export type TickCallbackType = (
   score: number,
   level: number,
-  grid: GridType,
+  grid: GridType
 ) => void;
 
 export type ClockCallbackType = (time: number) => void;
@@ -33,7 +33,7 @@ export type ClockCallbackType = (time: number) => void;
 export type EndCallbackType = (
   time: number,
   score: number,
-  isRestart: boolean,
+  isRestart: boolean
 ) => void;
 
 export type MovementCallbackType = (grid: GridType, score?: number) => void;
@@ -101,7 +101,7 @@ export default class GameLogic {
     this.gridManager = new GridManager(
       this.getWidth(),
       this.getHeight(),
-      this.theme,
+      this.theme
     );
   }
 
@@ -179,14 +179,14 @@ export default class GameLogic {
         this.gridManager.getCurrentGrid(),
         this.getWidth(),
         this.getHeight(),
-        this.onFreeze,
+        this.onFreeze
       );
     }
     if (callback) {
       callback(
         this.scoreManager.getScore(),
         this.scoreManager.getLevel(),
-        this.gridManager.getCurrentGrid(),
+        this.gridManager.getCurrentGrid()
       );
     }
     if (this.scoreManager.canLevelUp()) {
@@ -224,7 +224,7 @@ export default class GameLogic {
     isInitial: boolean,
     callback: MovementCallbackType,
     x: number,
-    y: number,
+    y: number
   ) {
     if (!this.canUseInput() || !this.isPressedIn) {
       return;
@@ -237,14 +237,14 @@ export default class GameLogic {
         this.gridManager.getCurrentGrid(),
         this.getWidth(),
         this.getHeight(),
-        this.onFreeze,
+        this.onFreeze
       );
     if (moved) {
       if (y === 1) {
         this.scoreManager.incrementScore();
         callback(
           this.gridManager.getCurrentGrid(),
-          this.scoreManager.getScore(),
+          this.scoreManager.getScore()
         );
       } else {
         callback(this.gridManager.getCurrentGrid());
@@ -254,7 +254,7 @@ export default class GameLogic {
       () => {
         this.movePressedRepeat(false, callback, x, y);
       },
-      isInitial ? this.autoRepeatActivationDelay : this.autoRepeatDelay,
+      isInitial ? this.autoRepeatActivationDelay : this.autoRepeatDelay
     );
   }
 
@@ -275,7 +275,7 @@ export default class GameLogic {
       this.currentObject.tryRotate(
         this.gridManager.getCurrentGrid(),
         this.getWidth(),
-        this.getHeight(),
+        this.getHeight()
       )
     ) {
       callback(this.gridManager.getCurrentGrid());
@@ -315,7 +315,7 @@ export default class GameLogic {
       !this.currentObject.isPositionValid(
         this.gridManager.getCurrentGrid(),
         this.getWidth(),
-        this.getHeight(),
+        this.getHeight()
       )
     ) {
       this.endGame(false);
@@ -346,7 +346,7 @@ export default class GameLogic {
   startGame(
     tickCallback: TickCallbackType,
     clockCallback: ClockCallbackType,
-    endCallback: EndCallbackType,
+    endCallback: EndCallbackType
   ) {
     if (this.gameRunning) {
       this.endGame(true);
@@ -359,7 +359,7 @@ export default class GameLogic {
     this.gridManager = new GridManager(
       this.getWidth(),
       this.getHeight(),
-      this.theme,
+      this.theme
     );
     this.nextPieces = [];
     this.generateNextPieces();
@@ -367,7 +367,7 @@ export default class GameLogic {
     tickCallback(
       this.scoreManager.getScore(),
       this.scoreManager.getLevel(),
-      this.gridManager.getCurrentGrid(),
+      this.gridManager.getCurrentGrid()
     );
     clockCallback(this.gameTime);
     this.startTick();

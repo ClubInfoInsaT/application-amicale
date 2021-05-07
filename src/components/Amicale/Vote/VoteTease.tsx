@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {Avatar, Card, Paragraph} from 'react-native-paper';
-import {StyleSheet} from 'react-native';
+import { Avatar, Card, Paragraph } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
 
 type PropsType = {
@@ -29,9 +29,6 @@ type PropsType = {
 const styles = StyleSheet.create({
   card: {
     margin: 10,
-  },
-  icon: {
-    backgroundColor: 'transparent',
   },
 });
 

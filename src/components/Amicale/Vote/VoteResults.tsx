@@ -26,9 +26,9 @@ import {
   Subheading,
   withTheme,
 } from 'react-native-paper';
-import {FlatList, StyleSheet} from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
-import type {VoteTeamType} from '../../../screens/Amicale/VoteScreen';
+import type { VoteTeamType } from '../../../screens/Amicale/VoteScreen';
 
 type PropsType = {
   teams: Array<VoteTeamType>;
@@ -40,8 +40,11 @@ const styles = StyleSheet.create({
   card: {
     margin: 10,
   },
-  icon: {
-    backgroundColor: 'transparent',
+  itemCard: {
+    marginTop: 10,
+  },
+  item: {
+    padding: 0,
   },
 });
 
@@ -86,16 +89,18 @@ class VoteResults extends React.Component<PropsType> {
 
   voteKeyExtractor = (item: VoteTeamType): string => item.id.toString();
 
-  resultRenderItem = ({item}: {item: VoteTeamType}) => {
+  resultRenderItem = ({ item }: { item: VoteTeamType }) => {
     const isWinner = this.winnerIds.indexOf(item.id) !== -1;
     const isDraw = this.winnerIds.length > 1;
-    const {props} = this;
+    const { props } = this;
+    const elevation = isWinner ? 5 : 3;
     return (
       <Card
         style={{
-          marginTop: 10,
-          elevation: isWinner ? 5 : 3,
-        }}>
+          ...styles.itemCard,
+          elevation: elevation,
+        }}
+      >
         <List.Item
           title={item.name}
           description={`${item.votes} ${i18n.t('screens.vote.results.votes')}`}
@@ -113,7 +118,7 @@ class VoteResults extends React.Component<PropsType> {
               ? props.theme.colors.primary
               : props.theme.colors.text,
           }}
-          style={{padding: 0}}
+          style={styles.item}
         />
         <ProgressBar
           progress={item.votes / this.totalVotes}
@@ -124,7 +129,7 @@ class VoteResults extends React.Component<PropsType> {
   };
 
   render() {
-    const {props} = this;
+    const { props } = this;
     return (
       <Card style={styles.card}>
         <Card.Title

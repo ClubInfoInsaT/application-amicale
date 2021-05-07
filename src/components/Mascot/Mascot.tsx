@@ -19,8 +19,14 @@
 
 import * as React from 'react';
 import * as Animatable from 'react-native-animatable';
-import {Image, TouchableWithoutFeedback, View, ViewStyle} from 'react-native';
-import {AnimatableProperties} from 'react-native-animatable';
+import {
+  Image,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+  ViewStyle,
+} from 'react-native';
+import { AnimatableProperties } from 'react-native-animatable';
 
 export type AnimatableViewRefType = {
   current: null | (typeof Animatable.View & View);
@@ -77,6 +83,34 @@ export enum MASCOT_STYLE {
   RANDOM = 999,
 }
 
+const styles = StyleSheet.create({
+  container: {
+    aspectRatio: 1,
+  },
+  mascot: {
+    width: '100%',
+    height: '100%',
+  },
+  glassesImage: {
+    position: 'absolute',
+    top: '15%',
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  eyesImage: {
+    position: 'absolute',
+    top: '15%',
+    width: '100%',
+    height: '100%',
+  },
+  eyesContainer: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+});
+
 class Mascot extends React.Component<PropsType, StateType> {
   static defaultProps = {
     emotion: MASCOT_STYLE.NORMAL,
@@ -100,9 +134,9 @@ class Mascot extends React.Component<PropsType, StateType> {
 
   viewRef: AnimatableViewRefType;
 
-  eyeList: {[key in EYE_STYLE]: number};
+  eyeList: { [key in EYE_STYLE]: number };
 
-  glassesList: {[key in GLASSES_STYLE]: number};
+  glassesList: { [key in GLASSES_STYLE]: number };
 
   onPress: (viewRef: AnimatableViewRefType) => void;
 
@@ -141,9 +175,9 @@ class Mascot extends React.Component<PropsType, StateType> {
       this.onPress = (viewRef: AnimatableViewRefType) => {
         const ref = viewRef.current;
         if (ref && ref.rubberBand) {
-          this.setState({currentEmotion: MASCOT_STYLE.LOVE});
+          this.setState({ currentEmotion: MASCOT_STYLE.LOVE });
           ref.rubberBand(1500).then(() => {
-            this.setState({currentEmotion: this.initialEmotion});
+            this.setState({ currentEmotion: this.initialEmotion });
           });
         }
       };
@@ -155,9 +189,9 @@ class Mascot extends React.Component<PropsType, StateType> {
       this.onLongPress = (viewRef: AnimatableViewRefType) => {
         const ref = viewRef.current;
         if (ref && ref.tada) {
-          this.setState({currentEmotion: MASCOT_STYLE.ANGRY});
+          this.setState({ currentEmotion: MASCOT_STYLE.ANGRY });
           ref.tada(1000).then(() => {
-            this.setState({currentEmotion: this.initialEmotion});
+            this.setState({ currentEmotion: this.initialEmotion });
           });
         }
       };
@@ -174,30 +208,22 @@ class Mascot extends React.Component<PropsType, StateType> {
         source={
           glasses != null ? glasses : this.glassesList[GLASSES_STYLE.NORMAL]
         }
-        style={{
-          position: 'absolute',
-          top: '15%',
-          left: 0,
-          width: '100%',
-          height: '100%',
-        }}
+        style={styles.glassesImage}
       />
     );
   }
 
   getEye(style: EYE_STYLE, isRight: boolean, rotation: string = '0deg') {
     const eye = this.eyeList[style];
+    const left = isRight ? '-11%' : '11%';
     return (
       <Image
         key={isRight ? 'right' : 'left'}
         source={eye != null ? eye : this.eyeList[EYE_STYLE.NORMAL]}
         style={{
-          position: 'absolute',
-          top: '15%',
-          left: isRight ? '-11%' : '11%',
-          width: '100%',
-          height: '100%',
-          transform: [{rotateY: rotation}],
+          ...styles.eyesImage,
+          left: left,
+          transform: [{ rotateY: rotation }],
         }}
       />
     );
@@ -205,16 +231,7 @@ class Mascot extends React.Component<PropsType, StateType> {
 
   getEyes(emotion: MASCOT_STYLE) {
     const final = [];
-    final.push(
-      <View
-        key="container"
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-        }}
-      />,
-    );
+    final.push(<View key="container" style={styles.eyesContainer} />);
     if (emotion === MASCOT_STYLE.CUTE) {
       final.push(this.getEye(EYE_STYLE.CUTE, true));
       final.push(this.getEye(EYE_STYLE.CUTE, false));
@@ -249,32 +266,28 @@ class Mascot extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const {props, state} = this;
+    const { props, state } = this;
     const entryAnimation = props.animated ? props.entryAnimation : null;
     const loopAnimation = props.animated ? props.loopAnimation : null;
     return (
       <Animatable.View
         style={{
-          aspectRatio: 1,
+          ...styles.container,
           ...props.style,
         }}
-        {...entryAnimation}>
+        {...entryAnimation}
+      >
         <TouchableWithoutFeedback
           onPress={() => {
             this.onPress(this.viewRef);
           }}
           onLongPress={() => {
             this.onLongPress(this.viewRef);
-          }}>
+          }}
+        >
           <Animatable.View ref={this.viewRef}>
             <Animatable.View {...loopAnimation}>
-              <Image
-                source={MASCOT_IMAGE}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              />
+              <Image source={MASCOT_IMAGE} style={styles.mascot} />
               {this.getEyes(state.currentEmotion)}
             </Animatable.View>
           </Animatable.View>

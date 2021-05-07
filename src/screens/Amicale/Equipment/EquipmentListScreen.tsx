@@ -18,16 +18,17 @@
  */
 
 import * as React from 'react';
-import {View} from 'react-native';
-import {Button} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StyleSheet, View } from 'react-native';
+import { Button } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'i18n-js';
 import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen';
 import EquipmentListItem from '../../../components/Lists/Equipment/EquipmentListItem';
 import MascotPopup from '../../../components/Mascot/MascotPopup';
-import {MASCOT_STYLE} from '../../../components/Mascot/Mascot';
+import { MASCOT_STYLE } from '../../../components/Mascot/Mascot';
 import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -41,7 +42,7 @@ export type DeviceType = {
   id: number;
   name: string;
   caution: number;
-  booked_at: Array<{begin: string; end: string}>;
+  booked_at: Array<{ begin: string; end: string }>;
 };
 
 export type RentedDeviceType = {
@@ -53,10 +54,18 @@ export type RentedDeviceType = {
 
 const LIST_ITEM_HEIGHT = 64;
 
+const styles = StyleSheet.create({
+  headerContainer: {
+    width: '100%',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+});
+
 class EquipmentListScreen extends React.Component<PropsType, StateType> {
   userRents: null | Array<RentedDeviceType>;
 
-  authRef: {current: null | AuthenticatedScreen<any>};
+  authRef: { current: null | AuthenticatedScreen<any> };
 
   canRefresh: boolean;
 
@@ -65,7 +74,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
     this.userRents = null;
     this.state = {
       mascotDialogVisible: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.equipmentShowMascot.key,
+        AsyncStorageManager.PREFERENCES.equipmentShowMascot.key
       ),
     };
     this.canRefresh = false;
@@ -84,8 +93,8 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
     this.canRefresh = true;
   };
 
-  getRenderItem = ({item}: {item: DeviceType}) => {
-    const {navigation} = this.props;
+  getRenderItem = ({ item }: { item: DeviceType }) => {
+    const { navigation } = this.props;
     return (
       <EquipmentListItem
         navigation={navigation}
@@ -115,20 +124,13 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
    */
   getListHeader() {
     return (
-      <View
-        style={{
-          width: '100%',
-          marginTop: 10,
-          marginBottom: 10,
-        }}>
+      <View style={styles.headerContainer}>
         <Button
           mode="contained"
           icon="help-circle"
           onPress={this.showMascotDialog}
-          style={{
-            marginRight: 'auto',
-            marginLeft: 'auto',
-          }}>
+          style={GENERAL_STYLES.centerHorizontal}
+        >
           {i18n.t('screens.equipment.mascotDialog.title')}
         </Button>
       </View>
@@ -145,8 +147,10 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
    */
   getScreen = (
     data: Array<
-      {devices: Array<DeviceType>} | {locations: Array<RentedDeviceType>} | null
-    >,
+      | { devices: Array<DeviceType> }
+      | { locations: Array<RentedDeviceType> }
+      | null
+    >
   ) => {
     const [allDevices, userRents] = data;
     if (userRents) {
@@ -161,7 +165,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
         ListHeaderComponent={this.getListHeader()}
         data={
           allDevices
-            ? (allDevices as {devices: Array<DeviceType>}).devices
+            ? (allDevices as { devices: Array<DeviceType> }).devices
             : null
         }
       />
@@ -169,21 +173,21 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
   };
 
   showMascotDialog = () => {
-    this.setState({mascotDialogVisible: true});
+    this.setState({ mascotDialogVisible: true });
   };
 
   hideMascotDialog = () => {
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.equipmentShowMascot.key,
-      false,
+      false
     );
-    this.setState({mascotDialogVisible: false});
+    this.setState({ mascotDialogVisible: false });
   };
 
   render() {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
-      <View style={{flex: 1}}>
+      <View style={GENERAL_STYLES.flex}>
         <AuthenticatedScreen
           navigation={props.navigation}
           ref={this.authRef}

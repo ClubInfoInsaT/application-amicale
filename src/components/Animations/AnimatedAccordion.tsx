@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {View, ViewStyle} from 'react-native';
-import {List, withTheme} from 'react-native-paper';
+import { View, ViewStyle } from 'react-native';
+import { List, withTheme } from 'react-native-paper';
 import Collapsible from 'react-native-collapsible';
 import * as Animatable from 'react-native-animatable';
 
@@ -47,7 +47,7 @@ type StateType = {
 const AnimatedListIcon = Animatable.createAnimatableComponent(List.Icon);
 
 class AnimatedAccordion extends React.Component<PropsType, StateType> {
-  chevronRef: {current: null | (typeof AnimatedListIcon & List.Icon)};
+  chevronRef: { current: null | (typeof AnimatedListIcon & List.Icon) };
 
   chevronIcon: string;
 
@@ -68,7 +68,7 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
   }
 
   shouldComponentUpdate(nextProps: PropsType): boolean {
-    const {state, props} = this;
+    const { state, props } = this;
     if (nextProps.opened != null && nextProps.opened !== props.opened) {
       state.expanded = nextProps.opened;
     }
@@ -76,7 +76,7 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
   }
 
   setupChevron() {
-    const {expanded} = this.state;
+    const { expanded } = this.state;
     if (expanded) {
       this.chevronIcon = 'chevron-up';
       this.animStart = '180deg';
@@ -89,26 +89,26 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
   }
 
   toggleAccordion = () => {
-    const {expanded} = this.state;
+    const { expanded } = this.state;
     if (this.chevronRef.current != null) {
       this.chevronRef.current.transitionTo({
         rotate: expanded ? this.animStart : this.animEnd,
       });
-      this.setState((prevState: StateType): {expanded: boolean} => ({
+      this.setState((prevState: StateType): { expanded: boolean } => ({
         expanded: !prevState.expanded,
       }));
     }
   };
 
   render() {
-    const {props, state} = this;
-    const {colors} = props.theme;
+    const { props, state } = this;
+    const { colors } = props.theme;
     return (
       <View style={props.style}>
         <List.Item
           title={props.title}
           description={props.subtitle}
-          titleStyle={state.expanded ? {color: colors.primary} : null}
+          titleStyle={state.expanded ? { color: colors.primary } : null}
           onPress={this.toggleAccordion}
           right={(iconProps) => (
             <AnimatedListIcon

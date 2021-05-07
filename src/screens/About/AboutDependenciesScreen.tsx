@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {List} from 'react-native-paper';
-import {View} from 'react-native-animatable';
+import { List } from 'react-native-paper';
+import { View } from 'react-native-animatable';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import packageJson from '../../../package.json';
 
@@ -40,7 +40,7 @@ function generateListFromObject(object: {
   const list: Array<ListItemType> = [];
   const keys = Object.keys(object);
   keys.forEach((key: string) => {
-    list.push({name: key, version: object[key]});
+    list.push({ name: key, version: object[key] });
   });
   return list;
 }
@@ -60,18 +60,18 @@ export default class AboutDependenciesScreen extends React.Component<{}> {
 
   keyExtractor = (item: ListItemType): string => item.name;
 
-  getRenderItem = ({item}: {item: ListItemType}) => (
+  getRenderItem = ({ item }: { item: ListItemType }) => (
     <List.Item
       title={item.name}
       description={item.version.replace('^', '').replace('~', '')}
-      style={{height: LIST_ITEM_HEIGHT}}
+      style={{ height: LIST_ITEM_HEIGHT }}
     />
   );
 
   getItemLayout = (
     data: Array<ListItemType> | null | undefined,
-    index: number,
-  ): {length: number; offset: number; index: number} => ({
+    index: number
+  ): { length: number; offset: number; index: number } => ({
     length: LIST_ITEM_HEIGHT,
     offset: LIST_ITEM_HEIGHT * index,
     index,

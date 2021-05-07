@@ -17,9 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable */
-
-import React from 'react';
 import ScoreManager from '../logic/ScoreManager';
 
 test('incrementScore', () => {

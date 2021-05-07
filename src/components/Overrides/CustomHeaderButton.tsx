@@ -25,7 +25,7 @@ import {
   HeaderButtons,
   HeaderButtonsProps,
 } from 'react-navigation-header-buttons';
-import {useTheme} from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 const MaterialHeaderButton = (props: HeaderButtonProps) => {
   const theme = useTheme();
@@ -40,7 +40,7 @@ const MaterialHeaderButton = (props: HeaderButtonProps) => {
 };
 
 const MaterialHeaderButtons = (
-  props: HeaderButtonsProps & {children?: React.ReactNode},
+  props: HeaderButtonsProps & { children?: React.ReactNode }
 ) => {
   return (
     <HeaderButtons {...props} HeaderButtonComponent={MaterialHeaderButton} />
@@ -49,4 +49,4 @@ const MaterialHeaderButtons = (
 
 export default MaterialHeaderButtons;
 
-export {Item} from 'react-navigation-header-buttons';
+export { Item } from 'react-navigation-header-buttons';

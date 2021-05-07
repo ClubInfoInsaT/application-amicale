@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   Button,
   Card,
@@ -28,20 +28,21 @@ import {
   Text,
   withTheme,
 } from 'react-native-paper';
-import {View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import Mascot, {MASCOT_STYLE} from '../../../components/Mascot/Mascot';
+import Mascot, { MASCOT_STYLE } from '../../../components/Mascot/Mascot';
 import MascotPopup from '../../../components/Mascot/MascotPopup';
 import AsyncStorageManager from '../../../managers/AsyncStorageManager';
-import type {GridType} from '../components/GridComponent';
+import type { GridType } from '../components/GridComponent';
 import GridComponent from '../components/GridComponent';
 import GridManager from '../logic/GridManager';
 import Piece from '../logic/Piece';
 import SpeechArrow from '../../../components/Mascot/SpeechArrow';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type GameStatsType = {
   score: number;
@@ -57,6 +58,87 @@ type PropsType = {
   theme: ReactNativePaper.Theme;
 };
 
+const styles = StyleSheet.create({
+  pieceContainer: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  pieceBackground: {
+    position: 'absolute',
+  },
+  playButton: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 10,
+  },
+  recapCard: {
+    borderWidth: 2,
+    marginLeft: 20,
+    marginRight: 20,
+  },
+  recapContainer: {
+    flexDirection: 'row',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  recapScoreContainer: {
+    flexDirection: 'row',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  recapScore: {
+    fontSize: 20,
+  },
+  recapScoreIcon: {
+    marginLeft: 5,
+  },
+  recapIcon: {
+    marginRight: 5,
+    marginLeft: 5,
+  },
+  welcomeMascot: {
+    width: '40%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  welcomeCard: {
+    borderWidth: 2,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  centertext: {
+    textAlign: 'center',
+  },
+  welcomeText: {
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  speechArrow: {
+    marginLeft: '60%',
+  },
+  podiumContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  podiumIconContainer: {
+    position: 'absolute',
+    top: -20,
+  },
+  topScoreContainer: {
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  topScoreSubcontainer: {
+    flexDirection: 'row',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+});
+
 class GameStartScreen extends React.Component<PropsType> {
   gridManager: GridManager;
 
@@ -71,7 +153,7 @@ class GameStartScreen extends React.Component<PropsType> {
     this.isHighScore = false;
     this.gridManager = new GridManager(4, 4, props.theme);
     this.scores = AsyncStorageManager.getObject(
-      AsyncStorageManager.PREFERENCES.gameScores.key,
+      AsyncStorageManager.PREFERENCES.gameScores.key
     );
     this.scores.sort((a: number, b: number): number => b - a);
     if (props.route.params != null) {
@@ -80,7 +162,7 @@ class GameStartScreen extends React.Component<PropsType> {
   }
 
   getPiecesBackground() {
-    const {theme} = this.props;
+    const { theme } = this.props;
     const gridList = [];
     for (let i = 0; i < 18; i += 1) {
       gridList.push(this.gridManager.getEmptyGrid(4, 4));
@@ -88,12 +170,7 @@ class GameStartScreen extends React.Component<PropsType> {
       piece.toGrid(gridList[i], true);
     }
     return (
-      <View
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-        }}>
+      <View style={styles.pieceContainer}>
         {gridList.map((item: GridType, index: number) => {
           const size = 10 + Math.floor(Math.random() * 30);
           const top = Math.floor(Math.random() * 100);
@@ -110,16 +187,17 @@ class GameStartScreen extends React.Component<PropsType> {
               key={`piece${index.toString()}`}
               style={{
                 width: `${size}%`,
-                position: 'absolute',
                 top: `${top}%`,
                 left: `${left}%`,
-              }}>
+                ...styles.pieceBackground,
+              }}
+            >
               <GridComponent
                 width={4}
                 height={4}
                 grid={item}
                 style={{
-                  transform: [{rotateZ: `${rot}deg`}],
+                  transform: [{ rotateZ: `${rot}deg` }],
                 }}
               />
             </Animatable.View>
@@ -130,99 +208,72 @@ class GameStartScreen extends React.Component<PropsType> {
   }
 
   getPostGameContent(stats: GameStatsType) {
-    const {props} = this;
+    const { props } = this;
+    const width = this.isHighScore ? '50%' : '30%';
+    const margin = this.isHighScore ? 'auto' : undefined;
+    const marginLeft = this.isHighScore ? '60%' : '20%';
+    const color = this.isHighScore
+      ? props.theme.colors.gameGold
+      : props.theme.colors.primary;
     return (
-      <View
-        style={{
-          flex: 1,
-        }}>
+      <View style={GENERAL_STYLES.flex}>
         <Mascot
           emotion={this.isHighScore ? MASCOT_STYLE.LOVE : MASCOT_STYLE.NORMAL}
           animated={this.isHighScore}
           style={{
-            width: this.isHighScore ? '50%' : '30%',
-            marginLeft: this.isHighScore ? 'auto' : undefined,
-            marginRight: this.isHighScore ? 'auto' : undefined,
+            width: width,
+            marginLeft: margin,
+            marginRight: margin,
           }}
         />
         <SpeechArrow
-          style={{marginLeft: this.isHighScore ? '60%' : '20%'}}
+          style={{ marginLeft: marginLeft }}
           size={20}
           color={props.theme.colors.mascotMessageArrow}
         />
         <Card
           style={{
             borderColor: props.theme.colors.mascotMessageArrow,
-            borderWidth: 2,
-            marginLeft: 20,
-            marginRight: 20,
-          }}>
+            ...styles.recapCard,
+          }}
+        >
           <Card.Content>
             <Headline
               style={{
-                textAlign: 'center',
-                color: this.isHighScore
-                  ? props.theme.colors.gameGold
-                  : props.theme.colors.primary,
-              }}>
+                color: color,
+                ...styles.centertext,
+              }}
+            >
               {this.isHighScore
                 ? i18n.t('screens.game.newHighScore')
                 : i18n.t('screens.game.gameOver')}
             </Headline>
             <Divider />
-            <View
-              style={{
-                flexDirection: 'row',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                marginTop: 10,
-                marginBottom: 10,
-              }}>
-              <Text
-                style={{
-                  fontSize: 20,
-                }}>
-                {i18n.t('screens.game.score', {score: stats.score})}
+            <View style={styles.recapScoreContainer}>
+              <Text style={styles.recapScore}>
+                {i18n.t('screens.game.score', { score: stats.score })}
               </Text>
               <MaterialCommunityIcons
                 name="star"
                 color={props.theme.colors.tetrisScore}
                 size={30}
-                style={{
-                  marginLeft: 5,
-                }}
+                style={styles.recapScoreIcon}
               />
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-              }}>
+            <View style={styles.recapContainer}>
               <Text>{i18n.t('screens.game.level')}</Text>
               <MaterialCommunityIcons
-                style={{
-                  marginRight: 5,
-                  marginLeft: 5,
-                }}
+                style={styles.recapIcon}
                 name="gamepad-square"
                 size={20}
                 color={props.theme.colors.textDisabled}
               />
               <Text>{stats.level}</Text>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-              }}>
+            <View style={styles.recapContainer}>
               <Text>{i18n.t('screens.game.time')}</Text>
               <MaterialCommunityIcons
-                style={{
-                  marginRight: 5,
-                  marginLeft: 5,
-                }}
+                style={styles.recapIcon}
                 name="timer"
                 size={20}
                 color={props.theme.colors.textDisabled}
@@ -236,43 +287,32 @@ class GameStartScreen extends React.Component<PropsType> {
   }
 
   getWelcomeText() {
-    const {props} = this;
+    const { props } = this;
     return (
       <View>
-        <Mascot
-          emotion={MASCOT_STYLE.COOL}
-          style={{
-            width: '40%',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-        />
+        <Mascot emotion={MASCOT_STYLE.COOL} style={styles.welcomeMascot} />
         <SpeechArrow
-          style={{marginLeft: '60%'}}
+          style={styles.speechArrow}
           size={20}
           color={props.theme.colors.mascotMessageArrow}
         />
         <Card
           style={{
             borderColor: props.theme.colors.mascotMessageArrow,
-            borderWidth: 2,
-            marginLeft: 10,
-            marginRight: 10,
-          }}>
+            ...styles.welcomeCard,
+          }}
+        >
           <Card.Content>
             <Headline
               style={{
-                textAlign: 'center',
                 color: props.theme.colors.primary,
-              }}>
+                ...styles.centertext,
+              }}
+            >
               {i18n.t('screens.game.welcomeTitle')}
             </Headline>
             <Divider />
-            <Paragraph
-              style={{
-                textAlign: 'center',
-                marginTop: 10,
-              }}>
+            <Paragraph style={styles.welcomeText}>
               {i18n.t('screens.game.welcomeMessage')}
             </Paragraph>
           </Card.Content>
@@ -282,7 +322,7 @@ class GameStartScreen extends React.Component<PropsType> {
   }
 
   getPodiumRender(place: 1 | 2 | 3, score: string) {
-    const {props} = this;
+    const { props } = this;
     let icon = 'podium-gold';
     let color = props.theme.colors.gameGold;
     let fontSize = 20;
@@ -298,15 +338,17 @@ class GameStartScreen extends React.Component<PropsType> {
       fontSize = 15;
       size = 50;
     }
+    const marginLeft = place === 2 ? 20 : 'auto';
+    const marginRight = place === 3 ? 20 : 'auto';
+    const fontWeight = place === 1 ? 'bold' : undefined;
     return (
       <View
         style={{
-          marginLeft: place === 2 ? 20 : 'auto',
-          marginRight: place === 3 ? 20 : 'auto',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}>
+          marginLeft: marginLeft,
+          marginRight: marginRight,
+          ...styles.podiumContainer,
+        }}
+      >
         {this.isHighScore && place === 1 ? (
           <Animatable.View
             animation="swing"
@@ -314,14 +356,13 @@ class GameStartScreen extends React.Component<PropsType> {
             duration={2000}
             delay={1000}
             useNativeDriver
-            style={{
-              position: 'absolute',
-              top: -20,
-            }}>
+            style={styles.podiumIconContainer}
+          >
             <Animatable.View
               animation="pulse"
               iterationCount="infinite"
-              useNativeDriver>
+              useNativeDriver
+            >
               <MaterialCommunityIcons
                 name="decagram"
                 color={props.theme.colors.gameGold}
@@ -337,10 +378,11 @@ class GameStartScreen extends React.Component<PropsType> {
         />
         <Text
           style={{
-            textAlign: 'center',
-            fontWeight: place === 1 ? 'bold' : undefined,
+            fontWeight: fontWeight,
             fontSize,
-          }}>
+            ...styles.centertext,
+          }}
+        >
           {score}
         </Text>
       </View>
@@ -352,18 +394,9 @@ class GameStartScreen extends React.Component<PropsType> {
     const silver = this.scores.length > 1 ? this.scores[1] : '-';
     const bronze = this.scores.length > 2 ? this.scores[2] : '-';
     return (
-      <View
-        style={{
-          marginBottom: 20,
-          marginTop: 20,
-        }}>
+      <View style={styles.topScoreContainer}>
         {this.getPodiumRender(1, gold.toString())}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}>
+        <View style={styles.topScoreSubcontainer}>
           {this.getPodiumRender(3, bronze.toString())}
           {this.getPodiumRender(2, silver.toString())}
         </View>
@@ -372,9 +405,9 @@ class GameStartScreen extends React.Component<PropsType> {
   }
 
   getMainContent() {
-    const {props} = this;
+    const { props } = this;
     return (
-      <View style={{flex: 1}}>
+      <View style={GENERAL_STYLES.flex}>
         {this.gameStats != null
           ? this.getPostGameContent(this.gameStats)
           : this.getWelcomeText()}
@@ -386,11 +419,8 @@ class GameStartScreen extends React.Component<PropsType> {
               highScore: this.scores.length > 0 ? this.scores[0] : null,
             });
           }}
-          style={{
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop: 10,
-          }}>
+          style={styles.playButton}
+        >
           {i18n.t('screens.game.play')}
         </Button>
         {this.getTopScoresRender()}
@@ -401,7 +431,7 @@ class GameStartScreen extends React.Component<PropsType> {
   keyExtractor = (item: number): string => item.toString();
 
   recoverGameScore() {
-    const {route} = this.props;
+    const { route } = this.props;
     this.gameStats = route.params;
     if (this.gameStats.score != null) {
       this.isHighScore =
@@ -420,24 +450,25 @@ class GameStartScreen extends React.Component<PropsType> {
       }
       AsyncStorageManager.set(
         AsyncStorageManager.PREFERENCES.gameScores.key,
-        this.scores,
+        this.scores
       );
     }
   }
 
   render() {
-    const {props} = this;
+    const { props } = this;
     return (
-      <View style={{flex: 1}}>
+      <View style={GENERAL_STYLES.flex}>
         {this.getPiecesBackground()}
         <LinearGradient
-          style={{flex: 1}}
+          style={GENERAL_STYLES.flex}
           colors={[
             `${props.theme.colors.background}00`,
             props.theme.colors.background,
           ]}
-          start={{x: 0, y: 0}}
-          end={{x: 0, y: 1}}>
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+        >
           <CollapsibleScrollView>
             {this.getMainContent()}
             <MascotPopup

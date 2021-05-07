@@ -25,7 +25,7 @@ import fr from '../../locales/fr.json';
 
 const initLocales = () => {
   i18n.fallbacks = true;
-  i18n.translations = {fr, en};
+  i18n.translations = { fr, en };
   const bestLanguage = RNLocalize.findBestAvailableLanguage(['en', 'fr']);
   i18n.locale = bestLanguage ? bestLanguage.languageTag : 'en';
 };

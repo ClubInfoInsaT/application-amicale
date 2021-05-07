@@ -38,13 +38,13 @@ const reminderIdFactor = 100;
  */
 export async function askPermissions(): Promise<void> {
   return new Promise((resolve: () => void, reject: () => void) => {
-    checkNotifications().then(({status}: {status: string}) => {
+    checkNotifications().then(({ status }: { status: string }) => {
       if (status === RESULTS.GRANTED) {
         resolve();
       } else if (status === RESULTS.BLOCKED) {
         reject();
       } else {
-        requestNotifications([]).then((result: {status: string}) => {
+        requestNotifications([]).then((result: { status: string }) => {
           if (result.status === RESULTS.GRANTED) {
             resolve();
           } else {
@@ -66,7 +66,7 @@ export async function askPermissions(): Promise<void> {
  */
 function createNotifications(machineID: string, date: Date) {
   const reminder = AsyncStorageManager.getNumber(
-    AsyncStorageManager.PREFERENCES.proxiwashNotifications.key,
+    AsyncStorageManager.PREFERENCES.proxiwashNotifications.key
   );
   if (!Number.isNaN(reminder) && reminder > 0) {
     const id = reminderIdFactor * parseInt(machineID, 10);
@@ -107,7 +107,7 @@ function createNotifications(machineID: string, date: Date) {
 export async function setupMachineNotification(
   machineID: string,
   isEnabled: boolean,
-  endDate: Date | null,
+  endDate: Date | null
 ): Promise<void> {
   return new Promise((resolve: () => void, reject: () => void) => {
     if (isEnabled && endDate != null) {
@@ -120,9 +120,9 @@ export async function setupMachineNotification(
           reject();
         });
     } else {
-      PushNotification.cancelLocalNotifications({id: machineID});
+      PushNotification.cancelLocalNotifications({ id: machineID });
       const reminderId = reminderIdFactor * parseInt(machineID, 10);
-      PushNotification.cancelLocalNotifications({id: reminderId.toString()});
+      PushNotification.cancelLocalNotifications({ id: reminderId.toString() });
       resolve();
     }
   });

@@ -54,7 +54,7 @@ export function stringMatchQuery(str: string, query: string): boolean {
  */
 export function isItemInCategoryFilter(
   filter: Array<number>,
-  categories: Array<number | null>,
+  categories: Array<number | null>
 ): boolean {
   let itemFound = false;
   categories.forEach((cat: number | null) => {

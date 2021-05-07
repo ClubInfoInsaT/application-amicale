@@ -30,13 +30,14 @@ import i18n from 'i18n-js';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
-import {Card} from 'react-native-paper';
+import { Card } from 'react-native-paper';
 import Update from '../../constants/Update';
 import ThemeManager from '../../managers/ThemeManager';
-import Mascot, {MASCOT_STYLE} from '../Mascot/Mascot';
+import Mascot, { MASCOT_STYLE } from '../Mascot/Mascot';
 import MascotIntroWelcome from '../Intro/MascotIntroWelcome';
 import IntroIcon from '../Intro/IconIntro';
 import MascotIntroEnd from '../Intro/MascotIntroEnd';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   onDone: () => void;
@@ -75,11 +76,42 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 16,
   },
-  center: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    marginRight: 'auto',
-    marginLeft: 'auto',
+  mascot: {
+    marginLeft: 30,
+    marginBottom: 0,
+    width: 100,
+    marginTop: -30,
+  },
+  speechArrow: {
+    marginLeft: 50,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 20,
+    borderRightWidth: 0,
+    borderBottomWidth: 20,
+    borderStyle: 'solid',
+    backgroundColor: 'transparent',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: 'rgba(0,0,0,0.60)',
+  },
+  card: {
+    backgroundColor: 'rgba(0,0,0,0.38)',
+    marginHorizontal: 20,
+    borderColor: 'rgba(0,0,0,0.60)',
+    borderWidth: 4,
+    borderRadius: 10,
+    elevation: 0,
+  },
+  nextButtonContainer: {
+    borderRadius: 25,
+    padding: 5,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+  },
+  doneButtonContainer: {
+    borderRadius: 25,
+    padding: 5,
+    backgroundColor: 'rgb(190,21,34)',
   },
 });
 
@@ -90,7 +122,7 @@ export default class CustomIntroSlider extends React.Component<
   PropsType,
   StateType
 > {
-  sliderRef: {current: null | AppIntroSlider};
+  sliderRef: { current: null | AppIntroSlider };
 
   introSlides: Array<IntroSlideType>;
 
@@ -173,31 +205,27 @@ export default class CustomIntroSlider extends React.Component<
   getIntroRenderItem = (
     data:
       | (ListRenderItemInfo<IntroSlideType> & {
-          dimensions: {width: number; height: number};
+          dimensions: { width: number; height: number };
         })
-      | ListRenderItemInfo<IntroSlideType>,
+      | ListRenderItemInfo<IntroSlideType>
   ) => {
     const item = data.item;
-    const {state} = this;
+    const { state } = this;
     const index = parseInt(item.key, 10);
     return (
       <LinearGradient
         style={[styles.mainContent]}
         colors={item.colors}
-        start={{x: 0, y: 0.1}}
-        end={{x: 0.1, y: 1}}>
+        start={{ x: 0, y: 0.1 }}
+        end={{ x: 0.1, y: 1 }}
+      >
         {state.currentSlide === index ? (
-          <View style={{height: '100%', flex: 1}}>
-            <View style={{flex: 1}}>{item.view()}</View>
+          <View style={GENERAL_STYLES.flex}>
+            <View style={GENERAL_STYLES.flex}>{item.view()}</View>
             <Animatable.View useNativeDriver animation="fadeIn">
               {item.mascotStyle != null ? (
                 <Mascot
-                  style={{
-                    marginLeft: 30,
-                    marginBottom: 0,
-                    width: 100,
-                    marginTop: -30,
-                  }}
+                  style={styles.mascot}
                   emotion={item.mascotStyle}
                   animated
                   entryAnimation={{
@@ -211,43 +239,23 @@ export default class CustomIntroSlider extends React.Component<
                   }}
                 />
               ) : null}
-              <View
-                style={{
-                  marginLeft: 50,
-                  width: 0,
-                  height: 0,
-                  borderLeftWidth: 20,
-                  borderRightWidth: 0,
-                  borderBottomWidth: 20,
-                  borderStyle: 'solid',
-                  backgroundColor: 'transparent',
-                  borderLeftColor: 'transparent',
-                  borderRightColor: 'transparent',
-                  borderBottomColor: 'rgba(0,0,0,0.60)',
-                }}
-              />
-              <Card
-                style={{
-                  backgroundColor: 'rgba(0,0,0,0.38)',
-                  marginHorizontal: 20,
-                  borderColor: 'rgba(0,0,0,0.60)',
-                  borderWidth: 4,
-                  borderRadius: 10,
-                  elevation: 0,
-                }}>
+              <View style={styles.speechArrow} />
+              <Card style={styles.card}>
                 <Card.Content>
                   <Animatable.Text
                     useNativeDriver
                     animation="fadeIn"
                     delay={100}
-                    style={styles.title}>
+                    style={styles.title}
+                  >
                     {item.title}
                   </Animatable.Text>
                   <Animatable.Text
                     useNativeDriver
                     animation="fadeIn"
                     delay={200}
-                    style={styles.text}>
+                    style={styles.text}
+                  >
                     {item.text}
                   </Animatable.Text>
                 </Card.Content>
@@ -267,12 +275,12 @@ export default class CustomIntroSlider extends React.Component<
 
   onSlideChange = (index: number) => {
     CustomIntroSlider.setStatusBarColor(this.currentSlides[index].colors[0]);
-    this.setState({currentSlide: index});
+    this.setState({ currentSlide: index });
   };
 
   onSkip = () => {
     CustomIntroSlider.setStatusBarColor(
-      this.currentSlides[this.currentSlides.length - 1].colors[0],
+      this.currentSlides[this.currentSlides.length - 1].colors[0]
     );
     if (this.sliderRef.current != null) {
       this.sliderRef.current.goToSlide(this.currentSlides.length - 1);
@@ -280,9 +288,9 @@ export default class CustomIntroSlider extends React.Component<
   };
 
   onDone = () => {
-    const {props} = this;
+    const { props } = this;
     CustomIntroSlider.setStatusBarColor(
-      ThemeManager.getCurrentTheme().colors.surface,
+      ThemeManager.getCurrentTheme().colors.surface
     );
     props.onDone();
   };
@@ -292,11 +300,8 @@ export default class CustomIntroSlider extends React.Component<
       <Animatable.View
         useNativeDriver
         animation="fadeIn"
-        style={{
-          borderRadius: 25,
-          padding: 5,
-          backgroundColor: 'rgba(0,0,0,0.2)',
-        }}>
+        style={styles.nextButtonContainer}
+      >
         <MaterialCommunityIcons name="arrow-right" color="#fff" size={40} />
       </Animatable.View>
     );
@@ -307,18 +312,15 @@ export default class CustomIntroSlider extends React.Component<
       <Animatable.View
         useNativeDriver
         animation="bounceIn"
-        style={{
-          borderRadius: 25,
-          padding: 5,
-          backgroundColor: 'rgb(190,21,34)',
-        }}>
+        style={styles.doneButtonContainer}
+      >
         <MaterialCommunityIcons name="check" color="#fff" size={40} />
       </Animatable.View>
     );
   };
 
   render() {
-    const {props, state} = this;
+    const { props, state } = this;
     this.currentSlides = this.introSlides;
     if (props.isUpdate) {
       this.currentSlides = this.updateSlides;

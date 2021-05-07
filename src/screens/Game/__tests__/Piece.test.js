@@ -17,9 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable */
-
-import React from 'react';
 import Piece from '../logic/Piece';
 import ShapeI from '../Shapes/ShapeI';
 
@@ -33,11 +30,9 @@ let theme = {
 jest.mock('../Shapes/ShapeI');
 
 beforeAll(() => {
-  jest
-    .spyOn(Piece.prototype, 'getRandomShape')
-    .mockImplementation((colors: Object) => {
-      return new ShapeI(colors);
-    });
+  jest.spyOn(Piece.prototype, 'getRandomShape').mockImplementation((colors) => {
+    return new ShapeI(colors);
+  });
 });
 
 afterAll(() => {
@@ -50,11 +45,11 @@ test('isPositionValid', () => {
   let spy = jest
     .spyOn(ShapeI.prototype, 'getCellsCoordinates')
     .mockImplementation(() => {
-      return [{x: x, y: y}];
+      return [{ x: x, y: y }];
     });
   let grid = [
-    [{isEmpty: true}, {isEmpty: true}],
-    [{isEmpty: true}, {isEmpty: false}],
+    [{ isEmpty: true }, { isEmpty: true }],
+    [{ isEmpty: true }, { isEmpty: false }],
   ];
   let size = 2;
 
@@ -149,29 +144,29 @@ test('toGrid', () => {
   let spy1 = jest
     .spyOn(ShapeI.prototype, 'getCellsCoordinates')
     .mockImplementation(() => {
-      return [{x: x, y: y}];
+      return [{ x: x, y: y }];
     });
   let spy2 = jest.spyOn(ShapeI.prototype, 'getColor').mockImplementation(() => {
     return theme.colors.tetrisI;
   });
   let grid = [
     [
-      {isEmpty: true, key: '0'},
-      {isEmpty: true, key: '1'},
+      { isEmpty: true, key: '0' },
+      { isEmpty: true, key: '1' },
     ],
     [
-      {isEmpty: true, key: '0'},
-      {isEmpty: true, key: '1'},
+      { isEmpty: true, key: '0' },
+      { isEmpty: true, key: '1' },
     ],
   ];
   let expectedGrid = [
     [
-      {color: theme.colors.tetrisI, isEmpty: false, key: '0'},
-      {isEmpty: true, key: '1'},
+      { color: theme.colors.tetrisI, isEmpty: false, key: '0' },
+      { isEmpty: true, key: '1' },
     ],
     [
-      {isEmpty: true, key: '0'},
-      {isEmpty: true, key: '1'},
+      { isEmpty: true, key: '0' },
+      { isEmpty: true, key: '1' },
     ],
   ];
 
@@ -186,21 +181,21 @@ test('toGrid', () => {
 test('removeFromGrid', () => {
   let gridOld = [
     [
-      {color: theme.colors.tetrisI, isEmpty: false, key: '0'},
-      {color: theme.colors.tetrisI, isEmpty: false, key: '1'},
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '2'},
+      { color: theme.colors.tetrisI, isEmpty: false, key: '0' },
+      { color: theme.colors.tetrisI, isEmpty: false, key: '1' },
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '2' },
     ],
   ];
   let gridNew = [
     [
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '0'},
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '1'},
-      {color: theme.colors.tetrisBackground, isEmpty: true, key: '2'},
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '0' },
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '1' },
+      { color: theme.colors.tetrisBackground, isEmpty: true, key: '2' },
     ],
   ];
   let oldCoord = [
-    {x: 0, y: 0},
-    {x: 1, y: 0},
+    { x: 0, y: 0 },
+    { x: 1, y: 0 },
   ];
   let spy1 = jest
     .spyOn(ShapeI.prototype, 'getCellsCoordinates')

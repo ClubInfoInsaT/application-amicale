@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Platform, StatusBar} from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 import ThemeManager from '../managers/ThemeManager';
 
 /**
@@ -33,7 +33,7 @@ export function setupStatusBar() {
   if (Platform.OS === 'android') {
     StatusBar.setBackgroundColor(
       ThemeManager.getCurrentTheme().colors.surface,
-      true,
+      true
     );
   }
 }

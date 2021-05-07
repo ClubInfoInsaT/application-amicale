@@ -18,11 +18,11 @@
  */
 
 import * as React from 'react';
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 import i18n from 'i18n-js';
-import {Searchbar} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {stringMatchQuery} from '../../utils/Search';
+import { Searchbar } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { stringMatchQuery } from '../../utils/Search';
 import WebSectionList from '../../components/Screens/WebSectionList';
 import GroupListAccordion from '../../components/Lists/PlanexGroups/GroupListAccordion';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
@@ -49,7 +49,7 @@ type StateType = {
 
 function sortName(
   a: PlanexGroupType | PlanexGroupCategoryType,
-  b: PlanexGroupType | PlanexGroupCategoryType,
+  b: PlanexGroupType | PlanexGroupCategoryType
 ): number {
   if (a.name.toLowerCase() < b.name.toLowerCase()) {
     return -1;
@@ -71,7 +71,7 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
     this.state = {
       currentSearchString: '',
       favoriteGroups: AsyncStorageManager.getObject(
-        AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
+        AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key
       ),
     };
   }
@@ -80,14 +80,14 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    * Creates the header content
    */
   componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.setOptions({
       headerTitle: this.getSearchBar,
       headerBackTitleVisible: false,
       headerTitleContainerStyle:
         Platform.OS === 'ios'
-          ? {marginHorizontal: 0, width: '70%'}
-          : {marginHorizontal: 0, right: 50, left: 50},
+          ? { marginHorizontal: 0, width: '70%' }
+          : { marginHorizontal: 0, right: 50, left: 50 },
     });
   }
 
@@ -112,8 +112,8 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    * @param item The article to render
    * @return {*}
    */
-  getRenderItem = ({item}: {item: PlanexGroupCategoryType}) => {
-    const {currentSearchString, favoriteGroups} = this.state;
+  getRenderItem = ({ item }: { item: PlanexGroupCategoryType }) => {
+    const { currentSearchString, favoriteGroups } = this.state;
     if (
       this.shouldDisplayAccordion(item) ||
       (item.id === 0 && item.content.length === 0)
@@ -139,7 +139,7 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    * */
   createDataset = (fetchedData: {
     [key: string]: PlanexGroupCategoryType;
-  }): Array<{title: string; data: Array<PlanexGroupCategoryType>}> => {
+  }): Array<{ title: string; data: Array<PlanexGroupCategoryType> }> => {
     return [
       {
         title: '',
@@ -154,7 +154,7 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    * @param str The new search string
    */
   onSearchStringChange = (str: string) => {
-    this.setState({currentSearchString: str});
+    this.setState({ currentSearchString: str });
   };
 
   /**
@@ -164,10 +164,10 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    * @param item The article pressed
    */
   onListItemPress = (item: PlanexGroupType) => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.navigate('planex', {
       screen: 'index',
-      params: {group: item},
+      params: { group: item },
     });
   };
 
@@ -188,7 +188,7 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    */
   isGroupInFavorites(group: PlanexGroupType): boolean {
     let isFav = false;
-    const {favoriteGroups} = this.state;
+    const { favoriteGroups } = this.state;
     favoriteGroups.forEach((favGroup: PlanexGroupType) => {
       if (group.id === favGroup.id) {
         isFav = true;
@@ -218,7 +218,7 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    * @returns {boolean}
    */
   shouldDisplayAccordion(item: PlanexGroupCategoryType): boolean {
-    const {currentSearchString} = this.state;
+    const { currentSearchString } = this.state;
     let shouldDisplay = false;
     for (let i = 0; i < item.content.length; i += 1) {
       if (stringMatchQuery(item.content[i].name, currentSearchString)) {
@@ -239,7 +239,7 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
   generateData(fetchedData: {
     [key: string]: PlanexGroupCategoryType;
   }): Array<PlanexGroupCategoryType> {
-    const {favoriteGroups} = this.state;
+    const { favoriteGroups } = this.state;
     const data: Array<PlanexGroupCategoryType> = [];
     Object.values(fetchedData).forEach((category: PlanexGroupCategoryType) => {
       data.push(category);
@@ -262,7 +262,7 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
     this.setState((prevState: StateType): {
       favoriteGroups: Array<PlanexGroupType>;
     } => {
-      const {favoriteGroups} = prevState;
+      const { favoriteGroups } = prevState;
       for (let i = 0; i < favoriteGroups.length; i += 1) {
         if (group.id === favoriteGroups[i].id) {
           favoriteGroups.splice(i, 1);
@@ -271,9 +271,9 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
       }
       AsyncStorageManager.set(
         AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
-        favoriteGroups,
+        favoriteGroups
       );
-      return {favoriteGroups};
+      return { favoriteGroups };
     });
   }
 
@@ -286,19 +286,19 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
     this.setState((prevState: StateType): {
       favoriteGroups: Array<PlanexGroupType>;
     } => {
-      const {favoriteGroups} = prevState;
+      const { favoriteGroups } = prevState;
       favoriteGroups.push(group);
       favoriteGroups.sort(sortName);
       AsyncStorageManager.set(
         AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
-        favoriteGroups,
+        favoriteGroups
       );
-      return {favoriteGroups};
+      return { favoriteGroups };
     });
   }
 
   render() {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
       <WebSectionList
         navigation={props.navigation}

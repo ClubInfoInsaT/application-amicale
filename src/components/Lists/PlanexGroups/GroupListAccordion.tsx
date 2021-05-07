@@ -18,9 +18,9 @@
  */
 
 import * as React from 'react';
-import {List, withTheme} from 'react-native-paper';
-import {FlatList, View} from 'react-native';
-import {stringMatchQuery} from '../../../utils/Search';
+import { List, withTheme } from 'react-native-paper';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { stringMatchQuery } from '../../../utils/Search';
 import GroupListItem from './GroupListItem';
 import AnimatedAccordion from '../../Animations/AnimatedAccordion';
 import type {
@@ -40,9 +40,15 @@ type PropsType = {
 const LIST_ITEM_HEIGHT = 64;
 const REPLACE_REGEX = /_/g;
 
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+  },
+});
+
 class GroupListAccordion extends React.Component<PropsType> {
   shouldComponentUpdate(nextProps: PropsType): boolean {
-    const {props} = this;
+    const { props } = this;
     return (
       nextProps.currentSearchString !== props.currentSearchString ||
       nextProps.favorites.length !== props.favorites.length ||
@@ -50,8 +56,8 @@ class GroupListAccordion extends React.Component<PropsType> {
     );
   }
 
-  getRenderItem = ({item}: {item: PlanexGroupType}) => {
-    const {props} = this;
+  getRenderItem = ({ item }: { item: PlanexGroupType }) => {
+    const { props } = this;
     const onPress = () => {
       props.onGroupPress(item);
     };
@@ -70,7 +76,7 @@ class GroupListAccordion extends React.Component<PropsType> {
   };
 
   getData(): Array<PlanexGroupType> {
-    const {props} = this;
+    const { props } = this;
     const originalData = props.item.content;
     const displayData: Array<PlanexGroupType> = [];
     originalData.forEach((data: PlanexGroupType) => {
@@ -83,8 +89,8 @@ class GroupListAccordion extends React.Component<PropsType> {
 
   itemLayout = (
     data: Array<PlanexGroupType> | null | undefined,
-    index: number,
-  ): {length: number; offset: number; index: number} => ({
+    index: number
+  ): { length: number; offset: number; index: number } => ({
     length: LIST_ITEM_HEIGHT,
     offset: LIST_ITEM_HEIGHT * index,
     index,
@@ -93,15 +99,13 @@ class GroupListAccordion extends React.Component<PropsType> {
   keyExtractor = (item: PlanexGroupType): string => item.id.toString();
 
   render() {
-    const {props} = this;
-    const {item} = this.props;
+    const { props } = this;
+    const { item } = this.props;
     return (
       <View>
         <AnimatedAccordion
           title={item.name.replace(REPLACE_REGEX, ' ')}
-          style={{
-            justifyContent: 'center',
-          }}
+          style={styles.container}
           left={(iconProps) =>
             item.id === 0 ? (
               <List.Icon
@@ -112,7 +116,8 @@ class GroupListAccordion extends React.Component<PropsType> {
             ) : null
           }
           unmountWhenCollapsed={item.id !== 0} // Only render list if expanded for increased performance
-          opened={props.currentSearchString.length > 0}>
+          opened={props.currentSearchString.length > 0}
+        >
           <FlatList
             data={this.getData()}
             extraData={props.currentSearchString + props.favorites.length}

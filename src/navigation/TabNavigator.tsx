@@ -18,14 +18,17 @@
  */
 
 import * as React from 'react';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import {Title, useTheme} from 'react-native-paper';
-import {Platform} from 'react-native';
+import { Title, useTheme } from 'react-native-paper';
+import { Platform, StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
-import {createCollapsibleStack} from 'react-navigation-collapsible';
-import {View} from 'react-native-animatable';
+import { createCollapsibleStack } from 'react-navigation-collapsible';
+import { View } from 'react-native-animatable';
 import HomeScreen from '../screens/Home/HomeScreen';
 import PlanningScreen from '../screens/Planning/PlanningScreen';
 import PlanningDisplayScreen from '../screens/Planning/PlanningDisplayScreen';
@@ -45,7 +48,7 @@ import {
   CreateScreenCollapsibleStack,
   getWebsiteStack,
 } from '../utils/CollapsibleUtils';
-import Mascot, {MASCOT_STYLE} from '../components/Mascot/Mascot';
+import Mascot, { MASCOT_STYLE } from '../components/Mascot/Mascot';
 
 const modalTransition =
   Platform.OS === 'ios'
@@ -58,6 +61,20 @@ const defaultScreenOptions = {
   ...modalTransition,
 };
 
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+  },
+  mascot: {
+    width: 50,
+  },
+  title: {
+    marginLeft: 10,
+    marginTop: 'auto',
+    marginBottom: 'auto',
+  },
+});
+
 const ServicesStack = createStackNavigator();
 
 function ServicesStackComponent() {
@@ -65,24 +82,25 @@ function ServicesStackComponent() {
     <ServicesStack.Navigator
       initialRouteName="index"
       headerMode="screen"
-      screenOptions={defaultScreenOptions}>
+      screenOptions={defaultScreenOptions}
+    >
       {CreateScreenCollapsibleStack(
         'index',
         ServicesStack,
         WebsitesHomeScreen,
-        i18n.t('screens.services.title'),
+        i18n.t('screens.services.title')
       )}
       {CreateScreenCollapsibleStack(
         'services-section',
         ServicesStack,
         ServicesSectionScreen,
-        'SECTION',
+        'SECTION'
       )}
       {CreateScreenCollapsibleStack(
         'amicale-contact',
         ServicesStack,
         AmicaleContactScreen,
-        i18n.t('screens.amicaleAbout.title'),
+        i18n.t('screens.amicaleAbout.title')
       )}
     </ServicesStack.Navigator>
   );
@@ -95,18 +113,19 @@ function ProxiwashStackComponent() {
     <ProxiwashStack.Navigator
       initialRouteName="index"
       headerMode="screen"
-      screenOptions={defaultScreenOptions}>
+      screenOptions={defaultScreenOptions}
+    >
       {CreateScreenCollapsibleStack(
         'index',
         ProxiwashStack,
         ProxiwashScreen,
-        i18n.t('screens.proxiwash.title'),
+        i18n.t('screens.proxiwash.title')
       )}
       {CreateScreenCollapsibleStack(
         'proxiwash-about',
         ProxiwashStack,
         ProxiwashAboutScreen,
-        i18n.t('screens.proxiwash.title'),
+        i18n.t('screens.proxiwash.title')
       )}
     </ProxiwashStack.Navigator>
   );
@@ -119,17 +138,18 @@ function PlanningStackComponent() {
     <PlanningStack.Navigator
       initialRouteName="index"
       headerMode="screen"
-      screenOptions={defaultScreenOptions}>
+      screenOptions={defaultScreenOptions}
+    >
       <PlanningStack.Screen
         name="index"
         component={PlanningScreen}
-        options={{title: i18n.t('screens.planning.title')}}
+        options={{ title: i18n.t('screens.planning.title') }}
       />
       {CreateScreenCollapsibleStack(
         'planning-information',
         PlanningStack,
         PlanningDisplayScreen,
-        i18n.t('screens.planning.eventDetails'),
+        i18n.t('screens.planning.eventDetails')
       )}
     </PlanningStack.Navigator>
   );
@@ -139,18 +159,19 @@ const HomeStack = createStackNavigator();
 
 function HomeStackComponent(
   initialRoute: string | null,
-  defaultData: {[key: string]: string},
+  defaultData: { [key: string]: string }
 ) {
   let params;
   if (initialRoute) {
-    params = {data: defaultData, nextScreen: initialRoute, shouldOpen: true};
+    params = { data: defaultData, nextScreen: initialRoute, shouldOpen: true };
   }
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   return (
     <HomeStack.Navigator
       initialRouteName="index"
       headerMode="screen"
-      screenOptions={defaultScreenOptions}>
+      screenOptions={defaultScreenOptions}
+    >
       {createCollapsibleStack(
         <HomeStack.Screen
           name="index"
@@ -161,11 +182,9 @@ function HomeStackComponent(
               backgroundColor: colors.surface,
             },
             headerTitle: () => (
-              <View style={{flexDirection: 'row'}}>
+              <View style={styles.header}>
                 <Mascot
-                  style={{
-                    width: 50,
-                  }}
+                  style={styles.mascot}
                   emotion={MASCOT_STYLE.RANDOM}
                   animated
                   entryAnimation={{
@@ -178,12 +197,7 @@ function HomeStackComponent(
                     iterationCount: 'infinite',
                   }}
                 />
-                <Title
-                  style={{
-                    marginLeft: 10,
-                    marginTop: 'auto',
-                    marginBottom: 'auto',
-                  }}>
+                <Title style={styles.title}>
                   {i18n.t('screens.home.title')}
                 </Title>
               </View>
@@ -194,31 +208,31 @@ function HomeStackComponent(
         {
           collapsedColor: colors.surface,
           useNativeDriver: true,
-        },
+        }
       )}
       <HomeStack.Screen
         name="scanner"
         component={ScannerScreen}
-        options={{title: i18n.t('screens.scanner.title')}}
+        options={{ title: i18n.t('screens.scanner.title') }}
       />
 
       {CreateScreenCollapsibleStack(
         'club-information',
         HomeStack,
         ClubDisplayScreen,
-        i18n.t('screens.clubs.details'),
+        i18n.t('screens.clubs.details')
       )}
       {CreateScreenCollapsibleStack(
         'feed-information',
         HomeStack,
         FeedItemScreen,
-        i18n.t('screens.home.feed'),
+        i18n.t('screens.home.feed')
       )}
       {CreateScreenCollapsibleStack(
         'planning-information',
         HomeStack,
         PlanningDisplayScreen,
-        i18n.t('screens.planning.eventDetails'),
+        i18n.t('screens.planning.eventDetails')
       )}
     </HomeStack.Navigator>
   );
@@ -231,18 +245,19 @@ function PlanexStackComponent() {
     <PlanexStack.Navigator
       initialRouteName="index"
       headerMode="screen"
-      screenOptions={defaultScreenOptions}>
+      screenOptions={defaultScreenOptions}
+    >
       {getWebsiteStack(
         'index',
         PlanexStack,
         PlanexScreen,
-        i18n.t('screens.planex.title'),
+        i18n.t('screens.planex.title')
       )}
       {CreateScreenCollapsibleStack(
         'group-select',
         PlanexStack,
         GroupSelectionScreen,
-        '',
+        ''
       )}
     </PlanexStack.Navigator>
   );
@@ -252,7 +267,7 @@ const Tab = createBottomTabNavigator();
 
 type PropsType = {
   defaultHomeRoute: string | null;
-  defaultHomeData: {[key: string]: string};
+  defaultHomeData: { [key: string]: string };
 };
 
 export default class TabNavigator extends React.Component<PropsType> {
@@ -264,7 +279,7 @@ export default class TabNavigator extends React.Component<PropsType> {
     this.defaultRoute = 'home';
     if (!props.defaultHomeRoute) {
       this.defaultRoute = AsyncStorageManager.getString(
-        AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
+        AsyncStorageManager.PREFERENCES.defaultStartScreen.key
       ).toLowerCase();
     }
     this.createHomeStackComponent = () =>
@@ -275,31 +290,32 @@ export default class TabNavigator extends React.Component<PropsType> {
     return (
       <Tab.Navigator
         initialRouteName={this.defaultRoute}
-        tabBar={(tabProps) => <CustomTabBar {...tabProps} />}>
+        tabBar={(tabProps) => <CustomTabBar {...tabProps} />}
+      >
         <Tab.Screen
           name="services"
           component={ServicesStackComponent}
-          options={{title: i18n.t('screens.services.title')}}
+          options={{ title: i18n.t('screens.services.title') }}
         />
         <Tab.Screen
           name="proxiwash"
           component={ProxiwashStackComponent}
-          options={{title: i18n.t('screens.proxiwash.title')}}
+          options={{ title: i18n.t('screens.proxiwash.title') }}
         />
         <Tab.Screen
           name="home"
           component={this.createHomeStackComponent}
-          options={{title: i18n.t('screens.home.title')}}
+          options={{ title: i18n.t('screens.home.title') }}
         />
         <Tab.Screen
           name="planning"
           component={PlanningStackComponent}
-          options={{title: i18n.t('screens.planning.title')}}
+          options={{ title: i18n.t('screens.planning.title') }}
         />
         <Tab.Screen
           name="planex"
           component={PlanexStackComponent}
-          options={{title: i18n.t('screens.planex.title')}}
+          options={{ title: i18n.t('screens.planex.title') }}
         />
       </Tab.Navigator>
     );

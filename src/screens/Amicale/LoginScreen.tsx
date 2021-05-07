@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import {Image, KeyboardAvoidingView, StyleSheet, View} from 'react-native';
+import { Image, KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import {
   Button,
   Card,
@@ -27,16 +27,17 @@ import {
   withTheme,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import LinearGradient from 'react-native-linear-gradient';
 import ConnectionManager from '../../managers/ConnectionManager';
 import ErrorDialog from '../../components/Dialogs/ErrorDialog';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import AvailableWebsites from '../../constants/AvailableWebsites';
-import {MASCOT_STYLE} from '../../components/Mascot/Mascot';
+import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
-import {MainStackParamsList} from '../../navigation/MainNavigator';
+import { MainStackParamsList } from '../../navigation/MainNavigator';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type LoginScreenNavigationProp = StackScreenProps<MainStackParamsList, 'login'>;
 
@@ -63,9 +64,6 @@ const RESET_PASSWORD_PATH = 'https://www.amicale-insat.fr/password/reset';
 const emailRegex = /^.+@.+\..+$/;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   card: {
     marginTop: 'auto',
     marginBottom: 'auto',
@@ -74,10 +72,18 @@ const styles = StyleSheet.create({
     fontSize: 36,
     marginBottom: 48,
   },
-  textInput: {},
-  btnContainer: {
-    marginTop: 5,
-    marginBottom: 10,
+  text: {
+    color: '#ffffff',
+  },
+  buttonContainer: {
+    flexWrap: 'wrap',
+  },
+  lockButton: {
+    marginRight: 'auto',
+    marginBottom: 20,
+  },
+  sendButton: {
+    marginLeft: 'auto',
   },
 });
 
@@ -113,7 +119,7 @@ class LoginScreen extends React.Component<Props, StateType> {
       dialogVisible: false,
       dialogError: 0,
       mascotDialogVisible: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.loginShowMascot.key,
+        AsyncStorageManager.PREFERENCES.loginShowMascot.key
       ),
     };
   }
@@ -126,7 +132,7 @@ class LoginScreen extends React.Component<Props, StateType> {
    * Navigates to the Amicale website screen with the reset password link as navigation parameters
    */
   onResetPasswordClick = () => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.navigate('website', {
       host: AvailableWebsites.websites.AMICALE,
       path: RESET_PASSWORD_PATH,
@@ -174,15 +180,15 @@ class LoginScreen extends React.Component<Props, StateType> {
    *
    */
   onSubmit = () => {
-    const {email, password} = this.state;
+    const { email, password } = this.state;
     if (this.shouldEnableLogin()) {
-      this.setState({loading: true});
+      this.setState({ loading: true });
       ConnectionManager.getInstance()
         .connect(email, password)
         .then(this.handleSuccess)
         .catch(this.showErrorDialog)
         .finally(() => {
-          this.setState({loading: false});
+          this.setState({ loading: false });
         });
     }
   };
@@ -193,7 +199,7 @@ class LoginScreen extends React.Component<Props, StateType> {
    * @returns {*}
    */
   getFormInput() {
-    const {email, password} = this.state;
+    const { email, password } = this.state;
     return (
       <View>
         <TextInput
@@ -244,15 +250,15 @@ class LoginScreen extends React.Component<Props, StateType> {
    * @returns {*}
    */
   getMainCard() {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
       <View style={styles.card}>
         <Card.Title
           title={i18n.t('screens.login.title')}
-          titleStyle={{color: '#fff'}}
+          titleStyle={styles.text}
           subtitle={i18n.t('screens.login.subtitle')}
-          subtitleStyle={{color: '#fff'}}
-          left={({size}) => (
+          subtitleStyle={styles.text}
+          left={({ size }) => (
             <Image
               source={ICON_AMICALE}
               style={{
@@ -264,13 +270,14 @@ class LoginScreen extends React.Component<Props, StateType> {
         />
         <Card.Content>
           {this.getFormInput()}
-          <Card.Actions style={{flexWrap: 'wrap'}}>
+          <Card.Actions style={styles.buttonContainer}>
             <Button
               icon="lock-question"
               mode="contained"
               onPress={this.onResetPasswordClick}
               color={props.theme.colors.warning}
-              style={{marginRight: 'auto', marginBottom: 20}}>
+              style={styles.lockButton}
+            >
               {i18n.t('screens.login.resetPassword')}
             </Button>
             <Button
@@ -279,7 +286,8 @@ class LoginScreen extends React.Component<Props, StateType> {
               disabled={!this.shouldEnableLogin()}
               loading={state.loading}
               onPress={this.onSubmit}
-              style={{marginLeft: 'auto'}}>
+              style={styles.sendButton}
+            >
               {i18n.t('screens.login.title')}
             </Button>
           </Card.Actions>
@@ -288,10 +296,8 @@ class LoginScreen extends React.Component<Props, StateType> {
               icon="help-circle"
               mode="contained"
               onPress={this.showMascotDialog}
-              style={{
-                marginLeft: 'auto',
-                marginRight: 'auto',
-              }}>
+              style={GENERAL_STYLES.centerHorizontal}
+            >
               {i18n.t('screens.login.mascotDialog.title')}
             </Button>
           </Card.Actions>
@@ -304,26 +310,26 @@ class LoginScreen extends React.Component<Props, StateType> {
    * The user has unfocused the input, his email is ready to be validated
    */
   validateEmail = () => {
-    this.setState({isEmailValidated: true});
+    this.setState({ isEmailValidated: true });
   };
 
   /**
    * The user has unfocused the input, his password is ready to be validated
    */
   validatePassword = () => {
-    this.setState({isPasswordValidated: true});
+    this.setState({ isPasswordValidated: true });
   };
 
   hideMascotDialog = () => {
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.loginShowMascot.key,
-      false,
+      false
     );
-    this.setState({mascotDialogVisible: false});
+    this.setState({ mascotDialogVisible: false });
   };
 
   showMascotDialog = () => {
-    this.setState({mascotDialogVisible: true});
+    this.setState({ mascotDialogVisible: true });
   };
 
   /**
@@ -339,7 +345,7 @@ class LoginScreen extends React.Component<Props, StateType> {
   };
 
   hideErrorDialog = () => {
-    this.setState({dialogVisible: false});
+    this.setState({ dialogVisible: false });
   };
 
   /**
@@ -347,11 +353,11 @@ class LoginScreen extends React.Component<Props, StateType> {
    * Saves in user preferences to not show the login banner again.
    */
   handleSuccess = () => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     // Do not show the home login banner again
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.homeShowMascot.key,
-      false,
+      false
     );
     if (this.nextScreen == null) {
       navigation.goBack();
@@ -373,7 +379,7 @@ class LoginScreen extends React.Component<Props, StateType> {
    * @returns {boolean}
    */
   isEmailValid(): boolean {
-    const {email} = this.state;
+    const { email } = this.state;
     return emailRegex.test(email);
   }
 
@@ -384,7 +390,7 @@ class LoginScreen extends React.Component<Props, StateType> {
    * @returns {boolean|boolean}
    */
   shouldShowEmailError(): boolean {
-    const {isEmailValidated} = this.state;
+    const { isEmailValidated } = this.state;
     return isEmailValidated && !this.isEmailValid();
   }
 
@@ -394,7 +400,7 @@ class LoginScreen extends React.Component<Props, StateType> {
    * @returns {boolean}
    */
   isPasswordValid(): boolean {
-    const {password} = this.state;
+    const { password } = this.state;
     return password !== '';
   }
 
@@ -405,7 +411,7 @@ class LoginScreen extends React.Component<Props, StateType> {
    * @returns {boolean|boolean}
    */
   shouldShowPasswordError(): boolean {
-    const {isPasswordValidated} = this.state;
+    const { isPasswordValidated } = this.state;
     return isPasswordValidated && !this.isPasswordValid();
   }
 
@@ -415,28 +421,28 @@ class LoginScreen extends React.Component<Props, StateType> {
    * @returns {boolean}
    */
   shouldEnableLogin(): boolean {
-    const {loading} = this.state;
+    const { loading } = this.state;
     return this.isEmailValid() && this.isPasswordValid() && !loading;
   }
 
   render() {
-    const {mascotDialogVisible, dialogVisible, dialogError} = this.state;
+    const { mascotDialogVisible, dialogVisible, dialogError } = this.state;
     return (
       <LinearGradient
-        style={{
-          height: '100%',
-        }}
+        style={GENERAL_STYLES.flex}
         colors={['#9e0d18', '#530209']}
-        start={{x: 0, y: 0.1}}
-        end={{x: 0.1, y: 1}}>
+        start={{ x: 0, y: 0.1 }}
+        end={{ x: 0.1, y: 1 }}
+      >
         <KeyboardAvoidingView
           behavior="height"
-          contentContainerStyle={styles.container}
-          style={styles.container}
+          contentContainerStyle={GENERAL_STYLES.flex}
+          style={GENERAL_STYLES.flex}
           enabled
-          keyboardVerticalOffset={100}>
+          keyboardVerticalOffset={100}
+        >
           <CollapsibleScrollView>
-            <View style={{height: '100%'}}>{this.getMainCard()}</View>
+            <View style={GENERAL_STYLES.flex}>{this.getMainCard()}</View>
             <MascotPopup
               visible={mascotDialogVisible}
               title={i18n.t('screens.login.mascotDialog.title')}

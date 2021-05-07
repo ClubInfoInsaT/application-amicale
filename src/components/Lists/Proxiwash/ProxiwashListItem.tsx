@@ -27,14 +27,14 @@ import {
   Text,
   withTheme,
 } from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
 import ProxiwashConstants, {
   MachineStates,
 } from '../../../constants/ProxiwashConstants';
 import AprilFoolsManager from '../../../managers/AprilFoolsManager';
-import type {ProxiwashMachineType} from '../../../screens/Proxiwash/ProxiwashScreen';
+import type { ProxiwashMachineType } from '../../../screens/Proxiwash/ProxiwashScreen';
 
 type PropsType = {
   item: ProxiwashMachineType;
@@ -42,7 +42,7 @@ type PropsType = {
   onPress: (
     title: string,
     item: ProxiwashMachineType,
-    isDryer: boolean,
+    isDryer: boolean
   ) => void;
   isWatched: boolean;
   isDryer: boolean;
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     margin: 5,
     justifyContent: 'center',
     elevation: 1,
+    borderRadius: 4,
   },
   icon: {
     backgroundColor: 'transparent',
@@ -65,17 +66,29 @@ const styles = StyleSheet.create({
     left: 0,
     borderRadius: 4,
   },
+  item: {
+    justifyContent: 'center',
+  },
+  text: {
+    fontWeight: 'bold',
+  },
+  textRow: {
+    flexDirection: 'row',
+  },
+  textContainer: {
+    justifyContent: 'center',
+  },
 });
 
 /**
  * Component used to display a proxiwash item, showing machine progression and state
  */
 class ProxiwashListItem extends React.Component<PropsType> {
-  stateStrings: {[key in MachineStates]: string} = {
+  stateStrings: { [key in MachineStates]: string } = {
     [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.states.ready'),
     [MachineStates.RUNNING]: i18n.t('screens.proxiwash.states.running'),
     [MachineStates.RUNNING_NOT_STARTED]: i18n.t(
-      'screens.proxiwash.states.runningNotStarted',
+      'screens.proxiwash.states.runningNotStarted'
     ),
     [MachineStates.FINISHED]: i18n.t('screens.proxiwash.states.finished'),
     [MachineStates.UNAVAILABLE]: i18n.t('screens.proxiwash.states.broken'),
@@ -83,7 +96,7 @@ class ProxiwashListItem extends React.Component<PropsType> {
     [MachineStates.UNKNOWN]: i18n.t('screens.proxiwash.states.unknown'),
   };
 
-  stateColors: {[key: string]: string};
+  stateColors: { [key: string]: string };
 
   title: string;
 
@@ -97,7 +110,7 @@ class ProxiwashListItem extends React.Component<PropsType> {
     const displayMaxWeight = props.item.maxWeight;
     if (AprilFoolsManager.getInstance().isAprilFoolsEnabled()) {
       displayNumber = AprilFoolsManager.getProxiwashMachineDisplayNumber(
-        parseInt(props.item.number, 10),
+        parseInt(props.item.number, 10)
       );
     }
 
@@ -109,7 +122,7 @@ class ProxiwashListItem extends React.Component<PropsType> {
   }
 
   shouldComponentUpdate(nextProps: PropsType): boolean {
-    const {props} = this;
+    const { props } = this;
     return (
       nextProps.theme.dark !== props.theme.dark ||
       nextProps.item.state !== props.item.state ||
@@ -119,13 +132,13 @@ class ProxiwashListItem extends React.Component<PropsType> {
   }
 
   onListItemPress = () => {
-    const {props} = this;
+    const { props } = this;
     props.onPress(this.titlePopUp, props.item, props.isDryer);
   };
 
   updateStateColors() {
-    const {props} = this;
-    const {colors} = props.theme;
+    const { props } = this;
+    const { colors } = props.theme;
     this.stateColors[MachineStates.AVAILABLE] = colors.proxiwashReadyColor;
     this.stateColors[MachineStates.RUNNING] = colors.proxiwashRunningColor;
     this.stateColors[MachineStates.RUNNING_NOT_STARTED] =
@@ -137,8 +150,8 @@ class ProxiwashListItem extends React.Component<PropsType> {
   }
 
   render() {
-    const {props} = this;
-    const {colors} = props.theme;
+    const { props } = this;
+    const { colors } = props.theme;
     const machineState = props.item.state;
     const isRunning = machineState === MachineStates.RUNNING;
     const isReady = machineState === MachineStates.AVAILABLE;
@@ -184,8 +197,8 @@ class ProxiwashListItem extends React.Component<PropsType> {
         style={{
           ...styles.container,
           height: props.height,
-          borderRadius: 4,
-        }}>
+        }}
+      >
         {!isReady ? (
           <ProgressBar
             style={{
@@ -201,26 +214,27 @@ class ProxiwashListItem extends React.Component<PropsType> {
           description={description}
           style={{
             height: props.height,
-            justifyContent: 'center',
+            ...styles.item,
           }}
           onPress={this.onListItemPress}
           left={() => icon}
           right={() => (
-            <View style={{flexDirection: 'row'}}>
-              <View style={{justifyContent: 'center'}}>
+            <View style={styles.textRow}>
+              <View style={styles.textContainer}>
                 <Text
                   style={
                     machineState === MachineStates.FINISHED
-                      ? {fontWeight: 'bold'}
-                      : {}
-                  }>
+                      ? styles.text
+                      : undefined
+                  }
+                >
                   {stateString}
                 </Text>
                 {machineState === MachineStates.RUNNING ? (
                   <Caption>{props.item.remainingTime} min</Caption>
                 ) : null}
               </View>
-              <View style={{justifyContent: 'center'}}>
+              <View style={styles.textContainer}>
                 <Avatar.Icon
                   icon={stateIcon}
                   color={colors.text}

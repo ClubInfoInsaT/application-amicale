@@ -18,24 +18,31 @@
  */
 
 import React from 'react';
-import {View} from 'react-native';
-import {Headline, useTheme} from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Headline, useTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  headline: {
+    textAlign: 'center',
+  },
+});
 
 function VoteNotAvailable() {
   const theme = useTheme();
   return (
-    <View
-      style={{
-        width: '100%',
-        marginTop: 10,
-        marginBottom: 10,
-      }}>
+    <View style={styles.container}>
       <Headline
         style={{
           color: theme.colors.textDisabled,
-          textAlign: 'center',
-        }}>
+          ...styles.headline,
+        }}
+      >
         {i18n.t('screens.vote.noVote')}
       </Headline>
     </View>

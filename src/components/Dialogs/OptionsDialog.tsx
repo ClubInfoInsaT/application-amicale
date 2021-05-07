@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {Button, Dialog, Paragraph, Portal} from 'react-native-paper';
-import {FlatList} from 'react-native';
+import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
+import { FlatList } from 'react-native';
 
 export type OptionsDialogButtonType = {
   title: string;
@@ -36,7 +36,7 @@ type PropsType = {
 };
 
 function OptionsDialog(props: PropsType) {
-  const getButtonRender = ({item}: {item: OptionsDialogButtonType}) => {
+  const getButtonRender = ({ item }: { item: OptionsDialogButtonType }) => {
     return (
       <Button onPress={item.onPress} icon={item.icon}>
         {item.title}

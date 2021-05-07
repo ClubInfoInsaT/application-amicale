@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {View, ViewStyle} from 'react-native';
-import type {CellType} from './CellComponent';
+import { StyleSheet, View, ViewStyle } from 'react-native';
+import type { CellType } from './CellComponent';
 import CellComponent from './CellComponent';
 
 export type GridType = Array<Array<CellType>>;
@@ -31,13 +31,22 @@ type PropsType = {
   style: ViewStyle;
 };
 
+const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+  },
+  grid: {
+    borderRadius: 4,
+  },
+});
+
 const getCellRender = (item: CellType) => {
   return <CellComponent cell={item} key={item.key} />;
 };
 
 function getRow(grid: GridType, rowNumber: number) {
   return (
-    <View style={{flexDirection: 'row'}} key={rowNumber.toString()}>
+    <View style={styles.row} key={rowNumber.toString()}>
       {grid[rowNumber].map(getCellRender)}
     </View>
   );
@@ -52,14 +61,15 @@ function getGrid(grid: GridType, height: number) {
 }
 
 function GridComponent(props: PropsType) {
-  const {style, width, height, grid} = props;
+  const { style, width, height, grid } = props;
   return (
     <View
       style={{
         aspectRatio: width / height,
-        borderRadius: 4,
         ...style,
-      }}>
+        ...styles.grid,
+      }}
+    >
       {getGrid(grid, height)}
     </View>
   );

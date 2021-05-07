@@ -25,8 +25,9 @@ import {
   TouchableRipple,
   useTheme,
 } from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   eventNumber: number;
@@ -45,6 +46,9 @@ const styles = StyleSheet.create({
   avatar: {
     backgroundColor: 'transparent',
   },
+  text: {
+    fontWeight: 'bold',
+  },
 });
 
 /**
@@ -61,7 +65,7 @@ function EventDashBoardItem(props: PropsType) {
   if (isAvailable) {
     subtitle = (
       <Text>
-        <Text style={{fontWeight: 'bold'}}>{props.eventNumber}</Text>
+        <Text style={styles.text}>{props.eventNumber}</Text>
         <Text>
           {props.eventNumber > 1
             ? i18n.t('screens.home.dashboard.todayEventsSubtitlePlural')
@@ -74,13 +78,13 @@ function EventDashBoardItem(props: PropsType) {
   }
   return (
     <Card style={styles.card}>
-      <TouchableRipple style={{flex: 1}} onPress={props.clickAction}>
+      <TouchableRipple style={GENERAL_STYLES.flex} onPress={props.clickAction}>
         <View>
           <Card.Title
             title={i18n.t('screens.home.dashboard.todayEventsTitle')}
-            titleStyle={{color: textColor}}
+            titleStyle={{ color: textColor }}
             subtitle={subtitle}
-            subtitleStyle={{color: textColor}}
+            subtitleStyle={{ color: textColor }}
             left={(iconProps) => (
               <Avatar.Icon
                 icon="calendar-range"

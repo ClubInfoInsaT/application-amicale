@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import {useCollapsibleStack} from 'react-navigation-collapsible';
+import { useCollapsibleStack } from 'react-navigation-collapsible';
 
 /**
  * Function used to manipulate Collapsible Hooks from a class.

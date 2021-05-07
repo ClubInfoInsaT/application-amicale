@@ -18,9 +18,9 @@
  */
 
 import * as React from 'react';
-import {useTheme} from 'react-native-paper';
-import {Modalize} from 'react-native-modalize';
-import {View} from 'react-native-animatable';
+import { useTheme } from 'react-native-paper';
+import { Modalize } from 'react-native-modalize';
+import { View } from 'react-native-animatable';
 import CustomTabBar from '../Tabbar/CustomTabBar';
 
 /**
@@ -34,18 +34,20 @@ function CustomModal(props: {
   children?: React.ReactNode;
 }) {
   const theme = useTheme();
-  const {onRef, children} = props;
+  const { onRef, children } = props;
   return (
     <Modalize
       ref={onRef}
       adjustToContentHeight
       handlePosition="inside"
-      modalStyle={{backgroundColor: theme.colors.card}}
-      handleStyle={{backgroundColor: theme.colors.primary}}>
+      modalStyle={{ backgroundColor: theme.colors.card }}
+      handleStyle={{ backgroundColor: theme.colors.primary }}
+    >
       <View
         style={{
           paddingBottom: CustomTabBar.TAB_BAR_HEIGHT,
-        }}>
+        }}
+      >
         {children}
       </View>
     </Modalize>

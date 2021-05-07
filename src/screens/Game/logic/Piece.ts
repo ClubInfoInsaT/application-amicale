@@ -24,9 +24,9 @@ import ShapeO from '../Shapes/ShapeO';
 import ShapeS from '../Shapes/ShapeS';
 import ShapeT from '../Shapes/ShapeT';
 import ShapeZ from '../Shapes/ShapeZ';
-import type {CoordinatesType} from '../Shapes/BaseShape';
+import type { CoordinatesType } from '../Shapes/BaseShape';
 import BaseShape from '../Shapes/BaseShape';
-import type {GridType} from '../components/GridComponent';
+import type { GridType } from '../components/GridComponent';
 
 /**
  * Class used as an abstraction layer for shapes.
@@ -66,7 +66,7 @@ export default class Piece {
    */
   removeFromGrid(grid: GridType) {
     const pos: Array<CoordinatesType> = this.currentShape.getCellsCoordinates(
-      true,
+      true
     );
     pos.forEach((coordinates: CoordinatesType) => {
       grid[coordinates.y][coordinates.x] = {
@@ -85,7 +85,7 @@ export default class Piece {
    */
   toGrid(grid: GridType, isPreview: boolean) {
     const pos: Array<CoordinatesType> = this.currentShape.getCellsCoordinates(
-      !isPreview,
+      !isPreview
     );
     pos.forEach((coordinates: CoordinatesType) => {
       grid[coordinates.y][coordinates.x] = {
@@ -107,7 +107,7 @@ export default class Piece {
   isPositionValid(grid: GridType, width: number, height: number): boolean {
     let isValid = true;
     const pos: Array<CoordinatesType> = this.currentShape.getCellsCoordinates(
-      true,
+      true
     );
     for (let i = 0; i < pos.length; i += 1) {
       if (
@@ -141,7 +141,7 @@ export default class Piece {
     grid: GridType,
     width: number,
     height: number,
-    freezeCallback: () => void,
+    freezeCallback: () => void
   ): boolean {
     let newX = x;
     let newY = y;

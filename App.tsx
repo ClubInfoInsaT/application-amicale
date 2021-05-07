@@ -17,13 +17,13 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import {LogBox, Platform, SafeAreaView, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {Provider as PaperProvider} from 'react-native-paper';
-import {setSafeBounceHeight} from 'react-navigation-collapsible';
+import React from 'react';
+import { LogBox, Platform, SafeAreaView, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { setSafeBounceHeight } from 'react-navigation-collapsible';
 import SplashScreen from 'react-native-splash-screen';
-import {OverflowMenuProvider} from 'react-navigation-header-buttons';
+import { OverflowMenuProvider } from 'react-navigation-header-buttons';
 import AsyncStorageManager from './src/managers/AsyncStorageManager';
 import CustomIntroSlider from './src/components/Overrides/CustomIntroSlider';
 import ThemeManager from './src/managers/ThemeManager';
@@ -31,11 +31,12 @@ import MainNavigator from './src/navigation/MainNavigator';
 import AprilFoolsManager from './src/managers/AprilFoolsManager';
 import Update from './src/constants/Update';
 import ConnectionManager from './src/managers/ConnectionManager';
-import type {ParsedUrlDataType} from './src/utils/URLHandler';
+import type { ParsedUrlDataType } from './src/utils/URLHandler';
 import URLHandler from './src/utils/URLHandler';
-import {setupStatusBar} from './src/utils/Utils';
+import { setupStatusBar } from './src/utils/Utils';
 import initLocales from './src/utils/Locales';
-import {NavigationContainerRef} from '@react-navigation/core';
+import { NavigationContainerRef } from '@react-navigation/core';
+import GENERAL_STYLES from './src/constants/Styles';
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 // Crashes app when navigating away from webview on android 9+
@@ -56,11 +57,11 @@ type StateType = {
 };
 
 export default class App extends React.Component<{}, StateType> {
-  navigatorRef: {current: null | NavigationContainerRef};
+  navigatorRef: { current: null | NavigationContainerRef };
 
   defaultHomeRoute: string | null;
 
-  defaultHomeData: {[key: string]: string};
+  defaultHomeData: { [key: string]: string };
 
   urlHandler: URLHandler;
 
@@ -106,7 +107,7 @@ export default class App extends React.Component<{}, StateType> {
     if (nav != null) {
       nav.navigate('home', {
         screen: 'index',
-        params: {nextScreen: parsedData.route, data: parsedData.data},
+        params: { nextScreen: parsedData.route, data: parsedData.data },
       });
     }
   };
@@ -132,15 +133,15 @@ export default class App extends React.Component<{}, StateType> {
     });
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.showIntro.key,
-      false,
+      false
     );
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.updateNumber.key,
-      Update.number,
+      Update.number
     );
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.showAprilFoolsStart.key,
-      false,
+      false
     );
   };
 
@@ -161,16 +162,16 @@ export default class App extends React.Component<{}, StateType> {
       isLoading: false,
       currentTheme: ThemeManager.getCurrentTheme(),
       showIntro: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.showIntro.key,
+        AsyncStorageManager.PREFERENCES.showIntro.key
       ),
       showUpdate:
         AsyncStorageManager.getNumber(
-          AsyncStorageManager.PREFERENCES.updateNumber.key,
+          AsyncStorageManager.PREFERENCES.updateNumber.key
         ) !== Update.number,
       showAprilFools:
         AprilFoolsManager.getInstance().isAprilFoolsEnabled() &&
         AsyncStorageManager.getBool(
-          AsyncStorageManager.PREFERENCES.showAprilFoolsStart.key,
+          AsyncStorageManager.PREFERENCES.showAprilFoolsStart.key
         ),
     });
     SplashScreen.hide();
@@ -194,7 +195,7 @@ export default class App extends React.Component<{}, StateType> {
    * Renders the app based on loading state
    */
   render() {
-    const {state} = this;
+    const { state } = this;
     if (state.isLoading) {
       return null;
     }
@@ -213,12 +214,14 @@ export default class App extends React.Component<{}, StateType> {
           <View
             style={{
               backgroundColor: ThemeManager.getCurrentTheme().colors.background,
-              flex: 1,
-            }}>
-            <SafeAreaView style={{flex: 1}}>
+              ...GENERAL_STYLES.flex,
+            }}
+          >
+            <SafeAreaView style={GENERAL_STYLES.flex}>
               <NavigationContainer
                 theme={state.currentTheme}
-                ref={this.navigatorRef}>
+                ref={this.navigatorRef}
+              >
                 <MainNavigator
                   defaultHomeRoute={this.defaultHomeRoute}
                   defaultHomeData={this.defaultHomeData}

@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {Animated, ScrollViewProps} from 'react-native';
-import type {CollapsibleComponentPropsType} from './CollapsibleComponent';
+import { Animated, ScrollViewProps } from 'react-native';
+import type { CollapsibleComponentPropsType } from './CollapsibleComponent';
 import CollapsibleComponent from './CollapsibleComponent';
 
 type Props = ScrollViewProps & CollapsibleComponentPropsType;

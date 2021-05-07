@@ -18,28 +18,40 @@
  */
 
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Mascot, {MASCOT_STYLE} from '../Mascot/Mascot';
+import GENERAL_STYLES from '../../constants/Styles';
+import Mascot, { MASCOT_STYLE } from '../Mascot/Mascot';
 
 const styles = StyleSheet.create({
-  center: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    marginRight: 'auto',
-    marginLeft: 'auto',
+  mascot: {
+    ...GENERAL_STYLES.center,
+    width: '80%',
+  },
+  text: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 25,
+  },
+  container: {
+    position: 'absolute',
+    bottom: 30,
+    right: '20%',
+    width: 50,
+    height: 50,
+  },
+  icon: {
+    ...GENERAL_STYLES.center,
+    transform: [{ rotateZ: '70deg' }],
   },
 });
 
 function MascotIntroWelcome() {
   return (
-    <View style={{flex: 1}}>
+    <View style={GENERAL_STYLES.flex}>
       <Mascot
-        style={{
-          ...styles.center,
-          width: '80%',
-        }}
+        style={styles.mascot}
         emotion={MASCOT_STYLE.NORMAL}
         animated
         entryAnimation={{
@@ -51,11 +63,8 @@ function MascotIntroWelcome() {
         useNativeDriver
         animation="fadeInUp"
         duration={500}
-        style={{
-          color: '#fff',
-          textAlign: 'center',
-          fontSize: 25,
-        }}>
+        style={styles.text}
+      >
         PABLO
       </Animatable.Text>
       <Animatable.View
@@ -63,18 +72,10 @@ function MascotIntroWelcome() {
         animation="fadeInUp"
         duration={500}
         delay={200}
-        style={{
-          position: 'absolute',
-          bottom: 30,
-          right: '20%',
-          width: 50,
-          height: 50,
-        }}>
+        style={styles.container}
+      >
         <MaterialCommunityIcons
-          style={{
-            ...styles.center,
-            transform: [{rotateZ: '70deg'}],
-          }}
+          style={styles.icon}
           name="undo"
           color="#fff"
           size={40}

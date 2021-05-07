@@ -18,12 +18,13 @@
  */
 
 import * as React from 'react';
-import {Avatar, Chip, List, withTheme} from 'react-native-paper';
-import {View} from 'react-native';
+import { Avatar, Chip, List, withTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
 import type {
   ClubCategoryType,
   ClubType,
 } from '../../../screens/Amicale/Clubs/ClubListScreen';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type PropsType = {
   onPress: () => void;
@@ -32,6 +33,28 @@ type PropsType = {
   height: number;
   theme: ReactNativePaper.Theme;
 };
+
+const styles = StyleSheet.create({
+  chip: {
+    marginRight: 5,
+    marginBottom: 5,
+  },
+  chipContainer: {
+    flexDirection: 'row',
+  },
+  avatar: {
+    backgroundColor: 'transparent',
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  icon: {
+    ...GENERAL_STYLES.centerVertical,
+    backgroundColor: 'transparent',
+  },
+  item: {
+    justifyContent: 'center',
+  },
+});
 
 class ClubListItem extends React.Component<PropsType> {
   hasManagers: boolean;
@@ -46,30 +69,28 @@ class ClubListItem extends React.Component<PropsType> {
   }
 
   getCategoriesRender(categories: Array<number | null>) {
-    const {props} = this;
+    const { props } = this;
     const final: Array<React.ReactNode> = [];
     categories.forEach((cat: number | null) => {
       if (cat != null) {
         const category = props.categoryTranslator(cat);
         if (category) {
           final.push(
-            <Chip
-              style={{marginRight: 5, marginBottom: 5}}
-              key={`${props.item.id}:${category.id}`}>
+            <Chip style={styles.chip} key={`${props.item.id}:${category.id}`}>
               {category.name}
-            </Chip>,
+            </Chip>
           );
         }
       }
     });
-    return <View style={{flexDirection: 'row'}}>{final}</View>;
+    return <View style={styles.chipContainer}>{final}</View>;
   }
 
   render() {
-    const {props} = this;
+    const { props } = this;
     const categoriesRender = () =>
       this.getCategoriesRender(props.item.category);
-    const {colors} = props.theme;
+    const { colors } = props.theme;
     return (
       <List.Item
         title={props.item.name}
@@ -77,22 +98,14 @@ class ClubListItem extends React.Component<PropsType> {
         onPress={props.onPress}
         left={() => (
           <Avatar.Image
-            style={{
-              backgroundColor: 'transparent',
-              marginLeft: 10,
-              marginRight: 10,
-            }}
+            style={styles.avatar}
             size={64}
-            source={{uri: props.item.logo}}
+            source={{ uri: props.item.logo }}
           />
         )}
         right={() => (
           <Avatar.Icon
-            style={{
-              marginTop: 'auto',
-              marginBottom: 'auto',
-              backgroundColor: 'transparent',
-            }}
+            style={styles.icon}
             size={48}
             icon={
               this.hasManagers ? 'check-circle-outline' : 'alert-circle-outline'
@@ -102,7 +115,7 @@ class ClubListItem extends React.Component<PropsType> {
         )}
         style={{
           height: props.height,
-          justifyContent: 'center',
+          ...styles.item,
         }}
       />
     );

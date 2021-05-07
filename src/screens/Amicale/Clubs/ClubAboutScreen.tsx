@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import {Image, View} from 'react-native';
-import {Card, Avatar, Text} from 'react-native-paper';
+import { Image, StyleSheet, View } from 'react-native';
+import { Card, Avatar, Text } from 'react-native-paper';
 import i18n from 'i18n-js';
 import Autolink from 'react-native-autolink';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
@@ -27,26 +27,39 @@ const AMICALE_ICON = require('../../../../assets/amicale.png');
 
 const CONTACT_LINK = 'clubs@amicale-insat.fr';
 
+const styles = StyleSheet.create({
+  container: {
+    padding: 5,
+  },
+  imageContainer: {
+    width: '100%',
+    height: 100,
+    marginTop: 20,
+    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'contain',
+  },
+  card: {
+    margin: 5,
+  },
+});
+
 function ClubAboutScreen() {
   return (
-    <CollapsibleScrollView style={{padding: 5}}>
-      <View
-        style={{
-          width: '100%',
-          height: 100,
-          marginTop: 20,
-          marginBottom: 20,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+    <CollapsibleScrollView style={styles.container}>
+      <View style={styles.imageContainer}>
         <Image
           source={AMICALE_ICON}
-          style={{flex: 1, resizeMode: 'contain'}}
+          style={styles.image}
           resizeMode="contain"
         />
       </View>
       <Text>{i18n.t('screens.clubs.about.text')}</Text>
-      <Card style={{margin: 5}}>
+      <Card style={styles.card}>
         <Card.Title
           title={i18n.t('screens.clubs.about.title')}
           subtitle={i18n.t('screens.clubs.about.subtitle')}

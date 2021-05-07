@@ -18,12 +18,13 @@
  */
 
 import * as React from 'react';
-import {Card, Chip, List, Text} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import { Card, Chip, List, Text } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import AnimatedAccordion from '../../Animations/AnimatedAccordion';
-import {isItemInCategoryFilter} from '../../../utils/Search';
-import type {ClubCategoryType} from '../../../screens/Amicale/Clubs/ClubListScreen';
+import { isItemInCategoryFilter } from '../../../utils/Search';
+import type { ClubCategoryType } from '../../../screens/Amicale/Clubs/ClubListScreen';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type PropsType = {
   categories: Array<ClubCategoryType>;
@@ -39,14 +40,18 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     marginTop: 5,
     marginBottom: 10,
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    ...GENERAL_STYLES.centerHorizontal,
   },
   chipContainer: {
     justifyContent: 'space-around',
     flexDirection: 'row',
     flexWrap: 'wrap',
     paddingLeft: 0,
+    marginBottom: 5,
+  },
+  chip: {
+    marginRight: 5,
+    marginLeft: 5,
     marginBottom: 5,
   },
 });
@@ -62,8 +67,9 @@ function ClubListHeader(props: PropsType) {
         ])}
         mode="outlined"
         onPress={onPress}
-        style={{marginRight: 5, marginLeft: 5, marginBottom: 5}}
-        key={key}>
+        style={styles.chip}
+        key={key}
+      >
         {category.name}
       </Chip>
     );
@@ -88,7 +94,8 @@ function ClubListHeader(props: PropsType) {
             icon="star"
           />
         )}
-        opened>
+        opened
+      >
         <Text style={styles.text}>
           {i18n.t('screens.clubs.categoriesFilterMessage')}
         </Text>

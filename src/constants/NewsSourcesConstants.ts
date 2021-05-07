@@ -17,8 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 const ICON_AMICALE = require('../../assets/amicale.png');
 const ICON_CAMPUS = require('../../assets/android.icon.png');
 

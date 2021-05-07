@@ -18,13 +18,13 @@
  */
 
 import * as React from 'react';
-import {View} from 'react-native';
-import {Card, Text, withTheme} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { StyleSheet, View } from 'react-native';
+import { Card, Text, withTheme } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'i18n-js';
 import DateManager from '../../managers/DateManager';
 import WebSectionList from '../../components/Screens/WebSectionList';
-import type {SectionListDataType} from '../../components/Screens/WebSectionList';
+import type { SectionListDataType } from '../../components/Screens/WebSectionList';
 
 const DATA_URL =
   'https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json';
@@ -36,7 +36,7 @@ type PropsType = {
 
 export type RuFoodCategoryType = {
   name: string;
-  dishes: Array<{name: string}>;
+  dishes: Array<{ name: string }>;
 };
 
 type RuMealType = {
@@ -50,6 +50,44 @@ type RawRuMenuType = {
   date: string;
   meal: Array<RuMealType>;
 };
+
+const styles = StyleSheet.create({
+  itemCard: {
+    flex: 0,
+    marginHorizontal: 10,
+    marginVertical: 5,
+  },
+  headerCard: {
+    width: '95%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 5,
+    marginBottom: 5,
+    elevation: 4,
+  },
+  text: {
+    textAlign: 'center',
+  },
+  title: {
+    paddingLeft: 0,
+  },
+  itemTitle: {
+    marginTop: 5,
+  },
+  item: {
+    width: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    borderBottomWidth: 1,
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  itemText: {
+    marginTop: 5,
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+});
 
 /**
  * Class defining the app's menu screen.
@@ -72,7 +110,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @return {[]}
    */
   createDataset = (
-    fetchedData: Array<RawRuMenuType>,
+    fetchedData: Array<RawRuMenuType>
   ): SectionListDataType<RuFoodCategoryType> => {
     let result: SectionListDataType<RuFoodCategoryType> = [];
     if (fetchedData == null || fetchedData.length === 0) {
@@ -101,28 +139,14 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @param section The section to render the header from
    * @return {*}
    */
-  getRenderSectionHeader = ({section}: {section: {title: string}}) => {
+  getRenderSectionHeader = ({ section }: { section: { title: string } }) => {
     return (
-      <Card
-        style={{
-          width: '95%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          marginTop: 5,
-          marginBottom: 5,
-          elevation: 4,
-        }}>
+      <Card style={styles.headerCard}>
         <Card.Title
           title={section.title}
-          titleStyle={{
-            textAlign: 'center',
-          }}
-          subtitleStyle={{
-            textAlign: 'center',
-          }}
-          style={{
-            paddingLeft: 0,
-          }}
+          titleStyle={styles.text}
+          subtitleStyle={styles.text}
+          style={styles.title}
         />
       </Card>
     );
@@ -134,39 +158,24 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @param item The item to render
    * @return {*}
    */
-  getRenderItem = ({item}: {item: RuFoodCategoryType}) => {
-    const {theme} = this.props;
+  getRenderItem = ({ item }: { item: RuFoodCategoryType }) => {
+    const { theme } = this.props;
     return (
-      <Card
-        style={{
-          flex: 0,
-          marginHorizontal: 10,
-          marginVertical: 5,
-        }}>
-        <Card.Title style={{marginTop: 5}} title={item.name} />
+      <Card style={styles.itemCard}>
+        <Card.Title style={styles.itemTitle} title={item.name} />
         <View
           style={{
-            width: '80%',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            borderBottomWidth: 1,
             borderBottomColor: theme.colors.primary,
-            marginTop: 5,
-            marginBottom: 5,
+            ...styles.item,
           }}
         />
         <Card.Content>
-          {item.dishes.map((object: {name: string}) =>
+          {item.dishes.map((object: { name: string }) =>
             object.name !== '' ? (
-              <Text
-                style={{
-                  marginTop: 5,
-                  marginBottom: 5,
-                  textAlign: 'center',
-                }}>
+              <Text style={styles.itemText}>
                 {SelfMenuScreen.formatName(object.name)}
               </Text>
-            ) : null,
+            ) : null
           )}
         </Card.Content>
       </Card>
@@ -182,7 +191,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
   getKeyExtractor = (item: RuFoodCategoryType): string => item.name;
 
   render() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     return (
       <WebSectionList
         createDataset={this.createDataset}

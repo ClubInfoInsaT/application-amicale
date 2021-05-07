@@ -18,10 +18,19 @@
  */
 
 import * as React from 'react';
-import {List} from 'react-native-paper';
-import {View} from 'react-native';
+import { List } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+
+const styles = StyleSheet.create({
+  item: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+});
 
 function ActionsDashBoardItem() {
   const navigation = useNavigation();
@@ -45,12 +54,7 @@ function ActionsDashBoardItem() {
           />
         )}
         onPress={(): void => navigation.navigate('feedback')}
-        style={{
-          paddingTop: 0,
-          paddingBottom: 0,
-          marginLeft: 10,
-          marginRight: 10,
-        }}
+        style={styles.item}
       />
     </View>
   );

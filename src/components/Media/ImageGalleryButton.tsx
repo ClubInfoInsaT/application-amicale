@@ -18,32 +18,36 @@
  */
 
 import * as React from 'react';
-import {TouchableRipple} from 'react-native-paper';
-import {Image} from 'react-native-animatable';
-import {useNavigation} from '@react-navigation/native';
-import {ViewStyle} from 'react-native';
+import { TouchableRipple } from 'react-native-paper';
+import { Image } from 'react-native-animatable';
+import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, ViewStyle } from 'react-native';
 
 type PropsType = {
-  images: Array<{url: string}>;
+  images: Array<{ url: string }>;
   style: ViewStyle;
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 function ImageGalleryButton(props: PropsType) {
   const navigation = useNavigation();
 
   const onPress = () => {
-    navigation.navigate('gallery', {images: props.images});
+    navigation.navigate('gallery', { images: props.images });
   };
 
   return (
     <TouchableRipple onPress={onPress} style={props.style}>
       <Image
         resizeMode="contain"
-        source={{uri: props.images[0].url}}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
+        source={{ uri: props.images[0].url }}
+        style={styles.image}
       />
     </TouchableRipple>
   );

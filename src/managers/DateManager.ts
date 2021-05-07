@@ -84,7 +84,7 @@ export default class DateManager {
     date.setFullYear(
       parseInt(dateArray[0], 10),
       parseInt(dateArray[1], 10) - 1,
-      parseInt(dateArray[2], 10),
+      parseInt(dateArray[2], 10)
     );
     return `${this.daysOfWeek[date.getDay()]} ${date.getDate()} ${
       this.monthsOfYear[date.getMonth()]

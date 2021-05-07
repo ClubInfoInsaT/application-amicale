@@ -18,12 +18,12 @@
  */
 
 import * as React from 'react';
-import {IconButton, Text} from 'react-native-paper';
+import { IconButton, Text } from 'react-native-paper';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
-import {StyleSheet, View} from 'react-native';
-import {MainStackParamsList} from '../../navigation/MainNavigator';
+import { StyleSheet, View } from 'react-native';
+import { MainStackParamsList } from '../../navigation/MainNavigator';
 
 type ImageGalleryScreenNavigationProp = StackScreenProps<
   MainStackParamsList,
@@ -63,11 +63,11 @@ const styles = StyleSheet.create({
 });
 
 class ImageGalleryScreen extends React.Component<Props> {
-  images: Array<{url: string}>;
+  images: Array<{ url: string }>;
 
-  closeButtonRef: {current: null | (Animatable.View & View)};
+  closeButtonRef: { current: null | (Animatable.View & View) };
 
-  indicatorRef: {current: null | (Animatable.View & View)};
+  indicatorRef: { current: null | (Animatable.View & View) };
 
   controlsShown: boolean;
 
@@ -84,7 +84,7 @@ class ImageGalleryScreen extends React.Component<Props> {
   }
 
   goBack = () => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.goBack();
   };
 
@@ -93,7 +93,8 @@ class ImageGalleryScreen extends React.Component<Props> {
       <Animatable.View
         ref={this.closeButtonRef}
         useNativeDriver
-        style={styles.closeButtonContainer}>
+        style={styles.closeButtonContainer}
+      >
         <IconButton
           onPress={this.goBack}
           icon="close"
@@ -111,7 +112,8 @@ class ImageGalleryScreen extends React.Component<Props> {
         <Animatable.View
           ref={this.indicatorRef}
           useNativeDriver
-          style={styles.indicatorContainer}>
+          style={styles.indicatorContainer}
+        >
           <Text style={styles.indicatorText}>
             {currentIndex}/{allSize}
           </Text>

@@ -31,12 +31,14 @@ import {
   BackHandler,
   Dimensions,
   ScrollView,
+  StyleSheet,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import Mascot from './Mascot';
 import SpeechArrow from './SpeechArrow';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   theme: ReactNativePaper.Theme;
@@ -66,6 +68,41 @@ type StateType = {
   shouldRenderDialog: boolean; // Used to stop rendering after hide animation
   dialogVisible: boolean;
 };
+
+const styles = StyleSheet.create({
+  speechBubbleContainer: {
+    marginLeft: '10%',
+    marginRight: '10%',
+  },
+  speechBubbleCard: {
+    borderWidth: 4,
+    borderRadius: 10,
+  },
+  speechBubbleIcon: {
+    backgroundColor: 'transparent',
+  },
+  speechBubbleText: {
+    marginBottom: 10,
+  },
+  actionsContainer: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  button: {
+    ...GENERAL_STYLES.centerHorizontal,
+    marginBottom: 10,
+  },
+  background: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    width: '100%',
+    height: '100%',
+  },
+  container: {
+    marginTop: -80,
+    width: '100%',
+  },
+});
 
 /**
  * Component used to display a popup with the mascot.
@@ -107,12 +144,13 @@ class MascotPopup extends React.Component<PropsType, StateType> {
   componentDidMount() {
     BackHandler.addEventListener(
       'hardwareBackPress',
-      this.onBackButtonPressAndroid,
+      this.onBackButtonPressAndroid
     );
   }
 
   shouldComponentUpdate(nextProps: PropsType, nextState: StateType): boolean {
-    const {props, state} = this;
+    // TODO this is so dirty it shouldn't even work
+    const { props, state } = this;
     if (nextProps.visible) {
       this.state.shouldRenderDialog = true;
       this.state.dialogVisible = true;
@@ -134,10 +172,10 @@ class MascotPopup extends React.Component<PropsType, StateType> {
   };
 
   onBackButtonPressAndroid = (): boolean => {
-    const {state, props} = this;
+    const { state, props } = this;
     if (state.dialogVisible) {
-      const {cancel} = props.buttons;
-      const {action} = props.buttons;
+      const { cancel } = props.buttons;
+      const { action } = props.buttons;
       if (cancel) {
         this.onDismiss(cancel.onPress);
       } else if (action) {
@@ -152,27 +190,25 @@ class MascotPopup extends React.Component<PropsType, StateType> {
   };
 
   getSpeechBubble() {
-    const {state, props} = this;
+    const { state, props } = this;
     return (
       <Animatable.View
-        style={{
-          marginLeft: '10%',
-          marginRight: '10%',
-        }}
+        style={styles.speechBubbleContainer}
         useNativeDriver
         animation={state.dialogVisible ? 'bounceInLeft' : 'bounceOutLeft'}
-        duration={state.dialogVisible ? 1000 : 300}>
+        duration={state.dialogVisible ? 1000 : 300}
+      >
         <SpeechArrow
-          style={{marginLeft: this.mascotSize / 3}}
+          style={{ marginLeft: this.mascotSize / 3 }}
           size={20}
           color={props.theme.colors.mascotMessageArrow}
         />
         <Card
           style={{
             borderColor: props.theme.colors.mascotMessageArrow,
-            borderWidth: 4,
-            borderRadius: 10,
-          }}>
+            ...styles.speechBubbleCard,
+          }}
+        >
           <Card.Title
             title={props.title}
             left={
@@ -180,7 +216,7 @@ class MascotPopup extends React.Component<PropsType, StateType> {
                 ? () => (
                     <Avatar.Icon
                       size={48}
-                      style={{backgroundColor: 'transparent'}}
+                      style={styles.speechBubbleIcon}
                       color={props.theme.colors.primary}
                       icon={props.icon}
                     />
@@ -191,13 +227,16 @@ class MascotPopup extends React.Component<PropsType, StateType> {
           <Card.Content
             style={{
               maxHeight: this.windowHeight / 3,
-            }}>
+            }}
+          >
             <ScrollView>
-              <Paragraph style={{marginBottom: 10}}>{props.message}</Paragraph>
+              <Paragraph style={styles.speechBubbleText}>
+                {props.message}
+              </Paragraph>
             </ScrollView>
           </Card.Content>
 
-          <Card.Actions style={{marginTop: 10, marginBottom: 10}}>
+          <Card.Actions style={styles.actionsContainer}>
             {this.getButtons()}
           </Card.Actions>
         </Card>
@@ -206,14 +245,15 @@ class MascotPopup extends React.Component<PropsType, StateType> {
   }
 
   getMascot() {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
       <Animatable.View
         useNativeDriver
         animation={state.dialogVisible ? 'bounceInLeft' : 'bounceOutLeft'}
-        duration={state.dialogVisible ? 1500 : 200}>
+        duration={state.dialogVisible ? 1500 : 200}
+      >
         <Mascot
-          style={{width: this.mascotSize}}
+          style={{ width: this.mascotSize }}
           animated
           emotion={props.emotion}
         />
@@ -222,45 +262,34 @@ class MascotPopup extends React.Component<PropsType, StateType> {
   }
 
   getButtons() {
-    const {props} = this;
-    const {action} = props.buttons;
-    const {cancel} = props.buttons;
+    const { props } = this;
+    const { action } = props.buttons;
+    const { cancel } = props.buttons;
     return (
-      <View
-        style={{
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          marginTop: 'auto',
-          marginBottom: 'auto',
-        }}>
+      <View style={GENERAL_STYLES.center}>
         {action != null ? (
           <Button
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginBottom: 10,
-            }}
+            style={styles.button}
             mode="contained"
             icon={action.icon}
             color={action.color}
             onPress={() => {
               this.onDismiss(action.onPress);
-            }}>
+            }}
+          >
             {action.message}
           </Button>
         ) : null}
         {cancel != null ? (
           <Button
-            style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
+            style={styles.button}
             mode="contained"
             icon={cancel.icon}
             color={cancel.color}
             onPress={() => {
               this.onDismiss(cancel.onPress);
-            }}>
+            }}
+          >
             {cancel.message}
           </Button>
         ) : null}
@@ -269,19 +298,15 @@ class MascotPopup extends React.Component<PropsType, StateType> {
   }
 
   getBackground() {
-    const {props, state} = this;
+    const { props, state } = this;
     return (
       <TouchableWithoutFeedback
         onPress={() => {
           this.onDismiss(props.buttons.cancel?.onPress);
-        }}>
+        }}
+      >
         <Animatable.View
-          style={{
-            position: 'absolute',
-            backgroundColor: 'rgba(0,0,0,0.7)',
-            width: '100%',
-            height: '100%',
-          }}
+          style={styles.background}
           useNativeDriver
           animation={state.dialogVisible ? 'fadeIn' : 'fadeOut'}
           duration={state.dialogVisible ? 300 : 300}
@@ -291,10 +316,10 @@ class MascotPopup extends React.Component<PropsType, StateType> {
   }
 
   onDismiss = (callback?: () => void) => {
-    const {prefKey} = this.props;
+    const { prefKey } = this.props;
     if (prefKey != null) {
       AsyncStorageManager.set(prefKey, false);
-      this.setState({dialogVisible: false});
+      this.setState({ dialogVisible: false });
     }
     if (callback != null) {
       callback();
@@ -302,21 +327,13 @@ class MascotPopup extends React.Component<PropsType, StateType> {
   };
 
   render() {
-    const {shouldRenderDialog} = this.state;
+    const { shouldRenderDialog } = this.state;
     if (shouldRenderDialog) {
       return (
         <Portal>
           {this.getBackground()}
-          <View
-            style={{
-              marginTop: 'auto',
-              marginBottom: 'auto',
-            }}>
-            <View
-              style={{
-                marginTop: -80,
-                width: '100%',
-              }}>
+          <View style={GENERAL_STYLES.centerVertical}>
+            <View style={styles.container}>
               {this.getMascot()}
               {this.getSpeechBubble()}
             </View>

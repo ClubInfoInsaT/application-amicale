@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import {View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import {
   RadioButton,
@@ -28,12 +28,13 @@ import {
   ToggleButton,
   withTheme,
 } from 'react-native-paper';
-import {Appearance} from 'react-native-appearance';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { Appearance } from 'react-native-appearance';
+import { StackNavigationProp } from '@react-navigation/stack';
 import ThemeManager from '../../../managers/ThemeManager';
 import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import CustomSlider from '../../../components/Overrides/CustomSlider';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -48,6 +49,20 @@ type StateType = {
   isDebugUnlocked: boolean;
 };
 
+const styles = StyleSheet.create({
+  slider: {
+    flex: 1,
+    marginHorizontal: 10,
+    height: 50,
+  },
+  card: {
+    margin: 5,
+  },
+  pickerContainer: {
+    marginLeft: 30,
+  },
+});
+
 /**
  * Class defining the Settings screen. This screen shows controls to modify app preferences.
  */
@@ -60,7 +75,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     const notifReminder = AsyncStorageManager.getString(
-      AsyncStorageManager.PREFERENCES.proxiwashNotifications.key,
+      AsyncStorageManager.PREFERENCES.proxiwashNotifications.key
     );
     this.savedNotificationReminder = parseInt(notifReminder, 10);
     if (Number.isNaN(this.savedNotificationReminder)) {
@@ -71,16 +86,16 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
       nightMode: ThemeManager.getNightMode(),
       nightModeFollowSystem:
         AsyncStorageManager.getBool(
-          AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key,
+          AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key
         ) && Appearance.getColorScheme() !== 'no-preference',
       startScreenPickerSelected: AsyncStorageManager.getString(
-        AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
+        AsyncStorageManager.PREFERENCES.defaultStartScreen.key
       ),
       selectedWash: AsyncStorageManager.getString(
-        AsyncStorageManager.PREFERENCES.selectedWash.key,
+        AsyncStorageManager.PREFERENCES.selectedWash.key
       ),
       isDebugUnlocked: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.debugUnlocked.key,
+        AsyncStorageManager.PREFERENCES.debugUnlocked.key
       ),
     };
   }
@@ -93,7 +108,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
   onProxiwashNotifPickerValueChange = (value: number) => {
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.proxiwashNotifications.key,
-      value,
+      value
     );
   };
 
@@ -104,10 +119,10 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
    */
   onStartScreenPickerValueChange = (value: string) => {
     if (value != null) {
-      this.setState({startScreenPickerSelected: value});
+      this.setState({ startScreenPickerSelected: value });
       AsyncStorageManager.set(
         AsyncStorageManager.PREFERENCES.defaultStartScreen.key,
-        value,
+        value
       );
     }
   };
@@ -118,10 +133,10 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
    * @returns {React.Node}
    */
   getProxiwashNotifPicker() {
-    const {theme} = this.props;
+    const { theme } = this.props;
     return (
       <CustomSlider
-        style={{flex: 1, marginHorizontal: 10, height: 50}}
+        style={styles.slider}
         minimumValue={0}
         maximumValue={10}
         step={1}
@@ -139,11 +154,12 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
    * @returns {React.Node}
    */
   getProxiwashChangePicker() {
-    const {selectedWash} = this.state;
+    const { selectedWash } = this.state;
     return (
       <RadioButton.Group
         onValueChange={this.onSelectWashValueChange}
-        value={selectedWash}>
+        value={selectedWash}
+      >
         <RadioButton.Item
           label={i18n.t('screens.proxiwash.washinsa.title')}
           value="washinsa"
@@ -162,12 +178,13 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
    * @returns {React.Node}
    */
   getStartScreenPicker() {
-    const {startScreenPickerSelected} = this.state;
+    const { startScreenPickerSelected } = this.state;
     return (
       <ToggleButton.Row
         onValueChange={this.onStartScreenPickerValueChange}
         value={startScreenPickerSelected}
-        style={{marginLeft: 'auto', marginRight: 'auto'}}>
+        style={GENERAL_STYLES.centerHorizontal}
+      >
         <ToggleButton icon="account-circle" value="services" />
         <ToggleButton icon="tshirt-crew" value="proxiwash" />
         <ToggleButton icon="triangle" value="home" />
@@ -181,23 +198,23 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
    * Toggles night mode and saves it to preferences
    */
   onToggleNightMode = () => {
-    const {nightMode} = this.state;
+    const { nightMode } = this.state;
     ThemeManager.getInstance().setNightMode(!nightMode);
-    this.setState({nightMode: !nightMode});
+    this.setState({ nightMode: !nightMode });
   };
 
   onToggleNightModeFollowSystem = () => {
-    const {nightModeFollowSystem} = this.state;
+    const { nightModeFollowSystem } = this.state;
     const value = !nightModeFollowSystem;
-    this.setState({nightModeFollowSystem: value});
+    this.setState({ nightModeFollowSystem: value });
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key,
-      value,
+      value
     );
     if (value) {
       const nightMode = Appearance.getColorScheme() === 'dark';
       ThemeManager.getInstance().setNightMode(nightMode);
-      this.setState({nightMode});
+      this.setState({ nightMode });
     }
   };
 
@@ -216,7 +233,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
     icon: string,
     title: string,
     subtitle: string,
-    state: boolean,
+    state: boolean
   ) {
     return (
       <List.Item
@@ -235,9 +252,9 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
     icon: string,
     title: string,
     subtitle: string,
-    onLongPress?: () => void,
+    onLongPress?: () => void
   ) {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     return (
       <List.Item
         title={title}
@@ -267,10 +284,10 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
    */
   onSelectWashValueChange = (value: string) => {
     if (value != null) {
-      this.setState({selectedWash: value});
+      this.setState({ selectedWash: value });
       AsyncStorageManager.set(
         AsyncStorageManager.PREFERENCES.selectedWash.key,
-        value,
+        value
       );
     }
   };
@@ -279,18 +296,18 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
    * Unlocks debug mode and saves its state to user preferences
    */
   unlockDebugMode = () => {
-    this.setState({isDebugUnlocked: true});
+    this.setState({ isDebugUnlocked: true });
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.debugUnlocked.key,
-      true,
+      true
     );
   };
 
   render() {
-    const {nightModeFollowSystem, nightMode, isDebugUnlocked} = this.state;
+    const { nightModeFollowSystem, nightMode, isDebugUnlocked } = this.state;
     return (
       <CollapsibleScrollView>
-        <Card style={{margin: 5}}>
+        <Card style={styles.card}>
           <Card.Title title={i18n.t('screens.settings.generalCard')} />
           <List.Section>
             {Appearance.getColorScheme() !== 'no-preference'
@@ -299,7 +316,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
                   'theme-light-dark',
                   i18n.t('screens.settings.nightModeAuto'),
                   i18n.t('screens.settings.nightModeAutoSub'),
-                  nightModeFollowSystem,
+                  nightModeFollowSystem
                 )
               : null}
             {Appearance.getColorScheme() === 'no-preference' ||
@@ -311,7 +328,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
                   nightMode
                     ? i18n.t('screens.settings.nightModeSubOn')
                     : i18n.t('screens.settings.nightModeSubOff'),
-                  nightMode,
+                  nightMode
                 )
               : null}
             <List.Item
@@ -330,11 +347,11 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
               'dashboard-edit',
               'view-dashboard',
               i18n.t('screens.settings.dashboard'),
-              i18n.t('screens.settings.dashboardSub'),
+              i18n.t('screens.settings.dashboardSub')
             )}
           </List.Section>
         </Card>
-        <Card style={{margin: 5}}>
+        <Card style={styles.card}>
           <Card.Title title="Proxiwash" />
           <List.Section>
             <List.Item
@@ -348,7 +365,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
                 />
               )}
             />
-            <View style={{marginLeft: 30}}>
+            <View style={styles.pickerContainer}>
               {this.getProxiwashNotifPicker()}
             </View>
             <List.Item
@@ -362,12 +379,12 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
                 />
               )}
             />
-            <View style={{marginLeft: 30}}>
+            <View style={styles.pickerContainer}>
               {this.getProxiwashChangePicker()}
             </View>
           </List.Section>
         </Card>
-        <Card style={{margin: 5}}>
+        <Card style={styles.card}>
           <Card.Title title={i18n.t('screens.settings.information')} />
           <List.Section>
             {isDebugUnlocked
@@ -375,7 +392,7 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
                   'debug',
                   'bug-check',
                   i18n.t('screens.debug.title'),
-                  '',
+                  ''
                 )
               : null}
             {this.getNavigateItem(
@@ -383,13 +400,13 @@ class SettingsScreen extends React.Component<PropsType, StateType> {
               'information',
               i18n.t('screens.about.title'),
               i18n.t('screens.about.buttonDesc'),
-              this.unlockDebugMode,
+              this.unlockDebugMode
             )}
             {this.getNavigateItem(
               'feedback',
               'comment-quote',
               i18n.t('screens.feedback.homeButtonTitle'),
-              i18n.t('screens.feedback.homeButtonSubtitle'),
+              i18n.t('screens.feedback.homeButtonSubtitle')
             )}
           </List.Section>
         </Card>
