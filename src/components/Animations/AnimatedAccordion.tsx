@@ -18,10 +18,13 @@
  */
 
 import * as React from 'react';
-import { View, ViewStyle } from 'react-native';
+import { View, ViewProps, ViewStyle } from 'react-native';
 import { List, withTheme } from 'react-native-paper';
 import Collapsible from 'react-native-collapsible';
 import * as Animatable from 'react-native-animatable';
+import { AnimatableProperties } from 'react-native-animatable';
+import { ClassicComponent } from 'react';
+import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
   theme: ReactNativePaper.Theme;
@@ -44,16 +47,50 @@ type StateType = {
   expanded: boolean;
 };
 
-const AnimatedListIcon = Animatable.createAnimatableComponent(List.Icon);
-
 class AnimatedAccordion extends React.Component<PropsType, StateType> {
-  chevronRef: { current: null | (typeof AnimatedListIcon & List.Icon) };
+  viewRef:
+    | null
+    | (ClassicComponent<AnimatableProperties<ViewStyle>> & ViewProps);
+  handleViewRef = (
+    ref: ClassicComponent<AnimatableProperties<ViewStyle>> & ViewProps
+  ) => (this.viewRef = ref);
 
   chevronIcon: string;
 
   animStart: string;
 
   animEnd: string;
+
+  getAccordionAnimation():
+    | Animatable.Animation
+    | string
+    | Animatable.CustomAnimation {
+    // I don't knwo why ts is complaining
+    // The type definitions must be broken because this is a valid style and it works
+    if (this.state.expanded) {
+      return {
+        from: {
+          // @ts-ignore
+          rotate: this.animStart,
+        },
+        to: {
+          // @ts-ignore
+          rotate: this.animEnd,
+        },
+      };
+    } else {
+      return {
+        from: {
+          // @ts-ignore
+          rotate: this.animEnd,
+        },
+        to: {
+          // @ts-ignore
+          rotate: this.animStart,
+        },
+      };
+    }
+  }
 
   constructor(props: PropsType) {
     super(props);
@@ -63,12 +100,13 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
     this.state = {
       expanded: props.opened != null ? props.opened : false,
     };
-    this.chevronRef = React.createRef();
+    this.viewRef = null;
     this.setupChevron();
   }
 
   shouldComponentUpdate(nextProps: PropsType): boolean {
     const { state, props } = this;
+    // TODO refactor this, it shouldn't even work
     if (nextProps.opened != null && nextProps.opened !== props.opened) {
       state.expanded = nextProps.opened;
     }
@@ -89,15 +127,10 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
   }
 
   toggleAccordion = () => {
-    const { expanded } = this.state;
-    if (this.chevronRef.current != null) {
-      this.chevronRef.current.transitionTo({
-        rotate: expanded ? this.animStart : this.animEnd,
-      });
-      this.setState((prevState: StateType): { expanded: boolean } => ({
-        expanded: !prevState.expanded,
-      }));
-    }
+    // const { expanded } = this.state;
+    this.setState((prevState: StateType): { expanded: boolean } => ({
+      expanded: !prevState.expanded,
+    }));
   };
 
   render() {
@@ -111,13 +144,17 @@ class AnimatedAccordion extends React.Component<PropsType, StateType> {
           titleStyle={state.expanded ? { color: colors.primary } : null}
           onPress={this.toggleAccordion}
           right={(iconProps) => (
-            <AnimatedListIcon
-              ref={this.chevronRef}
-              style={iconProps.style}
-              icon={this.chevronIcon}
-              color={state.expanded ? colors.primary : iconProps.color}
-              useNativeDriver
-            />
+            <Animatable.View
+              animation={this.getAccordionAnimation()}
+              duration={300}
+              useNativeDriver={true}
+            >
+              <List.Icon
+                style={{ ...iconProps.style, ...GENERAL_STYLES.center }}
+                icon={this.chevronIcon}
+                color={state.expanded ? colors.primary : iconProps.color}
+              />
+            </Animatable.View>
           )}
           left={props.left}
         />
