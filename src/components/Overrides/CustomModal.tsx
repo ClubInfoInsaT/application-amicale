@@ -21,7 +21,7 @@ import * as React from 'react';
 import { useTheme } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
 import { View } from 'react-native-animatable';
-import CustomTabBar from '../Tabbar/CustomTabBar';
+import CustomTabBar, { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 
 /**
  * Abstraction layer for Modalize component, using custom configuration
@@ -45,7 +45,7 @@ function CustomModal(props: {
     >
       <View
         style={{
-          paddingBottom: CustomTabBar.TAB_BAR_HEIGHT,
+          paddingBottom: TAB_BAR_HEIGHT,
         }}
       >
         {children}

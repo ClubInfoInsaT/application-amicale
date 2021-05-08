@@ -441,7 +441,7 @@ class LoginScreen extends React.Component<Props, StateType> {
           enabled
           keyboardVerticalOffset={100}
         >
-          <CollapsibleScrollView>
+          <CollapsibleScrollView headerColors={'transparent'}>
             <View style={GENERAL_STYLES.flex}>{this.getMainCard()}</View>
             <MascotPopup
               visible={mascotDialogVisible}

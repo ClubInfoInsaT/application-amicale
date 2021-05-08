@@ -23,9 +23,13 @@ import WebViewScreen from '../../components/Screens/WebViewScreen';
 import AvailableWebsites from '../../constants/AvailableWebsites';
 import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
 
-type PropsType = {
+type Props = {
   navigation: StackNavigationProp<any>;
   route: { params: { host: string; path: string | null; title: string } };
+};
+
+type State = {
+  url: string;
 };
 
 const ENABLE_MOBILE_STRING =
@@ -43,18 +47,18 @@ const BIB_BACK_BUTTON =
   '</a>' +
   '</div>';
 
-class WebsiteScreen extends React.Component<PropsType> {
-  fullUrl: string;
-
+class WebsiteScreen extends React.Component<Props, State> {
   injectedJS: { [key: string]: string };
 
-  customPaddingFunctions: { [key: string]: (padding: string) => string };
+  customPaddingFunctions: { [key: string]: (padding: number) => string };
 
   host: string;
 
-  constructor(props: PropsType) {
+  constructor(props: Props) {
     super(props);
-    this.fullUrl = '';
+    this.state = {
+      url: '',
+    };
     this.host = '';
     props.navigation.addListener('focus', this.onScreenFocus);
     this.injectedJS = {};
@@ -70,7 +74,7 @@ class WebsiteScreen extends React.Component<PropsType> {
       `$(".hero-unit-form").append("${BIB_BACK_BUTTON}");true;`;
 
     this.customPaddingFunctions[AvailableWebsites.websites.BLUEMIND] = (
-      padding: string
+      padding: number
     ): string => {
       return (
         `$('head').append('${ENABLE_MOBILE_STRING}');` +
@@ -79,7 +83,7 @@ class WebsiteScreen extends React.Component<PropsType> {
       );
     };
     this.customPaddingFunctions[AvailableWebsites.websites.WIKETUD] = (
-      padding: string
+      padding: number
     ): string => {
       return (
         `$('#p-logo-text').css('top', 10 + ${padding});` +
@@ -99,16 +103,20 @@ class WebsiteScreen extends React.Component<PropsType> {
    */
   handleNavigationParams() {
     const { route, navigation } = this.props;
+
     if (route.params != null) {
+      console.log(route.params);
       this.host = route.params.host;
       let { path } = route.params;
       const { title } = route.params;
+      let fullUrl = '';
       if (this.host != null && path != null) {
         path = path.replace(this.host, '');
-        this.fullUrl = this.host + path;
+        fullUrl = this.host + path;
       } else {
-        this.fullUrl = this.host;
+        fullUrl = this.host;
       }
+      this.setState({ url: fullUrl });
 
       if (title != null) {
         navigation.setOptions({ title });
@@ -117,7 +125,6 @@ class WebsiteScreen extends React.Component<PropsType> {
   }
 
   render() {
-    const { navigation } = this.props;
     let injectedJavascript = '';
     let customPadding = null;
     if (this.host != null && this.injectedJS[this.host] != null) {
@@ -127,12 +134,11 @@ class WebsiteScreen extends React.Component<PropsType> {
       customPadding = this.customPaddingFunctions[this.host];
     }
 
-    if (this.fullUrl != null) {
+    if (this.state.url) {
       return (
         <WebViewScreen
-          navigation={navigation}
-          url={this.fullUrl}
-          customJS={injectedJavascript}
+          url={this.state.url}
+          initialJS={injectedJavascript}
           customPaddingFunction={customPadding}
         />
       );

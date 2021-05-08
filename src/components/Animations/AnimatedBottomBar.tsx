@@ -28,7 +28,7 @@ import { FAB, IconButton, Surface, withTheme } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AutoHideHandler from '../../utils/AutoHideHandler';
-import CustomTabBar from '../Tabbar/CustomTabBar';
+import CustomTabBar, { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 
 const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
 
@@ -159,7 +159,7 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
         useNativeDriver
         style={{
           ...styles.container,
-          bottom: 10 + CustomTabBar.TAB_BAR_HEIGHT,
+          bottom: 10 + TAB_BAR_HEIGHT,
         }}
       >
         <Surface style={styles.surface}>

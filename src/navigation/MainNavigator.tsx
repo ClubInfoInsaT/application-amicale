@@ -18,12 +18,8 @@
  */
 
 import * as React from 'react';
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import i18n from 'i18n-js';
-import { Platform } from 'react-native';
 import SettingsScreen from '../screens/Other/Settings/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
@@ -40,10 +36,6 @@ import ProfileScreen from '../screens/Amicale/ProfileScreen';
 import ClubListScreen from '../screens/Amicale/Clubs/ClubListScreen';
 import ClubAboutScreen from '../screens/Amicale/Clubs/ClubAboutScreen';
 import ClubDisplayScreen from '../screens/Amicale/Clubs/ClubDisplayScreen';
-import {
-  CreateScreenCollapsibleStack,
-  getWebsiteStack,
-} from '../utils/CollapsibleUtils';
 import BugReportScreen from '../screens/Other/FeedbackScreen';
 import WebsiteScreen from '../screens/Services/WebsiteScreen';
 import EquipmentScreen, {
@@ -54,6 +46,7 @@ import EquipmentConfirmScreen from '../screens/Amicale/Equipment/EquipmentConfir
 import DashboardEditScreen from '../screens/Other/Settings/DashboardEditScreen';
 import GameStartScreen from '../screens/Game/screens/GameStartScreen';
 import ImageGalleryScreen from '../screens/Media/ImageGalleryScreen';
+import Test from '../screens/Test';
 
 export enum MainRoutes {
   Main = 'main',
@@ -83,7 +76,7 @@ export enum MainRoutes {
 
 type DefaultParams = { [key in MainRoutes]: object | undefined };
 
-export interface FullParamsList extends DefaultParams {
+export type FullParamsList = DefaultParams & {
   'login': { nextScreen: string };
   'equipment-confirm': {
     item?: DeviceType;
@@ -91,34 +84,22 @@ export interface FullParamsList extends DefaultParams {
   };
   'equipment-rent': { item?: DeviceType };
   'gallery': { images: Array<{ url: string }> };
-}
+};
 
 // Don't know why but TS is complaining without this
 // See: https://stackoverflow.com/questions/63652687/interface-does-not-satisfy-the-constraint-recordstring-object-undefined
 export type MainStackParamsList = FullParamsList &
   Record<string, object | undefined>;
 
-const modalTransition =
-  Platform.OS === 'ios'
-    ? TransitionPresets.ModalPresentationIOS
-    : TransitionPresets.ModalTransition;
-
-const defaultScreenOptions = {
-  gestureEnabled: true,
-  cardOverlayEnabled: true,
-  ...TransitionPresets.SlideFromRightIOS,
-};
-
 const MainStack = createStackNavigator<MainStackParamsList>();
 
-function MainStackComponent(props: { createTabNavigator: () => JSX.Element }) {
+function MainStackComponent(props: {
+  createTabNavigator: () => React.ReactElement;
+}) {
   const { createTabNavigator } = props;
   return (
-    <MainStack.Navigator
-      initialRouteName={MainRoutes.Main}
-      headerMode="screen"
-      screenOptions={defaultScreenOptions}
-    >
+    <MainStack.Navigator initialRouteName={MainRoutes.Main} headerMode="screen">
+      <MainStack.Screen name={'test'} component={Test} />
       <MainStack.Screen
         name={MainRoutes.Main}
         component={createTabNavigator}
@@ -132,49 +113,53 @@ function MainStackComponent(props: { createTabNavigator: () => JSX.Element }) {
         component={ImageGalleryScreen}
         options={{
           headerShown: false,
-          ...modalTransition,
         }}
       />
-      {CreateScreenCollapsibleStack(
-        MainRoutes.Settings,
-        MainStack,
-        SettingsScreen,
-        i18n.t('screens.settings.title')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.DashboardEdit,
-        MainStack,
-        DashboardEditScreen,
-        i18n.t('screens.settings.dashboardEdit.title')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.About,
-        MainStack,
-        AboutScreen,
-        i18n.t('screens.about.title')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.Dependencies,
-        MainStack,
-        AboutDependenciesScreen,
-        i18n.t('screens.about.libs')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.Debug,
-        MainStack,
-        DebugScreen,
-        i18n.t('screens.about.debug')
-      )}
-
-      {CreateScreenCollapsibleStack(
-        MainRoutes.GameStart,
-        MainStack,
-        GameStartScreen,
-        i18n.t('screens.game.title'),
-        true,
-        undefined,
-        'transparent'
-      )}
+      <MainStack.Screen
+        name={MainRoutes.Settings}
+        component={SettingsScreen}
+        options={{
+          title: i18n.t('screens.settings.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.DashboardEdit}
+        component={DashboardEditScreen}
+        options={{
+          title: i18n.t('screens.settings.dashboardEdit.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.About}
+        component={AboutScreen}
+        options={{
+          title: i18n.t('screens.about.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.Dependencies}
+        component={AboutDependenciesScreen}
+        options={{
+          title: i18n.t('screens.about.libs'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.Debug}
+        component={DebugScreen}
+        options={{
+          title: i18n.t('screens.about.debug'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.GameStart}
+        component={GameStartScreen}
+        options={{
+          title: i18n.t('screens.game.title'),
+          headerStyle: {
+            backgroundColor: 'transparent',
+          },
+        }}
+      />
       <MainStack.Screen
         name={MainRoutes.GameMain}
         component={GameMainScreen}
@@ -182,102 +167,114 @@ function MainStackComponent(props: { createTabNavigator: () => JSX.Element }) {
           title: i18n.t('screens.game.title'),
         }}
       />
-      {CreateScreenCollapsibleStack(
-        MainRoutes.Login,
-        MainStack,
-        LoginScreen,
-        i18n.t('screens.login.title'),
-        true,
-        { headerTintColor: '#fff' },
-        'transparent'
-      )}
-      {getWebsiteStack('website', MainStack, WebsiteScreen, '')}
-
-      {CreateScreenCollapsibleStack(
-        MainRoutes.SelfMenu,
-        MainStack,
-        SelfMenuScreen,
-        i18n.t('screens.menu.title')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.Proximo,
-        MainStack,
-        ProximoMainScreen,
-        i18n.t('screens.proximo.title')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.ProximoList,
-        MainStack,
-        ProximoListScreen,
-        i18n.t('screens.proximo.articleList')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.ProximoAbout,
-        MainStack,
-        ProximoAboutScreen,
-        i18n.t('screens.proximo.title'),
-        true,
-        { ...modalTransition }
-      )}
-
-      {CreateScreenCollapsibleStack(
-        MainRoutes.Profile,
-        MainStack,
-        ProfileScreen,
-        i18n.t('screens.profile.title')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.ClubList,
-        MainStack,
-        ClubListScreen,
-        i18n.t('screens.clubs.title')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.ClubInformation,
-        MainStack,
-        ClubDisplayScreen,
-        i18n.t('screens.clubs.details'),
-        true,
-        { ...modalTransition }
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.ClubAbout,
-        MainStack,
-        ClubAboutScreen,
-        i18n.t('screens.clubs.title'),
-        true,
-        { ...modalTransition }
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.EquipmentList,
-        MainStack,
-        EquipmentScreen,
-        i18n.t('screens.equipment.title')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.EquipmentRent,
-        MainStack,
-        EquipmentLendScreen,
-        i18n.t('screens.equipment.book')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.EquipmentConfirm,
-        MainStack,
-        EquipmentConfirmScreen,
-        i18n.t('screens.equipment.confirm')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.Vote,
-        MainStack,
-        VoteScreen,
-        i18n.t('screens.vote.title')
-      )}
-      {CreateScreenCollapsibleStack(
-        MainRoutes.Feedback,
-        MainStack,
-        BugReportScreen,
-        i18n.t('screens.feedback.title')
-      )}
+      <MainStack.Screen
+        name={MainRoutes.Login}
+        component={LoginScreen}
+        options={{
+          title: i18n.t('screens.login.title'),
+          headerStyle: {
+            backgroundColor: 'transparent',
+          },
+        }}
+      />
+      <MainStack.Screen
+        name={'website'}
+        component={WebsiteScreen}
+        options={{
+          title: '',
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.SelfMenu}
+        component={SelfMenuScreen}
+        options={{
+          title: i18n.t('screens.menu.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.Proximo}
+        component={ProximoMainScreen}
+        options={{
+          title: i18n.t('screens.proximo.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.ProximoList}
+        component={ProximoListScreen}
+        options={{
+          title: i18n.t('screens.proximo.articleList'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.ProximoAbout}
+        component={ProximoAboutScreen}
+        options={{
+          title: i18n.t('screens.proximo.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.Profile}
+        component={ProfileScreen}
+        options={{
+          title: i18n.t('screens.profile.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.ClubList}
+        component={ClubListScreen}
+        options={{
+          title: i18n.t('screens.clubs.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.ClubInformation}
+        component={ClubDisplayScreen}
+        options={{
+          title: i18n.t('screens.clubs.details'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.ClubAbout}
+        component={ClubAboutScreen}
+        options={{
+          title: i18n.t('screens.clubs.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.EquipmentList}
+        component={EquipmentScreen}
+        options={{
+          title: i18n.t('screens.equipment.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.EquipmentRent}
+        component={EquipmentLendScreen}
+        options={{
+          title: i18n.t('screens.equipment.book'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.EquipmentConfirm}
+        component={EquipmentConfirmScreen}
+        options={{
+          title: i18n.t('screens.equipment.confirm'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.Vote}
+        component={VoteScreen}
+        options={{
+          title: i18n.t('screens.vote.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.Feedback}
+        component={BugReportScreen}
+        options={{
+          title: i18n.t('screens.feedback.title'),
+        }}
+      />
     </MainStack.Navigator>
   );
 }

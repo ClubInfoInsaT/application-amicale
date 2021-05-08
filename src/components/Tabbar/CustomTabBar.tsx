@@ -17,211 +17,88 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React from 'react';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Animated, StyleSheet } from 'react-native';
-import { withTheme } from 'react-native-paper';
-import { Collapsible } from 'react-navigation-collapsible';
 import TabIcon from './TabIcon';
-import TabHomeIcon from './TabHomeIcon';
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { NavigationState } from '@react-navigation/native';
-import {
-  PartialState,
-  Route,
-} from '@react-navigation/routers/lib/typescript/src/types';
+import { useTheme } from 'react-native-paper';
+import { useCollapsible } from '../../utils/CollapsibleContext';
 
-type RouteType = Route<string> & {
-  state?: NavigationState | PartialState<NavigationState>;
-};
+export const TAB_BAR_HEIGHT = 50;
 
-interface PropsType extends BottomTabBarProps {
-  theme: ReactNativePaper.Theme;
+function CustomTabBar(
+  props: BottomTabBarProps<any> & {
+    icons: {
+      [key: string]: {
+        normal: string;
+        focused: string;
+      };
+    };
+    labels: {
+      [key: string]: string;
+    };
+  }
+) {
+  const state = props.state;
+  const theme = useTheme();
+
+  const { collapsible } = useCollapsible();
+  let translateY: number | Animated.AnimatedInterpolation = 0;
+  if (collapsible) {
+    translateY = Animated.multiply(-1.5, collapsible.translateY);
+  }
+
+  return (
+    <Animated.View
+      style={{
+        ...styles.bar,
+        backgroundColor: theme.colors.surface,
+        transform: [{ translateY: translateY }],
+      }}
+    >
+      {state.routes.map(
+        (
+          route: {
+            key: string;
+            name: string;
+            params?: object | undefined;
+          },
+          index: number
+        ) => {
+          const iconData = props.icons[route.name];
+          return (
+            <TabIcon
+              isMiddle={index === 2}
+              onPress={() => props.navigation.navigate(route.name)}
+              icon={iconData.normal}
+              focusedIcon={iconData.focused}
+              label={props.labels[route.name]}
+              focused={state.index === index}
+              key={route.key}
+            />
+          );
+        }
+      )}
+    </Animated.View>
+  );
 }
 
-type StateType = {
-  translateY: any;
-};
-
-type validRoutes = 'proxiwash' | 'services' | 'planning' | 'planex';
-
-const TAB_ICONS = {
-  proxiwash: 'tshirt-crew',
-  services: 'account-circle',
-  planning: 'calendar-range',
-  planex: 'clock',
-};
-
 const styles = StyleSheet.create({
-  container: {
+  bar: {
     flexDirection: 'row',
     width: '100%',
+    height: 50,
     position: 'absolute',
     bottom: 0,
     left: 0,
   },
 });
 
-class CustomTabBar extends React.Component<PropsType, StateType> {
-  static TAB_BAR_HEIGHT = 48;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      translateY: new Animated.Value(0),
-    };
-    // @ts-ignore
-    props.navigation.addListener('state', this.onRouteChange);
-  }
-
-  /**
-   * Navigates to the given route if it is different from the current one
-   *
-   * @param route Destination route
-   * @param currentIndex The current route index
-   * @param destIndex The destination route index
-   */
-  onItemPress(route: RouteType, currentIndex: number, destIndex: number) {
-    const { navigation } = this.props;
-    if (currentIndex !== destIndex) {
-      navigation.navigate(route.name);
-    }
-  }
-
-  /**
-   * Navigates to tetris screen on home button long press
-   *
-   * @param route
-   */
-  onItemLongPress(route: RouteType) {
-    const { navigation } = this.props;
-    if (route.name === 'home') {
-      navigation.navigate('game-start');
-    }
-  }
-
-  /**
-   * Finds the active route and syncs the tab bar animation with the header bar
-   */
-  onRouteChange = () => {
-    const { props } = this;
-    props.state.routes.map(this.syncTabBar);
-  };
-
-  /**
-   * Gets an icon for the given route if it is not the home one as it uses a custom button
-   *
-   * @param route
-   * @param focused
-   * @returns {null}
-   */
-  getTabBarIcon = (route: RouteType, focused: boolean) => {
-    let icon = TAB_ICONS[route.name as validRoutes];
-    icon = focused ? icon : `${icon}-outline`;
-    if (route.name !== 'home') {
-      return icon;
-    }
-    return '';
-  };
-
-  /**
-   * Gets a tab icon render.
-   * If the given route is focused, it syncs the tab bar and header bar animations together
-   *
-   * @param route The route for the icon
-   * @param index The index of the current route
-   * @returns {*}
-   */
-  getRenderIcon = (route: RouteType, index: number) => {
-    const { props } = this;
-    const { state } = props;
-    const { options } = props.descriptors[route.key];
-    let label;
-    if (options.tabBarLabel != null) {
-      label = options.tabBarLabel;
-    } else if (options.title != null) {
-      label = options.title;
-    } else {
-      label = route.name;
-    }
-
-    const onPress = () => {
-      this.onItemPress(route, state.index, index);
-    };
-    const onLongPress = () => {
-      this.onItemLongPress(route);
-    };
-    const isFocused = state.index === index;
-
-    const color = isFocused
-      ? props.theme.colors.primary
-      : props.theme.colors.tabIcon;
-    if (route.name !== 'home') {
-      return (
-        <TabIcon
-          onPress={onPress}
-          onLongPress={onLongPress}
-          icon={this.getTabBarIcon(route, isFocused)}
-          color={color}
-          label={label as string}
-          focused={isFocused}
-          extraData={state.index > index}
-          key={route.key}
-        />
-      );
-    }
-    return (
-      <TabHomeIcon
-        onPress={onPress}
-        onLongPress={onLongPress}
-        focused={isFocused}
-        key={route.key}
-        tabBarHeight={CustomTabBar.TAB_BAR_HEIGHT}
-      />
-    );
-  };
-
-  getIcons() {
-    const { props } = this;
-    return props.state.routes.map(this.getRenderIcon);
-  }
-
-  syncTabBar = (route: RouteType, index: number) => {
-    const { state } = this.props;
-    const isFocused = state.index === index;
-    if (isFocused) {
-      const stackState = route.state;
-      const stackRoute =
-        stackState && stackState.index != null
-          ? stackState.routes[stackState.index]
-          : null;
-      const params: { collapsible: Collapsible } | null | undefined = stackRoute
-        ? (stackRoute.params as { collapsible: Collapsible })
-        : null;
-      const collapsible = params != null ? params.collapsible : null;
-      if (collapsible != null) {
-        this.setState({
-          translateY: Animated.multiply(-1.5, collapsible.translateY), // Hide tab bar faster than header bar
-        });
-      }
-    }
-  };
-
-  render() {
-    const { props, state } = this;
-    const icons = this.getIcons();
-    return (
-      <Animated.View
-        style={{
-          height: CustomTabBar.TAB_BAR_HEIGHT,
-          backgroundColor: props.theme.colors.surface,
-          transform: [{ translateY: state.translateY }],
-          ...styles.container,
-        }}
-      >
-        {icons}
-      </Animated.View>
-    );
-  }
+function areEqual(
+  prevProps: BottomTabBarProps<any>,
+  nextProps: BottomTabBarProps<any>
+) {
+  return prevProps.state.index === nextProps.state.index;
 }
 
-export default withTheme(CustomTabBar);
+export default React.memo(CustomTabBar, areEqual);

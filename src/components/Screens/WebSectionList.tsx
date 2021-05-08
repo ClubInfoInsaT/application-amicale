@@ -32,10 +32,10 @@ import { Collapsible } from 'react-navigation-collapsible';
 import { StackNavigationProp } from '@react-navigation/stack';
 import ErrorView from './ErrorView';
 import BasicLoadingScreen from './BasicLoadingScreen';
-import withCollapsible from '../../utils/withCollapsible';
-import CustomTabBar from '../Tabbar/CustomTabBar';
+import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 import { ERROR_TYPE, readData } from '../../utils/WebData';
 import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
+import GENERAL_STYLES from '../../constants/Styles';
 
 export type SectionListDataType<ItemT> = Array<{
   title: string;
@@ -260,19 +260,20 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
       dataset = props.createDataset(state.fetchedData, state.refreshing);
     }
 
-    const { containerPaddingTop } = props.collapsibleStack;
     return (
-      <View>
+      <View style={GENERAL_STYLES.flex}>
         <CollapsibleSectionList
           sections={dataset}
           extraData={props.updateData}
-          refreshControl={
-            <RefreshControl
-              progressViewOffset={containerPaddingTop}
-              refreshing={state.refreshing}
-              onRefresh={this.onRefresh}
-            />
-          }
+          paddedProps={(paddingTop) => ({
+            refreshControl: (
+              <RefreshControl
+                progressViewOffset={paddingTop}
+                refreshing={state.refreshing}
+                onRefresh={this.onRefresh}
+              />
+            ),
+          })}
           renderSectionHeader={this.getRenderSectionHeader}
           renderItem={this.getRenderItem}
           stickySectionHeadersEnabled={props.stickyHeader}
@@ -299,7 +300,7 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
               : undefined
           }
           onScroll={this.onScroll}
-          hasTab
+          hasTab={true}
         />
         <Snackbar
           visible={state.snackbarVisible}
@@ -310,7 +311,7 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
           }}
           duration={4000}
           style={{
-            bottom: CustomTabBar.TAB_BAR_HEIGHT,
+            bottom: TAB_BAR_HEIGHT,
           }}
         >
           {i18n.t('general.listUpdateFail')}
@@ -320,4 +321,4 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
   }
 }
 
-export default withCollapsible(WebSectionList);
+export default WebSectionList;

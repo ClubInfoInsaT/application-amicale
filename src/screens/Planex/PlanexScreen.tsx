@@ -54,6 +54,7 @@ type StateType = {
   dialogTitle: string | React.ReactNode;
   dialogMessage: string;
   currentGroup: PlanexGroupType;
+  injectJS: string;
 };
 
 const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
@@ -153,20 +154,14 @@ const styles = StyleSheet.create({
  * This screen uses a webview to render the page
  */
 class PlanexScreen extends React.Component<PropsType, StateType> {
-  webScreenRef: { current: null | WebViewScreen };
-
   barRef: { current: null | AnimatedBottomBar };
-
-  customInjectedJS: string;
 
   /**
    * Defines custom injected JavaScript to improve the page display on mobile
    */
   constructor(props: PropsType) {
     super(props);
-    this.webScreenRef = React.createRef();
     this.barRef = React.createRef();
-    this.customInjectedJS = '';
     let currentGroupString = AsyncStorageManager.getString(
       AsyncStorageManager.PREFERENCES.planexCurrentGroup.key
     );
@@ -184,8 +179,8 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
       dialogTitle: '',
       dialogMessage: '',
       currentGroup,
+      injectJS: '',
     };
-    this.generateInjectedJS(currentGroup.id);
   }
 
   /**
@@ -197,20 +192,6 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
   }
 
   /**
-   * Only update the screen if the dark theme changed
-   *
-   * @param nextProps
-   * @returns {boolean}
-   */
-  shouldComponentUpdate(nextProps: PropsType): boolean {
-    const { props, state } = this;
-    if (nextProps.theme.dark !== props.theme.dark) {
-      this.generateInjectedJS(state.currentGroup.id);
-    }
-    return true;
-  }
-
-  /**
    * Gets the Webview, with an error view on top if no group is selected.
    *
    * @returns {*}
@@ -218,6 +199,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
   getWebView() {
     const { props, state } = this;
     const showWebview = state.currentGroup.id !== -1;
+    console.log(state.injectJS);
 
     return (
       <View style={GENERAL_STYLES.flex}>
@@ -230,10 +212,9 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
           />
         ) : null}
         <WebViewScreen
-          ref={this.webScreenRef}
-          navigation={props.navigation}
           url={PLANEX_URL}
-          customJS={this.customInjectedJS}
+          initialJS={this.generateInjectedJS(this.state.currentGroup.id)}
+          injectJS={this.state.injectJS}
           onMessage={this.onMessage}
           onScroll={this.onScroll}
           showAdvancedControls={false}
@@ -269,9 +250,13 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
     } else {
       command = `$('#calendar').fullCalendar('${action}', '${data}')`;
     }
-    if (this.webScreenRef.current != null) {
-      this.webScreenRef.current.injectJavaScript(`${command};true;`);
-    } // Injected javascript must end with true
+    // String must resolve to true to prevent crash on iOS
+    command += ';true;';
+    // Change the injected
+    if (command === this.state.injectJS) {
+      command += ';true;';
+    }
+    this.setState({ injectJS: command });
   };
 
   /**
@@ -373,7 +358,6 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
       group
     );
     navigation.setOptions({ title: getPrettierPlanexGroupName(group.name) });
-    this.generateInjectedJS(group.id);
   }
 
   /**
@@ -382,16 +366,20 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * @param groupID The current group selected
    */
   generateInjectedJS(groupID: number) {
-    this.customInjectedJS = `$(document).ready(function() {${OBSERVE_MUTATIONS_INJECTED}${FULL_CALENDAR_SETTINGS}displayAde(${groupID});${
-      // Reset Ade
-      DateManager.isWeekend(new Date()) ? 'calendar.next()' : ''
-    }${INJECT_STYLE}`;
-
+    let customInjectedJS = `$(document).ready(function() {
+      ${OBSERVE_MUTATIONS_INJECTED}
+      ${FULL_CALENDAR_SETTINGS}
+      displayAde(${groupID});
+      ${INJECT_STYLE}`;
+    if (DateManager.isWeekend(new Date())) {
+      customInjectedJS += `calendar.next();`;
+    }
     if (ThemeManager.getNightMode()) {
-      this.customInjectedJS += `$('head').append('<style>${CUSTOM_CSS_DARK}</style>');`;
+      customInjectedJS += `$('head').append('<style>${CUSTOM_CSS_DARK}</style>');`;
     }
 
-    this.customInjectedJS += 'removeAlpha();});true;'; // Prevents crash on ios
+    customInjectedJS += 'removeAlpha();});true;'; // Prevents crash on ios
+    return customInjectedJS;
   }
 
   render() {

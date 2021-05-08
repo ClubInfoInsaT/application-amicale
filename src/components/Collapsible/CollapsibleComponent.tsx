@@ -17,22 +17,27 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import { useCollapsibleStack } from 'react-navigation-collapsible';
-import CustomTabBar from '../Tabbar/CustomTabBar';
+import React, { useCallback } from 'react';
+import { useCollapsibleHeader } from 'react-navigation-collapsible';
+import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   StyleSheet,
 } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { useCollapsible } from '../../utils/CollapsibleContext';
+import { useFocusEffect } from '@react-navigation/core';
 
 export type CollapsibleComponentPropsType = {
   children?: React.ReactNode;
   hasTab?: boolean;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  paddedProps?: (paddingTop: number) => Record<string, any>;
+  headerColors: string;
 };
 
-type PropsType = CollapsibleComponentPropsType & {
+type Props = CollapsibleComponentPropsType & {
   component: React.ComponentType<any>;
 };
 
@@ -42,22 +47,46 @@ const styles = StyleSheet.create({
   },
 });
 
-function CollapsibleComponent(props: PropsType) {
+function CollapsibleComponent(props: Props) {
+  const { paddedProps, headerColors } = props;
+  const Comp = props.component;
+  const theme = useTheme();
+  const { setCollapsible } = useCollapsible();
+
+  const collapsible = useCollapsibleHeader({
+    config: {
+      collapsedColor: headerColors ? headerColors : theme.colors.surface,
+      useNativeDriver: true,
+    },
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      setCollapsible(collapsible);
+    }, [collapsible, setCollapsible])
+  );
+
+  const {
+    containerPaddingTop,
+    scrollIndicatorInsetTop,
+    onScrollWithListener,
+  } = collapsible;
+
+  const paddingBottom = props.hasTab ? TAB_BAR_HEIGHT : 0;
+
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (props.onScroll) {
       props.onScroll(event);
     }
   };
-  const Comp = props.component;
-  const {
-    containerPaddingTop,
-    scrollIndicatorInsetTop,
-    onScrollWithListener,
-  } = useCollapsibleStack();
-  const paddingBottom = props.hasTab ? CustomTabBar.TAB_BAR_HEIGHT : 0;
+
+  const pprops =
+    paddedProps !== undefined ? paddedProps(containerPaddingTop) : undefined;
+
   return (
     <Comp
       {...props}
+      {...pprops}
       onScroll={onScrollWithListener(onScroll)}
       contentContainerStyle={{
         paddingTop: containerPaddingTop,

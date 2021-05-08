@@ -21,7 +21,9 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import { Card, Avatar, Paragraph, Text } from 'react-native-paper';
-import CustomTabBar from '../../../components/Tabbar/CustomTabBar';
+import CustomTabBar, {
+  TAB_BAR_HEIGHT,
+} from '../../../components/Tabbar/CustomTabBar';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 
 const LOGO = 'https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png';
@@ -72,7 +74,7 @@ export default function ProximoAboutScreen() {
       <Card
         style={{
           ...styles.card,
-          marginBottom: CustomTabBar.TAB_BAR_HEIGHT + 20,
+          marginBottom: TAB_BAR_HEIGHT + 20,
         }}
       >
         <Card.Title

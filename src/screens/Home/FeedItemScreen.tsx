@@ -25,7 +25,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
-import CustomTabBar from '../../components/Tabbar/CustomTabBar';
+import CustomTabBar, {
+  TAB_BAR_HEIGHT,
+} from '../../components/Tabbar/CustomTabBar';
 import type { FeedItemType } from './HomeScreen';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
@@ -117,9 +119,7 @@ class FeedItemScreen extends React.Component<PropsType> {
             style={styles.button}
           />
         ) : null}
-        <Card.Content
-          style={{ paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20 }}
-        >
+        <Card.Content style={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}>
           {this.displayData.message !== undefined ? (
             <Autolink
               text={this.displayData.message}

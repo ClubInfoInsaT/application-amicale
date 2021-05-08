@@ -27,7 +27,7 @@ import {
 import { FAB } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import AutoHideHandler from '../../utils/AutoHideHandler';
-import CustomTabBar from '../Tabbar/CustomTabBar';
+import CustomTabBar, { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 
 type PropsType = {
   icon: string;
@@ -82,7 +82,7 @@ export default class AnimatedFAB extends React.Component<PropsType> {
         useNativeDriver={true}
         style={{
           ...styles.fab,
-          bottom: CustomTabBar.TAB_BAR_HEIGHT,
+          bottom: TAB_BAR_HEIGHT,
         }}
       >
         <FAB icon={props.icon} onPress={props.onPress} />

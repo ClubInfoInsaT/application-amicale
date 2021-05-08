@@ -18,29 +18,28 @@
  */
 
 import * as React from 'react';
-import { useCollapsibleStack } from 'react-navigation-collapsible';
+import { useTheme } from 'react-native-paper';
+import {
+  useCollapsibleHeader,
+  UseCollapsibleOptions,
+} from 'react-navigation-collapsible';
 
-/**
- * Function used to manipulate Collapsible Hooks from a class.
- *
- * Usage :
- *
- * export withCollapsible(Component)
- *
- * replacing Component with the one you want to use.
- * This component will then receive the collapsibleStack prop.
- *
- * @param Component The component to use Collapsible with
- * @returns {React.ComponentType<any>}
- */
-export default function withCollapsible(Component: React.ComponentType<any>) {
-  return React.forwardRef((props: any, ref: any) => {
-    return (
-      <Component
-        collapsibleStack={useCollapsibleStack()}
-        ref={ref}
-        {...props}
-      />
-    );
-  });
+export default function withCollapsible<T>(
+  Component: React.ComponentType<any>,
+  options?: UseCollapsibleOptions
+) {
+  return function WrappedComponent(props: T) {
+    const theme = useTheme();
+    if (!options?.config?.collapsedColor) {
+      options = {
+        ...options,
+        config: {
+          ...options?.config,
+          collapsedColor: theme.colors.surface,
+        },
+      };
+    }
+    const collapsible = useCollapsibleHeader(options);
+    return <Component {...props} collapsible={collapsible} />;
+  };
 }

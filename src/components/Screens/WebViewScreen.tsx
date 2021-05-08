@@ -17,7 +17,13 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import WebView from 'react-native-webview';
 import {
   Divider,
@@ -34,23 +40,21 @@ import {
   StyleSheet,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { withTheme } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { Collapsible } from 'react-navigation-collapsible';
-import withCollapsible from '../../utils/withCollapsible';
+import { useTheme } from 'react-native-paper';
+import { useCollapsibleHeader } from 'react-navigation-collapsible';
 import MaterialHeaderButtons, { Item } from '../Overrides/CustomHeaderButton';
 import { ERROR_TYPE } from '../../utils/WebData';
 import ErrorView from './ErrorView';
 import BasicLoadingScreen from './BasicLoadingScreen';
+import { useFocusEffect, useNavigation } from '@react-navigation/core';
+import { useCollapsible } from '../../utils/CollapsibleContext';
 
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  theme: ReactNativePaper.Theme;
+type Props = {
   url: string;
-  collapsibleStack: Collapsible;
-  onMessage: (event: { nativeEvent: { data: string } }) => void;
-  onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-  customJS?: string;
+  onMessage?: (event: { nativeEvent: { data: string } }) => void;
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  initialJS?: string;
+  injectJS?: string;
   customPaddingFunction?: null | ((padding: number) => string);
   showAdvancedControls?: boolean;
 };
@@ -66,134 +70,113 @@ const styles = StyleSheet.create({
 /**
  * Class defining a webview screen.
  */
-class WebViewScreen extends React.PureComponent<PropsType> {
-  static defaultProps = {
-    customJS: '',
-    showAdvancedControls: true,
-    customPaddingFunction: null,
-  };
+function WebViewScreen(props: Props) {
+  const [currentUrl, setCurrentUrl] = useState(props.url);
+  const [canGoBack, setCanGoBack] = useState(false);
+  const navigation = useNavigation();
+  const theme = useTheme();
+  const webviewRef = useRef<WebView>();
 
-  currentUrl: string;
+  const { setCollapsible } = useCollapsible();
+  const collapsible = useCollapsibleHeader({
+    config: { collapsedColor: theme.colors.surface, useNativeDriver: false },
+  });
+  const { containerPaddingTop, onScrollWithListener } = collapsible;
 
-  webviewRef: { current: null | WebView };
+  const [currentInjectedJS, setCurrentInjectedJS] = useState(props.injectJS);
 
-  canGoBack: boolean;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.webviewRef = React.createRef();
-    this.canGoBack = false;
-    this.currentUrl = props.url;
-  }
-
-  /**
-   * Creates header buttons and listens to events after mounting
-   */
-  componentDidMount() {
-    const { props } = this;
-    props.navigation.setOptions({
-      headerRight: props.showAdvancedControls
-        ? this.getAdvancedButtons
-        : this.getBasicButton,
-    });
-    props.navigation.addListener('focus', () => {
+  useFocusEffect(
+    useCallback(() => {
+      setCollapsible(collapsible);
       BackHandler.addEventListener(
         'hardwareBackPress',
-        this.onBackButtonPressAndroid
+        onBackButtonPressAndroid
       );
-    });
-    props.navigation.addListener('blur', () => {
-      BackHandler.removeEventListener(
-        'hardwareBackPress',
-        this.onBackButtonPressAndroid
-      );
-    });
-  }
+      return () => {
+        BackHandler.removeEventListener(
+          'hardwareBackPress',
+          onBackButtonPressAndroid
+        );
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [collapsible, setCollapsible])
+  );
 
-  /**
-   * Goes back on the webview or on the navigation stack if we cannot go back anymore
-   *
-   * @returns {boolean}
-   */
-  onBackButtonPressAndroid = (): boolean => {
-    if (this.canGoBack) {
-      this.onGoBackClicked();
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: props.showAdvancedControls
+        ? getAdvancedButtons
+        : getBasicButton,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation, props.showAdvancedControls]);
+
+  useEffect(() => {
+    if (props.injectJS && props.injectJS !== currentInjectedJS) {
+      injectJavaScript(props.injectJS);
+      setCurrentInjectedJS(props.injectJS);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.injectJS]);
+
+  const onBackButtonPressAndroid = () => {
+    if (canGoBack) {
+      onGoBackClicked();
       return true;
     }
     return false;
   };
 
-  /**
-   * Gets header refresh and open in browser buttons
-   *
-   * @return {*}
-   */
-  getBasicButton = () => {
+  const getBasicButton = () => {
     return (
       <MaterialHeaderButtons>
         <Item
-          title="refresh"
-          iconName="refresh"
-          onPress={this.onRefreshClicked}
+          title={'refresh'}
+          iconName={'refresh'}
+          onPress={onRefreshClicked}
         />
         <Item
           title={i18n.t('general.openInBrowser')}
-          iconName="open-in-new"
-          onPress={this.onOpenClicked}
+          iconName={'open-in-new'}
+          onPress={onOpenClicked}
         />
       </MaterialHeaderButtons>
     );
   };
 
-  /**
-   * Creates advanced header control buttons.
-   * These buttons allows the user to refresh, go back, go forward and open in the browser.
-   *
-   * @returns {*}
-   */
-  getAdvancedButtons = () => {
-    const { props } = this;
+  const getAdvancedButtons = () => {
     return (
       <MaterialHeaderButtons>
-        <Item
-          title="refresh"
-          iconName="refresh"
-          onPress={this.onRefreshClicked}
-        />
+        <Item title="refresh" iconName="refresh" onPress={onRefreshClicked} />
         <OverflowMenu
           style={styles.overflow}
           OverflowIcon={
             <MaterialCommunityIcons
               name="dots-vertical"
               size={26}
-              color={props.theme.colors.text}
+              color={theme.colors.text}
             />
           }
         >
           <HiddenItem
             title={i18n.t('general.goBack')}
-            onPress={this.onGoBackClicked}
+            onPress={onGoBackClicked}
           />
           <HiddenItem
             title={i18n.t('general.goForward')}
-            onPress={this.onGoForwardClicked}
+            onPress={onGoForwardClicked}
           />
           <Divider />
           <HiddenItem
             title={i18n.t('general.openInBrowser')}
-            onPress={this.onOpenClicked}
+            onPress={onOpenClicked}
           />
         </OverflowMenu>
       </MaterialHeaderButtons>
     );
   };
 
-  /**
-   * Gets the loading indicator
-   *
-   * @return {*}
-   */
-  getRenderLoading = () => <BasicLoadingScreen isAbsolute />;
+  const getRenderLoading = () => <BasicLoadingScreen isAbsolute={true} />;
 
   /**
    * Gets the javascript needed to generate a padding on top of the page
@@ -202,91 +185,78 @@ class WebViewScreen extends React.PureComponent<PropsType> {
    * @param padding The padding to add in pixels
    * @returns {string}
    */
-  getJavascriptPadding(padding: number): string {
-    const { props } = this;
+  const getJavascriptPadding = (padding: number) => {
     const customPadding =
       props.customPaddingFunction != null
         ? props.customPaddingFunction(padding)
         : '';
     return `document.getElementsByTagName('body')[0].style.paddingTop = '${padding}px';${customPadding}true;`;
-  }
+  };
 
-  /**
-   * Callback to use when refresh button is clicked. Reloads the webview.
-   */
-  onRefreshClicked = () => {
-    if (this.webviewRef.current != null) {
-      this.webviewRef.current.reload();
+  const onRefreshClicked = () => {
+    //@ts-ignore
+    if (webviewRef.current) {
+      //@ts-ignore
+      webviewRef.current.reload();
     }
   };
 
-  onGoBackClicked = () => {
-    if (this.webviewRef.current != null) {
-      this.webviewRef.current.goBack();
+  const onGoBackClicked = () => {
+    //@ts-ignore
+    if (webviewRef.current) {
+      //@ts-ignore
+      webviewRef.current.goBack();
     }
   };
 
-  onGoForwardClicked = () => {
-    if (this.webviewRef.current != null) {
-      this.webviewRef.current.goForward();
+  const onGoForwardClicked = () => {
+    //@ts-ignore
+    if (webviewRef.current) {
+      //@ts-ignore
+      webviewRef.current.goForward();
     }
   };
 
-  onOpenClicked = () => {
-    Linking.openURL(this.currentUrl);
-  };
+  const onOpenClicked = () => Linking.openURL(currentUrl);
 
-  onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { onScroll } = this.props;
-    if (onScroll) {
-      onScroll(event);
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (props.onScroll) {
+      props.onScroll(event);
     }
   };
 
-  /**
-   * Injects the given javascript string into the web page
-   *
-   * @param script The script to inject
-   */
-  injectJavaScript = (script: string) => {
-    if (this.webviewRef.current != null) {
-      this.webviewRef.current.injectJavaScript(script);
+  const injectJavaScript = (script: string) => {
+    //@ts-ignore
+    if (webviewRef.current) {
+      //@ts-ignore
+      webviewRef.current.injectJavaScript(script);
     }
   };
 
-  render() {
-    const { props } = this;
-    const {
-      containerPaddingTop,
-      onScrollWithListener,
-    } = props.collapsibleStack;
-    return (
-      <AnimatedWebView
-        ref={this.webviewRef}
-        source={{ uri: props.url }}
-        startInLoadingState
-        injectedJavaScript={props.customJS}
-        javaScriptEnabled
-        renderLoading={this.getRenderLoading}
-        renderError={() => (
-          <ErrorView
-            errorCode={ERROR_TYPE.CONNECTION_ERROR}
-            onRefresh={this.onRefreshClicked}
-          />
-        )}
-        onNavigationStateChange={(navState) => {
-          this.currentUrl = navState.url;
-          this.canGoBack = navState.canGoBack;
-        }}
-        onMessage={props.onMessage}
-        onLoad={() => {
-          this.injectJavaScript(this.getJavascriptPadding(containerPaddingTop));
-        }}
-        // Animations
-        onScroll={(event) => onScrollWithListener(this.onScroll)(event)}
-      />
-    );
-  }
+  return (
+    <AnimatedWebView
+      ref={webviewRef}
+      source={{ uri: props.url }}
+      startInLoadingState={true}
+      injectedJavaScript={props.initialJS}
+      javaScriptEnabled={true}
+      renderLoading={getRenderLoading}
+      renderError={() => (
+        <ErrorView
+          errorCode={ERROR_TYPE.CONNECTION_ERROR}
+          onRefresh={onRefreshClicked}
+        />
+      )}
+      onNavigationStateChange={(navState) => {
+        setCurrentUrl(navState.url);
+        setCanGoBack(navState.canGoBack);
+      }}
+      onMessage={props.onMessage}
+      onLoad={() => injectJavaScript(getJavascriptPadding(containerPaddingTop))}
+      // Animations
+      onScroll={onScrollWithListener(onScroll)}
+    />
+  );
 }
 
-export default withCollapsible(withTheme(WebViewScreen));
+export default WebViewScreen;

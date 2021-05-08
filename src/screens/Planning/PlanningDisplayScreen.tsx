@@ -28,7 +28,9 @@ import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
 import { apiRequest, ERROR_TYPE } from '../../utils/WebData';
 import ErrorView from '../../components/Screens/ErrorView';
 import CustomHTML from '../../components/Overrides/CustomHTML';
-import CustomTabBar from '../../components/Tabbar/CustomTabBar';
+import CustomTabBar, {
+  TAB_BAR_HEIGHT,
+} from '../../components/Tabbar/CustomTabBar';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import type { PlanningEventType } from '../../utils/Planning';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
@@ -145,9 +147,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
         ) : null}
 
         {displayData.description !== null ? (
-          <Card.Content
-            style={{ paddingBottom: CustomTabBar.TAB_BAR_HEIGHT + 20 }}
-          >
+          <Card.Content style={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}>
             <CustomHTML html={displayData.description} />
           </Card.Content>
         ) : (
