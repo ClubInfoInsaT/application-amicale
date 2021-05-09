@@ -2,6 +2,8 @@ import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { FAB } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
+import { useNavigation } from '@react-navigation/core';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 interface Props {
   icon: string;
@@ -74,6 +76,7 @@ const FOCUSED_ICON = require('../../../assets/tab-icon.png');
 const UNFOCUSED_ICON = require('../../../assets/tab-icon-outline.png');
 
 function TabHomeIcon(props: Props) {
+  const navigation = useNavigation();
   const getImage = (iconProps: { size: number; color: string }) => {
     return (
       <Animatable.View useNativeDriver={true} animation={'rubberBand'}>
@@ -101,6 +104,7 @@ function TabHomeIcon(props: Props) {
         >
           <FAB
             onPress={props.onPress}
+            onLongPress={() => navigation.navigate(MainRoutes.GameStart)}
             animated={false}
             icon={getImage}
             color={'#fff'}

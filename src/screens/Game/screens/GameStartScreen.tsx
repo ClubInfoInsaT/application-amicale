@@ -469,7 +469,7 @@ class GameStartScreen extends React.Component<PropsType> {
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
         >
-          <CollapsibleScrollView>
+          <CollapsibleScrollView headerColors={'transparent'}>
             {this.getMainContent()}
             <MascotPopup
               prefKey={AsyncStorageManager.PREFERENCES.gameStartMascot.key}
