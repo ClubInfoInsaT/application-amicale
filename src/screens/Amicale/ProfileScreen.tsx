@@ -36,12 +36,12 @@ import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
 import CardList from '../../components/Lists/CardList/CardList';
-import AvailableWebsites from '../../constants/AvailableWebsites';
 import Mascot, { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import ServicesManager, { SERVICES_KEY } from '../../managers/ServicesManager';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import type { ServiceItemType } from '../../managers/ServicesManager';
 import GENERAL_STYLES from '../../constants/Styles';
+import Urls from '../../constants/Urls';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -298,7 +298,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
               mode="contained"
               onPress={() => {
                 navigation.navigate('website', {
-                  host: AvailableWebsites.websites.AMICALE,
+                  host: Urls.websites.amicale,
                   path: this.data?.link,
                   title: i18n.t('screens.websites.amicale'),
                 });

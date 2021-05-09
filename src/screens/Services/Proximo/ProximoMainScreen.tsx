@@ -27,8 +27,8 @@ import MaterialHeaderButtons, {
 } from '../../../components/Overrides/CustomHeaderButton';
 import type { SectionListDataType } from '../../../components/Screens/WebSectionList';
 import { StyleSheet } from 'react-native';
+import Urls from '../../../constants/Urls';
 
-const DATA_URL = 'https://etud.insa-toulouse.fr/~proximo/data/stock-v2.json';
 const LIST_ITEM_HEIGHT = 84;
 
 export type ProximoCategoryType = {
@@ -320,7 +320,7 @@ class ProximoMainScreen extends React.Component<PropsType> {
         navigation={navigation}
         autoRefreshTime={0}
         refreshOnFocus={false}
-        fetchUrl={DATA_URL}
+        fetchUrl={Urls.proximo}
         renderItem={this.getRenderItem}
       />
     );

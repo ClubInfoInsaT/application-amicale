@@ -32,12 +32,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import ConnectionManager from '../../managers/ConnectionManager';
 import ErrorDialog from '../../components/Dialogs/ErrorDialog';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
-import AvailableWebsites from '../../constants/AvailableWebsites';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import { MainStackParamsList } from '../../navigation/MainNavigator';
 import GENERAL_STYLES from '../../constants/Styles';
+import Urls from '../../constants/Urls';
 
 type LoginScreenNavigationProp = StackScreenProps<MainStackParamsList, 'login'>;
 
@@ -58,8 +58,6 @@ type StateType = {
 };
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
-
-const RESET_PASSWORD_PATH = 'https://www.amicale-insat.fr/password/reset';
 
 const emailRegex = /^.+@.+\..+$/;
 
@@ -134,8 +132,8 @@ class LoginScreen extends React.Component<Props, StateType> {
   onResetPasswordClick = () => {
     const { navigation } = this.props;
     navigation.navigate('website', {
-      host: AvailableWebsites.websites.AMICALE,
-      path: RESET_PASSWORD_PATH,
+      host: Urls.websites.amicale,
+      path: Urls.amicale.resetPassword,
       title: i18n.t('screens.websites.amicale'),
     });
   };

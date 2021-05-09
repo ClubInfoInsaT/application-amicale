@@ -36,6 +36,7 @@ import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import GENERAL_STYLES from '../../constants/Styles';
+import Urls from '../../constants/Urls';
 
 LocaleConfig.locales.fr = {
   monthNames: [
@@ -88,7 +89,6 @@ type StateType = {
   calendarShowing: boolean;
 };
 
-const FETCH_URL = 'https://www.amicale-insat.fr/api/event/list';
 const AGENDA_MONTH_SPAN = 3;
 
 const styles = StyleSheet.create({
@@ -174,7 +174,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
 
     if (canRefresh) {
       this.setState({ refreshing: true });
-      readData(FETCH_URL)
+      readData(Urls.amicale.events)
         .then((fetchedData: Array<PlanningEventType>) => {
           this.setState({
             refreshing: false,

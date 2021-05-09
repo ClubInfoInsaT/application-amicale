@@ -17,6 +17,8 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Urls from '../constants/Urls';
+
 export const ERROR_TYPE = {
   SUCCESS: 0,
   BAD_CREDENTIALS: 1,
@@ -39,8 +41,6 @@ type ApiResponseType<T> = {
   error: number;
   data: T;
 };
-
-const API_ENDPOINT = 'https://www.amicale-insat.fr/api/';
 
 /**
  * Checks if the given API response is valid.
@@ -81,7 +81,7 @@ export async function apiRequest<T>(
       if (params != null) {
         requestParams = { ...params };
       }
-      fetch(API_ENDPOINT + path, {
+      fetch(Urls.amicale.api + path, {
         method,
         headers: new Headers({
           'Accept': 'application/json',

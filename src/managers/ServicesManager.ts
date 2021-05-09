@@ -19,47 +19,10 @@
 
 import i18n from 'i18n-js';
 import { StackNavigationProp } from '@react-navigation/stack';
-import AvailableWebsites from '../constants/AvailableWebsites';
 import ConnectionManager from './ConnectionManager';
 import type { FullDashboardType } from '../screens/Home/HomeScreen';
 import getStrippedServicesList from '../utils/Services';
-
-// AMICALE
-const CLUBS_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/Clubs.png';
-const PROFILE_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/ProfilAmicaliste.png';
-const EQUIPMENT_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/Materiel.png';
-const VOTE_IMAGE = 'https://etud.insa-toulouse.fr/~amicale_app/images/Vote.png';
-const AMICALE_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/WebsiteAmicale.png';
-
-// STUDENTS
-const PROXIMO_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png';
-const WIKETUD_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/Wiketud.png';
-const EE_IMAGE = 'https://etud.insa-toulouse.fr/~amicale_app/images/EEC.png';
-const TUTORINSA_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/TutorINSA.png';
-
-// INSA
-const BIB_IMAGE = 'https://etud.insa-toulouse.fr/~amicale_app/images/Bib.png';
-const RU_IMAGE = 'https://etud.insa-toulouse.fr/~amicale_app/images/RU.png';
-const ROOM_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/Salles.png';
-const EMAIL_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/Bluemind.png';
-const ENT_IMAGE = 'https://etud.insa-toulouse.fr/~amicale_app/images/ENT.png';
-const ACCOUNT_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/Account.png';
-
-// SPECIAL
-const WASHER_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/ProxiwashLaveLinge.png';
-const DRYER_IMAGE =
-  'https://etud.insa-toulouse.fr/~amicale_app/images/ProxiwashSecheLinge.png';
+import Urls from '../constants/Urls';
 
 const AMICALE_LOGO = require('../../assets/amicale.png');
 
@@ -127,31 +90,31 @@ export default class ServicesManager {
         key: SERVICES_KEY.CLUBS,
         title: i18n.t('screens.clubs.title'),
         subtitle: i18n.t('screens.services.descriptions.clubs'),
-        image: CLUBS_IMAGE,
+        image: Urls.images.clubs,
         onPress: (): void => this.onAmicaleServicePress('club-list'),
       },
       {
         key: SERVICES_KEY.PROFILE,
         title: i18n.t('screens.profile.title'),
         subtitle: i18n.t('screens.services.descriptions.profile'),
-        image: PROFILE_IMAGE,
+        image: Urls.images.profile,
         onPress: (): void => this.onAmicaleServicePress('profile'),
       },
       {
         key: SERVICES_KEY.EQUIPMENT,
         title: i18n.t('screens.equipment.title'),
         subtitle: i18n.t('screens.services.descriptions.equipment'),
-        image: EQUIPMENT_IMAGE,
+        image: Urls.images.equipment,
         onPress: (): void => this.onAmicaleServicePress('equipment-list'),
       },
       {
         key: SERVICES_KEY.AMICALE_WEBSITE,
         title: i18n.t('screens.websites.amicale'),
         subtitle: i18n.t('screens.services.descriptions.amicaleWebsite'),
-        image: AMICALE_IMAGE,
+        image: Urls.images.amicale,
         onPress: (): void =>
           nav.navigate('website', {
-            host: AvailableWebsites.websites.AMICALE,
+            host: Urls.websites.amicale,
             title: i18n.t('screens.websites.amicale'),
           }),
       },
@@ -159,7 +122,7 @@ export default class ServicesManager {
         key: SERVICES_KEY.VOTE,
         title: i18n.t('screens.vote.title'),
         subtitle: i18n.t('screens.services.descriptions.vote'),
-        image: VOTE_IMAGE,
+        image: Urls.images.vote,
         onPress: (): void => this.onAmicaleServicePress('vote'),
       },
     ];
@@ -168,7 +131,7 @@ export default class ServicesManager {
         key: SERVICES_KEY.PROXIMO,
         title: i18n.t('screens.proximo.title'),
         subtitle: i18n.t('screens.services.descriptions.proximo'),
-        image: PROXIMO_IMAGE,
+        image: Urls.images.proximo,
         onPress: (): void => nav.navigate('proximo'),
         badgeFunction: (dashboard: FullDashboardType): number =>
           dashboard.proximo_articles,
@@ -177,10 +140,10 @@ export default class ServicesManager {
         key: SERVICES_KEY.WIKETUD,
         title: 'Wiketud',
         subtitle: i18n.t('screens.services.descriptions.wiketud'),
-        image: WIKETUD_IMAGE,
+        image: Urls.images.wiketud,
         onPress: (): void =>
           nav.navigate('website', {
-            host: AvailableWebsites.websites.WIKETUD,
+            host: Urls.websites.wiketud,
             title: 'Wiketud',
           }),
       },
@@ -188,10 +151,10 @@ export default class ServicesManager {
         key: SERVICES_KEY.ELUS_ETUDIANTS,
         title: 'Élus Étudiants',
         subtitle: i18n.t('screens.services.descriptions.elusEtudiants'),
-        image: EE_IMAGE,
+        image: Urls.images.elusEtudiants,
         onPress: (): void =>
           nav.navigate('website', {
-            host: AvailableWebsites.websites.ELUS_ETUDIANTS,
+            host: Urls.websites.elusEtudiants,
             title: 'Élus Étudiants',
           }),
       },
@@ -199,10 +162,10 @@ export default class ServicesManager {
         key: SERVICES_KEY.TUTOR_INSA,
         title: "Tutor'INSA",
         subtitle: i18n.t('screens.services.descriptions.tutorInsa'),
-        image: TUTORINSA_IMAGE,
+        image: Urls.images.tutorInsa,
         onPress: (): void =>
           nav.navigate('website', {
-            host: AvailableWebsites.websites.TUTOR_INSA,
+            host: Urls.websites.tutorInsa,
             title: "Tutor'INSA",
           }),
         badgeFunction: (dashboard: FullDashboardType): number =>
@@ -214,7 +177,7 @@ export default class ServicesManager {
         key: SERVICES_KEY.RU,
         title: i18n.t('screens.menu.title'),
         subtitle: i18n.t('screens.services.descriptions.self'),
-        image: RU_IMAGE,
+        image: Urls.images.menu,
         onPress: (): void => nav.navigate('self-menu'),
         badgeFunction: (dashboard: FullDashboardType): number =>
           dashboard.today_menu.length,
@@ -223,10 +186,10 @@ export default class ServicesManager {
         key: SERVICES_KEY.AVAILABLE_ROOMS,
         title: i18n.t('screens.websites.rooms'),
         subtitle: i18n.t('screens.services.descriptions.availableRooms'),
-        image: ROOM_IMAGE,
+        image: Urls.images.availableRooms,
         onPress: (): void =>
           nav.navigate('website', {
-            host: AvailableWebsites.websites.AVAILABLE_ROOMS,
+            host: Urls.websites.availableRooms,
             title: i18n.t('screens.websites.rooms'),
           }),
       },
@@ -234,10 +197,10 @@ export default class ServicesManager {
         key: SERVICES_KEY.BIB,
         title: i18n.t('screens.websites.bib'),
         subtitle: i18n.t('screens.services.descriptions.bib'),
-        image: BIB_IMAGE,
+        image: Urls.images.bib,
         onPress: (): void =>
           nav.navigate('website', {
-            host: AvailableWebsites.websites.BIB,
+            host: Urls.websites.bib,
             title: i18n.t('screens.websites.bib'),
           }),
       },
@@ -245,10 +208,10 @@ export default class ServicesManager {
         key: SERVICES_KEY.EMAIL,
         title: i18n.t('screens.websites.mails'),
         subtitle: i18n.t('screens.services.descriptions.mails'),
-        image: EMAIL_IMAGE,
+        image: Urls.images.bluemind,
         onPress: (): void =>
           nav.navigate('website', {
-            host: AvailableWebsites.websites.BLUEMIND,
+            host: Urls.websites.bluemind,
             title: i18n.t('screens.websites.mails'),
           }),
       },
@@ -256,10 +219,10 @@ export default class ServicesManager {
         key: SERVICES_KEY.ENT,
         title: i18n.t('screens.websites.ent'),
         subtitle: i18n.t('screens.services.descriptions.ent'),
-        image: ENT_IMAGE,
+        image: Urls.images.ent,
         onPress: (): void =>
           nav.navigate('website', {
-            host: AvailableWebsites.websites.ENT,
+            host: Urls.websites.ent,
             title: i18n.t('screens.websites.ent'),
           }),
       },
@@ -267,10 +230,10 @@ export default class ServicesManager {
         key: SERVICES_KEY.INSA_ACCOUNT,
         title: i18n.t('screens.insaAccount.title'),
         subtitle: i18n.t('screens.services.descriptions.insaAccount'),
-        image: ACCOUNT_IMAGE,
+        image: Urls.images.insaAccount,
         onPress: (): void =>
           nav.navigate('website', {
-            host: AvailableWebsites.websites.INSA_ACCOUNT,
+            host: Urls.websites.insaAccount,
             title: i18n.t('screens.insaAccount.title'),
           }),
       },
@@ -280,7 +243,7 @@ export default class ServicesManager {
         key: SERVICES_KEY.WASHERS,
         title: i18n.t('screens.proxiwash.washers'),
         subtitle: i18n.t('screens.services.descriptions.washers'),
-        image: WASHER_IMAGE,
+        image: Urls.images.washer,
         onPress: (): void => nav.navigate('proxiwash'),
         badgeFunction: (dashboard: FullDashboardType): number =>
           dashboard.available_washers,
@@ -289,7 +252,7 @@ export default class ServicesManager {
         key: SERVICES_KEY.DRYERS,
         title: i18n.t('screens.proxiwash.dryers'),
         subtitle: i18n.t('screens.services.descriptions.washers'),
-        image: DRYER_IMAGE,
+        image: Urls.images.dryer,
         onPress: (): void => nav.navigate('proxiwash'),
         badgeFunction: (dashboard: FullDashboardType): number =>
           dashboard.available_dryers,

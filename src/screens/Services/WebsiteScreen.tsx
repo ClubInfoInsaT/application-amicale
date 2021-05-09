@@ -20,8 +20,8 @@
 import * as React from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import WebViewScreen from '../../components/Screens/WebViewScreen';
-import AvailableWebsites from '../../constants/AvailableWebsites';
 import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
+import Urls from '../../constants/Urls';
 
 type Props = {
   navigation: StackNavigationProp<any>;
@@ -42,7 +42,7 @@ const BIB_STYLE =
 
 const BIB_BACK_BUTTON =
   "<div style='width: 100%; display: flex'>" +
-  `<a style='margin: auto' href='${AvailableWebsites.websites.BIB}'>` +
+  `<a style='margin: auto' href='${Urls.websites.bib}'>` +
   "<button id='customBackButton' class='btn btn-primary'>Retour</button>" +
   '</a>' +
   '</div>';
@@ -63,17 +63,17 @@ class WebsiteScreen extends React.Component<Props, State> {
     props.navigation.addListener('focus', this.onScreenFocus);
     this.injectedJS = {};
     this.customPaddingFunctions = {};
-    this.injectedJS[AvailableWebsites.websites.AVAILABLE_ROOMS] =
+    this.injectedJS[Urls.websites.availableRooms] =
       `document.querySelector('head').innerHTML += '${ENABLE_MOBILE_STRING}';` +
       `document.querySelector('head').innerHTML += '${AVAILABLE_ROOMS_STYLE}'; true;`;
 
-    this.injectedJS[AvailableWebsites.websites.BIB] =
+    this.injectedJS[Urls.websites.bib] =
       `document.querySelector('head').innerHTML += '${ENABLE_MOBILE_STRING}';` +
       `document.querySelector('head').innerHTML += '${BIB_STYLE}';` +
       'if ($(".hero-unit-form").length > 0 && $("#customBackButton").length === 0)' +
       `$(".hero-unit-form").append("${BIB_BACK_BUTTON}");true;`;
 
-    this.customPaddingFunctions[AvailableWebsites.websites.BLUEMIND] = (
+    this.customPaddingFunctions[Urls.websites.bluemind] = (
       padding: number
     ): string => {
       return (
@@ -82,7 +82,7 @@ class WebsiteScreen extends React.Component<Props, State> {
         "$('#mailview-bottom').css('min-height', 500);"
       );
     };
-    this.customPaddingFunctions[AvailableWebsites.websites.WIKETUD] = (
+    this.customPaddingFunctions[Urls.websites.wiketud] = (
       padding: number
     ): string => {
       return (

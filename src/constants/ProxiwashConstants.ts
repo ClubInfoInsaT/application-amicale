@@ -17,6 +17,8 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Urls from './Urls';
+
 export enum MachineStates {
   AVAILABLE,
   RUNNING,
@@ -45,8 +47,7 @@ export default {
     tarif: 'screens.proxiwash.washinsa.tariff',
     paymentMethods: 'screens.proxiwash.washinsa.paymentMethods',
     icon: 'school-outline',
-    url:
-      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/washinsa_data.json',
+    url: Urls.app.api + 'washinsa/washinsa_data.json',
   },
   tripodeB: {
     id: 'tripodeB',
@@ -56,7 +57,6 @@ export default {
     tarif: 'screens.proxiwash.tripodeB.tariff',
     paymentMethods: 'screens.proxiwash.tripodeB.paymentMethods',
     icon: 'domain',
-    url:
-      'https://etud.insa-toulouse.fr/~amicale_app/v2/washinsa/tripode_b_data.json',
+    url: Urls.app.api + 'washinsa/tripode_b_data.json',
   },
 };

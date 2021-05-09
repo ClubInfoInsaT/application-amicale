@@ -51,10 +51,8 @@ import type { ServiceItemType } from '../../managers/ServicesManager';
 import { getDisplayEvent, getFutureEvents } from '../../utils/Home';
 import type { PlanningEventType } from '../../utils/Planning';
 import GENERAL_STYLES from '../../constants/Styles';
-// import DATA from "../dashboard_data.json";
+import Urls from '../../constants/Urls';
 
-const DATA_URL =
-  'https://etud.insa-toulouse.fr/~amicale_app/v2/dashboard/dashboard_data.json';
 const FEED_ITEM_HEIGHT = 500;
 
 const SECTIONS_ID = ['dashboard', 'news_feed'];
@@ -476,7 +474,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
             createDataset={this.createDataset}
             autoRefreshTime={REFRESH_TIME}
             refreshOnFocus
-            fetchUrl={DATA_URL}
+            fetchUrl={Urls.app.dashboard}
             renderItem={this.getRenderItem}
             itemHeight={FEED_ITEM_HEIGHT}
             onScroll={this.onScroll}

@@ -22,15 +22,7 @@ import { Avatar, Button, Card, Paragraph, withTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { Linking, StyleSheet, View } from 'react-native';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
-
-const links = {
-  bugsGit: 'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/',
-  trello: 'https://trello.com/b/RMej49Uq/application-campus-insa',
-  facebook: 'https://www.facebook.com/campus.insat',
-  feedbackMail: `mailto:app@amicale-insat.fr?subject=[FEEDBACK] Application CAMPUS
-&body=Coucou Arnaud j'ai du feedback\n\n\n\nBien cordialement.`,
-  feedbackDiscord: 'https://discord.gg/W8MeTec',
-};
+import Urls from '../../constants/Urls';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,7 +55,7 @@ function getButtons(isFeedback: boolean) {
             mode="contained"
             style={styles.button}
             onPress={() => {
-              Linking.openURL(links.feedbackMail);
+              Linking.openURL(Urls.feedback.mail);
             }}
           >
             MAIL
@@ -74,7 +66,7 @@ function getButtons(isFeedback: boolean) {
             color="#2e88fe"
             style={styles.button}
             onPress={() => {
-              Linking.openURL(links.facebook);
+              Linking.openURL(Urls.feedback.facebook);
             }}
           >
             Facebook
@@ -85,7 +77,7 @@ function getButtons(isFeedback: boolean) {
             color="#7289da"
             style={styles.button}
             onPress={() => {
-              Linking.openURL(links.feedbackDiscord);
+              Linking.openURL(Urls.feedback.discord);
             }}
           >
             Discord
@@ -99,7 +91,7 @@ function getButtons(isFeedback: boolean) {
             color="#609927"
             style={styles.button}
             onPress={() => {
-              Linking.openURL(links.bugsGit);
+              Linking.openURL(Urls.feedback.git);
             }}
           >
             GITETUD
@@ -110,7 +102,7 @@ function getButtons(isFeedback: boolean) {
             color="#026AA7"
             style={styles.button}
             onPress={() => {
-              Linking.openURL(links.trello);
+              Linking.openURL(Urls.feedback.trello);
             }}
           >
             TRELLO

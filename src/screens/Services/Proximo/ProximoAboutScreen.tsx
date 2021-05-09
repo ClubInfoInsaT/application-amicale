@@ -21,12 +21,9 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import { Card, Avatar, Paragraph, Text } from 'react-native-paper';
-import CustomTabBar, {
-  TAB_BAR_HEIGHT,
-} from '../../../components/Tabbar/CustomTabBar';
+import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
-
-const LOGO = 'https://etud.insa-toulouse.fr/~amicale_app/images/Proximo.png';
+import Urls from '../../../constants/Urls';
 
 const styles = StyleSheet.create({
   container: {
@@ -57,7 +54,7 @@ export default function ProximoAboutScreen() {
   return (
     <CollapsibleScrollView style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: LOGO }} style={styles.image} />
+        <Image source={{ uri: Urls.images.proximo }} style={styles.image} />
       </View>
       <Text>{i18n.t('screens.proximo.description')}</Text>
       <Card style={styles.card}>

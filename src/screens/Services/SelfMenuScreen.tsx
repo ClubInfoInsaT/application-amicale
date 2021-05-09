@@ -25,9 +25,7 @@ import i18n from 'i18n-js';
 import DateManager from '../../managers/DateManager';
 import WebSectionList from '../../components/Screens/WebSectionList';
 import type { SectionListDataType } from '../../components/Screens/WebSectionList';
-
-const DATA_URL =
-  'https://etud.insa-toulouse.fr/~amicale_app/menu/menu_data.json';
+import Urls from '../../constants/Urls';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -198,7 +196,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
         navigation={navigation}
         autoRefreshTime={0}
         refreshOnFocus={false}
-        fetchUrl={DATA_URL}
+        fetchUrl={Urls.app.menu}
         renderItem={this.getRenderItem}
         renderSectionHeader={this.getRenderSectionHeader}
         stickyHeader

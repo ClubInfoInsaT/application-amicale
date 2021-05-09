@@ -34,7 +34,7 @@ export type CollapsibleComponentPropsType = {
   hasTab?: boolean;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   paddedProps?: (paddingTop: number) => Record<string, any>;
-  headerColors: string;
+  headerColors?: string;
 };
 
 type Props = CollapsibleComponentPropsType & {

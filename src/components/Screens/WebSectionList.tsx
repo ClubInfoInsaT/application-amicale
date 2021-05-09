@@ -54,9 +54,8 @@ type PropsType<ItemT, RawData> = {
     data: RawData | null,
     isLoading?: boolean
   ) => SectionListDataType<ItemT>;
-  onScroll: (event: NativeSyntheticEvent<EventTarget>) => void;
-  collapsibleStack: Collapsible;
 
+  onScroll?: (event: NativeSyntheticEvent<EventTarget>) => void;
   showError?: boolean;
   itemHeight?: number | null;
   updateData?: number;

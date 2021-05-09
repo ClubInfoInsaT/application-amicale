@@ -23,8 +23,7 @@ import i18n from 'i18n-js';
 import { Card, Avatar, Paragraph, Title } from 'react-native-paper';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import ProxiwashConstants from '../../constants/ProxiwashConstants';
-
-const LOGO = 'https://etud.insa-toulouse.fr/~amicale_app/images/Proxiwash.png';
+import Urls from '../../constants/Urls';
 
 export type LaundromatType = {
   id: string;
@@ -85,9 +84,9 @@ function getCardItem(item: LaundromatType) {
  */
 export default function ProxiwashAboutScreen() {
   return (
-    <CollapsibleScrollView style={styles.container} hasTab>
+    <CollapsibleScrollView style={styles.container} hasTab={true}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: LOGO }} style={styles.image} />
+        <Image source={{ uri: Urls.images.proxiwash }} style={styles.image} />
       </View>
 
       {getCardItem(ProxiwashConstants.washinsa)}

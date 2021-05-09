@@ -34,6 +34,7 @@ import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatLis
 import OptionsDialog from '../../components/Dialogs/OptionsDialog';
 import type { OptionsDialogButtonType } from '../../components/Dialogs/OptionsDialog';
 import GENERAL_STYLES from '../../constants/Styles';
+import Urls from '../../constants/Urls';
 
 const APP_LOGO = require('../../../assets/android.icon.round.png');
 
@@ -51,19 +52,6 @@ type MemberItemType = {
   trollLink?: string;
   linkedin?: string;
   mail?: string;
-};
-
-const links = {
-  appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
-  playstore:
-    'https://play.google.com/store/apps/details?id=fr.amicaleinsat.application',
-  git:
-    'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/README.md',
-  changelog:
-    'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/Changelog.md',
-  license:
-    'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/src/branch/master/LICENSE',
-  react: 'https://facebook.github.io/react-native/',
 };
 
 type PropsType = {
@@ -177,7 +165,9 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   appData: Array<ListItemType> = [
     {
       onPressCallback: () => {
-        openWebLink(Platform.OS === 'ios' ? links.appstore : links.playstore);
+        openWebLink(
+          Platform.OS === 'ios' ? Urls.about.appstore : Urls.about.playstore
+        );
       },
       icon: Platform.OS === 'ios' ? 'apple' : 'google-play',
       text:
@@ -197,7 +187,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
     },
     {
       onPressCallback: () => {
-        openWebLink(links.git);
+        openWebLink(Urls.about.git);
       },
       icon: 'git',
       text: 'Git',
@@ -205,7 +195,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
     },
     {
       onPressCallback: () => {
-        openWebLink(links.changelog);
+        openWebLink(Urls.about.changelog);
       },
       icon: 'refresh',
       text: i18n.t('screens.about.changelog'),
@@ -213,7 +203,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
     },
     {
       onPressCallback: () => {
-        openWebLink(links.license);
+        openWebLink(Urls.about.license);
       },
       icon: 'file-document',
       text: i18n.t('screens.about.license'),
@@ -237,7 +227,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
   technoData = [
     {
       onPressCallback: () => {
-        openWebLink(links.react);
+        openWebLink(Urls.about.react);
       },
       icon: 'react',
       text: i18n.t('screens.about.reactNative'),
