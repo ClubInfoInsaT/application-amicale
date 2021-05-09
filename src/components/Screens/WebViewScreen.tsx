@@ -24,7 +24,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import WebView from 'react-native-webview';
+import WebView, { WebViewNavigation } from 'react-native-webview';
 import {
   Divider,
   HiddenItem,
@@ -71,8 +71,15 @@ const styles = StyleSheet.create({
  * Class defining a webview screen.
  */
 function WebViewScreen(props: Props) {
-  const [currentUrl, setCurrentUrl] = useState(props.url);
-  const [canGoBack, setCanGoBack] = useState(false);
+  const [navState, setNavState] = useState<undefined | WebViewNavigation>({
+    canGoBack: false,
+    canGoForward: false,
+    loading: true,
+    url: props.url,
+    lockIdentifier: 0,
+    navigationType: 'click',
+    title: '',
+  });
   const navigation = useNavigation();
   const theme = useTheme();
   const webviewRef = useRef<WebView>();
@@ -109,7 +116,7 @@ function WebViewScreen(props: Props) {
         : getBasicButton,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation, props.showAdvancedControls]);
+  }, [navigation, props.showAdvancedControls, navState?.url]);
 
   useEffect(() => {
     if (props.injectJS && props.injectJS !== currentInjectedJS) {
@@ -120,7 +127,7 @@ function WebViewScreen(props: Props) {
   }, [props.injectJS]);
 
   const onBackButtonPressAndroid = () => {
-    if (canGoBack) {
+    if (navState?.canGoBack) {
       onGoBackClicked();
       return true;
     }
@@ -217,7 +224,8 @@ function WebViewScreen(props: Props) {
     }
   };
 
-  const onOpenClicked = () => Linking.openURL(currentUrl);
+  const onOpenClicked = () =>
+    navState ? Linking.openURL(navState.url) : undefined;
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (props.onScroll) {
@@ -247,10 +255,7 @@ function WebViewScreen(props: Props) {
           onRefresh={onRefreshClicked}
         />
       )}
-      onNavigationStateChange={(navState) => {
-        setCurrentUrl(navState.url);
-        setCanGoBack(navState.canGoBack);
-      }}
+      onNavigationStateChange={setNavState}
       onMessage={props.onMessage}
       onLoad={() => injectJavaScript(getJavascriptPadding(containerPaddingTop))}
       // Animations
