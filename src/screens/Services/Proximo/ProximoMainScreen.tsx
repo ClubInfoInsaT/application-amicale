@@ -40,6 +40,7 @@ export type ProximoCategoryType = {
   icon: string;
   created_at: string;
   updated_at: string;
+  nb_articles: number;
 };
 
 export type ProximoArticleType = {
@@ -149,8 +150,7 @@ function ProximoMainScreen() {
       shouldFocusSearchBar: false,
       category: item.id,
     };
-    // TODO get article number
-    const article_number = 1;
+    const article_number = item.nb_articles;
     const subtitle = `${article_number} ${
       article_number > 1
         ? i18n.t('screens.proximo.articles')
@@ -201,6 +201,8 @@ function ProximoMainScreen() {
     data: CategoriesType | undefined
   ): SectionListDataType<ProximoCategoryType> => {
     if (data) {
+      let totalArticles = 0;
+      data.forEach((c) => (totalArticles += c.nb_articles));
       const finalData: CategoriesType = [
         {
           id: -1,
@@ -208,13 +210,14 @@ function ProximoMainScreen() {
           icon: 'star',
           created_at: '',
           updated_at: '',
+          nb_articles: totalArticles,
         },
         ...data,
       ];
       return [
         {
           title: '',
-          data: finalData.sort(sortFinalData),
+          data: finalData.filter((c) => c.nb_articles > 0).sort(sortFinalData),
           keyExtractor: getKeyExtractor,
         },
       ];
