@@ -26,6 +26,8 @@ import { stringMatchQuery } from '../../utils/Search';
 import WebSectionList from '../../components/Screens/WebSectionList';
 import GroupListAccordion from '../../components/Lists/PlanexGroups/GroupListAccordion';
 import AsyncStorageManager from '../../managers/AsyncStorageManager';
+import Urls from '../../constants/Urls';
+import { readData } from '../../utils/WebData';
 
 export type PlanexGroupType = {
   name: string;
@@ -59,8 +61,6 @@ function sortName(
   }
   return 0;
 }
-
-const GROUPS_URL = 'http://planex.insa-toulouse.fr/wsAdeGrp.php?projectId=1';
 
 /**
  * Class defining planex group selection screen.
@@ -137,9 +137,13 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    * @param fetchedData
    * @return {*}
    * */
-  createDataset = (fetchedData: {
-    [key: string]: PlanexGroupCategoryType;
-  }): Array<{ title: string; data: Array<PlanexGroupCategoryType> }> => {
+  createDataset = (
+    fetchedData:
+      | {
+          [key: string]: PlanexGroupCategoryType;
+        }
+      | undefined
+  ): Array<{ title: string; data: Array<PlanexGroupCategoryType> }> => {
     return [
       {
         title: '',
@@ -236,20 +240,28 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
    * @param fetchedData The raw data fetched from the server
    * @returns {[]}
    */
-  generateData(fetchedData: {
-    [key: string]: PlanexGroupCategoryType;
-  }): Array<PlanexGroupCategoryType> {
+  generateData(
+    fetchedData:
+      | {
+          [key: string]: PlanexGroupCategoryType;
+        }
+      | undefined
+  ): Array<PlanexGroupCategoryType> {
     const { favoriteGroups } = this.state;
     const data: Array<PlanexGroupCategoryType> = [];
-    Object.values(fetchedData).forEach((category: PlanexGroupCategoryType) => {
-      data.push(category);
-    });
-    data.sort(sortName);
-    data.unshift({
-      name: i18n.t('screens.planex.favorites'),
-      id: 0,
-      content: favoriteGroups,
-    });
+    if (fetchedData) {
+      Object.values(fetchedData).forEach(
+        (category: PlanexGroupCategoryType) => {
+          data.push(category);
+        }
+      );
+      data.sort(sortName);
+      data.unshift({
+        name: i18n.t('screens.planex.favorites'),
+        id: 0,
+        content: favoriteGroups,
+      });
+    }
     return data;
   }
 
@@ -298,14 +310,16 @@ class GroupSelectionScreen extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const { props, state } = this;
+    const { state } = this;
     return (
       <WebSectionList
-        navigation={props.navigation}
+        request={() =>
+          readData<{ [key: string]: PlanexGroupCategoryType }>(
+            Urls.planex.groups
+          )
+        }
         createDataset={this.createDataset}
-        autoRefreshTime={0}
-        refreshOnFocus={false}
-        fetchUrl={GROUPS_URL}
+        refreshOnFocus={true}
         renderItem={this.getRenderItem}
         updateData={state.currentSearchString + state.favoriteGroups.length}
       />

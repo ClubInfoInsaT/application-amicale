@@ -18,28 +18,29 @@
  */
 
 import * as React from 'react';
-import { Button, Subheading, withTheme } from 'react-native-paper';
+import { Button, Subheading, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { ERROR_TYPE } from '../../utils/WebData';
+import { REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
 
-type PropsType = {
-  navigation?: StackNavigationProp<any>;
-  theme: ReactNativePaper.Theme;
-  route?: { name: string };
-  onRefresh?: () => void;
-  errorCode?: number;
+type Props = {
+  status?: Exclude<REQUEST_STATUS, REQUEST_STATUS.SUCCESS>;
+  code?: Exclude<REQUEST_CODES, REQUEST_CODES.SUCCESS>;
   icon?: string;
   message?: string;
-  showRetryButton?: boolean;
+  loading?: boolean;
+  button?: {
+    text: string;
+    icon: string;
+    onPress: () => void;
+  };
 };
 
 const styles = StyleSheet.create({
   outer: {
-    height: '100%',
+    flex: 1,
   },
   inner: {
     marginTop: 'auto',
@@ -61,134 +62,96 @@ const styles = StyleSheet.create({
   },
 });
 
-class ErrorView extends React.PureComponent<PropsType> {
-  static defaultProps = {
-    onRefresh: () => {},
-    errorCode: 0,
-    icon: '',
+function getMessage(props: Props) {
+  let fullMessage = {
     message: '',
-    showRetryButton: true,
+    icon: '',
   };
-
-  message: string;
-
-  icon: string;
-
-  showLoginButton: boolean;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.icon = '';
-    this.showLoginButton = false;
-    this.message = '';
-  }
-
-  getRetryButton() {
-    const { props } = this;
-    return (
-      <Button
-        mode="contained"
-        icon="refresh"
-        onPress={props.onRefresh}
-        style={styles.button}
-      >
-        {i18n.t('general.retry')}
-      </Button>
-    );
-  }
-
-  getLoginButton() {
-    return (
-      <Button
-        mode="contained"
-        icon="login"
-        onPress={this.goToLogin}
-        style={styles.button}
-      >
-        {i18n.t('screens.login.title')}
-      </Button>
-    );
-  }
-
-  goToLogin = () => {
-    const { props } = this;
-    if (props.navigation) {
-      props.navigation.navigate('login', {
-        screen: 'login',
-        params: { nextScreen: props.route ? props.route.name : undefined },
-      });
+  if (props.code === undefined) {
+    switch (props.status) {
+      case REQUEST_STATUS.BAD_INPUT:
+        fullMessage.message = i18n.t('errors.badInput');
+        fullMessage.icon = 'alert-circle-outline';
+        break;
+      case REQUEST_STATUS.FORBIDDEN:
+        fullMessage.message = i18n.t('errors.forbidden');
+        fullMessage.icon = 'lock';
+        break;
+      case REQUEST_STATUS.CONNECTION_ERROR:
+        fullMessage.message = i18n.t('errors.connectionError');
+        fullMessage.icon = 'access-point-network-off';
+        break;
+      case REQUEST_STATUS.SERVER_ERROR:
+        fullMessage.message = i18n.t('errors.serverError');
+        fullMessage.icon = 'server-network-off';
+        break;
+      default:
+        fullMessage.message = i18n.t('errors.unknown');
+        fullMessage.icon = 'alert-circle-outline';
+        break;
     }
-  };
-
-  generateMessage() {
-    const { props } = this;
-    this.showLoginButton = false;
-    if (props.errorCode !== 0) {
-      switch (props.errorCode) {
-        case ERROR_TYPE.BAD_CREDENTIALS:
-          this.message = i18n.t('errors.badCredentials');
-          this.icon = 'account-alert-outline';
-          break;
-        case ERROR_TYPE.BAD_TOKEN:
-          this.message = i18n.t('errors.badToken');
-          this.icon = 'account-alert-outline';
-          this.showLoginButton = true;
-          break;
-        case ERROR_TYPE.NO_CONSENT:
-          this.message = i18n.t('errors.noConsent');
-          this.icon = 'account-remove-outline';
-          break;
-        case ERROR_TYPE.TOKEN_SAVE:
-          this.message = i18n.t('errors.tokenSave');
-          this.icon = 'alert-circle-outline';
-          break;
-        case ERROR_TYPE.BAD_INPUT:
-          this.message = i18n.t('errors.badInput');
-          this.icon = 'alert-circle-outline';
-          break;
-        case ERROR_TYPE.FORBIDDEN:
-          this.message = i18n.t('errors.forbidden');
-          this.icon = 'lock';
-          break;
-        case ERROR_TYPE.CONNECTION_ERROR:
-          this.message = i18n.t('errors.connectionError');
-          this.icon = 'access-point-network-off';
-          break;
-        case ERROR_TYPE.SERVER_ERROR:
-          this.message = i18n.t('errors.serverError');
-          this.icon = 'server-network-off';
-          break;
-        default:
-          this.message = i18n.t('errors.unknown');
-          this.icon = 'alert-circle-outline';
-          break;
-      }
-      this.message += `\n\nCode ${
-        props.errorCode != null ? props.errorCode : -1
-      }`;
-    } else {
-      this.message = props.message != null ? props.message : '';
-      this.icon = props.icon != null ? props.icon : '';
+  } else {
+    switch (props.code) {
+      case REQUEST_CODES.BAD_CREDENTIALS:
+        fullMessage.message = i18n.t('errors.badCredentials');
+        fullMessage.icon = 'account-alert-outline';
+        break;
+      case REQUEST_CODES.BAD_TOKEN:
+        fullMessage.message = i18n.t('errors.badToken');
+        fullMessage.icon = 'account-alert-outline';
+        break;
+      case REQUEST_CODES.NO_CONSENT:
+        fullMessage.message = i18n.t('errors.noConsent');
+        fullMessage.icon = 'account-remove-outline';
+        break;
+      case REQUEST_CODES.TOKEN_SAVE:
+        fullMessage.message = i18n.t('errors.tokenSave');
+        fullMessage.icon = 'alert-circle-outline';
+        break;
+      case REQUEST_CODES.BAD_INPUT:
+        fullMessage.message = i18n.t('errors.badInput');
+        fullMessage.icon = 'alert-circle-outline';
+        break;
+      case REQUEST_CODES.FORBIDDEN:
+        fullMessage.message = i18n.t('errors.forbidden');
+        fullMessage.icon = 'lock';
+        break;
+      case REQUEST_CODES.CONNECTION_ERROR:
+        fullMessage.message = i18n.t('errors.connectionError');
+        fullMessage.icon = 'access-point-network-off';
+        break;
+      case REQUEST_CODES.SERVER_ERROR:
+        fullMessage.message = i18n.t('errors.serverError');
+        fullMessage.icon = 'server-network-off';
+        break;
+      default:
+        fullMessage.message = i18n.t('errors.unknown');
+        fullMessage.icon = 'alert-circle-outline';
+        break;
     }
   }
 
-  render() {
-    const { props } = this;
-    this.generateMessage();
-    let button;
-    if (this.showLoginButton) {
-      button = this.getLoginButton();
-    } else if (props.showRetryButton) {
-      button = this.getRetryButton();
-    } else {
-      button = null;
-    }
+  fullMessage.message += `\n\nCode {${props.status}:${props.code}}`;
+  if (props.message != null) {
+    fullMessage.message = props.message;
+  }
+  if (props.icon != null) {
+    fullMessage.icon = props.icon;
+  }
+  return fullMessage;
+}
 
-    return (
+function ErrorView(props: Props) {
+  const theme = useTheme();
+  const fullMessage = getMessage(props);
+  const { button } = props;
+
+  return (
+    <View style={styles.outer}>
       <Animatable.View
         style={{
           ...styles.outer,
-          backgroundColor: props.theme.colors.background,
+          backgroundColor: theme.colors.background,
         }}
         animation="zoomIn"
         duration={200}
@@ -197,25 +160,33 @@ class ErrorView extends React.PureComponent<PropsType> {
         <View style={styles.inner}>
           <View style={styles.iconContainer}>
             <MaterialCommunityIcons
-              // $FlowFixMe
-              name={this.icon}
+              name={fullMessage.icon}
               size={150}
-              color={props.theme.colors.textDisabled}
+              color={theme.colors.disabled}
             />
           </View>
           <Subheading
             style={{
               ...styles.subheading,
-              color: props.theme.colors.textDisabled,
+              color: theme.colors.disabled,
             }}
           >
-            {this.message}
+            {fullMessage.message}
           </Subheading>
-          {button}
+          {button ? (
+            <Button
+              mode={'contained'}
+              icon={button.icon}
+              onPress={button.onPress}
+              style={styles.button}
+            >
+              {button.text}
+            </Button>
+          ) : null}
         </View>
       </Animatable.View>
-    );
-  }
+    </View>
+  );
 }
 
-export default withTheme(ErrorView);
+export default ErrorView;

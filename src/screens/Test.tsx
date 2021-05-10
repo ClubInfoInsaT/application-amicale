@@ -141,7 +141,6 @@ class Test extends React.Component<Props> {
     // );
     return (
       <WebSectionList
-        navigation={props.navigation}
         createDataset={this.createDataset}
         autoRefreshTime={REFRESH_TIME}
         refreshOnFocus

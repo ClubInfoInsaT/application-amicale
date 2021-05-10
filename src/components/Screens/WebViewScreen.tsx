@@ -251,8 +251,12 @@ function WebViewScreen(props: Props) {
       renderLoading={getRenderLoading}
       renderError={() => (
         <ErrorView
-          errorCode={ERROR_TYPE.CONNECTION_ERROR}
-          onRefresh={onRefreshClicked}
+          status={ERROR_TYPE.CONNECTION_ERROR}
+          button={{
+            icon: 'refresh',
+            text: i18n.t('general.retry'),
+            onPress: onRefreshClicked,
+          }}
         />
       )}
       onNavigationStateChange={setNavState}

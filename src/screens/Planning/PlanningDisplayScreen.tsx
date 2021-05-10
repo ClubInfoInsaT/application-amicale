@@ -28,9 +28,7 @@ import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
 import { apiRequest, ERROR_TYPE } from '../../utils/WebData';
 import ErrorView from '../../components/Screens/ErrorView';
 import CustomHTML from '../../components/Overrides/CustomHTML';
-import CustomTabBar, {
-  TAB_BAR_HEIGHT,
-} from '../../components/Tabbar/CustomTabBar';
+import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import type { PlanningEventType } from '../../utils/Planning';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
@@ -163,12 +161,9 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getErrorView() {
-    const { navigation } = this.props;
     if (this.errorCode === ERROR_TYPE.BAD_INPUT) {
       return (
         <ErrorView
-          navigation={navigation}
-          showRetryButton={false}
           message={i18n.t('screens.planning.invalidEvent')}
           icon="calendar-remove"
         />
@@ -176,9 +171,12 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
     }
     return (
       <ErrorView
-        navigation={navigation}
-        errorCode={this.errorCode}
-        onRefresh={this.fetchData}
+        status={this.errorCode}
+        button={{
+          icon: 'refresh',
+          text: i18n.t('general.retry'),
+          onPress: this.fetchData,
+        }}
       />
     );
   }

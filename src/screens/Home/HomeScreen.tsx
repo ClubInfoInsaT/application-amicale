@@ -22,6 +22,7 @@ import {
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  SectionListData,
   StyleSheet,
 } from 'react-native';
 import i18n from 'i18n-js';
@@ -52,6 +53,7 @@ import { getDisplayEvent, getFutureEvents } from '../../utils/Home';
 import type { PlanningEventType } from '../../utils/Planning';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
+import { readData } from '../../utils/WebData';
 
 const FEED_ITEM_HEIGHT = 500;
 
@@ -314,12 +316,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
   getRenderItem = ({ item }: { item: FeedItemType }) => this.getFeedItem(item);
 
   getRenderSectionHeader = (
-    data: {
-      section: {
-        data: Array<object>;
-        title: string;
-      };
-    },
+    data: { section: SectionListData<FeedItemType> },
     isLoading: boolean
   ) => {
     const { props } = this;
@@ -352,7 +349,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  getListHeader = (fetchedData: RawDashboardType) => {
+  getListHeader = (fetchedData: RawDashboardType | undefined) => {
     let dashboard = null;
     if (fetchedData != null) {
       dashboard = fetchedData.dashboard;
@@ -404,21 +401,20 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @return {*}
    */
   createDataset = (
-    fetchedData: RawDashboardType | null,
+    fetchedData: RawDashboardType | undefined,
     isLoading: boolean
   ): Array<{
     title: string;
     data: [] | Array<FeedItemType>;
     id: string;
   }> => {
-    // fetchedData = DATA;
-    if (fetchedData != null) {
-      if (fetchedData.news_feed != null) {
+    if (fetchedData) {
+      if (fetchedData.news_feed) {
         this.currentNewFeed = HomeScreen.generateNewsFeed(
           fetchedData.news_feed
         );
       }
-      if (fetchedData.dashboard != null) {
+      if (fetchedData.dashboard) {
         this.currentDashboard = fetchedData.dashboard;
       }
     }
@@ -470,11 +466,10 @@ class HomeScreen extends React.Component<PropsType, StateType> {
       <View style={GENERAL_STYLES.flex}>
         <View style={styles.content}>
           <WebSectionList
-            navigation={props.navigation}
+            request={() => readData<RawDashboardType>(Urls.app.dashboard)}
             createDataset={this.createDataset}
             autoRefreshTime={REFRESH_TIME}
-            refreshOnFocus
-            fetchUrl={Urls.app.dashboard}
+            refreshOnFocus={true}
             renderItem={this.getRenderItem}
             itemHeight={FEED_ITEM_HEIGHT}
             onScroll={this.onScroll}

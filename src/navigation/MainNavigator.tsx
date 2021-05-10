@@ -84,6 +84,10 @@ export type FullParamsList = DefaultParams & {
   };
   'equipment-rent': { item?: DeviceType };
   'gallery': { images: Array<{ url: string }> };
+  [MainRoutes.ProximoList]: {
+    shouldFocusSearchBar: boolean;
+    category: number;
+  };
 };
 
 // Don't know why but TS is complaining without this

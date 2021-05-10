@@ -22,6 +22,7 @@ import { Avatar, List, Text } from 'react-native-paper';
 import i18n from 'i18n-js';
 import type { ProximoArticleType } from '../../../screens/Services/Proximo/ProximoMainScreen';
 import { StyleSheet } from 'react-native';
+import Urls from '../../../constants/Urls';
 
 type PropsType = {
   onPress: () => void;
@@ -43,6 +44,8 @@ const styles = StyleSheet.create({
 });
 
 function ProximoListItem(props: PropsType) {
+  // console.log(Urls.proximo.images + props.item.image);
+
   return (
     <List.Item
       title={props.item.name}
@@ -55,7 +58,7 @@ function ProximoListItem(props: PropsType) {
         <Avatar.Image
           style={styles.avatar}
           size={64}
-          source={{ uri: props.item.image }}
+          source={{ uri: Urls.proximo.images + props.item.image }}
         />
       )}
       right={() => <Text style={styles.text}>{props.item.price}€</Text>}

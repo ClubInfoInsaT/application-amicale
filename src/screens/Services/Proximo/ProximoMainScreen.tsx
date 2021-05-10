@@ -19,8 +19,7 @@
 
 import * as React from 'react';
 import i18n from 'i18n-js';
-import { List, withTheme } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { Avatar, List, useTheme, withTheme } from 'react-native-paper';
 import WebSectionList from '../../../components/Screens/WebSectionList';
 import MaterialHeaderButtons, {
   Item,
@@ -28,40 +27,35 @@ import MaterialHeaderButtons, {
 import type { SectionListDataType } from '../../../components/Screens/WebSectionList';
 import { StyleSheet } from 'react-native';
 import Urls from '../../../constants/Urls';
+import { readData } from '../../../utils/WebData';
+import { useNavigation } from '@react-navigation/core';
+import { useLayoutEffect } from 'react';
 
 const LIST_ITEM_HEIGHT = 84;
 
 export type ProximoCategoryType = {
+  id: number;
   name: string;
   icon: string;
-  id: string;
+  created_at: string;
+  updated_at: string;
 };
 
 export type ProximoArticleType = {
+  id: number;
   name: string;
   description: string;
-  quantity: string;
-  price: string;
+  quantity: number;
+  price: number;
   code: string;
-  id: string;
-  type: Array<string>;
   image: string;
+  category_id: number;
+  created_at: string;
+  updated_at: string;
+  category: ProximoCategoryType;
 };
 
-export type ProximoMainListItemType = {
-  type: ProximoCategoryType;
-  data: Array<ProximoArticleType>;
-};
-
-export type ProximoDataType = {
-  types: Array<ProximoCategoryType>;
-  articles: Array<ProximoArticleType>;
-};
-
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  theme: ReactNativePaper.Theme;
-};
+type CategoriesType = Array<ProximoCategoryType>;
 
 const styles = StyleSheet.create({
   item: {
@@ -69,138 +63,69 @@ const styles = StyleSheet.create({
   },
 });
 
+function sortFinalData(a: ProximoCategoryType, b: ProximoCategoryType): number {
+  const str1 = a.name.toLowerCase();
+  const str2 = b.name.toLowerCase();
+
+  // Make 'All' category with id -1 stick to the top
+  if (a.id === -1) {
+    return -1;
+  }
+  if (b.id === -1) {
+    return 1;
+  }
+
+  // Sort others by name ascending
+  if (str1 < str2) {
+    return -1;
+  }
+  if (str1 > str2) {
+    return 1;
+  }
+  return 0;
+}
+
 /**
  * Class defining the main proximo screen.
  * This screen shows the different categories of articles offered by proximo.
  */
-class ProximoMainScreen extends React.Component<PropsType> {
-  /**
-   * Function used to sort items in the list.
-   * Makes the All category sticks to the top and sorts the others by name ascending
-   *
-   * @param a
-   * @param b
-   * @return {number}
-   */
-  static sortFinalData(
-    a: ProximoMainListItemType,
-    b: ProximoMainListItemType
-  ): number {
-    const str1 = a.type.name.toLowerCase();
-    const str2 = b.type.name.toLowerCase();
+function ProximoMainScreen() {
+  const navigation = useNavigation();
+  const theme = useTheme();
 
-    // Make 'All' category with id -1 stick to the top
-    if (a.type.id === '-1') {
-      return -1;
-    }
-    if (b.type.id === '-1') {
-      return 1;
-    }
-
-    // Sort others by name ascending
-    if (str1 < str2) {
-      return -1;
-    }
-    if (str1 > str2) {
-      return 1;
-    }
-    return 0;
-  }
-
-  /**
-   * Get an array of available articles (in stock) of the given type
-   *
-   * @param articles The list of all articles
-   * @param type The type of articles to find (undefined for any type)
-   * @return {Array} The array of available articles
-   */
-  static getAvailableArticles(
-    articles: Array<ProximoArticleType> | null,
-    type?: ProximoCategoryType
-  ): Array<ProximoArticleType> {
-    const availableArticles: Array<ProximoArticleType> = [];
-    if (articles != null) {
-      articles.forEach((article: ProximoArticleType) => {
-        if (
-          ((type != null && article.type.includes(type.id)) || type == null) &&
-          parseInt(article.quantity, 10) > 0
-        ) {
-          availableArticles.push(article);
-        }
-      });
-    }
-    return availableArticles;
-  }
-
-  articles: Array<ProximoArticleType> | null;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.articles = null;
-  }
-
-  /**
-   * Creates header button
-   */
-  componentDidMount() {
-    const { navigation } = this.props;
+  useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => this.getHeaderButtons(),
+      headerRight: () => getHeaderButtons(),
     });
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation]);
 
   /**
    * Callback used when the search button is pressed.
    * This will open a new ProximoListScreen with all items displayed
    */
-  onPressSearchBtn = () => {
-    const { navigation } = this.props;
+  const onPressSearchBtn = () => {
     const searchScreenData = {
       shouldFocusSearchBar: true,
-      data: {
-        type: {
-          id: '0',
-          name: i18n.t('screens.proximo.all'),
-          icon: 'star',
-        },
-        data:
-          this.articles != null
-            ? ProximoMainScreen.getAvailableArticles(this.articles)
-            : [],
-      },
+      category: -1,
     };
     navigation.navigate('proximo-list', searchScreenData);
   };
 
-  /**
-   * Callback used when the about button is pressed.
-   * This will open the ProximoAboutScreen
-   */
-  onPressAboutBtn = () => {
-    const { navigation } = this.props;
-    navigation.navigate('proximo-about');
-  };
+  const onPressAboutBtn = () => navigation.navigate('proximo-about');
 
-  /**
-   * Gets the header buttons
-   * @return {*}
-   */
-  getHeaderButtons() {
+  const getHeaderButtons = () => {
     return (
       <MaterialHeaderButtons>
-        <Item
-          title="magnify"
-          iconName="magnify"
-          onPress={this.onPressSearchBtn}
-        />
+        <Item title="magnify" iconName="magnify" onPress={onPressSearchBtn} />
         <Item
           title="information"
           iconName="information"
-          onPress={this.onPressAboutBtn}
+          onPress={onPressAboutBtn}
         />
       </MaterialHeaderButtons>
     );
-  }
+  };
 
   /**
    * Extracts a key for the given category
@@ -208,7 +133,8 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * @param item The category to extract the key from
    * @return {*} The extracted key
    */
-  getKeyExtractor = (item: ProximoMainListItemType): string => item.type.id;
+  const getKeyExtractor = (item: ProximoCategoryType): string =>
+    item.id.toString();
 
   /**
    * Gets the given category render item
@@ -216,33 +142,36 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * @param item The category to render
    * @return {*}
    */
-  getRenderItem = ({ item }: { item: ProximoMainListItemType }) => {
-    const { navigation, theme } = this.props;
+  const getRenderItem = ({ item }: { item: ProximoCategoryType }) => {
     const dataToSend = {
       shouldFocusSearchBar: false,
-      data: item,
+      category: item.id,
     };
-    const subtitle = `${item.data.length} ${
-      item.data.length > 1
+    // TODO get article number
+    const article_number = 1;
+    const subtitle = `${article_number} ${
+      article_number > 1
         ? i18n.t('screens.proximo.articles')
         : i18n.t('screens.proximo.article')
     }`;
-    const onPress = () => {
-      navigation.navigate('proximo-list', dataToSend);
-    };
-    if (item.data.length > 0) {
+    const onPress = () => navigation.navigate('proximo-list', dataToSend);
+    if (article_number > 0) {
       return (
         <List.Item
-          title={item.type.name}
+          title={item.name}
           description={subtitle}
           onPress={onPress}
-          left={(props) => (
-            <List.Icon
-              style={props.style}
-              icon={item.type.icon}
-              color={theme.colors.primary}
-            />
-          )}
+          left={(props) =>
+            item.icon.endsWith('.png') ? (
+              <Avatar.Image style={props.style} source={{ uri: item.icon }} />
+            ) : (
+              <List.Icon
+                style={props.style}
+                icon={item.icon}
+                color={theme.colors.primary}
+              />
+            )
+          }
           right={(props) => (
             <List.Icon
               color={props.color}
@@ -266,65 +195,46 @@ class ProximoMainScreen extends React.Component<PropsType> {
    * @param fetchedData
    * @return {*}
    * */
-  createDataset = (
-    fetchedData: ProximoDataType | null
-  ): SectionListDataType<ProximoMainListItemType> => {
-    return [
-      {
-        title: '',
-        data: this.generateData(fetchedData),
-        keyExtractor: this.getKeyExtractor,
-      },
-    ];
-  };
-
-  /**
-   * Generate the data using types and FetchedData.
-   * This will group items under the same type.
-   *
-   * @param fetchedData The array of articles represented by objects
-   * @returns {Array} The formatted dataset
-   */
-  generateData(
-    fetchedData: ProximoDataType | null
-  ): Array<ProximoMainListItemType> {
-    const finalData: Array<ProximoMainListItemType> = [];
-    this.articles = null;
-    if (fetchedData != null) {
-      const { types } = fetchedData;
-      this.articles = fetchedData.articles;
-      finalData.push({
-        type: {
-          id: '-1',
+  const createDataset = (
+    data: CategoriesType | undefined
+  ): SectionListDataType<ProximoCategoryType> => {
+    if (data) {
+      const finalData: CategoriesType = [
+        {
+          id: -1,
           name: i18n.t('screens.proximo.all'),
           icon: 'star',
+          created_at: '',
+          updated_at: '',
         },
-        data: ProximoMainScreen.getAvailableArticles(this.articles),
-      });
-      types.forEach((type: ProximoCategoryType) => {
-        finalData.push({
-          type,
-          data: ProximoMainScreen.getAvailableArticles(this.articles, type),
-        });
-      });
+        ...data,
+      ];
+      return [
+        {
+          title: '',
+          data: finalData.sort(sortFinalData),
+          keyExtractor: getKeyExtractor,
+        },
+      ];
+    } else {
+      return [
+        {
+          title: '',
+          data: [],
+          keyExtractor: getKeyExtractor,
+        },
+      ];
     }
-    finalData.sort(ProximoMainScreen.sortFinalData);
-    return finalData;
-  }
+  };
 
-  render() {
-    const { navigation } = this.props;
-    return (
-      <WebSectionList
-        createDataset={this.createDataset}
-        navigation={navigation}
-        autoRefreshTime={0}
-        refreshOnFocus={false}
-        fetchUrl={Urls.proximo}
-        renderItem={this.getRenderItem}
-      />
-    );
-  }
+  return (
+    <WebSectionList
+      request={() => readData<CategoriesType>(Urls.proximo.categories)}
+      createDataset={createDataset}
+      refreshOnFocus={true}
+      renderItem={getRenderItem}
+    />
+  );
 }
 
 export default withTheme(ProximoMainScreen);

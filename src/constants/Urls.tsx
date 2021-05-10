@@ -21,11 +21,14 @@ const STUDENT_SERVER = 'https://etud.insa-toulouse.fr/';
 const AMICALE_SERVER = 'https://www.amicale-insat.fr/';
 const GIT_SERVER =
   'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/';
+const PLANEX_SERVER = 'http://planex.insa-toulouse.fr/';
 
 const AMICALE_ENDPOINT = AMICALE_SERVER + 'api/';
 
 const APP_ENDPOINT = STUDENT_SERVER + '~amicale_app/v2/';
-const PROXIMO_ENDPOINT = STUDENT_SERVER + '~proximo/data/stock-v2.json';
+const PROXIMO_ENDPOINT = STUDENT_SERVER + '~proximo/v2/api/';
+const PROXIMO_IMAGES_ENDPOINT =
+  STUDENT_SERVER + '~proximo/v2/api-proximo/public/storage/app/';
 const APP_IMAGES_ENDPOINT = STUDENT_SERVER + '~amicale_app/images/';
 
 export default {
@@ -39,7 +42,16 @@ export default {
     dashboard: APP_ENDPOINT + 'dashboard/dashboard_data.json',
     menu: APP_ENDPOINT + 'menu/menu_data.json',
   },
-  proximo: PROXIMO_ENDPOINT,
+  proximo: {
+    articles: PROXIMO_ENDPOINT + 'articles',
+    categories: PROXIMO_ENDPOINT + 'categories',
+    images: PROXIMO_IMAGES_ENDPOINT + 'img/',
+    icons: PROXIMO_IMAGES_ENDPOINT + 'icon/',
+  },
+  planex: {
+    planning: PLANEX_SERVER,
+    groups: PLANEX_SERVER + 'wsAdeGrp.php?projectId=1',
+  },
   images: {
     proxiwash: APP_IMAGES_ENDPOINT + 'Proxiwash.png',
     washer: APP_IMAGES_ENDPOINT + 'ProxiwashLaveLinge.png',

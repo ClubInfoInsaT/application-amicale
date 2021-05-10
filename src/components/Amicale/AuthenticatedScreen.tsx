@@ -23,6 +23,7 @@ import ConnectionManager from '../../managers/ConnectionManager';
 import { ERROR_TYPE } from '../../utils/WebData';
 import ErrorView from '../Screens/ErrorView';
 import BasicLoadingScreen from '../Screens/BasicLoadingScreen';
+import i18n from 'i18n-js';
 
 type PropsType<T> = {
   navigation: StackNavigationProp<any>;
@@ -151,11 +152,28 @@ class AuthenticatedScreen<T> extends React.Component<PropsType<T>, StateType> {
         <ErrorView
           icon={override.icon}
           message={override.message}
-          showRetryButton={override.showRetryButton}
+          button={
+            override.showRetryButton
+              ? {
+                  icon: 'refresh',
+                  text: i18n.t('general.retry'),
+                  onPress: this.fetchData,
+                }
+              : undefined
+          }
         />
       );
     }
-    return <ErrorView errorCode={errorCode} onRefresh={this.fetchData} />;
+    return (
+      <ErrorView
+        status={errorCode}
+        button={{
+          icon: 'refresh',
+          text: i18n.t('general.retry'),
+          onPress: this.fetchData,
+        }}
+      />
+    );
   }
 
   /**

@@ -18,7 +18,13 @@
  */
 
 import * as React from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  SectionListData,
+  SectionListRenderItemInfo,
+  StyleSheet,
+  View,
+} from 'react-native';
 import i18n from 'i18n-js';
 import { Avatar, Button, Card, Text, withTheme } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -46,6 +52,7 @@ import MascotPopup from '../../components/Mascot/MascotPopup';
 import type { SectionListDataType } from '../../components/Screens/WebSectionList';
 import type { LaundromatType } from './ProxiwashAboutScreen';
 import GENERAL_STYLES from '../../constants/Styles';
+import { readData } from '../../utils/WebData';
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
@@ -70,6 +77,11 @@ type StateType = {
   modalCurrentDisplayItem: React.ReactNode;
   machinesWatched: Array<ProxiwashMachineType>;
   selectedWash: string;
+};
+
+type FetchedDataType = {
+  dryers: Array<ProxiwashMachineType>;
+  washers: Array<ProxiwashMachineType>;
 };
 
 const styles = StyleSheet.create({
@@ -277,7 +289,11 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @param section The section to render
    * @return {*}
    */
-  getRenderSectionHeader = ({ section }: { section: { title: string } }) => {
+  getRenderSectionHeader = ({
+    section,
+  }: {
+    section: SectionListData<ProxiwashMachineType>;
+  }) => {
     const isDryer = section.title === i18n.t('screens.proxiwash.dryers');
     const nbAvailable = this.getMachineAvailableNumber(isDryer);
     return (
@@ -296,20 +312,14 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @param section The object describing the current SectionList section
    * @returns {React.Node}
    */
-  getRenderItem = ({
-    item,
-    section,
-  }: {
-    item: ProxiwashMachineType;
-    section: { title: string };
-  }) => {
+  getRenderItem = (data: SectionListRenderItemInfo<ProxiwashMachineType>) => {
     const { machinesWatched } = this.state;
-    const isDryer = section.title === i18n.t('screens.proxiwash.dryers');
+    const isDryer = data.section.title === i18n.t('screens.proxiwash.dryers');
     return (
       <ProxiwashListItem
-        item={item}
+        item={data.item}
         onPress={this.showModal}
-        isWatched={isMachineWatched(item, machinesWatched)}
+        isWatched={isMachineWatched(data.item, machinesWatched)}
         isDryer={isDryer}
         height={LIST_ITEM_HEIGHT}
       />
@@ -382,37 +392,40 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
    * @param fetchedData
    * @return {*}
    */
-  createDataset = (fetchedData: {
-    dryers: Array<ProxiwashMachineType>;
-    washers: Array<ProxiwashMachineType>;
-  }): SectionListDataType<ProxiwashMachineType> => {
+  createDataset = (
+    fetchedData: FetchedDataType | undefined
+  ): SectionListDataType<ProxiwashMachineType> => {
     const { state } = this;
-    let data = fetchedData;
-    if (AprilFoolsManager.getInstance().isAprilFoolsEnabled()) {
-      data = JSON.parse(JSON.stringify(fetchedData)); // Deep copy
-      AprilFoolsManager.getNewProxiwashDryerOrderedList(data.dryers);
-      AprilFoolsManager.getNewProxiwashWasherOrderedList(data.washers);
+    if (fetchedData) {
+      let data = fetchedData;
+      if (AprilFoolsManager.getInstance().isAprilFoolsEnabled()) {
+        data = JSON.parse(JSON.stringify(fetchedData)); // Deep copy
+        AprilFoolsManager.getNewProxiwashDryerOrderedList(data.dryers);
+        AprilFoolsManager.getNewProxiwashWasherOrderedList(data.washers);
+      }
+      this.fetchedData = data;
+      // TODO dirty, should be refactored
+      this.state.machinesWatched = getCleanedMachineWatched(
+        state.machinesWatched,
+        [...data.dryers, ...data.washers]
+      );
+      return [
+        {
+          title: i18n.t('screens.proxiwash.dryers'),
+          icon: 'tumble-dryer',
+          data: data.dryers === undefined ? [] : data.dryers,
+          keyExtractor: this.getKeyExtractor,
+        },
+        {
+          title: i18n.t('screens.proxiwash.washers'),
+          icon: 'washing-machine',
+          data: data.washers === undefined ? [] : data.washers,
+          keyExtractor: this.getKeyExtractor,
+        },
+      ];
+    } else {
+      return [];
     }
-    this.fetchedData = data;
-    // TODO dirty, should be refactored
-    this.state.machinesWatched = getCleanedMachineWatched(
-      state.machinesWatched,
-      [...data.dryers, ...data.washers]
-    );
-    return [
-      {
-        title: i18n.t('screens.proxiwash.dryers'),
-        icon: 'tumble-dryer',
-        data: data.dryers === undefined ? [] : data.dryers,
-        keyExtractor: this.getKeyExtractor,
-      },
-      {
-        title: i18n.t('screens.proxiwash.washers'),
-        icon: 'washing-machine',
-        data: data.washers === undefined ? [] : data.washers,
-        keyExtractor: this.getKeyExtractor,
-      },
-    ];
   };
 
   /**
@@ -481,7 +494,6 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
 
   render() {
     const { state } = this;
-    const { navigation } = this.props;
     let data: LaundromatType;
     switch (state.selectedWash) {
       case 'tripodeB':
@@ -494,13 +506,12 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
       <View style={GENERAL_STYLES.flex}>
         <View style={styles.container}>
           <WebSectionList
+            request={() => readData<FetchedDataType>(data.url)}
             createDataset={this.createDataset}
-            navigation={navigation}
-            fetchUrl={data.url}
             renderItem={this.getRenderItem}
             renderSectionHeader={this.getRenderSectionHeader}
             autoRefreshTime={REFRESH_TIME}
-            refreshOnFocus
+            refreshOnFocus={true}
             updateData={state.machinesWatched.length}
           />
         </View>

@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import {
@@ -26,9 +26,8 @@ import {
   Subheading,
   Text,
   Title,
-  withTheme,
+  useTheme,
 } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { Modalize } from 'react-native-modalize';
 import CustomModal from '../../../components/Overrides/CustomModal';
 import { stringMatchQuery } from '../../../utils/Search';
@@ -36,19 +35,29 @@ import ProximoListItem from '../../../components/Lists/Proximo/ProximoListItem';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
-import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
 import type { ProximoArticleType } from './ProximoMainScreen';
 import GENERAL_STYLES from '../../../constants/Styles';
+import { useNavigation } from '@react-navigation/core';
+import Urls from '../../../constants/Urls';
+import WebSectionList, {
+  SectionListDataType,
+} from '../../../components/Screens/WebSectionList';
+import { readData } from '../../../utils/WebData';
+import { StackScreenProps } from '@react-navigation/stack';
+import {
+  MainRoutes,
+  MainStackParamsList,
+} from '../../../navigation/MainNavigator';
 
 function sortPrice(a: ProximoArticleType, b: ProximoArticleType): number {
-  return parseInt(a.price, 10) - parseInt(b.price, 10);
+  return a.price - b.price;
 }
 
 function sortPriceReverse(
   a: ProximoArticleType,
   b: ProximoArticleType
 ): number {
-  return parseInt(b.price, 10) - parseInt(a.price, 10);
+  return b.price - a.price;
 }
 
 function sortName(a: ProximoArticleType, b: ProximoArticleType): number {
@@ -72,23 +81,6 @@ function sortNameReverse(a: ProximoArticleType, b: ProximoArticleType): number {
 }
 
 const LIST_ITEM_HEIGHT = 84;
-
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  route: {
-    params: {
-      data: { data: Array<ProximoArticleType> };
-      shouldFocusSearchBar: boolean;
-    };
-  };
-  theme: ReactNativePaper.Theme;
-};
-
-type StateType = {
-  currentSortMode: number;
-  modalCurrentDisplayItem: React.ReactNode;
-  currentSearchString: string;
-};
 
 const styles = StyleSheet.create({
   modalContainer: {
@@ -118,64 +110,45 @@ const styles = StyleSheet.create({
   },
 });
 
-/**
- * Class defining Proximo article list of a certain category.
- */
-class ProximoListScreen extends React.Component<PropsType, StateType> {
-  modalRef: Modalize | null;
+type ArticlesType = Array<ProximoArticleType>;
 
-  listData: Array<ProximoArticleType>;
+type Props = StackScreenProps<MainStackParamsList, MainRoutes.ProximoList>;
 
-  shouldFocusSearchBar: boolean;
+function ProximoListScreen(props: Props) {
+  const navigation = useNavigation();
+  const theme = useTheme();
+  const modalRef = useRef<Modalize>();
 
-  constructor(props: PropsType) {
-    super(props);
-    this.modalRef = null;
-    this.listData = props.route.params.data.data.sort(sortName);
-    this.shouldFocusSearchBar = props.route.params.shouldFocusSearchBar;
-    this.state = {
-      currentSearchString: '',
-      currentSortMode: 3,
-      modalCurrentDisplayItem: null,
-    };
-  }
+  const [currentSearchString, setCurrentSearchString] = useState('');
+  const [currentSortMode, setCurrentSortMode] = useState(2);
+  const [modalCurrentDisplayItem, setModalCurrentDisplayItem] = useState<
+    React.ReactNode | undefined
+  >();
 
-  /**
-   * Creates the header content
-   */
-  componentDidMount() {
-    const { navigation } = this.props;
+  const sortModes = [sortPrice, sortPriceReverse, sortName, sortNameReverse];
+
+  useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: this.getSortMenuButton,
-      headerTitle: this.getSearchBar,
+      headerRight: getSortMenuButton,
+      headerTitle: getSearchBar,
       headerBackTitleVisible: false,
       headerTitleContainerStyle:
         Platform.OS === 'ios'
           ? { marginHorizontal: 0, width: '70%' }
           : { marginHorizontal: 0, right: 50, left: 50 },
     });
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation, currentSortMode]);
 
   /**
    * Callback used when clicking on the sort menu button.
    * It will open the modal to show a sort selection
    */
-  onSortMenuPress = () => {
-    this.setState({
-      modalCurrentDisplayItem: this.getModalSortMenu(),
-    });
-    if (this.modalRef) {
-      this.modalRef.open();
+  const onSortMenuPress = () => {
+    setModalCurrentDisplayItem(getModalSortMenu());
+    if (modalRef.current) {
+      modalRef.current.open();
     }
-  };
-
-  /**
-   * Callback used when the search changes
-   *
-   * @param str The new search string
-   */
-  onSearchStringChange = (str: string) => {
-    this.setState({ currentSearchString: str });
   };
 
   /**
@@ -184,47 +157,25 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    *
    * @param item The article pressed
    */
-  onListItemPress(item: ProximoArticleType) {
-    this.setState({
-      modalCurrentDisplayItem: this.getModalItemContent(item),
-    });
-    if (this.modalRef) {
-      this.modalRef.open();
+  const onListItemPress = (item: ProximoArticleType) => {
+    setModalCurrentDisplayItem(getModalItemContent(item));
+    if (modalRef.current) {
+      modalRef.current.open();
     }
-  }
+  };
 
   /**
    * Sets the current sort mode.
    *
    * @param mode The number representing the mode
    */
-  setSortMode(mode: string) {
-    const { currentSortMode } = this.state;
+  const setSortMode = (mode: string) => {
     const currentMode = parseInt(mode, 10);
-    this.setState({
-      currentSortMode: currentMode,
-    });
-    switch (currentMode) {
-      case 1:
-        this.listData.sort(sortPrice);
-        break;
-      case 2:
-        this.listData.sort(sortPriceReverse);
-        break;
-      case 3:
-        this.listData.sort(sortName);
-        break;
-      case 4:
-        this.listData.sort(sortNameReverse);
-        break;
-      default:
-        this.listData.sort(sortName);
-        break;
+    setCurrentSortMode(currentMode);
+    if (modalRef.current && currentMode !== currentSortMode) {
+      modalRef.current.close();
     }
-    if (this.modalRef && currentMode !== currentSortMode) {
-      this.modalRef.close();
-    }
-  }
+  };
 
   /**
    * Gets a color depending on the quantity available
@@ -232,8 +183,7 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    * @param availableStock The quantity available
    * @return
    */
-  getStockColor(availableStock: number): string {
-    const { theme } = this.props;
+  const getStockColor = (availableStock: number): string => {
     let color: string;
     if (availableStock > 3) {
       color = theme.colors.success;
@@ -243,17 +193,17 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
       color = theme.colors.danger;
     }
     return color;
-  }
+  };
 
   /**
    * Gets the sort menu header button
    *
    * @return {*}
    */
-  getSortMenuButton = () => {
+  const getSortMenuButton = () => {
     return (
       <MaterialHeaderButtons>
-        <Item title="main" iconName="sort" onPress={this.onSortMenuPress} />
+        <Item title="main" iconName="sort" onPress={onSortMenuPress} />
       </MaterialHeaderButtons>
     );
   };
@@ -263,12 +213,13 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getSearchBar = () => {
+  const getSearchBar = () => {
     return (
       // @ts-ignore
       <Searchbar
         placeholder={i18n.t('screens.proximo.search')}
-        onChangeText={this.onSearchStringChange}
+        onChangeText={setCurrentSearchString}
+        autoFocus={props.route.params.shouldFocusSearchBar}
       />
     );
   };
@@ -279,14 +230,14 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    * @param item The article to display
    * @return {*}
    */
-  getModalItemContent(item: ProximoArticleType) {
+  const getModalItemContent = (item: ProximoArticleType) => {
     return (
       <View style={styles.modalContainer}>
         <Title>{item.name}</Title>
         <View style={styles.modalTitleContainer}>
           <Subheading
             style={{
-              color: this.getStockColor(parseInt(item.quantity, 10)),
+              color: getStockColor(item.quantity),
             }}
           >
             {`${item.quantity} ${i18n.t('screens.proximo.inStock')}`}
@@ -302,46 +253,43 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
         </ScrollView>
       </View>
     );
-  }
+  };
 
   /**
    * Gets the modal content to display a sort menu
    *
    * @return {*}
    */
-  getModalSortMenu() {
-    const { currentSortMode } = this.state;
+  const getModalSortMenu = () => {
     return (
       <View style={styles.modalContainer}>
         <Title style={styles.sortTitle}>
           {i18n.t('screens.proximo.sortOrder')}
         </Title>
         <RadioButton.Group
-          onValueChange={(value: string) => {
-            this.setSortMode(value);
-          }}
+          onValueChange={setSortMode}
           value={currentSortMode.toString()}
         >
           <RadioButton.Item
             label={i18n.t('screens.proximo.sortPrice')}
-            value={'1'}
+            value={'0'}
           />
           <RadioButton.Item
             label={i18n.t('screens.proximo.sortPriceReverse')}
-            value={'2'}
+            value={'1'}
           />
           <RadioButton.Item
             label={i18n.t('screens.proximo.sortName')}
-            value={'3'}
+            value={'2'}
           />
           <RadioButton.Item
             label={i18n.t('screens.proximo.sortNameReverse')}
-            value={'4'}
+            value={'3'}
           />
         </RadioButton.Group>
       </View>
     );
-  }
+  };
 
   /**
    * Gets a render item for the given article
@@ -349,13 +297,12 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    * @param item The article to render
    * @return {*}
    */
-  getRenderItem = ({ item }: { item: ProximoArticleType }) => {
-    const { currentSearchString } = this.state;
+  const getRenderItem = ({ item }: { item: ProximoArticleType }) => {
     if (stringMatchQuery(item.name, currentSearchString)) {
       const onPress = () => {
-        this.onListItemPress(item);
+        onListItemPress(item);
       };
-      const color = this.getStockColor(parseInt(item.quantity, 10));
+      const color = getStockColor(item.quantity);
       return (
         <ProximoListItem
           item={item}
@@ -374,46 +321,55 @@ class ProximoListScreen extends React.Component<PropsType, StateType> {
    * @param item The article to extract the key from
    * @return {string} The extracted key
    */
-  keyExtractor = (item: ProximoArticleType): string => item.name + item.code;
+  const keyExtractor = (item: ProximoArticleType): string =>
+    item.name + item.code;
 
-  /**
-   * Callback used when receiving the modal ref
-   *
-   * @param ref
-   */
-  onModalRef = (ref: Modalize) => {
-    this.modalRef = ref;
+  const createDataset = (
+    data: ArticlesType | undefined
+  ): SectionListDataType<ProximoArticleType> => {
+    if (data) {
+      console.log(data);
+      console.log(props.route.params.category);
+
+      return [
+        {
+          title: '',
+          data: data
+            .filter(
+              (d) =>
+                props.route.params.category === -1 ||
+                props.route.params.category === d.category_id
+            )
+            .sort(sortModes[currentSortMode]),
+          keyExtractor: keyExtractor,
+        },
+      ];
+    } else {
+      return [
+        {
+          title: '',
+          data: [],
+          keyExtractor: keyExtractor,
+        },
+      ];
+    }
   };
 
-  itemLayout = (
-    data: Array<ProximoArticleType> | null | undefined,
-    index: number
-  ): { length: number; offset: number; index: number } => ({
-    length: LIST_ITEM_HEIGHT,
-    offset: LIST_ITEM_HEIGHT * index,
-    index,
-  });
-
-  render() {
-    const { state } = this;
-    return (
-      <View style={GENERAL_STYLES.flex}>
-        <CustomModal onRef={this.onModalRef}>
-          {state.modalCurrentDisplayItem}
-        </CustomModal>
-        <CollapsibleFlatList
-          data={this.listData}
-          extraData={state.currentSearchString + state.currentSortMode}
-          keyExtractor={this.keyExtractor}
-          renderItem={this.getRenderItem}
-          // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-          removeClippedSubviews
-          getItemLayout={this.itemLayout}
-          initialNumToRender={10}
-        />
-      </View>
-    );
-  }
+  return (
+    <View style={GENERAL_STYLES.flex}>
+      <CustomModal onRef={(ref) => (modalRef.current = ref)}>
+        {modalCurrentDisplayItem}
+      </CustomModal>
+      <WebSectionList
+        request={() => readData<ArticlesType>(Urls.proximo.articles)}
+        createDataset={createDataset}
+        refreshOnFocus={true}
+        renderItem={getRenderItem}
+        updateData={currentSearchString + currentSortMode}
+        itemHeight={LIST_ITEM_HEIGHT}
+      />
+    </View>
+  );
 }
 
-export default withTheme(ProximoListScreen);
+export default ProximoListScreen;

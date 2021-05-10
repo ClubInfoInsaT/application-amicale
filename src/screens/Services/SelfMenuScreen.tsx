@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { SectionListData, StyleSheet, View } from 'react-native';
 import { Card, Text, withTheme } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'i18n-js';
@@ -26,6 +26,7 @@ import DateManager from '../../managers/DateManager';
 import WebSectionList from '../../components/Screens/WebSectionList';
 import type { SectionListDataType } from '../../components/Screens/WebSectionList';
 import Urls from '../../constants/Urls';
+import { readData } from '../../utils/WebData';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -108,7 +109,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @return {[]}
    */
   createDataset = (
-    fetchedData: Array<RawRuMenuType>
+    fetchedData: Array<RawRuMenuType> | undefined
   ): SectionListDataType<RuFoodCategoryType> => {
     let result: SectionListDataType<RuFoodCategoryType> = [];
     if (fetchedData == null || fetchedData.length === 0) {
@@ -137,7 +138,11 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @param section The section to render the header from
    * @return {*}
    */
-  getRenderSectionHeader = ({ section }: { section: { title: string } }) => {
+  getRenderSectionHeader = ({
+    section,
+  }: {
+    section: SectionListData<RuFoodCategoryType>;
+  }) => {
     return (
       <Card style={styles.headerCard}>
         <Card.Title
@@ -189,17 +194,14 @@ class SelfMenuScreen extends React.Component<PropsType> {
   getKeyExtractor = (item: RuFoodCategoryType): string => item.name;
 
   render() {
-    const { navigation } = this.props;
     return (
       <WebSectionList
+        request={() => readData<Array<RawRuMenuType>>(Urls.app.menu)}
         createDataset={this.createDataset}
-        navigation={navigation}
-        autoRefreshTime={0}
-        refreshOnFocus={false}
-        fetchUrl={Urls.app.menu}
+        refreshOnFocus={true}
         renderItem={this.getRenderItem}
         renderSectionHeader={this.getRenderSectionHeader}
-        stickyHeader
+        stickyHeader={true}
       />
     );
   }

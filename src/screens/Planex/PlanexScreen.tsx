@@ -42,6 +42,7 @@ import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import { getPrettierPlanexGroupName } from '../../utils/Utils';
 import GENERAL_STYLES from '../../constants/Styles';
+import Urls from '../../constants/Urls';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -56,8 +57,6 @@ type StateType = {
   currentGroup: PlanexGroupType;
   injectJS: string;
 };
-
-const PLANEX_URL = 'http://planex.insa-toulouse.fr/';
 
 // // JS + JQuery functions used to remove alpha from events. Copy paste in browser console for quick testing
 // // Remove alpha from given Jquery node
@@ -197,22 +196,19 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getWebView() {
-    const { props, state } = this;
+    const { state } = this;
     const showWebview = state.currentGroup.id !== -1;
-    console.log(state.injectJS);
 
     return (
       <View style={GENERAL_STYLES.flex}>
         {!showWebview ? (
           <ErrorView
-            navigation={props.navigation}
-            icon="account-clock"
+            icon={'account-clock'}
             message={i18n.t('screens.planex.noGroupSelected')}
-            showRetryButton={false}
           />
         ) : null}
         <WebViewScreen
-          url={PLANEX_URL}
+          url={Urls.planex.planning}
           initialJS={this.generateInjectedJS(this.state.currentGroup.id)}
           injectJS={this.state.injectJS}
           onMessage={this.onMessage}

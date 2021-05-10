@@ -120,11 +120,11 @@ export async function apiRequest<T>(
  * @param url The urls to fetch data from
  * @return Promise<any>
  */
-export async function readData(url: string): Promise<any> {
-  return new Promise((resolve: (response: any) => void, reject: () => void) => {
+export async function readData<T>(url: string): Promise<T> {
+  return new Promise((resolve: (response: T) => void, reject: () => void) => {
     fetch(url)
       .then(async (response: Response): Promise<any> => response.json())
-      .then((data: any): void => resolve(data))
-      .catch((): void => reject());
+      .then((data: T) => resolve(data))
+      .catch(() => reject());
   });
 }

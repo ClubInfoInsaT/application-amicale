@@ -17,25 +17,26 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import i18n from 'i18n-js';
 import { Snackbar } from 'react-native-paper';
 import {
+  NativeScrollEvent,
   NativeSyntheticEvent,
   RefreshControl,
   SectionListData,
+  SectionListRenderItemInfo,
   StyleSheet,
   View,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { Collapsible } from 'react-navigation-collapsible';
-import { StackNavigationProp } from '@react-navigation/stack';
 import ErrorView from './ErrorView';
 import BasicLoadingScreen from './BasicLoadingScreen';
 import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
-import { ERROR_TYPE, readData } from '../../utils/WebData';
+import { ERROR_TYPE } from '../../utils/WebData';
 import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
 import GENERAL_STYLES from '../../constants/Styles';
+import RequestScreen from './RequestScreen';
 
 export type SectionListDataType<ItemT> = Array<{
   title: string;
@@ -44,38 +45,29 @@ export type SectionListDataType<ItemT> = Array<{
   keyExtractor?: (data: ItemT) => string;
 }>;
 
-type PropsType<ItemT, RawData> = {
-  navigation: StackNavigationProp<any>;
-  fetchUrl: string;
-  autoRefreshTime: number;
+type Props<ItemT, RawData> = {
+  request: () => Promise<RawData>;
   refreshOnFocus: boolean;
-  renderItem: (data: { item: ItemT }) => React.ReactNode;
+  renderItem: (data: SectionListRenderItemInfo<ItemT>) => React.ReactNode;
   createDataset: (
-    data: RawData | null,
-    isLoading?: boolean
+    data: RawData | undefined,
+    isLoading: boolean
   ) => SectionListDataType<ItemT>;
 
-  onScroll?: (event: NativeSyntheticEvent<EventTarget>) => void;
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   showError?: boolean;
   itemHeight?: number | null;
-  updateData?: number;
+  autoRefreshTime?: number;
+  updateData?: number | string;
   renderListHeaderComponent?: (
-    data: RawData | null
+    data?: RawData
   ) => React.ComponentType<any> | React.ReactElement | null;
   renderSectionHeader?: (
     data: { section: SectionListData<ItemT> },
-    isLoading?: boolean
+    isLoading: boolean
   ) => React.ReactElement | null;
   stickyHeader?: boolean;
 };
-
-type StateType<RawData> = {
-  refreshing: boolean;
-  fetchedData: RawData | null;
-  snackbarVisible: boolean;
-};
-
-const MIN_REFRESH_TIME = 5 * 1000;
 
 const styles = StyleSheet.create({
   container: {
@@ -85,131 +77,18 @@ const styles = StyleSheet.create({
 
 /**
  * Component used to render a SectionList with data fetched from the web
- *
- * This is a pure component, meaning it will only update if a shallow comparison of state and props is different.
  * To force the component to update, change the value of updateData.
  */
-class WebSectionList<ItemT, RawData> extends React.PureComponent<
-  PropsType<ItemT, RawData>,
-  StateType<RawData>
-> {
-  static defaultProps = {
-    showError: true,
-    itemHeight: null,
-    updateData: 0,
-    renderListHeaderComponent: () => null,
-    renderSectionHeader: () => null,
-    stickyHeader: false,
-  };
+function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
 
-  refreshInterval: NodeJS.Timeout | undefined;
+  const showSnackBar = () => setSnackbarVisible(true);
 
-  lastRefresh: Date | undefined;
+  const hideSnackBar = () => setSnackbarVisible(false);
 
-  constructor(props: PropsType<ItemT, RawData>) {
-    super(props);
-    this.state = {
-      refreshing: false,
-      fetchedData: null,
-      snackbarVisible: false,
-    };
-  }
-
-  /**
-   * Registers react navigation events on first screen load.
-   * Allows to detect when the screen is focused
-   */
-  componentDidMount() {
-    const { navigation } = this.props;
-    navigation.addListener('focus', this.onScreenFocus);
-    navigation.addListener('blur', this.onScreenBlur);
-    this.lastRefresh = undefined;
-    this.onRefresh();
-  }
-
-  /**
-   * Refreshes data when focusing the screen and setup a refresh interval if asked to
-   */
-  onScreenFocus = () => {
-    const { props } = this;
-    if (props.refreshOnFocus && this.lastRefresh) {
-      setTimeout(this.onRefresh, 200);
-    }
-    if (props.autoRefreshTime > 0) {
-      this.refreshInterval = setInterval(this.onRefresh, props.autoRefreshTime);
-    }
-  };
-
-  /**
-   * Removes any interval on un-focus
-   */
-  onScreenBlur = () => {
-    if (this.refreshInterval) {
-      clearInterval(this.refreshInterval);
-    }
-  };
-
-  /**
-   * Callback used when fetch is successful.
-   * It will update the displayed data and stop the refresh animation
-   *
-   * @param fetchedData The newly fetched data
-   */
-  onFetchSuccess = (fetchedData: RawData) => {
-    this.setState({
-      fetchedData,
-      refreshing: false,
-    });
-    this.lastRefresh = new Date();
-  };
-
-  /**
-   * Callback used when fetch encountered an error.
-   * It will reset the displayed data and show an error.
-   */
-  onFetchError = () => {
-    this.setState({
-      fetchedData: null,
-      refreshing: false,
-    });
-    this.showSnackBar();
-  };
-
-  /**
-   * Refreshes data and shows an animations while doing it
-   */
-  onRefresh = () => {
-    const { fetchUrl } = this.props;
-    let canRefresh;
-    if (this.lastRefresh != null) {
-      const last = this.lastRefresh;
-      canRefresh = new Date().getTime() - last.getTime() > MIN_REFRESH_TIME;
-    } else {
-      canRefresh = true;
-    }
-    if (canRefresh) {
-      this.setState({ refreshing: true });
-      readData(fetchUrl).then(this.onFetchSuccess).catch(this.onFetchError);
-    }
-  };
-
-  /**
-   * Shows the error popup
-   */
-  showSnackBar = () => {
-    this.setState({ snackbarVisible: true });
-  };
-
-  /**
-   * Hides the error popup
-   */
-  hideSnackBar = () => {
-    this.setState({ snackbarVisible: false });
-  };
-
-  getItemLayout = (
+  const getItemLayout = (
     height: number,
-    data: Array<SectionListData<ItemT>> | null,
+    _data: Array<SectionListData<ItemT>> | null,
     index: number
   ): { length: number; offset: number; index: number } => {
     return {
@@ -219,105 +98,125 @@ class WebSectionList<ItemT, RawData> extends React.PureComponent<
     };
   };
 
-  getRenderSectionHeader = (data: { section: SectionListData<ItemT> }) => {
-    const { renderSectionHeader } = this.props;
-    const { refreshing } = this.state;
-    if (renderSectionHeader != null) {
+  const getRenderSectionHeader = (
+    data: { section: SectionListData<ItemT> },
+    loading: boolean
+  ) => {
+    const { renderSectionHeader } = props;
+    if (renderSectionHeader) {
       return (
-        <Animatable.View animation="fadeInUp" duration={500} useNativeDriver>
-          {renderSectionHeader(data, refreshing)}
+        <Animatable.View
+          animation={'fadeInUp'}
+          duration={500}
+          useNativeDriver={true}
+        >
+          {renderSectionHeader(data, loading)}
         </Animatable.View>
       );
     }
     return null;
   };
 
-  getRenderItem = (data: { item: ItemT }) => {
-    const { renderItem } = this.props;
+  const getRenderItem = (data: SectionListRenderItemInfo<ItemT>) => {
+    const { renderItem } = props;
     return (
-      <Animatable.View animation="fadeInUp" duration={500} useNativeDriver>
+      <Animatable.View
+        animation={'fadeInUp'}
+        duration={500}
+        useNativeDriver={true}
+      >
         {renderItem(data)}
       </Animatable.View>
     );
   };
 
-  onScroll = (event: NativeSyntheticEvent<EventTarget>) => {
-    const { onScroll } = this.props;
-    if (onScroll != null) {
-      onScroll(event);
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (props.onScroll) {
+      props.onScroll(event);
     }
   };
 
-  render() {
-    const { props, state } = this;
+  const render = (
+    data: RawData | undefined,
+    loading: boolean,
+    refreshData: (newRequest?: () => Promise<RawData>) => void
+  ) => {
     const { itemHeight } = props;
-    let dataset: SectionListDataType<ItemT> = [];
-    if (
-      state.fetchedData != null ||
-      (state.fetchedData == null && !props.showError)
-    ) {
-      dataset = props.createDataset(state.fetchedData, state.refreshing);
+    const dataset = props.createDataset(data, loading);
+    if (!data && !loading) {
+      showSnackBar();
     }
-
     return (
-      <View style={GENERAL_STYLES.flex}>
-        <CollapsibleSectionList
-          sections={dataset}
-          extraData={props.updateData}
-          paddedProps={(paddingTop) => ({
-            refreshControl: (
-              <RefreshControl
-                progressViewOffset={paddingTop}
-                refreshing={state.refreshing}
-                onRefresh={this.onRefresh}
-              />
-            ),
-          })}
-          renderSectionHeader={this.getRenderSectionHeader}
-          renderItem={this.getRenderItem}
-          stickySectionHeadersEnabled={props.stickyHeader}
-          style={styles.container}
-          ListHeaderComponent={
-            props.renderListHeaderComponent != null
-              ? props.renderListHeaderComponent(state.fetchedData)
-              : null
-          }
-          ListEmptyComponent={
-            state.refreshing ? (
-              <BasicLoadingScreen />
-            ) : (
-              <ErrorView
-                navigation={props.navigation}
-                errorCode={ERROR_TYPE.CONNECTION_ERROR}
-                onRefresh={this.onRefresh}
-              />
-            )
-          }
-          getItemLayout={
-            itemHeight
-              ? (data, index) => this.getItemLayout(itemHeight, data, index)
-              : undefined
-          }
-          onScroll={this.onScroll}
-          hasTab={true}
-        />
-        <Snackbar
-          visible={state.snackbarVisible}
-          onDismiss={this.hideSnackBar}
-          action={{
-            label: 'OK',
-            onPress: () => {},
-          }}
-          duration={4000}
-          style={{
-            bottom: TAB_BAR_HEIGHT,
-          }}
-        >
-          {i18n.t('general.listUpdateFail')}
-        </Snackbar>
-      </View>
+      <CollapsibleSectionList
+        sections={dataset}
+        extraData={props.updateData}
+        paddedProps={(paddingTop) => ({
+          refreshControl: (
+            <RefreshControl
+              progressViewOffset={paddingTop}
+              refreshing={loading}
+              onRefresh={refreshData}
+            />
+          ),
+        })}
+        renderSectionHeader={(info) => getRenderSectionHeader(info, loading)}
+        renderItem={getRenderItem}
+        stickySectionHeadersEnabled={props.stickyHeader}
+        style={styles.container}
+        ListHeaderComponent={
+          props.renderListHeaderComponent != null
+            ? props.renderListHeaderComponent(data)
+            : null
+        }
+        ListEmptyComponent={
+          loading ? (
+            <BasicLoadingScreen />
+          ) : (
+            <ErrorView
+              status={ERROR_TYPE.CONNECTION_ERROR}
+              button={{
+                icon: 'refresh',
+                text: i18n.t('general.retry'),
+                onPress: refreshData,
+              }}
+            />
+          )
+        }
+        getItemLayout={
+          itemHeight ? (d, i) => getItemLayout(itemHeight, d, i) : undefined
+        }
+        onScroll={onScroll}
+        hasTab={true}
+      />
     );
-  }
+  };
+
+  return (
+    <View style={GENERAL_STYLES.flex}>
+      <RequestScreen<RawData>
+        request={props.request}
+        render={render}
+        showError={false}
+        showLoading={false}
+        autoRefreshTime={props.autoRefreshTime}
+        refreshOnFocus={props.refreshOnFocus}
+      />
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={hideSnackBar}
+        action={{
+          label: 'OK',
+          onPress: hideSnackBar,
+        }}
+        duration={4000}
+        style={{
+          bottom: TAB_BAR_HEIGHT,
+        }}
+      >
+        {i18n.t('general.listUpdateFail')}
+      </Snackbar>
+    </View>
+  );
 }
 
 export default WebSectionList;

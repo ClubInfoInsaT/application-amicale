@@ -105,7 +105,6 @@ class WebsiteScreen extends React.Component<Props, State> {
     const { route, navigation } = this.props;
 
     if (route.params != null) {
-      console.log(route.params);
       this.host = route.params.host;
       let { path } = route.params;
       const { title } = route.params;
