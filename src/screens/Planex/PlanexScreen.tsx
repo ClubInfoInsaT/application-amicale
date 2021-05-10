@@ -190,7 +190,7 @@ function PlanexScreen(props: Props) {
         navigation.dispatch(CommonActions.setParams({ group: undefined }));
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [props.route.params])
   );
   /**
    * Gets the Webview, with an error view on top if no group is selected.
@@ -388,7 +388,7 @@ function PlanexScreen(props: Props) {
         navigation={navigation}
         ref={barRef}
         onPress={sendMessage}
-        seekAttention={currentGroup !== undefined}
+        seekAttention={currentGroup === undefined}
       />
     </View>
   );
