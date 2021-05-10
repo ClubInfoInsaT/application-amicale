@@ -31,9 +31,7 @@ import i18n from 'i18n-js';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen';
 import CustomHTML from '../../../components/Overrides/CustomHTML';
-import CustomTabBar, {
-  TAB_BAR_HEIGHT,
-} from '../../../components/Tabbar/CustomTabBar';
+import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
 import type { ClubCategoryType, ClubType } from './ClubListScreen';
 import { ERROR_TYPE } from '../../../utils/WebData';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';

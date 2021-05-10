@@ -69,7 +69,7 @@ export default class AboutDependenciesScreen extends React.Component<{}> {
   );
 
   getItemLayout = (
-    data: Array<ListItemType> | null | undefined,
+    _data: Array<ListItemType> | null | undefined,
     index: number
   ): { length: number; offset: number; index: number } => ({
     length: LIST_ITEM_HEIGHT,

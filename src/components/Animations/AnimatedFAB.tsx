@@ -27,7 +27,7 @@ import {
 import { FAB } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import AutoHideHandler from '../../utils/AutoHideHandler';
-import CustomTabBar, { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
+import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 
 type PropsType = {
   icon: string;

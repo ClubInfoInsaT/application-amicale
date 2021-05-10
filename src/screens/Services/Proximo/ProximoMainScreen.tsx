@@ -123,10 +123,14 @@ function ProximoMainScreen() {
   const getHeaderButtons = () => {
     return (
       <MaterialHeaderButtons>
-        <Item title="magnify" iconName="magnify" onPress={onPressSearchBtn} />
         <Item
-          title="information"
-          iconName="information"
+          title={'magnify'}
+          iconName={'magnify'}
+          onPress={onPressSearchBtn}
+        />
+        <Item
+          title={'information'}
+          iconName={'information'}
           onPress={onPressAboutBtn}
         />
       </MaterialHeaderButtons>
@@ -181,7 +185,7 @@ function ProximoMainScreen() {
             <List.Icon
               color={props.color}
               style={props.style}
-              icon="chevron-right"
+              icon={'chevron-right'}
             />
           )}
           style={{

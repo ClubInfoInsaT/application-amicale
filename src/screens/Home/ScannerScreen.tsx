@@ -26,9 +26,7 @@ import i18n from 'i18n-js';
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import URLHandler from '../../utils/URLHandler';
 import AlertDialog from '../../components/Dialogs/AlertDialog';
-import CustomTabBar, {
-  TAB_BAR_HEIGHT,
-} from '../../components/Tabbar/CustomTabBar';
+import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import LoadingConfirmDialog from '../../components/Dialogs/LoadingConfirmDialog';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';

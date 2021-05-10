@@ -46,7 +46,6 @@ import EquipmentConfirmScreen from '../screens/Amicale/Equipment/EquipmentConfir
 import DashboardEditScreen from '../screens/Other/Settings/DashboardEditScreen';
 import GameStartScreen from '../screens/Game/screens/GameStartScreen';
 import ImageGalleryScreen from '../screens/Media/ImageGalleryScreen';
-import Test from '../screens/Test';
 
 export enum MainRoutes {
   Main = 'main',
@@ -102,8 +101,10 @@ function MainStackComponent(props: {
 }) {
   const { createTabNavigator } = props;
   return (
-    <MainStack.Navigator initialRouteName={MainRoutes.Main} headerMode="screen">
-      <MainStack.Screen name={'test'} component={Test} />
+    <MainStack.Navigator
+      initialRouteName={MainRoutes.Main}
+      headerMode={'screen'}
+    >
       <MainStack.Screen
         name={MainRoutes.Main}
         component={createTabNavigator}

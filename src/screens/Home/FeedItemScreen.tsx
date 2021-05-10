@@ -25,9 +25,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
-import CustomTabBar, {
-  TAB_BAR_HEIGHT,
-} from '../../components/Tabbar/CustomTabBar';
+import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import type { FeedItemType } from './HomeScreen';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';

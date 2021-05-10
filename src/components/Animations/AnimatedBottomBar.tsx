@@ -28,7 +28,7 @@ import { FAB, IconButton, Surface, withTheme } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AutoHideHandler from '../../utils/AutoHideHandler';
-import CustomTabBar, { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
+import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 
 const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
 
