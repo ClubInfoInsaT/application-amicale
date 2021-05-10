@@ -65,7 +65,10 @@ const styles = StyleSheet.create({
   },
 });
 
-function sortFinalData(a: ProximoCategoryType, b: ProximoCategoryType): number {
+function sortCategories(
+  a: ProximoCategoryType,
+  b: ProximoCategoryType
+): number {
   const str1 = a.name.toLowerCase();
   const str2 = b.name.toLowerCase();
 
@@ -217,7 +220,7 @@ function ProximoMainScreen() {
       return [
         {
           title: '',
-          data: finalData.filter((c) => c.nb_articles > 0).sort(sortFinalData),
+          data: finalData.filter((c) => c.nb_articles > 0).sort(sortCategories),
           keyExtractor: getKeyExtractor,
         },
       ];
