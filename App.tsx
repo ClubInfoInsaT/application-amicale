@@ -38,6 +38,7 @@ import initLocales from './src/utils/Locales';
 import { NavigationContainerRef } from '@react-navigation/core';
 import GENERAL_STYLES from './src/constants/Styles';
 import CollapsibleProvider from './src/components/providers/CollapsibleProvider';
+import CacheProvider from './src/components/providers/CacheProvider';
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 // Crashes app when navigating away from webview on android 9+
@@ -212,27 +213,29 @@ export default class App extends React.Component<{}, StateType> {
     return (
       <PaperProvider theme={state.currentTheme}>
         <CollapsibleProvider>
-          <OverflowMenuProvider>
-            <View
-              style={{
-                backgroundColor: ThemeManager.getCurrentTheme().colors
-                  .background,
-                ...GENERAL_STYLES.flex,
-              }}
-            >
-              <SafeAreaView style={GENERAL_STYLES.flex}>
-                <NavigationContainer
-                  theme={state.currentTheme}
-                  ref={this.navigatorRef}
-                >
-                  <MainNavigator
-                    defaultHomeRoute={this.defaultHomeRoute}
-                    defaultHomeData={this.defaultHomeData}
-                  />
-                </NavigationContainer>
-              </SafeAreaView>
-            </View>
-          </OverflowMenuProvider>
+          <CacheProvider>
+            <OverflowMenuProvider>
+              <View
+                style={{
+                  backgroundColor: ThemeManager.getCurrentTheme().colors
+                    .background,
+                  ...GENERAL_STYLES.flex,
+                }}
+              >
+                <SafeAreaView style={GENERAL_STYLES.flex}>
+                  <NavigationContainer
+                    theme={state.currentTheme}
+                    ref={this.navigatorRef}
+                  >
+                    <MainNavigator
+                      defaultHomeRoute={this.defaultHomeRoute}
+                      defaultHomeData={this.defaultHomeData}
+                    />
+                  </NavigationContainer>
+                </SafeAreaView>
+              </View>
+            </OverflowMenuProvider>
+          </CacheProvider>
         </CollapsibleProvider>
       </PaperProvider>
     );

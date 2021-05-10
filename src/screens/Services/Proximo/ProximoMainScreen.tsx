@@ -30,6 +30,7 @@ import Urls from '../../../constants/Urls';
 import { readData } from '../../../utils/WebData';
 import { useNavigation } from '@react-navigation/core';
 import { useLayoutEffect } from 'react';
+import { useCachedProximoCategories } from '../../../utils/cacheContext';
 
 const LIST_ITEM_HEIGHT = 84;
 
@@ -55,7 +56,7 @@ export type ProximoArticleType = {
   category: ProximoCategoryType;
 };
 
-type CategoriesType = Array<ProximoCategoryType>;
+export type CategoriesType = Array<ProximoCategoryType>;
 
 const styles = StyleSheet.create({
   item: {
@@ -92,6 +93,7 @@ function sortFinalData(a: ProximoCategoryType, b: ProximoCategoryType): number {
 function ProximoMainScreen() {
   const navigation = useNavigation();
   const theme = useTheme();
+  const { categories, setCategories } = useCachedProximoCategories();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -233,6 +235,8 @@ function ProximoMainScreen() {
       createDataset={createDataset}
       refreshOnFocus={true}
       renderItem={getRenderItem}
+      cache={categories}
+      onCacheUpdate={setCategories}
     />
   );
 }

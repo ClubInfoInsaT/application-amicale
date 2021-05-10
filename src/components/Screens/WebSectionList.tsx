@@ -67,6 +67,8 @@ type Props<ItemT, RawData> = {
     isLoading: boolean
   ) => React.ReactElement | null;
   stickyHeader?: boolean;
+  cache?: RawData;
+  onCacheUpdate?: (newCache: RawData) => void;
 };
 
 const styles = StyleSheet.create({
@@ -200,6 +202,8 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
         showLoading={false}
         autoRefreshTime={props.autoRefreshTime}
         refreshOnFocus={props.refreshOnFocus}
+        cache={props.cache}
+        onCacheUpdate={props.onCacheUpdate}
       />
       <Snackbar
         visible={snackbarVisible}

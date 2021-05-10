@@ -48,6 +48,7 @@ import {
   MainRoutes,
   MainStackParamsList,
 } from '../../../navigation/MainNavigator';
+import { useCachedProximoArticles } from '../../../utils/cacheContext';
 
 function sortPrice(a: ProximoArticleType, b: ProximoArticleType): number {
   return a.price - b.price;
@@ -110,13 +111,14 @@ const styles = StyleSheet.create({
   },
 });
 
-type ArticlesType = Array<ProximoArticleType>;
+export type ArticlesType = Array<ProximoArticleType>;
 
 type Props = StackScreenProps<MainStackParamsList, MainRoutes.ProximoList>;
 
 function ProximoListScreen(props: Props) {
   const navigation = useNavigation();
   const theme = useTheme();
+  const { articles, setArticles } = useCachedProximoArticles();
   const modalRef = useRef<Modalize>();
 
   const [currentSearchString, setCurrentSearchString] = useState('');
@@ -367,6 +369,8 @@ function ProximoListScreen(props: Props) {
         renderItem={getRenderItem}
         updateData={currentSearchString + currentSortMode}
         itemHeight={LIST_ITEM_HEIGHT}
+        cache={articles}
+        onCacheUpdate={setArticles}
       />
     </View>
   );
