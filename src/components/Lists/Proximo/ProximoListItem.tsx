@@ -23,6 +23,7 @@ import i18n from 'i18n-js';
 import type { ProximoArticleType } from '../../../screens/Services/Proximo/ProximoMainScreen';
 import { StyleSheet } from 'react-native';
 import Urls from '../../../constants/Urls';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 type PropsType = {
   onPress: () => void;
@@ -34,9 +35,13 @@ type PropsType = {
 const styles = StyleSheet.create({
   avatar: {
     backgroundColor: 'transparent',
+    marginRight: 5,
   },
   text: {
+    marginLeft: 10,
     fontWeight: 'bold',
+    fontSize: 15,
+    ...GENERAL_STYLES.centerVertical,
   },
   item: {
     justifyContent: 'center',
@@ -47,6 +52,7 @@ function ProximoListItem(props: PropsType) {
   return (
     <List.Item
       title={props.item.name}
+      titleNumberOfLines={2}
       description={`${props.item.quantity} ${i18n.t(
         'screens.proximo.inStock'
       )}`}
@@ -59,7 +65,9 @@ function ProximoListItem(props: PropsType) {
           source={{ uri: Urls.proximo.images + props.item.image }}
         />
       )}
-      right={() => <Text style={styles.text}>{props.item.price}€</Text>}
+      right={() => (
+        <Text style={styles.text}>{props.item.price.toFixed(2)}€</Text>
+      )}
       style={{
         height: props.height,
         ...styles.item,
