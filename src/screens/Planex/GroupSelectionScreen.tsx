@@ -75,7 +75,6 @@ function GroupSelectionScreen() {
           ? { marginHorizontal: 0, width: '70%' }
           : { marginHorizontal: 0, right: 50, left: 50 },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 
   const getSearchBar = () => {
