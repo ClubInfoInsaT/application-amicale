@@ -30,8 +30,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import AutoHideHandler from '../../utils/AutoHideHandler';
 import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 
-const AnimatedFAB = Animatable.createAnimatableComponent(FAB);
-
 type PropsType = {
   navigation: StackNavigationProp<any>;
   theme: ReactNativePaper.Theme;
@@ -164,16 +162,19 @@ class AnimatedBottomBar extends React.Component<PropsType, StateType> {
       >
         <Surface style={styles.surface}>
           <View style={styles.fabContainer}>
-            <AnimatedFAB
-              animation={props.seekAttention ? 'bounce' : undefined}
-              easing="ease-out"
-              iterationDelay={500}
-              iterationCount="infinite"
-              useNativeDriver
+            <Animatable.View
               style={styles.fab}
-              icon="account-clock"
-              onPress={() => props.navigation.navigate('group-select')}
-            />
+              animation={props.seekAttention ? 'bounce' : undefined}
+              easing={'ease-out'}
+              iterationDelay={500}
+              iterationCount={'infinite'}
+              useNativeDriver={true}
+            >
+              <FAB
+                icon={'account-clock'}
+                onPress={() => props.navigation.navigate('group-select')}
+              />
+            </Animatable.View>
           </View>
           <View style={styles.side}>
             <IconButton
