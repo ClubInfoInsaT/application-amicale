@@ -28,7 +28,7 @@ const AMICALE_ENDPOINT = AMICALE_SERVER + 'api/';
 const APP_ENDPOINT = STUDENT_SERVER + '~amicale_app/v2/';
 const PROXIMO_ENDPOINT = STUDENT_SERVER + '~proximo/v2/api/';
 const PROXIMO_IMAGES_ENDPOINT =
-  STUDENT_SERVER + '~proximo/v2/api-proximo/public/storage/app/';
+  STUDENT_SERVER + '~proximo/api_proximo/storage/app/public/';
 const APP_IMAGES_ENDPOINT = STUDENT_SERVER + '~amicale_app/images/';
 
 export default {

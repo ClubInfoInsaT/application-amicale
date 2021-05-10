@@ -249,7 +249,10 @@ function ProximoListScreen(props: Props) {
 
         <ScrollView>
           <View style={styles.modalContent}>
-            <Image style={styles.image} source={{ uri: item.image }} />
+            <Image
+              style={styles.image}
+              source={{ uri: Urls.proximo.images + item.image }}
+            />
           </View>
           <Text>{item.description}</Text>
         </ScrollView>
@@ -330,9 +333,6 @@ function ProximoListScreen(props: Props) {
     data: ArticlesType | undefined
   ): SectionListDataType<ProximoArticleType> => {
     if (data) {
-      console.log(data);
-      console.log(props.route.params.category);
-
       return [
         {
           title: '',

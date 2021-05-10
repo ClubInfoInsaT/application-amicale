@@ -44,8 +44,6 @@ const styles = StyleSheet.create({
 });
 
 function ProximoListItem(props: PropsType) {
-  // console.log(Urls.proximo.images + props.item.image);
-
   return (
     <List.Item
       title={props.item.name}

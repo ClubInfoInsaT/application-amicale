@@ -19,18 +19,19 @@
 
 import * as React from 'react';
 import i18n from 'i18n-js';
-import { Avatar, List, useTheme, withTheme } from 'react-native-paper';
+import { List, useTheme, withTheme } from 'react-native-paper';
 import WebSectionList from '../../../components/Screens/WebSectionList';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
 import type { SectionListDataType } from '../../../components/Screens/WebSectionList';
-import { StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import Urls from '../../../constants/Urls';
 import { readData } from '../../../utils/WebData';
 import { useNavigation } from '@react-navigation/core';
 import { useLayoutEffect } from 'react';
 import { useCachedProximoCategories } from '../../../utils/cacheContext';
+import GENERAL_STYLES from '../../../constants/Styles';
 
 const LIST_ITEM_HEIGHT = 84;
 
@@ -62,6 +63,12 @@ export type CategoriesType = Array<ProximoCategoryType>;
 const styles = StyleSheet.create({
   item: {
     justifyContent: 'center',
+  },
+  avatar: {
+    marginLeft: 5,
+    ...GENERAL_STYLES.centerVertical,
+    height: 35,
+    width: 35,
   },
 });
 
@@ -172,7 +179,10 @@ function ProximoMainScreen() {
           onPress={onPress}
           left={(props) =>
             item.icon.endsWith('.png') ? (
-              <Avatar.Image style={props.style} source={{ uri: item.icon }} />
+              <Image
+                style={{ ...props.style, ...styles.avatar }}
+                source={{ uri: Urls.proximo.icons + item.icon }}
+              />
             ) : (
               <List.Icon
                 style={props.style}
