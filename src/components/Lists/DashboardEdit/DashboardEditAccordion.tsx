@@ -60,7 +60,7 @@ function DashboardEditAccordion(props: PropsType) {
   };
 
   const getItemLayout = (
-    data: Array<ServiceItemType> | null | undefined,
+    _data: Array<ServiceItemType> | null | undefined,
     index: number
   ): { length: number; offset: number; index: number } => ({
     length: LIST_ITEM_HEIGHT,

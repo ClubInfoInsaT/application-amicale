@@ -30,14 +30,14 @@ type PropsType = {
  * Abstraction layer for Agenda component, using custom configuration
  */
 function CustomHTML(props: PropsType) {
-  const openWebLink = (event: GestureResponderEvent, link: string) => {
+  const openWebLink = (_event: GestureResponderEvent, link: string) => {
     Linking.openURL(link);
   };
 
   const getBasicText = (
-    htmlAttribs: any,
+    _htmlAttribs: any,
     children: any,
-    convertedCSSStyles: any,
+    _convertedCSSStyles: any,
     passProps: any
   ) => {
     return <Text {...passProps}>{children}</Text>;

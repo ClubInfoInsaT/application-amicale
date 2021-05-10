@@ -67,9 +67,9 @@ export default class ConnectionManager {
   /**
    * Tries to recover login token from the secure keychain
    *
-   * @returns Promise<string>
+   * @returns Promise<void>
    */
-  async recoverLogin(): Promise<string> {
+  async recoverLogin(): Promise<void> {
     return new Promise((resolve: () => void) => {
       const token = this.getToken();
       if (token != null) {
@@ -103,7 +103,7 @@ export default class ConnectionManager {
    * @param token
    * @returns Promise<void>
    */
-  async saveLogin(email: string, token: string): Promise<void> {
+  async saveLogin(_email: string, token: string): Promise<void> {
     return new Promise((resolve: () => void, reject: () => void) => {
       Keychain.setGenericPassword('token', token)
         .then(() => {

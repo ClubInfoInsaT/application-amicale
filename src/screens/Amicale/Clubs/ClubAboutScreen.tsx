@@ -69,7 +69,7 @@ function ClubAboutScreen() {
         />
         <Card.Content>
           <Text>{i18n.t('screens.clubs.about.message')}</Text>
-          <Autolink<typeof Text>
+          <Autolink
             text={CONTACT_LINK}
             hashtag={'facebook'}
             component={Text}

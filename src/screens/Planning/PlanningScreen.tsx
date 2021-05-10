@@ -174,8 +174,8 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
 
     if (canRefresh) {
       this.setState({ refreshing: true });
-      readData(Urls.amicale.events)
-        .then((fetchedData: Array<PlanningEventType>) => {
+      readData<Array<PlanningEventType>>(Urls.amicale.events)
+        .then((fetchedData) => {
           this.setState({
             refreshing: false,
             agendaItems: generateEventAgenda(fetchedData, AGENDA_MONTH_SPAN),

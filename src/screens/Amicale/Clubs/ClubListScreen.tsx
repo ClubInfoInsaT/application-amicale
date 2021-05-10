@@ -224,7 +224,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
   keyExtractor = (item: ClubType): string => item.id.toString();
 
   itemLayout = (
-    data: Array<ClubType> | null | undefined,
+    _data: Array<ClubType> | null | undefined,
     index: number
   ): { length: number; offset: number; index: number } => ({
     length: LIST_ITEM_HEIGHT,

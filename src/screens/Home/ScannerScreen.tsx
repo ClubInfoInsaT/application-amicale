@@ -61,7 +61,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type PermissionResults = 'unavailable' | 'denied' | 'blocked' | 'granted';
+type PermissionResults =
+  | 'unavailable'
+  | 'denied'
+  | 'blocked'
+  | 'granted'
+  | 'limited';
 
 class ScannerScreen extends React.Component<{}, StateType> {
   constructor(props: {}) {

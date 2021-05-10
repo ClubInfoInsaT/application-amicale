@@ -88,7 +88,7 @@ class GroupListAccordion extends React.Component<PropsType> {
   }
 
   itemLayout = (
-    data: Array<PlanexGroupType> | null | undefined,
+    _data: Array<PlanexGroupType> | null | undefined,
     index: number
   ): { length: number; offset: number; index: number } => ({
     length: LIST_ITEM_HEIGHT,
