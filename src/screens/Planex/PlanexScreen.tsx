@@ -17,8 +17,8 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import { Title, withTheme } from 'react-native-paper';
+import React, { useCallback, useRef, useState } from 'react';
+import { Title, useTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
 import {
   NativeScrollEvent,
@@ -26,8 +26,11 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  CommonActions,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
 import Autolink from 'react-native-autolink';
 import ThemeManager from '../../managers/ThemeManager';
 import WebViewScreen from '../../components/Screens/WebViewScreen';
@@ -43,20 +46,7 @@ import MascotPopup from '../../components/Mascot/MascotPopup';
 import { getPrettierPlanexGroupName } from '../../utils/Utils';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
-
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  route: { params: { group: PlanexGroupType } };
-  theme: ReactNativePaper.Theme;
-};
-
-type StateType = {
-  dialogVisible: boolean;
-  dialogTitle: string | React.ReactNode;
-  dialogMessage: string;
-  currentGroup: PlanexGroupType;
-  injectJS: string;
-};
+import { useMountEffect } from '../../utils/customHooks';
 
 // // JS + JQuery functions used to remove alpha from events. Copy paste in browser console for quick testing
 // // Remove alpha from given Jquery node
@@ -131,14 +121,19 @@ calendar.option({
   }
 });`;
 
+// Mobile friendly CSS
 const CUSTOM_CSS =
   'body>.container{padding-top:20px; padding-bottom: 50px}header,#entite,#groupe_visibility,#calendar .fc-left,#calendar .fc-right{display:none}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-time{font-size:.5rem}#calendar .fc-month-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-month-view .fc-content-skeleton .fc-time{font-size:.7rem}.fc-axis{font-size:.8rem;width:15px!important}.fc-day-header{font-size:.8rem}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}';
+
+// Dark mode CSS, to be used with the mobile friendly css
 const CUSTOM_CSS_DARK =
   'body{background-color:#121212}.fc-unthemed .fc-content,.fc-unthemed .fc-divider,.fc-unthemed .fc-list-heading td,.fc-unthemed .fc-list-view,.fc-unthemed .fc-popover,.fc-unthemed .fc-row,.fc-unthemed tbody,.fc-unthemed td,.fc-unthemed th,.fc-unthemed thead{border-color:#222}.fc-toolbar .fc-center>*,h2,table{color:#fff}.fc-event-container{color:#121212}.fc-event-container .fc-bg{opacity:0.2;background-color:#000}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}';
 
-const INJECT_STYLE = `
-$('head').append('<style>${CUSTOM_CSS}</style>');
-`;
+// Inject the custom css into the webpage
+const INJECT_STYLE = `$('head').append('<style>${CUSTOM_CSS}</style>');`;
+
+// Inject the dark mode into the webpage, to call after the custom css inject above
+const INJECT_STYLE_DARK = `$('head').append('<style>${CUSTOM_CSS_DARK}</style>');`;
 
 const styles = StyleSheet.create({
   container: {
@@ -148,60 +143,64 @@ const styles = StyleSheet.create({
   },
 });
 
-/**
- * Class defining the app's Planex screen.
- * This screen uses a webview to render the page
- */
-class PlanexScreen extends React.Component<PropsType, StateType> {
-  barRef: { current: null | AnimatedBottomBar };
+type Props = {
+  route: {
+    params: {
+      group?: PlanexGroupType;
+    };
+  };
+};
 
-  /**
-   * Defines custom injected JavaScript to improve the page display on mobile
-   */
-  constructor(props: PropsType) {
-    super(props);
-    this.barRef = React.createRef();
+function PlanexScreen(props: Props) {
+  const navigation = useNavigation();
+  const theme = useTheme();
+  const barRef = useRef<typeof AnimatedBottomBar>();
+
+  const [dialogContent, setDialogContent] = useState<
+    | undefined
+    | {
+        title: string | React.ReactElement;
+        message: string | React.ReactElement;
+      }
+  >();
+  const [injectJS, setInjectJS] = useState('');
+  const [currentGroup, setCurrentGroup] = useState<
+    PlanexGroupType | undefined
+  >();
+
+  useMountEffect(() => {
     let currentGroupString = AsyncStorageManager.getString(
       AsyncStorageManager.PREFERENCES.planexCurrentGroup.key
     );
-    let currentGroup: PlanexGroupType;
-    if (currentGroupString === '') {
-      currentGroup = { name: 'SELECT GROUP', id: -1 };
-    } else {
-      currentGroup = JSON.parse(currentGroupString);
-      props.navigation.setOptions({
-        title: getPrettierPlanexGroupName(currentGroup.name),
+    let group: PlanexGroupType;
+    if (currentGroupString !== '') {
+      group = JSON.parse(currentGroupString);
+      navigation.setOptions({
+        title: getPrettierPlanexGroupName(group.name),
       });
+      setCurrentGroup(group);
     }
-    this.state = {
-      dialogVisible: false,
-      dialogTitle: '',
-      dialogMessage: '',
-      currentGroup,
-      injectJS: '',
-    };
-  }
+  });
 
-  /**
-   * Register for events and show the banner after 2 seconds
-   */
-  componentDidMount() {
-    const { navigation } = this.props;
-    navigation.addListener('focus', this.onScreenFocus);
-  }
-
+  useFocusEffect(
+    useCallback(() => {
+      if (props.route.params?.group) {
+        // reset params to prevent infinite loop
+        selectNewGroup(props.route.params.group);
+        navigation.dispatch(CommonActions.setParams({ group: undefined }));
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+  );
   /**
    * Gets the Webview, with an error view on top if no group is selected.
    *
    * @returns {*}
    */
-  getWebView() {
-    const { state } = this;
-    const showWebview = state.currentGroup.id !== -1;
-
+  const getWebView = () => {
     return (
       <View style={GENERAL_STYLES.flex}>
-        {!showWebview ? (
+        {!currentGroup ? (
           <ErrorView
             icon={'account-clock'}
             message={i18n.t('screens.planex.noGroupSelected')}
@@ -209,28 +208,21 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
         ) : null}
         <WebViewScreen
           url={Urls.planex.planning}
-          initialJS={this.generateInjectedJS(this.state.currentGroup.id)}
-          injectJS={this.state.injectJS}
-          onMessage={this.onMessage}
-          onScroll={this.onScroll}
+          initialJS={generateInjectedJS(currentGroup)}
+          injectJS={injectJS}
+          onMessage={onMessage}
+          onScroll={onScroll}
           showAdvancedControls={false}
         />
       </View>
     );
-  }
+  };
 
   /**
    * Callback used when the user clicks on the navigate to settings button.
    * This will hide the banner and open the SettingsScreen
    */
-  onGoToSettings = () => {
-    const { navigation } = this.props;
-    navigation.navigate('settings');
-  };
-
-  onScreenFocus = () => {
-    this.handleNavigationParams();
-  };
+  const onGoToSettings = () => navigation.navigate('settings');
 
   /**
    * Sends a FullCalendar action to the web page inside the webview.
@@ -239,7 +231,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * Or "setGroup" with the group id as data to set the selected group
    * @param data Data to pass to the action
    */
-  sendMessage = (action: string, data?: string) => {
+  const sendMessage = (action: string, data?: string) => {
     let command;
     if (action === 'setGroup') {
       command = `displayAde(${data})`;
@@ -249,10 +241,10 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
     // String must resolve to true to prevent crash on iOS
     command += ';true;';
     // Change the injected
-    if (command === this.state.injectJS) {
+    if (command === injectJS) {
       command += ';true;';
     }
-    this.setState({ injectJS: command });
+    setInjectJS(command);
   };
 
   /**
@@ -260,7 +252,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    *
    * @param event
    */
-  onMessage = (event: { nativeEvent: { data: string } }) => {
+  const onMessage = (event: { nativeEvent: { data: string } }) => {
     const data: {
       start: string;
       end: string;
@@ -276,7 +268,7 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
     if (startString != null && endString != null) {
       msg += `${startString} - ${endString}`;
     }
-    this.showDialog(data.title, msg);
+    showDialog(data.title, msg);
   };
 
   /**
@@ -285,10 +277,9 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    * @param title The dialog's title
    * @param message The message to show
    */
-  showDialog = (title: string, message: string) => {
-    this.setState({
-      dialogVisible: true,
-      dialogTitle: (
+  const showDialog = (title: string, message: string) => {
+    setDialogContent({
+      title: (
         <Autolink
           text={title}
           hashtag={'facebook'}
@@ -299,44 +290,20 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
           phone={true}
         />
       ),
-      dialogMessage: message,
+      message: message,
     });
   };
 
-  /**
-   * Hides the dialog
-   */
-  hideDialog = () => {
-    this.setState({
-      dialogVisible: false,
-    });
-  };
+  const hideDialog = () => setDialogContent(undefined);
 
   /**
    * Binds the onScroll event to the control bar for automatic hiding based on scroll direction and speed
    *
    * @param event
    */
-  onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (this.barRef.current != null) {
-      this.barRef.current.onScroll(event);
-    }
-  };
-
-  /**
-   * If navigations parameters contain a group, set it as selected
-   */
-  handleNavigationParams = () => {
-    const { props } = this;
-    if (props.route.params != null) {
-      if (
-        props.route.params.group !== undefined &&
-        props.route.params.group !== null
-      ) {
-        // reset params to prevent infinite loop
-        this.selectNewGroup(props.route.params.group);
-        props.navigation.dispatch(CommonActions.setParams({ group: null }));
-      }
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (barRef.current) {
+      barRef.current.onScroll(event);
     }
   };
 
@@ -345,89 +312,86 @@ class PlanexScreen extends React.Component<PropsType, StateType> {
    *
    * @param group The group object selected
    */
-  selectNewGroup(group: PlanexGroupType) {
-    const { navigation } = this.props;
-    this.sendMessage('setGroup', group.id.toString());
-    this.setState({ currentGroup: group });
+  const selectNewGroup = (group: PlanexGroupType) => {
+    sendMessage('setGroup', group.id.toString());
+    setCurrentGroup(group);
     AsyncStorageManager.set(
       AsyncStorageManager.PREFERENCES.planexCurrentGroup.key,
       group
     );
     navigation.setOptions({ title: getPrettierPlanexGroupName(group.name) });
-  }
+  };
 
   /**
    * Generates custom JavaScript to be injected into the webpage
    *
    * @param groupID The current group selected
    */
-  generateInjectedJS(groupID: number) {
+  const generateInjectedJS = (group: PlanexGroupType | undefined) => {
     let customInjectedJS = `$(document).ready(function() {
       ${OBSERVE_MUTATIONS_INJECTED}
-      ${FULL_CALENDAR_SETTINGS}
-      displayAde(${groupID});
-      ${INJECT_STYLE}`;
+      ${INJECT_STYLE}
+      ${FULL_CALENDAR_SETTINGS}`;
+    if (group) {
+      customInjectedJS += `displayAde(${group.id});`;
+    }
     if (DateManager.isWeekend(new Date())) {
       customInjectedJS += `calendar.next();`;
     }
     if (ThemeManager.getNightMode()) {
-      customInjectedJS += `$('head').append('<style>${CUSTOM_CSS_DARK}</style>');`;
+      customInjectedJS += INJECT_STYLE_DARK;
     }
-
     customInjectedJS += 'removeAlpha();});true;'; // Prevents crash on ios
     return customInjectedJS;
-  }
+  };
 
-  render() {
-    const { props, state } = this;
-    return (
-      <View style={GENERAL_STYLES.flex}>
-        {/* Allow to draw webview bellow banner */}
-        <View style={styles.container}>
-          {props.theme.dark ? ( // Force component theme update by recreating it on theme change
-            this.getWebView()
-          ) : (
-            <View style={GENERAL_STYLES.flex}>{this.getWebView()}</View>
-          )}
-        </View>
-        {AsyncStorageManager.getString(
-          AsyncStorageManager.PREFERENCES.defaultStartScreen.key
-        ).toLowerCase() !== 'planex' ? (
-          <MascotPopup
-            prefKey={AsyncStorageManager.PREFERENCES.planexShowMascot.key}
-            title={i18n.t('screens.planex.mascotDialog.title')}
-            message={i18n.t('screens.planex.mascotDialog.message')}
-            icon="emoticon-kiss"
-            buttons={{
-              action: {
-                message: i18n.t('screens.planex.mascotDialog.ok'),
-                icon: 'cog',
-                onPress: this.onGoToSettings,
-              },
-              cancel: {
-                message: i18n.t('screens.planex.mascotDialog.cancel'),
-                icon: 'close',
-                color: props.theme.colors.warning,
-              },
-            }}
-            emotion={MASCOT_STYLE.INTELLO}
-          />
-        ) : null}
-        <AlertDialog
-          visible={state.dialogVisible}
-          onDismiss={this.hideDialog}
-          title={state.dialogTitle}
-          message={state.dialogMessage}
-        />
-        <AnimatedBottomBar
-          navigation={props.navigation}
-          ref={this.barRef}
-          onPress={this.sendMessage}
-          seekAttention={state.currentGroup.id === -1}
-        />
+  return (
+    <View style={GENERAL_STYLES.flex}>
+      {/* Allow to draw webview bellow banner */}
+      <View style={styles.container}>
+        {theme.dark ? ( // Force component theme update by recreating it on theme change
+          getWebView()
+        ) : (
+          <View style={GENERAL_STYLES.flex}>{getWebView()}</View>
+        )}
       </View>
-    );
-  }
+      {AsyncStorageManager.getString(
+        AsyncStorageManager.PREFERENCES.defaultStartScreen.key
+      ).toLowerCase() !== 'planex' ? (
+        <MascotPopup
+          prefKey={AsyncStorageManager.PREFERENCES.planexShowMascot.key}
+          title={i18n.t('screens.planex.mascotDialog.title')}
+          message={i18n.t('screens.planex.mascotDialog.message')}
+          icon="emoticon-kiss"
+          buttons={{
+            action: {
+              message: i18n.t('screens.planex.mascotDialog.ok'),
+              icon: 'cog',
+              onPress: onGoToSettings,
+            },
+            cancel: {
+              message: i18n.t('screens.planex.mascotDialog.cancel'),
+              icon: 'close',
+              color: theme.colors.warning,
+            },
+          }}
+          emotion={MASCOT_STYLE.INTELLO}
+        />
+      ) : null}
+      <AlertDialog
+        visible={dialogContent !== undefined}
+        onDismiss={hideDialog}
+        title={dialogContent ? dialogContent.title : ''}
+        message={dialogContent ? dialogContent.message : ''}
+      />
+      <AnimatedBottomBar
+        navigation={navigation}
+        ref={barRef}
+        onPress={sendMessage}
+        seekAttention={currentGroup !== undefined}
+      />
+    </View>
+  );
 }
 
-export default withTheme(PlanexScreen);
+export default PlanexScreen;
