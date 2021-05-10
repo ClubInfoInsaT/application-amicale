@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { PlanexGroupsType } from '../screens/Planex/GroupSelectionScreen';
 import { ArticlesType } from '../screens/Services/Proximo/ProximoListScreen';
 import { CategoriesType } from '../screens/Services/Proximo/ProximoMainScreen';
 
@@ -6,6 +7,9 @@ export type CacheType = {
   proximo?: {
     articles?: ArticlesType;
     categories?: CategoriesType;
+  };
+  planex?: {
+    groups?: PlanexGroupsType;
   };
 };
 
@@ -51,4 +55,17 @@ export function useCachedProximoArticles() {
     });
   };
   return { articles, setArticles };
+}
+
+export function useCachedPlanexGroups() {
+  const { cache, setCache } = useCache();
+  const groups = cache?.planex?.groups;
+  const setGroups = (newGroups: PlanexGroupsType) => {
+    setCache({
+      planex: {
+        groups: newGroups,
+      },
+    });
+  };
+  return { groups, setGroups };
 }
