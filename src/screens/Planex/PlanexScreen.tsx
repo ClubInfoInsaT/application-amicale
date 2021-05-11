@@ -160,6 +160,7 @@ function PlanexScreen(props: Props) {
     | {
         title: string | React.ReactElement;
         message: string | React.ReactElement;
+        color: string;
       }
   >();
   const [injectJS, setInjectJS] = useState('');
@@ -269,7 +270,7 @@ function PlanexScreen(props: Props) {
     if (startString != null && endString != null) {
       msg += `${startString} - ${endString}`;
     }
-    showDialog(data.title, msg);
+    showDialog(data.title, msg, data.color);
   };
 
   /**
@@ -278,7 +279,8 @@ function PlanexScreen(props: Props) {
    * @param title The dialog's title
    * @param message The message to show
    */
-  const showDialog = (title: string, message: string) => {
+  const showDialog = (title: string, message: string, color?: string) => {
+    const finalColor = color ? color : theme.colors.surface;
     setDialogContent({
       title: (
         <Autolink
@@ -292,6 +294,7 @@ function PlanexScreen(props: Props) {
         />
       ),
       message: message,
+      color: finalColor,
     });
   };
 
@@ -329,8 +332,6 @@ function PlanexScreen(props: Props) {
    * @param groupID The current group selected
    */
   const generateInjectedJS = (group: PlanexGroupType | undefined) => {
-    console.log(group);
-
     let customInjectedJS = `$(document).ready(function() {
       ${OBSERVE_MUTATIONS_INJECTED}
       ${INJECT_STYLE}
@@ -386,6 +387,11 @@ function PlanexScreen(props: Props) {
         onDismiss={hideDialog}
         title={dialogContent ? dialogContent.title : ''}
         message={dialogContent ? dialogContent.message : ''}
+        style={
+          dialogContent
+            ? { borderColor: dialogContent.color, borderWidth: 2 }
+            : undefined
+        }
       />
       <AnimatedBottomBar
         navigation={navigation}

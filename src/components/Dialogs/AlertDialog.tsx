@@ -20,18 +20,24 @@
 import * as React from 'react';
 import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import i18n from 'i18n-js';
+import { ViewStyle } from 'react-native';
 
 type PropsType = {
   visible: boolean;
   onDismiss: () => void;
   title: string | React.ReactNode;
   message: string | React.ReactNode;
+  style?: ViewStyle;
 };
 
 function AlertDialog(props: PropsType) {
   return (
     <Portal>
-      <Dialog visible={props.visible} onDismiss={props.onDismiss}>
+      <Dialog
+        visible={props.visible}
+        onDismiss={props.onDismiss}
+        style={props.style}
+      >
         <Dialog.Title>{props.title}</Dialog.Title>
         <Dialog.Content>
           <Paragraph>{props.message}</Paragraph>
