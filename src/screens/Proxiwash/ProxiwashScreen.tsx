@@ -512,7 +512,7 @@ class ProxiwashScreen extends React.Component<PropsType, StateType> {
             renderSectionHeader={this.getRenderSectionHeader}
             autoRefreshTime={REFRESH_TIME}
             refreshOnFocus={true}
-            updateData={state.machinesWatched.length}
+            extraData={state.machinesWatched.length}
           />
         </View>
         <MascotPopup

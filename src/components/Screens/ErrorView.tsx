@@ -26,8 +26,8 @@ import * as Animatable from 'react-native-animatable';
 import { REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
 
 type Props = {
-  status?: Exclude<REQUEST_STATUS, REQUEST_STATUS.SUCCESS>;
-  code?: Exclude<REQUEST_CODES, REQUEST_CODES.SUCCESS>;
+  status?: REQUEST_STATUS;
+  code?: REQUEST_CODES;
   icon?: string;
   message?: string;
   loading?: boolean;

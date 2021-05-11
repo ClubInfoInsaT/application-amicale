@@ -21,22 +21,19 @@ import React, { useState } from 'react';
 import i18n from 'i18n-js';
 import { Snackbar } from 'react-native-paper';
 import {
-  NativeScrollEvent,
-  NativeSyntheticEvent,
   RefreshControl,
   SectionListData,
-  SectionListRenderItemInfo,
+  SectionListProps,
   StyleSheet,
   View,
 } from 'react-native';
-import * as Animatable from 'react-native-animatable';
 import ErrorView from './ErrorView';
-import BasicLoadingScreen from './BasicLoadingScreen';
 import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
-import { ERROR_TYPE } from '../../utils/WebData';
 import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
 import GENERAL_STYLES from '../../constants/Styles';
-import RequestScreen from './RequestScreen';
+import RequestScreen, { RequestScreenProps } from './RequestScreen';
+import { CollapsibleComponentPropsType } from '../Collapsible/CollapsibleComponent';
+import { REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
 
 export type SectionListDataType<ItemT> = Array<{
   title: string;
@@ -45,31 +42,36 @@ export type SectionListDataType<ItemT> = Array<{
   keyExtractor?: (data: ItemT) => string;
 }>;
 
-type Props<ItemT, RawData> = {
-  request: () => Promise<RawData>;
-  refreshOnFocus: boolean;
-  renderItem: (data: SectionListRenderItemInfo<ItemT>) => React.ReactNode;
-  createDataset: (
-    data: RawData | undefined,
-    isLoading: boolean
-  ) => SectionListDataType<ItemT>;
-
-  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-  showError?: boolean;
-  itemHeight?: number | null;
-  autoRefreshTime?: number;
-  updateData?: number | string;
-  renderListHeaderComponent?: (
-    data?: RawData
-  ) => React.ComponentType<any> | React.ReactElement | null;
-  renderSectionHeader?: (
-    data: { section: SectionListData<ItemT> },
-    isLoading: boolean
-  ) => React.ReactElement | null;
-  stickyHeader?: boolean;
-  cache?: RawData;
-  onCacheUpdate?: (newCache: RawData) => void;
-};
+type Props<ItemT, RawData> = Omit<
+  CollapsibleComponentPropsType,
+  'children' | 'paddedProps'
+> &
+  Omit<
+    RequestScreenProps<RawData>,
+    | 'render'
+    | 'showLoading'
+    | 'showError'
+    | 'refresh'
+    | 'onFinish'
+    | 'onMajorError'
+  > &
+  Omit<
+    SectionListProps<ItemT>,
+    'sections' | 'getItemLayout' | 'ListHeaderComponent' | 'ListEmptyComponent'
+  > & {
+    createDataset: (
+      data: RawData | undefined,
+      isLoading: boolean
+    ) => SectionListDataType<ItemT>;
+    renderListHeaderComponent?: (
+      data?: RawData
+    ) => React.ComponentType<any> | React.ReactElement | null;
+    renderSectionHeader?: (
+      data: { section: SectionListData<ItemT> },
+      isLoading: boolean
+    ) => React.ReactElement | null;
+    itemHeight?: number | null;
+  };
 
 const styles = StyleSheet.create({
   container: {
@@ -100,48 +102,12 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
     };
   };
 
-  const getRenderSectionHeader = (
-    data: { section: SectionListData<ItemT> },
-    loading: boolean
-  ) => {
-    const { renderSectionHeader } = props;
-    if (renderSectionHeader) {
-      return (
-        <Animatable.View
-          animation={'fadeInUp'}
-          duration={500}
-          useNativeDriver={true}
-        >
-          {renderSectionHeader(data, loading)}
-        </Animatable.View>
-      );
-    }
-    return null;
-  };
-
-  const getRenderItem = (data: SectionListRenderItemInfo<ItemT>) => {
-    const { renderItem } = props;
-    return (
-      <Animatable.View
-        animation={'fadeInUp'}
-        duration={500}
-        useNativeDriver={true}
-      >
-        {renderItem(data)}
-      </Animatable.View>
-    );
-  };
-
-  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (props.onScroll) {
-      props.onScroll(event);
-    }
-  };
-
   const render = (
     data: RawData | undefined,
     loading: boolean,
-    refreshData: (newRequest?: () => Promise<RawData>) => void
+    refreshData: (newRequest?: () => Promise<RawData>) => void,
+    status: REQUEST_STATUS,
+    code?: REQUEST_CODES
   ) => {
     const { itemHeight } = props;
     const dataset = props.createDataset(data, loading);
@@ -150,8 +116,8 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
     }
     return (
       <CollapsibleSectionList
+        {...props}
         sections={dataset}
-        extraData={props.updateData}
         paddedProps={(paddingTop) => ({
           refreshControl: (
             <RefreshControl
@@ -161,9 +127,7 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
             />
           ),
         })}
-        renderSectionHeader={(info) => getRenderSectionHeader(info, loading)}
-        renderItem={getRenderItem}
-        stickySectionHeadersEnabled={props.stickyHeader}
+        renderItem={props.renderItem}
         style={styles.container}
         ListHeaderComponent={
           props.renderListHeaderComponent != null
@@ -171,11 +135,10 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
             : null
         }
         ListEmptyComponent={
-          loading ? (
-            <BasicLoadingScreen />
-          ) : (
+          loading ? undefined : (
             <ErrorView
-              status={ERROR_TYPE.CONNECTION_ERROR}
+              status={status}
+              code={code}
               button={{
                 icon: 'refresh',
                 text: i18n.t('general.retry'),
@@ -187,8 +150,6 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
         getItemLayout={
           itemHeight ? (d, i) => getItemLayout(itemHeight, d, i) : undefined
         }
-        onScroll={onScroll}
-        hasTab={true}
       />
     );
   };

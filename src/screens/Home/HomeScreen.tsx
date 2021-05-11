@@ -26,7 +26,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import i18n from 'i18n-js';
-import { ActivityIndicator, Headline, withTheme } from 'react-native-paper';
+import { Headline, withTheme } from 'react-native-paper';
 import { CommonActions } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
@@ -315,11 +315,11 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    */
   getRenderItem = ({ item }: { item: FeedItemType }) => this.getFeedItem(item);
 
-  getRenderSectionHeader = (
-    data: { section: SectionListData<FeedItemType> },
-    isLoading: boolean
-  ) => {
+  getRenderSectionHeader = (data: {
+    section: SectionListData<FeedItemType>;
+  }) => {
     const { props } = this;
+    const icon = data.section.icon;
     if (data.section.data.length > 0) {
       return (
         <Headline style={styles.sectionHeader}>{data.section.title}</Headline>
@@ -335,16 +335,14 @@ class HomeScreen extends React.Component<PropsType, StateType> {
         >
           {data.section.title}
         </Headline>
-        {isLoading ? (
-          <ActivityIndicator style={styles.activityIndicator} />
-        ) : (
+        {icon ? (
           <MaterialCommunityIcons
-            name="access-point-network-off"
+            name={icon}
             size={100}
             color={props.theme.colors.textDisabled}
             style={GENERAL_STYLES.center}
           />
-        )}
+        ) : null}
       </View>
     );
   };
@@ -406,6 +404,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
   ): Array<{
     title: string;
     data: [] | Array<FeedItemType>;
+    icon?: string;
     id: string;
   }> => {
     if (fetchedData) {
@@ -433,6 +432,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
           ? i18n.t('screens.home.feedLoading')
           : i18n.t('screens.home.feedError'),
         data: [],
+        icon: isLoading ? undefined : 'access-point-network-off',
         id: SECTIONS_ID[1],
       },
     ];
@@ -473,7 +473,6 @@ class HomeScreen extends React.Component<PropsType, StateType> {
             renderItem={this.getRenderItem}
             itemHeight={FEED_ITEM_HEIGHT}
             onScroll={this.onScroll}
-            showError={false}
             renderSectionHeader={this.getRenderSectionHeader}
             renderListHeaderComponent={this.getListHeader}
           />

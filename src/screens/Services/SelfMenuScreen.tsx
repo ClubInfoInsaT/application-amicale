@@ -201,7 +201,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
         refreshOnFocus={true}
         renderItem={this.getRenderItem}
         renderSectionHeader={this.getRenderSectionHeader}
-        stickyHeader={true}
+        stickySectionHeadersEnabled={true}
       />
     );
   }

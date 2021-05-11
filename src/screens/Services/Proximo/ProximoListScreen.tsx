@@ -367,7 +367,7 @@ function ProximoListScreen(props: Props) {
         createDataset={createDataset}
         refreshOnFocus={true}
         renderItem={getRenderItem}
-        updateData={currentSearchString + currentSortMode}
+        extraData={currentSearchString + currentSortMode}
         itemHeight={LIST_ITEM_HEIGHT}
         cache={articles}
         onCacheUpdate={setArticles}

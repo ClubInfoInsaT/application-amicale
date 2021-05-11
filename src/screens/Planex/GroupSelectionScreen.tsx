@@ -259,7 +259,7 @@ function GroupSelectionScreen() {
       createDataset={createDataset}
       refreshOnFocus={true}
       renderItem={getRenderItem}
-      updateData={currentSearchString + favoriteGroups.length}
+      extraData={currentSearchString + favoriteGroups.length}
       cache={groups}
       onCacheUpdate={setGroups}
     />
