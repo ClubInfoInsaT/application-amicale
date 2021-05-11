@@ -46,7 +46,6 @@ import MascotPopup from '../../components/Mascot/MascotPopup';
 import { getPrettierPlanexGroupName } from '../../utils/Utils';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
-import { useMountEffect } from '../../utils/customHooks';
 
 // // JS + JQuery functions used to remove alpha from events. Copy paste in browser console for quick testing
 // // Remove alpha from given Jquery node
@@ -164,11 +163,8 @@ function PlanexScreen(props: Props) {
       }
   >();
   const [injectJS, setInjectJS] = useState('');
-  const [currentGroup, setCurrentGroup] = useState<
-    PlanexGroupType | undefined
-  >();
 
-  useMountEffect(() => {
+  const getCurrentGroup = (): PlanexGroupType | undefined => {
     let currentGroupString = AsyncStorageManager.getString(
       AsyncStorageManager.PREFERENCES.planexCurrentGroup.key
     );
@@ -178,9 +174,14 @@ function PlanexScreen(props: Props) {
       navigation.setOptions({
         title: getPrettierPlanexGroupName(group.name),
       });
-      setCurrentGroup(group);
+      return group;
     }
-  });
+    return undefined;
+  };
+
+  const [currentGroup, setCurrentGroup] = useState<PlanexGroupType | undefined>(
+    getCurrentGroup()
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -328,6 +329,8 @@ function PlanexScreen(props: Props) {
    * @param groupID The current group selected
    */
   const generateInjectedJS = (group: PlanexGroupType | undefined) => {
+    console.log(group);
+
     let customInjectedJS = `$(document).ready(function() {
       ${OBSERVE_MUTATIONS_INJECTED}
       ${INJECT_STYLE}
