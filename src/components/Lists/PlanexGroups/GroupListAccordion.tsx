@@ -27,6 +27,7 @@ import type {
   PlanexGroupType,
   PlanexGroupCategoryType,
 } from '../../../screens/Planex/GroupSelectionScreen';
+import i18n from 'i18n-js';
 
 type PropsType = {
   item: PlanexGroupCategoryType;
@@ -101,22 +102,37 @@ class GroupListAccordion extends React.Component<PropsType> {
   render() {
     const { props } = this;
     const { item } = this.props;
+    var isFavorite = item.id === 0;
+    var isEmptyFavorite = isFavorite && props.favorites.length === 0;
     return (
       <View>
         <AnimatedAccordion
-          title={item.name.replace(REPLACE_REGEX, ' ')}
+          title={
+            isEmptyFavorite
+              ? i18n.t('screens.planex.favorites.empty.title')
+              : item.name.replace(REPLACE_REGEX, ' ')
+          }
+          subtitle={
+            isEmptyFavorite
+              ? i18n.t('screens.planex.favorites.empty.subtitle')
+              : undefined
+          }
           style={styles.container}
           left={(iconProps) =>
-            item.id === 0 ? (
+            isFavorite ? (
               <List.Icon
                 style={iconProps.style}
-                icon="star"
+                icon={'star'}
                 color={props.theme.colors.tetrisScore}
               />
-            ) : null
+            ) : undefined
           }
-          unmountWhenCollapsed={item.id !== 0} // Only render list if expanded for increased performance
-          opened={props.currentSearchString.length > 0}
+          unmountWhenCollapsed={!isFavorite} // Only render list if expanded for increased performance
+          opened={
+            props.currentSearchString.length > 0 ||
+            (isFavorite && !isEmptyFavorite)
+          }
+          enabled={!isEmptyFavorite}
         >
           <FlatList
             data={this.getData()}

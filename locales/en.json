@@ -136,7 +136,13 @@
     "planex": {
       "title": "Planex",
       "noGroupSelected": "No group selected. Please select your group using the big beautiful red button bellow.",
-      "favorites": "Favorites",
+      "favorites": {
+        "title": "Favorites",
+        "empty": {
+          "title": "No favorites",
+          "subtitle": "Clic on the star next to a group to add it to the favorites"
+        }
+      },
       "mascotDialog": {
         "title": "Don't skip class",
         "message": "Here is Planex! You can set your class and your crush's to favorites in order to find them back easily!\n\nIf you mainly use Campus for Planex, go to the settings to make the app directly start on it!",

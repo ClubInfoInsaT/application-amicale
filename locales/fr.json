@@ -136,7 +136,13 @@
     "planex": {
       "title": "Planex",
       "noGroupSelected": "Pas de groupe sélectionné. Choisis un groupe avec le beau bouton rouge ci-dessous.",
-      "favorites": "Favoris",
+      "favorites": {
+        "title": "Favoris",
+        "empty": {
+          "title": "Aucun favoris",
+          "subtitle": "Cliquez sur l'étoile à côté d'un groupe pour l'ajouter aux favoris"
+        }
+      },
       "mascotDialog": {
         "title": "Sécher c'est mal",
         "message": "Ici c'est Planex ! Tu peux mettre en favoris ta classe et celle de ton crush pour l'espio... les retrouver facilement !\n\nSi tu utilises Campus surtout pour Planex, vas dans les paramètres pour faire démarrer l'appli direct dessus !",

@@ -106,7 +106,7 @@ class GroupListItem extends React.Component<PropsType> {
           <List.Icon
             color={iconProps.color}
             style={iconProps.style}
-            icon="chevron-right"
+            icon={'chevron-right'}
           />
         )}
         right={(iconProps) => (

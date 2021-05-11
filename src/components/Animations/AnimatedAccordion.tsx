@@ -17,17 +17,14 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import { View, ViewProps, ViewStyle } from 'react-native';
-import { List, withTheme } from 'react-native-paper';
+import React, { useEffect, useRef } from 'react';
+import { View, ViewStyle } from 'react-native';
+import { List, useTheme } from 'react-native-paper';
 import Collapsible from 'react-native-collapsible';
 import * as Animatable from 'react-native-animatable';
-import { AnimatableProperties } from 'react-native-animatable';
-import { ClassicComponent } from 'react';
 import GENERAL_STYLES from '../../constants/Styles';
 
 type PropsType = {
-  theme: ReactNativePaper.Theme;
   title: string;
   subtitle?: string;
   style?: ViewStyle;
@@ -40,133 +37,102 @@ type PropsType = {
   }) => React.ReactNode;
   opened?: boolean;
   unmountWhenCollapsed?: boolean;
+  enabled?: boolean;
   children?: React.ReactNode;
 };
 
-type StateType = {
-  expanded: boolean;
-};
+function AnimatedAccordion(props: PropsType) {
+  const theme = useTheme();
 
-class AnimatedAccordion extends React.Component<PropsType, StateType> {
-  viewRef:
-    | null
-    | (ClassicComponent<AnimatableProperties<ViewStyle>> & ViewProps);
-  handleViewRef = (
-    ref: ClassicComponent<AnimatableProperties<ViewStyle>> & ViewProps
-  ) => (this.viewRef = ref);
+  const [expanded, setExpanded] = React.useState(props.opened);
+  const lastOpenedProp = useRef(props.opened);
+  const chevronIcon = useRef(props.opened ? 'chevron-up' : 'chevron-down');
+  const animStart = useRef(props.opened ? '180deg' : '0deg');
+  const animEnd = useRef(props.opened ? '0deg' : '180deg');
+  const enabled = props.enabled !== false;
 
-  chevronIcon: string;
-
-  animStart: string;
-
-  animEnd: string;
-
-  getAccordionAnimation():
+  const getAccordionAnimation = ():
     | Animatable.Animation
     | string
-    | Animatable.CustomAnimation {
+    | Animatable.CustomAnimation => {
     // I don't knwo why ts is complaining
     // The type definitions must be broken because this is a valid style and it works
-    if (this.state.expanded) {
-      return {
-        from: {
-          // @ts-ignore
-          rotate: this.animStart,
-        },
-        to: {
-          // @ts-ignore
-          rotate: this.animEnd,
-        },
-      };
-    } else {
-      return {
-        from: {
-          // @ts-ignore
-          rotate: this.animEnd,
-        },
-        to: {
-          // @ts-ignore
-          rotate: this.animStart,
-        },
-      };
-    }
-  }
-
-  constructor(props: PropsType) {
-    super(props);
-    this.chevronIcon = '';
-    this.animStart = '';
-    this.animEnd = '';
-    this.state = {
-      expanded: props.opened != null ? props.opened : false,
-    };
-    this.viewRef = null;
-    this.setupChevron();
-  }
-
-  shouldComponentUpdate(nextProps: PropsType): boolean {
-    const { state, props } = this;
-    // TODO refactor this, it shouldn't even work
-    if (nextProps.opened != null && nextProps.opened !== props.opened) {
-      state.expanded = nextProps.opened;
-    }
-    return true;
-  }
-
-  setupChevron() {
-    const { expanded } = this.state;
     if (expanded) {
-      this.chevronIcon = 'chevron-up';
-      this.animStart = '180deg';
-      this.animEnd = '0deg';
+      return {
+        from: {
+          // @ts-ignore
+          rotate: animStart.current,
+        },
+        to: {
+          // @ts-ignore
+          rotate: animEnd.current,
+        },
+      };
     } else {
-      this.chevronIcon = 'chevron-down';
-      this.animStart = '0deg';
-      this.animEnd = '180deg';
+      return {
+        from: {
+          // @ts-ignore
+          rotate: animEnd.current,
+        },
+        to: {
+          // @ts-ignore
+          rotate: animStart.current,
+        },
+      };
     }
-  }
-
-  toggleAccordion = () => {
-    // const { expanded } = this.state;
-    this.setState((prevState: StateType): { expanded: boolean } => ({
-      expanded: !prevState.expanded,
-    }));
   };
 
-  render() {
-    const { props, state } = this;
-    const { colors } = props.theme;
-    return (
-      <View style={props.style}>
-        <List.Item
-          title={props.title}
-          description={props.subtitle}
-          titleStyle={state.expanded ? { color: colors.primary } : null}
-          onPress={this.toggleAccordion}
-          right={(iconProps) => (
-            <Animatable.View
-              animation={this.getAccordionAnimation()}
-              duration={300}
-              useNativeDriver={true}
-            >
-              <List.Icon
-                style={{ ...iconProps.style, ...GENERAL_STYLES.center }}
-                icon={this.chevronIcon}
-                color={state.expanded ? colors.primary : iconProps.color}
-              />
-            </Animatable.View>
-          )}
-          left={props.left}
-        />
-        <Collapsible collapsed={!state.expanded}>
+  useEffect(() => {
+    // Force the expanded state to follow the prop when changing
+    if (!enabled) {
+      setExpanded(false);
+    } else if (
+      props.opened !== undefined &&
+      props.opened !== lastOpenedProp.current
+    ) {
+      setExpanded(props.opened);
+    }
+  }, [enabled, props.opened]);
+
+  const toggleAccordion = () => setExpanded(!expanded);
+
+  return (
+    <View style={props.style}>
+      <List.Item
+        title={props.title}
+        description={props.subtitle}
+        descriptionNumberOfLines={2}
+        titleStyle={expanded ? { color: theme.colors.primary } : null}
+        onPress={enabled ? toggleAccordion : undefined}
+        right={
+          enabled
+            ? (iconProps) => (
+                <Animatable.View
+                  animation={getAccordionAnimation()}
+                  duration={300}
+                  useNativeDriver={true}
+                >
+                  <List.Icon
+                    style={{ ...iconProps.style, ...GENERAL_STYLES.center }}
+                    icon={chevronIcon.current}
+                    color={expanded ? theme.colors.primary : iconProps.color}
+                  />
+                </Animatable.View>
+              )
+            : undefined
+        }
+        left={props.left}
+      />
+      {enabled ? (
+        <Collapsible collapsed={!expanded}>
           {!props.unmountWhenCollapsed ||
-          (props.unmountWhenCollapsed && state.expanded)
+          (props.unmountWhenCollapsed && expanded)
             ? props.children
             : null}
         </Collapsible>
-      </View>
-    );
-  }
+      ) : null}
+    </View>
+  );
 }
 
-export default withTheme(AnimatedAccordion);
+export default AnimatedAccordion;

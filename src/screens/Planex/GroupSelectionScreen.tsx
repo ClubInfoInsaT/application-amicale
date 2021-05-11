@@ -220,7 +220,7 @@ function GroupSelectionScreen() {
       );
       data.sort(sortName);
       data.unshift({
-        name: i18n.t('screens.planex.favorites'),
+        name: i18n.t('screens.planex.favorites.title'),
         id: 0,
         content: favoriteGroups,
       });
