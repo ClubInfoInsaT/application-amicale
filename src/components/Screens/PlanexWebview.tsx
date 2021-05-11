@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
 import DateManager from '../../managers/DateManager';
@@ -14,6 +14,14 @@ type Props = {
   injectJS: string;
   onMessage: (event: { nativeEvent: { data: string } }) => void;
 };
+
+const styles = StyleSheet.create({
+  error: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+  },
+});
 
 // Watch for changes in the calendar and call the remove alpha function to prevent invisible events
 const OBSERVE_MUTATIONS_INJECTED =
@@ -99,19 +107,21 @@ const generateInjectedJS = (group: PlanexGroupType | undefined) => {
 function PlanexWebview(props: Props) {
   return (
     <View style={GENERAL_STYLES.flex}>
-      {!props.currentGroup ? (
-        <ErrorView
-          icon={'account-clock'}
-          message={i18n.t('screens.planex.noGroupSelected')}
-        />
-      ) : null}
       <WebViewScreen
         url={Urls.planex.planning}
         initialJS={generateInjectedJS(props.currentGroup)}
         injectJS={props.injectJS}
         onMessage={props.onMessage}
         showAdvancedControls={false}
+        showControls={props.currentGroup !== undefined}
       />
+      {!props.currentGroup ? (
+        <ErrorView
+          icon={'account-clock'}
+          message={i18n.t('screens.planex.noGroupSelected')}
+          style={styles.error}
+        />
+      ) : null}
     </View>
   );
 }

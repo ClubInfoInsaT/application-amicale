@@ -57,6 +57,7 @@ type Props = {
   injectJS?: string;
   customPaddingFunction?: null | ((padding: number) => string);
   showAdvancedControls?: boolean;
+  showControls?: boolean;
 };
 
 const AnimatedWebView = Animated.createAnimatedComponent(WebView);
@@ -110,13 +111,20 @@ function WebViewScreen(props: Props) {
   );
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: props.showAdvancedControls
-        ? getAdvancedButtons
-        : getBasicButton,
-    });
+    if (props.showControls !== false) {
+      navigation.setOptions({
+        headerRight: props.showAdvancedControls
+          ? getAdvancedButtons
+          : getBasicButton,
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation, props.showAdvancedControls, navState?.url]);
+  }, [
+    navigation,
+    props.showAdvancedControls,
+    navState?.url,
+    props.showControls,
+  ]);
 
   useEffect(() => {
     if (props.injectJS && props.injectJS !== currentInjectedJS) {

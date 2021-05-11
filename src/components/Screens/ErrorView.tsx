@@ -19,7 +19,7 @@
 
 import * as React from 'react';
 import { Button, Subheading, useTheme } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
@@ -36,6 +36,7 @@ type Props = {
     icon: string;
     onPress: () => void;
   };
+  style?: ViewStyle;
 };
 
 const styles = StyleSheet.create({
@@ -147,7 +148,7 @@ function ErrorView(props: Props) {
   const { button } = props;
 
   return (
-    <View style={styles.outer}>
+    <View style={{ ...styles.outer, ...props.style }}>
       <Animatable.View
         style={{
           ...styles.outer,
