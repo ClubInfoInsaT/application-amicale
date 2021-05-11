@@ -20,7 +20,6 @@
 import * as React from 'react';
 import { List, withTheme } from 'react-native-paper';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { stringMatchQuery } from '../../../utils/Search';
 import GroupListItem from './GroupListItem';
 import AnimatedAccordion from '../../Animations/AnimatedAccordion';
 import type {
@@ -40,6 +39,9 @@ type PropsType = {
 
 const LIST_ITEM_HEIGHT = 64;
 const REPLACE_REGEX = /_/g;
+// The minimum number of characters to type before expanding the accordion
+// This prevents expanding too many items at once
+const MIN_SEARCH_SIZE_EXPAND = 2;
 
 const styles = StyleSheet.create({
   container: {
@@ -75,18 +77,6 @@ class GroupListAccordion extends React.Component<PropsType> {
       />
     );
   };
-
-  getData(): Array<PlanexGroupType> {
-    const { props } = this;
-    const originalData = props.item.content;
-    const displayData: Array<PlanexGroupType> = [];
-    originalData.forEach((data: PlanexGroupType) => {
-      if (stringMatchQuery(data.name, props.currentSearchString)) {
-        displayData.push(data);
-      }
-    });
-    return displayData;
-  }
 
   itemLayout = (
     _data: Array<PlanexGroupType> | null | undefined,
@@ -129,13 +119,13 @@ class GroupListAccordion extends React.Component<PropsType> {
           }
           unmountWhenCollapsed={!isFavorite} // Only render list if expanded for increased performance
           opened={
-            props.currentSearchString.length > 0 ||
+            props.currentSearchString.length >= MIN_SEARCH_SIZE_EXPAND ||
             (isFavorite && !isEmptyFavorite)
           }
           enabled={!isEmptyFavorite}
         >
           <FlatList
-            data={this.getData()}
+            data={props.item.content}
             extraData={props.currentSearchString + props.favorites.length}
             renderItem={this.getRenderItem}
             keyExtractor={this.keyExtractor}

@@ -93,23 +93,15 @@ function GroupSelectionScreen() {
    * @param item The article to render
    * @return {*}
    */
-  const getRenderItem = ({ item }: { item: PlanexGroupCategoryType }) => {
-    if (
-      shouldDisplayAccordion(item) ||
-      (item.id === 0 && item.content.length === 0)
-    ) {
-      return (
-        <GroupListAccordion
-          item={item}
-          favorites={[...favoriteGroups]}
-          onGroupPress={onListItemPress}
-          onFavoritePress={onListFavoritePress}
-          currentSearchString={currentSearchString}
-        />
-      );
-    }
-    return null;
-  };
+  const getRenderItem = ({ item }: { item: PlanexGroupCategoryType }) => (
+    <GroupListAccordion
+      item={item}
+      favorites={[...favoriteGroups]}
+      onGroupPress={onListItemPress}
+      onFavoritePress={onListFavoritePress}
+      currentSearchString={currentSearchString}
+    />
+  );
 
   /**
    * Creates the dataset to be used in the FlatList
@@ -185,23 +177,6 @@ function GroupSelectionScreen() {
   };
 
   /**
-   * Checks whether to display the given group category, depending on user search query
-   *
-   * @param item The group category
-   * @returns {boolean}
-   */
-  const shouldDisplayAccordion = (item: PlanexGroupCategoryType): boolean => {
-    let shouldDisplay = false;
-    for (let i = 0; i < item.content.length; i += 1) {
-      if (stringMatchQuery(item.content[i].name, currentSearchString)) {
-        shouldDisplay = true;
-        break;
-      }
-    }
-    return shouldDisplay;
-  };
-
-  /**
    * Generates the dataset to be used in the FlatList.
    * This improves formatting of group names, sorts alphabetically the categories, and adds favorites at the top.
    *
@@ -212,13 +187,30 @@ function GroupSelectionScreen() {
     fetchedData: PlanexGroupsType | undefined
   ): Array<PlanexGroupCategoryType> => {
     const data: Array<PlanexGroupCategoryType> = [];
+
     if (fetchedData) {
+      // Convert the object into an array
       Object.values(fetchedData).forEach(
         (category: PlanexGroupCategoryType) => {
-          data.push(category);
+          const content: Array<PlanexGroupType> = [];
+          // Filter groups matching the search query
+          category.content.forEach((g: PlanexGroupType) => {
+            if (stringMatchQuery(g.name, currentSearchString)) {
+              content.push(g);
+            }
+          });
+          // Only add categories with groups matching the query
+          if (content.length > 0) {
+            data.push({
+              id: category.id,
+              name: category.name,
+              content: content,
+            });
+          }
         }
       );
       data.sort(sortName);
+      // Add the favorites at the top
       data.unshift({
         name: i18n.t('screens.planex.favorites.title'),
         id: 0,
