@@ -244,7 +244,9 @@ function ProximoListScreen(props: Props) {
           >
             {`${item.quantity} ${i18n.t('screens.proximo.inStock')}`}
           </Subheading>
-          <Subheading style={styles.modalTitle}>{item.price}€</Subheading>
+          <Subheading style={styles.modalTitle}>
+            {item.price.toFixed(2)}€
+          </Subheading>
         </View>
 
         <ScrollView>
