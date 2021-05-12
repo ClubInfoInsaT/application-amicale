@@ -131,11 +131,6 @@ function ProxiwashScreen() {
       headerRight: () => (
         <MaterialHeaderButtons>
           <Item
-            title={'switch'}
-            iconName={'swap-horizontal'}
-            onPress={() => navigation.navigate('settings')}
-          />
-          <Item
             title={'information'}
             iconName={'information'}
             onPress={() => navigation.navigate('proxiwash-about')}
