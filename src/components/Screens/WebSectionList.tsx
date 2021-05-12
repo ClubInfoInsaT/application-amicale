@@ -61,15 +61,18 @@ type Props<ItemT, RawData> = Omit<
   > & {
     createDataset: (
       data: RawData | undefined,
-      isLoading: boolean
+      loading: boolean,
+      refreshData: (newRequest?: () => Promise<RawData>) => void,
+      status: REQUEST_STATUS,
+      code?: REQUEST_CODES
     ) => SectionListDataType<ItemT>;
     renderListHeaderComponent?: (
-      data?: RawData
+      data: RawData | undefined,
+      loading: boolean,
+      refreshData: (newRequest?: () => Promise<RawData>) => void,
+      status: REQUEST_STATUS,
+      code?: REQUEST_CODES
     ) => React.ComponentType<any> | React.ReactElement | null;
-    renderSectionHeader?: (
-      data: { section: SectionListData<ItemT> },
-      isLoading: boolean
-    ) => React.ReactElement | null;
     itemHeight?: number | null;
   };
 
@@ -110,7 +113,13 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
     code?: REQUEST_CODES
   ) => {
     const { itemHeight } = props;
-    const dataset = props.createDataset(data, loading);
+    const dataset = props.createDataset(
+      data,
+      loading,
+      refreshData,
+      status,
+      code
+    );
     if (!data && !loading) {
       showSnackBar();
     }
@@ -131,7 +140,13 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
         style={styles.container}
         ListHeaderComponent={
           props.renderListHeaderComponent != null
-            ? props.renderListHeaderComponent(data)
+            ? props.renderListHeaderComponent(
+                data,
+                loading,
+                refreshData,
+                status,
+                code
+              )
             : null
         }
         ListEmptyComponent={

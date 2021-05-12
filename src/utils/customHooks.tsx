@@ -104,6 +104,7 @@ export function useRequestLogic<T>(
             code: 0,
             data: prevState.data,
           }));
+          setLastRefreshDate(undefined);
         });
     }
   };

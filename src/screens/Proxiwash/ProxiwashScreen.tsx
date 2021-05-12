@@ -52,6 +52,8 @@ import GENERAL_STYLES from '../../constants/Styles';
 import { readData } from '../../utils/WebData';
 import { useFocusEffect, useNavigation } from '@react-navigation/core';
 import { setupMachineNotification } from '../../utils/Notifications';
+import { REQUEST_STATUS } from '../../utils/Requests';
+import ProximoListHeader from '../../components/Lists/Proximo/ProximoListHeader';
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
@@ -105,8 +107,10 @@ function ProxiwashScreen() {
   const [selectedWash, setSelectedWash] = useState(
     AsyncStorageManager.getString(
       AsyncStorageManager.PREFERENCES.selectedWash.key
-    )
+    ) as 'tripodeB' | 'washinsa'
   );
+
+  const lastrefreshDate = useRef<Date | undefined>(undefined);
 
   const modalStateStrings: { [key in MachineStates]: string } = {
     [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.modal.ready'),
@@ -145,7 +149,7 @@ function ProxiwashScreen() {
     useCallback(() => {
       const selected = AsyncStorageManager.getString(
         AsyncStorageManager.PREFERENCES.selectedWash.key
-      );
+      ) as 'tripodeB' | 'washinsa';
       if (selected !== selectedWash) {
         setSelectedWash(selected);
       }
@@ -418,6 +422,24 @@ function ProxiwashScreen() {
     );
   };
 
+  const renderListHeaderComponent = (
+    _data: FetchedDataType | undefined,
+    loading: boolean,
+    _refreshData: (newRequest?: () => Promise<FetchedDataType>) => void,
+    status: REQUEST_STATUS
+  ) => {
+    const success = status === REQUEST_STATUS.SUCCESS;
+    if (success && !loading) {
+      lastrefreshDate.current = new Date();
+    }
+    return (
+      <ProximoListHeader
+        date={lastrefreshDate.current}
+        selectedWash={selectedWash}
+      />
+    );
+  };
+
   let data: LaundromatType;
   switch (selectedWash) {
     case 'tripodeB':
@@ -437,6 +459,7 @@ function ProxiwashScreen() {
           autoRefreshTime={REFRESH_TIME}
           refreshOnFocus={true}
           extraData={machinesWatched.length}
+          renderListHeaderComponent={renderListHeaderComponent}
         />
       </View>
       <MascotPopup
