@@ -45,7 +45,7 @@
     "react-native-modalize": "2.0.8",
     "react-native-paper": "4.8.1",
     "react-native-permissions": "3.0.3",
-    "react-native-push-notification": "5.1.1",
+    "react-native-push-notification": "7.3.0",
     "react-native-reanimated": "1.13.2",
     "react-native-render-html": "5.1.0",
     "react-native-safe-area-context": "3.2.0",
@@ -65,6 +65,7 @@
     "@types/react": "17.0.3",
     "@types/react-native": "0.64.4",
     "@types/react-native-calendars": "1.20.10",
+    "@types/react-native-push-notification": "^7.2.0",
     "@types/react-native-vector-icons": "6.4.6",
     "@types/react-test-renderer": "17.0.1",
     "@typescript-eslint/eslint-plugin": "4.22.1",
@@ -94,7 +95,9 @@
     "rules": {
       "no-undef": 0,
       "no-shadow": "off",
-      "@typescript-eslint/no-shadow": ["error"],
+      "@typescript-eslint/no-shadow": [
+        "error"
+      ],
       "prettier/prettier": [
         "error",
         {

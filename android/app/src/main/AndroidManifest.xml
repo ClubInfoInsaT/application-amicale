@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <application
             android:name=".MainApplication"
@@ -19,31 +18,33 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
     >
-        <!--        NOTIFICATIONS -->
-        <meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_name"
-                   android:value="reminders"/>
-        <meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_description"
-                   android:value="reminders"/>
-        <!-- Change the resource name to your App's accent color - or any other color you want -->
-        <meta-data android:name="com.dieam.reactnativepushnotification.notification_color"
-                   android:resource="@color/colorPrimary"/> <!-- or @android:color/{name} to use a standard color -->
 
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher"/>
+        <!-- START NOTIFICATIONS -->
+
+        <!-- Change the value to true to enable pop-up for in foreground on receiving remote notifications (for prevent duplicating while showing local notifications set this to false) -->
+        <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground"
+                    android:value="false"/>
+        Change the resource name to your App's accent color - or any other color you want
+        <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"
+                    android:resource="@color/colorPrimary"/>
+        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions" />
+        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
 
         <service
-                android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
-                android:exported="false">
+            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
+            android:exported="false" >
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <!--        END NOTIFICATIONS-->
+        <!-- END NOTIFICATIONS -->
 
 
         <meta-data android:name="com.facebook.sdk.AutoInitEnabled" android:value="false"/>

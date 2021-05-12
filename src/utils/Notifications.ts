@@ -17,44 +17,59 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-  checkNotifications,
-  requestNotifications,
-  RESULTS,
-} from 'react-native-permissions';
 import i18n from 'i18n-js';
 import AsyncStorageManager from '../managers/AsyncStorageManager';
-
-const PushNotification = require('react-native-push-notification');
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import PushNotification from 'react-native-push-notification';
+import { Platform } from 'react-native';
 
 // Used to multiply the normal notification id to create the reminder one. It allows to find it back easily
 const reminderIdFactor = 100;
 
-/**
- * Async function asking permission to send notifications to the user.
- * Used on ios.
- *
- * @returns {Promise<void>}
- */
-export async function askPermissions(): Promise<void> {
-  return new Promise((resolve: () => void, reject: () => void) => {
-    checkNotifications().then(({ status }: { status: string }) => {
-      if (status === RESULTS.GRANTED) {
-        resolve();
-      } else if (status === RESULTS.BLOCKED) {
-        reject();
-      } else {
-        requestNotifications([]).then((result: { status: string }) => {
-          if (result.status === RESULTS.GRANTED) {
-            resolve();
-          } else {
-            reject();
-          }
-        });
-      }
-    });
-  });
-}
+PushNotification.createChannel(
+  {
+    channelId: 'reminders', // (required)
+    channelName: 'Reminders', // (required)
+    channelDescription: 'Get laundry reminders', // (optional) default: undefined.
+    playSound: true, // (optional) default: true
+    soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
+    importance: 4, // (optional) default: 4. Int value of the Android notification importance
+    vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
+  },
+  (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+);
+
+PushNotification.configure({
+  // (required) Called when a remote is received or opened, or local notification is opened
+  onNotification: function (notification) {
+    console.log('NOTIFICATION:', notification);
+
+    // process the notification
+
+    // (required) Called when a remote is received or opened, or local notification is opened
+    notification.finish(PushNotificationIOS.FetchResult.NoData);
+  },
+
+  // IOS ONLY (optional): default: all - Permissions to register.
+  permissions: {
+    alert: true,
+    badge: true,
+    sound: true,
+  },
+
+  // Should the initial notification be popped automatically
+  // default: true
+  popInitialNotification: true,
+
+  /**
+   * (optional) default: true
+   * - Specified if permissions (ios) and token (android and ios) will requested or not,
+   * - if not, you must call PushNotificationsHandler.requestPermissions() later
+   * - if you are not using remote notification or do not have Firebase installed, use this:
+   *     requestPermissions: Platform.OS === 'ios'
+   */
+  requestPermissions: Platform.OS === 'ios',
+});
 
 /**
  * Creates a notification for the given machine id at the given date.
@@ -79,7 +94,7 @@ function createNotifications(machineID: string, date: Date) {
       message: i18n.t('screens.proxiwash.notifications.machineRunningBody', {
         number: machineID,
       }),
-      id: id.toString(),
+      id: id,
       date: reminderDate,
     });
   }
@@ -89,7 +104,7 @@ function createNotifications(machineID: string, date: Date) {
     message: i18n.t('screens.proxiwash.notifications.machineFinishedBody', {
       number: machineID,
     }),
-    id: machineID,
+    id: parseInt(machineID, 10),
     date,
   });
 }
@@ -104,26 +119,16 @@ function createNotifications(machineID: string, date: Date) {
  * @param isEnabled True to enable notifications, false to disable
  * @param endDate The trigger date, or null if disabling notifications
  */
-export async function setupMachineNotification(
+export function setupMachineNotification(
   machineID: string,
   isEnabled: boolean,
-  endDate: Date | null
-): Promise<void> {
-  return new Promise((resolve: () => void, reject: () => void) => {
-    if (isEnabled && endDate != null) {
-      askPermissions()
-        .then(() => {
-          createNotifications(machineID, endDate);
-          resolve();
-        })
-        .catch(() => {
-          reject();
-        });
-    } else {
-      PushNotification.cancelLocalNotifications({ id: machineID });
-      const reminderId = reminderIdFactor * parseInt(machineID, 10);
-      PushNotification.cancelLocalNotifications({ id: reminderId.toString() });
-      resolve();
-    }
-  });
+  endDate?: Date | null
+) {
+  if (isEnabled && endDate) {
+    createNotifications(machineID, endDate);
+  } else {
+    PushNotification.cancelLocalNotifications({ id: machineID });
+    const reminderId = reminderIdFactor * parseInt(machineID, 10);
+    PushNotification.cancelLocalNotifications({ id: reminderId.toString() });
+  }
 }

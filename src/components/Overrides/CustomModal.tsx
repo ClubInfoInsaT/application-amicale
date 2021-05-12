@@ -17,11 +17,15 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { Ref } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
 import { View } from 'react-native-animatable';
 import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
+
+type Props = {
+  children?: React.ReactChild | null;
+};
 
 /**
  * Abstraction layer for Modalize component, using custom configuration
@@ -29,15 +33,12 @@ import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
  * @param props Props to pass to the element. Must specify an onRef prop to get an Modalize ref.
  * @return {*}
  */
-function CustomModal(props: {
-  onRef: (re: Modalize) => void;
-  children?: React.ReactNode;
-}) {
+function CustomModal(props: Props, ref?: Ref<Modalize>) {
   const theme = useTheme();
-  const { onRef, children } = props;
+  const { children } = props;
   return (
     <Modalize
-      ref={onRef}
+      ref={ref}
       adjustToContentHeight
       handlePosition="inside"
       modalStyle={{ backgroundColor: theme.colors.card }}
@@ -54,4 +55,4 @@ function CustomModal(props: {
   );
 }
 
-export default CustomModal;
+export default React.forwardRef(CustomModal);
