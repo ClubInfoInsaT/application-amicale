@@ -62,6 +62,7 @@ type Props<ItemT, RawData> = Omit<
     createDataset: (
       data: RawData | undefined,
       loading: boolean,
+      lastRefreshDate: Date | undefined,
       refreshData: (newRequest?: () => Promise<RawData>) => void,
       status: REQUEST_STATUS,
       code?: REQUEST_CODES
@@ -69,6 +70,7 @@ type Props<ItemT, RawData> = Omit<
     renderListHeaderComponent?: (
       data: RawData | undefined,
       loading: boolean,
+      lastRefreshDate: Date | undefined,
       refreshData: (newRequest?: () => Promise<RawData>) => void,
       status: REQUEST_STATUS,
       code?: REQUEST_CODES
@@ -108,6 +110,7 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
   const render = (
     data: RawData | undefined,
     loading: boolean,
+    lastRefreshDate: Date | undefined,
     refreshData: (newRequest?: () => Promise<RawData>) => void,
     status: REQUEST_STATUS,
     code?: REQUEST_CODES
@@ -116,6 +119,7 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
     const dataset = props.createDataset(
       data,
       loading,
+      lastRefreshDate,
       refreshData,
       status,
       code
@@ -143,6 +147,7 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
             ? props.renderListHeaderComponent(
                 data,
                 loading,
+                lastRefreshDate,
                 refreshData,
                 status,
                 code

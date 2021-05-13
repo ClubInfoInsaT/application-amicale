@@ -52,7 +52,6 @@ import GENERAL_STYLES from '../../constants/Styles';
 import { readData } from '../../utils/WebData';
 import { useFocusEffect, useNavigation } from '@react-navigation/core';
 import { setupMachineNotification } from '../../utils/Notifications';
-import { REQUEST_STATUS } from '../../utils/Requests';
 import ProximoListHeader from '../../components/Lists/Proximo/ProximoListHeader';
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
@@ -109,8 +108,6 @@ function ProxiwashScreen() {
       AsyncStorageManager.PREFERENCES.selectedWash.key
     ) as 'tripodeB' | 'washinsa'
   );
-
-  const lastrefreshDate = useRef<Date | undefined>(undefined);
 
   const modalStateStrings: { [key in MachineStates]: string } = {
     [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.modal.ready'),
@@ -418,21 +415,17 @@ function ProxiwashScreen() {
   };
 
   const renderListHeaderComponent = (
-    _data: FetchedDataType | undefined,
-    loading: boolean,
-    _refreshData: (newRequest?: () => Promise<FetchedDataType>) => void,
-    status: REQUEST_STATUS
+    data: FetchedDataType | undefined,
+    _loading: boolean,
+    lastRefreshDate: Date | undefined
   ) => {
-    const success = status === REQUEST_STATUS.SUCCESS;
-    if (success && !loading) {
-      lastrefreshDate.current = new Date();
+    if (data) {
+      return (
+        <ProximoListHeader date={lastRefreshDate} selectedWash={selectedWash} />
+      );
+    } else {
+      return null;
     }
-    return (
-      <ProximoListHeader
-        date={lastrefreshDate.current}
-        selectedWash={selectedWash}
-      />
-    );
   };
 
   let data: LaundromatType;

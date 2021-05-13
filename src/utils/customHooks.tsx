@@ -55,24 +55,24 @@ export function useRequestLogic<T>(
 ) {
   const [response, setResponse] = useState<{
     loading: boolean;
+    lastRefreshDate?: Date;
     status: REQUEST_STATUS;
     code?: number;
     data: T | undefined;
   }>({
     loading: startLoading !== false && cache === undefined,
+    lastRefreshDate: undefined,
     status: REQUEST_STATUS.SUCCESS,
     code: undefined,
     data: undefined,
   });
-  const [lastRefreshDate, setLastRefreshDate] = useState<Date | undefined>(
-    undefined
-  );
 
   const refreshData = (newRequest?: () => Promise<T>) => {
     let canRefresh;
-    if (lastRefreshDate && minRefreshTime) {
-      const last = lastRefreshDate;
-      canRefresh = new Date().getTime() - last.getTime() > minRefreshTime;
+    if (response.lastRefreshDate && minRefreshTime) {
+      canRefresh =
+        new Date().getTime() - response.lastRefreshDate.getTime() >
+        minRefreshTime;
     } else {
       canRefresh = true;
     }
@@ -83,12 +83,12 @@ export function useRequestLogic<T>(
           loading: true,
         }));
       }
-      setLastRefreshDate(new Date());
       const r = newRequest ? newRequest : request;
       r()
         .then((requestResponse: T) => {
           setResponse({
             loading: false,
+            lastRefreshDate: new Date(),
             status: REQUEST_STATUS.SUCCESS,
             code: undefined,
             data: requestResponse,
@@ -100,23 +100,25 @@ export function useRequestLogic<T>(
         .catch(() => {
           setResponse((prevState) => ({
             loading: false,
+            lastRefreshDate: prevState.lastRefreshDate,
             status: REQUEST_STATUS.CONNECTION_ERROR,
             code: 0,
             data: prevState.data,
           }));
-          setLastRefreshDate(undefined);
         });
     }
   };
 
   const value: [
     boolean,
+    Date | undefined,
     REQUEST_STATUS,
     number | undefined,
     T | undefined,
     (newRequest?: () => Promise<T>) => void
   ] = [
     response.loading,
+    response.lastRefreshDate,
     response.status,
     response.code,
     cache ? cache : response.data,

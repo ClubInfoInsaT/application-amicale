@@ -11,6 +11,7 @@ export type RequestScreenProps<T> = {
   render: (
     data: T | undefined,
     loading: boolean,
+    lastRefreshDate: Date | undefined,
     refreshData: (newRequest?: () => Promise<T>) => void,
     status: REQUEST_STATUS,
     code?: REQUEST_CODES
@@ -37,8 +38,15 @@ const MIN_REFRESH_TIME = 5 * 1000;
 
 export default function RequestScreen<T>(props: Props<T>) {
   const refreshInterval = useRef<number>();
-  const [loading, status, code, data, refreshData] = useRequestLogic<T>(
-    () => props.request(),
+  const [
+    loading,
+    lastRefreshDate,
+    status,
+    code,
+    data,
+    refreshData,
+  ] = useRequestLogic<T>(
+    props.request,
     props.cache,
     props.onCacheUpdate,
     props.refreshOnFocus,
@@ -81,16 +89,6 @@ export default function RequestScreen<T>(props: Props<T>) {
     }, [props.cache, props.refreshOnFocus])
   );
 
-  // useEffect(() => {
-  //   if (status === REQUEST_STATUS.BAD_TOKEN && props.onMajorError) {
-  //     props.onMajorError(status, code);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [status, code]);
-
-  // if (status === REQUEST_STATUS.BAD_TOKEN && props.onMajorError) {
-  //   return <View />;
-  // } else
   if (data === undefined && loading && props.showLoading !== false) {
     return <BasicLoadingScreen />;
   } else if (
@@ -110,6 +108,13 @@ export default function RequestScreen<T>(props: Props<T>) {
       />
     );
   } else {
-    return props.render(data, loading, refreshData, status, code);
+    return props.render(
+      data,
+      loading,
+      lastRefreshDate,
+      refreshData,
+      status,
+      code
+    );
   }
 }
