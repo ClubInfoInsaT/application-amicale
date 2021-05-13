@@ -84,8 +84,6 @@ export function useRequestLogic<T>(
         });
       }
       const r = newRequest ? newRequest : request;
-      console.log(r);
-
       r()
         .then((requestResponse: T) => {
           setResponse({
