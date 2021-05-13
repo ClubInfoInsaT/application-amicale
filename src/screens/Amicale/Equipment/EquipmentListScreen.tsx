@@ -136,7 +136,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
       }
       return [{ title: '', data: data.devices }];
     } else {
-      return [{ title: '', data: [] }];
+      return [];
     }
   };
 

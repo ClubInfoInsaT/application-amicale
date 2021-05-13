@@ -239,13 +239,7 @@ function ProximoMainScreen() {
         },
       ];
     } else {
-      return [
-        {
-          title: '',
-          data: [],
-          keyExtractor: getKeyExtractor,
-        },
-      ];
+      return [];
     }
   };
 

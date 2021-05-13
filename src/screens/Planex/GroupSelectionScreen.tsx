@@ -121,12 +121,16 @@ function GroupSelectionScreen() {
         }
       | undefined
   ): Array<{ title: string; data: Array<PlanexGroupCategoryType> }> => {
-    return [
-      {
-        title: '',
-        data: generateData(fetchedData),
-      },
-    ];
+    if (fetchedData) {
+      return [
+        {
+          title: '',
+          data: generateData(fetchedData),
+        },
+      ];
+    } else {
+      return [];
+    }
   };
 
   /**
@@ -181,39 +185,34 @@ function GroupSelectionScreen() {
    * @returns {[]}
    */
   const generateData = (
-    fetchedData: PlanexGroupsType | undefined
+    fetchedData: PlanexGroupsType
   ): Array<PlanexGroupCategoryType> => {
     const data: Array<PlanexGroupCategoryType> = [];
-
-    if (fetchedData) {
-      // Convert the object into an array
-      Object.values(fetchedData).forEach(
-        (category: PlanexGroupCategoryType) => {
-          const content: Array<PlanexGroupType> = [];
-          // Filter groups matching the search query
-          category.content.forEach((g: PlanexGroupType) => {
-            if (stringMatchQuery(g.name, currentSearchString)) {
-              content.push(g);
-            }
-          });
-          // Only add categories with groups matching the query
-          if (content.length > 0) {
-            data.push({
-              id: category.id,
-              name: category.name,
-              content: content,
-            });
-          }
+    // Convert the object into an array
+    Object.values(fetchedData).forEach((category: PlanexGroupCategoryType) => {
+      const content: Array<PlanexGroupType> = [];
+      // Filter groups matching the search query
+      category.content.forEach((g: PlanexGroupType) => {
+        if (stringMatchQuery(g.name, currentSearchString)) {
+          content.push(g);
         }
-      );
-      data.sort(sortName);
-      // Add the favorites at the top
-      data.unshift({
-        name: i18n.t('screens.planex.favorites.title'),
-        id: 0,
-        content: favoriteGroups,
       });
-    }
+      // Only add categories with groups matching the query
+      if (content.length > 0) {
+        data.push({
+          id: category.id,
+          name: category.name,
+          content: content,
+        });
+      }
+    });
+    data.sort(sortName);
+    // Add the favorites at the top
+    data.unshift({
+      name: i18n.t('screens.planex.favorites.title'),
+      id: 0,
+      content: favoriteGroups,
+    });
     return data;
   };
 

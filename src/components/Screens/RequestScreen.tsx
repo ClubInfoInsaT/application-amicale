@@ -1,10 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import ErrorView from './ErrorView';
 import { useRequestLogic } from '../../utils/customHooks';
-import { useFocusEffect } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import BasicLoadingScreen from './BasicLoadingScreen';
 import i18n from 'i18n-js';
 import { API_REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { MainRoutes } from '../../navigation/MainNavigator';
+import ConnectionManager from '../../managers/ConnectionManager';
 
 export type RequestScreenProps<T> = {
   request: () => Promise<T>;
@@ -37,6 +44,8 @@ type Props<T> = RequestScreenProps<T>;
 const MIN_REFRESH_TIME = 5 * 1000;
 
 export default function RequestScreen<T>(props: Props<T>) {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+  const route = useRoute();
   const refreshInterval = useRef<number>();
   const [
     loading,
@@ -89,22 +98,42 @@ export default function RequestScreen<T>(props: Props<T>) {
     }, [props.cache, props.refreshOnFocus])
   );
 
+  const isErrorCritical = (e: API_REQUEST_CODES | undefined) => {
+    return e === API_REQUEST_CODES.BAD_TOKEN;
+  };
+
+  useEffect(() => {
+    if (isErrorCritical(code)) {
+      ConnectionManager.getInstance()
+        .disconnect()
+        .then(() => {
+          navigation.replace(MainRoutes.Login, { nextScreen: route.name });
+        });
+    }
+  }, [code, navigation, route]);
+
   if (data === undefined && loading && props.showLoading !== false) {
     return <BasicLoadingScreen />;
   } else if (
     data === undefined &&
-    status !== REQUEST_STATUS.SUCCESS &&
+    (status !== REQUEST_STATUS.SUCCESS ||
+      (status === REQUEST_STATUS.SUCCESS && code !== undefined)) &&
     props.showError !== false
   ) {
     return (
       <ErrorView
         status={status}
+        code={code}
         loading={loading}
-        button={{
-          icon: 'refresh',
-          text: i18n.t('general.retry'),
-          onPress: () => refreshData(),
-        }}
+        button={
+          isErrorCritical(code)
+            ? undefined
+            : {
+                icon: 'refresh',
+                text: i18n.t('general.retry'),
+                onPress: () => refreshData(),
+              }
+        }
       />
     );
   } else {

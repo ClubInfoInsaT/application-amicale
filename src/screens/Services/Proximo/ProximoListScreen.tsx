@@ -349,13 +349,7 @@ function ProximoListScreen(props: Props) {
         },
       ];
     } else {
-      return [
-        {
-          title: '',
-          data: [],
-          keyExtractor: keyExtractor,
-        },
-      ];
+      return [];
     }
   };
 

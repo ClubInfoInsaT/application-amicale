@@ -27,6 +27,7 @@ import WebSectionList from '../../components/Screens/WebSectionList';
 import type { SectionListDataType } from '../../components/Screens/WebSectionList';
 import Urls from '../../constants/Urls';
 import { readData } from '../../utils/WebData';
+import { REQUEST_STATUS } from '../../utils/Requests';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -109,25 +110,31 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @return {[]}
    */
   createDataset = (
-    fetchedData: Array<RawRuMenuType> | undefined
+    fetchedData: Array<RawRuMenuType> | undefined,
+    _loading: boolean,
+    _lastRefreshDate: Date | undefined,
+    _refreshData: (newRequest?: () => Promise<Array<RawRuMenuType>>) => void,
+    status: REQUEST_STATUS
   ): SectionListDataType<RuFoodCategoryType> => {
     let result: SectionListDataType<RuFoodCategoryType> = [];
-    if (fetchedData == null || fetchedData.length === 0) {
-      result = [
-        {
-          title: i18n.t('general.notAvailable'),
-          data: [],
-          keyExtractor: this.getKeyExtractor,
-        },
-      ];
-    } else {
-      fetchedData.forEach((item: RawRuMenuType) => {
-        result.push({
-          title: DateManager.getInstance().getTranslatedDate(item.date),
-          data: item.meal[0].foodcategory,
-          keyExtractor: this.getKeyExtractor,
+    if (status === REQUEST_STATUS.SUCCESS) {
+      if (fetchedData == null || fetchedData.length === 0) {
+        result = [
+          {
+            title: i18n.t('general.notAvailable'),
+            data: [],
+            keyExtractor: this.getKeyExtractor,
+          },
+        ];
+      } else {
+        fetchedData.forEach((item: RawRuMenuType) => {
+          result.push({
+            title: DateManager.getInstance().getTranslatedDate(item.date),
+            data: item.meal[0].foodcategory,
+            keyExtractor: this.getKeyExtractor,
+          });
         });
-      });
+      }
     }
     return result;
   };

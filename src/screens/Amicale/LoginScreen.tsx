@@ -110,10 +110,9 @@ class LoginScreen extends React.Component<Props, StateType> {
       this.onInputChange(false, value);
     };
     props.navigation.addListener('focus', this.onScreenFocus);
-    // TODO remove
     this.state = {
-      email: 'vergnet@etud.insa-toulouse.fr',
-      password: 'IGtt25ùj',
+      email: '',
+      password: '',
       isEmailValidated: false,
       isPasswordValidated: false,
       loading: false,
@@ -373,7 +372,7 @@ class LoginScreen extends React.Component<Props, StateType> {
    * Saves the screen to navigate to after a successful login if one was provided in navigation parameters
    */
   handleNavigationParams() {
-    this.nextScreen = this.props.route.params.nextScreen;
+    this.nextScreen = this.props.route.params?.nextScreen;
   }
 
   /**

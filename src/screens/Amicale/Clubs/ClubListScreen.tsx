@@ -156,7 +156,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
       this.categories = data?.categories;
       return [{ title: '', data: data.clubs }];
     } else {
-      return [{ title: '', data: [] }];
+      return [];
     }
   };
 
