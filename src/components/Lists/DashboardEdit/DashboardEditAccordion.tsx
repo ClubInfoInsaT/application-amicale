@@ -84,17 +84,18 @@ function DashboardEditAccordion(props: PropsType) {
             />
           )
         }
-      >
-        <FlatList
-          data={item.content}
-          extraData={props.activeDashboard.toString()}
-          renderItem={getRenderItem}
-          listKey={item.key}
-          // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-          getItemLayout={getItemLayout}
-          removeClippedSubviews
-        />
-      </AnimatedAccordion>
+        renderItem={() => (
+          <FlatList
+            data={item.content}
+            extraData={props.activeDashboard.toString()}
+            renderItem={getRenderItem}
+            listKey={item.key}
+            // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+            getItemLayout={getItemLayout}
+            removeClippedSubviews={true}
+          />
+        )}
+      />
     </View>
   );
 }

@@ -38,7 +38,7 @@ type PropsType = {
   opened?: boolean;
   unmountWhenCollapsed?: boolean;
   enabled?: boolean;
-  children?: React.ReactNode;
+  renderItem: () => React.ReactNode;
 };
 
 function AnimatedAccordion(props: PropsType) {
@@ -96,6 +96,8 @@ function AnimatedAccordion(props: PropsType) {
 
   const toggleAccordion = () => setExpanded(!expanded);
 
+  const renderChildren =
+    !props.unmountWhenCollapsed || (props.unmountWhenCollapsed && expanded);
   return (
     <View style={props.style}>
       <List.Item
@@ -125,10 +127,7 @@ function AnimatedAccordion(props: PropsType) {
       />
       {enabled ? (
         <Collapsible collapsed={!expanded}>
-          {!props.unmountWhenCollapsed ||
-          (props.unmountWhenCollapsed && expanded)
-            ? props.children
-            : null}
+          {renderChildren ? props.renderItem() : null}
         </Collapsible>
       ) : null}
     </View>

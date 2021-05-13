@@ -105,18 +105,19 @@ function GroupListAccordion(props: PropsType) {
         (isFavorite && !isEmptyFavorite)
       }
       enabled={!isEmptyFavorite}
-    >
-      <FlatList
-        data={props.item.content}
-        extraData={props.currentSearchString + props.favorites.length}
-        renderItem={getRenderItem}
-        keyExtractor={keyExtractor}
-        listKey={props.item.id.toString()}
-        // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-        getItemLayout={itemLayout}
-        removeClippedSubviews={true}
-      />
-    </AnimatedAccordion>
+      renderItem={() => (
+        <FlatList
+          data={props.item.content}
+          extraData={props.currentSearchString + props.favorites.length}
+          renderItem={getRenderItem}
+          keyExtractor={keyExtractor}
+          listKey={props.item.id.toString()}
+          // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+          getItemLayout={itemLayout}
+          removeClippedSubviews={true}
+        />
+      )}
+    />
   );
 }
 

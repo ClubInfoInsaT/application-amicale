@@ -94,13 +94,16 @@ function ClubListHeader(props: PropsType) {
             icon="star"
           />
         )}
-        opened
-      >
-        <Text style={styles.text}>
-          {i18n.t('screens.clubs.categoriesFilterMessage')}
-        </Text>
-        <View style={styles.chipContainer}>{getCategoriesRender()}</View>
-      </AnimatedAccordion>
+        opened={true}
+        renderItem={() => (
+          <View>
+            <Text style={styles.text}>
+              {i18n.t('screens.clubs.categoriesFilterMessage')}
+            </Text>
+            <View style={styles.chipContainer}>{getCategoriesRender()}</View>
+          </View>
+        )}
+      />
     </Card>
   );
 }
