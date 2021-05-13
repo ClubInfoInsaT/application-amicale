@@ -22,13 +22,14 @@ import { StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'i18n-js';
-import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen';
 import EquipmentListItem from '../../../components/Lists/Equipment/EquipmentListItem';
 import MascotPopup from '../../../components/Mascot/MascotPopup';
 import { MASCOT_STYLE } from '../../../components/Mascot/Mascot';
 import AsyncStorageManager from '../../../managers/AsyncStorageManager';
-import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
 import GENERAL_STYLES from '../../../constants/Styles';
+import ConnectionManager from '../../../managers/ConnectionManager';
+import { ApiRejectType } from '../../../utils/WebData';
+import WebSectionList from '../../../components/Screens/WebSectionList';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -52,6 +53,11 @@ export type RentedDeviceType = {
   end: string;
 };
 
+type ResponseType = {
+  devices: Array<DeviceType>;
+  locations?: Array<RentedDeviceType>;
+};
+
 const LIST_ITEM_HEIGHT = 64;
 
 const styles = StyleSheet.create({
@@ -65,10 +71,6 @@ const styles = StyleSheet.create({
 class EquipmentListScreen extends React.Component<PropsType, StateType> {
   userRents: null | Array<RentedDeviceType>;
 
-  authRef: { current: null | AuthenticatedScreen<any> };
-
-  canRefresh: boolean;
-
   constructor(props: PropsType) {
     super(props);
     this.userRents = null;
@@ -77,21 +79,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
         AsyncStorageManager.PREFERENCES.equipmentShowMascot.key
       ),
     };
-    this.canRefresh = false;
-    this.authRef = React.createRef();
-    props.navigation.addListener('focus', this.onScreenFocus);
   }
-
-  onScreenFocus = () => {
-    if (
-      this.canRefresh &&
-      this.authRef.current &&
-      this.authRef.current.reload
-    ) {
-      this.authRef.current.reload();
-    }
-    this.canRefresh = true;
-  };
 
   getRenderItem = ({ item }: { item: DeviceType }) => {
     const { navigation } = this.props;
@@ -139,37 +127,17 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
 
   keyExtractor = (item: DeviceType): string => item.id.toString();
 
-  /**
-   * Gets the main screen component with the fetched data
-   *
-   * @param data The data fetched from the server
-   * @returns {*}
-   */
-  getScreen = (
-    data: Array<
-      | { devices: Array<DeviceType> }
-      | { locations: Array<RentedDeviceType> }
-      | null
-    >
-  ) => {
-    const [allDevices, userRents] = data;
-    if (userRents) {
-      this.userRents = (userRents as {
-        locations: Array<RentedDeviceType>;
-      }).locations;
+  createDataset = (data: ResponseType | undefined) => {
+    if (data) {
+      const userRents = data.locations;
+
+      if (userRents) {
+        this.userRents = userRents;
+      }
+      return [{ title: '', data: data.devices }];
+    } else {
+      return [{ title: '', data: [] }];
     }
-    return (
-      <CollapsibleFlatList
-        keyExtractor={this.keyExtractor}
-        renderItem={this.getRenderItem}
-        ListHeaderComponent={this.getListHeader()}
-        data={
-          allDevices
-            ? (allDevices as { devices: Array<DeviceType> }).devices
-            : null
-        }
-      />
-    );
   };
 
   showMascotDialog = () => {
@@ -184,26 +152,46 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
     this.setState({ mascotDialogVisible: false });
   };
 
+  request = () => {
+    return new Promise(
+      (
+        resolve: (data: ResponseType) => void,
+        reject: (error: ApiRejectType) => void
+      ) => {
+        ConnectionManager.getInstance()
+          .authenticatedRequest<{ devices: Array<DeviceType> }>('location/all')
+          .then((devicesData) => {
+            ConnectionManager.getInstance()
+              .authenticatedRequest<{
+                locations: Array<RentedDeviceType>;
+              }>('location/my')
+              .then((rentsData) => {
+                resolve({
+                  devices: devicesData.devices,
+                  locations: rentsData.locations,
+                });
+              })
+              .catch(() =>
+                resolve({
+                  devices: devicesData.devices,
+                })
+              );
+          })
+          .catch(reject);
+      }
+    );
+  };
+
   render() {
-    const { props, state } = this;
+    const { state } = this;
     return (
       <View style={GENERAL_STYLES.flex}>
-        <AuthenticatedScreen
-          navigation={props.navigation}
-          ref={this.authRef}
-          requests={[
-            {
-              link: 'location/all',
-              params: {},
-              mandatory: true,
-            },
-            {
-              link: 'location/my',
-              params: {},
-              mandatory: false,
-            },
-          ]}
-          renderFunction={this.getScreen}
+        <WebSectionList
+          request={this.request}
+          createDataset={this.createDataset}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.getRenderItem}
+          renderListHeaderComponent={() => this.getListHeader()}
         />
         <MascotPopup
           visible={state.mascotDialogVisible}

@@ -30,7 +30,6 @@ import {
 } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { StackNavigationProp } from '@react-navigation/stack';
-import AuthenticatedScreen from '../../components/Amicale/AuthenticatedScreen';
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import MaterialHeaderButtons, {
   Item,
@@ -42,6 +41,8 @@ import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatLis
 import type { ServiceItemType } from '../../managers/ServicesManager';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
+import RequestScreen from '../../components/Screens/RequestScreen';
+import ConnectionManager from '../../managers/ConnectionManager';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
 });
 
 class ProfileScreen extends React.Component<PropsType, StateType> {
-  data: ProfileDataType | null;
+  data: ProfileDataType | undefined;
 
   flatListData: Array<{ id: string }>;
 
@@ -97,7 +98,7 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
-    this.data = null;
+    this.data = undefined;
     this.flatListData = [{ id: '0' }, { id: '1' }, { id: '2' }, { id: '3' }];
     const services = new ServicesManager(props.navigation);
     this.amicaleDataset = services.getAmicaleServices([SERVICES_KEY.PROFILE]);
@@ -134,21 +135,25 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
    * @param data The data fetched from the server
    * @returns {*}
    */
-  getScreen = (data: Array<ProfileDataType | null>) => {
+  getScreen = (data: ProfileDataType | undefined) => {
     const { dialogVisible } = this.state;
-    this.data = data[0];
-    return (
-      <View style={GENERAL_STYLES.flex}>
-        <CollapsibleFlatList
-          renderItem={this.getRenderItem}
-          data={this.flatListData}
-        />
-        <LogoutDialog
-          visible={dialogVisible}
-          onDismiss={this.hideDisconnectDialog}
-        />
-      </View>
-    );
+    if (data) {
+      this.data = data;
+      return (
+        <View style={GENERAL_STYLES.flex}>
+          <CollapsibleFlatList
+            renderItem={this.getRenderItem}
+            data={this.flatListData}
+          />
+          <LogoutDialog
+            visible={dialogVisible}
+            onDismiss={this.hideDisconnectDialog}
+          />
+        </View>
+      );
+    } else {
+      return <View />;
+    }
   };
 
   getRenderItem = ({ item }: { item: { id: string } }) => {
@@ -482,18 +487,12 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const { navigation } = this.props;
     return (
-      <AuthenticatedScreen
-        navigation={navigation}
-        requests={[
-          {
-            link: 'user/profile',
-            params: {},
-            mandatory: true,
-          },
-        ]}
-        renderFunction={this.getScreen}
+      <RequestScreen<ProfileDataType>
+        request={() =>
+          ConnectionManager.getInstance().authenticatedRequest('user/profile')
+        }
+        render={this.getScreen}
       />
     );
   }

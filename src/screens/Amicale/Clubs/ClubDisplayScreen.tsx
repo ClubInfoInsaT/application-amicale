@@ -29,13 +29,13 @@ import {
 } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { StackNavigationProp } from '@react-navigation/stack';
-import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen';
 import CustomHTML from '../../../components/Overrides/CustomHTML';
 import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
 import type { ClubCategoryType, ClubType } from './ClubListScreen';
-import { ERROR_TYPE } from '../../../utils/WebData';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../../components/Media/ImageGalleryButton';
+import RequestScreen from '../../../components/Screens/RequestScreen';
+import ConnectionManager from '../../../managers/ConnectionManager';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -48,6 +48,8 @@ type PropsType = {
   };
   theme: ReactNativePaper.Theme;
 };
+
+type ResponseType = ClubType;
 
 const AMICALE_MAIL = 'clubs@amicale-insat.fr';
 
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
  * If called with clubId parameter, will fetch the information on the server
  */
 class ClubDisplayScreen extends React.Component<PropsType> {
-  displayData: ClubType | null;
+  displayData: ClubType | undefined;
 
   categories: Array<ClubCategoryType> | null;
 
@@ -98,7 +100,7 @@ class ClubDisplayScreen extends React.Component<PropsType> {
 
   constructor(props: PropsType) {
     super(props);
-    this.displayData = null;
+    this.displayData = undefined;
     this.categories = null;
     this.clubId = props.route.params?.clubId ? props.route.params.clubId : 0;
     this.shouldFetchData = true;
@@ -236,9 +238,8 @@ class ClubDisplayScreen extends React.Component<PropsType> {
     );
   }
 
-  getScreen = (response: Array<ClubType | null>) => {
-    let data: ClubType | null = response[0];
-    if (data != null) {
+  getScreen = (data: ResponseType | undefined) => {
+    if (data) {
       this.updateHeaderTitle(data);
       return (
         <CollapsibleScrollView style={styles.scroll} hasTab>
@@ -264,7 +265,7 @@ class ClubDisplayScreen extends React.Component<PropsType> {
         </CollapsibleScrollView>
       );
     }
-    return null;
+    return <View />;
   };
 
   /**
@@ -278,31 +279,20 @@ class ClubDisplayScreen extends React.Component<PropsType> {
   }
 
   render() {
-    const { props } = this;
     if (this.shouldFetchData) {
       return (
-        <AuthenticatedScreen
-          navigation={props.navigation}
-          requests={[
-            {
-              link: 'clubs/info',
-              params: { id: this.clubId },
-              mandatory: true,
-            },
-          ]}
-          renderFunction={this.getScreen}
-          errorViewOverride={[
-            {
-              errorCode: ERROR_TYPE.BAD_INPUT,
-              message: i18n.t('screens.clubs.invalidClub'),
-              icon: 'account-question',
-              showRetryButton: false,
-            },
-          ]}
+        <RequestScreen
+          request={() =>
+            ConnectionManager.getInstance().authenticatedRequest<ResponseType>(
+              'clubs/info',
+              { id: this.clubId }
+            )
+          }
+          render={this.getScreen}
         />
       );
     }
-    return this.getScreen([this.displayData]);
+    return this.getScreen(this.displayData);
   }
 }
 

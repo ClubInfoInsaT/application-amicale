@@ -33,7 +33,7 @@ const APP_IMAGES_ENDPOINT = STUDENT_SERVER + '~amicale_app/images/';
 
 export default {
   amicale: {
-    api: APP_ENDPOINT,
+    api: AMICALE_ENDPOINT,
     resetPassword: AMICALE_SERVER + 'password/reset',
     events: AMICALE_ENDPOINT + 'event/list',
   },

@@ -163,7 +163,9 @@ export default class ConnectionManager {
               });
             }
           })
-          .catch(reject);
+          .catch((err) => {
+            reject(err);
+          });
       }
     );
   }
@@ -177,7 +179,7 @@ export default class ConnectionManager {
    */
   async authenticatedRequest<T>(
     path: string,
-    params: { [key: string]: any }
+    params?: { [key: string]: any }
   ): Promise<T> {
     return new Promise(
       (

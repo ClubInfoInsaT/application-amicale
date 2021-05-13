@@ -39,8 +39,9 @@ export type ApiDataLoginType = {
 };
 
 type ApiResponseType<T> = {
-  error: number;
-  data: T;
+  status: REQUEST_STATUS;
+  error?: API_REQUEST_CODES;
+  data?: T;
 };
 
 export type ApiRejectType = {
@@ -87,6 +88,8 @@ export async function apiRequest<T>(
       if (params != null) {
         requestParams = { ...params };
       }
+      console.log(Urls.amicale.api + path);
+
       fetch(Urls.amicale.api + path, {
         method,
         headers: new Headers({
@@ -95,12 +98,20 @@ export async function apiRequest<T>(
         }),
         body: JSON.stringify(requestParams),
       })
-        .then(
-          async (response: Response): Promise<ApiResponseType<T>> =>
-            response.json()
-        )
+        .then((response: Response) => {
+          const status = response.status;
+          if (status === REQUEST_STATUS.SUCCESS) {
+            return response.json().then(
+              (data): ApiResponseType<T> => {
+                return { status: status, error: data.error, data: data.data };
+              }
+            );
+          } else {
+            return { status: status };
+          }
+        })
         .then((response: ApiResponseType<T>) => {
-          if (isApiResponseValid(response)) {
+          if (isApiResponseValid(response) && response.data) {
             if (response.error === API_REQUEST_CODES.SUCCESS) {
               resolve(response.data);
             } else {
@@ -111,15 +122,15 @@ export async function apiRequest<T>(
             }
           } else {
             reject({
-              status: REQUEST_STATUS.SERVER_ERROR,
+              status: response.status,
             });
           }
         })
-        .catch(() =>
+        .catch(() => {
           reject({
-            status: REQUEST_STATUS.SERVER_ERROR,
-          })
-        );
+            status: REQUEST_STATUS.CONNECTION_ERROR,
+          });
+        });
     }
   );
 }

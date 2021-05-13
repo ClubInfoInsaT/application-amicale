@@ -55,7 +55,7 @@ type StateType = {
   isPasswordValidated: boolean;
   loading: boolean;
   dialogVisible: boolean;
-  dialogError: REQUEST_STATUS;
+  dialogError: ApiRejectType;
   mascotDialogVisible: boolean;
 };
 
@@ -110,14 +110,15 @@ class LoginScreen extends React.Component<Props, StateType> {
       this.onInputChange(false, value);
     };
     props.navigation.addListener('focus', this.onScreenFocus);
+    // TODO remove
     this.state = {
-      email: '',
-      password: '',
+      email: 'vergnet@etud.insa-toulouse.fr',
+      password: 'IGtt25ùj',
       isEmailValidated: false,
       isPasswordValidated: false,
       loading: false,
       dialogVisible: false,
-      dialogError: REQUEST_STATUS.SUCCESS,
+      dialogError: { status: REQUEST_STATUS.SUCCESS },
       mascotDialogVisible: AsyncStorageManager.getBool(
         AsyncStorageManager.PREFERENCES.loginShowMascot.key
       ),
@@ -338,9 +339,11 @@ class LoginScreen extends React.Component<Props, StateType> {
    * @param error The error given by the login request
    */
   showErrorDialog = (error: ApiRejectType) => {
+    console.log(error);
+
     this.setState({
       dialogVisible: true,
-      dialogError: error.status,
+      dialogError: error,
     });
   };
 
@@ -460,7 +463,8 @@ class LoginScreen extends React.Component<Props, StateType> {
             <ErrorDialog
               visible={dialogVisible}
               onDismiss={this.hideErrorDialog}
-              status={dialogError}
+              status={dialogError.status}
+              code={dialogError.code}
             />
           </CollapsibleScrollView>
         </KeyboardAvoidingView>

@@ -22,7 +22,6 @@ import { Platform } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { StackNavigationProp } from '@react-navigation/stack';
-import AuthenticatedScreen from '../../../components/Amicale/AuthenticatedScreen';
 import ClubListItem from '../../../components/Lists/Clubs/ClubListItem';
 import {
   isItemInCategoryFilter,
@@ -32,7 +31,8 @@ import ClubListHeader from '../../../components/Lists/Clubs/ClubListHeader';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
-import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
+import ConnectionManager from '../../../managers/ConnectionManager';
+import WebSectionList from '../../../components/Screens/WebSectionList';
 
 export type ClubCategoryType = {
   id: number;
@@ -56,6 +56,11 @@ type PropsType = {
 type StateType = {
   currentlySelectedCategories: Array<number>;
   currentSearchString: string;
+};
+
+type ResponseType = {
+  categories: Array<ClubCategoryType>;
+  clubs: Array<ClubType>;
 };
 
 const LIST_ITEM_HEIGHT = 96;
@@ -146,30 +151,13 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  getScreen = (
-    data: Array<{
-      categories: Array<ClubCategoryType>;
-      clubs: Array<ClubType>;
-    } | null>
-  ) => {
-    let categoryList: Array<ClubCategoryType> = [];
-    let clubList: Array<ClubType> = [];
-    if (data[0] != null) {
-      categoryList = data[0].categories;
-      clubList = data[0].clubs;
+  createDataset = (data: ResponseType | undefined) => {
+    if (data) {
+      this.categories = data?.categories;
+      return [{ title: '', data: data.clubs }];
+    } else {
+      return [{ title: '', data: [] }];
     }
-    this.categories = categoryList;
-    return (
-      <CollapsibleFlatList
-        data={clubList}
-        keyExtractor={this.keyExtractor}
-        renderItem={this.getRenderItem}
-        ListHeaderComponent={this.getListHeader()}
-        // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-        removeClippedSubviews
-        getItemLayout={this.itemLayout}
-      />
-    );
   };
 
   /**
@@ -177,15 +165,19 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getListHeader() {
+  getListHeader(data: ResponseType | undefined) {
     const { state } = this;
-    return (
-      <ClubListHeader
-        categories={this.categories}
-        selectedCategories={state.currentlySelectedCategories}
-        onChipSelect={this.onChipSelect}
-      />
-    );
+    if (data) {
+      return (
+        <ClubListHeader
+          categories={this.categories}
+          selectedCategories={state.currentlySelectedCategories}
+          onChipSelect={this.onChipSelect}
+        />
+      );
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -222,15 +214,6 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
   };
 
   keyExtractor = (item: ClubType): string => item.id.toString();
-
-  itemLayout = (
-    _data: Array<ClubType> | null | undefined,
-    index: number
-  ): { length: number; offset: number; index: number } => ({
-    length: LIST_ITEM_HEIGHT,
-    offset: LIST_ITEM_HEIGHT * index,
-    index,
-  });
 
   /**
    * Updates the search string and category filter, saving them to the State.
@@ -282,18 +265,20 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
   }
 
   render() {
-    const { props } = this;
     return (
-      <AuthenticatedScreen
-        navigation={props.navigation}
-        requests={[
-          {
-            link: 'clubs/list',
-            params: {},
-            mandatory: true,
-          },
-        ]}
-        renderFunction={this.getScreen}
+      <WebSectionList
+        request={() =>
+          ConnectionManager.getInstance().authenticatedRequest<ResponseType>(
+            'clubs/list'
+          )
+        }
+        createDataset={this.createDataset}
+        keyExtractor={this.keyExtractor}
+        renderItem={this.getRenderItem}
+        renderListHeaderComponent={(data) => this.getListHeader(data)}
+        // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+        removeClippedSubviews={true}
+        itemHeight={LIST_ITEM_HEIGHT}
       />
     );
   }

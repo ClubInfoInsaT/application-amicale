@@ -39,7 +39,7 @@ function ErrorDialog(props: PropsType) {
       visible={props.visible}
       onDismiss={props.onDismiss}
       title={i18n.t('errors.title')}
-      message={getErrorMessage(props)}
+      message={getErrorMessage(props).message}
     />
   );
 }
