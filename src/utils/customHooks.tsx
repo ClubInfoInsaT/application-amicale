@@ -78,10 +78,10 @@ export function useRequestLogic<T>(
     }
     if (canRefresh) {
       if (!response.loading) {
-        setResponse({
-          ...response,
+        setResponse((prevState) => ({
+          ...prevState,
           loading: true,
-        });
+        }));
       }
       const r = newRequest ? newRequest : request;
       r()
@@ -98,13 +98,13 @@ export function useRequestLogic<T>(
           }
         })
         .catch(() => {
-          setResponse({
+          setResponse((prevState) => ({
             loading: false,
-            lastRefreshDate: response.lastRefreshDate,
+            lastRefreshDate: prevState.lastRefreshDate,
             status: REQUEST_STATUS.CONNECTION_ERROR,
             code: undefined,
-            data: response.data,
-          });
+            data: prevState.data,
+          }));
         });
     }
   };
