@@ -17,20 +17,16 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import i18n from 'i18n-js';
-import { Snackbar } from 'react-native-paper';
 import {
   RefreshControl,
   SectionListData,
   SectionListProps,
   StyleSheet,
-  View,
 } from 'react-native';
 import ErrorView from './ErrorView';
-import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
-import GENERAL_STYLES from '../../constants/Styles';
 import RequestScreen, { RequestScreenProps } from './RequestScreen';
 import { CollapsibleComponentPropsType } from '../Collapsible/CollapsibleComponent';
 import { REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
@@ -89,12 +85,6 @@ const styles = StyleSheet.create({
  * To force the component to update, change the value of updateData.
  */
 function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-
-  const showSnackBar = () => setSnackbarVisible(true);
-
-  const hideSnackBar = () => setSnackbarVisible(false);
-
   const getItemLayout = (
     height: number,
     _data: Array<SectionListData<ItemT>> | null,
@@ -124,9 +114,6 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
       status,
       code
     );
-    if (!data && !loading) {
-      showSnackBar();
-    }
     return (
       <CollapsibleSectionList
         {...props}
@@ -162,7 +149,7 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
               button={{
                 icon: 'refresh',
                 text: i18n.t('general.retry'),
-                onPress: refreshData,
+                onPress: () => refreshData(),
               }}
             />
           )
@@ -175,32 +162,16 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
   };
 
   return (
-    <View style={GENERAL_STYLES.flex}>
-      <RequestScreen<RawData>
-        request={props.request}
-        render={render}
-        showError={false}
-        showLoading={false}
-        autoRefreshTime={props.autoRefreshTime}
-        refreshOnFocus={props.refreshOnFocus}
-        cache={props.cache}
-        onCacheUpdate={props.onCacheUpdate}
-      />
-      <Snackbar
-        visible={snackbarVisible}
-        onDismiss={hideSnackBar}
-        action={{
-          label: 'OK',
-          onPress: hideSnackBar,
-        }}
-        duration={4000}
-        style={{
-          bottom: TAB_BAR_HEIGHT,
-        }}
-      >
-        {i18n.t('general.listUpdateFail')}
-      </Snackbar>
-    </View>
+    <RequestScreen<RawData>
+      request={props.request}
+      render={render}
+      showError={false}
+      showLoading={false}
+      autoRefreshTime={props.autoRefreshTime}
+      refreshOnFocus={props.refreshOnFocus}
+      cache={props.cache}
+      onCacheUpdate={props.onCacheUpdate}
+    />
   );
 }
 

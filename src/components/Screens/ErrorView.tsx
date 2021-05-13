@@ -132,7 +132,11 @@ function getMessage(props: Props) {
     }
   }
 
-  fullMessage.message += `\n\nCode {${props.status}:${props.code}}`;
+  if (props.code !== undefined) {
+    fullMessage.message += `\n\nCode {${props.status}:${props.code}}`;
+  } else {
+    fullMessage.message += `\n\nCode {${props.status}}`;
+  }
   if (props.message != null) {
     fullMessage.message = props.message;
   }
