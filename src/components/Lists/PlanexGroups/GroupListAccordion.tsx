@@ -18,8 +18,8 @@
  */
 
 import * as React from 'react';
-import { List, withTheme } from 'react-native-paper';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { List, useTheme } from 'react-native-paper';
+import { FlatList, StyleSheet } from 'react-native';
 import GroupListItem from './GroupListItem';
 import AnimatedAccordion from '../../Animations/AnimatedAccordion';
 import type {
@@ -34,7 +34,6 @@ type PropsType = {
   onGroupPress: (data: PlanexGroupType) => void;
   onFavoritePress: (data: PlanexGroupType) => void;
   currentSearchString: string;
-  theme: ReactNativePaper.Theme;
 };
 
 const LIST_ITEM_HEIGHT = 64;
@@ -49,36 +48,22 @@ const styles = StyleSheet.create({
   },
 });
 
-class GroupListAccordion extends React.Component<PropsType> {
-  shouldComponentUpdate(nextProps: PropsType): boolean {
-    const { props } = this;
-    return (
-      nextProps.currentSearchString !== props.currentSearchString ||
-      nextProps.favorites.length !== props.favorites.length ||
-      nextProps.item.content.length !== props.item.content.length
-    );
-  }
+function GroupListAccordion(props: PropsType) {
+  const theme = useTheme();
 
-  getRenderItem = ({ item }: { item: PlanexGroupType }) => {
-    const { props } = this;
-    const onPress = () => {
-      props.onGroupPress(item);
-    };
-    const onStarPress = () => {
-      props.onFavoritePress(item);
-    };
+  const getRenderItem = ({ item }: { item: PlanexGroupType }) => {
     return (
       <GroupListItem
         height={LIST_ITEM_HEIGHT}
         item={item}
-        favorites={props.favorites}
-        onPress={onPress}
-        onStarPress={onStarPress}
+        isFav={props.favorites.some((f) => f.id === item.id)}
+        onPress={() => props.onGroupPress(item)}
+        onStarPress={() => props.onFavoritePress(item)}
       />
     );
   };
 
-  itemLayout = (
+  const itemLayout = (
     _data: Array<PlanexGroupType> | null | undefined,
     index: number
   ): { length: number; offset: number; index: number } => ({
@@ -87,57 +72,58 @@ class GroupListAccordion extends React.Component<PropsType> {
     index,
   });
 
-  keyExtractor = (item: PlanexGroupType): string => item.id.toString();
+  const keyExtractor = (item: PlanexGroupType): string => item.id.toString();
 
-  render() {
-    const { props } = this;
-    const { item } = this.props;
-    var isFavorite = item.id === 0;
-    var isEmptyFavorite = isFavorite && props.favorites.length === 0;
-    return (
-      <View>
-        <AnimatedAccordion
-          title={
-            isEmptyFavorite
-              ? i18n.t('screens.planex.favorites.empty.title')
-              : item.name.replace(REPLACE_REGEX, ' ')
-          }
-          subtitle={
-            isEmptyFavorite
-              ? i18n.t('screens.planex.favorites.empty.subtitle')
-              : undefined
-          }
-          style={styles.container}
-          left={(iconProps) =>
-            isFavorite ? (
-              <List.Icon
-                style={iconProps.style}
-                icon={'star'}
-                color={props.theme.colors.tetrisScore}
-              />
-            ) : undefined
-          }
-          unmountWhenCollapsed={!isFavorite} // Only render list if expanded for increased performance
-          opened={
-            props.currentSearchString.length >= MIN_SEARCH_SIZE_EXPAND ||
-            (isFavorite && !isEmptyFavorite)
-          }
-          enabled={!isEmptyFavorite}
-        >
-          <FlatList
-            data={props.item.content}
-            extraData={props.currentSearchString + props.favorites.length}
-            renderItem={this.getRenderItem}
-            keyExtractor={this.keyExtractor}
-            listKey={item.id.toString()}
-            // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-            getItemLayout={this.itemLayout}
-            removeClippedSubviews
+  var isFavorite = props.item.id === 0;
+  var isEmptyFavorite = isFavorite && props.favorites.length === 0;
+
+  return (
+    <AnimatedAccordion
+      title={
+        isEmptyFavorite
+          ? i18n.t('screens.planex.favorites.empty.title')
+          : props.item.name.replace(REPLACE_REGEX, ' ')
+      }
+      subtitle={
+        isEmptyFavorite
+          ? i18n.t('screens.planex.favorites.empty.subtitle')
+          : undefined
+      }
+      style={styles.container}
+      left={(iconProps) =>
+        isFavorite ? (
+          <List.Icon
+            style={iconProps.style}
+            icon={'star'}
+            color={theme.colors.tetrisScore}
           />
-        </AnimatedAccordion>
-      </View>
-    );
-  }
+        ) : undefined
+      }
+      unmountWhenCollapsed={!isFavorite} // Only render list if expanded for increased performance
+      opened={
+        props.currentSearchString.length >= MIN_SEARCH_SIZE_EXPAND ||
+        (isFavorite && !isEmptyFavorite)
+      }
+      enabled={!isEmptyFavorite}
+    >
+      <FlatList
+        data={props.item.content}
+        extraData={props.currentSearchString + props.favorites.length}
+        renderItem={getRenderItem}
+        keyExtractor={keyExtractor}
+        listKey={props.item.id.toString()}
+        // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+        getItemLayout={itemLayout}
+        removeClippedSubviews={true}
+      />
+    </AnimatedAccordion>
+  );
 }
 
-export default withTheme(GroupListAccordion);
+const propsEqual = (pp: PropsType, np: PropsType) =>
+  pp.currentSearchString === np.currentSearchString &&
+  pp.favorites.length === np.favorites.length &&
+  pp.item.content.length === np.item.content.length &&
+  pp.onFavoritePress === np.onFavoritePress;
+
+export default React.memo(GroupListAccordion, propsEqual);

@@ -17,7 +17,12 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import { Platform } from 'react-native';
 import i18n from 'i18n-js';
 import { Searchbar } from 'react-native-paper';
@@ -142,39 +147,31 @@ function GroupSelectionScreen() {
    *
    * @param item The item to add/remove from favorites
    */
-  const onListFavoritePress = (item: PlanexGroupType) => {
-    updateGroupFavorites(item);
-  };
+  const onListFavoritePress = useCallback(
+    (group: PlanexGroupType) => {
+      const removeGroupFromFavorites = (g: PlanexGroupType) => {
+        setFavoriteGroups(favoriteGroups.filter((f) => f.id !== g.id));
+      };
 
-  /**
-   * Checks if the given group is in the favorites list
-   *
-   * @param group The group to check
-   * @returns {boolean}
-   */
-  const isGroupInFavorites = (group: PlanexGroupType): boolean => {
-    let isFav = false;
-    favoriteGroups.forEach((favGroup: PlanexGroupType) => {
-      if (group.id === favGroup.id) {
-        isFav = true;
+      const addGroupToFavorites = (g: PlanexGroupType) => {
+        setFavoriteGroups([...favoriteGroups, g].sort(sortName));
+      };
+
+      if (favoriteGroups.some((f) => f.id === group.id)) {
+        removeGroupFromFavorites(group);
+      } else {
+        addGroupToFavorites(group);
       }
-    });
-    return isFav;
-  };
+    },
+    [favoriteGroups]
+  );
 
-  /**
-   * Adds or removes the given group to the favorites list, depending on whether it is already in it or not.
-   * Favorites are then saved in user preferences
-   *
-   * @param group The group to add/remove to favorites
-   */
-  const updateGroupFavorites = (group: PlanexGroupType) => {
-    if (isGroupInFavorites(group)) {
-      removeGroupFromFavorites(group);
-    } else {
-      addGroupToFavorites(group);
-    }
-  };
+  useEffect(() => {
+    AsyncStorageManager.set(
+      AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
+      favoriteGroups
+    );
+  }, [favoriteGroups]);
 
   /**
    * Generates the dataset to be used in the FlatList.
@@ -218,31 +215,6 @@ function GroupSelectionScreen() {
       });
     }
     return data;
-  };
-
-  /**
-   * Removes the given group from the favorites
-   *
-   * @param group The group to remove from the array
-   */
-  const removeGroupFromFavorites = (group: PlanexGroupType) => {
-    setFavoriteGroups(favoriteGroups.filter((g) => g.id !== group.id));
-  };
-
-  useEffect(() => {
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
-      favoriteGroups
-    );
-  }, [favoriteGroups]);
-
-  /**
-   * Adds the given group to favorites
-   *
-   * @param group The group to add to the array
-   */
-  const addGroupToFavorites = (group: PlanexGroupType) => {
-    setFavoriteGroups([...favoriteGroups, group].sort(sortName));
   };
 
   return (

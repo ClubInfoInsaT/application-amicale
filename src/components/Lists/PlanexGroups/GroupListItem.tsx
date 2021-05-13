@@ -17,20 +17,19 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import { List, TouchableRipple, withTheme } from 'react-native-paper';
+import React, { useRef } from 'react';
+import { List, TouchableRipple, useTheme } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import type { PlanexGroupType } from '../../../screens/Planex/GroupSelectionScreen';
 import { StyleSheet, View } from 'react-native';
 import { getPrettierPlanexGroupName } from '../../../utils/Utils';
 
-type PropsType = {
-  theme: ReactNativePaper.Theme;
+type Props = {
   onPress: () => void;
   onStarPress: () => void;
   item: PlanexGroupType;
-  favorites: Array<PlanexGroupType>;
+  isFav: boolean;
   height: number;
 };
 
@@ -49,88 +48,51 @@ const styles = StyleSheet.create({
   },
 });
 
-class GroupListItem extends React.Component<PropsType> {
-  isFav: boolean;
+function GroupListItem(props: Props) {
+  const theme = useTheme();
 
-  starRef: { current: null | (Animatable.View & View) };
+  const starRef = useRef<Animatable.View & View>(null);
 
-  constructor(props: PropsType) {
-    super(props);
-    this.starRef = React.createRef();
-    this.isFav = this.isGroupInFavorites(props.favorites);
-  }
-
-  shouldComponentUpdate(nextProps: PropsType): boolean {
-    const { favorites } = this.props;
-    const favChanged = favorites.length !== nextProps.favorites.length;
-    let newFavState = this.isFav;
-    if (favChanged) {
-      newFavState = this.isGroupInFavorites(nextProps.favorites);
-    }
-    const shouldUpdate = this.isFav !== newFavState;
-    this.isFav = newFavState;
-    return shouldUpdate;
-  }
-
-  onStarPress = () => {
-    const { props } = this;
-    const ref = this.starRef;
-    if (ref.current && ref.current.rubberBand && ref.current.swing) {
-      if (this.isFav) {
-        ref.current.rubberBand();
-      } else {
-        ref.current.swing();
-      }
-    }
-    props.onStarPress();
-  };
-
-  isGroupInFavorites(favorites: Array<PlanexGroupType>): boolean {
-    const { item } = this.props;
-    for (let i = 0; i < favorites.length; i += 1) {
-      if (favorites[i].id === item.id) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  render() {
-    const { props } = this;
-    const { colors } = props.theme;
-    return (
-      <List.Item
-        title={getPrettierPlanexGroupName(props.item.name)}
-        onPress={props.onPress}
-        left={(iconProps) => (
-          <List.Icon
-            color={iconProps.color}
-            style={iconProps.style}
-            icon={'chevron-right'}
-          />
-        )}
-        right={(iconProps) => (
-          <Animatable.View ref={this.starRef} useNativeDriver>
-            <TouchableRipple
-              onPress={this.onStarPress}
-              style={styles.iconContainer}
-            >
-              <MaterialCommunityIcons
-                size={30}
-                style={styles.icon}
-                name="star"
-                color={this.isFav ? colors.tetrisScore : iconProps.color}
-              />
-            </TouchableRipple>
-          </Animatable.View>
-        )}
-        style={{
-          height: props.height,
-          ...styles.item,
-        }}
-      />
-    );
-  }
+  return (
+    <List.Item
+      title={getPrettierPlanexGroupName(props.item.name)}
+      onPress={props.onPress}
+      left={(iconProps) => (
+        <List.Icon
+          color={iconProps.color}
+          style={iconProps.style}
+          icon={'chevron-right'}
+        />
+      )}
+      right={(iconProps) => (
+        <Animatable.View
+          ref={starRef}
+          useNativeDriver={true}
+          animation={props.isFav ? 'rubberBand' : undefined}
+        >
+          <TouchableRipple
+            onPress={props.onStarPress}
+            style={styles.iconContainer}
+          >
+            <MaterialCommunityIcons
+              size={30}
+              style={styles.icon}
+              name="star"
+              color={props.isFav ? theme.colors.tetrisScore : iconProps.color}
+            />
+          </TouchableRipple>
+        </Animatable.View>
+      )}
+      style={{
+        height: props.height,
+        ...styles.item,
+      }}
+    />
+  );
 }
 
-export default withTheme(GroupListItem);
+export default React.memo(
+  GroupListItem,
+  (pp: Props, np: Props) =>
+    pp.isFav === np.isFav && pp.onStarPress === np.onStarPress
+);
