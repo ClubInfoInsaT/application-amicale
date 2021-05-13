@@ -18,7 +18,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Portal, withTheme } from 'react-native-paper';
+import { Portal } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import {
   BackHandler,
