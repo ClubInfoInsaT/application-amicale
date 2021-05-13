@@ -38,6 +38,8 @@ import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrol
 import { MainStackParamsList } from '../../navigation/MainNavigator';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
+import { ApiRejectType } from '../../utils/WebData';
+import { REQUEST_STATUS } from '../../utils/Requests';
 
 type LoginScreenNavigationProp = StackScreenProps<MainStackParamsList, 'login'>;
 
@@ -53,7 +55,7 @@ type StateType = {
   isPasswordValidated: boolean;
   loading: boolean;
   dialogVisible: boolean;
-  dialogError: number;
+  dialogError: REQUEST_STATUS;
   mascotDialogVisible: boolean;
 };
 
@@ -115,7 +117,7 @@ class LoginScreen extends React.Component<Props, StateType> {
       isPasswordValidated: false,
       loading: false,
       dialogVisible: false,
-      dialogError: 0,
+      dialogError: REQUEST_STATUS.SUCCESS,
       mascotDialogVisible: AsyncStorageManager.getBool(
         AsyncStorageManager.PREFERENCES.loginShowMascot.key
       ),
@@ -335,10 +337,10 @@ class LoginScreen extends React.Component<Props, StateType> {
    *
    * @param error The error given by the login request
    */
-  showErrorDialog = (error: number) => {
+  showErrorDialog = (error: ApiRejectType) => {
     this.setState({
       dialogVisible: true,
-      dialogError: error,
+      dialogError: error.status,
     });
   };
 
@@ -433,10 +435,10 @@ class LoginScreen extends React.Component<Props, StateType> {
         end={{ x: 0.1, y: 1 }}
       >
         <KeyboardAvoidingView
-          behavior="height"
+          behavior={'height'}
           contentContainerStyle={GENERAL_STYLES.flex}
           style={GENERAL_STYLES.flex}
-          enabled
+          enabled={true}
           keyboardVerticalOffset={100}
         >
           <CollapsibleScrollView headerColors={'transparent'}>
@@ -445,7 +447,7 @@ class LoginScreen extends React.Component<Props, StateType> {
               visible={mascotDialogVisible}
               title={i18n.t('screens.login.mascotDialog.title')}
               message={i18n.t('screens.login.mascotDialog.message')}
-              icon="help"
+              icon={'help'}
               buttons={{
                 cancel: {
                   message: i18n.t('screens.login.mascotDialog.button'),
@@ -458,7 +460,7 @@ class LoginScreen extends React.Component<Props, StateType> {
             <ErrorDialog
               visible={dialogVisible}
               onDismiss={this.hideErrorDialog}
-              errorCode={dialogError}
+              status={dialogError}
             />
           </CollapsibleScrollView>
         </KeyboardAvoidingView>

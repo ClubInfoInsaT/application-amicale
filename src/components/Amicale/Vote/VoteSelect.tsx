@@ -25,6 +25,8 @@ import ConnectionManager from '../../../managers/ConnectionManager';
 import LoadingConfirmDialog from '../../Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../Dialogs/ErrorDialog';
 import type { VoteTeamType } from '../../../screens/Amicale/VoteScreen';
+import { ApiRejectType } from '../../../utils/WebData';
+import { REQUEST_STATUS } from '../../../utils/Requests';
 
 type PropsType = {
   teams: Array<VoteTeamType>;
@@ -36,7 +38,7 @@ type StateType = {
   selectedTeam: string;
   voteDialogVisible: boolean;
   errorDialogVisible: boolean;
-  currentError: number;
+  currentError: ApiRejectType;
 };
 
 const styles = StyleSheet.create({
@@ -58,7 +60,7 @@ export default class VoteSelect extends React.PureComponent<
       selectedTeam: 'none',
       voteDialogVisible: false,
       errorDialogVisible: false,
-      currentError: 0,
+      currentError: { status: REQUEST_STATUS.SUCCESS },
     };
   }
 
@@ -88,7 +90,7 @@ export default class VoteSelect extends React.PureComponent<
           props.onVoteSuccess();
           resolve();
         })
-        .catch((error: number) => {
+        .catch((error: ApiRejectType) => {
           this.onVoteDialogDismiss();
           this.showErrorDialog(error);
           resolve();
@@ -96,7 +98,7 @@ export default class VoteSelect extends React.PureComponent<
     });
   };
 
-  showErrorDialog = (error: number): void =>
+  showErrorDialog = (error: ApiRejectType): void =>
     this.setState({
       errorDialogVisible: true,
       currentError: error,
@@ -156,7 +158,8 @@ export default class VoteSelect extends React.PureComponent<
         <ErrorDialog
           visible={state.errorDialogVisible}
           onDismiss={this.onErrorDialogDismiss}
-          errorCode={state.currentError}
+          status={state.currentError.status}
+          code={state.currentError.code}
         />
       </View>
     );

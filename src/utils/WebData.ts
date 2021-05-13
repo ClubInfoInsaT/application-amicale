@@ -18,20 +18,21 @@
  */
 
 import Urls from '../constants/Urls';
+import { API_REQUEST_CODES, REQUEST_STATUS } from './Requests';
 
-export const ERROR_TYPE = {
-  SUCCESS: 0,
-  BAD_CREDENTIALS: 1,
-  BAD_TOKEN: 2,
-  NO_CONSENT: 3,
-  TOKEN_SAVE: 4,
-  TOKEN_RETRIEVE: 5,
-  BAD_INPUT: 400,
-  FORBIDDEN: 403,
-  CONNECTION_ERROR: 404,
-  SERVER_ERROR: 500,
-  UNKNOWN: 999,
-};
+// export const ERROR_TYPE = {
+//   SUCCESS: 0,
+//   BAD_CREDENTIALS: 1,
+//   BAD_TOKEN: 2,
+//   NO_CONSENT: 3,
+//   TOKEN_SAVE: 4,
+//   TOKEN_RETRIEVE: 5,
+//   BAD_INPUT: 400,
+//   FORBIDDEN: 403,
+//   CONNECTION_ERROR: 404,
+//   SERVER_ERROR: 500,
+//   UNKNOWN: 999,
+// };
 
 export type ApiDataLoginType = {
   token: string;
@@ -40,6 +41,11 @@ export type ApiDataLoginType = {
 type ApiResponseType<T> = {
   error: number;
   data: T;
+};
+
+export type ApiRejectType = {
+  status: REQUEST_STATUS;
+  code?: API_REQUEST_CODES;
 };
 
 /**
@@ -76,7 +82,7 @@ export async function apiRequest<T>(
   params?: object
 ): Promise<T> {
   return new Promise(
-    (resolve: (data: T) => void, reject: (error: number) => void) => {
+    (resolve: (data: T) => void, reject: (error: ApiRejectType) => void) => {
       let requestParams = {};
       if (params != null) {
         requestParams = { ...params };
@@ -95,16 +101,25 @@ export async function apiRequest<T>(
         )
         .then((response: ApiResponseType<T>) => {
           if (isApiResponseValid(response)) {
-            if (response.error === ERROR_TYPE.SUCCESS) {
+            if (response.error === API_REQUEST_CODES.SUCCESS) {
               resolve(response.data);
             } else {
-              reject(response.error);
+              reject({
+                status: REQUEST_STATUS.SUCCESS,
+                code: response.error,
+              });
             }
           } else {
-            reject(ERROR_TYPE.SERVER_ERROR);
+            reject({
+              status: REQUEST_STATUS.SERVER_ERROR,
+            });
           }
         })
-        .catch((): void => reject(ERROR_TYPE.CONNECTION_ERROR));
+        .catch(() =>
+          reject({
+            status: REQUEST_STATUS.SERVER_ERROR,
+          })
+        );
     }
   );
 }

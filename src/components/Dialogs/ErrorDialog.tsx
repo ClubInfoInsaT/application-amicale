@@ -19,60 +19,27 @@
 
 import * as React from 'react';
 import i18n from 'i18n-js';
-import { ERROR_TYPE } from '../../utils/WebData';
 import AlertDialog from './AlertDialog';
+import {
+  API_REQUEST_CODES,
+  getErrorMessage,
+  REQUEST_STATUS,
+} from '../../utils/Requests';
 
 type PropsType = {
   visible: boolean;
   onDismiss: () => void;
-  errorCode: number;
+  status?: REQUEST_STATUS;
+  code?: API_REQUEST_CODES;
 };
 
 function ErrorDialog(props: PropsType) {
-  let title: string;
-  let message: string;
-
-  title = i18n.t('errors.title');
-  switch (props.errorCode) {
-    case ERROR_TYPE.BAD_CREDENTIALS:
-      message = i18n.t('errors.badCredentials');
-      break;
-    case ERROR_TYPE.BAD_TOKEN:
-      message = i18n.t('errors.badToken');
-      break;
-    case ERROR_TYPE.NO_CONSENT:
-      message = i18n.t('errors.noConsent');
-      break;
-    case ERROR_TYPE.TOKEN_SAVE:
-      message = i18n.t('errors.tokenSave');
-      break;
-    case ERROR_TYPE.TOKEN_RETRIEVE:
-      message = i18n.t('errors.unknown');
-      break;
-    case ERROR_TYPE.BAD_INPUT:
-      message = i18n.t('errors.badInput');
-      break;
-    case ERROR_TYPE.FORBIDDEN:
-      message = i18n.t('errors.forbidden');
-      break;
-    case ERROR_TYPE.CONNECTION_ERROR:
-      message = i18n.t('errors.connectionError');
-      break;
-    case ERROR_TYPE.SERVER_ERROR:
-      message = i18n.t('errors.serverError');
-      break;
-    default:
-      message = i18n.t('errors.unknown');
-      break;
-  }
-  message += `\n\nCode ${props.errorCode}`;
-
   return (
     <AlertDialog
       visible={props.visible}
       onDismiss={props.onDismiss}
-      title={title}
-      message={message}
+      title={i18n.t('errors.title')}
+      message={getErrorMessage(props)}
     />
   );
 }

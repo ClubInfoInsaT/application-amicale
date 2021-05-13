@@ -29,7 +29,7 @@ import ErrorView from './ErrorView';
 import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
 import RequestScreen, { RequestScreenProps } from './RequestScreen';
 import { CollapsibleComponentPropsType } from '../Collapsible/CollapsibleComponent';
-import { REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
+import { API_REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
 
 export type SectionListDataType<ItemT> = Array<{
   title: string;
@@ -61,7 +61,7 @@ type Props<ItemT, RawData> = Omit<
       lastRefreshDate: Date | undefined,
       refreshData: (newRequest?: () => Promise<RawData>) => void,
       status: REQUEST_STATUS,
-      code?: REQUEST_CODES
+      code?: API_REQUEST_CODES
     ) => SectionListDataType<ItemT>;
     renderListHeaderComponent?: (
       data: RawData | undefined,
@@ -69,7 +69,7 @@ type Props<ItemT, RawData> = Omit<
       lastRefreshDate: Date | undefined,
       refreshData: (newRequest?: () => Promise<RawData>) => void,
       status: REQUEST_STATUS,
-      code?: REQUEST_CODES
+      code?: API_REQUEST_CODES
     ) => React.ComponentType<any> | React.ReactElement | null;
     itemHeight?: number | null;
   };
@@ -103,7 +103,7 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
     lastRefreshDate: Date | undefined,
     refreshData: (newRequest?: () => Promise<RawData>) => void,
     status: REQUEST_STATUS,
-    code?: REQUEST_CODES
+    code?: API_REQUEST_CODES
   ) => {
     const { itemHeight } = props;
     const dataset = props.createDataset(

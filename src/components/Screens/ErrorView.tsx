@@ -21,13 +21,16 @@ import * as React from 'react';
 import { Button, Subheading, useTheme } from 'react-native-paper';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import i18n from 'i18n-js';
 import * as Animatable from 'react-native-animatable';
-import { REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
+import {
+  API_REQUEST_CODES,
+  getErrorMessage,
+  REQUEST_STATUS,
+} from '../../utils/Requests';
 
 type Props = {
   status?: REQUEST_STATUS;
-  code?: REQUEST_CODES;
+  code?: API_REQUEST_CODES;
   icon?: string;
   message?: string;
   loading?: boolean;
@@ -63,92 +66,9 @@ const styles = StyleSheet.create({
   },
 });
 
-function getMessage(props: Props) {
-  let fullMessage = {
-    message: '',
-    icon: '',
-  };
-  if (props.code === undefined) {
-    switch (props.status) {
-      case REQUEST_STATUS.BAD_INPUT:
-        fullMessage.message = i18n.t('errors.badInput');
-        fullMessage.icon = 'alert-circle-outline';
-        break;
-      case REQUEST_STATUS.FORBIDDEN:
-        fullMessage.message = i18n.t('errors.forbidden');
-        fullMessage.icon = 'lock';
-        break;
-      case REQUEST_STATUS.CONNECTION_ERROR:
-        fullMessage.message = i18n.t('errors.connectionError');
-        fullMessage.icon = 'access-point-network-off';
-        break;
-      case REQUEST_STATUS.SERVER_ERROR:
-        fullMessage.message = i18n.t('errors.serverError');
-        fullMessage.icon = 'server-network-off';
-        break;
-      default:
-        fullMessage.message = i18n.t('errors.unknown');
-        fullMessage.icon = 'alert-circle-outline';
-        break;
-    }
-  } else {
-    switch (props.code) {
-      case REQUEST_CODES.BAD_CREDENTIALS:
-        fullMessage.message = i18n.t('errors.badCredentials');
-        fullMessage.icon = 'account-alert-outline';
-        break;
-      case REQUEST_CODES.BAD_TOKEN:
-        fullMessage.message = i18n.t('errors.badToken');
-        fullMessage.icon = 'account-alert-outline';
-        break;
-      case REQUEST_CODES.NO_CONSENT:
-        fullMessage.message = i18n.t('errors.noConsent');
-        fullMessage.icon = 'account-remove-outline';
-        break;
-      case REQUEST_CODES.TOKEN_SAVE:
-        fullMessage.message = i18n.t('errors.tokenSave');
-        fullMessage.icon = 'alert-circle-outline';
-        break;
-      case REQUEST_CODES.BAD_INPUT:
-        fullMessage.message = i18n.t('errors.badInput');
-        fullMessage.icon = 'alert-circle-outline';
-        break;
-      case REQUEST_CODES.FORBIDDEN:
-        fullMessage.message = i18n.t('errors.forbidden');
-        fullMessage.icon = 'lock';
-        break;
-      case REQUEST_CODES.CONNECTION_ERROR:
-        fullMessage.message = i18n.t('errors.connectionError');
-        fullMessage.icon = 'access-point-network-off';
-        break;
-      case REQUEST_CODES.SERVER_ERROR:
-        fullMessage.message = i18n.t('errors.serverError');
-        fullMessage.icon = 'server-network-off';
-        break;
-      default:
-        fullMessage.message = i18n.t('errors.unknown');
-        fullMessage.icon = 'alert-circle-outline';
-        break;
-    }
-  }
-
-  if (props.code !== undefined) {
-    fullMessage.message += `\n\nCode {${props.status}:${props.code}}`;
-  } else {
-    fullMessage.message += `\n\nCode {${props.status}}`;
-  }
-  if (props.message != null) {
-    fullMessage.message = props.message;
-  }
-  if (props.icon != null) {
-    fullMessage.icon = props.icon;
-  }
-  return fullMessage;
-}
-
 function ErrorView(props: Props) {
   const theme = useTheme();
-  const fullMessage = getMessage(props);
+  const fullMessage = getErrorMessage(props, props.message, props.icon);
   const { button } = props;
 
   return (

@@ -18,8 +18,9 @@
  */
 
 import * as Keychain from 'react-native-keychain';
-import type { ApiDataLoginType } from '../utils/WebData';
-import { apiRequest, ERROR_TYPE } from '../utils/WebData';
+import { REQUEST_STATUS } from '../utils/Requests';
+import type { ApiDataLoginType, ApiRejectType } from '../utils/WebData';
+import { apiRequest } from '../utils/WebData';
 
 /**
  * champ: error
@@ -141,7 +142,7 @@ export default class ConnectionManager {
    */
   async connect(email: string, password: string): Promise<void> {
     return new Promise(
-      (resolve: () => void, reject: (error: number) => void) => {
+      (resolve: () => void, reject: (error: ApiRejectType) => void) => {
         const data = {
           email,
           password,
@@ -150,13 +151,19 @@ export default class ConnectionManager {
           .then((response: ApiDataLoginType) => {
             if (response.token != null) {
               this.saveLogin(email, response.token)
-                .then((): void => resolve())
-                .catch((): void => reject(ERROR_TYPE.TOKEN_SAVE));
+                .then(() => resolve())
+                .catch(() =>
+                  reject({
+                    status: REQUEST_STATUS.TOKEN_SAVE,
+                  })
+                );
             } else {
-              reject(ERROR_TYPE.SERVER_ERROR);
+              reject({
+                status: REQUEST_STATUS.SERVER_ERROR,
+              });
             }
           })
-          .catch((error: number): void => reject(error));
+          .catch(reject);
       }
     );
   }
@@ -173,17 +180,22 @@ export default class ConnectionManager {
     params: { [key: string]: any }
   ): Promise<T> {
     return new Promise(
-      (resolve: (response: T) => void, reject: (error: number) => void) => {
+      (
+        resolve: (response: T) => void,
+        reject: (error: ApiRejectType) => void
+      ) => {
         if (this.getToken() !== null) {
           const data = {
             ...params,
             token: this.getToken(),
           };
           apiRequest<T>(path, 'POST', data)
-            .then((response: T): void => resolve(response))
-            .catch((error: number): void => reject(error));
+            .then((response: T) => resolve(response))
+            .catch(reject);
         } else {
-          reject(ERROR_TYPE.TOKEN_RETRIEVE);
+          reject({
+            status: REQUEST_STATUS.TOKEN_RETRIEVE,
+          });
         }
       }
     );

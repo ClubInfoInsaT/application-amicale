@@ -4,7 +4,7 @@ import { useRequestLogic } from '../../utils/customHooks';
 import { useFocusEffect } from '@react-navigation/native';
 import BasicLoadingScreen from './BasicLoadingScreen';
 import i18n from 'i18n-js';
-import { REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
+import { API_REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
 
 export type RequestScreenProps<T> = {
   request: () => Promise<T>;
@@ -14,7 +14,7 @@ export type RequestScreenProps<T> = {
     lastRefreshDate: Date | undefined,
     refreshData: (newRequest?: () => Promise<T>) => void,
     status: REQUEST_STATUS,
-    code?: REQUEST_CODES
+    code?: API_REQUEST_CODES
   ) => React.ReactElement;
   cache?: T;
   onCacheUpdate?: (newCache: T) => void;

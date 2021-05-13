@@ -46,6 +46,8 @@ import ConnectionManager from '../../../managers/ConnectionManager';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import { MainStackParamsList } from '../../../navigation/MainNavigator';
 import GENERAL_STYLES from '../../../constants/Styles';
+import { ApiRejectType } from '../../../utils/WebData';
+import { REQUEST_STATUS } from '../../../utils/Requests';
 
 type EquipmentRentScreenNavigationProp = StackScreenProps<
   MainStackParamsList,
@@ -65,7 +67,7 @@ type StateType = {
   dialogVisible: boolean;
   errorDialogVisible: boolean;
   markedDates: MarkedDatesObjectType;
-  currentError: number;
+  currentError: ApiRejectType;
 };
 
 const styles = StyleSheet.create({
@@ -133,7 +135,7 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
       dialogVisible: false,
       errorDialogVisible: false,
       markedDates: {},
-      currentError: 0,
+      currentError: { status: REQUEST_STATUS.SUCCESS },
     };
     this.resetSelection();
     this.bookRef = React.createRef();
@@ -231,7 +233,7 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
             });
             resolve();
           })
-          .catch((error: number) => {
+          .catch((error: ApiRejectType) => {
             this.onDialogDismiss();
             this.showErrorDialog(error);
             resolve();
@@ -284,7 +286,7 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
     }
   };
 
-  showErrorDialog = (error: number) => {
+  showErrorDialog = (error: ApiRejectType) => {
     this.setState({
       errorDialogVisible: true,
       currentError: error,
@@ -460,7 +462,8 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
           <ErrorDialog
             visible={state.errorDialogVisible}
             onDismiss={this.onErrorDialogDismiss}
-            errorCode={state.currentError}
+            status={state.currentError.status}
+            code={state.currentError.code}
           />
           <Animatable.View
             ref={this.bookRef}

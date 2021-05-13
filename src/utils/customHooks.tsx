@@ -19,6 +19,7 @@
 
 import { DependencyList, useEffect, useRef, useState } from 'react';
 import { REQUEST_STATUS } from './Requests';
+import { ApiRejectType } from './WebData';
 
 export function useMountEffect(func: () => void) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,14 +98,24 @@ export function useRequestLogic<T>(
             onCacheUpdate(requestResponse);
           }
         })
-        .catch(() => {
-          setResponse((prevState) => ({
-            loading: false,
-            lastRefreshDate: prevState.lastRefreshDate,
-            status: REQUEST_STATUS.CONNECTION_ERROR,
-            code: undefined,
-            data: prevState.data,
-          }));
+        .catch((error: ApiRejectType | undefined) => {
+          if (!error) {
+            setResponse((prevState) => ({
+              loading: false,
+              lastRefreshDate: prevState.lastRefreshDate,
+              status: REQUEST_STATUS.CONNECTION_ERROR,
+              code: undefined,
+              data: prevState.data,
+            }));
+          } else {
+            setResponse((prevState) => ({
+              loading: false,
+              lastRefreshDate: prevState.lastRefreshDate,
+              status: error.status,
+              code: error.code,
+              data: prevState.data,
+            }));
+          }
         });
     }
   };

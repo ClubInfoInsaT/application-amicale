@@ -43,11 +43,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useTheme } from 'react-native-paper';
 import { useCollapsibleHeader } from 'react-navigation-collapsible';
 import MaterialHeaderButtons, { Item } from '../Overrides/CustomHeaderButton';
-import { ERROR_TYPE } from '../../utils/WebData';
 import ErrorView from './ErrorView';
 import BasicLoadingScreen from './BasicLoadingScreen';
 import { useFocusEffect, useNavigation } from '@react-navigation/core';
 import { useCollapsible } from '../../utils/CollapsibleContext';
+import { REQUEST_STATUS } from '../../utils/Requests';
 
 type Props = {
   url: string;
@@ -259,7 +259,7 @@ function WebViewScreen(props: Props) {
       renderLoading={getRenderLoading}
       renderError={() => (
         <ErrorView
-          status={ERROR_TYPE.CONNECTION_ERROR}
+          status={REQUEST_STATUS.CONNECTION_ERROR}
           button={{
             icon: 'refresh',
             text: i18n.t('general.retry'),
