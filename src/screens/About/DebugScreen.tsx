@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
  * This screen allows the user to get and modify information on the app/device.
  */
 class DebugScreen extends React.Component<PropsType, StateType> {
-  modalRef: Modalize | null;
+  modalRef: { current: Modalize | null };
 
   modalInputValue: string;
 
@@ -74,7 +74,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
    */
   constructor(props: PropsType) {
     super(props);
-    this.modalRef = null;
+    this.modalRef = React.createRef<Modalize>();
     this.modalInputValue = '';
     const currentPreferences: Array<PreferenceItemType> = [];
     Object.values(AsyncStorageManager.PREFERENCES).forEach((object: any) => {
@@ -155,15 +155,6 @@ class DebugScreen extends React.Component<PropsType, StateType> {
   };
 
   /**
-   * Callback used when receiving the modal ref
-   *
-   * @param ref
-   */
-  onModalRef = (ref: Modalize) => {
-    this.modalRef = ref;
-  };
-
-  /**
    * Shows the edit modal
    *
    * @param item
@@ -172,8 +163,8 @@ class DebugScreen extends React.Component<PropsType, StateType> {
     this.setState({
       modalCurrentDisplayItem: item,
     });
-    if (this.modalRef) {
-      this.modalRef.open();
+    if (this.modalRef.current) {
+      this.modalRef.current.open();
     }
   }
 
@@ -210,8 +201,8 @@ class DebugScreen extends React.Component<PropsType, StateType> {
       return { currentPreferences };
     });
     AsyncStorageManager.set(key, value);
-    if (this.modalRef) {
-      this.modalRef.close();
+    if (this.modalRef.current) {
+      this.modalRef.current.close();
     }
   }
 
@@ -219,9 +210,7 @@ class DebugScreen extends React.Component<PropsType, StateType> {
     const { state } = this;
     return (
       <View>
-        <CustomModal onRef={this.onModalRef}>
-          {this.getModalContent()}
-        </CustomModal>
+        <CustomModal ref={this.modalRef}>{this.getModalContent()}</CustomModal>
         <CollapsibleFlatList
           data={state.currentPreferences}
           extraData={state.currentPreferences}

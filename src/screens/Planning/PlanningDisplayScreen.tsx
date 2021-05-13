@@ -25,13 +25,14 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { getDateOnlyString, getTimeOnlyString } from '../../utils/Planning';
 import DateManager from '../../managers/DateManager';
 import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
-import { apiRequest, ERROR_TYPE } from '../../utils/WebData';
+import { ApiRejectType, apiRequest } from '../../utils/WebData';
 import ErrorView from '../../components/Screens/ErrorView';
 import CustomHTML from '../../components/Overrides/CustomHTML';
 import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import type { PlanningEventType } from '../../utils/Planning';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
+import { API_REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -67,7 +68,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
 
   eventId: number;
 
-  errorCode: number;
+  error: ApiRejectType;
 
   /**
    * Generates data depending on whether the screen was opened from the planning or from a link
@@ -81,7 +82,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
       this.displayData = props.route.params.data;
       this.eventId = this.displayData.id;
       this.shouldFetchData = false;
-      this.errorCode = 0;
+      this.error = { status: REQUEST_STATUS.SUCCESS };
       this.state = {
         loading: false,
       };
@@ -89,7 +90,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
       this.displayData = null;
       this.eventId = props.route.params.eventId;
       this.shouldFetchData = true;
-      this.errorCode = 0;
+      this.error = { status: REQUEST_STATUS.SUCCESS };
       this.state = {
         loading: true,
       };
@@ -112,8 +113,8 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    *
    * @param error
    */
-  onFetchError = (error: number) => {
-    this.errorCode = error;
+  onFetchError = (error: ApiRejectType) => {
+    this.error = error;
     this.setState({ loading: false });
   };
 
@@ -161,7 +162,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
    * @returns {*}
    */
   getErrorView() {
-    if (this.errorCode === ERROR_TYPE.BAD_INPUT) {
+    if (this.error.code === API_REQUEST_CODES.BAD_INPUT) {
       return (
         <ErrorView
           message={i18n.t('screens.planning.invalidEvent')}
@@ -171,7 +172,8 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
     }
     return (
       <ErrorView
-        status={this.errorCode}
+        status={this.error.status}
+        code={this.error.code}
         button={{
           icon: 'refresh',
           text: i18n.t('general.retry'),
@@ -196,7 +198,10 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
     if (loading) {
       return <BasicLoadingScreen />;
     }
-    if (this.errorCode === 0) {
+    if (
+      this.error.status === REQUEST_STATUS.SUCCESS &&
+      this.error.code === undefined
+    ) {
       return this.getContent();
     }
     return this.getErrorView();

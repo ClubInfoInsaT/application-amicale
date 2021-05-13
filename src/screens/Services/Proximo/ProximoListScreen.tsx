@@ -119,12 +119,12 @@ function ProximoListScreen(props: Props) {
   const navigation = useNavigation();
   const theme = useTheme();
   const { articles, setArticles } = useCachedProximoArticles();
-  const modalRef = useRef<Modalize>();
+  const modalRef = useRef<Modalize>(null);
 
   const [currentSearchString, setCurrentSearchString] = useState('');
   const [currentSortMode, setCurrentSortMode] = useState(2);
   const [modalCurrentDisplayItem, setModalCurrentDisplayItem] = useState<
-    React.ReactNode | undefined
+    React.ReactChild | undefined
   >();
 
   const sortModes = [sortPrice, sortPriceReverse, sortName, sortNameReverse];
@@ -361,9 +361,7 @@ function ProximoListScreen(props: Props) {
 
   return (
     <View style={GENERAL_STYLES.flex}>
-      <CustomModal onRef={(ref) => (modalRef.current = ref)}>
-        {modalCurrentDisplayItem}
-      </CustomModal>
+      <CustomModal ref={modalRef}>{modalCurrentDisplayItem}</CustomModal>
       <WebSectionList
         request={() => readData<ArticlesType>(Urls.proximo.articles)}
         createDataset={createDataset}
