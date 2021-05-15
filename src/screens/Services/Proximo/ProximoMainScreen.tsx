@@ -30,7 +30,7 @@ import Urls from '../../../constants/Urls';
 import { readData } from '../../../utils/WebData';
 import { useNavigation } from '@react-navigation/core';
 import { useLayoutEffect } from 'react';
-import { useCachedProximoCategories } from '../../../utils/cacheContext';
+import { useCachedProximoCategories } from '../../../context/cacheContext';
 import GENERAL_STYLES from '../../../constants/Styles';
 
 const LIST_ITEM_HEIGHT = 84;

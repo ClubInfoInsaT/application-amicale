@@ -8,7 +8,7 @@ import {
 import {
   PreferencesContext,
   PreferencesContextType,
-} from '../../utils/preferencesContext';
+} from '../../context/preferencesContext';
 
 type Props = {
   children: React.ReactChild;

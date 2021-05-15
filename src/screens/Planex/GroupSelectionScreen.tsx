@@ -33,7 +33,7 @@ import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import Urls from '../../constants/Urls';
 import { readData } from '../../utils/WebData';
 import { useNavigation } from '@react-navigation/core';
-import { useCachedPlanexGroups } from '../../utils/cacheContext';
+import { useCachedPlanexGroups } from '../../context/cacheContext';
 
 export type PlanexGroupType = {
   name: string;

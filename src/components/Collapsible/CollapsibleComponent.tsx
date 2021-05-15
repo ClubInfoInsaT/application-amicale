@@ -26,7 +26,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useCollapsible } from '../../utils/CollapsibleContext';
+import { useCollapsible } from '../../context/CollapsibleContext';
 import { useFocusEffect } from '@react-navigation/core';
 
 export type CollapsibleComponentPropsType = {

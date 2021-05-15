@@ -3,7 +3,7 @@ import {
   defaultPreferences,
   PreferenceKeys,
   PreferencesType,
-} from './asyncStorage';
+} from '../utils/asyncStorage';
 
 export type PreferencesContextType = {
   preferences: PreferencesType;

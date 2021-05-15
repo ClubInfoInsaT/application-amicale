@@ -48,7 +48,7 @@ import {
   MainRoutes,
   MainStackParamsList,
 } from '../../../navigation/MainNavigator';
-import { useCachedProximoArticles } from '../../../utils/cacheContext';
+import { useCachedProximoArticles } from '../../../context/cacheContext';
 
 function sortPrice(a: ProximoArticleType, b: ProximoArticleType): number {
   return a.price - b.price;

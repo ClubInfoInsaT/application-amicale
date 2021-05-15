@@ -3,7 +3,7 @@ import { Collapsible } from 'react-navigation-collapsible';
 import {
   CollapsibleContext,
   CollapsibleContextType,
-} from '../../utils/CollapsibleContext';
+} from '../../context/CollapsibleContext';
 
 type Props = {
   children: React.ReactChild;

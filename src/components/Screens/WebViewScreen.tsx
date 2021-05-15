@@ -46,7 +46,7 @@ import MaterialHeaderButtons, { Item } from '../Overrides/CustomHeaderButton';
 import ErrorView from './ErrorView';
 import BasicLoadingScreen from './BasicLoadingScreen';
 import { useFocusEffect, useNavigation } from '@react-navigation/core';
-import { useCollapsible } from '../../utils/CollapsibleContext';
+import { useCollapsible } from '../../context/CollapsibleContext';
 import { REQUEST_STATUS } from '../../utils/Requests';
 
 type Props = {

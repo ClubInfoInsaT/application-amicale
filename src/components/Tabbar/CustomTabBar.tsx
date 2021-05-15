@@ -22,7 +22,7 @@ import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Animated, StyleSheet } from 'react-native';
 import TabIcon from './TabIcon';
 import { useTheme } from 'react-native-paper';
-import { useCollapsible } from '../../utils/CollapsibleContext';
+import { useCollapsible } from '../../context/CollapsibleContext';
 
 export const TAB_BAR_HEIGHT = 50;
 

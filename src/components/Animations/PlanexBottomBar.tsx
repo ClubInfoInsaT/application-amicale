@@ -23,7 +23,7 @@ import { FAB, IconButton, Surface, useTheme } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 import { useNavigation } from '@react-navigation/core';
-import { useCollapsible } from '../../utils/CollapsibleContext';
+import { useCollapsible } from '../../context/CollapsibleContext';
 
 type Props = {
   onPress: (action: string, data?: string) => void;

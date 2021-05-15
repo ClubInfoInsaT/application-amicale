@@ -3,7 +3,7 @@ import {
   CacheContext,
   CacheContextType,
   CacheType,
-} from '../../utils/cacheContext';
+} from '../../context/cacheContext';
 
 type Props = {
   children: React.ReactChild;
