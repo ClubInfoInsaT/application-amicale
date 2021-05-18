@@ -320,7 +320,6 @@ type PropsType = {
 export default function MainNavigator(props: PropsType) {
   const { preferences } = usePreferences();
   const showIntro = getPreferenceBool(PreferenceKeys.showIntro, preferences);
-  console.log(preferences);
 
   return (
     <MainStackComponent

@@ -29,6 +29,7 @@ import { NavigationContainerRef } from '@react-navigation/core';
 import {
   defaultPreferences,
   PreferenceKeys,
+  PreferencesType,
   retrievePreferences,
 } from './src/utils/asyncStorage';
 import PreferencesProvider from './src/components/providers/PreferencesProvider';
@@ -46,6 +47,7 @@ LogBox.ignoreLogs([
 
 type StateType = {
   isLoading: boolean;
+  initialPreferences: PreferencesType;
 };
 
 export default class App extends React.Component<{}, StateType> {
@@ -61,6 +63,7 @@ export default class App extends React.Component<{}, StateType> {
     super(props);
     this.state = {
       isLoading: true,
+      initialPreferences: defaultPreferences,
     };
     initLocales();
     this.navigatorRef = React.createRef();
@@ -103,9 +106,11 @@ export default class App extends React.Component<{}, StateType> {
   /**
    * Async loading is done, finish processing startup data
    */
-  onLoadFinished = () => {
+  onLoadFinished = (values: Array<PreferencesType | void>) => {
+    const [preferences] = values;
     this.setState({
       isLoading: false,
+      initialPreferences: { ...(preferences as PreferencesType) },
     });
     SplashScreen.hide();
   };
@@ -133,7 +138,7 @@ export default class App extends React.Component<{}, StateType> {
       return null;
     }
     return (
-      <PreferencesProvider initialPreferences={defaultPreferences}>
+      <PreferencesProvider initialPreferences={this.state.initialPreferences}>
         <MainApp
           ref={this.navigatorRef}
           defaultHomeData={this.defaultHomeData}
