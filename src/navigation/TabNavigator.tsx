@@ -254,7 +254,7 @@ const ICONS: {
     normal: '',
     focused: '',
   },
-  planning: {
+  events: {
     normal: 'calendar-range-outline',
     focused: 'calendar-range',
   },
@@ -285,7 +285,7 @@ export default function TabNavigator(props: PropsType) {
     services: i18n.t('screens.services.title'),
     proxiwash: i18n.t('screens.proxiwash.title'),
     home: i18n.t('screens.home.title'),
-    planning: i18n.t('screens.planning.title'),
+    events: i18n.t('screens.planning.title'),
     planex: i18n.t('screens.planex.title'),
   };
   return (

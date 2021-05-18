@@ -115,19 +115,9 @@ function getIntroScreens() {
   );
 }
 
-function MainStackComponent(props: {
-  showIntro: boolean;
-  createTabNavigator: () => React.ReactElement;
-}) {
-  const { showIntro, createTabNavigator } = props;
-  if (showIntro) {
-    return getIntroScreens();
-  }
+function getRegularScreens(createTabNavigator: () => React.ReactElement) {
   return (
-    <MainStack.Navigator
-      initialRouteName={showIntro ? MainRoutes.Intro : MainRoutes.Main}
-      headerMode={'screen'}
-    >
+    <>
       <MainStack.Screen
         name={MainRoutes.Main}
         component={createTabNavigator}
@@ -303,6 +293,21 @@ function MainStackComponent(props: {
           title: i18n.t('screens.feedback.title'),
         }}
       />
+    </>
+  );
+}
+
+function MainStackComponent(props: {
+  showIntro: boolean;
+  createTabNavigator: () => React.ReactElement;
+}) {
+  const { showIntro, createTabNavigator } = props;
+  return (
+    <MainStack.Navigator
+      initialRouteName={showIntro ? MainRoutes.Intro : MainRoutes.Main}
+      headerMode={'screen'}
+    >
+      {showIntro ? getIntroScreens() : getRegularScreens(createTabNavigator)}
     </MainStack.Navigator>
   );
 }
@@ -315,6 +320,8 @@ type PropsType = {
 export default function MainNavigator(props: PropsType) {
   const { preferences } = usePreferences();
   const showIntro = getPreferenceBool(PreferenceKeys.showIntro, preferences);
+  console.log(preferences);
+
   return (
     <MainStackComponent
       showIntro={showIntro !== false}
