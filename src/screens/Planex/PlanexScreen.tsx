@@ -17,17 +17,12 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Title, useTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { StyleSheet, View } from 'react-native';
-import {
-  CommonActions,
-  useFocusEffect,
-  useNavigation,
-} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Autolink from 'react-native-autolink';
-import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import AlertDialog from '../../components/Dialogs/AlertDialog';
 import { dateToString, getTimeOnlyString } from '../../utils/Planning';
 import DateManager from '../../managers/DateManager';
@@ -38,6 +33,8 @@ import { getPrettierPlanexGroupName } from '../../utils/Utils';
 import GENERAL_STYLES from '../../constants/Styles';
 import PlanexWebview from '../../components/Screens/PlanexWebview';
 import PlanexBottomBar from '../../components/Animations/PlanexBottomBar';
+import { usePreferences } from '../../context/preferencesContext';
+import { getPreferenceString, PreferenceKeys } from '../../utils/asyncStorage';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,17 +47,10 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
-  route: {
-    params: {
-      group?: PlanexGroupType;
-    };
-  };
-};
-
-function PlanexScreen(props: Props) {
+function PlanexScreen() {
   const navigation = useNavigation();
   const theme = useTheme();
+  const { preferences } = usePreferences();
 
   const [dialogContent, setDialogContent] = useState<
     | undefined
@@ -72,12 +62,13 @@ function PlanexScreen(props: Props) {
   >();
   const [injectJS, setInjectJS] = useState('');
 
-  const getCurrentGroup = (): PlanexGroupType | undefined => {
-    let currentGroupString = AsyncStorageManager.getString(
-      AsyncStorageManager.PREFERENCES.planexCurrentGroup.key
+  const getCurrentGroup: () => PlanexGroupType | undefined = useCallback(() => {
+    let currentGroupString = getPreferenceString(
+      PreferenceKeys.planexCurrentGroup,
+      preferences
     );
     let group: PlanexGroupType;
-    if (currentGroupString !== '') {
+    if (currentGroupString) {
       group = JSON.parse(currentGroupString);
       navigation.setOptions({
         title: getPrettierPlanexGroupName(group.name),
@@ -85,22 +76,10 @@ function PlanexScreen(props: Props) {
       return group;
     }
     return undefined;
-  };
+  }, [navigation, preferences]);
 
-  const [currentGroup, setCurrentGroup] = useState<PlanexGroupType | undefined>(
-    getCurrentGroup()
-  );
+  const currentGroup = getCurrentGroup();
 
-  useFocusEffect(
-    useCallback(() => {
-      if (props.route.params?.group) {
-        // reset params to prevent infinite loop
-        selectNewGroup(props.route.params.group);
-        navigation.dispatch(CommonActions.setParams({ group: undefined }));
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.route.params])
-  );
   /**
    * Gets the Webview, with an error view on top if no group is selected.
    *
@@ -194,21 +173,20 @@ function PlanexScreen(props: Props) {
 
   const hideDialog = () => setDialogContent(undefined);
 
-  /**
-   * Sends the webpage a message with the new group to select and save it to preferences
-   *
-   * @param group The group object selected
-   */
-  const selectNewGroup = (group: PlanexGroupType) => {
-    sendMessage('setGroup', group.id.toString());
-    setCurrentGroup(group);
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.planexCurrentGroup.key,
-      group
-    );
+  useEffect(() => {
+    const group = getCurrentGroup();
+    if (group) {
+      sendMessage('setGroup', group.id.toString());
+      navigation.setOptions({ title: getPrettierPlanexGroupName(group.name) });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getCurrentGroup, navigation]);
 
-    navigation.setOptions({ title: getPrettierPlanexGroupName(group.name) });
-  };
+  const showMascot =
+    getPreferenceString(
+      PreferenceKeys.defaultStartScreen,
+      preferences
+    )?.toLowerCase() !== 'planex';
 
   return (
     <View style={GENERAL_STYLES.flex}>
@@ -220,11 +198,8 @@ function PlanexScreen(props: Props) {
           <View style={GENERAL_STYLES.flex}>{getWebView()}</View>
         )}
       </View>
-      {AsyncStorageManager.getString(
-        AsyncStorageManager.PREFERENCES.defaultStartScreen.key
-      ).toLowerCase() !== 'planex' ? (
+      {showMascot ? (
         <MascotPopup
-          prefKey={AsyncStorageManager.PREFERENCES.planexShowMascot.key}
           title={i18n.t('screens.planex.mascotDialog.title')}
           message={i18n.t('screens.planex.mascotDialog.message')}
           icon="emoticon-kiss"

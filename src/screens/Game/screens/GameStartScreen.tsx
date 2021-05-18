@@ -35,7 +35,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import LinearGradient from 'react-native-linear-gradient';
 import Mascot, { MASCOT_STYLE } from '../../../components/Mascot/Mascot';
 import MascotPopup from '../../../components/Mascot/MascotPopup';
-import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import type { GridType } from '../components/GridComponent';
 import GridComponent from '../components/GridComponent';
 import GridManager from '../logic/GridManager';
@@ -152,9 +151,11 @@ class GameStartScreen extends React.Component<PropsType> {
     super(props);
     this.isHighScore = false;
     this.gridManager = new GridManager(4, 4, props.theme);
-    this.scores = AsyncStorageManager.getObject(
-      AsyncStorageManager.PREFERENCES.gameScores.key
-    );
+    // TODO
+    // this.scores = AsyncStorageManager.getObject(
+    //   AsyncStorageManager.PREFERENCES.gameScores.key
+    // );
+    this.scores = [];
     this.scores.sort((a: number, b: number): number => b - a);
     if (props.route.params != null) {
       this.recoverGameScore();
@@ -448,10 +449,11 @@ class GameStartScreen extends React.Component<PropsType> {
       if (this.scores.length > 3) {
         this.scores.splice(3, 1);
       }
-      AsyncStorageManager.set(
-        AsyncStorageManager.PREFERENCES.gameScores.key,
-        this.scores
-      );
+      // TODO
+      // AsyncStorageManager.set(
+      //   AsyncStorageManager.PREFERENCES.gameScores.key,
+      //   this.scores
+      // );
     }
   }
 
@@ -472,7 +474,6 @@ class GameStartScreen extends React.Component<PropsType> {
           <CollapsibleScrollView headerColors={'transparent'}>
             {this.getMainContent()}
             <MascotPopup
-              prefKey={AsyncStorageManager.PREFERENCES.gameStartMascot.key}
               title={i18n.t('screens.game.mascotDialog.title')}
               message={i18n.t('screens.game.mascotDialog.message')}
               icon="gamepad-variant"

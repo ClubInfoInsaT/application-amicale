@@ -25,7 +25,6 @@ import i18n from 'i18n-js';
 import EquipmentListItem from '../../../components/Lists/Equipment/EquipmentListItem';
 import MascotPopup from '../../../components/Mascot/MascotPopup';
 import { MASCOT_STYLE } from '../../../components/Mascot/Mascot';
-import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import GENERAL_STYLES from '../../../constants/Styles';
 import ConnectionManager from '../../../managers/ConnectionManager';
 import { ApiRejectType } from '../../../utils/WebData';
@@ -36,7 +35,7 @@ type PropsType = {
 };
 
 type StateType = {
-  mascotDialogVisible: boolean;
+  mascotDialogVisible: boolean | undefined;
 };
 
 export type DeviceType = {
@@ -75,9 +74,7 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
     super(props);
     this.userRents = null;
     this.state = {
-      mascotDialogVisible: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.equipmentShowMascot.key
-      ),
+      mascotDialogVisible: undefined,
     };
   }
 
@@ -145,10 +142,6 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
   };
 
   hideMascotDialog = () => {
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.equipmentShowMascot.key,
-      false
-    );
     this.setState({ mascotDialogVisible: false });
   };
 

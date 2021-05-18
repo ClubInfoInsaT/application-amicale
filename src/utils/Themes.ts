@@ -1,28 +1,4 @@
-/*
- * Copyright (c) 2019 - 2020 Arnaud Vergnet.
- *
- * This file is part of Campus INSAT.
- *
- * Campus INSAT is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Campus INSAT is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 import { DarkTheme, DefaultTheme } from 'react-native-paper';
-import { Appearance } from 'react-native-appearance';
-import AsyncStorageManager from './AsyncStorageManager';
-import AprilFoolsManager from './AprilFoolsManager';
-
-const colorScheme = Appearance.getColorScheme();
 
 declare global {
   namespace ReactNativePaper {
@@ -83,7 +59,7 @@ declare global {
   }
 }
 
-const CustomWhiteTheme: ReactNativePaper.Theme = {
+export const CustomWhiteTheme: ReactNativePaper.Theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
@@ -142,7 +118,7 @@ const CustomWhiteTheme: ReactNativePaper.Theme = {
   },
 };
 
-const CustomDarkTheme: ReactNativePaper.Theme = {
+export const CustomDarkTheme: ReactNativePaper.Theme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
@@ -200,99 +176,3 @@ const CustomDarkTheme: ReactNativePaper.Theme = {
     mascotMessageArrow: '#323232',
   },
 };
-
-/**
- * Singleton class used to manage themes
- */
-export default class ThemeManager {
-  static instance: ThemeManager | null = null;
-
-  updateThemeCallback: null | (() => void);
-
-  constructor() {
-    this.updateThemeCallback = null;
-  }
-
-  /**
-   * Get this class instance or create one if none is found
-   *
-   * @returns {ThemeManager}
-   */
-  static getInstance(): ThemeManager {
-    if (ThemeManager.instance == null) {
-      ThemeManager.instance = new ThemeManager();
-    }
-    return ThemeManager.instance;
-  }
-
-  /**
-   * Gets night mode status.
-   * If Follow System Preferences is enabled, will first use system theme.
-   * If disabled or not available, will use value stored din preferences
-   *
-   * @returns {boolean} Night mode state
-   */
-  static getNightMode(): boolean {
-    return (
-      (AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.nightMode.key
-      ) &&
-        (!AsyncStorageManager.getBool(
-          AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key
-        ) ||
-          colorScheme === 'no-preference')) ||
-      (AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.nightModeFollowSystem.key
-      ) &&
-        colorScheme === 'dark')
-    );
-  }
-
-  /**
-   * Get the current theme based on night mode and events
-   *
-   * @returns {ReactNativePaper.Theme} The current theme
-   */
-  static getCurrentTheme(): ReactNativePaper.Theme {
-    if (AprilFoolsManager.getInstance().isAprilFoolsEnabled()) {
-      return AprilFoolsManager.getAprilFoolsTheme(CustomWhiteTheme);
-    }
-    return ThemeManager.getBaseTheme();
-  }
-
-  /**
-   * Get the theme based on night mode
-   *
-   * @return {ReactNativePaper.Theme} The theme
-   */
-  static getBaseTheme(): ReactNativePaper.Theme {
-    if (ThemeManager.getNightMode()) {
-      return CustomDarkTheme;
-    }
-    return CustomWhiteTheme;
-  }
-
-  /**
-   * Sets the function to be called when the theme is changed (allows for general reload of the app)
-   *
-   * @param callback Function to call after theme change
-   */
-  setUpdateThemeCallback(callback: () => void) {
-    this.updateThemeCallback = callback;
-  }
-
-  /**
-   * Set night mode and save it to preferences
-   *
-   * @param isNightMode True to enable night mode, false to disable
-   */
-  setNightMode(isNightMode: boolean) {
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.nightMode.key,
-      isNightMode
-    );
-    if (this.updateThemeCallback != null) {
-      this.updateThemeCallback();
-    }
-  }
-}

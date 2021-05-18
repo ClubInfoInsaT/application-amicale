@@ -20,8 +20,8 @@
 import * as React from 'react';
 import { Caption, Card, Paragraph, TouchableRipple } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-import type { ServiceItemType } from '../../../managers/ServicesManager';
 import GENERAL_STYLES from '../../../constants/Styles';
+import { ServiceItemType } from '../../../utils/Services';
 
 type PropsType = {
   item: ServiceItemType;

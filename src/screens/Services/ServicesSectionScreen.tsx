@@ -22,7 +22,7 @@ import { Collapsible } from 'react-navigation-collapsible';
 import { CommonActions } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import CardList from '../../components/Lists/CardList/CardList';
-import type { ServiceCategoryType } from '../../managers/ServicesManager';
+import { ServiceCategoryType } from '../../utils/Services';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;

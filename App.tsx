@@ -18,27 +18,21 @@
  */
 
 import React from 'react';
-import { LogBox, Platform, SafeAreaView, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { LogBox, Platform } from 'react-native';
 import { setSafeBounceHeight } from 'react-navigation-collapsible';
 import SplashScreen from 'react-native-splash-screen';
-import { OverflowMenuProvider } from 'react-navigation-header-buttons';
-import AsyncStorageManager from './src/managers/AsyncStorageManager';
-import CustomIntroSlider from './src/components/Overrides/CustomIntroSlider';
-import ThemeManager from './src/managers/ThemeManager';
-import MainNavigator from './src/navigation/MainNavigator';
-import AprilFoolsManager from './src/managers/AprilFoolsManager';
-import Update from './src/constants/Update';
 import ConnectionManager from './src/managers/ConnectionManager';
 import type { ParsedUrlDataType } from './src/utils/URLHandler';
 import URLHandler from './src/utils/URLHandler';
-import { setupStatusBar } from './src/utils/Utils';
 import initLocales from './src/utils/Locales';
 import { NavigationContainerRef } from '@react-navigation/core';
-import GENERAL_STYLES from './src/constants/Styles';
-import CollapsibleProvider from './src/components/providers/CollapsibleProvider';
-import CacheProvider from './src/components/providers/CacheProvider';
+import {
+  defaultPreferences,
+  PreferenceKeys,
+  retrievePreferences,
+} from './src/utils/asyncStorage';
+import PreferencesProvider from './src/components/providers/PreferencesProvider';
+import MainApp from './src/screens/MainApp';
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 // Crashes app when navigating away from webview on android 9+
@@ -52,10 +46,6 @@ LogBox.ignoreLogs([
 
 type StateType = {
   isLoading: boolean;
-  showIntro: boolean;
-  showUpdate: boolean;
-  showAprilFools: boolean;
-  currentTheme: ReactNativePaper.Theme | undefined;
 };
 
 export default class App extends React.Component<{}, StateType> {
@@ -71,10 +61,6 @@ export default class App extends React.Component<{}, StateType> {
     super(props);
     this.state = {
       isLoading: true,
-      showIntro: true,
-      showUpdate: true,
-      showAprilFools: false,
-      currentTheme: undefined,
     };
     initLocales();
     this.navigatorRef = React.createRef();
@@ -115,66 +101,11 @@ export default class App extends React.Component<{}, StateType> {
   };
 
   /**
-   * Updates the current theme
-   */
-  onUpdateTheme = () => {
-    this.setState({
-      currentTheme: ThemeManager.getCurrentTheme(),
-    });
-    setupStatusBar();
-  };
-
-  /**
-   * Callback when user ends the intro. Save in preferences to avoid showing back the introSlides
-   */
-  onIntroDone = () => {
-    this.setState({
-      showIntro: false,
-      showUpdate: false,
-      showAprilFools: false,
-    });
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.showIntro.key,
-      false
-    );
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.updateNumber.key,
-      Update.number
-    );
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.showAprilFoolsStart.key,
-      false
-    );
-  };
-
-  /**
    * Async loading is done, finish processing startup data
    */
   onLoadFinished = () => {
-    // Only show intro if this is the first time starting the app
-    ThemeManager.getInstance().setUpdateThemeCallback(this.onUpdateTheme);
-    // Status bar goes dark if set too fast on ios
-    if (Platform.OS === 'ios') {
-      setTimeout(setupStatusBar, 1000);
-    } else {
-      setupStatusBar();
-    }
-
     this.setState({
       isLoading: false,
-      currentTheme: ThemeManager.getCurrentTheme(),
-      showIntro: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.showIntro.key
-      ),
-      showUpdate:
-        AsyncStorageManager.getNumber(
-          AsyncStorageManager.PREFERENCES.updateNumber.key
-        ) !== Update.number,
-      showAprilFools:
-        AprilFoolsManager.getInstance().isAprilFoolsEnabled() &&
-        AsyncStorageManager.getBool(
-          AsyncStorageManager.PREFERENCES.showAprilFoolsStart.key
-        ),
     });
     SplashScreen.hide();
   };
@@ -186,7 +117,7 @@ export default class App extends React.Component<{}, StateType> {
    */
   loadAssetsAsync() {
     Promise.all([
-      AsyncStorageManager.getInstance().loadPreferences(),
+      retrievePreferences(Object.values(PreferenceKeys), defaultPreferences),
       ConnectionManager.getInstance().recoverLogin(),
     ])
       .then(this.onLoadFinished)
@@ -201,43 +132,14 @@ export default class App extends React.Component<{}, StateType> {
     if (state.isLoading) {
       return null;
     }
-    if (state.showIntro || state.showUpdate || state.showAprilFools) {
-      return (
-        <CustomIntroSlider
-          onDone={this.onIntroDone}
-          isUpdate={state.showUpdate && !state.showIntro}
-          isAprilFools={state.showAprilFools && !state.showIntro}
-        />
-      );
-    }
     return (
-      <PaperProvider theme={state.currentTheme}>
-        <CollapsibleProvider>
-          <CacheProvider>
-            <OverflowMenuProvider>
-              <View
-                style={{
-                  backgroundColor: ThemeManager.getCurrentTheme().colors
-                    .background,
-                  ...GENERAL_STYLES.flex,
-                }}
-              >
-                <SafeAreaView style={GENERAL_STYLES.flex}>
-                  <NavigationContainer
-                    theme={state.currentTheme}
-                    ref={this.navigatorRef}
-                  >
-                    <MainNavigator
-                      defaultHomeRoute={this.defaultHomeRoute}
-                      defaultHomeData={this.defaultHomeData}
-                    />
-                  </NavigationContainer>
-                </SafeAreaView>
-              </View>
-            </OverflowMenuProvider>
-          </CacheProvider>
-        </CollapsibleProvider>
-      </PaperProvider>
+      <PreferencesProvider initialPreferences={defaultPreferences}>
+        <MainApp
+          ref={this.navigatorRef}
+          defaultHomeData={this.defaultHomeData}
+          defaultHomeRoute={this.defaultHomeRoute}
+        />
+      </PreferencesProvider>
     );
   }
 }

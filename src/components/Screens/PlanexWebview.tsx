@@ -3,11 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
 import DateManager from '../../managers/DateManager';
-import ThemeManager from '../../managers/ThemeManager';
 import { PlanexGroupType } from '../../screens/Planex/GroupSelectionScreen';
 import ErrorView from './ErrorView';
 import WebViewScreen from './WebViewScreen';
 import i18n from 'i18n-js';
+import { useTheme } from 'react-native-paper';
 
 type Props = {
   currentGroup?: PlanexGroupType;
@@ -86,7 +86,10 @@ const INJECT_STYLE_DARK = `$('head').append('<style>${CUSTOM_CSS_DARK}</style>')
  *
  * @param groupID The current group selected
  */
-const generateInjectedJS = (group: PlanexGroupType | undefined) => {
+const generateInjectedJS = (
+  group: PlanexGroupType | undefined,
+  darkMode: boolean
+) => {
   let customInjectedJS = `$(document).ready(function() {
       ${OBSERVE_MUTATIONS_INJECTED}
       ${INJECT_STYLE}
@@ -97,7 +100,7 @@ const generateInjectedJS = (group: PlanexGroupType | undefined) => {
   if (DateManager.isWeekend(new Date())) {
     customInjectedJS += `calendar.next();`;
   }
-  if (ThemeManager.getNightMode()) {
+  if (darkMode) {
     customInjectedJS += INJECT_STYLE_DARK;
   }
   customInjectedJS += 'removeAlpha();});true;'; // Prevents crash on ios
@@ -105,11 +108,12 @@ const generateInjectedJS = (group: PlanexGroupType | undefined) => {
 };
 
 function PlanexWebview(props: Props) {
+  const theme = useTheme();
   return (
     <View style={GENERAL_STYLES.flex}>
       <WebViewScreen
         url={Urls.planex.planning}
-        initialJS={generateInjectedJS(props.currentGroup)}
+        initialJS={generateInjectedJS(props.currentGroup, theme.dark)}
         injectJS={props.injectJS}
         onMessage={props.onMessage}
         showAdvancedControls={false}

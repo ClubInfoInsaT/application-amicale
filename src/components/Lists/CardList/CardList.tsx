@@ -21,7 +21,7 @@ import * as React from 'react';
 import { Animated, Dimensions, ViewStyle } from 'react-native';
 import ImageListItem from './ImageListItem';
 import CardListItem from './CardListItem';
-import type { ServiceItemType } from '../../../managers/ServicesManager';
+import { ServiceItemType } from '../../../utils/Services';
 
 type PropsType = {
   dataset: Array<ServiceItemType>;

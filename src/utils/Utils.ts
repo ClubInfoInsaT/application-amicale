@@ -18,23 +18,21 @@
  */
 
 import { Platform, StatusBar } from 'react-native';
-import ThemeManager from '../managers/ThemeManager';
 
 /**
  * Updates status bar content color if on iOS only,
  * as the android status bar is always set to black.
  */
-export function setupStatusBar() {
-  if (ThemeManager.getNightMode()) {
-    StatusBar.setBarStyle('light-content', true);
-  } else {
-    StatusBar.setBarStyle('dark-content', true);
-  }
-  if (Platform.OS === 'android') {
-    StatusBar.setBackgroundColor(
-      ThemeManager.getCurrentTheme().colors.surface,
-      true
-    );
+export function setupStatusBar(theme?: ReactNativePaper.Theme) {
+  if (theme) {
+    if (theme.dark) {
+      StatusBar.setBarStyle('light-content', true);
+    } else {
+      StatusBar.setBarStyle('dark-content', true);
+    }
+    if (Platform.OS === 'android') {
+      StatusBar.setBackgroundColor(theme.colors.surface, true);
+    }
   }
 }
 

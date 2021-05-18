@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SERVICES_KEY } from '../managers/ServicesManager';
+import { SERVICES_KEY } from './Services';
 
 export enum PreferenceKeys {
   debugUnlocked = 'debugUnlocked',
@@ -9,6 +9,7 @@ export enum PreferenceKeys {
   nightModeFollowSystem = 'nightModeFollowSystem',
   nightMode = 'nightMode',
   defaultStartScreen = 'defaultStartScreen',
+
   servicesShowMascot = 'servicesShowMascot',
   proxiwashShowMascot = 'proxiwashShowMascot',
   homeShowMascot = 'homeShowMascot',
@@ -17,7 +18,8 @@ export enum PreferenceKeys {
   loginShowMascot = 'loginShowMascot',
   voteShowMascot = 'voteShowMascot',
   equipmentShowMascot = 'equipmentShowMascot',
-  gameStartMascot = 'gameStartMascot',
+  gameShowMascot = 'gameShowMascot',
+
   proxiwashWatchedMachines = 'proxiwashWatchedMachines',
   showAprilFoolsStart = 'showAprilFoolsStart',
   planexCurrentGroup = 'planexCurrentGroup',
@@ -45,7 +47,7 @@ export const defaultPreferences: { [key in PreferenceKeys]: string } = {
   [PreferenceKeys.loginShowMascot]: '1',
   [PreferenceKeys.voteShowMascot]: '1',
   [PreferenceKeys.equipmentShowMascot]: '1',
-  [PreferenceKeys.gameStartMascot]: '1',
+  [PreferenceKeys.gameShowMascot]: '1',
   [PreferenceKeys.proxiwashWatchedMachines]: '[]',
   [PreferenceKeys.showAprilFoolsStart]: '1',
   [PreferenceKeys.planexCurrentGroup]: '',
@@ -112,6 +114,10 @@ export function setPreference(
     .then(undefined)
     .catch(() => console.debug('save error: ' + convertedValue));
   return prevPreferences;
+}
+
+export function isValidPreferenceKey(key: string): key is PreferenceKeys {
+  return key in Object.values(PreferenceKeys);
 }
 
 /**

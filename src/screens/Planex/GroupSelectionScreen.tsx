@@ -17,23 +17,19 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import i18n from 'i18n-js';
 import { Searchbar } from 'react-native-paper';
 import { stringMatchQuery } from '../../utils/Search';
 import WebSectionList from '../../components/Screens/WebSectionList';
 import GroupListAccordion from '../../components/Lists/PlanexGroups/GroupListAccordion';
-import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import Urls from '../../constants/Urls';
 import { readData } from '../../utils/WebData';
 import { useNavigation } from '@react-navigation/core';
 import { useCachedPlanexGroups } from '../../context/cacheContext';
+import { usePreferences } from '../../context/preferencesContext';
+import { getPreferenceObject, PreferenceKeys } from '../../utils/asyncStorage';
 
 export type PlanexGroupType = {
   name: string;
@@ -63,13 +59,23 @@ function sortName(
 
 function GroupSelectionScreen() {
   const navigation = useNavigation();
+  const { preferences, updatePreferences } = usePreferences();
   const { groups, setGroups } = useCachedPlanexGroups();
   const [currentSearchString, setCurrentSearchString] = useState('');
-  const [favoriteGroups, setFavoriteGroups] = useState<Array<PlanexGroupType>>(
-    AsyncStorageManager.getObject(
-      AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key
-    )
-  );
+
+  const getFavoriteGroups = (): Array<PlanexGroupType> => {
+    const data = getPreferenceObject(
+      PreferenceKeys.planexFavoriteGroups,
+      preferences
+    );
+    if (data) {
+      return data as Array<PlanexGroupType>;
+    } else {
+      return [];
+    }
+  };
+
+  const favoriteGroups = getFavoriteGroups();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -140,10 +146,8 @@ function GroupSelectionScreen() {
    * @param item The article pressed
    */
   const onListItemPress = (item: PlanexGroupType) => {
-    navigation.navigate('planex', {
-      screen: 'index',
-      params: { group: item },
-    });
+    updatePreferences(PreferenceKeys.planexCurrentGroup, item);
+    navigation.goBack();
   };
 
   /**
@@ -153,12 +157,16 @@ function GroupSelectionScreen() {
    */
   const onListFavoritePress = useCallback(
     (group: PlanexGroupType) => {
+      const updateFavorites = (newValue: Array<PlanexGroupType>) => {
+        updatePreferences(PreferenceKeys.planexFavoriteGroups, newValue);
+      };
+
       const removeGroupFromFavorites = (g: PlanexGroupType) => {
-        setFavoriteGroups(favoriteGroups.filter((f) => f.id !== g.id));
+        updateFavorites(favoriteGroups.filter((f) => f.id !== g.id));
       };
 
       const addGroupToFavorites = (g: PlanexGroupType) => {
-        setFavoriteGroups([...favoriteGroups, g].sort(sortName));
+        updateFavorites([...favoriteGroups, g].sort(sortName));
       };
 
       if (favoriteGroups.some((f) => f.id === group.id)) {
@@ -167,15 +175,8 @@ function GroupSelectionScreen() {
         addGroupToFavorites(group);
       }
     },
-    [favoriteGroups]
+    [favoriteGroups, updatePreferences]
   );
-
-  useEffect(() => {
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.planexFavoriteGroups.key,
-      favoriteGroups
-    );
-  }, [favoriteGroups]);
 
   /**
    * Generates the dataset to be used in the FlatList.

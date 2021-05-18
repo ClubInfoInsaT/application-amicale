@@ -28,17 +28,17 @@ import {
   View,
 } from 'react-native';
 import Mascot from './Mascot';
-import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import GENERAL_STYLES from '../../constants/Styles';
 import MascotSpeechBubble, {
   MascotSpeechBubbleProps,
 } from './MascotSpeechBubble';
 import { useMountEffect } from '../../utils/customHooks';
+import { useRoute } from '@react-navigation/core';
+import { useShouldShowMascot } from '../../context/preferencesContext';
 
 type PropsType = MascotSpeechBubbleProps & {
   emotion: number;
   visible?: boolean;
-  prefKey?: string;
 };
 
 const styles = StyleSheet.create({
@@ -61,13 +61,14 @@ const BUBBLE_HEIGHT = Dimensions.get('window').height / 3;
  * Component used to display a popup with the mascot.
  */
 function MascotPopup(props: PropsType) {
+  const route = useRoute();
+  const { shouldShow, setShouldShow } = useShouldShowMascot(route.name);
+
   const isVisible = () => {
     if (props.visible !== undefined) {
       return props.visible;
-    } else if (props.prefKey != null) {
-      return AsyncStorageManager.getBool(props.prefKey);
     } else {
-      return false;
+      return shouldShow;
     }
   };
 
@@ -164,10 +165,8 @@ function MascotPopup(props: PropsType) {
   };
 
   const onDismiss = (callback?: () => void) => {
-    if (props.prefKey != null) {
-      AsyncStorageManager.set(props.prefKey, false);
-      setDialogVisible(false);
-    }
+    setShouldShow(false);
+    setDialogVisible(false);
     if (callback) {
       callback();
     }

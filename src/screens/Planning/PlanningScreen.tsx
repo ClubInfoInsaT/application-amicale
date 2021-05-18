@@ -34,7 +34,6 @@ import {
 import CustomAgenda from '../../components/Overrides/CustomAgenda';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
-import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
 
@@ -291,7 +290,6 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
           }
         />
         <MascotPopup
-          prefKey={AsyncStorageManager.PREFERENCES.eventsShowMascot.key}
           title={i18n.t('screens.planning.mascotDialog.title')}
           message={i18n.t('screens.planning.mascotDialog.message')}
           icon="party-popper"

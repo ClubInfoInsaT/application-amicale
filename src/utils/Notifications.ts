@@ -18,7 +18,6 @@
  */
 
 import i18n from 'i18n-js';
-import AsyncStorageManager from '../managers/AsyncStorageManager';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 import { Platform } from 'react-native';
@@ -79,11 +78,8 @@ PushNotification.configure({
  * @param machineID The machine id to schedule notifications for. This is used as id and in the notification string.
  * @param date The date to trigger the notification at
  */
-function createNotifications(machineID: string, date: Date) {
-  const reminder = AsyncStorageManager.getNumber(
-    AsyncStorageManager.PREFERENCES.proxiwashNotifications.key
-  );
-  if (!Number.isNaN(reminder) && reminder > 0) {
+function createNotifications(machineID: string, date: Date, reminder?: number) {
+  if (reminder && !Number.isNaN(reminder) && reminder > 0) {
     const id = reminderIdFactor * parseInt(machineID, 10);
     const reminderDate = new Date(date);
     reminderDate.setMinutes(reminderDate.getMinutes() - reminder);
@@ -122,10 +118,11 @@ function createNotifications(machineID: string, date: Date) {
 export function setupMachineNotification(
   machineID: string,
   isEnabled: boolean,
+  reminder?: number,
   endDate?: Date | null
 ) {
   if (isEnabled && endDate) {
-    createNotifications(machineID, endDate);
+    createNotifications(machineID, endDate, reminder);
   } else {
     PushNotification.cancelLocalNotifications({ id: machineID });
     const reminderId = reminderIdFactor * parseInt(machineID, 10);

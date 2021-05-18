@@ -28,7 +28,6 @@ import VoteResults from '../../components/Amicale/Vote/VoteResults';
 import VoteWait from '../../components/Amicale/Vote/VoteWait';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
-import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import VoteNotAvailable from '../../components/Amicale/Vote/VoteNotAvailable';
 import GENERAL_STYLES from '../../constants/Styles';
 import ConnectionManager from '../../managers/ConnectionManager';
@@ -118,7 +117,7 @@ type PropsType = {};
 
 type StateType = {
   hasVoted: boolean;
-  mascotDialogVisible: boolean;
+  mascotDialogVisible: boolean | undefined;
 };
 
 const styles = StyleSheet.create({
@@ -154,9 +153,7 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
     this.dates = undefined;
     this.state = {
       hasVoted: false,
-      mascotDialogVisible: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.voteShowMascot.key
-      ),
+      mascotDialogVisible: undefined,
     };
     this.hasVoted = false;
     this.today = new Date();
@@ -328,10 +325,6 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
   };
 
   hideMascotDialog = () => {
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.voteShowMascot.key,
-      false
-    );
     this.setState({ mascotDialogVisible: false });
   };
 

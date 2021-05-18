@@ -33,6 +33,7 @@ import MaterialHeaderButtons, {
 import type { OptionsDialogButtonType } from '../../../components/Dialogs/OptionsDialog';
 import OptionsDialog from '../../../components/Dialogs/OptionsDialog';
 import GENERAL_STYLES from '../../../constants/Styles';
+import { MainRoutes } from '../../../navigation/MainNavigator';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -200,7 +201,7 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
       gameScore: score,
     });
     if (!isRestart) {
-      props.navigation.replace('game-start', {
+      props.navigation.replace(MainRoutes.GameStart, {
         score: state.gameScore,
         level: state.gameLevel,
         time: state.gameTime,

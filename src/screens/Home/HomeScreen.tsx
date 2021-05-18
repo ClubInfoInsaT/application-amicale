@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import {
   FlatList,
   NativeScrollEvent,
@@ -26,9 +26,13 @@ import {
   StyleSheet,
 } from 'react-native';
 import i18n from 'i18n-js';
-import { Headline, withTheme } from 'react-native-paper';
-import { CommonActions } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { Headline, useTheme } from 'react-native-paper';
+import {
+  CommonActions,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
 import { View } from 'react-native-animatable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -44,16 +48,17 @@ import MaterialHeaderButtons, {
 import AnimatedFAB from '../../components/Animations/AnimatedFAB';
 import ConnectionManager from '../../managers/ConnectionManager';
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
-import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
-import DashboardManager from '../../managers/DashboardManager';
-import type { ServiceItemType } from '../../managers/ServicesManager';
 import { getDisplayEvent, getFutureEvents } from '../../utils/Home';
 import type { PlanningEventType } from '../../utils/Planning';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
 import { readData } from '../../utils/WebData';
+import { TabRoutes, TabStackParamsList } from '../../navigation/TabNavigator';
+import { ServiceItemType } from '../../utils/Services';
+import { useCurrentDashboard } from '../../context/preferencesContext';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 const FEED_ITEM_HEIGHT = 500;
 
@@ -88,15 +93,7 @@ type RawDashboardType = {
   dashboard: FullDashboardType;
 };
 
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  route: { params: { nextScreen: string; data: object } };
-  theme: ReactNativePaper.Theme;
-};
-
-type StateType = {
-  dialogVisible: boolean;
-};
+type Props = StackScreenProps<TabStackParamsList, TabRoutes.Home>;
 
 const styles = StyleSheet.create({
   dashboardRow: {
@@ -127,106 +124,94 @@ const styles = StyleSheet.create({
   },
 });
 
+const sortFeedTime = (a: FeedItemType, b: FeedItemType): number =>
+  b.time - a.time;
+
+const generateNewsFeed = (rawFeed: RawNewsFeedType): Array<FeedItemType> => {
+  const finalFeed: Array<FeedItemType> = [];
+  Object.keys(rawFeed).forEach((key: string) => {
+    const category: Array<FeedItemType> | null = rawFeed[key];
+    if (category != null && category.length > 0) {
+      finalFeed.push(...category);
+    }
+  });
+  finalFeed.sort(sortFeedTime);
+  return finalFeed;
+};
+
 /**
  * Class defining the app's home screen
  */
-class HomeScreen extends React.Component<PropsType, StateType> {
-  static sortFeedTime = (a: FeedItemType, b: FeedItemType): number =>
-    b.time - a.time;
+function HomeScreen(props: Props) {
+  const theme = useTheme();
+  const navigation = useNavigation();
 
-  static generateNewsFeed(rawFeed: RawNewsFeedType): Array<FeedItemType> {
-    const finalFeed: Array<FeedItemType> = [];
-    Object.keys(rawFeed).forEach((key: string) => {
-      const category: Array<FeedItemType> | null = rawFeed[key];
-      if (category != null && category.length > 0) {
-        finalFeed.push(...category);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const fabRef = useRef<AnimatedFAB>(null);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    ConnectionManager.getInstance().isLoggedIn()
+  );
+  const { currentDashboard } = useCurrentDashboard();
+
+  let homeDashboard: FullDashboardType | null = null;
+
+  useLayoutEffect(() => {
+    const getHeaderButton = () => {
+      let onPressLog = () =>
+        navigation.navigate('login', { nextScreen: 'profile' });
+      let logIcon = 'login';
+      let logColor = theme.colors.primary;
+      if (isLoggedIn) {
+        onPressLog = () => showDisconnectDialog();
+        logIcon = 'logout';
+        logColor = theme.colors.text;
       }
-    });
-    finalFeed.sort(HomeScreen.sortFeedTime);
-    return finalFeed;
-  }
 
-  isLoggedIn: boolean | null;
-
-  fabRef: { current: null | AnimatedFAB };
-
-  currentNewFeed: Array<FeedItemType>;
-
-  currentDashboard: FullDashboardType | null;
-
-  dashboardManager: DashboardManager;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.fabRef = React.createRef();
-    this.dashboardManager = new DashboardManager(props.navigation);
-    this.currentNewFeed = [];
-    this.currentDashboard = null;
-    this.isLoggedIn = ConnectionManager.getInstance().isLoggedIn();
-    props.navigation.setOptions({
-      headerRight: this.getHeaderButton,
-    });
-    this.state = {
-      dialogVisible: false,
+      return (
+        <MaterialHeaderButtons>
+          <Item
+            title={'log'}
+            iconName={logIcon}
+            color={logColor}
+            onPress={onPressLog}
+          />
+          <Item
+            title={i18n.t('screens.settings.title')}
+            iconName={'cog'}
+            onPress={() => navigation.navigate(MainRoutes.Settings)}
+          />
+        </MaterialHeaderButtons>
+      );
     };
-  }
+    navigation.setOptions({
+      headerRight: getHeaderButton,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation, isLoggedIn]);
 
-  componentDidMount() {
-    const { props } = this;
-    props.navigation.addListener('focus', this.onScreenFocus);
-    // Handle link open when home is focused
-    props.navigation.addListener('state', this.handleNavigationParams);
-  }
+  useFocusEffect(
+    React.useCallback(() => {
+      const handleNavigationParams = () => {
+        const { route } = props;
+        if (route.params != null) {
+          if (route.params.nextScreen != null) {
+            navigation.navigate(route.params.nextScreen, route.params.data);
+            // reset params to prevent infinite loop
+            navigation.dispatch(CommonActions.setParams({ nextScreen: null }));
+          }
+        }
+      };
 
-  /**
-   * Updates login state and navigation parameters on screen focus
-   */
-  onScreenFocus = () => {
-    const { props } = this;
-    if (ConnectionManager.getInstance().isLoggedIn() !== this.isLoggedIn) {
-      this.isLoggedIn = ConnectionManager.getInstance().isLoggedIn();
-      props.navigation.setOptions({
-        headerRight: this.getHeaderButton,
-      });
-    }
-    // handle link open when home is not focused or created
-    this.handleNavigationParams();
-  };
-
-  /**
-   * Gets header buttons based on login state
-   *
-   * @returns {*}
-   */
-  getHeaderButton = () => {
-    const { props } = this;
-    let onPressLog = (): void =>
-      props.navigation.navigate('login', { nextScreen: 'profile' });
-    let logIcon = 'login';
-    let logColor = props.theme.colors.primary;
-    if (this.isLoggedIn) {
-      onPressLog = (): void => this.showDisconnectDialog();
-      logIcon = 'logout';
-      logColor = props.theme.colors.text;
-    }
-
-    const onPressSettings = (): void => props.navigation.navigate('settings');
-    return (
-      <MaterialHeaderButtons>
-        <Item
-          title="log"
-          iconName={logIcon}
-          color={logColor}
-          onPress={onPressLog}
-        />
-        <Item
-          title={i18n.t('screens.settings.title')}
-          iconName="cog"
-          onPress={onPressSettings}
-        />
-      </MaterialHeaderButtons>
-    );
-  };
+      if (ConnectionManager.getInstance().isLoggedIn() !== isLoggedIn) {
+        setIsLoggedIn(ConnectionManager.getInstance().isLoggedIn());
+      }
+      // handle link open when home is not focused or created
+      handleNavigationParams();
+      return () => {};
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLoggedIn])
+  );
 
   /**
    * Gets the event dashboard render item.
@@ -235,7 +220,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param content
    * @return {*}
    */
-  getDashboardEvent(content: Array<PlanningEventType>) {
+  const getDashboardEvent = (content: Array<PlanningEventType>) => {
     const futureEvents = getFutureEvents(content);
     const displayEvent = getDisplayEvent(futureEvents);
     // const clickPreviewAction = () =>
@@ -246,15 +231,15 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     return (
       <DashboardItem
         eventNumber={futureEvents.length}
-        clickAction={this.onEventContainerClick}
+        clickAction={onEventContainerClick}
       >
         <PreviewEventDashboardItem
           event={displayEvent}
-          clickAction={this.onEventContainerClick}
+          clickAction={onEventContainerClick}
         />
       </DashboardItem>
     );
-  }
+  };
 
   /**
    * Gets a dashboard item with a row of shortcut buttons.
@@ -262,16 +247,16 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param content
    * @return {*}
    */
-  getDashboardRow(content: Array<ServiceItemType | null>) {
+  const getDashboardRow = (content: Array<ServiceItemType | null>) => {
     return (
       <FlatList
         data={content}
-        renderItem={this.getDashboardRowRenderItem}
+        renderItem={getDashboardRowRenderItem}
         horizontal
         contentContainerStyle={styles.dashboardRow}
       />
     );
-  }
+  };
 
   /**
    * Gets a dashboard shortcut item
@@ -279,15 +264,19 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param item
    * @returns {*}
    */
-  getDashboardRowRenderItem = ({ item }: { item: ServiceItemType | null }) => {
+  const getDashboardRowRenderItem = ({
+    item,
+  }: {
+    item: ServiceItemType | null;
+  }) => {
     if (item != null) {
       return (
         <SmallDashboardItem
           image={item.image}
           onPress={item.onPress}
           badgeCount={
-            this.currentDashboard != null && item.badgeFunction != null
-              ? item.badgeFunction(this.currentDashboard)
+            homeDashboard != null && item.badgeFunction != null
+              ? item.badgeFunction(homeDashboard)
               : undefined
           }
         />
@@ -296,29 +285,13 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     return <SmallDashboardItem />;
   };
 
-  /**
-   * Gets a render item for the given feed object
-   *
-   * @param item The feed item to display
-   * @return {*}
-   */
-  getFeedItem(item: FeedItemType) {
-    return <FeedItem item={item} height={FEED_ITEM_HEIGHT} />;
-  }
+  const getRenderItem = ({ item }: { item: FeedItemType }) => (
+    <FeedItem item={item} height={FEED_ITEM_HEIGHT} />
+  );
 
-  /**
-   * Gets a FlatList render item
-   *
-   * @param item The item to display
-   * @param section The current section
-   * @return {*}
-   */
-  getRenderItem = ({ item }: { item: FeedItemType }) => this.getFeedItem(item);
-
-  getRenderSectionHeader = (data: {
+  const getRenderSectionHeader = (data: {
     section: SectionListData<FeedItemType>;
   }) => {
-    const { props } = this;
     const icon = data.section.icon;
     if (data.section.data.length > 0) {
       return (
@@ -330,7 +303,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
         <Headline
           style={{
             ...styles.sectionHeaderEmpty,
-            color: props.theme.colors.textDisabled,
+            color: theme.colors.textDisabled,
           }}
         >
           {data.section.title}
@@ -339,7 +312,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
           <MaterialCommunityIcons
             name={icon}
             size={100}
-            color={props.theme.colors.textDisabled}
+            color={theme.colors.textDisabled}
             style={GENERAL_STYLES.center}
           />
         ) : null}
@@ -347,7 +320,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  getListHeader = (fetchedData: RawDashboardType | undefined) => {
+  const getListHeader = (fetchedData: RawDashboardType | undefined) => {
     let dashboard = null;
     if (fetchedData != null) {
       dashboard = fetchedData.dashboard;
@@ -355,41 +328,17 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     return (
       <Animatable.View animation="fadeInDown" duration={500} useNativeDriver>
         <ActionsDashBoardItem />
-        {this.getDashboardRow(this.dashboardManager.getCurrentDashboard())}
-        {this.getDashboardEvent(
-          dashboard == null ? [] : dashboard.today_events
-        )}
+        {getDashboardRow(currentDashboard)}
+        {getDashboardEvent(dashboard == null ? [] : dashboard.today_events)}
       </Animatable.View>
     );
   };
 
-  /**
-   * Navigates to the a new screen if navigation parameters specify one
-   */
-  handleNavigationParams = () => {
-    const { props } = this;
-    if (props.route.params != null) {
-      if (props.route.params.nextScreen != null) {
-        props.navigation.navigate(
-          props.route.params.nextScreen,
-          props.route.params.data
-        );
-        // reset params to prevent infinite loop
-        props.navigation.dispatch(
-          CommonActions.setParams({ nextScreen: null })
-        );
-      }
-    }
-  };
+  const showDisconnectDialog = () => setDialogVisible(true);
 
-  showDisconnectDialog = (): void => this.setState({ dialogVisible: true });
+  const hideDisconnectDialog = () => setDialogVisible(false);
 
-  hideDisconnectDialog = (): void => this.setState({ dialogVisible: false });
-
-  openScanner = () => {
-    const { props } = this;
-    props.navigation.navigate('scanner');
-  };
+  const openScanner = () => navigation.navigate('scanner');
 
   /**
    * Creates the dataset to be used in the FlatList
@@ -398,7 +347,7 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * @param isLoading
    * @return {*}
    */
-  createDataset = (
+  const createDataset = (
     fetchedData: RawDashboardType | undefined,
     isLoading: boolean
   ): Array<{
@@ -407,21 +356,20 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     icon?: string;
     id: string;
   }> => {
+    let currentNewFeed: Array<FeedItemType> = [];
     if (fetchedData) {
       if (fetchedData.news_feed) {
-        this.currentNewFeed = HomeScreen.generateNewsFeed(
-          fetchedData.news_feed
-        );
+        currentNewFeed = generateNewsFeed(fetchedData.news_feed);
       }
       if (fetchedData.dashboard) {
-        this.currentDashboard = fetchedData.dashboard;
+        homeDashboard = fetchedData.dashboard;
       }
     }
-    if (this.currentNewFeed.length > 0) {
+    if (currentNewFeed.length > 0) {
       return [
         {
           title: i18n.t('screens.home.feedTitle'),
-          data: this.currentNewFeed,
+          data: currentNewFeed,
           id: SECTIONS_ID[1],
         },
       ];
@@ -438,14 +386,11 @@ class HomeScreen extends React.Component<PropsType, StateType> {
     ];
   };
 
-  onEventContainerClick = () => {
-    const { props } = this;
-    props.navigation.navigate('planning');
-  };
+  const onEventContainerClick = () => navigation.navigate(TabRoutes.Planning);
 
-  onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (this.fabRef.current) {
-      this.fabRef.current.onScroll(event);
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (fabRef.current) {
+      fabRef.current.onScroll(event);
     }
   };
 
@@ -453,63 +398,50 @@ class HomeScreen extends React.Component<PropsType, StateType> {
    * Callback when pressing the login button on the banner.
    * This hides the banner and takes the user to the login page.
    */
-  onLogin = () => {
-    const { props } = this;
-    props.navigation.navigate('login', {
+  const onLogin = () =>
+    navigation.navigate(MainRoutes.Login, {
       nextScreen: 'profile',
     });
-  };
 
-  render() {
-    const { props, state } = this;
-    return (
-      <View style={GENERAL_STYLES.flex}>
-        <View style={styles.content}>
-          <WebSectionList
-            request={() => readData<RawDashboardType>(Urls.app.dashboard)}
-            createDataset={this.createDataset}
-            autoRefreshTime={REFRESH_TIME}
-            refreshOnFocus={true}
-            renderItem={this.getRenderItem}
-            itemHeight={FEED_ITEM_HEIGHT}
-            onScroll={this.onScroll}
-            renderSectionHeader={this.getRenderSectionHeader}
-            renderListHeaderComponent={this.getListHeader}
-          />
-        </View>
-        {!this.isLoggedIn ? (
-          <MascotPopup
-            prefKey={AsyncStorageManager.PREFERENCES.homeShowMascot.key}
-            title={i18n.t('screens.home.mascotDialog.title')}
-            message={i18n.t('screens.home.mascotDialog.message')}
-            icon="human-greeting"
-            buttons={{
-              action: {
-                message: i18n.t('screens.home.mascotDialog.login'),
-                icon: 'login',
-                onPress: this.onLogin,
-              },
-              cancel: {
-                message: i18n.t('screens.home.mascotDialog.later'),
-                icon: 'close',
-                color: props.theme.colors.warning,
-              },
-            }}
-            emotion={MASCOT_STYLE.CUTE}
-          />
-        ) : null}
-        <AnimatedFAB
-          ref={this.fabRef}
-          icon="qrcode-scan"
-          onPress={this.openScanner}
-        />
-        <LogoutDialog
-          visible={state.dialogVisible}
-          onDismiss={this.hideDisconnectDialog}
+  return (
+    <View style={GENERAL_STYLES.flex}>
+      <View style={styles.content}>
+        <WebSectionList
+          request={() => readData<RawDashboardType>(Urls.app.dashboard)}
+          createDataset={createDataset}
+          autoRefreshTime={REFRESH_TIME}
+          refreshOnFocus={true}
+          renderItem={getRenderItem}
+          itemHeight={FEED_ITEM_HEIGHT}
+          onScroll={onScroll}
+          renderSectionHeader={getRenderSectionHeader}
+          renderListHeaderComponent={getListHeader}
         />
       </View>
-    );
-  }
+      {!isLoggedIn ? (
+        <MascotPopup
+          title={i18n.t('screens.home.mascotDialog.title')}
+          message={i18n.t('screens.home.mascotDialog.message')}
+          icon="human-greeting"
+          buttons={{
+            action: {
+              message: i18n.t('screens.home.mascotDialog.login'),
+              icon: 'login',
+              onPress: onLogin,
+            },
+            cancel: {
+              message: i18n.t('screens.home.mascotDialog.later'),
+              icon: 'close',
+              color: theme.colors.warning,
+            },
+          }}
+          emotion={MASCOT_STYLE.CUTE}
+        />
+      ) : null}
+      <AnimatedFAB ref={fabRef} icon="qrcode-scan" onPress={openScanner} />
+      <LogoutDialog visible={dialogVisible} onDismiss={hideDisconnectDialog} />
+    </View>
+  );
 }
 
-export default withTheme(HomeScreen);
+export default HomeScreen;

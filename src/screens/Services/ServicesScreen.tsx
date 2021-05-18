@@ -35,12 +35,12 @@ import MaterialHeaderButtons, {
 } from '../../components/Overrides/CustomHeaderButton';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
-import AsyncStorageManager from '../../managers/AsyncStorageManager';
-import ServicesManager, {
-  SERVICES_CATEGORIES_KEY,
-} from '../../managers/ServicesManager';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
-import type { ServiceCategoryType } from '../../managers/ServicesManager';
+import {
+  getCategories,
+  ServiceCategoryType,
+  SERVICES_CATEGORIES_KEY,
+} from '../../utils/Services';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -66,8 +66,7 @@ class ServicesScreen extends React.Component<PropsType> {
 
   constructor(props: PropsType) {
     super(props);
-    const services = new ServicesManager(props.navigation);
-    this.finalDataset = services.getCategories([
+    this.finalDataset = getCategories(props.navigation.navigate, [
       SERVICES_CATEGORIES_KEY.SPECIAL,
     ]);
   }
@@ -159,7 +158,6 @@ class ServicesScreen extends React.Component<PropsType> {
           hasTab
         />
         <MascotPopup
-          prefKey={AsyncStorageManager.PREFERENCES.servicesShowMascot.key}
           title={i18n.t('screens.services.mascotDialog.title')}
           message={i18n.t('screens.services.mascotDialog.message')}
           icon="cloud-question"

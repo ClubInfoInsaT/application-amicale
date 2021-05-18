@@ -31,7 +31,6 @@ import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import LinearGradient from 'react-native-linear-gradient';
 import ConnectionManager from '../../managers/ConnectionManager';
 import ErrorDialog from '../../components/Dialogs/ErrorDialog';
-import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
@@ -56,7 +55,7 @@ type StateType = {
   loading: boolean;
   dialogVisible: boolean;
   dialogError: ApiRejectType;
-  mascotDialogVisible: boolean;
+  mascotDialogVisible: boolean | undefined;
 };
 
 const ICON_AMICALE = require('../../../assets/amicale.png');
@@ -118,9 +117,7 @@ class LoginScreen extends React.Component<Props, StateType> {
       loading: false,
       dialogVisible: false,
       dialogError: { status: REQUEST_STATUS.SUCCESS },
-      mascotDialogVisible: AsyncStorageManager.getBool(
-        AsyncStorageManager.PREFERENCES.loginShowMascot.key
-      ),
+      mascotDialogVisible: undefined,
     };
   }
 
@@ -321,10 +318,6 @@ class LoginScreen extends React.Component<Props, StateType> {
   };
 
   hideMascotDialog = () => {
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.loginShowMascot.key,
-      false
-    );
     this.setState({ mascotDialogVisible: false });
   };
 
@@ -357,10 +350,11 @@ class LoginScreen extends React.Component<Props, StateType> {
   handleSuccess = () => {
     const { navigation } = this.props;
     // Do not show the home login banner again
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.homeShowMascot.key,
-      false
-    );
+    // TODO
+    // AsyncStorageManager.set(
+    //   AsyncStorageManager.PREFERENCES.homeShowMascot.key,
+    //   false
+    // );
     if (this.nextScreen == null) {
       navigation.goBack();
     } else {

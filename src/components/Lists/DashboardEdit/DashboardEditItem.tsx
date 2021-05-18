@@ -20,7 +20,7 @@
 import * as React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { List, useTheme } from 'react-native-paper';
-import type { ServiceItemType } from '../../../managers/ServicesManager';
+import { ServiceItemType } from '../../../utils/Services';
 
 type PropsType = {
   item: ServiceItemType;

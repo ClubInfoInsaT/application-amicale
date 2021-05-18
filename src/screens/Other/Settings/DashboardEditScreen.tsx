@@ -17,31 +17,21 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useRef, useState } from 'react';
 import { Button, Card, Paragraph } from 'react-native-paper';
 import { FlatList, StyleSheet } from 'react-native';
 import { View } from 'react-native-animatable';
 import i18n from 'i18n-js';
-import type {
-  ServiceCategoryType,
-  ServiceItemType,
-} from '../../../managers/ServicesManager';
-import DashboardManager from '../../../managers/DashboardManager';
 import DashboardEditAccordion from '../../../components/Lists/DashboardEdit/DashboardEditAccordion';
 import DashboardEditPreviewItem from '../../../components/Lists/DashboardEdit/DashboardEditPreviewItem';
-import AsyncStorageManager from '../../../managers/AsyncStorageManager';
 import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
-
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-};
-
-type StateType = {
-  currentDashboard: Array<ServiceItemType | null>;
-  currentDashboardIdList: Array<string>;
-  activeItem: number;
-};
+import {
+  getCategories,
+  ServiceCategoryType,
+  ServiceItemType,
+} from '../../../utils/Services';
+import { useNavigation } from '@react-navigation/core';
+import { useCurrentDashboard } from '../../../context/preferencesContext';
 
 const styles = StyleSheet.create({
   dashboardContainer: {
@@ -71,85 +61,71 @@ const styles = StyleSheet.create({
 /**
  * Class defining the Settings screen. This screen shows controls to modify app preferences.
  */
-class DashboardEditScreen extends React.Component<PropsType, StateType> {
-  content: Array<ServiceCategoryType>;
+function DashboardEditScreen() {
+  const navigation = useNavigation();
 
-  initialDashboard: Array<ServiceItemType | null>;
+  const {
+    currentDashboard,
+    currentDashboardIdList,
+    updateCurrentDashboard,
+  } = useCurrentDashboard();
+  const initialDashboard = useRef(currentDashboardIdList);
+  const [activeItem, setActiveItem] = useState(0);
 
-  initialDashboardIdList: Array<string>;
-
-  constructor(props: PropsType) {
-    super(props);
-    const dashboardManager = new DashboardManager(props.navigation);
-    this.initialDashboardIdList = AsyncStorageManager.getObject(
-      AsyncStorageManager.PREFERENCES.dashboardItems.key
-    );
-    this.initialDashboard = dashboardManager.getCurrentDashboard();
-    this.state = {
-      currentDashboard: [...this.initialDashboard],
-      currentDashboardIdList: [...this.initialDashboardIdList],
-      activeItem: 0,
-    };
-    this.content = dashboardManager.getCategories();
-  }
-
-  getDashboardRowRenderItem = ({
+  const getDashboardRowRenderItem = ({
     item,
     index,
   }: {
     item: ServiceItemType | null;
     index: number;
   }) => {
-    const { activeItem } = this.state;
     return (
       <DashboardEditPreviewItem
         image={item?.image}
         onPress={() => {
-          this.setState({ activeItem: index });
+          setActiveItem(index);
         }}
         isActive={activeItem === index}
       />
     );
   };
 
-  getDashboard(content: Array<ServiceItemType | null>) {
+  const getDashboard = (content: Array<ServiceItemType | null>) => {
     return (
       <FlatList
         data={content}
-        extraData={this.state}
-        renderItem={this.getDashboardRowRenderItem}
+        extraData={activeItem}
+        renderItem={getDashboardRowRenderItem}
         horizontal
         contentContainerStyle={styles.dashboard}
       />
     );
-  }
+  };
 
-  getRenderItem = ({ item }: { item: ServiceCategoryType }) => {
-    const { currentDashboardIdList } = this.state;
+  const getRenderItem = ({ item }: { item: ServiceCategoryType }) => {
     return (
       <DashboardEditAccordion
         item={item}
-        onPress={this.updateDashboard}
+        onPress={updateDashboard}
         activeDashboard={currentDashboardIdList}
       />
     );
   };
 
-  getListHeader() {
-    const { currentDashboard } = this.state;
+  const getListHeader = () => {
     return (
       <Card style={styles.card}>
         <Card.Content>
           <View style={styles.buttonContainer}>
             <Button
-              mode="contained"
-              onPress={this.undoDashboard}
+              mode={'contained'}
+              onPress={undoDashboard}
               style={styles.button}
             >
               {i18n.t('screens.settings.dashboardEdit.undo')}
             </Button>
             <View style={styles.dashboardContainer}>
-              {this.getDashboard(currentDashboard)}
+              {getDashboard(currentDashboard)}
             </View>
           </View>
           <Paragraph style={styles.text}>
@@ -158,43 +134,28 @@ class DashboardEditScreen extends React.Component<PropsType, StateType> {
         </Card.Content>
       </Card>
     );
-  }
+  };
 
-  updateDashboard = (service: ServiceItemType) => {
-    const { currentDashboard, currentDashboardIdList, activeItem } = this.state;
-    currentDashboard[activeItem] = service;
-    currentDashboardIdList[activeItem] = service.key;
-    this.setState({
-      currentDashboard,
-      currentDashboardIdList,
-    });
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.dashboardItems.key,
-      currentDashboardIdList
+  const updateDashboard = (service: ServiceItemType) => {
+    updateCurrentDashboard(
+      currentDashboardIdList.map((id, index) =>
+        index === activeItem ? service.key : id
+      )
     );
   };
 
-  undoDashboard = () => {
-    this.setState({
-      currentDashboard: [...this.initialDashboard],
-      currentDashboardIdList: [...this.initialDashboardIdList],
-    });
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.dashboardItems.key,
-      this.initialDashboardIdList
-    );
+  const undoDashboard = () => {
+    updateCurrentDashboard(initialDashboard.current);
   };
 
-  render() {
-    return (
-      <CollapsibleFlatList
-        data={this.content}
-        renderItem={this.getRenderItem}
-        ListHeaderComponent={this.getListHeader()}
-        style={{}}
-      />
-    );
-  }
+  return (
+    <CollapsibleFlatList
+      data={getCategories(navigation.navigate)}
+      renderItem={getRenderItem}
+      ListHeaderComponent={getListHeader()}
+      style={{}}
+    />
+  );
 }
 
 export default DashboardEditScreen;

@@ -46,16 +46,20 @@ import EquipmentConfirmScreen from '../screens/Amicale/Equipment/EquipmentConfir
 import DashboardEditScreen from '../screens/Other/Settings/DashboardEditScreen';
 import GameStartScreen from '../screens/Game/screens/GameStartScreen';
 import ImageGalleryScreen from '../screens/Media/ImageGalleryScreen';
+import { usePreferences } from '../context/preferencesContext';
+import { getPreferenceBool, PreferenceKeys } from '../utils/asyncStorage';
+import IntroScreen from '../screens/Intro/IntroScreen';
 
 export enum MainRoutes {
   Main = 'main',
+  Intro = 'Intro',
   Gallery = 'gallery',
   Settings = 'settings',
   DashboardEdit = 'dashboard-edit',
   About = 'about',
   Dependencies = 'dependencies',
   Debug = 'debug',
-  GameStart = 'game-start',
+  GameStart = 'game',
   GameMain = 'game-main',
   Login = 'login',
   SelfMenu = 'self-menu',
@@ -66,11 +70,12 @@ export enum MainRoutes {
   ClubList = 'club-list',
   ClubInformation = 'club-information',
   ClubAbout = 'club-about',
-  EquipmentList = 'equipment-list',
+  EquipmentList = 'equipment',
   EquipmentRent = 'equipment-rent',
   EquipmentConfirm = 'equipment-confirm',
   Vote = 'vote',
   Feedback = 'feedback',
+  Website = 'website',
 }
 
 type DefaultParams = { [key in MainRoutes]: object | undefined };
@@ -96,13 +101,31 @@ export type MainStackParamsList = FullParamsList &
 
 const MainStack = createStackNavigator<MainStackParamsList>();
 
+function getIntroScreens() {
+  return (
+    <>
+      <MainStack.Screen
+        name={MainRoutes.Intro}
+        component={IntroScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </>
+  );
+}
+
 function MainStackComponent(props: {
+  showIntro: boolean;
   createTabNavigator: () => React.ReactElement;
 }) {
-  const { createTabNavigator } = props;
+  const { showIntro, createTabNavigator } = props;
+  if (showIntro) {
+    return getIntroScreens();
+  }
   return (
     <MainStack.Navigator
-      initialRouteName={MainRoutes.Main}
+      initialRouteName={showIntro ? MainRoutes.Intro : MainRoutes.Main}
       headerMode={'screen'}
     >
       <MainStack.Screen
@@ -183,7 +206,7 @@ function MainStackComponent(props: {
         }}
       />
       <MainStack.Screen
-        name={'website'}
+        name={MainRoutes.Website}
         component={WebsiteScreen}
         options={{
           title: '',
@@ -290,8 +313,11 @@ type PropsType = {
 };
 
 export default function MainNavigator(props: PropsType) {
+  const { preferences } = usePreferences();
+  const showIntro = getPreferenceBool(PreferenceKeys.showIntro, preferences);
   return (
     <MainStackComponent
+      showIntro={showIntro !== false}
       createTabNavigator={() => <TabNavigator {...props} />}
     />
   );

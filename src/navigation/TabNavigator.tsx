@@ -31,7 +31,6 @@ import PlanningDisplayScreen from '../screens/Planning/PlanningDisplayScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
 import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import PlanexScreen from '../screens/Planex/PlanexScreen';
-import AsyncStorageManager from '../managers/AsyncStorageManager';
 import ClubDisplayScreen from '../screens/Amicale/Clubs/ClubDisplayScreen';
 import ScannerScreen from '../screens/Home/ScannerScreen';
 import FeedItemScreen from '../screens/Home/FeedItemScreen';
@@ -41,6 +40,8 @@ import WebsitesHomeScreen from '../screens/Services/ServicesScreen';
 import ServicesSectionScreen from '../screens/Services/ServicesSectionScreen';
 import AmicaleContactScreen from '../screens/Amicale/AmicaleContactScreen';
 import Mascot, { MASCOT_STYLE } from '../components/Mascot/Mascot';
+import { usePreferences } from '../context/preferencesContext';
+import { getPreferenceString, PreferenceKeys } from '../utils/asyncStorage';
 
 const styles = StyleSheet.create({
   header: {
@@ -55,6 +56,20 @@ const styles = StyleSheet.create({
     marginBottom: 'auto',
   },
 });
+
+type DefaultParams = { [key in TabRoutes]: object | undefined };
+
+export type FullParamsList = DefaultParams & {
+  [TabRoutes.Home]: {
+    nextScreen: string;
+    data: Record<string, object | undefined>;
+  };
+};
+
+// Don't know why but TS is complaining without this
+// See: https://stackoverflow.com/questions/63652687/interface-does-not-satisfy-the-constraint-recordstring-object-undefined
+export type TabStackParamsList = FullParamsList &
+  Record<string, object | undefined>;
 
 const ServicesStack = createStackNavigator();
 
@@ -214,7 +229,7 @@ function PlanexStackComponent() {
   );
 }
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<TabStackParamsList>();
 
 type PropsType = {
   defaultHomeRoute: string | null;
@@ -249,65 +264,70 @@ const ICONS: {
   },
 };
 
-export default class TabNavigator extends React.Component<PropsType> {
-  defaultRoute: string;
-  createHomeStackComponent: () => any;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.defaultRoute = 'home';
-    if (!props.defaultHomeRoute) {
-      this.defaultRoute = AsyncStorageManager.getString(
-        AsyncStorageManager.PREFERENCES.defaultStartScreen.key
-      ).toLowerCase();
-    }
-    this.createHomeStackComponent = () =>
-      HomeStackComponent(props.defaultHomeRoute, props.defaultHomeData);
+export default function TabNavigator(props: PropsType) {
+  const { preferences } = usePreferences();
+  let defaultRoute = getPreferenceString(
+    PreferenceKeys.defaultStartScreen,
+    preferences
+  );
+  if (!defaultRoute) {
+    defaultRoute = 'home';
+  } else {
+    defaultRoute = defaultRoute.toLowerCase();
   }
 
-  render() {
-    const LABELS: {
-      [key: string]: string;
-    } = {
-      services: i18n.t('screens.services.title'),
-      proxiwash: i18n.t('screens.proxiwash.title'),
-      home: i18n.t('screens.home.title'),
-      planning: i18n.t('screens.planning.title'),
-      planex: i18n.t('screens.planex.title'),
-    };
-    return (
-      <Tab.Navigator
-        initialRouteName={this.defaultRoute}
-        tabBar={(tabProps) => (
-          <CustomTabBar {...tabProps} labels={LABELS} icons={ICONS} />
-        )}
-      >
-        <Tab.Screen
-          name={'services'}
-          component={ServicesStackComponent}
-          options={{ title: i18n.t('screens.services.title') }}
-        />
-        <Tab.Screen
-          name={'proxiwash'}
-          component={ProxiwashStackComponent}
-          options={{ title: i18n.t('screens.proxiwash.title') }}
-        />
-        <Tab.Screen
-          name={'home'}
-          component={this.createHomeStackComponent}
-          options={{ title: i18n.t('screens.home.title') }}
-        />
-        <Tab.Screen
-          name={'planning'}
-          component={PlanningStackComponent}
-          options={{ title: i18n.t('screens.planning.title') }}
-        />
-        <Tab.Screen
-          name={'planex'}
-          component={PlanexStackComponent}
-          options={{ title: i18n.t('screens.planex.title') }}
-        />
-      </Tab.Navigator>
-    );
-  }
+  const createHomeStackComponent = () =>
+    HomeStackComponent(props.defaultHomeRoute, props.defaultHomeData);
+
+  const LABELS: {
+    [key: string]: string;
+  } = {
+    services: i18n.t('screens.services.title'),
+    proxiwash: i18n.t('screens.proxiwash.title'),
+    home: i18n.t('screens.home.title'),
+    planning: i18n.t('screens.planning.title'),
+    planex: i18n.t('screens.planex.title'),
+  };
+  return (
+    <Tab.Navigator
+      initialRouteName={defaultRoute}
+      tabBar={(tabProps) => (
+        <CustomTabBar {...tabProps} labels={LABELS} icons={ICONS} />
+      )}
+    >
+      <Tab.Screen
+        name={'services'}
+        component={ServicesStackComponent}
+        options={{ title: i18n.t('screens.services.title') }}
+      />
+      <Tab.Screen
+        name={'proxiwash'}
+        component={ProxiwashStackComponent}
+        options={{ title: i18n.t('screens.proxiwash.title') }}
+      />
+      <Tab.Screen
+        name={'home'}
+        component={createHomeStackComponent}
+        options={{ title: i18n.t('screens.home.title') }}
+      />
+      <Tab.Screen
+        name={'events'}
+        component={PlanningStackComponent}
+        options={{ title: i18n.t('screens.planning.title') }}
+      />
+      <Tab.Screen
+        name={'planex'}
+        component={PlanexStackComponent}
+        options={{ title: i18n.t('screens.planex.title') }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+export enum TabRoutes {
+  Services = 'services',
+  Proxiwash = 'proxiwash',
+  Home = 'home',
+  Planning = 'events',
+  Planex = 'planex',
 }

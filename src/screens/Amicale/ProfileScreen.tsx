@@ -36,13 +36,16 @@ import MaterialHeaderButtons, {
 } from '../../components/Overrides/CustomHeaderButton';
 import CardList from '../../components/Lists/CardList/CardList';
 import Mascot, { MASCOT_STYLE } from '../../components/Mascot/Mascot';
-import ServicesManager, { SERVICES_KEY } from '../../managers/ServicesManager';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
-import type { ServiceItemType } from '../../managers/ServicesManager';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
 import RequestScreen from '../../components/Screens/RequestScreen';
 import ConnectionManager from '../../managers/ConnectionManager';
+import {
+  getAmicaleServices,
+  ServiceItemType,
+  SERVICES_KEY,
+} from '../../utils/Services';
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -100,8 +103,9 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
     super(props);
     this.data = undefined;
     this.flatListData = [{ id: '0' }, { id: '1' }, { id: '2' }, { id: '3' }];
-    const services = new ServicesManager(props.navigation);
-    this.amicaleDataset = services.getAmicaleServices([SERVICES_KEY.PROFILE]);
+    this.amicaleDataset = getAmicaleServices(props.navigation.navigate, [
+      SERVICES_KEY.PROFILE,
+    ]);
     this.state = {
       dialogVisible: false,
     };

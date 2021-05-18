@@ -32,7 +32,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 import { Card } from 'react-native-paper';
 import Update from '../../constants/Update';
-import ThemeManager from '../../managers/ThemeManager';
 import Mascot, { MASCOT_STYLE } from '../Mascot/Mascot';
 import MascotIntroWelcome from '../Intro/MascotIntroWelcome';
 import IntroIcon from '../Intro/IconIntro';
@@ -289,9 +288,6 @@ export default class CustomIntroSlider extends React.Component<
 
   onDone = () => {
     const { props } = this;
-    CustomIntroSlider.setStatusBarColor(
-      ThemeManager.getCurrentTheme().colors.surface
-    );
     props.onDone();
   };
 

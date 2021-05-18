@@ -23,10 +23,7 @@ import { FlatList, Image, StyleSheet, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashboardEditItem from './DashboardEditItem';
 import AnimatedAccordion from '../../Animations/AnimatedAccordion';
-import type {
-  ServiceCategoryType,
-  ServiceItemType,
-} from '../../../managers/ServicesManager';
+import { ServiceCategoryType, ServiceItemType } from '../../../utils/Services';
 
 type PropsType = {
   item: ServiceCategoryType;

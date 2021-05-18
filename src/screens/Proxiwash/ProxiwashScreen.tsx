@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import {
   SectionListData,
   SectionListRenderItemInfo,
@@ -28,7 +28,6 @@ import i18n from 'i18n-js';
 import { Avatar, Button, Card, Text, useTheme } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
 import WebSectionList from '../../components/Screens/WebSectionList';
-import AsyncStorageManager from '../../managers/AsyncStorageManager';
 import ProxiwashListItem from '../../components/Lists/Proxiwash/ProxiwashListItem';
 import ProxiwashConstants, {
   MachineStates,
@@ -50,9 +49,16 @@ import type { SectionListDataType } from '../../components/Screens/WebSectionLis
 import type { LaundromatType } from './ProxiwashAboutScreen';
 import GENERAL_STYLES from '../../constants/Styles';
 import { readData } from '../../utils/WebData';
-import { useFocusEffect, useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import { setupMachineNotification } from '../../utils/Notifications';
 import ProximoListHeader from '../../components/Lists/Proximo/ProximoListHeader';
+import { usePreferences } from '../../context/preferencesContext';
+import {
+  getPreferenceNumber,
+  getPreferenceObject,
+  getPreferenceString,
+  PreferenceKeys,
+} from '../../utils/asyncStorage';
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
@@ -91,23 +97,35 @@ const styles = StyleSheet.create({
 function ProxiwashScreen() {
   const navigation = useNavigation();
   const theme = useTheme();
+  const { preferences, updatePreferences } = usePreferences();
   const [
     modalCurrentDisplayItem,
     setModalCurrentDisplayItem,
   ] = useState<React.ReactElement | null>(null);
-  const [machinesWatched, setMachinesWatched] = useState<
-    Array<ProxiwashMachineType>
-  >(
-    AsyncStorageManager.getObject(
-      AsyncStorageManager.PREFERENCES.proxiwashWatchedMachines.key
-    )
+  const reminder = getPreferenceNumber(
+    PreferenceKeys.proxiwashNotifications,
+    preferences
   );
 
-  const [selectedWash, setSelectedWash] = useState(
-    AsyncStorageManager.getString(
-      AsyncStorageManager.PREFERENCES.selectedWash.key
-    ) as 'tripodeB' | 'washinsa'
-  );
+  const getMachinesWatched = () => {
+    const data = getPreferenceObject(
+      PreferenceKeys.proxiwashWatchedMachines,
+      preferences
+    ) as Array<ProxiwashMachineType>;
+    return data ? (data as Array<ProxiwashMachineType>) : [];
+  };
+
+  const getSelectedWash = () => {
+    const data = getPreferenceString(PreferenceKeys.selectedWash, preferences);
+    if (data !== 'washinsa' && data !== 'tripodeB') {
+      return 'washinsa';
+    } else {
+      return data;
+    }
+  };
+
+  const machinesWatched: Array<ProxiwashMachineType> = getMachinesWatched();
+  const selectedWash: 'washinsa' | 'tripodeB' = getSelectedWash();
 
   const modalStateStrings: { [key in MachineStates]: string } = {
     [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.modal.ready'),
@@ -136,17 +154,6 @@ function ProxiwashScreen() {
       ),
     });
   }, [navigation]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const selected = AsyncStorageManager.getString(
-        AsyncStorageManager.PREFERENCES.selectedWash.key
-      ) as 'tripodeB' | 'washinsa';
-      if (selected !== selectedWash) {
-        setSelectedWash(selected);
-      }
-    }, [selectedWash])
-  );
 
   /**
    * Callback used when the user clicks on enable notifications for a machine
@@ -293,6 +300,7 @@ function ProxiwashScreen() {
       setupMachineNotification(
         machine.number,
         true,
+        reminder,
         getMachineEndDate(machine)
       );
       saveNotificationToState(machine);
@@ -342,7 +350,7 @@ function ProxiwashScreen() {
         ...data.washers,
       ]);
       if (cleanedList !== machinesWatched) {
-        setMachinesWatched(machinesWatched);
+        updatePreferences(PreferenceKeys.proxiwashWatchedMachines, cleanedList);
       }
       return [
         {
@@ -407,11 +415,7 @@ function ProxiwashScreen() {
   };
 
   const saveNewWatchedList = (list: Array<ProxiwashMachineType>) => {
-    setMachinesWatched(list);
-    AsyncStorageManager.set(
-      AsyncStorageManager.PREFERENCES.proxiwashWatchedMachines.key,
-      list
-    );
+    updatePreferences(PreferenceKeys.proxiwashWatchedMachines, list);
   };
 
   const renderListHeaderComponent = (
@@ -451,7 +455,6 @@ function ProxiwashScreen() {
         />
       </View>
       <MascotPopup
-        prefKey={AsyncStorageManager.PREFERENCES.proxiwashShowMascot.key}
         title={i18n.t('screens.proxiwash.mascotDialog.title')}
         message={i18n.t('screens.proxiwash.mascotDialog.message')}
         icon="information"
