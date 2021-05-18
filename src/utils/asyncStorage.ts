@@ -76,8 +76,6 @@ export function retrievePreferences(
   return new Promise((resolve: (preferences: PreferencesType) => void) => {
     AsyncStorage.multiGet(keys)
       .then((result) => {
-        console.log(result);
-
         const preferences = { ...defaults };
         result.forEach((item) => {
           let [key, value] = item;
