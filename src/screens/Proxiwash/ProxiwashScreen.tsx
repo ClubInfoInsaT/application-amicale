@@ -349,7 +349,7 @@ function ProxiwashScreen() {
         ...data.dryers,
         ...data.washers,
       ]);
-      if (cleanedList !== machinesWatched) {
+      if (cleanedList.length !== machinesWatched.length) {
         updatePreferences(PreferenceKeys.proxiwashWatchedMachines, cleanedList);
       }
       return [
