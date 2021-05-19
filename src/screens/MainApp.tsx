@@ -15,8 +15,8 @@ import { CustomDarkTheme, CustomWhiteTheme } from '../utils/Themes';
 import { setupStatusBar } from '../utils/Utils';
 
 type Props = {
-  defaultHomeRoute: string | null;
-  defaultHomeData: { [key: string]: string };
+  defaultHomeRoute?: string;
+  defaultHomeData?: { [key: string]: string };
 };
 
 function MainApp(props: Props, ref?: Ref<NavigationContainerRef>) {

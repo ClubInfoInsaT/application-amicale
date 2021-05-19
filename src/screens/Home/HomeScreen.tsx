@@ -139,9 +139,6 @@ const generateNewsFeed = (rawFeed: RawNewsFeedType): Array<FeedItemType> => {
   return finalFeed;
 };
 
-/**
- * Class defining the app's home screen
- */
 function HomeScreen(props: Props) {
   const theme = useTheme();
   const navigation = useNavigation();

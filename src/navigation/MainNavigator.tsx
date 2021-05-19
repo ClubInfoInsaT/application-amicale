@@ -313,18 +313,25 @@ function MainStackComponent(props: {
 }
 
 type PropsType = {
-  defaultHomeRoute: string | null;
-  defaultHomeData: { [key: string]: string };
+  defaultHomeRoute?: string;
+  defaultHomeData?: { [key: string]: string };
 };
 
-export default function MainNavigator(props: PropsType) {
+function MainNavigator(props: PropsType) {
   const { preferences } = usePreferences();
   const showIntro = getPreferenceBool(PreferenceKeys.showIntro, preferences);
-
+  const createTabNavigator = () => <TabNavigator {...props} />;
   return (
     <MainStackComponent
       showIntro={showIntro !== false}
-      createTabNavigator={() => <TabNavigator {...props} />}
+      createTabNavigator={createTabNavigator}
     />
   );
 }
+
+export default React.memo(
+  MainNavigator,
+  (pp: PropsType, np: PropsType) =>
+    pp.defaultHomeRoute === np.defaultHomeRoute &&
+    pp.defaultHomeData === np.defaultHomeData
+);

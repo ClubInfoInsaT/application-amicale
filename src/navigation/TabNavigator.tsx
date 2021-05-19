@@ -136,8 +136,8 @@ function PlanningStackComponent() {
 const HomeStack = createStackNavigator();
 
 function HomeStackComponent(
-  initialRoute: string | null,
-  defaultData: { [key: string]: string }
+  initialRoute?: string,
+  defaultData?: { [key: string]: string }
 ) {
   let params;
   if (initialRoute) {
@@ -232,8 +232,8 @@ function PlanexStackComponent() {
 const Tab = createBottomTabNavigator<TabStackParamsList>();
 
 type PropsType = {
-  defaultHomeRoute: string | null;
-  defaultHomeData: { [key: string]: string };
+  defaultHomeRoute?: string;
+  defaultHomeData?: { [key: string]: string };
 };
 
 const ICONS: {
@@ -264,7 +264,7 @@ const ICONS: {
   },
 };
 
-export default function TabNavigator(props: PropsType) {
+function TabNavigator(props: PropsType) {
   const { preferences } = usePreferences();
   let defaultRoute = getPreferenceString(
     PreferenceKeys.defaultStartScreen,
@@ -323,6 +323,13 @@ export default function TabNavigator(props: PropsType) {
     </Tab.Navigator>
   );
 }
+
+export default React.memo(
+  TabNavigator,
+  (pp: PropsType, np: PropsType) =>
+    pp.defaultHomeRoute === np.defaultHomeRoute &&
+    pp.defaultHomeData === np.defaultHomeData
+);
 
 export enum TabRoutes {
   Services = 'services',

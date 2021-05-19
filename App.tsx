@@ -53,9 +53,9 @@ type StateType = {
 export default class App extends React.Component<{}, StateType> {
   navigatorRef: { current: null | NavigationContainerRef };
 
-  defaultHomeRoute: string | null;
+  defaultHomeRoute: string | undefined;
 
-  defaultHomeData: { [key: string]: string };
+  defaultHomeData: { [key: string]: string } | undefined;
 
   urlHandler: URLHandler;
 
@@ -67,8 +67,8 @@ export default class App extends React.Component<{}, StateType> {
     };
     initLocales();
     this.navigatorRef = React.createRef();
-    this.defaultHomeRoute = null;
-    this.defaultHomeData = {};
+    this.defaultHomeRoute = undefined;
+    this.defaultHomeData = undefined;
     this.urlHandler = new URLHandler(this.onInitialURLParsed, this.onDetectURL);
     this.urlHandler.listen();
     setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 20);
