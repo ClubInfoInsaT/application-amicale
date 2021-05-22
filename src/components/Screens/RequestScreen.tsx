@@ -41,7 +41,7 @@ export type RequestProps = {
 
 type Props<T> = RequestScreenProps<T>;
 
-const MIN_REFRESH_TIME = 5 * 1000;
+const MIN_REFRESH_TIME = 3 * 1000;
 
 export default function RequestScreen<T>(props: Props<T>) {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -94,8 +94,7 @@ export default function RequestScreen<T>(props: Props<T>) {
           clearInterval(refreshInterval.current);
         }
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.cache, props.refreshOnFocus])
+    }, [props.cache, props.refreshOnFocus, props.autoRefreshTime, refreshData])
   );
 
   const isErrorCritical = (e: API_REQUEST_CODES | undefined) => {

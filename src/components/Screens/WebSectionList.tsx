@@ -44,12 +44,7 @@ type Props<ItemT, RawData> = Omit<
 > &
   Omit<
     RequestScreenProps<RawData>,
-    | 'render'
-    | 'showLoading'
-    | 'showError'
-    | 'refresh'
-    | 'onFinish'
-    | 'onMajorError'
+    'render' | 'showLoading' | 'showError' | 'onMajorError'
   > &
   Omit<
     SectionListProps<ItemT>,
@@ -171,6 +166,8 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
       refreshOnFocus={props.refreshOnFocus}
       cache={props.cache}
       onCacheUpdate={props.onCacheUpdate}
+      refresh={props.refresh}
+      onFinish={props.onFinish}
     />
   );
 }

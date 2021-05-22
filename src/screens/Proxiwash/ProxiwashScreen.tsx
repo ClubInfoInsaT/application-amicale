@@ -59,6 +59,7 @@ import {
   ProxiwashPreferenceKeys,
 } from '../../utils/asyncStorage';
 import { useProxiwashPreferences } from '../../context/preferencesContext';
+import { useSubsequentEffect } from '../../utils/customHooks';
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
@@ -106,6 +107,7 @@ function ProxiwashScreen() {
     ProxiwashPreferenceKeys.proxiwashNotifications,
     preferences
   );
+  const [refresh, setRefresh] = useState(false);
 
   const getMachinesWatched = () => {
     const data = getPreferenceObject(
@@ -129,6 +131,11 @@ function ProxiwashScreen() {
 
   const machinesWatched: Array<ProxiwashMachineType> = getMachinesWatched();
   const selectedWash: 'washinsa' | 'tripodeB' = getSelectedWash();
+
+  useSubsequentEffect(() => {
+    // Refresh the list when the selected wash changes
+    setRefresh(true);
+  }, [selectedWash]);
 
   const modalStateStrings: { [key in MachineStates]: string } = {
     [MachineStates.AVAILABLE]: i18n.t('screens.proxiwash.modal.ready'),
@@ -446,6 +453,7 @@ function ProxiwashScreen() {
     default:
       data = ProxiwashConstants.washinsa;
   }
+
   return (
     <View style={GENERAL_STYLES.flex}>
       <View style={styles.container}>
@@ -458,6 +466,8 @@ function ProxiwashScreen() {
           refreshOnFocus={true}
           extraData={machinesWatched.length}
           renderListHeaderComponent={renderListHeaderComponent}
+          refresh={refresh}
+          onFinish={() => setRefresh(false)}
         />
       </View>
       <MascotPopup
