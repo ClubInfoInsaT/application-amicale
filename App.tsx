@@ -59,8 +59,6 @@ LogBox.ignoreLogs([
   'Cannot update a component from inside the function body of a different component',
 ]);
 
-// TODO move preferences in smaller contextes for improved performances
-
 type StateType = {
   isLoading: boolean;
   initialPreferences: {

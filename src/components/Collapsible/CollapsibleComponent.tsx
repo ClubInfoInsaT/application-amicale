@@ -60,9 +60,10 @@ function CollapsibleComponent(props: Props) {
       collapsedColor: headerColors ? headerColors : theme.colors.surface,
       useNativeDriver: true,
     },
-
     navigationOptions: {
-      headerStyle: { backgroundColor: theme.colors.surface },
+      headerStyle: {
+        backgroundColor: headerColors ? headerColors : theme.colors.surface,
+      },
     },
   });
 
