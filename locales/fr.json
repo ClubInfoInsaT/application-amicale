@@ -463,6 +463,7 @@
     "badToken": "Tu n'est pas connecté. Merci de te connecter puis réessayes.",
     "noConsent": "Tu n'as pas donné ton consentement pour l'utilisation de tes données personnelles.",
     "tokenSave": "Impossible de sauvegarder le token de session. Merci de contacter le support.",
+    "tokenRetrieve": "Impossible de récupérer le token de session. Merci de contacter le support.",
     "badInput": "Entrée invalide. Merci de réessayer.",
     "forbidden": "Tu n'as pas accès à cette information.",
     "connectionError": "Erreur de réseau. Merci de vérifier ta connexion Internet.",

@@ -53,6 +53,10 @@ export function getErrorMessage(
         fullMessage.message = i18n.t('errors.tokenSave');
         fullMessage.icon = 'alert-circle-outline';
         break;
+      case REQUEST_STATUS.TOKEN_RETRIEVE:
+        fullMessage.message = i18n.t('errors.tokenRetrieve');
+        fullMessage.icon = 'alert-circle-outline';
+        break;
       default:
         fullMessage.message = i18n.t('errors.unknown');
         fullMessage.icon = 'alert-circle-outline';
