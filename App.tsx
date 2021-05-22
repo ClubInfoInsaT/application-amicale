@@ -27,12 +27,26 @@ import URLHandler from './src/utils/URLHandler';
 import initLocales from './src/utils/Locales';
 import { NavigationContainerRef } from '@react-navigation/core';
 import {
+  defaultMascotPreferences,
+  defaultPlanexPreferences,
   defaultPreferences,
-  PreferenceKeys,
-  PreferencesType,
+  defaultProxiwashPreferences,
+  GeneralPreferenceKeys,
+  GeneralPreferencesType,
+  MascotPreferenceKeys,
+  MascotPreferencesType,
+  PlanexPreferenceKeys,
+  PlanexPreferencesType,
+  ProxiwashPreferenceKeys,
+  ProxiwashPreferencesType,
   retrievePreferences,
 } from './src/utils/asyncStorage';
-import PreferencesProvider from './src/components/providers/PreferencesProvider';
+import {
+  GeneralPreferencesProvider,
+  MascotPreferencesProvider,
+  PlanexPreferencesProvider,
+  ProxiwashPreferencesProvider,
+} from './src/components/providers/PreferencesProvider';
 import MainApp from './src/screens/MainApp';
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
@@ -45,9 +59,16 @@ LogBox.ignoreLogs([
   'Cannot update a component from inside the function body of a different component',
 ]);
 
+// TODO move preferences in smaller contextes for improved performances
+
 type StateType = {
   isLoading: boolean;
-  initialPreferences: PreferencesType;
+  initialPreferences: {
+    general: GeneralPreferencesType;
+    planex: PlanexPreferencesType;
+    proxiwash: ProxiwashPreferencesType;
+    mascot: MascotPreferencesType;
+  };
 };
 
 export default class App extends React.Component<{}, StateType> {
@@ -63,7 +84,12 @@ export default class App extends React.Component<{}, StateType> {
     super(props);
     this.state = {
       isLoading: true,
-      initialPreferences: defaultPreferences,
+      initialPreferences: {
+        general: defaultPreferences,
+        planex: defaultPlanexPreferences,
+        proxiwash: defaultProxiwashPreferences,
+        mascot: defaultMascotPreferences,
+      },
     };
     initLocales();
     this.navigatorRef = React.createRef();
@@ -106,11 +132,24 @@ export default class App extends React.Component<{}, StateType> {
   /**
    * Async loading is done, finish processing startup data
    */
-  onLoadFinished = (values: Array<PreferencesType | void>) => {
-    const [preferences] = values;
+  onLoadFinished = (
+    values: Array<
+      | GeneralPreferencesType
+      | PlanexPreferencesType
+      | ProxiwashPreferencesType
+      | MascotPreferencesType
+      | void
+    >
+  ) => {
+    const [general, planex, proxiwash, mascot] = values;
     this.setState({
       isLoading: false,
-      initialPreferences: { ...(preferences as PreferencesType) },
+      initialPreferences: {
+        general: general as GeneralPreferencesType,
+        planex: planex as PlanexPreferencesType,
+        proxiwash: proxiwash as ProxiwashPreferencesType,
+        mascot: mascot as MascotPreferencesType,
+      },
     });
     SplashScreen.hide();
   };
@@ -122,7 +161,22 @@ export default class App extends React.Component<{}, StateType> {
    */
   loadAssetsAsync() {
     Promise.all([
-      retrievePreferences(Object.values(PreferenceKeys), defaultPreferences),
+      retrievePreferences(
+        Object.values(GeneralPreferenceKeys),
+        defaultPreferences
+      ),
+      retrievePreferences(
+        Object.values(PlanexPreferenceKeys),
+        defaultPlanexPreferences
+      ),
+      retrievePreferences(
+        Object.values(ProxiwashPreferenceKeys),
+        defaultProxiwashPreferences
+      ),
+      retrievePreferences(
+        Object.values(MascotPreferenceKeys),
+        defaultMascotPreferences
+      ),
       ConnectionManager.getInstance().recoverLogin(),
     ])
       .then(this.onLoadFinished)
@@ -138,13 +192,27 @@ export default class App extends React.Component<{}, StateType> {
       return null;
     }
     return (
-      <PreferencesProvider initialPreferences={this.state.initialPreferences}>
-        <MainApp
-          ref={this.navigatorRef}
-          defaultHomeData={this.defaultHomeData}
-          defaultHomeRoute={this.defaultHomeRoute}
-        />
-      </PreferencesProvider>
+      <GeneralPreferencesProvider
+        initialPreferences={this.state.initialPreferences.general}
+      >
+        <PlanexPreferencesProvider
+          initialPreferences={this.state.initialPreferences.planex}
+        >
+          <ProxiwashPreferencesProvider
+            initialPreferences={this.state.initialPreferences.proxiwash}
+          >
+            <MascotPreferencesProvider
+              initialPreferences={this.state.initialPreferences.mascot}
+            >
+              <MainApp
+                ref={this.navigatorRef}
+                defaultHomeData={this.defaultHomeData}
+                defaultHomeRoute={this.defaultHomeRoute}
+              />
+            </MascotPreferencesProvider>
+          </ProxiwashPreferencesProvider>
+        </PlanexPreferencesProvider>
+      </GeneralPreferencesProvider>
     );
   }
 }

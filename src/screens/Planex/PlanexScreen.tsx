@@ -33,8 +33,12 @@ import { getPrettierPlanexGroupName } from '../../utils/Utils';
 import GENERAL_STYLES from '../../constants/Styles';
 import PlanexWebview from '../../components/Screens/PlanexWebview';
 import PlanexBottomBar from '../../components/Animations/PlanexBottomBar';
-import { usePreferences } from '../../context/preferencesContext';
-import { getPreferenceString, PreferenceKeys } from '../../utils/asyncStorage';
+import {
+  getPreferenceString,
+  GeneralPreferenceKeys,
+  PlanexPreferenceKeys,
+} from '../../utils/asyncStorage';
+import { usePlanexPreferences } from '../../context/preferencesContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,7 +54,7 @@ const styles = StyleSheet.create({
 function PlanexScreen() {
   const navigation = useNavigation();
   const theme = useTheme();
-  const { preferences } = usePreferences();
+  const { preferences } = usePlanexPreferences();
 
   const [dialogContent, setDialogContent] = useState<
     | undefined
@@ -64,7 +68,7 @@ function PlanexScreen() {
 
   const getCurrentGroup: () => PlanexGroupType | undefined = useCallback(() => {
     let currentGroupString = getPreferenceString(
-      PreferenceKeys.planexCurrentGroup,
+      PlanexPreferenceKeys.planexCurrentGroup,
       preferences
     );
     let group: PlanexGroupType;
@@ -184,7 +188,7 @@ function PlanexScreen() {
 
   const showMascot =
     getPreferenceString(
-      PreferenceKeys.defaultStartScreen,
+      GeneralPreferenceKeys.defaultStartScreen,
       preferences
     )?.toLowerCase() !== 'planex';
 

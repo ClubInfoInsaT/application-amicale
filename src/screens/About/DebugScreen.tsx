@@ -33,8 +33,8 @@ import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatLis
 import { usePreferences } from '../../context/preferencesContext';
 import {
   defaultPreferences,
-  isValidPreferenceKey,
-  PreferenceKeys,
+  GeneralPreferenceKeys,
+  isValidGeneralPreferenceKey,
 } from '../../utils/asyncStorage';
 
 type PreferenceItemType = {
@@ -70,7 +70,7 @@ function DebugScreen() {
   ] = useState<PreferenceItemType | null>(null);
 
   const currentPreferences: Array<PreferenceItemType> = [];
-  Object.values(PreferenceKeys).forEach((key) => {
+  Object.values(GeneralPreferenceKeys).forEach((key) => {
     const newObject: PreferenceItemType = {
       key: key,
       current: preferences[key],
@@ -141,7 +141,7 @@ function DebugScreen() {
   };
 
   const saveNewPrefs = (key: string, value: string) => {
-    if (isValidPreferenceKey(key)) {
+    if (isValidGeneralPreferenceKey(key)) {
       updatePreferences(key, value);
     }
     if (modalRef.current) {

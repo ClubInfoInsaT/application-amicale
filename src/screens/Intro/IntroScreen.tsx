@@ -6,29 +6,31 @@ import AprilFoolsManager from '../../managers/AprilFoolsManager';
 import {
   getPreferenceBool,
   getPreferenceNumber,
-  PreferenceKeys,
+  GeneralPreferenceKeys,
 } from '../../utils/asyncStorage';
 
 export default function IntroScreen() {
   const { preferences, updatePreferences } = usePreferences();
 
   const onDone = () => {
-    updatePreferences(PreferenceKeys.showIntro, false);
-    updatePreferences(PreferenceKeys.updateNumber, Update.number);
-    updatePreferences(PreferenceKeys.showAprilFoolsStart, false);
+    updatePreferences(GeneralPreferenceKeys.showIntro, false);
+    updatePreferences(GeneralPreferenceKeys.updateNumber, Update.number);
+    updatePreferences(GeneralPreferenceKeys.showAprilFoolsStart, false);
   };
 
   const showIntro =
-    getPreferenceBool(PreferenceKeys.showIntro, preferences) !== false;
+    getPreferenceBool(GeneralPreferenceKeys.showIntro, preferences) !== false;
 
   const isUpdate =
-    getPreferenceNumber(PreferenceKeys.updateNumber, preferences) !==
+    getPreferenceNumber(GeneralPreferenceKeys.updateNumber, preferences) !==
       Update.number && !showIntro;
 
   const isAprilFools =
     AprilFoolsManager.getInstance().isAprilFoolsEnabled() &&
-    getPreferenceBool(PreferenceKeys.showAprilFoolsStart, preferences) !==
-      false &&
+    getPreferenceBool(
+      GeneralPreferenceKeys.showAprilFoolsStart,
+      preferences
+    ) !== false &&
     !showIntro;
 
   return (

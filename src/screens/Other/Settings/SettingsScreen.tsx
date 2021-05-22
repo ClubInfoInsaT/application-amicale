@@ -32,13 +32,17 @@ import { Appearance } from 'react-native-appearance';
 import CustomSlider from '../../../components/Overrides/CustomSlider';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import GENERAL_STYLES from '../../../constants/Styles';
-import { usePreferences } from '../../../context/preferencesContext';
+import {
+  usePreferences,
+  useProxiwashPreferences,
+} from '../../../context/preferencesContext';
 import { useNavigation } from '@react-navigation/core';
 import {
   getPreferenceBool,
   getPreferenceNumber,
   getPreferenceString,
-  PreferenceKeys,
+  GeneralPreferenceKeys,
+  ProxiwashPreferenceKeys,
 } from '../../../utils/asyncStorage';
 
 const styles = StyleSheet.create({
@@ -61,42 +65,49 @@ const styles = StyleSheet.create({
 function SettingsScreen() {
   const navigation = useNavigation();
   const theme = useTheme();
-  const { preferences, updatePreferences } = usePreferences();
+  const generalPreferences = usePreferences();
+  const proxiwashPreferences = useProxiwashPreferences();
 
   const nightMode = getPreferenceBool(
-    PreferenceKeys.nightMode,
-    preferences
+    GeneralPreferenceKeys.nightMode,
+    generalPreferences.preferences
   ) as boolean;
   const nightModeFollowSystem =
     (getPreferenceBool(
-      PreferenceKeys.nightModeFollowSystem,
-      preferences
+      GeneralPreferenceKeys.nightModeFollowSystem,
+      generalPreferences.preferences
     ) as boolean) && Appearance.getColorScheme() !== 'no-preference';
   const startScreenPickerSelected = getPreferenceString(
-    PreferenceKeys.defaultStartScreen,
-    preferences
+    GeneralPreferenceKeys.defaultStartScreen,
+    generalPreferences.preferences
   ) as string;
   const selectedWash = getPreferenceString(
-    PreferenceKeys.selectedWash,
-    preferences
+    ProxiwashPreferenceKeys.selectedWash,
+    proxiwashPreferences.preferences
   ) as string;
   const isDebugUnlocked = getPreferenceBool(
-    PreferenceKeys.debugUnlocked,
-    preferences
+    GeneralPreferenceKeys.debugUnlocked,
+    generalPreferences.preferences
   ) as boolean;
   const notif = getPreferenceNumber(
-    PreferenceKeys.proxiwashNotifications,
-    preferences
+    ProxiwashPreferenceKeys.proxiwashNotifications,
+    proxiwashPreferences.preferences
   );
   const savedNotificationReminder = !notif || Number.isNaN(notif) ? 0 : notif;
 
   const onProxiwashNotifPickerValueChange = (value: number) => {
-    updatePreferences(PreferenceKeys.proxiwashNotifications, value);
+    proxiwashPreferences.updatePreferences(
+      ProxiwashPreferenceKeys.proxiwashNotifications,
+      value
+    );
   };
 
   const onStartScreenPickerValueChange = (value: string) => {
     if (value != null) {
-      updatePreferences(PreferenceKeys.defaultStartScreen, value);
+      generalPreferences.updatePreferences(
+        GeneralPreferenceKeys.defaultStartScreen,
+        value
+      );
     }
   };
 
@@ -150,12 +161,15 @@ function SettingsScreen() {
   };
 
   const onToggleNightMode = () => {
-    updatePreferences(PreferenceKeys.nightMode, !nightMode);
+    generalPreferences.updatePreferences(
+      GeneralPreferenceKeys.nightMode,
+      !nightMode
+    );
   };
 
   const onToggleNightModeFollowSystem = () => {
-    updatePreferences(
-      PreferenceKeys.nightModeFollowSystem,
+    generalPreferences.updatePreferences(
+      GeneralPreferenceKeys.nightModeFollowSystem,
       !nightModeFollowSystem
     );
   };
@@ -220,12 +234,18 @@ function SettingsScreen() {
 
   const onSelectWashValueChange = (value: string) => {
     if (value != null) {
-      updatePreferences(PreferenceKeys.selectedWash, value);
+      proxiwashPreferences.updatePreferences(
+        ProxiwashPreferenceKeys.selectedWash,
+        value
+      );
     }
   };
 
   const unlockDebugMode = () => {
-    updatePreferences(PreferenceKeys.debugUnlocked, true);
+    generalPreferences.updatePreferences(
+      GeneralPreferenceKeys.debugUnlocked,
+      true
+    );
   };
 
   return (

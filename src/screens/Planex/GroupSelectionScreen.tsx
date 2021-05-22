@@ -28,8 +28,11 @@ import Urls from '../../constants/Urls';
 import { readData } from '../../utils/WebData';
 import { useNavigation } from '@react-navigation/core';
 import { useCachedPlanexGroups } from '../../context/cacheContext';
-import { usePreferences } from '../../context/preferencesContext';
-import { getPreferenceObject, PreferenceKeys } from '../../utils/asyncStorage';
+import { usePlanexPreferences } from '../../context/preferencesContext';
+import {
+  getPreferenceObject,
+  PlanexPreferenceKeys,
+} from '../../utils/asyncStorage';
 
 export type PlanexGroupType = {
   name: string;
@@ -59,13 +62,13 @@ function sortName(
 
 function GroupSelectionScreen() {
   const navigation = useNavigation();
-  const { preferences, updatePreferences } = usePreferences();
+  const { preferences, updatePreferences } = usePlanexPreferences();
   const { groups, setGroups } = useCachedPlanexGroups();
   const [currentSearchString, setCurrentSearchString] = useState('');
 
   const getFavoriteGroups = (): Array<PlanexGroupType> => {
     const data = getPreferenceObject(
-      PreferenceKeys.planexFavoriteGroups,
+      PlanexPreferenceKeys.planexFavoriteGroups,
       preferences
     );
     if (data) {
@@ -146,7 +149,7 @@ function GroupSelectionScreen() {
    * @param item The article pressed
    */
   const onListItemPress = (item: PlanexGroupType) => {
-    updatePreferences(PreferenceKeys.planexCurrentGroup, item);
+    updatePreferences(PlanexPreferenceKeys.planexCurrentGroup, item);
     navigation.goBack();
   };
 
@@ -158,7 +161,7 @@ function GroupSelectionScreen() {
   const onListFavoritePress = useCallback(
     (group: PlanexGroupType) => {
       const updateFavorites = (newValue: Array<PlanexGroupType>) => {
-        updatePreferences(PreferenceKeys.planexFavoriteGroups, newValue);
+        updatePreferences(PlanexPreferenceKeys.planexFavoriteGroups, newValue);
       };
 
       const removeGroupFromFavorites = (g: PlanexGroupType) => {

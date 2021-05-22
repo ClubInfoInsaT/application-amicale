@@ -52,13 +52,13 @@ import { readData } from '../../utils/WebData';
 import { useNavigation } from '@react-navigation/core';
 import { setupMachineNotification } from '../../utils/Notifications';
 import ProximoListHeader from '../../components/Lists/Proximo/ProximoListHeader';
-import { usePreferences } from '../../context/preferencesContext';
 import {
   getPreferenceNumber,
   getPreferenceObject,
   getPreferenceString,
-  PreferenceKeys,
+  ProxiwashPreferenceKeys,
 } from '../../utils/asyncStorage';
+import { useProxiwashPreferences } from '../../context/preferencesContext';
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
@@ -97,26 +97,29 @@ const styles = StyleSheet.create({
 function ProxiwashScreen() {
   const navigation = useNavigation();
   const theme = useTheme();
-  const { preferences, updatePreferences } = usePreferences();
+  const { preferences, updatePreferences } = useProxiwashPreferences();
   const [
     modalCurrentDisplayItem,
     setModalCurrentDisplayItem,
   ] = useState<React.ReactElement | null>(null);
   const reminder = getPreferenceNumber(
-    PreferenceKeys.proxiwashNotifications,
+    ProxiwashPreferenceKeys.proxiwashNotifications,
     preferences
   );
 
   const getMachinesWatched = () => {
     const data = getPreferenceObject(
-      PreferenceKeys.proxiwashWatchedMachines,
+      ProxiwashPreferenceKeys.proxiwashWatchedMachines,
       preferences
     ) as Array<ProxiwashMachineType>;
     return data ? (data as Array<ProxiwashMachineType>) : [];
   };
 
   const getSelectedWash = () => {
-    const data = getPreferenceString(PreferenceKeys.selectedWash, preferences);
+    const data = getPreferenceString(
+      ProxiwashPreferenceKeys.selectedWash,
+      preferences
+    );
     if (data !== 'washinsa' && data !== 'tripodeB') {
       return 'washinsa';
     } else {
@@ -350,7 +353,10 @@ function ProxiwashScreen() {
         ...data.washers,
       ]);
       if (cleanedList.length !== machinesWatched.length) {
-        updatePreferences(PreferenceKeys.proxiwashWatchedMachines, cleanedList);
+        updatePreferences(
+          ProxiwashPreferenceKeys.proxiwashWatchedMachines,
+          cleanedList
+        );
       }
       return [
         {
@@ -415,7 +421,7 @@ function ProxiwashScreen() {
   };
 
   const saveNewWatchedList = (list: Array<ProxiwashMachineType>) => {
-    updatePreferences(PreferenceKeys.proxiwashWatchedMachines, list);
+    updatePreferences(ProxiwashPreferenceKeys.proxiwashWatchedMachines, list);
   };
 
   const renderListHeaderComponent = (

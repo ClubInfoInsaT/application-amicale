@@ -47,7 +47,10 @@ import DashboardEditScreen from '../screens/Other/Settings/DashboardEditScreen';
 import GameStartScreen from '../screens/Game/screens/GameStartScreen';
 import ImageGalleryScreen from '../screens/Media/ImageGalleryScreen';
 import { usePreferences } from '../context/preferencesContext';
-import { getPreferenceBool, PreferenceKeys } from '../utils/asyncStorage';
+import {
+  getPreferenceBool,
+  GeneralPreferenceKeys,
+} from '../utils/asyncStorage';
 import IntroScreen from '../screens/Intro/IntroScreen';
 
 export enum MainRoutes {
@@ -319,7 +322,10 @@ type PropsType = {
 
 function MainNavigator(props: PropsType) {
   const { preferences } = usePreferences();
-  const showIntro = getPreferenceBool(PreferenceKeys.showIntro, preferences);
+  const showIntro = getPreferenceBool(
+    GeneralPreferenceKeys.showIntro,
+    preferences
+  );
   const createTabNavigator = () => <TabNavigator {...props} />;
   return (
     <MainStackComponent

@@ -41,7 +41,10 @@ import ServicesSectionScreen from '../screens/Services/ServicesSectionScreen';
 import AmicaleContactScreen from '../screens/Amicale/AmicaleContactScreen';
 import Mascot, { MASCOT_STYLE } from '../components/Mascot/Mascot';
 import { usePreferences } from '../context/preferencesContext';
-import { getPreferenceString, PreferenceKeys } from '../utils/asyncStorage';
+import {
+  getPreferenceString,
+  GeneralPreferenceKeys,
+} from '../utils/asyncStorage';
 
 const styles = StyleSheet.create({
   header: {
@@ -267,7 +270,7 @@ const ICONS: {
 function TabNavigator(props: PropsType) {
   const { preferences } = usePreferences();
   let defaultRoute = getPreferenceString(
-    PreferenceKeys.defaultStartScreen,
+    GeneralPreferenceKeys.defaultStartScreen,
     preferences
   );
   if (!defaultRoute) {

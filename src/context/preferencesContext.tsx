@@ -2,11 +2,21 @@ import { useNavigation } from '@react-navigation/core';
 import React, { useContext } from 'react';
 import { Appearance } from 'react-native-appearance';
 import {
+  defaultMascotPreferences,
+  defaultPlanexPreferences,
   defaultPreferences,
+  defaultProxiwashPreferences,
   getPreferenceBool,
   getPreferenceObject,
-  isValidPreferenceKey,
-  PreferenceKeys,
+  MascotPreferenceKeys,
+  MascotPreferencesType,
+  PlanexPreferenceKeys,
+  PlanexPreferencesType,
+  GeneralPreferenceKeys,
+  GeneralPreferencesType,
+  ProxiwashPreferenceKeys,
+  ProxiwashPreferencesType,
+  isValidMascotPreferenceKey,
   PreferencesType,
 } from '../utils/asyncStorage';
 import {
@@ -18,35 +28,83 @@ import {
 
 const colorScheme = Appearance.getColorScheme();
 
-export type PreferencesContextType = {
-  preferences: PreferencesType;
+export type PreferencesContextType<
+  T extends Partial<PreferencesType>,
+  K extends string
+> = {
+  preferences: T;
   updatePreferences: (
-    key: PreferenceKeys,
+    key: K,
     value: number | string | boolean | object | Array<any>
   ) => void;
   resetPreferences: () => void;
 };
 
-export const PreferencesContext = React.createContext<PreferencesContextType>({
+// CONTEXTES
+// Preferences are separated into several contextes to improve performances
+
+export const PreferencesContext = React.createContext<
+  PreferencesContextType<GeneralPreferencesType, GeneralPreferenceKeys>
+>({
   preferences: defaultPreferences,
   updatePreferences: () => undefined,
   resetPreferences: () => undefined,
 });
 
+export const PlanexPreferencesContext = React.createContext<
+  PreferencesContextType<PlanexPreferencesType, PlanexPreferenceKeys>
+>({
+  preferences: defaultPlanexPreferences,
+  updatePreferences: () => undefined,
+  resetPreferences: () => undefined,
+});
+
+export const ProxiwashPreferencesContext = React.createContext<
+  PreferencesContextType<ProxiwashPreferencesType, ProxiwashPreferenceKeys>
+>({
+  preferences: defaultProxiwashPreferences,
+  updatePreferences: () => undefined,
+  resetPreferences: () => undefined,
+});
+
+export const MascotPreferencesContext = React.createContext<
+  PreferencesContextType<MascotPreferencesType, MascotPreferenceKeys>
+>({
+  preferences: defaultMascotPreferences,
+  updatePreferences: () => undefined,
+  resetPreferences: () => undefined,
+});
+
+// Context Hooks
+
 export function usePreferences() {
   return useContext(PreferencesContext);
 }
 
+export function usePlanexPreferences() {
+  return useContext(PlanexPreferencesContext);
+}
+
+export function useProxiwashPreferences() {
+  return useContext(ProxiwashPreferencesContext);
+}
+
+export function useMascotPreferences() {
+  return useContext(MascotPreferencesContext);
+}
+
+// Custom Hooks
+
 export function useShouldShowMascot(route: string) {
-  const { preferences, updatePreferences } = usePreferences();
+  const { preferences, updatePreferences } = useMascotPreferences();
   const key = route + 'ShowMascot';
   let shouldShow = false;
-  if (isValidPreferenceKey(key)) {
+  if (isValidMascotPreferenceKey(key)) {
     shouldShow = getPreferenceBool(key, preferences) !== false;
   }
 
   const setShouldShow = (show: boolean) => {
-    if (isValidPreferenceKey(key)) {
+    if (isValidMascotPreferenceKey(key)) {
       updatePreferences(key, show);
     } else {
       console.log('Invalid preference key: ' + key);
@@ -59,12 +117,17 @@ export function useShouldShowMascot(route: string) {
 export function useDarkTheme() {
   const { preferences } = usePreferences();
   return (
-    (getPreferenceBool(PreferenceKeys.nightMode, preferences) !== false &&
-      (getPreferenceBool(PreferenceKeys.nightModeFollowSystem, preferences) ===
-        false ||
-        colorScheme === 'no-preference')) ||
-    (getPreferenceBool(PreferenceKeys.nightModeFollowSystem, preferences) !==
+    (getPreferenceBool(GeneralPreferenceKeys.nightMode, preferences) !==
       false &&
+      (getPreferenceBool(
+        GeneralPreferenceKeys.nightModeFollowSystem,
+        preferences
+      ) === false ||
+        colorScheme === 'no-preference')) ||
+    (getPreferenceBool(
+      GeneralPreferenceKeys.nightModeFollowSystem,
+      preferences
+    ) !== false &&
       colorScheme === 'dark')
   );
 }
@@ -73,12 +136,12 @@ export function useCurrentDashboard() {
   const { preferences, updatePreferences } = usePreferences();
   const navigation = useNavigation();
   const dashboardIdList = getPreferenceObject(
-    PreferenceKeys.dashboardItems,
+    GeneralPreferenceKeys.dashboardItems,
     preferences
   ) as Array<string>;
 
   const updateCurrentDashboard = (newList: Array<string>) => {
-    updatePreferences(PreferenceKeys.dashboardItems, newList);
+    updatePreferences(GeneralPreferenceKeys.dashboardItems, newList);
   };
 
   const allDatasets = [
