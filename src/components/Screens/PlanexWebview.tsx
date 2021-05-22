@@ -67,6 +67,14 @@ calendar.option({
   }
 });`;
 
+export const JS_LOADED_MESSAGE = '1';
+
+const NOTIFY_JS_INJECTED = `
+function notifyJsInjected() {
+  window.ReactNativeWebView.postMessage('${JS_LOADED_MESSAGE}');
+}
+`;
+
 // Mobile friendly CSS
 const CUSTOM_CSS =
   'body>.container{padding-top:20px; padding-bottom: 50px}header,#entite,#groupe_visibility,#calendar .fc-left,#calendar .fc-right{display:none}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-agendaWeek-view .fc-content-skeleton .fc-time{font-size:.5rem}#calendar .fc-month-view .fc-content-skeleton .fc-title{font-size:.6rem}#calendar .fc-month-view .fc-content-skeleton .fc-time{font-size:.7rem}.fc-axis{font-size:.8rem;width:15px!important}.fc-day-header{font-size:.8rem}.fc-unthemed td.fc-today{background:#be1522; opacity:0.4}';
@@ -93,7 +101,8 @@ const generateInjectedJS = (
   let customInjectedJS = `$(document).ready(function() {
       ${OBSERVE_MUTATIONS_INJECTED}
       ${INJECT_STYLE}
-      ${FULL_CALENDAR_SETTINGS}`;
+      ${FULL_CALENDAR_SETTINGS}
+      ${NOTIFY_JS_INJECTED}`;
   if (group) {
     customInjectedJS += `displayAde(${group.id});`;
   }
@@ -103,7 +112,7 @@ const generateInjectedJS = (
   if (darkMode) {
     customInjectedJS += INJECT_STYLE_DARK;
   }
-  customInjectedJS += 'removeAlpha();});true;'; // Prevents crash on ios
+  customInjectedJS += `notifyJsInjected();});true;`; // Prevents crash on ios
   return customInjectedJS;
 };
 

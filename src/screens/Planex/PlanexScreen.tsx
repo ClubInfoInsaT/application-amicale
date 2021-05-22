@@ -31,7 +31,9 @@ import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import { getPrettierPlanexGroupName } from '../../utils/Utils';
 import GENERAL_STYLES from '../../constants/Styles';
-import PlanexWebview from '../../components/Screens/PlanexWebview';
+import PlanexWebview, {
+  JS_LOADED_MESSAGE,
+} from '../../components/Screens/PlanexWebview';
 import PlanexBottomBar from '../../components/Animations/PlanexBottomBar';
 import {
   getPreferenceString,
@@ -39,6 +41,7 @@ import {
   PlanexPreferenceKeys,
 } from '../../utils/asyncStorage';
 import { usePlanexPreferences } from '../../context/preferencesContext';
+import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
 
 const styles = StyleSheet.create({
   container: {
@@ -65,6 +68,7 @@ function PlanexScreen() {
       }
   >();
   const [injectJS, setInjectJS] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const getCurrentGroup: () => PlanexGroupType | undefined = useCallback(() => {
     let currentGroupString = getPreferenceString(
@@ -132,22 +136,26 @@ function PlanexScreen() {
    * @param event
    */
   const onMessage = (event: { nativeEvent: { data: string } }) => {
-    const data: {
-      start: string;
-      end: string;
-      title: string;
-      color: string;
-    } = JSON.parse(event.nativeEvent.data);
-    const startDate = dateToString(new Date(data.start), true);
-    const endDate = dateToString(new Date(data.end), true);
-    const startString = getTimeOnlyString(startDate);
-    const endString = getTimeOnlyString(endDate);
+    if (event.nativeEvent.data === JS_LOADED_MESSAGE) {
+      setLoading(false);
+    } else {
+      const data: {
+        start: string;
+        end: string;
+        title: string;
+        color: string;
+      } = JSON.parse(event.nativeEvent.data);
+      const startDate = dateToString(new Date(data.start), true);
+      const endDate = dateToString(new Date(data.end), true);
+      const startString = getTimeOnlyString(startDate);
+      const endString = getTimeOnlyString(endDate);
 
-    let msg = `${DateManager.getInstance().getTranslatedDate(startDate)}\n`;
-    if (startString != null && endString != null) {
-      msg += `${startString} - ${endString}`;
+      let msg = `${DateManager.getInstance().getTranslatedDate(startDate)}\n`;
+      if (startString != null && endString != null) {
+        msg += `${startString} - ${endString}`;
+      }
+      showDialog(data.title, msg, data.color);
     }
-    showDialog(data.title, msg, data.color);
   };
 
   /**
@@ -202,6 +210,11 @@ function PlanexScreen() {
           <View style={GENERAL_STYLES.flex}>{getWebView()}</View>
         )}
       </View>
+      {loading ? (
+        <View style={styles.container}>
+          <BasicLoadingScreen />
+        </View>
+      ) : null}
       {showMascot ? (
         <MascotPopup
           title={i18n.t('screens.planex.mascotDialog.title')}
