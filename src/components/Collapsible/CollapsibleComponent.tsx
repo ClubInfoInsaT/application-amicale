@@ -51,12 +51,18 @@ function CollapsibleComponent(props: Props) {
   const { paddedProps, headerColors } = props;
   const Comp = props.component;
   const theme = useTheme();
+  console.log(theme.dark);
+
   const { setCollapsible } = useCollapsible();
 
   const collapsible = useCollapsibleHeader({
     config: {
       collapsedColor: headerColors ? headerColors : theme.colors.surface,
       useNativeDriver: true,
+    },
+
+    navigationOptions: {
+      headerStyle: { backgroundColor: theme.colors.surface },
     },
   });
 
