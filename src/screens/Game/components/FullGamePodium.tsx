@@ -30,12 +30,12 @@ export default function FullGamePodium(props: Props) {
       <View style={styles.topScoreSubcontainer}>
         <GamePodium
           place={3}
-          score={silver.toString()}
+          score={bronze.toString()}
           isHighScore={isHighScore}
         />
         <GamePodium
           place={2}
-          score={bronze.toString()}
+          score={silver.toString()}
           isHighScore={isHighScore}
         />
       </View>

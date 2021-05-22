@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
@@ -41,7 +41,7 @@ import {
   getPreferenceObject,
   PreferenceKeys,
 } from '../../../utils/asyncStorage';
-import { useNavigation } from '@react-navigation/core';
+import { useFocusEffect, useNavigation } from '@react-navigation/core';
 
 const styles = StyleSheet.create({
   container: {
@@ -110,6 +110,13 @@ export default function GameMainScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 
+  useFocusEffect(
+    useCallback(() => {
+      const l = logic.current;
+      return () => l.endGame(true);
+    }, [])
+  );
+
   const getRightButton = () => (
     <MaterialHeaderButtons>
       <Item title={'pause'} iconName={'pause'} onPress={togglePause} />
@@ -146,8 +153,9 @@ export default function GameMainScreen() {
     if (newScores.length > 3) {
       newScores.splice(3, 1);
     }
-    console.log(newScores);
-    updatePreferences(PreferenceKeys.gameScores, newScores);
+    if (newScores.some((item, i) => item !== savedScores[i])) {
+      updatePreferences(PreferenceKeys.gameScores, newScores);
+    }
     if (!isRestart) {
       navigation.replace(MainRoutes.GameStart, {
         score: score,
