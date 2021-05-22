@@ -17,10 +17,9 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Caption, IconButton, Text, withTheme } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { StackNavigationProp } from '@react-navigation/stack';
 import GameLogic from '../logic/GameLogic';
@@ -34,25 +33,15 @@ import type { OptionsDialogButtonType } from '../../../components/Dialogs/Option
 import OptionsDialog from '../../../components/Dialogs/OptionsDialog';
 import GENERAL_STYLES from '../../../constants/Styles';
 import { MainRoutes } from '../../../navigation/MainNavigator';
-
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  route: { params: { highScore: number } };
-  theme: ReactNativePaper.Theme;
-};
-
-type StateType = {
-  grid: GridType;
-  gameTime: number;
-  gameScore: number;
-  gameLevel: number;
-
-  dialogVisible: boolean;
-  dialogTitle: string;
-  dialogMessage: string;
-  dialogButtons: Array<OptionsDialogButtonType>;
-  onDialogDismiss: () => void;
-};
+import GameStatus from '../components/GameStatus';
+import GameControls from '../components/GameControls';
+import GameScore from '../components/GameScore';
+import { usePreferences } from '../../../context/preferencesContext';
+import {
+  getPreferenceObject,
+  PreferenceKeys,
+} from '../../../utils/asyncStorage';
+import { useNavigation } from '@react-navigation/core';
 
 const styles = StyleSheet.create({
   container: {
@@ -61,44 +50,6 @@ const styles = StyleSheet.create({
   },
   gridContainer: {
     flex: 4,
-  },
-  centerSmallMargin: {
-    ...GENERAL_STYLES.centerHorizontal,
-    marginBottom: 5,
-  },
-  centerVerticalSmallMargin: {
-    ...GENERAL_STYLES.centerVertical,
-    marginLeft: 5,
-  },
-  centerBigMargin: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginBottom: 20,
-  },
-  statusContainer: {
-    flexDirection: 'row',
-  },
-  statusIcon: {
-    marginLeft: 5,
-  },
-  scoreMainContainer: {
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  scoreCurrentContainer: {
-    flexDirection: 'row',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-  scoreText: {
-    marginLeft: 5,
-    fontSize: 20,
-  },
-  scoreBestContainer: {
-    flexDirection: 'row',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: 5,
   },
   controlsContainer: {
     height: 80,
@@ -115,273 +66,125 @@ const styles = StyleSheet.create({
   },
 });
 
-class GameMainScreen extends React.Component<PropsType, StateType> {
-  static getFormattedTime(seconds: number): string {
-    const date = new Date();
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(seconds);
-    let format;
-    if (date.getHours()) {
-      format = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-    } else if (date.getMinutes()) {
-      format = `${date.getMinutes()}:${date.getSeconds()}`;
+export default function GameMainScreen() {
+  const theme = useTheme();
+  const navigation = useNavigation<StackNavigationProp<any>>();
+  const logic = useRef(new GameLogic(20, 10, theme));
+
+  const [gameTime, setGameTime] = useState(0);
+
+  const [gameState, setGameState] = useState({
+    grid: logic.current.getCurrentGrid(),
+    gameScore: 0,
+    gameLevel: 0,
+  });
+
+  const [dialogContent, setDialogContent] = useState<{
+    dialogTitle: string;
+    dialogMessage: string;
+    dialogButtons: Array<OptionsDialogButtonType>;
+    onDialogDismiss: () => void;
+  }>();
+
+  const { preferences, updatePreferences } = usePreferences();
+
+  function getScores() {
+    const pref = getPreferenceObject(PreferenceKeys.gameScores, preferences) as
+      | Array<number>
+      | undefined;
+    if (pref) {
+      return pref.sort((a, b) => b - a);
     } else {
-      format = date.getSeconds().toString();
-    }
-    return format;
-  }
-
-  logic: GameLogic;
-
-  highScore: number | null;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.highScore = null;
-    this.logic = new GameLogic(20, 10, props.theme);
-    this.state = {
-      grid: this.logic.getCurrentGrid(),
-      gameTime: 0,
-      gameScore: 0,
-      gameLevel: 0,
-      dialogVisible: false,
-      dialogTitle: '',
-      dialogMessage: '',
-      dialogButtons: [],
-      onDialogDismiss: () => {},
-    };
-    if (props.route.params != null) {
-      this.highScore = props.route.params.highScore;
+      return [];
     }
   }
 
-  componentDidMount() {
-    const { navigation } = this.props;
+  const savedScores = getScores();
+  const highScore = savedScores.length > 0 ? savedScores[0] : undefined;
+
+  useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: this.getRightButton,
+      headerRight: getRightButton,
     });
-    this.startGame();
-  }
+    startGame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation]);
 
-  componentWillUnmount() {
-    this.logic.endGame(true);
-  }
+  const getRightButton = () => (
+    <MaterialHeaderButtons>
+      <Item title={'pause'} iconName={'pause'} onPress={togglePause} />
+    </MaterialHeaderButtons>
+  );
 
-  getRightButton = () => {
-    return (
-      <MaterialHeaderButtons>
-        <Item title="pause" iconName="pause" onPress={this.togglePause} />
-      </MaterialHeaderButtons>
-    );
-  };
-
-  onTick = (score: number, level: number, newGrid: GridType) => {
-    this.setState({
+  const onTick = (score: number, level: number, newGrid: GridType) => {
+    setGameState({
       gameScore: score,
       gameLevel: level,
       grid: newGrid,
     });
   };
 
-  onClock = (time: number) => {
-    this.setState({
-      gameTime: time,
-    });
-  };
+  const onDialogDismiss = () => setDialogContent(undefined);
 
-  onDialogDismiss = () => {
-    this.setState({ dialogVisible: false });
-  };
-
-  onGameEnd = (time: number, score: number, isRestart: boolean) => {
-    const { props, state } = this;
-    this.setState({
-      gameTime: time,
+  const onGameEnd = (time: number, score: number, isRestart: boolean) => {
+    setGameState((prevState) => ({
+      ...prevState,
       gameScore: score,
-    });
+    }));
+    setGameTime(time);
+    const newScores = [...savedScores];
+    const isHighScore = newScores.length === 0 || score > newScores[0];
+    for (let i = 0; i < 3; i += 1) {
+      if (newScores.length > i && score > newScores[i]) {
+        newScores.splice(i, 0, score);
+        break;
+      } else if (newScores.length <= i) {
+        newScores.push(score);
+        break;
+      }
+    }
+    if (newScores.length > 3) {
+      newScores.splice(3, 1);
+    }
+    console.log(newScores);
+    updatePreferences(PreferenceKeys.gameScores, newScores);
     if (!isRestart) {
-      props.navigation.replace(MainRoutes.GameStart, {
-        score: state.gameScore,
-        level: state.gameLevel,
-        time: state.gameTime,
+      navigation.replace(MainRoutes.GameStart, {
+        score: score,
+        level: gameState.gameLevel,
+        time: time,
+        isHighScore: isHighScore,
       });
     }
   };
 
-  getStatusIcons() {
-    const { props, state } = this;
-    return (
-      <View
-        style={{
-          ...GENERAL_STYLES.flex,
-          ...GENERAL_STYLES.centerVertical,
-        }}
-      >
-        <View style={GENERAL_STYLES.centerHorizontal}>
-          <Caption style={styles.centerSmallMargin}>
-            {i18n.t('screens.game.time')}
-          </Caption>
-          <View style={styles.statusContainer}>
-            <MaterialCommunityIcons
-              name="timer"
-              color={props.theme.colors.subtitle}
-              size={20}
-            />
-            <Text
-              style={{
-                ...styles.statusIcon,
-                color: props.theme.colors.subtitle,
-              }}
-            >
-              {GameMainScreen.getFormattedTime(state.gameTime)}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.centerBigMargin}>
-          <Caption style={styles.centerSmallMargin}>
-            {i18n.t('screens.game.level')}
-          </Caption>
-          <View style={styles.statusContainer}>
-            <MaterialCommunityIcons
-              name="gamepad-square"
-              color={props.theme.colors.text}
-              size={20}
-            />
-            <Text style={styles.statusIcon}>{state.gameLevel}</Text>
-          </View>
-        </View>
-      </View>
-    );
-  }
-
-  getScoreIcon() {
-    const { props, state } = this;
-    const highScore =
-      this.highScore == null || state.gameScore > this.highScore
-        ? state.gameScore
-        : this.highScore;
-    return (
-      <View style={styles.scoreMainContainer}>
-        <View style={styles.scoreCurrentContainer}>
-          <Text style={styles.scoreText}>
-            {i18n.t('screens.game.score', { score: state.gameScore })}
-          </Text>
-          <MaterialCommunityIcons
-            name="star"
-            color={props.theme.colors.tetrisScore}
-            size={20}
-            style={styles.centerVerticalSmallMargin}
-          />
-        </View>
-        <View style={styles.scoreBestContainer}>
-          <Text
-            style={{
-              ...styles.scoreText,
-              color: props.theme.colors.textDisabled,
-            }}
-          >
-            {i18n.t('screens.game.highScore', { score: highScore })}
-          </Text>
-          <MaterialCommunityIcons
-            name="star"
-            color={props.theme.colors.tetrisScore}
-            size={10}
-            style={styles.centerVerticalSmallMargin}
-          />
-        </View>
-      </View>
-    );
-  }
-
-  getControlButtons() {
-    const { props } = this;
-    return (
-      <View style={styles.controlsContainer}>
-        <IconButton
-          icon="rotate-right-variant"
-          size={40}
-          onPress={() => {
-            this.logic.rotatePressed(this.updateGrid);
-          }}
-          style={GENERAL_STYLES.flex}
-        />
-        <View style={styles.directionsContainer}>
-          <IconButton
-            icon="chevron-left"
-            size={40}
-            style={GENERAL_STYLES.flex}
-            onPress={() => {
-              this.logic.pressedOut();
-            }}
-            onPressIn={() => {
-              this.logic.leftPressedIn(this.updateGrid);
-            }}
-          />
-          <IconButton
-            icon="chevron-right"
-            size={40}
-            style={GENERAL_STYLES.flex}
-            onPress={() => {
-              this.logic.pressedOut();
-            }}
-            onPressIn={() => {
-              this.logic.rightPressed(this.updateGrid);
-            }}
-          />
-        </View>
-        <IconButton
-          icon="arrow-down-bold"
-          size={40}
-          onPressIn={() => {
-            this.logic.downPressedIn(this.updateGridScore);
-          }}
-          onPress={() => {
-            this.logic.pressedOut();
-          }}
-          style={GENERAL_STYLES.flex}
-          color={props.theme.colors.tetrisScore}
-        />
-      </View>
-    );
-  }
-
-  updateGrid = (newGrid: GridType) => {
-    this.setState({
-      grid: newGrid,
-    });
-  };
-
-  updateGridScore = (newGrid: GridType, score?: number) => {
-    this.setState((prevState: StateType): {
-      grid: GridType;
-      gameScore: number;
-    } => ({
+  const onDirectionPressed = (newGrid: GridType, score?: number) => {
+    setGameState((prevState) => ({
+      ...prevState,
       grid: newGrid,
       gameScore: score != null ? score : prevState.gameScore,
     }));
   };
 
-  togglePause = () => {
-    this.logic.togglePause();
-    if (this.logic.isGamePaused()) {
-      this.showPausePopup();
+  const togglePause = () => {
+    logic.current.togglePause();
+    if (logic.current.isGamePaused()) {
+      showPausePopup();
     }
   };
 
-  showPausePopup = () => {
+  const showPausePopup = () => {
     const onDismiss = () => {
-      this.togglePause();
-      this.onDialogDismiss();
+      togglePause();
+      onDialogDismiss();
     };
-    this.setState({
-      dialogVisible: true,
+    setDialogContent({
       dialogTitle: i18n.t('screens.game.pause'),
       dialogMessage: i18n.t('screens.game.pauseMessage'),
       dialogButtons: [
         {
           title: i18n.t('screens.game.restart.text'),
-          onPress: this.showRestartConfirm,
+          onPress: showRestartConfirm,
         },
         {
           title: i18n.t('screens.game.resume'),
@@ -392,71 +195,68 @@ class GameMainScreen extends React.Component<PropsType, StateType> {
     });
   };
 
-  showRestartConfirm = () => {
-    this.setState({
-      dialogVisible: true,
+  const showRestartConfirm = () => {
+    setDialogContent({
       dialogTitle: i18n.t('screens.game.restart.confirm'),
       dialogMessage: i18n.t('screens.game.restart.confirmMessage'),
       dialogButtons: [
         {
           title: i18n.t('screens.game.restart.confirmYes'),
           onPress: () => {
-            this.onDialogDismiss();
-            this.startGame();
+            onDialogDismiss();
+            startGame();
           },
         },
         {
           title: i18n.t('screens.game.restart.confirmNo'),
-          onPress: this.showPausePopup,
+          onPress: showPausePopup,
         },
       ],
-      onDialogDismiss: this.showPausePopup,
+      onDialogDismiss: showPausePopup,
     });
   };
 
-  startGame = () => {
-    this.logic.startGame(this.onTick, this.onClock, this.onGameEnd);
+  const startGame = () => {
+    logic.current.startGame(onTick, setGameTime, onGameEnd);
   };
 
-  render() {
-    const { props, state } = this;
-    return (
-      <View style={GENERAL_STYLES.flex}>
-        <View style={styles.container}>
-          {this.getStatusIcons()}
-          <View style={styles.gridContainer}>
-            {this.getScoreIcon()}
-            <GridComponent
-              width={this.logic.getWidth()}
-              height={this.logic.getHeight()}
-              grid={state.grid}
-              style={{
-                backgroundColor: props.theme.colors.tetrisBackground,
-                ...GENERAL_STYLES.flex,
-                ...GENERAL_STYLES.centerHorizontal,
-              }}
-            />
-          </View>
-
-          <View style={GENERAL_STYLES.flex}>
-            <Preview
-              items={this.logic.getNextPiecesPreviews()}
-              style={styles.preview}
-            />
-          </View>
+  return (
+    <View style={GENERAL_STYLES.flex}>
+      <View style={styles.container}>
+        <GameStatus time={gameTime} level={gameState.gameLevel} />
+        <View style={styles.gridContainer}>
+          <GameScore score={gameState.gameScore} highScore={highScore} />
+          <GridComponent
+            width={logic.current.getWidth()}
+            height={logic.current.getHeight()}
+            grid={gameState.grid}
+            style={{
+              backgroundColor: theme.colors.tetrisBackground,
+              ...GENERAL_STYLES.flex,
+              ...GENERAL_STYLES.centerHorizontal,
+            }}
+          />
         </View>
-        {this.getControlButtons()}
-
-        <OptionsDialog
-          visible={state.dialogVisible}
-          title={state.dialogTitle}
-          message={state.dialogMessage}
-          buttons={state.dialogButtons}
-          onDismiss={state.onDialogDismiss}
-        />
+        <View style={GENERAL_STYLES.flex}>
+          <Preview
+            items={logic.current.getNextPiecesPreviews()}
+            style={styles.preview}
+          />
+        </View>
       </View>
-    );
-  }
+      <GameControls
+        logic={logic.current}
+        onDirectionPressed={onDirectionPressed}
+      />
+      {dialogContent ? (
+        <OptionsDialog
+          visible={dialogContent !== undefined}
+          title={dialogContent.dialogTitle}
+          message={dialogContent.dialogMessage}
+          buttons={dialogContent.dialogButtons}
+          onDismiss={dialogContent.onDialogDismiss}
+        />
+      ) : null}
+    </View>
+  );
 }
-
-export default withTheme(GameMainScreen);
