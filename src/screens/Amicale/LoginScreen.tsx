@@ -35,11 +35,13 @@ import LoginForm from '../../components/Amicale/Login/LoginForm';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { TabRoutes } from '../../navigation/TabNavigator';
 import { useShouldShowMascot } from '../../context/preferencesContext';
+import { useLogin } from '../../context/loginContext';
 
 type Props = StackScreenProps<MainStackParamsList, 'login'>;
 
 function LoginScreen(props: Props) {
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const { setLogin } = useLogin();
   const [loading, setLoading] = useState(false);
   const [nextScreen, setNextScreen] = useState<string | undefined>(undefined);
   const [mascotDialogVisible, setMascotDialogVisible] = useState(false);
@@ -88,11 +90,12 @@ function LoginScreen(props: Props) {
    * Navigates to the screen specified in navigation parameters or simply go back tha stack.
    * Saves in user preferences to not show the login banner again.
    */
-  const handleSuccess = () => {
+  const handleSuccess = (token: string) => {
     // Do not show the home login banner again
     if (homeMascot.shouldShow) {
       homeMascot.setShouldShow(false);
     }
+    setLogin(token);
     if (!nextScreen) {
       navigation.goBack();
     } else {
@@ -138,7 +141,10 @@ function LoginScreen(props: Props) {
             emotion={MASCOT_STYLE.NORMAL}
           />
           <ErrorDialog
-            visible={currentError.status !== REQUEST_STATUS.SUCCESS}
+            visible={
+              currentError.status !== REQUEST_STATUS.SUCCESS ||
+              currentError.code !== undefined
+            }
             onDismiss={hideErrorDialog}
             status={currentError.status}
             code={currentError.code}

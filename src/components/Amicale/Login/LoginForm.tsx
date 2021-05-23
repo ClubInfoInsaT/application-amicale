@@ -22,7 +22,7 @@ type Props = {
   onResetPasswordPress: () => void;
 };
 
-const ICON_AMICALE = require('../../../assets/amicale.png');
+const ICON_AMICALE = require('../../../../assets/amicale.png');
 
 const styles = StyleSheet.create({
   card: {

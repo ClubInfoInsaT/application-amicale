@@ -407,7 +407,10 @@ function EquipmentRentScreen(props: Props) {
         />
 
         <ErrorDialog
-          visible={currentError.status !== REQUEST_STATUS.SUCCESS}
+          visible={
+            currentError.status !== REQUEST_STATUS.SUCCESS ||
+            currentError.code !== undefined
+          }
           onDismiss={onErrorDialogDismiss}
           status={currentError.status}
           code={currentError.code}

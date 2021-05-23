@@ -33,6 +33,7 @@ function LogoutDialog(props: PropsType) {
   const onClickAccept = async (): Promise<void> => {
     return new Promise((resolve: () => void) => {
       onLogout();
+      props.onDismiss();
       resolve();
     });
   };

@@ -128,7 +128,10 @@ function VoteSelect(props: Props) {
         message={i18n.t('screens.vote.select.dialogMessage')}
       />
       <ErrorDialog
-        visible={currentError.status !== REQUEST_STATUS.SUCCESS}
+        visible={
+          currentError.status !== REQUEST_STATUS.SUCCESS ||
+          currentError.code !== undefined
+        }
         onDismiss={onErrorDialogDismiss}
         status={currentError.status}
         code={currentError.code}
