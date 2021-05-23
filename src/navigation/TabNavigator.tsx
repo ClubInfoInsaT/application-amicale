@@ -78,9 +78,12 @@ const ServicesStack = createStackNavigator();
 
 function ServicesStackComponent() {
   return (
-    <ServicesStack.Navigator initialRouteName={'index'} headerMode={'screen'}>
+    <ServicesStack.Navigator
+      initialRouteName={'services'}
+      headerMode={'screen'}
+    >
       <ServicesStack.Screen
-        name={'index'}
+        name={'services'}
         component={WebsitesHomeScreen}
         options={{ title: i18n.t('screens.services.title') }}
       />
@@ -102,9 +105,12 @@ const ProxiwashStack = createStackNavigator();
 
 function ProxiwashStackComponent() {
   return (
-    <ProxiwashStack.Navigator initialRouteName={'index'} headerMode={'screen'}>
+    <ProxiwashStack.Navigator
+      initialRouteName={'proxiwash'}
+      headerMode={'screen'}
+    >
       <ProxiwashStack.Screen
-        name={'index-contact'}
+        name={'proxiwash'}
         component={ProxiwashScreen}
         options={{ title: i18n.t('screens.proxiwash.title') }}
       />
@@ -121,9 +127,9 @@ const PlanningStack = createStackNavigator();
 
 function PlanningStackComponent() {
   return (
-    <PlanningStack.Navigator initialRouteName={'index'} headerMode={'screen'}>
+    <PlanningStack.Navigator initialRouteName={'events'} headerMode={'screen'}>
       <PlanningStack.Screen
-        name={'index'}
+        name={'events'}
         component={PlanningScreen}
         options={{ title: i18n.t('screens.planning.title') }}
       />
@@ -148,9 +154,9 @@ function HomeStackComponent(
   }
   const { colors } = useTheme();
   return (
-    <HomeStack.Navigator initialRouteName={'index'} headerMode={'screen'}>
+    <HomeStack.Navigator initialRouteName={'home'} headerMode={'screen'}>
       <HomeStack.Screen
-        name={'index'}
+        name={'home'}
         component={HomeScreen}
         options={{
           title: i18n.t('screens.home.title'),
@@ -213,9 +219,9 @@ const PlanexStack = createStackNavigator();
 
 function PlanexStackComponent() {
   return (
-    <PlanexStack.Navigator initialRouteName={'index'} headerMode={'screen'}>
+    <PlanexStack.Navigator initialRouteName={'planex'} headerMode={'screen'}>
       <PlanexStack.Screen
-        name={'index'}
+        name={'planex'}
         component={PlanexScreen}
         options={{
           title: i18n.t('screens.planex.title'),

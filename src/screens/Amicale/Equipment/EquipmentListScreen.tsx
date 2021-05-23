@@ -60,7 +60,9 @@ const styles = StyleSheet.create({
 
 function EquipmentListScreen() {
   const userRents = useRef<undefined | Array<RentedDeviceType>>();
-  const [mascotDialogVisible, setMascotDialogVisible] = useState(false);
+  const [mascotDialogVisible, setMascotDialogVisible] = useState<
+    undefined | boolean
+  >(undefined);
 
   const requestAll = useAuthenticatedRequest<{ devices: Array<DeviceType> }>(
     'location/all'

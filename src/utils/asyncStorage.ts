@@ -110,13 +110,17 @@ export const defaultPreferences: { [key in GeneralPreferenceKeys]: string } = {
 export function isValidGeneralPreferenceKey(
   key: string
 ): key is GeneralPreferenceKeys {
-  return key in Object.values(GeneralPreferenceKeys);
+  return Object.values(GeneralPreferenceKeys).includes(
+    key as GeneralPreferenceKeys
+  );
 }
 
 export function isValidMascotPreferenceKey(
   key: string
 ): key is MascotPreferenceKeys {
-  return key in Object.values(MascotPreferenceKeys);
+  return Object.values(MascotPreferenceKeys).includes(
+    key as MascotPreferenceKeys
+  );
 }
 
 /**
