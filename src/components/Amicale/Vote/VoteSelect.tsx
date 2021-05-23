@@ -17,28 +17,21 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Avatar, Button, Card, RadioButton } from 'react-native-paper';
 import { FlatList, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
-import ConnectionManager from '../../../managers/ConnectionManager';
 import LoadingConfirmDialog from '../../Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../Dialogs/ErrorDialog';
 import type { VoteTeamType } from '../../../screens/Amicale/VoteScreen';
 import { ApiRejectType } from '../../../utils/WebData';
 import { REQUEST_STATUS } from '../../../utils/Requests';
+import { useAuthenticatedRequest } from '../../../context/loginContext';
 
-type PropsType = {
+type Props = {
   teams: Array<VoteTeamType>;
   onVoteSuccess: () => void;
   onVoteError: () => void;
-};
-
-type StateType = {
-  selectedTeam: string;
-  voteDialogVisible: boolean;
-  errorDialogVisible: boolean;
-  currentError: ApiRejectType;
 };
 
 const styles = StyleSheet.create({
@@ -50,118 +43,98 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class VoteSelect extends React.PureComponent<
-  PropsType,
-  StateType
-> {
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      selectedTeam: 'none',
-      voteDialogVisible: false,
-      errorDialogVisible: false,
-      currentError: { status: REQUEST_STATUS.SUCCESS },
-    };
-  }
+function VoteSelect(props: Props) {
+  const [selectedTeam, setSelectedTeam] = useState('none');
+  const [voteDialogVisible, setVoteDialogVisible] = useState(false);
+  const [currentError, setCurrentError] = useState<ApiRejectType>({
+    status: REQUEST_STATUS.SUCCESS,
+  });
+  const request = useAuthenticatedRequest('elections/vote', {
+    team: parseInt(selectedTeam, 10),
+  });
 
-  onVoteSelectionChange = (teamName: string): void =>
-    this.setState({ selectedTeam: teamName });
+  const voteKeyExtractor = (item: VoteTeamType) => item.id.toString();
 
-  voteKeyExtractor = (item: VoteTeamType): string => item.id.toString();
-
-  voteRenderItem = ({ item }: { item: VoteTeamType }) => (
+  const voteRenderItem = ({ item }: { item: VoteTeamType }) => (
     <RadioButton.Item label={item.name} value={item.id.toString()} />
   );
 
-  showVoteDialog = (): void => this.setState({ voteDialogVisible: true });
+  const showVoteDialog = () => setVoteDialogVisible(true);
 
-  onVoteDialogDismiss = (): void => this.setState({ voteDialogVisible: false });
+  const onVoteDialogDismiss = () => setVoteDialogVisible(false);
 
-  onVoteDialogAccept = async (): Promise<void> => {
+  const onVoteDialogAccept = async (): Promise<void> => {
     return new Promise((resolve: () => void) => {
-      const { state } = this;
-      ConnectionManager.getInstance()
-        .authenticatedRequest('elections/vote', {
-          team: parseInt(state.selectedTeam, 10),
-        })
+      request()
         .then(() => {
-          this.onVoteDialogDismiss();
-          const { props } = this;
+          onVoteDialogDismiss();
           props.onVoteSuccess();
           resolve();
         })
         .catch((error: ApiRejectType) => {
-          this.onVoteDialogDismiss();
-          this.showErrorDialog(error);
+          onVoteDialogDismiss();
+          setCurrentError(error);
           resolve();
         });
     });
   };
 
-  showErrorDialog = (error: ApiRejectType): void =>
-    this.setState({
-      errorDialogVisible: true,
-      currentError: error,
-    });
-
-  onErrorDialogDismiss = () => {
-    this.setState({ errorDialogVisible: false });
-    const { props } = this;
+  const onErrorDialogDismiss = () => {
+    setCurrentError({ status: REQUEST_STATUS.SUCCESS });
     props.onVoteError();
   };
 
-  render() {
-    const { state, props } = this;
-    return (
-      <View>
-        <Card style={styles.card}>
-          <Card.Title
-            title={i18n.t('screens.vote.select.title')}
-            subtitle={i18n.t('screens.vote.select.subtitle')}
-            left={(iconProps) => (
-              <Avatar.Icon size={iconProps.size} icon="alert-decagram" />
-            )}
-          />
-          <Card.Content>
-            <RadioButton.Group
-              onValueChange={this.onVoteSelectionChange}
-              value={state.selectedTeam}
-            >
-              <FlatList
-                data={props.teams}
-                keyExtractor={this.voteKeyExtractor}
-                extraData={state.selectedTeam}
-                renderItem={this.voteRenderItem}
-              />
-            </RadioButton.Group>
-          </Card.Content>
-          <Card.Actions>
-            <Button
-              icon="send"
-              mode="contained"
-              onPress={this.showVoteDialog}
-              style={styles.button}
-              disabled={state.selectedTeam === 'none'}
-            >
-              {i18n.t('screens.vote.select.sendButton')}
-            </Button>
-          </Card.Actions>
-        </Card>
-        <LoadingConfirmDialog
-          visible={state.voteDialogVisible}
-          onDismiss={this.onVoteDialogDismiss}
-          onAccept={this.onVoteDialogAccept}
-          title={i18n.t('screens.vote.select.dialogTitle')}
-          titleLoading={i18n.t('screens.vote.select.dialogTitleLoading')}
-          message={i18n.t('screens.vote.select.dialogMessage')}
+  return (
+    <View>
+      <Card style={styles.card}>
+        <Card.Title
+          title={i18n.t('screens.vote.select.title')}
+          subtitle={i18n.t('screens.vote.select.subtitle')}
+          left={(iconProps) => (
+            <Avatar.Icon size={iconProps.size} icon="alert-decagram" />
+          )}
         />
-        <ErrorDialog
-          visible={state.errorDialogVisible}
-          onDismiss={this.onErrorDialogDismiss}
-          status={state.currentError.status}
-          code={state.currentError.code}
-        />
-      </View>
-    );
-  }
+        <Card.Content>
+          <RadioButton.Group
+            onValueChange={setSelectedTeam}
+            value={selectedTeam}
+          >
+            <FlatList
+              data={props.teams}
+              keyExtractor={voteKeyExtractor}
+              extraData={selectedTeam}
+              renderItem={voteRenderItem}
+            />
+          </RadioButton.Group>
+        </Card.Content>
+        <Card.Actions>
+          <Button
+            icon={'send'}
+            mode={'contained'}
+            onPress={showVoteDialog}
+            style={styles.button}
+            disabled={selectedTeam === 'none'}
+          >
+            {i18n.t('screens.vote.select.sendButton')}
+          </Button>
+        </Card.Actions>
+      </Card>
+      <LoadingConfirmDialog
+        visible={voteDialogVisible}
+        onDismiss={onVoteDialogDismiss}
+        onAccept={onVoteDialogAccept}
+        title={i18n.t('screens.vote.select.dialogTitle')}
+        titleLoading={i18n.t('screens.vote.select.dialogTitleLoading')}
+        message={i18n.t('screens.vote.select.dialogMessage')}
+      />
+      <ErrorDialog
+        visible={currentError.status !== REQUEST_STATUS.SUCCESS}
+        onDismiss={onErrorDialogDismiss}
+        status={currentError.status}
+        code={currentError.code}
+      />
+    </View>
+  );
 }
+
+export default VoteSelect;

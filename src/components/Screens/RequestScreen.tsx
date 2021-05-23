@@ -11,7 +11,7 @@ import i18n from 'i18n-js';
 import { API_REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainRoutes } from '../../navigation/MainNavigator';
-import ConnectionManager from '../../managers/ConnectionManager';
+import { useLogout } from '../../utils/logout';
 
 export type RequestScreenProps<T> = {
   request: () => Promise<T>;
@@ -44,6 +44,7 @@ type Props<T> = RequestScreenProps<T>;
 const MIN_REFRESH_TIME = 3 * 1000;
 
 export default function RequestScreen<T>(props: Props<T>) {
+  const onLogout = useLogout();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const route = useRoute();
   const refreshInterval = useRef<number>();
@@ -103,13 +104,10 @@ export default function RequestScreen<T>(props: Props<T>) {
 
   useEffect(() => {
     if (isErrorCritical(code)) {
-      ConnectionManager.getInstance()
-        .disconnect()
-        .then(() => {
-          navigation.replace(MainRoutes.Login, { nextScreen: route.name });
-        });
+      onLogout();
+      navigation.replace(MainRoutes.Login, { nextScreen: route.name });
     }
-  }, [code, navigation, route]);
+  }, [code, navigation, route, onLogout]);
 
   if (data === undefined && loading && props.showLoading !== false) {
     return <BasicLoadingScreen />;

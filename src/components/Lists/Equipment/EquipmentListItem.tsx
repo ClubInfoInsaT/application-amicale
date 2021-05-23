@@ -20,7 +20,6 @@
 import * as React from 'react';
 import { Avatar, List, useTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { StackNavigationProp } from '@react-navigation/stack';
 import type { DeviceType } from '../../../screens/Amicale/Equipment/EquipmentListScreen';
 import {
   getFirstEquipmentAvailability,
@@ -29,9 +28,9 @@ import {
 } from '../../../utils/EquipmentBooking';
 import { StyleSheet } from 'react-native';
 import GENERAL_STYLES from '../../../constants/Styles';
+import { useNavigation } from '@react-navigation/native';
 
 type PropsType = {
-  navigation: StackNavigationProp<any>;
   userDeviceRentDates: [string, string] | null;
   item: DeviceType;
   height: number;
@@ -48,7 +47,8 @@ const styles = StyleSheet.create({
 
 function EquipmentListItem(props: PropsType) {
   const theme = useTheme();
-  const { item, userDeviceRentDates, navigation, height } = props;
+  const navigation = useNavigation();
+  const { item, userDeviceRentDates, height } = props;
   const isRented = userDeviceRentDates != null;
   const isAvailable = isEquipmentAvailable(item);
   const firstAvailability = getFirstEquipmentAvailability(item);

@@ -17,26 +17,17 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'i18n-js';
 import EquipmentListItem from '../../../components/Lists/Equipment/EquipmentListItem';
 import MascotPopup from '../../../components/Mascot/MascotPopup';
 import { MASCOT_STYLE } from '../../../components/Mascot/Mascot';
 import GENERAL_STYLES from '../../../constants/Styles';
-import ConnectionManager from '../../../managers/ConnectionManager';
 import { ApiRejectType } from '../../../utils/WebData';
 import WebSectionList from '../../../components/Screens/WebSectionList';
-
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-};
-
-type StateType = {
-  mascotDialogVisible: boolean | undefined;
-};
+import { useAuthenticatedRequest } from '../../../context/loginContext';
 
 export type DeviceType = {
   id: number;
@@ -67,69 +58,62 @@ const styles = StyleSheet.create({
   },
 });
 
-class EquipmentListScreen extends React.Component<PropsType, StateType> {
-  userRents: null | Array<RentedDeviceType>;
+function EquipmentListScreen() {
+  const userRents = useRef<undefined | Array<RentedDeviceType>>();
+  const [mascotDialogVisible, setMascotDialogVisible] = useState(false);
 
-  constructor(props: PropsType) {
-    super(props);
-    this.userRents = null;
-    this.state = {
-      mascotDialogVisible: undefined,
-    };
-  }
+  const requestAll = useAuthenticatedRequest<{ devices: Array<DeviceType> }>(
+    'location/all'
+  );
+  const requestOwn = useAuthenticatedRequest<{
+    locations: Array<RentedDeviceType>;
+  }>('location/my');
 
-  getRenderItem = ({ item }: { item: DeviceType }) => {
-    const { navigation } = this.props;
+  const getRenderItem = ({ item }: { item: DeviceType }) => {
     return (
       <EquipmentListItem
-        navigation={navigation}
         item={item}
-        userDeviceRentDates={this.getUserDeviceRentDates(item)}
+        userDeviceRentDates={getUserDeviceRentDates(item)}
         height={LIST_ITEM_HEIGHT}
       />
     );
   };
 
-  getUserDeviceRentDates(item: DeviceType): [string, string] | null {
+  const getUserDeviceRentDates = (
+    item: DeviceType
+  ): [string, string] | null => {
     let dates = null;
-    if (this.userRents != null) {
-      this.userRents.forEach((device: RentedDeviceType) => {
+    if (userRents.current) {
+      userRents.current.forEach((device: RentedDeviceType) => {
         if (item.id === device.device_id) {
           dates = [device.begin, device.end];
         }
       });
     }
     return dates;
-  }
+  };
 
-  /**
-   * Gets the list header, with explains this screen's purpose
-   *
-   * @returns {*}
-   */
-  getListHeader() {
+  const getListHeader = () => {
     return (
       <View style={styles.headerContainer}>
         <Button
           mode="contained"
           icon="help-circle"
-          onPress={this.showMascotDialog}
+          onPress={showMascotDialog}
           style={GENERAL_STYLES.centerHorizontal}
         >
           {i18n.t('screens.equipment.mascotDialog.title')}
         </Button>
       </View>
     );
-  }
+  };
 
-  keyExtractor = (item: DeviceType): string => item.id.toString();
+  const keyExtractor = (item: DeviceType): string => item.id.toString();
 
-  createDataset = (data: ResponseType | undefined) => {
+  const createDataset = (data: ResponseType | undefined) => {
     if (data) {
-      const userRents = data.locations;
-
-      if (userRents) {
-        this.userRents = userRents;
+      if (data.locations) {
+        userRents.current = data.locations;
       }
       return [{ title: '', data: data.devices }];
     } else {
@@ -137,27 +121,19 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
     }
   };
 
-  showMascotDialog = () => {
-    this.setState({ mascotDialogVisible: true });
-  };
+  const showMascotDialog = () => setMascotDialogVisible(true);
 
-  hideMascotDialog = () => {
-    this.setState({ mascotDialogVisible: false });
-  };
+  const hideMascotDialog = () => setMascotDialogVisible(false);
 
-  request = () => {
+  const request = () => {
     return new Promise(
       (
         resolve: (data: ResponseType) => void,
         reject: (error: ApiRejectType) => void
       ) => {
-        ConnectionManager.getInstance()
-          .authenticatedRequest<{ devices: Array<DeviceType> }>('location/all')
+        requestAll()
           .then((devicesData) => {
-            ConnectionManager.getInstance()
-              .authenticatedRequest<{
-                locations: Array<RentedDeviceType>;
-              }>('location/my')
+            requestOwn()
               .then((rentsData) => {
                 resolve({
                   devices: devicesData.devices,
@@ -175,34 +151,31 @@ class EquipmentListScreen extends React.Component<PropsType, StateType> {
     );
   };
 
-  render() {
-    const { state } = this;
-    return (
-      <View style={GENERAL_STYLES.flex}>
-        <WebSectionList
-          request={this.request}
-          createDataset={this.createDataset}
-          keyExtractor={this.keyExtractor}
-          renderItem={this.getRenderItem}
-          renderListHeaderComponent={() => this.getListHeader()}
-        />
-        <MascotPopup
-          visible={state.mascotDialogVisible}
-          title={i18n.t('screens.equipment.mascotDialog.title')}
-          message={i18n.t('screens.equipment.mascotDialog.message')}
-          icon="vote"
-          buttons={{
-            cancel: {
-              message: i18n.t('screens.equipment.mascotDialog.button'),
-              icon: 'check',
-              onPress: this.hideMascotDialog,
-            },
-          }}
-          emotion={MASCOT_STYLE.WINK}
-        />
-      </View>
-    );
-  }
+  return (
+    <View style={GENERAL_STYLES.flex}>
+      <WebSectionList
+        request={request}
+        createDataset={createDataset}
+        keyExtractor={keyExtractor}
+        renderItem={getRenderItem}
+        renderListHeaderComponent={getListHeader}
+      />
+      <MascotPopup
+        visible={mascotDialogVisible}
+        title={i18n.t('screens.equipment.mascotDialog.title')}
+        message={i18n.t('screens.equipment.mascotDialog.message')}
+        icon="vote"
+        buttons={{
+          cancel: {
+            message: i18n.t('screens.equipment.mascotDialog.button'),
+            icon: 'check',
+            onPress: hideMascotDialog,
+          },
+        }}
+        emotion={MASCOT_STYLE.WINK}
+      />
+    </View>
+  );
 }
 
 export default EquipmentListScreen;

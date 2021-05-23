@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import { Button } from 'react-native-paper';
@@ -30,10 +30,10 @@ import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import VoteNotAvailable from '../../components/Amicale/Vote/VoteNotAvailable';
 import GENERAL_STYLES from '../../constants/Styles';
-import ConnectionManager from '../../managers/ConnectionManager';
 import WebSectionList, {
   SectionListDataType,
 } from '../../components/Screens/WebSectionList';
+import { useAuthenticatedRequest } from '../../context/loginContext';
 
 export type VoteTeamType = {
   id: number;
@@ -63,6 +63,13 @@ type VoteDatesObjectType = {
 type ResponseType = {
   teams?: TeamResponseType;
   dates?: VoteDatesStringType;
+};
+
+type FlatlistType = {
+  teams: Array<VoteTeamType>;
+  hasVoted: boolean;
+  datesString?: VoteDatesStringType;
+  dates?: VoteDatesObjectType;
 };
 
 // const FAKE_DATE = {
@@ -113,13 +120,6 @@ type ResponseType = {
 //     ],
 // };
 
-type PropsType = {};
-
-type StateType = {
-  hasVoted: boolean;
-  mascotDialogVisible: boolean | undefined;
-};
-
 const styles = StyleSheet.create({
   button: {
     marginLeft: 'auto',
@@ -131,38 +131,19 @@ const styles = StyleSheet.create({
 /**
  * Screen displaying vote information and controls
  */
-export default class VoteScreen extends React.Component<PropsType, StateType> {
-  teams: Array<VoteTeamType>;
+export default function VoteScreen() {
+  const [hasVoted, setHasVoted] = useState(false);
+  const [mascotDialogVisible, setMascotDialogVisible] = useState(false);
 
-  hasVoted: boolean;
+  const datesRequest = useAuthenticatedRequest<VoteDatesStringType>(
+    'elections/dates'
+  );
+  const teamsRequest = useAuthenticatedRequest<TeamResponseType>(
+    'elections/teams'
+  );
 
-  datesString: undefined | VoteDatesStringType;
-
-  dates: undefined | VoteDatesObjectType;
-
-  today: Date;
-
-  mainFlatListData: SectionListDataType<{ key: string }>;
-
-  refreshData: () => void;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.teams = [];
-    this.datesString = undefined;
-    this.dates = undefined;
-    this.state = {
-      hasVoted: false,
-      mascotDialogVisible: undefined,
-    };
-    this.hasVoted = false;
-    this.today = new Date();
-    this.refreshData = () => undefined;
-    this.mainFlatListData = [
-      { title: '', data: [{ key: 'main' }, { key: 'info' }] },
-    ];
-  }
-
+  const today = new Date();
+  const refresh = useRef<() => void | undefined>();
   /**
    * Gets the string representation of the given date.
    *
@@ -173,22 +154,26 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
    * @param dateString The string representation of the wanted date
    * @returns {string}
    */
-  getDateString(date: Date, dateString: string): string {
-    if (this.today.getDate() === date.getDate()) {
+  const getDateString = (date: Date, dateString: string) => {
+    if (today.getDate() === date.getDate()) {
       const str = getTimeOnlyString(dateString);
       return str != null ? str : '';
     }
     return dateString;
-  }
+  };
 
-  getMainRenderItem = ({ item }: { item: { key: string } }) => {
+  const getMainRenderItem = ({
+    item,
+  }: {
+    item: { key: string; data?: FlatlistType };
+  }) => {
     if (item.key === 'info') {
       return (
         <View>
           <Button
             mode="contained"
             icon="help-circle"
-            onPress={this.showMascotDialog}
+            onPress={showMascotDialog}
             style={styles.button}
           >
             {i18n.t('screens.vote.mascotDialog.title')}
@@ -196,10 +181,14 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
         </View>
       );
     }
-    return this.getContent();
+    if (item.data) {
+      return getContent(item.data);
+    } else {
+      return <View />;
+    }
   };
 
-  createDataset = (
+  const createDataset = (
     data: ResponseType | undefined,
     _loading: boolean,
     _lastRefreshDate: Date | undefined,
@@ -207,157 +196,158 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
   ) => {
     // data[0] = FAKE_TEAMS2;
     // data[1] = FAKE_DATE;
-    this.refreshData = refreshData;
+
+    const mainFlatListData: SectionListDataType<{
+      key: string;
+      data?: FlatlistType;
+    }> = [
+      {
+        title: '',
+        data: [{ key: 'main' }, { key: 'info' }],
+      },
+    ];
+    refresh.current = refreshData;
     if (data) {
       const { teams, dates } = data;
-
-      if (dates && dates.date_begin == null) {
-        this.datesString = undefined;
-      } else {
-        this.datesString = dates;
+      const flatlistData: FlatlistType = {
+        teams: [],
+        hasVoted: false,
+      };
+      if (dates && dates.date_begin != null) {
+        flatlistData.datesString = dates;
       }
-
       if (teams) {
-        this.teams = teams.teams;
-        this.hasVoted = teams.has_voted;
+        flatlistData.teams = teams.teams;
+        flatlistData.hasVoted = teams.has_voted;
       }
-
-      this.generateDateObject();
+      flatlistData.dates = generateDateObject(flatlistData.datesString);
     }
-    return this.mainFlatListData;
+    return mainFlatListData;
   };
 
-  getContent() {
-    const { state } = this;
-    if (!this.isVoteStarted()) {
-      return this.getTeaseVoteCard();
+  const getContent = (data: FlatlistType) => {
+    const { dates } = data;
+    if (!isVoteStarted(dates)) {
+      return getTeaseVoteCard(data);
     }
-    if (this.isVoteRunning() && !this.hasVoted && !state.hasVoted) {
-      return this.getVoteCard();
+    if (isVoteRunning(dates) && !data.hasVoted && !hasVoted) {
+      return getVoteCard(data);
     }
-    if (!this.isResultStarted()) {
-      return this.getWaitVoteCard();
+    if (!isResultStarted(dates)) {
+      return getWaitVoteCard(data);
     }
-    if (this.isResultRunning()) {
-      return this.getVoteResultCard();
+    if (isResultRunning(dates)) {
+      return getVoteResultCard(data);
     }
     return <VoteNotAvailable />;
-  }
+  };
 
-  onVoteSuccess = (): void => this.setState({ hasVoted: true });
-
+  const onVoteSuccess = () => setHasVoted(true);
   /**
    * The user has not voted yet, and the votes are open
    */
-  getVoteCard() {
+  const getVoteCard = (data: FlatlistType) => {
     return (
       <VoteSelect
-        teams={this.teams}
-        onVoteSuccess={this.onVoteSuccess}
-        onVoteError={this.refreshData}
+        teams={data.teams}
+        onVoteSuccess={onVoteSuccess}
+        onVoteError={() => {
+          if (refresh.current) {
+            refresh.current();
+          }
+        }}
       />
     );
-  }
-
+  };
   /**
    * Votes have ended, results can be displayed
    */
-  getVoteResultCard() {
-    if (this.dates != null && this.datesString != null) {
+  const getVoteResultCard = (data: FlatlistType) => {
+    if (data.dates != null && data.datesString != null) {
       return (
         <VoteResults
-          teams={this.teams}
-          dateEnd={this.getDateString(
-            this.dates.date_result_end,
-            this.datesString.date_result_end
+          teams={data.teams}
+          dateEnd={getDateString(
+            data.dates.date_result_end,
+            data.datesString.date_result_end
           )}
         />
       );
     }
     return <VoteNotAvailable />;
-  }
-
+  };
   /**
    * Vote will open shortly
    */
-  getTeaseVoteCard() {
-    if (this.dates != null && this.datesString != null) {
+  const getTeaseVoteCard = (data: FlatlistType) => {
+    if (data.dates != null && data.datesString != null) {
       return (
         <VoteTease
-          startDate={this.getDateString(
-            this.dates.date_begin,
-            this.datesString.date_begin
+          startDate={getDateString(
+            data.dates.date_begin,
+            data.datesString.date_begin
           )}
         />
       );
     }
     return <VoteNotAvailable />;
-  }
-
+  };
   /**
    * Votes have ended, or user has voted waiting for results
    */
-  getWaitVoteCard() {
-    const { state } = this;
+  const getWaitVoteCard = (data: FlatlistType) => {
     let startDate = null;
     if (
-      this.dates != null &&
-      this.datesString != null &&
-      this.dates.date_result_begin != null
+      data.dates != null &&
+      data.datesString != null &&
+      data.dates.date_result_begin != null
     ) {
-      startDate = this.getDateString(
-        this.dates.date_result_begin,
-        this.datesString.date_result_begin
+      startDate = getDateString(
+        data.dates.date_result_begin,
+        data.datesString.date_result_begin
       );
     }
     return (
       <VoteWait
         startDate={startDate}
-        hasVoted={this.hasVoted || state.hasVoted}
-        justVoted={state.hasVoted}
-        isVoteRunning={this.isVoteRunning()}
+        hasVoted={data.hasVoted}
+        justVoted={hasVoted}
+        isVoteRunning={isVoteRunning()}
       />
     );
-  }
-
-  showMascotDialog = () => {
-    this.setState({ mascotDialogVisible: true });
   };
 
-  hideMascotDialog = () => {
-    this.setState({ mascotDialogVisible: false });
+  const showMascotDialog = () => setMascotDialogVisible(true);
+
+  const hideMascotDialog = () => setMascotDialogVisible(false);
+
+  const isVoteStarted = (dates?: VoteDatesObjectType) => {
+    return dates != null && today > dates.date_begin;
   };
 
-  isVoteStarted(): boolean {
-    return this.dates != null && this.today > this.dates.date_begin;
-  }
-
-  isResultRunning(): boolean {
+  const isResultRunning = (dates?: VoteDatesObjectType) => {
     return (
-      this.dates != null &&
-      this.today > this.dates.date_result_begin &&
-      this.today < this.dates.date_result_end
+      dates != null &&
+      today > dates.date_result_begin &&
+      today < dates.date_result_end
     );
-  }
+  };
 
-  isResultStarted(): boolean {
-    return this.dates != null && this.today > this.dates.date_result_begin;
-  }
+  const isResultStarted = (dates?: VoteDatesObjectType) => {
+    return dates != null && today > dates.date_result_begin;
+  };
 
-  isVoteRunning(): boolean {
-    return (
-      this.dates != null &&
-      this.today > this.dates.date_begin &&
-      this.today < this.dates.date_end
-    );
-  }
+  const isVoteRunning = (dates?: VoteDatesObjectType) => {
+    return dates != null && today > dates.date_begin && today < dates.date_end;
+  };
 
   /**
    * Generates the objects containing string and Date representations of key vote dates
    */
-  generateDateObject() {
-    const strings = this.datesString;
-    if (strings != null) {
+  const generateDateObject = (
+    strings?: VoteDatesStringType
+  ): VoteDatesObjectType | undefined => {
+    if (strings) {
       const dateBegin = stringToDate(strings.date_begin);
       const dateEnd = stringToDate(strings.date_end);
       const dateResultBegin = stringToDate(strings.date_result_begin);
@@ -368,27 +358,25 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
         dateResultBegin != null &&
         dateResultEnd != null
       ) {
-        this.dates = {
+        return {
           date_begin: dateBegin,
           date_end: dateEnd,
           date_result_begin: dateResultBegin,
           date_result_end: dateResultEnd,
         };
       } else {
-        this.dates = undefined;
+        return undefined;
       }
     } else {
-      this.dates = undefined;
+      return undefined;
     }
-  }
+  };
 
-  request = () => {
+  const request = () => {
     return new Promise((resolve: (data: ResponseType) => void) => {
-      ConnectionManager.getInstance()
-        .authenticatedRequest<VoteDatesStringType>('elections/dates')
+      datesRequest()
         .then((datesData) => {
-          ConnectionManager.getInstance()
-            .authenticatedRequest<TeamResponseType>('elections/teams')
+          teamsRequest()
             .then((teamsData) => {
               resolve({
                 dates: datesData,
@@ -405,38 +393,28 @@ export default class VoteScreen extends React.Component<PropsType, StateType> {
     });
   };
 
-  /**
-   * Renders the authenticated screen.
-   *
-   * Teams and dates are not mandatory to allow showing the information box even if api requests fail
-   *
-   * @returns {*}
-   */
-  render() {
-    const { state } = this;
-    return (
-      <View style={GENERAL_STYLES.flex}>
-        <WebSectionList
-          request={this.request}
-          createDataset={this.createDataset}
-          extraData={state.hasVoted.toString()}
-          renderItem={this.getMainRenderItem}
-        />
-        <MascotPopup
-          visible={state.mascotDialogVisible}
-          title={i18n.t('screens.vote.mascotDialog.title')}
-          message={i18n.t('screens.vote.mascotDialog.message')}
-          icon="vote"
-          buttons={{
-            cancel: {
-              message: i18n.t('screens.vote.mascotDialog.button'),
-              icon: 'check',
-              onPress: this.hideMascotDialog,
-            },
-          }}
-          emotion={MASCOT_STYLE.CUTE}
-        />
-      </View>
-    );
-  }
+  return (
+    <View style={GENERAL_STYLES.flex}>
+      <WebSectionList
+        request={request}
+        createDataset={createDataset}
+        extraData={hasVoted.toString()}
+        renderItem={getMainRenderItem}
+      />
+      <MascotPopup
+        visible={mascotDialogVisible}
+        title={i18n.t('screens.vote.mascotDialog.title')}
+        message={i18n.t('screens.vote.mascotDialog.message')}
+        icon="vote"
+        buttons={{
+          cancel: {
+            message: i18n.t('screens.vote.mascotDialog.button'),
+            icon: 'check',
+            onPress: hideMascotDialog,
+          },
+        }}
+        emotion={MASCOT_STYLE.CUTE}
+      />
+    </View>
+  );
 }

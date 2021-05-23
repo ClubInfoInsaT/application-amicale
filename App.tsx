@@ -21,7 +21,6 @@ import React from 'react';
 import { LogBox, Platform } from 'react-native';
 import { setSafeBounceHeight } from 'react-navigation-collapsible';
 import SplashScreen from 'react-native-splash-screen';
-import ConnectionManager from './src/managers/ConnectionManager';
 import type { ParsedUrlDataType } from './src/utils/URLHandler';
 import URLHandler from './src/utils/URLHandler';
 import initLocales from './src/utils/Locales';
@@ -48,6 +47,8 @@ import {
   ProxiwashPreferencesProvider,
 } from './src/components/providers/PreferencesProvider';
 import MainApp from './src/screens/MainApp';
+import LoginProvider from './src/components/providers/LoginProvider';
+import { retrieveLoginToken } from './src/utils/loginToken';
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 // Crashes app when navigating away from webview on android 9+
@@ -67,6 +68,7 @@ type StateType = {
     proxiwash: ProxiwashPreferencesType;
     mascot: MascotPreferencesType;
   };
+  loginToken?: string;
 };
 
 export default class App extends React.Component<{}, StateType> {
@@ -88,6 +90,7 @@ export default class App extends React.Component<{}, StateType> {
         proxiwash: defaultProxiwashPreferences,
         mascot: defaultMascotPreferences,
       },
+      loginToken: undefined,
     };
     initLocales();
     this.navigatorRef = React.createRef();
@@ -136,10 +139,11 @@ export default class App extends React.Component<{}, StateType> {
       | PlanexPreferencesType
       | ProxiwashPreferencesType
       | MascotPreferencesType
-      | void
+      | string
+      | undefined
     >
   ) => {
-    const [general, planex, proxiwash, mascot] = values;
+    const [general, planex, proxiwash, mascot, token] = values;
     this.setState({
       isLoading: false,
       initialPreferences: {
@@ -148,6 +152,7 @@ export default class App extends React.Component<{}, StateType> {
         proxiwash: proxiwash as ProxiwashPreferencesType,
         mascot: mascot as MascotPreferencesType,
       },
+      loginToken: token as string | undefined,
     });
     SplashScreen.hide();
   };
@@ -175,7 +180,7 @@ export default class App extends React.Component<{}, StateType> {
         Object.values(MascotPreferenceKeys),
         defaultMascotPreferences
       ),
-      ConnectionManager.getInstance().recoverLogin(),
+      retrieveLoginToken(),
     ])
       .then(this.onLoadFinished)
       .catch(this.onLoadFinished);
@@ -202,11 +207,13 @@ export default class App extends React.Component<{}, StateType> {
             <MascotPreferencesProvider
               initialPreferences={this.state.initialPreferences.mascot}
             >
-              <MainApp
-                ref={this.navigatorRef}
-                defaultHomeData={this.defaultHomeData}
-                defaultHomeRoute={this.defaultHomeRoute}
-              />
+              <LoginProvider initialToken={this.state.loginToken}>
+                <MainApp
+                  ref={this.navigatorRef}
+                  defaultHomeData={this.defaultHomeData}
+                  defaultHomeRoute={this.defaultHomeRoute}
+                />
+              </LoginProvider>
             </MascotPreferencesProvider>
           </ProxiwashPreferencesProvider>
         </PlanexPreferencesProvider>

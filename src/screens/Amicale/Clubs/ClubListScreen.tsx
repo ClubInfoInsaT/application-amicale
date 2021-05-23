@@ -17,11 +17,10 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { StackNavigationProp } from '@react-navigation/stack';
 import ClubListItem from '../../../components/Lists/Clubs/ClubListItem';
 import {
   isItemInCategoryFilter,
@@ -31,8 +30,9 @@ import ClubListHeader from '../../../components/Lists/Clubs/ClubListHeader';
 import MaterialHeaderButtons, {
   Item,
 } from '../../../components/Overrides/CustomHeaderButton';
-import ConnectionManager from '../../../managers/ConnectionManager';
 import WebSectionList from '../../../components/Screens/WebSectionList';
+import { useNavigation } from '@react-navigation/native';
+import { useAuthenticatedRequest } from '../../../context/loginContext';
 
 export type ClubCategoryType = {
   id: number;
@@ -49,15 +49,6 @@ export type ClubType = {
   responsibles: Array<string>;
 };
 
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-};
-
-type StateType = {
-  currentlySelectedCategories: Array<number>;
-  currentSearchString: string;
-};
-
 type ResponseType = {
   categories: Array<ClubCategoryType>;
   clubs: Array<ClubType>;
@@ -65,33 +56,52 @@ type ResponseType = {
 
 const LIST_ITEM_HEIGHT = 96;
 
-class ClubListScreen extends React.Component<PropsType, StateType> {
-  categories: Array<ClubCategoryType>;
+function ClubListScreen() {
+  const navigation = useNavigation();
+  const request = useAuthenticatedRequest<ResponseType>('clubs/list');
+  const [
+    currentlySelectedCategories,
+    setCurrentlySelectedCategories,
+  ] = useState<Array<number>>([]);
+  const [currentSearchString, setCurrentSearchString] = useState('');
+  const categories = useRef<Array<ClubCategoryType>>([]);
 
-  constructor(props: PropsType) {
-    super(props);
-    this.categories = [];
-    this.state = {
-      currentlySelectedCategories: [],
-      currentSearchString: '',
+  useLayoutEffect(() => {
+    const getSearchBar = () => {
+      return (
+        // @ts-ignore
+        <Searchbar
+          placeholder={i18n.t('screens.proximo.search')}
+          onChangeText={onSearchStringChange}
+        />
+      );
     };
-  }
-
-  /**
-   * Creates the header content
-   */
-  componentDidMount() {
-    const { props } = this;
-    props.navigation.setOptions({
-      headerTitle: this.getSearchBar,
-      headerRight: this.getHeaderButtons,
+    const getHeaderButtons = () => {
+      return (
+        <MaterialHeaderButtons>
+          <Item
+            title="main"
+            iconName="information"
+            onPress={() => navigation.navigate('club-about')}
+          />
+        </MaterialHeaderButtons>
+      );
+    };
+    navigation.setOptions({
+      headerTitle: getSearchBar,
+      headerRight: getHeaderButtons,
       headerBackTitleVisible: false,
       headerTitleContainerStyle:
         Platform.OS === 'ios'
           ? { marginHorizontal: 0, width: '70%' }
           : { marginHorizontal: 0, right: 50, left: 50 },
     });
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation]);
+
+  const onSearchStringChange = (str: string) => {
+    updateFilteredData(str, null);
+  };
 
   /**
    * Callback used when clicking an article in the list.
@@ -99,61 +109,20 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    *
    * @param item The article pressed
    */
-  onListItemPress(item: ClubType) {
-    const { props } = this;
-    props.navigation.navigate('club-information', {
+  const onListItemPress = (item: ClubType) => {
+    navigation.navigate('club-information', {
       data: item,
-      categories: this.categories,
+      categories: categories.current,
     });
-  }
-
-  /**
-   * Callback used when the search changes
-   *
-   * @param str The new search string
-   */
-  onSearchStringChange = (str: string) => {
-    this.updateFilteredData(str, null);
   };
 
-  /**
-   * Gets the header search bar
-   *
-   * @return {*}
-   */
-  getSearchBar = () => {
-    return (
-      // @ts-ignore
-      <Searchbar
-        placeholder={i18n.t('screens.proximo.search')}
-        onChangeText={this.onSearchStringChange}
-      />
-    );
+  const onChipSelect = (id: number) => {
+    updateFilteredData(null, id);
   };
 
-  onChipSelect = (id: number) => {
-    this.updateFilteredData(null, id);
-  };
-
-  /**
-   * Gets the header button
-   * @return {*}
-   */
-  getHeaderButtons = () => {
-    const onPress = () => {
-      const { props } = this;
-      props.navigation.navigate('club-about');
-    };
-    return (
-      <MaterialHeaderButtons>
-        <Item title="main" iconName="information" onPress={onPress} />
-      </MaterialHeaderButtons>
-    );
-  };
-
-  createDataset = (data: ResponseType | undefined) => {
+  const createDataset = (data: ResponseType | undefined) => {
     if (data) {
-      this.categories = data?.categories;
+      categories.current = data.categories;
       return [{ title: '', data: data.clubs }];
     } else {
       return [];
@@ -165,30 +134,23 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    *
    * @returns {*}
    */
-  getListHeader(data: ResponseType | undefined) {
-    const { state } = this;
+  const getListHeader = (data: ResponseType | undefined) => {
     if (data) {
       return (
         <ClubListHeader
-          categories={this.categories}
-          selectedCategories={state.currentlySelectedCategories}
-          onChipSelect={this.onChipSelect}
+          categories={categories.current}
+          selectedCategories={currentlySelectedCategories}
+          onChipSelect={onChipSelect}
         />
       );
     } else {
       return null;
     }
-  }
+  };
 
-  /**
-   * Gets the category object of the given ID
-   *
-   * @param id The ID of the category to find
-   * @returns {*}
-   */
-  getCategoryOfId = (id: number): ClubCategoryType | null => {
+  const getCategoryOfId = (id: number): ClubCategoryType | null => {
     let cat = null;
-    this.categories.forEach((item: ClubCategoryType) => {
+    categories.current.forEach((item: ClubCategoryType) => {
       if (id === item.id) {
         cat = item;
       }
@@ -196,14 +158,14 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
     return cat;
   };
 
-  getRenderItem = ({ item }: { item: ClubType }) => {
+  const getRenderItem = ({ item }: { item: ClubType }) => {
     const onPress = () => {
-      this.onListItemPress(item);
+      onListItemPress(item);
     };
-    if (this.shouldRenderItem(item)) {
+    if (shouldRenderItem(item)) {
       return (
         <ClubListItem
-          categoryTranslator={this.getCategoryOfId}
+          categoryTranslator={getCategoryOfId}
           item={item}
           onPress={onPress}
           height={LIST_ITEM_HEIGHT}
@@ -213,7 +175,7 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
     return null;
   };
 
-  keyExtractor = (item: ClubType): string => item.id.toString();
+  const keyExtractor = (item: ClubType): string => item.id.toString();
 
   /**
    * Updates the search string and category filter, saving them to the State.
@@ -224,10 +186,12 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    * @param filterStr The new filter string to use
    * @param categoryId The category to add/remove from the filter
    */
-  updateFilteredData(filterStr: string | null, categoryId: number | null) {
-    const { state } = this;
-    const newCategoriesState = [...state.currentlySelectedCategories];
-    let newStrState = state.currentSearchString;
+  const updateFilteredData = (
+    filterStr: string | null,
+    categoryId: number | null
+  ) => {
+    const newCategoriesState = [...currentlySelectedCategories];
+    let newStrState = currentSearchString;
     if (filterStr !== null) {
       newStrState = filterStr;
     }
@@ -240,12 +204,10 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
       }
     }
     if (filterStr !== null || categoryId !== null) {
-      this.setState({
-        currentSearchString: newStrState,
-        currentlySelectedCategories: newCategoriesState,
-      });
+      setCurrentSearchString(newStrState);
+      setCurrentlySelectedCategories(newCategoriesState);
     }
-  }
+  };
 
   /**
    * Checks if the given item should be rendered according to current name and category filters
@@ -253,35 +215,28 @@ class ClubListScreen extends React.Component<PropsType, StateType> {
    * @param item The club to check
    * @returns {boolean}
    */
-  shouldRenderItem(item: ClubType): boolean {
-    const { state } = this;
+  const shouldRenderItem = (item: ClubType): boolean => {
     let shouldRender =
-      state.currentlySelectedCategories.length === 0 ||
-      isItemInCategoryFilter(state.currentlySelectedCategories, item.category);
+      currentlySelectedCategories.length === 0 ||
+      isItemInCategoryFilter(currentlySelectedCategories, item.category);
     if (shouldRender) {
-      shouldRender = stringMatchQuery(item.name, state.currentSearchString);
+      shouldRender = stringMatchQuery(item.name, currentSearchString);
     }
     return shouldRender;
-  }
+  };
 
-  render() {
-    return (
-      <WebSectionList
-        request={() =>
-          ConnectionManager.getInstance().authenticatedRequest<ResponseType>(
-            'clubs/list'
-          )
-        }
-        createDataset={this.createDataset}
-        keyExtractor={this.keyExtractor}
-        renderItem={this.getRenderItem}
-        renderListHeaderComponent={(data) => this.getListHeader(data)}
-        // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-        removeClippedSubviews={true}
-        itemHeight={LIST_ITEM_HEIGHT}
-      />
-    );
-  }
+  return (
+    <WebSectionList
+      request={request}
+      createDataset={createDataset}
+      keyExtractor={keyExtractor}
+      renderItem={getRenderItem}
+      renderListHeaderComponent={getListHeader}
+      // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+      removeClippedSubviews={true}
+      itemHeight={LIST_ITEM_HEIGHT}
+    />
+  );
 }
 
 export default ClubListScreen;

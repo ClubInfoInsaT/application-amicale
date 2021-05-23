@@ -17,52 +17,29 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import {
-  Avatar,
-  Button,
-  Card,
-  Divider,
-  List,
-  Paragraph,
-  withTheme,
-} from 'react-native-paper';
-import i18n from 'i18n-js';
-import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useLayoutEffect, useState } from 'react';
+import { View } from 'react-native';
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
-import CardList from '../../components/Lists/CardList/CardList';
-import Mascot, { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import GENERAL_STYLES from '../../constants/Styles';
-import Urls from '../../constants/Urls';
 import RequestScreen from '../../components/Screens/RequestScreen';
-import ConnectionManager from '../../managers/ConnectionManager';
-import {
-  getAmicaleServices,
-  ServiceItemType,
-  SERVICES_KEY,
-} from '../../utils/Services';
+import ProfileWelcomeCard from '../../components/Amicale/Profile/ProfileWelcomeCard';
+import ProfilePersonalCard from '../../components/Amicale/Profile/ProfilePersonalCard';
+import ProfileClubCard from '../../components/Amicale/Profile/ProfileClubCard';
+import ProfileMembershipCard from '../../components/Amicale/Profile/ProfileMembershipCard';
+import { useNavigation } from '@react-navigation/core';
+import { useAuthenticatedRequest } from '../../context/loginContext';
 
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  theme: ReactNativePaper.Theme;
-};
-
-type StateType = {
-  dialogVisible: boolean;
-};
-
-type ClubType = {
+export type ProfileClubType = {
   id: number;
   name: string;
   is_manager: boolean;
 };
 
-type ProfileDataType = {
+export type ProfileDataType = {
   first_name: string;
   last_name: string;
   email: string;
@@ -71,87 +48,68 @@ type ProfileDataType = {
   branch: string;
   link: string;
   validity: boolean;
-  clubs: Array<ClubType>;
+  clubs: Array<ProfileClubType>;
 };
 
-const styles = StyleSheet.create({
-  card: {
-    margin: 10,
-  },
-  icon: {
-    backgroundColor: 'transparent',
-  },
-  editButton: {
-    marginLeft: 'auto',
-  },
-  mascot: {
-    width: 60,
-  },
-  title: {
-    marginLeft: 10,
-  },
-});
+function ProfileScreen() {
+  const navigation = useNavigation();
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const request = useAuthenticatedRequest<ProfileDataType>('user/profile');
 
-class ProfileScreen extends React.Component<PropsType, StateType> {
-  data: ProfileDataType | undefined;
-
-  flatListData: Array<{ id: string }>;
-
-  amicaleDataset: Array<ServiceItemType>;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.data = undefined;
-    this.flatListData = [{ id: '0' }, { id: '1' }, { id: '2' }, { id: '3' }];
-    this.amicaleDataset = getAmicaleServices(props.navigation.navigate, [
-      SERVICES_KEY.PROFILE,
-    ]);
-    this.state = {
-      dialogVisible: false,
-    };
-  }
-
-  componentDidMount() {
-    const { navigation } = this.props;
+  useLayoutEffect(() => {
+    const getHeaderButton = () => (
+      <MaterialHeaderButtons>
+        <Item
+          title={'logout'}
+          iconName={'logout'}
+          onPress={showDisconnectDialog}
+        />
+      </MaterialHeaderButtons>
+    );
     navigation.setOptions({
-      headerRight: this.getHeaderButton,
+      headerRight: getHeaderButton,
     });
-  }
+  }, [navigation]);
 
-  /**
-   * Gets the logout header button
-   *
-   * @returns {*}
-   */
-  getHeaderButton = () => (
-    <MaterialHeaderButtons>
-      <Item
-        title="logout"
-        iconName="logout"
-        onPress={this.showDisconnectDialog}
-      />
-    </MaterialHeaderButtons>
-  );
-
-  /**
-   * Gets the main screen component with the fetched data
-   *
-   * @param data The data fetched from the server
-   * @returns {*}
-   */
-  getScreen = (data: ProfileDataType | undefined) => {
-    const { dialogVisible } = this.state;
+  const getScreen = (data: ProfileDataType | undefined) => {
     if (data) {
-      this.data = data;
+      const flatListData: Array<{
+        id: string;
+        render: () => React.ReactElement;
+      }> = [];
+      for (let i = 0; i < 4; i++) {
+        switch (i) {
+          case 0:
+            flatListData.push({
+              id: i.toString(),
+              render: () => <ProfileWelcomeCard firstname={data?.first_name} />,
+            });
+            break;
+          case 1:
+            flatListData.push({
+              id: i.toString(),
+              render: () => <ProfilePersonalCard profile={data} />,
+            });
+            break;
+          case 2:
+            flatListData.push({
+              id: i.toString(),
+              render: () => <ProfileClubCard clubs={data?.clubs} />,
+            });
+            break;
+          default:
+            flatListData.push({
+              id: i.toString(),
+              render: () => <ProfileMembershipCard valid={data?.validity} />,
+            });
+        }
+      }
       return (
         <View style={GENERAL_STYLES.flex}>
-          <CollapsibleFlatList
-            renderItem={this.getRenderItem}
-            data={this.flatListData}
-          />
+          <CollapsibleFlatList renderItem={getRenderItem} data={flatListData} />
           <LogoutDialog
             visible={dialogVisible}
-            onDismiss={this.hideDisconnectDialog}
+            onDismiss={hideDisconnectDialog}
           />
         </View>
       );
@@ -160,346 +118,17 @@ class ProfileScreen extends React.Component<PropsType, StateType> {
     }
   };
 
-  getRenderItem = ({ item }: { item: { id: string } }) => {
-    switch (item.id) {
-      case '0':
-        return this.getWelcomeCard();
-      case '1':
-        return this.getPersonalCard();
-      case '2':
-        return this.getClubCard();
-      default:
-        return this.getMembershipCar();
-    }
-  };
+  const getRenderItem = ({
+    item,
+  }: {
+    item: { id: string; render: () => React.ReactElement };
+  }) => item.render();
 
-  /**
-   * Gets the list of services available with the Amicale account
-   *
-   * @returns {*}
-   */
-  getServicesList() {
-    return <CardList dataset={this.amicaleDataset} isHorizontal />;
-  }
+  const showDisconnectDialog = () => setDialogVisible(true);
 
-  /**
-   * Gets a card welcoming the user to his account
-   *
-   * @returns {*}
-   */
-  getWelcomeCard() {
-    const { navigation } = this.props;
-    return (
-      <Card style={styles.card}>
-        <Card.Title
-          title={i18n.t('screens.profile.welcomeTitle', {
-            name: this.data?.first_name,
-          })}
-          left={() => (
-            <Mascot
-              style={styles.mascot}
-              emotion={MASCOT_STYLE.COOL}
-              animated
-              entryAnimation={{
-                animation: 'bounceIn',
-                duration: 1000,
-              }}
-            />
-          )}
-          titleStyle={styles.title}
-        />
-        <Card.Content>
-          <Divider />
-          <Paragraph>{i18n.t('screens.profile.welcomeDescription')}</Paragraph>
-          {this.getServicesList()}
-          <Paragraph>{i18n.t('screens.profile.welcomeFeedback')}</Paragraph>
-          <Divider />
-          <Card.Actions>
-            <Button
-              icon="bug"
-              mode="contained"
-              onPress={() => {
-                navigation.navigate('feedback');
-              }}
-              style={styles.editButton}
-            >
-              {i18n.t('screens.feedback.homeButtonTitle')}
-            </Button>
-          </Card.Actions>
-        </Card.Content>
-      </Card>
-    );
-  }
+  const hideDisconnectDialog = () => setDialogVisible(false);
 
-  /**
-   * Gets the given field value.
-   * If the field does not have a value, returns a placeholder text
-   *
-   * @param field The field to get the value from
-   * @return {*}
-   */
-  static getFieldValue(field?: string): string {
-    return field ? field : i18n.t('screens.profile.noData');
-  }
-
-  /**
-   * Gets a list item showing personal information
-   *
-   * @param field The field to display
-   * @param icon The icon to use
-   * @return {*}
-   */
-  getPersonalListItem(field: string | undefined, icon: string) {
-    const { theme } = this.props;
-    const title = field != null ? ProfileScreen.getFieldValue(field) : ':(';
-    const subtitle = field != null ? '' : ProfileScreen.getFieldValue(field);
-    return (
-      <List.Item
-        title={title}
-        description={subtitle}
-        left={(props) => (
-          <List.Icon
-            style={props.style}
-            icon={icon}
-            color={field != null ? props.color : theme.colors.textDisabled}
-          />
-        )}
-      />
-    );
-  }
-
-  /**
-   * Gets a card containing user personal information
-   *
-   * @return {*}
-   */
-  getPersonalCard() {
-    const { theme, navigation } = this.props;
-    return (
-      <Card style={styles.card}>
-        <Card.Title
-          title={`${this.data?.first_name} ${this.data?.last_name}`}
-          subtitle={this.data?.email}
-          left={(iconProps) => (
-            <Avatar.Icon
-              size={iconProps.size}
-              icon="account"
-              color={theme.colors.primary}
-              style={styles.icon}
-            />
-          )}
-        />
-        <Card.Content>
-          <Divider />
-          <List.Section>
-            <List.Subheader>
-              {i18n.t('screens.profile.personalInformation')}
-            </List.Subheader>
-            {this.getPersonalListItem(this.data?.birthday, 'cake-variant')}
-            {this.getPersonalListItem(this.data?.phone, 'phone')}
-            {this.getPersonalListItem(this.data?.email, 'email')}
-            {this.getPersonalListItem(this.data?.branch, 'school')}
-          </List.Section>
-          <Divider />
-          <Card.Actions>
-            <Button
-              icon="account-edit"
-              mode="contained"
-              onPress={() => {
-                navigation.navigate('website', {
-                  host: Urls.websites.amicale,
-                  path: this.data?.link,
-                  title: i18n.t('screens.websites.amicale'),
-                });
-              }}
-              style={styles.editButton}
-            >
-              {i18n.t('screens.profile.editInformation')}
-            </Button>
-          </Card.Actions>
-        </Card.Content>
-      </Card>
-    );
-  }
-
-  /**
-   * Gets a cars containing clubs the user is part of
-   *
-   * @return {*}
-   */
-  getClubCard() {
-    const { theme } = this.props;
-    return (
-      <Card style={styles.card}>
-        <Card.Title
-          title={i18n.t('screens.profile.clubs')}
-          subtitle={i18n.t('screens.profile.clubsSubtitle')}
-          left={(iconProps) => (
-            <Avatar.Icon
-              size={iconProps.size}
-              icon="account-group"
-              color={theme.colors.primary}
-              style={styles.icon}
-            />
-          )}
-        />
-        <Card.Content>
-          <Divider />
-          {this.getClubList(this.data?.clubs)}
-        </Card.Content>
-      </Card>
-    );
-  }
-
-  /**
-   * Gets a card showing if the user has payed his membership
-   *
-   * @return {*}
-   */
-  getMembershipCar() {
-    const { theme } = this.props;
-    return (
-      <Card style={styles.card}>
-        <Card.Title
-          title={i18n.t('screens.profile.membership')}
-          subtitle={i18n.t('screens.profile.membershipSubtitle')}
-          left={(iconProps) => (
-            <Avatar.Icon
-              size={iconProps.size}
-              icon="credit-card"
-              color={theme.colors.primary}
-              style={styles.icon}
-            />
-          )}
-        />
-        <Card.Content>
-          <List.Section>
-            {this.getMembershipItem(this.data?.validity === true)}
-          </List.Section>
-        </Card.Content>
-      </Card>
-    );
-  }
-
-  /**
-   * Gets the item showing if the user has payed his membership
-   *
-   * @return {*}
-   */
-  getMembershipItem(state: boolean) {
-    const { theme } = this.props;
-    return (
-      <List.Item
-        title={
-          state
-            ? i18n.t('screens.profile.membershipPayed')
-            : i18n.t('screens.profile.membershipNotPayed')
-        }
-        left={(props) => (
-          <List.Icon
-            style={props.style}
-            color={state ? theme.colors.success : theme.colors.danger}
-            icon={state ? 'check' : 'close'}
-          />
-        )}
-      />
-    );
-  }
-
-  /**
-   * Gets a list item for the club list
-   *
-   * @param item The club to render
-   * @return {*}
-   */
-  getClubListItem = ({ item }: { item: ClubType }) => {
-    const { theme } = this.props;
-    const onPress = () => {
-      this.openClubDetailsScreen(item.id);
-    };
-    let description = i18n.t('screens.profile.isMember');
-    let icon = (props: {
-      color: string;
-      style: {
-        marginLeft: number;
-        marginRight: number;
-        marginVertical?: number;
-      };
-    }) => (
-      <List.Icon color={props.color} style={props.style} icon="chevron-right" />
-    );
-    if (item.is_manager) {
-      description = i18n.t('screens.profile.isManager');
-      icon = (props) => (
-        <List.Icon
-          style={props.style}
-          icon="star"
-          color={theme.colors.primary}
-        />
-      );
-    }
-    return (
-      <List.Item
-        title={item.name}
-        description={description}
-        left={icon}
-        onPress={onPress}
-      />
-    );
-  };
-
-  /**
-   * Renders the list of clubs the user is part of
-   *
-   * @param list The club list
-   * @return {*}
-   */
-  getClubList(list: Array<ClubType> | undefined) {
-    if (!list) {
-      return null;
-    }
-
-    list.sort(this.sortClubList);
-    return (
-      <FlatList
-        renderItem={this.getClubListItem}
-        keyExtractor={this.clubKeyExtractor}
-        data={list}
-      />
-    );
-  }
-
-  clubKeyExtractor = (item: ClubType): string => item.name;
-
-  sortClubList = (a: ClubType): number => (a.is_manager ? -1 : 1);
-
-  showDisconnectDialog = () => {
-    this.setState({ dialogVisible: true });
-  };
-
-  hideDisconnectDialog = () => {
-    this.setState({ dialogVisible: false });
-  };
-
-  /**
-   * Opens the club details screen for the club of given ID
-   * @param id The club's id to open
-   */
-  openClubDetailsScreen(id: number) {
-    const { navigation } = this.props;
-    navigation.navigate('club-information', { clubId: id });
-  }
-
-  render() {
-    return (
-      <RequestScreen<ProfileDataType>
-        request={() =>
-          ConnectionManager.getInstance().authenticatedRequest('user/profile')
-        }
-        render={this.getScreen}
-      />
-    );
-  }
+  return <RequestScreen request={request} render={getScreen} />;
 }
 
-export default withTheme(ProfileScreen);
+export default ProfileScreen;

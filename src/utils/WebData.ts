@@ -80,7 +80,8 @@ export function isApiResponseValid<T>(response: ApiResponseType<T>): boolean {
 export async function apiRequest<T>(
   path: string,
   method: string,
-  params?: object
+  params?: object,
+  token?: string
 ): Promise<T> {
   return new Promise(
     (resolve: (data: T) => void, reject: (error: ApiRejectType) => void) => {
@@ -88,7 +89,9 @@ export async function apiRequest<T>(
       if (params != null) {
         requestParams = { ...params };
       }
-      console.log(Urls.amicale.api + path);
+      if (token) {
+        requestParams = { ...requestParams, token: token };
+      }
 
       fetch(Urls.amicale.api + path, {
         method,
@@ -130,6 +133,33 @@ export async function apiRequest<T>(
           reject({
             status: REQUEST_STATUS.CONNECTION_ERROR,
           });
+        });
+    }
+  );
+}
+
+export async function connectToAmicale(email: string, password: string) {
+  return new Promise(
+    (
+      resolve: (token: string) => void,
+      reject: (error: ApiRejectType) => void
+    ) => {
+      const data = {
+        email,
+        password,
+      };
+      apiRequest<ApiDataLoginType>('password', 'POST', data)
+        .then((response: ApiDataLoginType) => {
+          if (response.token != null) {
+            resolve(response.token);
+          } else {
+            reject({
+              status: REQUEST_STATUS.SERVER_ERROR,
+            });
+          }
+        })
+        .catch((err) => {
+          reject(err);
         });
     }
   );

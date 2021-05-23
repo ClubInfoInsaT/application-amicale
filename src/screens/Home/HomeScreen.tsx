@@ -46,7 +46,6 @@ import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
 import AnimatedFAB from '../../components/Animations/AnimatedFAB';
-import ConnectionManager from '../../managers/ConnectionManager';
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
@@ -59,6 +58,7 @@ import { TabRoutes, TabStackParamsList } from '../../navigation/TabNavigator';
 import { ServiceItemType } from '../../utils/Services';
 import { useCurrentDashboard } from '../../context/preferencesContext';
 import { MainRoutes } from '../../navigation/MainNavigator';
+import { useLoginState } from '../../context/loginContext';
 
 const FEED_ITEM_HEIGHT = 500;
 
@@ -146,9 +146,7 @@ function HomeScreen(props: Props) {
   const [dialogVisible, setDialogVisible] = useState(false);
   const fabRef = useRef<AnimatedFAB>(null);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    ConnectionManager.getInstance().isLoggedIn()
-  );
+  const isLoggedIn = useLoginState();
   const { currentDashboard } = useCurrentDashboard();
 
   let homeDashboard: FullDashboardType | null = null;
@@ -199,13 +197,8 @@ function HomeScreen(props: Props) {
           }
         }
       };
-
-      if (ConnectionManager.getInstance().isLoggedIn() !== isLoggedIn) {
-        setIsLoggedIn(ConnectionManager.getInstance().isLoggedIn());
-      }
       // handle link open when home is not focused or created
       handleNavigationParams();
-      return () => {};
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoggedIn])
   );

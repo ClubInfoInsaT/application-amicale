@@ -17,21 +17,20 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Button,
   Caption,
   Card,
   Headline,
   Subheading,
-  withTheme,
+  useTheme,
 } from 'react-native-paper';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { BackHandler, StyleSheet, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import i18n from 'i18n-js';
 import { CalendarList, PeriodMarking } from 'react-native-calendars';
-import type { DeviceType } from './EquipmentListScreen';
 import LoadingConfirmDialog from '../../../components/Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../../components/Dialogs/ErrorDialog';
 import {
@@ -42,32 +41,19 @@ import {
   getValidRange,
   isEquipmentAvailable,
 } from '../../../utils/EquipmentBooking';
-import ConnectionManager from '../../../managers/ConnectionManager';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import { MainStackParamsList } from '../../../navigation/MainNavigator';
 import GENERAL_STYLES from '../../../constants/Styles';
 import { ApiRejectType } from '../../../utils/WebData';
 import { REQUEST_STATUS } from '../../../utils/Requests';
+import { useFocusEffect } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/native';
+import { useAuthenticatedRequest } from '../../../context/loginContext';
 
-type EquipmentRentScreenNavigationProp = StackScreenProps<
-  MainStackParamsList,
-  'equipment-rent'
->;
-
-type Props = EquipmentRentScreenNavigationProp & {
-  navigation: StackNavigationProp<any>;
-  theme: ReactNativePaper.Theme;
-};
+type Props = StackScreenProps<MainStackParamsList, 'equipment-rent'>;
 
 export type MarkedDatesObjectType = {
   [key: string]: PeriodMarking;
-};
-
-type StateType = {
-  dialogVisible: boolean;
-  errorDialogVisible: boolean;
-  markedDates: MarkedDatesObjectType;
-  currentError: ApiRejectType;
 };
 
 const styles = StyleSheet.create({
@@ -114,97 +100,100 @@ const styles = StyleSheet.create({
   },
 });
 
-class EquipmentRentScreen extends React.Component<Props, StateType> {
-  item: DeviceType | null;
+function EquipmentRentScreen(props: Props) {
+  const theme = useTheme();
+  const navigation = useNavigation<StackNavigationProp<any>>();
+  const [currentError, setCurrentError] = useState<ApiRejectType>({
+    status: REQUEST_STATUS.SUCCESS,
+  });
+  const [markedDates, setMarkedDates] = useState<MarkedDatesObjectType>({});
+  const [dialogVisible, setDialogVisible] = useState(false);
 
-  bookedDates: Array<string>;
+  const item = props.route.params.item;
 
-  bookRef: { current: null | (Animatable.View & View) };
+  const bookedDates = useRef<Array<string>>([]);
+  const canBookEquipment = useRef(false);
 
-  canBookEquipment: boolean;
+  const bookRef = useRef<Animatable.View & View>(null);
 
-  lockedDates: {
+  let lockedDates: {
     [key: string]: PeriodMarking;
-  };
+  } = {};
 
-  constructor(props: Props) {
-    super(props);
-    this.item = null;
-    this.lockedDates = {};
-    this.state = {
-      dialogVisible: false,
-      errorDialogVisible: false,
-      markedDates: {},
-      currentError: { status: REQUEST_STATUS.SUCCESS },
-    };
-    this.resetSelection();
-    this.bookRef = React.createRef();
-    this.canBookEquipment = false;
-    this.bookedDates = [];
-    if (props.route.params != null) {
-      if (props.route.params.item != null) {
-        this.item = props.route.params.item;
-      } else {
-        this.item = null;
-      }
-    }
-    const { item } = this;
-    if (item != null) {
-      this.lockedDates = {};
-      item.booked_at.forEach((date: { begin: string; end: string }) => {
-        const range = getValidRange(
-          new Date(date.begin),
-          new Date(date.end),
-          null
-        );
-        this.lockedDates = {
-          ...this.lockedDates,
-          ...generateMarkedDates(false, props.theme, range),
-        };
-      });
-    }
+  if (item) {
+    item.booked_at.forEach((date: { begin: string; end: string }) => {
+      const range = getValidRange(
+        new Date(date.begin),
+        new Date(date.end),
+        null
+      );
+      lockedDates = {
+        ...lockedDates,
+        ...generateMarkedDates(false, theme, range),
+      };
+    });
   }
 
-  /**
-   * Captures focus and blur events to hook on android back button
-   */
-  componentDidMount() {
-    const { navigation } = this.props;
-    navigation.addListener('focus', () => {
+  useFocusEffect(
+    useCallback(() => {
       BackHandler.addEventListener(
         'hardwareBackPress',
-        this.onBackButtonPressAndroid
+        onBackButtonPressAndroid
       );
-    });
-    navigation.addListener('blur', () => {
-      BackHandler.removeEventListener(
-        'hardwareBackPress',
-        this.onBackButtonPressAndroid
-      );
-    });
-  }
+      return () => {
+        BackHandler.removeEventListener(
+          'hardwareBackPress',
+          onBackButtonPressAndroid
+        );
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+  );
 
   /**
    * Overrides default android back button behaviour to deselect date if any is selected.
    *
    * @return {boolean}
    */
-  onBackButtonPressAndroid = (): boolean => {
-    if (this.bookedDates.length > 0) {
-      this.resetSelection();
-      this.updateMarkedSelection();
+  const onBackButtonPressAndroid = (): boolean => {
+    if (bookedDates.current.length > 0) {
+      resetSelection();
+      updateMarkedSelection();
       return true;
     }
     return false;
   };
 
-  onDialogDismiss = () => {
-    this.setState({ dialogVisible: false });
+  const showDialog = () => setDialogVisible(true);
+
+  const onDialogDismiss = () => setDialogVisible(false);
+
+  const onErrorDialogDismiss = () =>
+    setCurrentError({ status: REQUEST_STATUS.SUCCESS });
+
+  const getBookStartDate = (): Date | null => {
+    return bookedDates.current.length > 0
+      ? new Date(bookedDates.current[0])
+      : null;
   };
 
-  onErrorDialogDismiss = () => {
-    this.setState({ errorDialogVisible: false });
+  const getBookEndDate = (): Date | null => {
+    const { length } = bookedDates.current;
+    return length > 0 ? new Date(bookedDates.current[length - 1]) : null;
   };
+
+  const start = getBookStartDate();
+  const end = getBookEndDate();
+  const request = useAuthenticatedRequest(
+    'location/booking',
+    item && start && end
+      ? {
+          device: item.id,
+          begin: getISODate(start),
+          end: getISODate(end),
+        }
+      : undefined
+  );
 
   /**
    * Sends the selected data to the server and waits for a response.
@@ -213,46 +202,29 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
    *
    * @returns {Promise<void>}
    */
-  onDialogAccept = (): Promise<void> => {
+  const onDialogAccept = (): Promise<void> => {
     return new Promise((resolve: () => void) => {
-      const { item, props } = this;
-      const start = this.getBookStartDate();
-      const end = this.getBookEndDate();
       if (item != null && start != null && end != null) {
-        ConnectionManager.getInstance()
-          .authenticatedRequest('location/booking', {
-            device: item.id,
-            begin: getISODate(start),
-            end: getISODate(end),
-          })
+        request()
           .then(() => {
-            this.onDialogDismiss();
-            props.navigation.replace('equipment-confirm', {
-              item: this.item,
+            onDialogDismiss();
+            navigation.replace('equipment-confirm', {
+              item: item,
               dates: [getISODate(start), getISODate(end)],
             });
             resolve();
           })
           .catch((error: ApiRejectType) => {
-            this.onDialogDismiss();
-            this.showErrorDialog(error);
+            onDialogDismiss();
+            setCurrentError(error);
             resolve();
           });
       } else {
-        this.onDialogDismiss();
+        onDialogDismiss();
         resolve();
       }
     });
   };
-
-  getBookStartDate(): Date | null {
-    return this.bookedDates.length > 0 ? new Date(this.bookedDates[0]) : null;
-  }
-
-  getBookEndDate(): Date | null {
-    const { length } = this.bookedDates;
-    return length > 0 ? new Date(this.bookedDates[length - 1]) : null;
-  }
 
   /**
    * Selects a new date on the calendar.
@@ -260,7 +232,7 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
    *
    * @param day The day selected
    */
-  selectNewDate = (day: {
+  const selectNewDate = (day: {
     dateString: string;
     day: number;
     month: number;
@@ -268,222 +240,196 @@ class EquipmentRentScreen extends React.Component<Props, StateType> {
     year: number;
   }) => {
     const selected = new Date(day.dateString);
-    const start = this.getBookStartDate();
 
-    if (!this.lockedDates[day.dateString] != null) {
+    if (!lockedDates[day.dateString] != null) {
       if (start === null) {
-        this.updateSelectionRange(selected, selected);
-        this.enableBooking();
+        updateSelectionRange(selected, selected);
+        enableBooking();
       } else if (start.getTime() === selected.getTime()) {
-        this.resetSelection();
-      } else if (this.bookedDates.length === 1) {
-        this.updateSelectionRange(start, selected);
-        this.enableBooking();
+        resetSelection();
+      } else if (bookedDates.current.length === 1) {
+        updateSelectionRange(start, selected);
+        enableBooking();
       } else {
-        this.resetSelection();
+        resetSelection();
       }
-      this.updateMarkedSelection();
+      updateMarkedSelection();
     }
   };
 
-  showErrorDialog = (error: ApiRejectType) => {
-    this.setState({
-      errorDialogVisible: true,
-      currentError: error,
-    });
+  const showBookButton = () => {
+    if (bookRef.current && bookRef.current.fadeInUp) {
+      bookRef.current.fadeInUp(500);
+    }
   };
 
-  showDialog = () => {
-    this.setState({ dialogVisible: true });
+  const hideBookButton = () => {
+    if (bookRef.current && bookRef.current.fadeOutDown) {
+      bookRef.current.fadeOutDown(500);
+    }
   };
 
-  /**
-   * Shows the book button by plying a fade animation
-   */
-  showBookButton() {
-    if (this.bookRef.current && this.bookRef.current.fadeInUp) {
-      this.bookRef.current.fadeInUp(500);
+  const enableBooking = () => {
+    if (!canBookEquipment.current) {
+      showBookButton();
+      canBookEquipment.current = true;
     }
-  }
+  };
 
-  /**
-   * Hides the book button by plying a fade animation
-   */
-  hideBookButton() {
-    if (this.bookRef.current && this.bookRef.current.fadeOutDown) {
-      this.bookRef.current.fadeOutDown(500);
+  const resetSelection = () => {
+    if (canBookEquipment.current) {
+      hideBookButton();
     }
-  }
+    canBookEquipment.current = false;
+    bookedDates.current = [];
+  };
 
-  enableBooking() {
-    if (!this.canBookEquipment) {
-      this.showBookButton();
-      this.canBookEquipment = true;
-    }
-  }
-
-  resetSelection() {
-    if (this.canBookEquipment) {
-      this.hideBookButton();
-    }
-    this.canBookEquipment = false;
-    this.bookedDates = [];
-  }
-
-  updateSelectionRange(start: Date, end: Date) {
-    this.bookedDates = getValidRange(start, end, this.item);
-  }
-
-  updateMarkedSelection() {
-    const { theme } = this.props;
-    this.setState({
-      markedDates: generateMarkedDates(true, theme, this.bookedDates),
-    });
-  }
-
-  render() {
-    const { item, props, state } = this;
-    const start = this.getBookStartDate();
-    const end = this.getBookEndDate();
-    let subHeadingText;
-    if (start == null) {
-      subHeadingText = i18n.t('screens.equipment.booking');
-    } else if (end != null && start.getTime() !== end.getTime()) {
-      subHeadingText = i18n.t('screens.equipment.bookingPeriod', {
-        begin: getRelativeDateString(start),
-        end: getRelativeDateString(end),
-      });
+  const updateSelectionRange = (s: Date, e: Date) => {
+    if (item) {
+      bookedDates.current = getValidRange(s, e, item);
     } else {
-      subHeadingText = i18n.t('screens.equipment.bookingDay', {
-        date: getRelativeDateString(start),
-      });
+      bookedDates.current = [];
     }
-    if (item != null) {
-      const isAvailable = isEquipmentAvailable(item);
-      const firstAvailability = getFirstEquipmentAvailability(item);
-      return (
-        <View style={GENERAL_STYLES.flex}>
-          <CollapsibleScrollView>
-            <Card style={styles.card}>
-              <Card.Content>
-                <View style={GENERAL_STYLES.flex}>
-                  <View style={styles.titleContainer}>
-                    <Headline style={styles.title}>{item.name}</Headline>
-                    <Caption style={styles.caption}>
-                      (
-                      {i18n.t('screens.equipment.bail', { cost: item.caution })}
-                      )
-                    </Caption>
-                  </View>
-                </View>
+  };
 
-                <Button
-                  icon={isAvailable ? 'check-circle-outline' : 'update'}
-                  color={
-                    isAvailable
-                      ? props.theme.colors.success
-                      : props.theme.colors.primary
-                  }
-                  mode="text"
-                >
-                  {i18n.t('screens.equipment.available', {
-                    date: getRelativeDateString(firstAvailability),
-                  })}
-                </Button>
-                <Subheading style={styles.subtitle}>
-                  {subHeadingText}
-                </Subheading>
-              </Card.Content>
-            </Card>
-            <CalendarList
-              // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-              minDate={new Date()}
-              // Max amount of months allowed to scroll to the past. Default = 50
-              pastScrollRange={0}
-              // Max amount of months allowed to scroll to the future. Default = 50
-              futureScrollRange={3}
-              // Enable horizontal scrolling, default = false
-              horizontal
-              // Enable paging on horizontal, default = false
-              pagingEnabled
-              // Handler which gets executed on day press. Default = undefined
-              onDayPress={this.selectNewDate}
-              // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-              firstDay={1}
-              // Hide month navigation arrows.
-              hideArrows={false}
-              // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-              markingType={'period'}
-              markedDates={{ ...this.lockedDates, ...state.markedDates }}
-              theme={{
-                'backgroundColor': props.theme.colors.agendaBackgroundColor,
-                'calendarBackground': props.theme.colors.background,
-                'textSectionTitleColor': props.theme.colors.agendaDayTextColor,
-                'selectedDayBackgroundColor': props.theme.colors.primary,
-                'selectedDayTextColor': '#ffffff',
-                'todayTextColor': props.theme.colors.text,
-                'dayTextColor': props.theme.colors.text,
-                'textDisabledColor': props.theme.colors.agendaDayTextColor,
-                'dotColor': props.theme.colors.primary,
-                'selectedDotColor': '#ffffff',
-                'arrowColor': props.theme.colors.primary,
-                'monthTextColor': props.theme.colors.text,
-                'indicatorColor': props.theme.colors.primary,
-                'textDayFontFamily': 'monospace',
-                'textMonthFontFamily': 'monospace',
-                'textDayHeaderFontFamily': 'monospace',
-                'textDayFontWeight': '300',
-                'textMonthFontWeight': 'bold',
-                'textDayHeaderFontWeight': '300',
-                'textDayFontSize': 16,
-                'textMonthFontSize': 16,
-                'textDayHeaderFontSize': 16,
-                'stylesheet.day.period': {
-                  base: {
-                    overflow: 'hidden',
-                    height: 34,
-                    width: 34,
-                    alignItems: 'center',
-                  },
-                },
-              }}
-              style={styles.calendar}
-            />
-          </CollapsibleScrollView>
-          <LoadingConfirmDialog
-            visible={state.dialogVisible}
-            onDismiss={this.onDialogDismiss}
-            onAccept={this.onDialogAccept}
-            title={i18n.t('screens.equipment.dialogTitle')}
-            titleLoading={i18n.t('screens.equipment.dialogTitleLoading')}
-            message={i18n.t('screens.equipment.dialogMessage')}
-          />
+  const updateMarkedSelection = () => {
+    setMarkedDates(generateMarkedDates(true, theme, bookedDates.current));
+  };
 
-          <ErrorDialog
-            visible={state.errorDialogVisible}
-            onDismiss={this.onErrorDialogDismiss}
-            status={state.currentError.status}
-            code={state.currentError.code}
-          />
-          <Animatable.View
-            ref={this.bookRef}
-            useNativeDriver
-            style={styles.buttonContainer}
-          >
-            <Button
-              icon="bookmark-check"
-              mode="contained"
-              onPress={this.showDialog}
-              style={styles.button}
-            >
-              {i18n.t('screens.equipment.bookButton')}
-            </Button>
-          </Animatable.View>
-        </View>
-      );
-    }
-    return null;
+  let subHeadingText;
+
+  if (start == null) {
+    subHeadingText = i18n.t('screens.equipment.booking');
+  } else if (end != null && start.getTime() !== end.getTime()) {
+    subHeadingText = i18n.t('screens.equipment.bookingPeriod', {
+      begin: getRelativeDateString(start),
+      end: getRelativeDateString(end),
+    });
+  } else {
+    subHeadingText = i18n.t('screens.equipment.bookingDay', {
+      date: getRelativeDateString(start),
+    });
   }
+
+  if (item) {
+    const isAvailable = isEquipmentAvailable(item);
+    const firstAvailability = getFirstEquipmentAvailability(item);
+    return (
+      <View style={GENERAL_STYLES.flex}>
+        <CollapsibleScrollView>
+          <Card style={styles.card}>
+            <Card.Content>
+              <View style={GENERAL_STYLES.flex}>
+                <View style={styles.titleContainer}>
+                  <Headline style={styles.title}>{item.name}</Headline>
+                  <Caption style={styles.caption}>
+                    ({i18n.t('screens.equipment.bail', { cost: item.caution })})
+                  </Caption>
+                </View>
+              </View>
+
+              <Button
+                icon={isAvailable ? 'check-circle-outline' : 'update'}
+                color={
+                  isAvailable ? theme.colors.success : theme.colors.primary
+                }
+                mode="text"
+              >
+                {i18n.t('screens.equipment.available', {
+                  date: getRelativeDateString(firstAvailability),
+                })}
+              </Button>
+              <Subheading style={styles.subtitle}>{subHeadingText}</Subheading>
+            </Card.Content>
+          </Card>
+          <CalendarList
+            // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+            minDate={new Date()}
+            // Max amount of months allowed to scroll to the past. Default = 50
+            pastScrollRange={0}
+            // Max amount of months allowed to scroll to the future. Default = 50
+            futureScrollRange={3}
+            // Enable horizontal scrolling, default = false
+            horizontal
+            // Enable paging on horizontal, default = false
+            pagingEnabled
+            // Handler which gets executed on day press. Default = undefined
+            onDayPress={selectNewDate}
+            // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+            firstDay={1}
+            // Hide month navigation arrows.
+            hideArrows={false}
+            // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
+            markingType={'period'}
+            markedDates={{ ...lockedDates, ...markedDates }}
+            theme={{
+              'backgroundColor': theme.colors.agendaBackgroundColor,
+              'calendarBackground': theme.colors.background,
+              'textSectionTitleColor': theme.colors.agendaDayTextColor,
+              'selectedDayBackgroundColor': theme.colors.primary,
+              'selectedDayTextColor': '#ffffff',
+              'todayTextColor': theme.colors.text,
+              'dayTextColor': theme.colors.text,
+              'textDisabledColor': theme.colors.agendaDayTextColor,
+              'dotColor': theme.colors.primary,
+              'selectedDotColor': '#ffffff',
+              'arrowColor': theme.colors.primary,
+              'monthTextColor': theme.colors.text,
+              'indicatorColor': theme.colors.primary,
+              'textDayFontFamily': 'monospace',
+              'textMonthFontFamily': 'monospace',
+              'textDayHeaderFontFamily': 'monospace',
+              'textDayFontWeight': '300',
+              'textMonthFontWeight': 'bold',
+              'textDayHeaderFontWeight': '300',
+              'textDayFontSize': 16,
+              'textMonthFontSize': 16,
+              'textDayHeaderFontSize': 16,
+              'stylesheet.day.period': {
+                base: {
+                  overflow: 'hidden',
+                  height: 34,
+                  width: 34,
+                  alignItems: 'center',
+                },
+              },
+            }}
+            style={styles.calendar}
+          />
+        </CollapsibleScrollView>
+        <LoadingConfirmDialog
+          visible={dialogVisible}
+          onDismiss={onDialogDismiss}
+          onAccept={onDialogAccept}
+          title={i18n.t('screens.equipment.dialogTitle')}
+          titleLoading={i18n.t('screens.equipment.dialogTitleLoading')}
+          message={i18n.t('screens.equipment.dialogMessage')}
+        />
+
+        <ErrorDialog
+          visible={currentError.status !== REQUEST_STATUS.SUCCESS}
+          onDismiss={onErrorDialogDismiss}
+          status={currentError.status}
+          code={currentError.code}
+        />
+        <Animatable.View
+          ref={bookRef}
+          useNativeDriver
+          style={styles.buttonContainer}
+        >
+          <Button
+            icon="bookmark-check"
+            mode="contained"
+            onPress={showDialog}
+            style={styles.button}
+          >
+            {i18n.t('screens.equipment.bookButton')}
+          </Button>
+        </Animatable.View>
+      </View>
+    );
+  }
+  return null;
 }
 
-export default withTheme(EquipmentRentScreen);
+export default EquipmentRentScreen;

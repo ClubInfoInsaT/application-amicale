@@ -20,8 +20,7 @@
 import * as React from 'react';
 import i18n from 'i18n-js';
 import LoadingConfirmDialog from '../Dialogs/LoadingConfirmDialog';
-import ConnectionManager from '../../managers/ConnectionManager';
-import { useNavigation } from '@react-navigation/native';
+import { useLogout } from '../../utils/logout';
 
 type PropsType = {
   visible: boolean;
@@ -29,19 +28,12 @@ type PropsType = {
 };
 
 function LogoutDialog(props: PropsType) {
-  const navigation = useNavigation();
+  const onLogout = useLogout();
+  // Use a loading dialog as it can take some time to update the context
   const onClickAccept = async (): Promise<void> => {
     return new Promise((resolve: () => void) => {
-      ConnectionManager.getInstance()
-        .disconnect()
-        .then(() => {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'main' }],
-          });
-          props.onDismiss();
-          resolve();
-        });
+      onLogout();
+      resolve();
     });
   };
 
