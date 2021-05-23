@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import {
   Avatar,
@@ -25,10 +25,9 @@ import {
   Divider,
   List,
   TouchableRipple,
-  withTheme,
+  useTheme,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { StackNavigationProp } from '@react-navigation/stack';
 import CardList from '../../components/Lists/CardList/CardList';
 import MaterialHeaderButtons, {
   Item,
@@ -41,11 +40,8 @@ import {
   ServiceCategoryType,
   SERVICES_CATEGORIES_KEY,
 } from '../../utils/Services';
-
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  theme: ReactNativePaper.Theme;
-};
+import { useNavigation } from '@react-navigation/native';
+import { useLoginState } from '../../context/loginContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -61,37 +57,29 @@ const styles = StyleSheet.create({
   },
 });
 
-class ServicesScreen extends React.Component<PropsType> {
-  finalDataset: Array<ServiceCategoryType>;
+function ServicesScreen() {
+  const navigation = useNavigation();
+  const theme = useTheme();
+  const isLoggedIn = useLoginState();
 
-  constructor(props: PropsType) {
-    super(props);
-    this.finalDataset = getCategories(props.navigation.navigate, [
-      SERVICES_CATEGORIES_KEY.SPECIAL,
-    ]);
-  }
+  const finalDataset = getCategories(navigation.navigate, isLoggedIn, [
+    SERVICES_CATEGORIES_KEY.SPECIAL,
+  ]);
 
-  componentDidMount() {
-    const { props } = this;
-    props.navigation.setOptions({
-      headerRight: this.getAboutButton,
+  useLayoutEffect(() => {
+    const getAboutButton = () => (
+      <MaterialHeaderButtons>
+        <Item
+          title="information"
+          iconName="information"
+          onPress={() => navigation.navigate('amicale-contact')}
+        />
+      </MaterialHeaderButtons>
+    );
+    navigation.setOptions({
+      headerRight: getAboutButton,
     });
-  }
-
-  getAboutButton = () => (
-    <MaterialHeaderButtons>
-      <Item
-        title="information"
-        iconName="information"
-        onPress={this.onAboutPress}
-      />
-    </MaterialHeaderButtons>
-  );
-
-  onAboutPress = () => {
-    const { props } = this;
-    props.navigation.navigate('amicale-contact');
-  };
+  }, [navigation]);
 
   /**
    * Gets the list title image for the list.
@@ -102,8 +90,7 @@ class ServicesScreen extends React.Component<PropsType> {
    * @param source The source image to display. Can be a string for icons or a number for local images
    * @returns {*}
    */
-  getListTitleImage(source: string | number) {
-    const { props } = this;
+  const getListTitleImage = (source: string | number) => {
     if (typeof source === 'number') {
       return <Image source={source} style={styles.image} />;
     }
@@ -111,11 +98,11 @@ class ServicesScreen extends React.Component<PropsType> {
       <Avatar.Icon
         size={48}
         icon={source}
-        color={props.theme.colors.primary}
+        color={theme.colors.primary}
         style={styles.icon}
       />
     );
-  }
+  };
 
   /**
    * A list item showing a list of available services for the current category
@@ -123,20 +110,17 @@ class ServicesScreen extends React.Component<PropsType> {
    * @param item
    * @returns {*}
    */
-  getRenderItem = ({ item }: { item: ServiceCategoryType }) => {
-    const { props } = this;
+  const getRenderItem = ({ item }: { item: ServiceCategoryType }) => {
     return (
       <TouchableRipple
         style={styles.container}
-        onPress={() => {
-          props.navigation.navigate('services-section', { data: item });
-        }}
+        onPress={() => navigation.navigate('services-section', { data: item })}
       >
         <View>
           <Card.Title
             title={item.title}
             subtitle={item.subtitle}
-            left={() => this.getListTitleImage(item.image)}
+            left={() => getListTitleImage(item.image)}
             right={() => <List.Icon icon="chevron-right" />}
           />
           <CardList dataset={item.content} isHorizontal />
@@ -145,33 +129,31 @@ class ServicesScreen extends React.Component<PropsType> {
     );
   };
 
-  keyExtractor = (item: ServiceCategoryType): string => item.title;
+  const keyExtractor = (item: ServiceCategoryType): string => item.title;
 
-  render() {
-    return (
-      <View>
-        <CollapsibleFlatList
-          data={this.finalDataset}
-          renderItem={this.getRenderItem}
-          keyExtractor={this.keyExtractor}
-          ItemSeparatorComponent={() => <Divider />}
-          hasTab
-        />
-        <MascotPopup
-          title={i18n.t('screens.services.mascotDialog.title')}
-          message={i18n.t('screens.services.mascotDialog.message')}
-          icon="cloud-question"
-          buttons={{
-            cancel: {
-              message: i18n.t('screens.services.mascotDialog.button'),
-              icon: 'check',
-            },
-          }}
-          emotion={MASCOT_STYLE.WINK}
-        />
-      </View>
-    );
-  }
+  return (
+    <View>
+      <CollapsibleFlatList
+        data={finalDataset}
+        renderItem={getRenderItem}
+        keyExtractor={keyExtractor}
+        ItemSeparatorComponent={() => <Divider />}
+        hasTab
+      />
+      <MascotPopup
+        title={i18n.t('screens.services.mascotDialog.title')}
+        message={i18n.t('screens.services.mascotDialog.message')}
+        icon="cloud-question"
+        buttons={{
+          cancel: {
+            message: i18n.t('screens.services.mascotDialog.button'),
+            icon: 'check',
+          },
+        }}
+        emotion={MASCOT_STYLE.WINK}
+      />
+    </View>
+  );
 }
 
-export default withTheme(ServicesScreen);
+export default ServicesScreen;

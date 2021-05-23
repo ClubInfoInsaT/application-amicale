@@ -51,7 +51,7 @@ function ProfileWelcomeCard(props: Props) {
         <Divider />
         <Paragraph>{i18n.t('screens.profile.welcomeDescription')}</Paragraph>
         <CardList
-          dataset={getAmicaleServices(navigation.navigate, [
+          dataset={getAmicaleServices(navigation.navigate, true, [
             SERVICES_KEY.PROFILE,
           ])}
           isHorizontal={true}

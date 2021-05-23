@@ -52,6 +52,7 @@ import {
   GeneralPreferenceKeys,
 } from '../utils/asyncStorage';
 import IntroScreen from '../screens/Intro/IntroScreen';
+import { useLoginState } from '../context/loginContext';
 
 export enum MainRoutes {
   Main = 'main',
@@ -112,6 +113,62 @@ function getIntroScreens() {
         component={IntroScreen}
         options={{
           headerShown: false,
+        }}
+      />
+    </>
+  );
+}
+
+function getAmicaleScreens() {
+  return (
+    <>
+      <MainStack.Screen
+        name={MainRoutes.Profile}
+        component={ProfileScreen}
+        options={{
+          title: i18n.t('screens.profile.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.ClubList}
+        component={ClubListScreen}
+        options={{
+          title: i18n.t('screens.clubs.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.ClubInformation}
+        component={ClubDisplayScreen}
+        options={{
+          title: i18n.t('screens.clubs.details'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.ClubAbout}
+        component={ClubAboutScreen}
+        options={{
+          title: i18n.t('screens.clubs.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.EquipmentList}
+        component={EquipmentScreen}
+        options={{
+          title: i18n.t('screens.equipment.title'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.EquipmentRent}
+        component={EquipmentLendScreen}
+        options={{
+          title: i18n.t('screens.equipment.book'),
+        }}
+      />
+      <MainStack.Screen
+        name={MainRoutes.EquipmentConfirm}
+        component={EquipmentConfirmScreen}
+        options={{
+          title: i18n.t('screens.equipment.confirm'),
         }}
       />
     </>
@@ -234,55 +291,6 @@ function getRegularScreens(createTabNavigator: () => React.ReactElement) {
         }}
       />
       <MainStack.Screen
-        name={MainRoutes.Profile}
-        component={ProfileScreen}
-        options={{
-          title: i18n.t('screens.profile.title'),
-        }}
-      />
-      <MainStack.Screen
-        name={MainRoutes.ClubList}
-        component={ClubListScreen}
-        options={{
-          title: i18n.t('screens.clubs.title'),
-        }}
-      />
-      <MainStack.Screen
-        name={MainRoutes.ClubInformation}
-        component={ClubDisplayScreen}
-        options={{
-          title: i18n.t('screens.clubs.details'),
-        }}
-      />
-      <MainStack.Screen
-        name={MainRoutes.ClubAbout}
-        component={ClubAboutScreen}
-        options={{
-          title: i18n.t('screens.clubs.title'),
-        }}
-      />
-      <MainStack.Screen
-        name={MainRoutes.EquipmentList}
-        component={EquipmentScreen}
-        options={{
-          title: i18n.t('screens.equipment.title'),
-        }}
-      />
-      <MainStack.Screen
-        name={MainRoutes.EquipmentRent}
-        component={EquipmentLendScreen}
-        options={{
-          title: i18n.t('screens.equipment.book'),
-        }}
-      />
-      <MainStack.Screen
-        name={MainRoutes.EquipmentConfirm}
-        component={EquipmentConfirmScreen}
-        options={{
-          title: i18n.t('screens.equipment.confirm'),
-        }}
-      />
-      <MainStack.Screen
         name={MainRoutes.Vote}
         component={VoteScreen}
         options={{
@@ -302,15 +310,17 @@ function getRegularScreens(createTabNavigator: () => React.ReactElement) {
 
 function MainStackComponent(props: {
   showIntro: boolean;
+  isloggedIn: boolean;
   createTabNavigator: () => React.ReactElement;
 }) {
-  const { showIntro, createTabNavigator } = props;
+  const { showIntro, isloggedIn, createTabNavigator } = props;
   return (
     <MainStack.Navigator
       initialRouteName={showIntro ? MainRoutes.Intro : MainRoutes.Main}
       headerMode={'screen'}
     >
       {showIntro ? getIntroScreens() : getRegularScreens(createTabNavigator)}
+      {isloggedIn ? getAmicaleScreens() : null}
     </MainStack.Navigator>
   );
 }
@@ -322,6 +332,7 @@ type PropsType = {
 
 function MainNavigator(props: PropsType) {
   const { preferences } = usePreferences();
+  const isloggedIn = useLoginState();
   const showIntro = getPreferenceBool(
     GeneralPreferenceKeys.showIntro,
     preferences
@@ -330,6 +341,7 @@ function MainNavigator(props: PropsType) {
   return (
     <MainStackComponent
       showIntro={showIntro !== false}
+      isloggedIn={isloggedIn}
       createTabNavigator={createTabNavigator}
     />
   );

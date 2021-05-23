@@ -86,8 +86,21 @@ export type ServiceCategoryType = {
   content: Array<ServiceItemType>;
 };
 
+function getAmicaleOnPress(
+  route: string,
+  onPress: (route: string, params?: { [key: string]: any }) => void,
+  isLoggedIn: boolean
+) {
+  if (isLoggedIn) {
+    return () => onPress(route);
+  } else {
+    return () => onPress(MainRoutes.Login, { nextScreen: route });
+  }
+}
+
 export function getAmicaleServices(
   onPress: (route: string, params?: { [key: string]: any }) => void,
+  isLoggedIn: boolean,
   excludedItems?: Array<string>
 ): Array<ServiceItemType> {
   const amicaleDataset = [
@@ -96,21 +109,21 @@ export function getAmicaleServices(
       title: i18n.t('screens.clubs.title'),
       subtitle: i18n.t('screens.services.descriptions.clubs'),
       image: Urls.images.clubs,
-      onPress: () => onPress(MainRoutes.ClubList),
+      onPress: getAmicaleOnPress(MainRoutes.ClubList, onPress, isLoggedIn),
     },
     {
       key: SERVICES_KEY.PROFILE,
       title: i18n.t('screens.profile.title'),
       subtitle: i18n.t('screens.services.descriptions.profile'),
       image: Urls.images.profile,
-      onPress: () => onPress(MainRoutes.Profile),
+      onPress: getAmicaleOnPress(MainRoutes.Profile, onPress, isLoggedIn),
     },
     {
       key: SERVICES_KEY.EQUIPMENT,
       title: i18n.t('screens.equipment.title'),
       subtitle: i18n.t('screens.services.descriptions.equipment'),
       image: Urls.images.equipment,
-      onPress: () => onPress(MainRoutes.EquipmentList),
+      onPress: getAmicaleOnPress(MainRoutes.EquipmentList, onPress, isLoggedIn),
     },
     {
       key: SERVICES_KEY.AMICALE_WEBSITE,
@@ -289,6 +302,7 @@ export function getSpecialServices(
 
 export function getCategories(
   onPress: (route: string, params?: { [key: string]: any }) => void,
+  isLoggedIn: boolean,
   excludedItems?: Array<string>
 ): Array<ServiceCategoryType> {
   const categoriesDataset = [
@@ -297,7 +311,7 @@ export function getCategories(
       title: i18n.t('screens.services.categories.amicale'),
       subtitle: i18n.t('screens.services.more'),
       image: AMICALE_LOGO,
-      content: getAmicaleServices(onPress),
+      content: getAmicaleServices(onPress, isLoggedIn),
     },
     {
       key: SERVICES_CATEGORIES_KEY.STUDENTS,

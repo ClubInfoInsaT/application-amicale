@@ -32,6 +32,7 @@ import {
 } from '../../../utils/Services';
 import { useNavigation } from '@react-navigation/core';
 import { useCurrentDashboard } from '../../../context/preferencesContext';
+import { useLoginState } from '../../../context/loginContext';
 
 const styles = StyleSheet.create({
   dashboardContainer: {
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
  */
 function DashboardEditScreen() {
   const navigation = useNavigation();
+  const isLoggedIn = useLoginState();
 
   const {
     currentDashboard,
@@ -150,7 +152,7 @@ function DashboardEditScreen() {
 
   return (
     <CollapsibleFlatList
-      data={getCategories(navigation.navigate)}
+      data={getCategories(navigation.navigate, isLoggedIn)}
       renderItem={getRenderItem}
       ListHeaderComponent={getListHeader()}
       style={{}}

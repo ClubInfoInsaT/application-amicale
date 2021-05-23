@@ -25,6 +25,7 @@ import {
   getSpecialServices,
   getStudentServices,
 } from '../utils/Services';
+import { useLoginState } from './loginContext';
 
 const colorScheme = Appearance.getColorScheme();
 
@@ -135,6 +136,7 @@ export function useDarkTheme() {
 export function useCurrentDashboard() {
   const { preferences, updatePreferences } = usePreferences();
   const navigation = useNavigation();
+  const isLoggedIn = useLoginState();
   const dashboardIdList = getPreferenceObject(
     GeneralPreferenceKeys.dashboardItems,
     preferences
@@ -145,7 +147,7 @@ export function useCurrentDashboard() {
   };
 
   const allDatasets = [
-    ...getAmicaleServices(navigation.navigate),
+    ...getAmicaleServices(navigation.navigate, isLoggedIn),
     ...getStudentServices(navigation.navigate),
     ...getINSAServices(navigation.navigate),
     ...getSpecialServices(navigation.navigate),
