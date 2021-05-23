@@ -64,10 +64,8 @@ function DebugScreen() {
   const modalRef = useRef<Modalize>(null);
 
   const [modalInputValue, setModalInputValue] = useState<string>('');
-  const [
-    modalCurrentDisplayItem,
-    setModalCurrentDisplayItem,
-  ] = useState<PreferenceItemType | null>(null);
+  const [modalCurrentDisplayItem, setModalCurrentDisplayItem] =
+    useState<PreferenceItemType | null>(null);
 
   const currentPreferences: Array<PreferenceItemType> = [];
   Object.values(GeneralPreferenceKeys).forEach((key) => {

@@ -44,9 +44,8 @@ function LoginScreen(props: Props) {
   const { setLogin } = useLogin();
   const [loading, setLoading] = useState(false);
   const [nextScreen, setNextScreen] = useState<string | undefined>(undefined);
-  const [mascotDialogVisible, setMascotDialogVisible] = useState<
-    undefined | boolean
-  >(undefined);
+  const [mascotDialogVisible, setMascotDialogVisible] =
+    useState<undefined | boolean>(undefined);
   const [currentError, setCurrentError] = useState<ApiRejectType>({
     status: REQUEST_STATUS.SUCCESS,
   });

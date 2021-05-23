@@ -285,8 +285,9 @@ export default class GameLogic {
   getNextPiecesPreviews(): Array<GridType> {
     const finalArray = [];
     for (let i = 0; i < this.nextPieces.length; i += 1) {
-      const gridSize = this.nextPieces[i].getCurrentShape().getCurrentShape()[0]
-        .length;
+      const gridSize = this.nextPieces[i]
+        .getCurrentShape()
+        .getCurrentShape()[0].length;
       finalArray.push(this.gridManager.getEmptyGrid(gridSize, gridSize));
       this.nextPieces[i].toGrid(finalArray[i], true);
     }

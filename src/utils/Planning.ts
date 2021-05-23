@@ -178,9 +178,9 @@ export function isDescriptionEmpty(description?: string): boolean {
  * @param numberOfMonths The number of months to create, starting from the current date
  * @return {Object}
  */
-export function generateEmptyCalendar(
-  numberOfMonths: number
-): { [key: string]: Array<PlanningEventType> } {
+export function generateEmptyCalendar(numberOfMonths: number): {
+  [key: string]: Array<PlanningEventType>;
+} {
   const end = new Date(Date.now());
   end.setMonth(end.getMonth() + numberOfMonths);
   const daysOfYear: { [key: string]: Array<PlanningEventType> } = {};

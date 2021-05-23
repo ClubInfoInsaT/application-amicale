@@ -17,13 +17,11 @@ export default function CollapsibleProvider(props: Props) {
     }));
   };
 
-  const [
-    currentCollapsible,
-    setCurrentCollapsible,
-  ] = useState<CollapsibleContextType>({
-    collapsible: undefined,
-    setCollapsible: setCollapsible,
-  });
+  const [currentCollapsible, setCurrentCollapsible] =
+    useState<CollapsibleContextType>({
+      collapsible: undefined,
+      setCollapsible: setCollapsible,
+    });
 
   return (
     <CollapsibleContext.Provider value={currentCollapsible}>

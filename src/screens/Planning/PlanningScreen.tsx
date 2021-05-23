@@ -76,6 +76,7 @@ LocaleConfig.locales.fr = {
     'Samedi',
   ],
   dayNamesShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+  today: "Aujourd'hui",
 };
 
 type PropsType = {

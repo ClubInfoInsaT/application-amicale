@@ -66,11 +66,8 @@ function DashboardEditScreen() {
   const navigation = useNavigation();
   const isLoggedIn = useLoginState();
 
-  const {
-    currentDashboard,
-    currentDashboardIdList,
-    updateCurrentDashboard,
-  } = useCurrentDashboard();
+  const { currentDashboard, currentDashboardIdList, updateCurrentDashboard } =
+    useCurrentDashboard();
   const initialDashboard = useRef(currentDashboardIdList);
   const [activeItem, setActiveItem] = useState(0);
 

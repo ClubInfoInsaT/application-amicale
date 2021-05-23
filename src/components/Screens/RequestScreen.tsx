@@ -48,20 +48,14 @@ export default function RequestScreen<T>(props: Props<T>) {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const route = useRoute();
   const refreshInterval = useRef<number>();
-  const [
-    loading,
-    lastRefreshDate,
-    status,
-    code,
-    data,
-    refreshData,
-  ] = useRequestLogic<T>(
-    props.request,
-    props.cache,
-    props.onCacheUpdate,
-    props.refreshOnFocus,
-    MIN_REFRESH_TIME
-  );
+  const [loading, lastRefreshDate, status, code, data, refreshData] =
+    useRequestLogic<T>(
+      props.request,
+      props.cache,
+      props.onCacheUpdate,
+      props.refreshOnFocus,
+      MIN_REFRESH_TIME
+    );
   // Store last refresh prop value
   const lastRefresh = useRef<boolean>(false);
 

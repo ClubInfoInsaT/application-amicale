@@ -99,10 +99,8 @@ function ProxiwashScreen() {
   const navigation = useNavigation();
   const theme = useTheme();
   const { preferences, updatePreferences } = useProxiwashPreferences();
-  const [
-    modalCurrentDisplayItem,
-    setModalCurrentDisplayItem,
-  ] = useState<React.ReactElement | null>(null);
+  const [modalCurrentDisplayItem, setModalCurrentDisplayItem] =
+    useState<React.ReactElement | null>(null);
   const reminder = getPreferenceNumber(
     ProxiwashPreferenceKeys.proxiwashNotifications,
     preferences

@@ -65,9 +65,8 @@ export default class Piece {
    * @param grid The grid to remove the piece from
    */
   removeFromGrid(grid: GridType) {
-    const pos: Array<CoordinatesType> = this.currentShape.getCellsCoordinates(
-      true
-    );
+    const pos: Array<CoordinatesType> =
+      this.currentShape.getCellsCoordinates(true);
     pos.forEach((coordinates: CoordinatesType) => {
       grid[coordinates.y][coordinates.x] = {
         color: this.theme.colors.tetrisBackground,
@@ -106,9 +105,8 @@ export default class Piece {
    */
   isPositionValid(grid: GridType, width: number, height: number): boolean {
     let isValid = true;
-    const pos: Array<CoordinatesType> = this.currentShape.getCellsCoordinates(
-      true
-    );
+    const pos: Array<CoordinatesType> =
+      this.currentShape.getCellsCoordinates(true);
     for (let i = 0; i < pos.length; i += 1) {
       if (
         pos[i].x >= width ||

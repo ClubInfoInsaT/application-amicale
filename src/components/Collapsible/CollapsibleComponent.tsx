@@ -72,11 +72,8 @@ function CollapsibleComponent(props: Props) {
     }, [collapsible, setCollapsible])
   );
 
-  const {
-    containerPaddingTop,
-    scrollIndicatorInsetTop,
-    onScrollWithListener,
-  } = collapsible;
+  const { containerPaddingTop, scrollIndicatorInsetTop, onScrollWithListener } =
+    collapsible;
 
   const paddingBottom = props.hasTab ? TAB_BAR_HEIGHT : 0;
 

@@ -104,11 +104,9 @@ export async function apiRequest<T>(
         .then((response: Response) => {
           const status = response.status;
           if (status === REQUEST_STATUS.SUCCESS) {
-            return response.json().then(
-              (data): ApiResponseType<T> => {
-                return { status: status, error: data.error, data: data.data };
-              }
-            );
+            return response.json().then((data): ApiResponseType<T> => {
+              return { status: status, error: data.error, data: data.data };
+            });
           } else {
             return { status: status };
           }

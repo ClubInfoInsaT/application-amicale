@@ -123,9 +123,8 @@ function ProximoListScreen(props: Props) {
 
   const [currentSearchString, setCurrentSearchString] = useState('');
   const [currentSortMode, setCurrentSortMode] = useState(2);
-  const [modalCurrentDisplayItem, setModalCurrentDisplayItem] = useState<
-    React.ReactChild | undefined
-  >();
+  const [modalCurrentDisplayItem, setModalCurrentDisplayItem] =
+    useState<React.ReactChild | undefined>();
 
   const sortModes = [sortPrice, sortPriceReverse, sortName, sortNameReverse];
 

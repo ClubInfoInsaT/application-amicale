@@ -94,9 +94,8 @@ function ClubDisplayScreen(props: Props) {
   const theme = useTheme();
 
   const [displayData, setDisplayData] = useState<ClubType | undefined>();
-  const [categories, setCategories] = useState<
-    Array<ClubCategoryType> | undefined
-  >();
+  const [categories, setCategories] =
+    useState<Array<ClubCategoryType> | undefined>();
   const [clubId, setClubId] = useState<number | undefined>();
 
   useFocusEffect(
