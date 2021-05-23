@@ -141,11 +141,15 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
             <ErrorView
               status={status}
               code={code}
-              button={{
-                icon: 'refresh',
-                text: i18n.t('general.retry'),
-                onPress: () => refreshData(),
-              }}
+              button={
+                code !== API_REQUEST_CODES.BAD_TOKEN
+                  ? {
+                      icon: 'refresh',
+                      text: i18n.t('general.retry'),
+                      onPress: () => refreshData(),
+                    }
+                  : undefined
+              }
             />
           )
         }
