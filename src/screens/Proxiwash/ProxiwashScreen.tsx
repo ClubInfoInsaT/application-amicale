@@ -19,6 +19,7 @@
 
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import {
+  Linking,
   SectionListData,
   SectionListRenderItemInfo,
   StyleSheet,
@@ -154,6 +155,11 @@ function ProxiwashScreen() {
       headerRight: () => (
         <MaterialHeaderButtons>
           <Item
+            title={'web'}
+            iconName={'information'}
+            onPress={() => Linking.openURL(ProxiwashConstants[selectedWash].webPageUrl)}
+          />
+          <Item
             title={'information'}
             iconName={'information'}
             onPress={() => navigation.navigate('proxiwash-about')}
@@ -161,7 +167,7 @@ function ProxiwashScreen() {
         </MaterialHeaderButtons>
       ),
     });
-  }, [navigation]);
+  }, [navigation, selectedWash]);
 
   /**
    * Callback used when the user clicks on enable notifications for a machine
