@@ -30,6 +30,7 @@ const PROXIMO_ENDPOINT = STUDENT_SERVER + '~proximo/v2/api/';
 const PROXIMO_IMAGES_ENDPOINT =
   STUDENT_SERVER + '~proximo/api_proximo/storage/app/public/';
 const APP_IMAGES_ENDPOINT = STUDENT_SERVER + '~amicale_app/images/';
+const PROXIWASH_ENDPOINT = 'https://www.proxiwash.com/weblaverie/ma-laverie-2?s=';
 
 export default {
   amicale: {
@@ -47,6 +48,10 @@ export default {
     categories: PROXIMO_ENDPOINT + 'categories',
     images: PROXIMO_IMAGES_ENDPOINT + 'img/',
     icons: PROXIMO_IMAGES_ENDPOINT + 'icon/',
+  },
+  proxiwash: {
+    washinsa: PROXIWASH_ENDPOINT + 'cf4f39',
+    tripodeB: PROXIWASH_ENDPOINT + 'b310b7',
   },
   planex: {
     planning: PLANEX_SERVER,
