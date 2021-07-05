@@ -48,6 +48,7 @@ export default {
     paymentMethods: 'screens.proxiwash.washinsa.paymentMethods',
     icon: 'school-outline',
     url: Urls.app.api + 'washinsa/washinsa_data.json',
+    webPageUrl: Urls.proxiwash.washinsa,
   },
   tripodeB: {
     id: 'tripodeB',
@@ -58,5 +59,6 @@ export default {
     paymentMethods: 'screens.proxiwash.tripodeB.paymentMethods',
     icon: 'domain',
     url: Urls.app.api + 'washinsa/tripode_b_data.json',
+    webPageUrl: Urls.proxiwash.tripodeB,
   },
 };
