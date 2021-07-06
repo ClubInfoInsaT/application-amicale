@@ -47,10 +47,10 @@
       "paymentTab": "Payment",
       "tariffs": "Tariffs",
       "paymentMethods": "Payment Methods",
-      "washerProcedure": "Put your laundry in the tumble without tamping it and by respecting charge limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the command central, then press the START button on the machine.\n\nWhen the program is finished, the screen indicates 'Programme terminé', press the yellow button to open the lid and retrieve your laundry.",
+      "washerProcedure": "Put your laundry in the tumble without tamping it and by respecting weight limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the central command, then press the START button on the machine.\n\nWhen the program is finished, the screen indicates 'Programme terminé', press the yellow button to open the lid and retrieve your laundry.",
       "washerTips": "Program 'blanc/couleur': 6kg of dry laundry (cotton linen, linen, underwear, sheets, jeans, towels).\n\nProgram 'non repassable': 3,5 kg of dry laundry (synthetic fibre linen, cotton and polyester mixed).\n\nProgram 'fin 30°C': 2,5 kg of dry laundry (delicate linen in synthetic fibres).\n\nProgram 'laine 30°C': 2,5 kg of dry laundry (wool textiles).",
-      "dryerProcedure": "Put your laundry in the tumble without tamping it and by respecting charge limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the command central, then press the START button on the machine.",
-      "dryerTips": "The advised dryer length is 35 minutes for 14 kg of laundry. You can choose a shorter length if the dryer is not fully charged.",
+      "dryerProcedure": "Put your laundry in the tumble without tamping it and by respecting charge limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the central command , then press the START button on the machine.",
+      "dryerTips": "The recommended dryer length is 35 minutes for 14 kg of laundry. You can choose a shorter length if the dryer is not fully charged.",
       "procedure": "Procedure",
       "tips": "Tips",
       "numAvailable": "available",
@@ -59,22 +59,22 @@
         "title": "INSA laundromat",
         "subtitle": "Your favorite laundromat!!",
         "description": "This is the washing service for INSA's residences (We don't mind if you do not live on the campus and do your laundry here). The room is right next to the R2, with 3 dryers and 9 washers. It is open 7d/7 24h/24! You can bring your own detergent, use the one given on site or buy it at the Proximo (cheaper than the one given by the machines).",
-        "tariff": "Washers 6kg: 3€ the washer + 0.80€ with detergent.\nDryers 14kg: 0.35€ for 5min of dryer usage.",
-        "paymentMethods": "Cash up until 10€.\nCredit Card also accepted."
+        "tariff": "Washers 6kg: 3€ per run + 0.80€ with detergent.\nDryers 14kg: 0.35€ for 5min of dryer usage.",
+        "paymentMethods": "Cash up to 10€.\nCredit Cards also accepted."
       },
       "tripodeB": {
         "title": "Tripode B laundromat",
         "subtitle": "For those who live near the metro.",
         "description": "This is the washing service for Tripode B and C residences, as well as Thalès and Pythagore. The room is at the foot of Tripod B in front of the Pythagore residence, with 2 dryers and 6 washers. It is open 7d/7 from 7am to 11pm. In addition to the 6kg washers there is one 10kg washer.",
-        "tariff": "Washers 6kg: 2.60€ the washer + 0.90€ with detergent.\nWashers 10kg: 4.90€ the washer + 1.50€ with detergent.\nDryers 14kg: 0.40€ for 5min of dryer usage.",
-        "paymentMethods": "Credit Card accepted."
+        "tariff": "Washers 6kg: 2.60€ per run + 0.90€ with detergent.\nWashers 10kg: 4.90€ per run + 1.50€ with detergent.\nDryers 14kg: 0.40€ for 5min of dryer usage.",
+        "paymentMethods": "Credit Cards accepted."
       },
       "modal": {
         "enableNotifications": "Notify me",
         "disableNotifications": "Stop notifications",
         "cancel": "Cancel",
-        "finished": "This machine is finished. If you started it, you can get back your laundry.",
-        "ready": "This machine is empty and ready to use.",
+        "finished": "This machine is finished. If you started it, you can pick up your laundry.",
+        "ready": "This machine is empty and ready for use.",
         "running": "This machine has been started at %{start} and will end at %{end}.\n\nRemaining time: %{remaining} min.\nProgram: %{program}",
         "runningNotStarted": "This machine is ready but not started. Please make sure you pressed the start button.",
         "broken": "This machine is out of order and cannot be used. Thank you for your comprehension.",
@@ -94,13 +94,13 @@
       },
       "notifications": {
         "machineFinishedTitle": "Laundry Ready",
-        "machineFinishedBody": "The machine n°{{number}} is finished and your laundry is ready to pickup",
+        "machineFinishedBody": "Machine n°{{number}} is finished and your laundry is ready for pickup",
         "machineRunningTitle": "Laundry running: {{time}} minutes left",
-        "machineRunningBody": "The machine n°{{number}} is still running"
+        "machineRunningBody": "Machine n°{{number}} is still running"
       },
       "mascotDialog": {
         "title": "Small tips",
-        "message": "No need for queues anymore, you will be notified when machines are ready !\n\nIf you have your head in the clouds, you can turn on notifications for your machine by clicking on it.\n\nIf you live off campus we have other laundromat available, check the settings !!!!",
+        "message": "No need for queues anymore, you will be notified when machines are ready !\n\nIf you have your head in the clouds, you can turn on notifications for your machine by clicking on it.\n\nIf you live off campus we have another available laundromat, check the settings !!!!",
         "ok": "Settings",
         "cancel": "Later"
       }
@@ -137,12 +137,12 @@
     },
     "planex": {
       "title": "Planex",
-      "noGroupSelected": "No group selected. Please select your group using the big beautiful red button bellow.",
+      "noGroupSelected": "No group selected. Please select your group using the big beautiful red button below.",
       "favorites": {
         "title": "Favorites",
         "empty": {
           "title": "No favorites",
-          "subtitle": "Clic on the star next to a group to add it to the favorites"
+          "subtitle": "Click on the star next to a group to add it to the favorites"
         }
       },
       "mascotDialog": {
@@ -156,7 +156,7 @@
     "amicaleAbout": {
       "title": "A question ?",
       "subtitle": "Ask the Amicale",
-      "message": "You want to revive a club?\nYou want to start a new project?\nHere are al the contacts you need! Do not hesitate to write a mail or send a message to the Amicale's Facebook page!",
+      "message": "Want to revive a club?\nWant to start a new project?\nHere are all the contacts you need! Don't hesitate to write a mail or send a message to the Amicale's Facebook page!",
       "roles": {
         "interSchools": "Inter Schools",
         "culture": "Culture",
@@ -181,8 +181,8 @@
       "sortPrice": "Price",
       "sortPriceReverse": "Price (reverse)",
       "inStock": "in stock",
-      "description": "The Proximo is your small grocery store maintained by students directly on the campus. Open every day from 18h30 to 19h30, we welcome you when you are short on pastas or sodas ! Different products for different problems, everything at cost price. You can pay by Lydia or cash.",
-      "openingHours": "Openning Hours",
+      "description": "The Proximo is your small grocery store held by students directly on campus. Open every day from 18h30 to 19h30, we welcome you when you are short on pasta or soda ! Different products for different problems, everything is sold at cost. You can pay with Lydia or cash.",
+      "openingHours": "Opening Hours",
       "paymentMethods": "Payment Methods",
       "paymentMethodsDescription": "Cash or Lydia",
       "search": "Search",
@@ -212,7 +212,7 @@
       "resetPassword": "Forgot Password",
       "mascotDialog": {
         "title": "An account?",
-        "message": "An Amicale account allows you to take part in several activities around campus. You can join a club, or even create your own!\n\nLogging into your Amicale account on the app will allow you to see all available clubs on the campus, vote for the upcoming elections, and more to come!\n\nNo Account? Go to the Amicale's building during open hours to create one.",
+        "message": "An Amicale account allows you to take part in several activities around campus. You can join a club, or even create your own!\n\nLogging into your Amicale account on the app will allow you to see all available clubs on the campus, vote for the upcoming elections, and more to come!\n\nNo Account? Go to the Amicale's building during opening hours to create one.",
         "button": "OK"
       }
     },
@@ -230,8 +230,8 @@
       "membershipPayed": "Payed",
       "membershipNotPayed": "Not payed",
       "welcomeTitle": "Welcome %{name}!",
-      "welcomeDescription": "This is your Amicale INSA Toulouse personal space. Bellow are the current services you can access thanks to your account. Feels empty? You're right and we plan on fixing that, so stay tuned!",
-      "welcomeFeedback": "We plan on doing more! If you have any suggestions or found bugs, please tell us by clicking the button bellow."
+      "welcomeDescription": "This is your Amicale INSA Toulouse personal space. Below are the services you can currently access thanks to your account. Feels empty? You're right and we plan on fixing that, so stay tuned!",
+      "welcomeFeedback": "We plan on doing more! If you have any suggestions or found bugs, please tell us by clicking the button below."
     },
     "clubs": {
       "title": "Clubs",
@@ -245,10 +245,10 @@
       "amicaleContact": "Contact the Amicale",
       "invalidClub": "Could not find the club. Please make sure the club you are trying to access is valid.",
       "about": {
-        "text": "The clubs, making the campus live, with more than sixty clubs offering various activities! From the philosophy club to the PABI (Production Artisanale de Bière Insaienne), without forgetting the multiple music and dance clubs, you will surely find an activity that suits you!",
+        "text": "The clubs keep the campus alive, with more than sixty clubs offering various activities! From the philosophy club to the PABI (Production Artisanale de Bière Insalienne), without forgetting the multiple music and dance clubs, you will surely find an activity that suits you!",
         "title": "A question ?",
         "subtitle": "Ask the Amicale",
-        "message": "You have a question concerning the clubs?\nYou want to revive or create a club?\nContact the Amicale at the following address:"
+        "message": "Do you have a question regarding clubs?\nWant to revive or create a club?\nContact the Amicale at the following address:"
       }
     },
     "vote": {
@@ -257,14 +257,14 @@
       "select": {
         "title": "Elections open",
         "subtitle": "Vote now!",
-        "sendButton": "Send Vote",
-        "dialogTitle": "Send Vote?",
-        "dialogTitleLoading": "Sending vote...",
-        "dialogMessage": "Are you sure you want to send your vote? You will not be able to change it."
+        "sendButton": "Cast Vote",
+        "dialogTitle": "Cast Vote?",
+        "dialogTitleLoading": "Casting vote...",
+        "dialogMessage": "Are you sure you want to cast your vote? You will not be able to change it."
       },
       "tease": {
         "title": "Elections incoming",
-        "subtitle": "Be ready to vote!",
+        "subtitle": "Get ready to vote!",
         "message": "Vote start:"
       },
       "wait": {
@@ -284,7 +284,7 @@
       },
       "mascotDialog": {
         "title": "Why vote?",
-        "message": "The Amicale's elections is the right moment for you to choose the next team, which will handle different projects on the campus, help organizing your favorite events, animate the campus life during the whole year, and relay your ideas to the administration, so that your campus life is the most enjoyable possible!\nYour turn to make a change!\uD83D\uDE09\n\nNote: If there is only one list, it is still important to vote to show your support, so that the administration knows the current list is supported by students. It is always a plus when taking difficult decisions! \uD83D\uDE09",
+        "message": "The Amicale's elections are the right moment for you to choose the next team, which will handle different projects on the campus, help organizing your favorite events, animate the campus life during the whole year, and relay your ideas to the administration, so that your campus life is the most enjoyable possible!\nYour turn to make a change!\uD83D\uDE09\n\nNote: If there is only one list, it is still important to vote to show your support, so that the administration knows the current list is supported by students. It is always a plus when taking difficult decisions! \uD83D\uDE09",
         "button": "Ok"
       }
     },
@@ -309,7 +309,7 @@
       "bookingConfirmedMessage": "Do not forget to come by the Amicale to give your bail in exchange of the equipment.",
       "mascotDialog": {
         "title": "How does it work ?",
-        "message": "Thanks to the Amicale, students have access to some equipment like BBQs and others. To book one of those items, click the equipment of your choice in the list bellow, enter your lend dates, then come around the Amicale to claim it and give your bail.",
+        "message": "Thanks to the Amicale, students have access to some equipment like BBQs and others. To book one of those items, select the equipment of your choice in the list below, enter your lend dates, then come around the Amicale to claim it and give your bail.",
         "button": "Ok"
       }
     },
@@ -329,7 +329,7 @@
       },
       "mascotDialog": {
         "title": "Scano...what?",
-        "message": "Scanotron 3000 allows you to scan Campus QR codes, created by clubs or event managers, to get more detailed info!\n\nThe camera will never be used for any other purposes.",
+        "message": "Scanotron 3000 allows you to scan Campus QR codes, created by clubs or event managers, to get more detailed info!\n\nThe camera will never be used for any other purpose.",
         "button": "OK"
       }
     },
@@ -340,11 +340,11 @@
       "nightModeSubOn": "Your eyes are at peace",
       "nightModeSubOff": "Your eyes are burning",
       "nightModeAuto": "Follow system dark mode",
-      "nightModeAutoSub": "Follows the mode chosen by your system",
+      "nightModeAutoSub": "Follows the mode set by your system",
       "startScreen": "Start Screen",
       "startScreenSub": "Select which screen to start the app on",
       "dashboard": "Dashboard",
-      "dashboardSub": "Edit what services to display on the dashboard",
+      "dashboardSub": "Edit which services to display on the dashboard",
       "proxiwashNotifReminder": "Machine running reminder",
       "proxiwashNotifReminderSub": "How many minutes before",
       "proxiwashChangeWash": "Laundromat selection",
@@ -352,7 +352,7 @@
       "information": "Information",
       "dashboardEdit": {
         "title": "Edit dashboard",
-        "message": "The five items above represent your dashboard.\nYou can replace one of its services by selecting it, and then by clicking on the desired new service in the list bellow.",
+        "message": "The five items above represent your dashboard.\nYou can replace one of its services by selecting it, and then by clicking on the desired new service in the list below.",
         "undo": "Undo changes"
       }
     },
@@ -375,7 +375,7 @@
         "docjyj":  "Student in 2MIC FAS (2020). He added some new features and fixed some bugs.",
         "yohan":  "Student in 4IR (2020). He helped to fix bugs and gave some ideas.",
         "beranger": "Student in 4AE (2020) and president of the Amicale when the app was created. The app was his idea. He helped a lot to find bugs, new features and communication.",
-        "celine": "Student in 4GPE (2020). Without her, everything would be less cute. She helped to write the text, for communication, and also to create the mascot 🦊.",
+        "celine": "Student in 4GPE (2020). Without her, everything wouldn't be as cute. She helped to write the text, for communication, and also to create the mascot 🦊.",
         "damien": "Student in 4IR (2020) and creator of the 2020 version of the Amicale's website. Thanks to his help, integrating Amicale's services into the app was child's play.",
         "titouan": "Student in 4IR (2020). He helped a lot in finding bugs and new features.",
         "theo": "Student in 4AE (2020). If the app works on iOS, this is all thanks to his help during his numerous tests."
@@ -385,10 +385,10 @@
       "title": "Contribute",
       "feedback": "Contact the dev",
       "feedbackSubtitle": "A student like you!",
-      "feedbackDescription": "Feedback or bugs, you are always welcome.\nChoose your preferred way from the buttons bellow.",
+      "feedbackDescription": "Feedback or bugs, you are always welcome.\nChoose your preferred way from the buttons below.",
       "contribute": "Contribute to the project",
       "contributeSubtitle": "With a possible \"implication citoyenne\"!",
-      "contributeDescription": "Everyone can help: communication, design or coding! You are free to contribute as you like.\nYou can find bellow a link to Trello for project organization, and a link to the source code on GitEtud.",
+      "contributeDescription": "Everyone can help: communication, design or coding! You are free to contribute as you like.\nYou can find below a link to Trello for project organization, and a link to the source code on GitEtud.",
       "homeButtonTitle": "Contribute to the project",
       "homeButtonSubtitle": "Your help is important"
     },
@@ -426,11 +426,11 @@
   "intro": {
     "slideMain": {
       "title": "Welcome to CAMPUS!",
-      "text": "The students app of the INSA Toulouse! Read along to see everything you can do."
+      "text": "INSA Toulouse's student app! Read along to see everything you can do."
     },
     "slidePlanex": {
       "title": "Prettier Planex",
-      "text": "Lookup your and your friends timetable with a mobile friendly Planex!"
+      "text": "Lookup your friends' and your own timetables with a mobile friendly Planex!"
     },
     "slideEvents": {
       "title": "Events",
@@ -438,7 +438,7 @@
     },
     "slideServices": {
       "title": "And even more!",
-      "text": "You can do much more with CAMPUS, but I can't explain everything here. Explore the app to find out!"
+      "text": "You can do much more with CAMPUS, but I can't explain everything here. Explore the app to find out for yourself!"
     },
     "slideDone": {
       "title": "Contribute to the project!",
