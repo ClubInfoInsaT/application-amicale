@@ -156,8 +156,10 @@ function ProxiwashScreen() {
         <MaterialHeaderButtons>
           <Item
             title={'web'}
-            iconName={'web'}
-            onPress={() => Linking.openURL(ProxiwashConstants[selectedWash].webPageUrl)}
+            iconName={'open-in-new'}
+            onPress={() =>
+              Linking.openURL(ProxiwashConstants[selectedWash].webPageUrl)
+            }
           />
           <Item
             title={'information'}
