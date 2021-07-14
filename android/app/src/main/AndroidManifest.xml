@@ -24,7 +24,7 @@
         <!-- Change the value to true to enable pop-up for in foreground on receiving remote notifications (for prevent duplicating while showing local notifications set this to false) -->
         <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground"
                     android:value="false"/>
-        Change the resource name to your App's accent color - or any other color you want
+        <!-- Change the resource name to your App's accent color - or any other color you want -->
         <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"
                     android:resource="@color/colorPrimary"/>
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions" />
