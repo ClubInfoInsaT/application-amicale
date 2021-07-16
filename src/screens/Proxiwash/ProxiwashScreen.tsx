@@ -52,7 +52,7 @@ import GENERAL_STYLES from '../../constants/Styles';
 import { readData } from '../../utils/WebData';
 import { useNavigation } from '@react-navigation/core';
 import { setupMachineNotification } from '../../utils/Notifications';
-import ProximoListHeader from '../../components/Lists/Proximo/ProximoListHeader';
+import ProxiwashListHeader from '../../components/Lists/Proxiwash/ProxiwashListHeader';
 import {
   getPreferenceNumber,
   getPreferenceObject,
@@ -76,7 +76,13 @@ export type ProxiwashMachineType = {
   program: string;
 };
 
+export type ProxiwashInfoType = {
+  message: string;
+  last_checked: number;
+};
+
 type FetchedDataType = {
+  info: ProxiwashInfoType;
   dryers: Array<ProxiwashMachineType>;
   washers: Array<ProxiwashMachineType>;
 };
@@ -444,7 +450,11 @@ function ProxiwashScreen() {
   ) => {
     if (data) {
       return (
-        <ProximoListHeader date={lastRefreshDate} selectedWash={selectedWash} />
+        <ProxiwashListHeader
+          date={lastRefreshDate}
+          selectedWash={selectedWash}
+          info={data?.info}
+        />
       );
     } else {
       return null;

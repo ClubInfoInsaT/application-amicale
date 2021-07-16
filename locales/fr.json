@@ -55,6 +55,10 @@
       "tips": "Conseils",
       "numAvailable": "disponible",
       "numAvailablePlural": "disponibles",
+      "errors": {
+        "title": "Message laverie",
+        "button": "En savoir plus"
+      },
       "washinsa": {
         "title": "Laverie INSA",
         "subtitle": "Ta laverie préférée !!",
@@ -93,6 +97,10 @@
         "unknown": "INCONNU"
       },
       "notifications": {
+        "channel": {
+          "title": "Rappels laverie",
+          "description": "Recevoir des rappels pour les machines demandées"
+        },
         "machineFinishedTitle": "Linge prêt",
         "machineFinishedBody": "La machine n°{{number}} est terminée et ton linge est prêt à être récupéré",
         "machineRunningTitle": "Machine en cours: {{time}} minutes restantes",

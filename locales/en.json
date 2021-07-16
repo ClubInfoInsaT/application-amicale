@@ -55,6 +55,10 @@
       "tips": "Tips",
       "numAvailable": "available",
       "numAvailablePlural": "available",
+      "errors": {
+        "title": "Proxiwash message",
+        "button": "More info"
+      },
       "washinsa": {
         "title": "INSA laundromat",
         "subtitle": "Your favorite laundromat!!",
@@ -93,6 +97,10 @@
         "unknown": "UNKNOWN"
       },
       "notifications": {
+        "channel": {
+          "title": "Laundry reminders",
+          "description": "Get reminders for watched washers/dryers"
+        },
         "machineFinishedTitle": "Laundry Ready",
         "machineFinishedBody": "Machine n°{{number}} is finished and your laundry is ready for pickup",
         "machineRunningTitle": "Laundry running: {{time}} minutes left",
