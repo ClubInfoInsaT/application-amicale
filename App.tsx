@@ -49,10 +49,14 @@ import {
 import MainApp from './src/screens/MainApp';
 import LoginProvider from './src/components/providers/LoginProvider';
 import { retrieveLoginToken } from './src/utils/loginToken';
+import { setupNotifications } from './src/utils/Notifications';
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 // Crashes app when navigating away from webview on android 9+
 // enableScreens(true);
+
+initLocales();
+setupNotifications();
 
 LogBox.ignoreLogs([
   // collapsible headers cause this warning, just ignore as it is not an issue
@@ -92,7 +96,6 @@ export default class App extends React.Component<{}, StateType> {
       },
       loginToken: undefined,
     };
-    initLocales();
     this.navigatorRef = React.createRef();
     this.defaultHomeRoute = undefined;
     this.defaultHomeData = undefined;
