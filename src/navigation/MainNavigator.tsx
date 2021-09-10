@@ -53,6 +53,13 @@ import {
 } from '../utils/asyncStorage';
 import IntroScreen from '../screens/Intro/IntroScreen';
 import { useLoginState } from '../context/loginContext';
+import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
+import PlanningDisplayScreen from '../screens/Planning/PlanningDisplayScreen';
+import ScannerScreen from '../screens/Home/ScannerScreen';
+import FeedItemScreen from '../screens/Home/FeedItemScreen';
+import GroupSelectionScreen from '../screens/Planex/GroupSelectionScreen';
+import ServicesSectionScreen from '../screens/Services/ServicesSectionScreen';
+import AmicaleContactScreen from '../screens/Amicale/AmicaleContactScreen';
 
 export enum MainRoutes {
   Main = 'main',
@@ -304,6 +311,45 @@ function getRegularScreens(createTabNavigator: () => React.ReactElement) {
           title: i18n.t('screens.feedback.title'),
         }}
       />
+      <MainStack.Screen
+        name={'proxiwash-about'}
+        component={ProxiwashAboutScreen}
+        options={{ title: i18n.t('screens.proxiwash.title') }}
+      />
+      <MainStack.Screen
+        name={'planning-information'}
+        component={PlanningDisplayScreen}
+        options={{ title: i18n.t('screens.planning.eventDetails') }}
+      />
+      <MainStack.Screen
+        name={'scanner'}
+        component={ScannerScreen}
+        options={{ title: i18n.t('screens.scanner.title') }}
+      />
+      <MainStack.Screen
+        name={'feed-information'}
+        component={FeedItemScreen}
+        options={{
+          title: i18n.t('screens.home.feed'),
+        }}
+      />
+      <MainStack.Screen
+        name={'group-select'}
+        component={GroupSelectionScreen}
+        options={{
+          title: '',
+        }}
+      />
+      <MainStack.Screen
+        name={'services-section'}
+        component={ServicesSectionScreen}
+        options={{ title: 'SECTION' }}
+      />
+      <MainStack.Screen
+        name={'amicale-contact'}
+        component={AmicaleContactScreen}
+        options={{ title: i18n.t('screens.amicaleAbout.title') }}
+      />
     </>
   );
 }
@@ -317,7 +363,7 @@ function MainStackComponent(props: {
   return (
     <MainStack.Navigator
       initialRouteName={showIntro ? MainRoutes.Intro : MainRoutes.Main}
-      headerMode={'screen'}
+      headerMode={'float'}
     >
       {showIntro ? getIntroScreens() : getRegularScreens(createTabNavigator)}
       {isloggedIn ? getAmicaleScreens() : null}

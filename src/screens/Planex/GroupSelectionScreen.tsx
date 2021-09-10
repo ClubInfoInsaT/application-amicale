@@ -87,7 +87,7 @@ function GroupSelectionScreen() {
       headerTitleContainerStyle:
         Platform.OS === 'ios'
           ? { marginHorizontal: 0, width: '70%' }
-          : { marginHorizontal: 0, right: 50, left: 50 },
+          : { width: '100%' },
     });
   }, [navigation]);
 

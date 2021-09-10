@@ -18,7 +18,6 @@
  */
 
 import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Title, useTheme } from 'react-native-paper';
@@ -27,18 +26,10 @@ import i18n from 'i18n-js';
 import { View } from 'react-native-animatable';
 import HomeScreen from '../screens/Home/HomeScreen';
 import PlanningScreen from '../screens/Planning/PlanningScreen';
-import PlanningDisplayScreen from '../screens/Planning/PlanningDisplayScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
-import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import PlanexScreen from '../screens/Planex/PlanexScreen';
-import ClubDisplayScreen from '../screens/Amicale/Clubs/ClubDisplayScreen';
-import ScannerScreen from '../screens/Home/ScannerScreen';
-import FeedItemScreen from '../screens/Home/FeedItemScreen';
-import GroupSelectionScreen from '../screens/Planex/GroupSelectionScreen';
 import CustomTabBar from '../components/Tabbar/CustomTabBar';
 import WebsitesHomeScreen from '../screens/Services/ServicesScreen';
-import ServicesSectionScreen from '../screens/Services/ServicesSectionScreen';
-import AmicaleContactScreen from '../screens/Amicale/AmicaleContactScreen';
 import Mascot, { MASCOT_STYLE } from '../components/Mascot/Mascot';
 import { usePreferences } from '../context/preferencesContext';
 import {
@@ -73,170 +64,6 @@ export type FullParamsList = DefaultParams & {
 // See: https://stackoverflow.com/questions/63652687/interface-does-not-satisfy-the-constraint-recordstring-object-undefined
 export type TabStackParamsList = FullParamsList &
   Record<string, object | undefined>;
-
-const ServicesStack = createStackNavigator();
-
-function ServicesStackComponent() {
-  return (
-    <ServicesStack.Navigator
-      initialRouteName={'services'}
-      headerMode={'screen'}
-    >
-      <ServicesStack.Screen
-        name={'services'}
-        component={WebsitesHomeScreen}
-        options={{ title: i18n.t('screens.services.title') }}
-      />
-      <ServicesStack.Screen
-        name={'services-section'}
-        component={ServicesSectionScreen}
-        options={{ title: 'SECTION' }}
-      />
-      <ServicesStack.Screen
-        name={'amicale-contact'}
-        component={AmicaleContactScreen}
-        options={{ title: i18n.t('screens.amicaleAbout.title') }}
-      />
-    </ServicesStack.Navigator>
-  );
-}
-
-const ProxiwashStack = createStackNavigator();
-
-function ProxiwashStackComponent() {
-  return (
-    <ProxiwashStack.Navigator
-      initialRouteName={'proxiwash'}
-      headerMode={'screen'}
-    >
-      <ProxiwashStack.Screen
-        name={'proxiwash'}
-        component={ProxiwashScreen}
-        options={{ title: i18n.t('screens.proxiwash.title') }}
-      />
-      <ProxiwashStack.Screen
-        name={'proxiwash-about'}
-        component={ProxiwashAboutScreen}
-        options={{ title: i18n.t('screens.proxiwash.title') }}
-      />
-    </ProxiwashStack.Navigator>
-  );
-}
-
-const PlanningStack = createStackNavigator();
-
-function PlanningStackComponent() {
-  return (
-    <PlanningStack.Navigator initialRouteName={'events'} headerMode={'screen'}>
-      <PlanningStack.Screen
-        name={'events'}
-        component={PlanningScreen}
-        options={{ title: i18n.t('screens.planning.title') }}
-      />
-      <PlanningStack.Screen
-        name={'planning-information'}
-        component={PlanningDisplayScreen}
-        options={{ title: i18n.t('screens.planning.eventDetails') }}
-      />
-    </PlanningStack.Navigator>
-  );
-}
-
-const HomeStack = createStackNavigator();
-
-function HomeStackComponent(
-  initialRoute?: string,
-  defaultData?: { [key: string]: string }
-) {
-  let params;
-  if (initialRoute) {
-    params = { data: defaultData, nextScreen: initialRoute, shouldOpen: true };
-  }
-  const { colors } = useTheme();
-  return (
-    <HomeStack.Navigator initialRouteName={'home'} headerMode={'screen'}>
-      <HomeStack.Screen
-        name={'home'}
-        component={HomeScreen}
-        options={{
-          title: i18n.t('screens.home.title'),
-          headerStyle: {
-            backgroundColor: colors.surface,
-          },
-          headerTitle: (headerProps) => (
-            <View style={styles.header}>
-              <Mascot
-                style={styles.mascot}
-                emotion={MASCOT_STYLE.RANDOM}
-                animated
-                entryAnimation={{
-                  animation: 'bounceIn',
-                  duration: 1000,
-                }}
-                loopAnimation={{
-                  animation: 'pulse',
-                  duration: 2000,
-                  iterationCount: 'infinite',
-                }}
-              />
-              <Title style={styles.title}>{headerProps.children}</Title>
-            </View>
-          ),
-        }}
-        initialParams={params}
-      />
-      <HomeStack.Screen
-        name={'scanner'}
-        component={ScannerScreen}
-        options={{ title: i18n.t('screens.scanner.title') }}
-      />
-      <HomeStack.Screen
-        name={'club-information'}
-        component={ClubDisplayScreen}
-        options={{
-          title: i18n.t('screens.clubs.details'),
-        }}
-      />
-      <HomeStack.Screen
-        name={'feed-information'}
-        component={FeedItemScreen}
-        options={{
-          title: i18n.t('screens.home.feed'),
-        }}
-      />
-      <HomeStack.Screen
-        name={'planning-information'}
-        component={PlanningDisplayScreen}
-        options={{
-          title: i18n.t('screens.planning.eventDetails'),
-        }}
-      />
-    </HomeStack.Navigator>
-  );
-}
-
-const PlanexStack = createStackNavigator();
-
-function PlanexStackComponent() {
-  return (
-    <PlanexStack.Navigator initialRouteName={'planex'} headerMode={'screen'}>
-      <PlanexStack.Screen
-        name={'planex'}
-        component={PlanexScreen}
-        options={{
-          title: i18n.t('screens.planex.title'),
-        }}
-      />
-      <PlanexStack.Screen
-        name={'group-select'}
-        component={GroupSelectionScreen}
-        options={{
-          title: '',
-        }}
-      />
-    </PlanexStack.Navigator>
-  );
-}
 
 const Tab = createBottomTabNavigator<TabStackParamsList>();
 
@@ -285,8 +112,15 @@ function TabNavigator(props: PropsType) {
     defaultRoute = defaultRoute.toLowerCase();
   }
 
-  const createHomeStackComponent = () =>
-    HomeStackComponent(props.defaultHomeRoute, props.defaultHomeData);
+  let params;
+  if (props.defaultHomeRoute) {
+    params = {
+      data: props.defaultHomeData,
+      nextScreen: props.defaultHomeRoute,
+      shouldOpen: true,
+    };
+  }
+  const { colors } = useTheme();
 
   const LABELS: {
     [key: string]: string;
@@ -306,28 +140,55 @@ function TabNavigator(props: PropsType) {
     >
       <Tab.Screen
         name={'services'}
-        component={ServicesStackComponent}
+        component={WebsitesHomeScreen}
         options={{ title: i18n.t('screens.services.title') }}
       />
       <Tab.Screen
         name={'proxiwash'}
-        component={ProxiwashStackComponent}
+        component={ProxiwashScreen}
         options={{ title: i18n.t('screens.proxiwash.title') }}
       />
       <Tab.Screen
         name={'home'}
-        component={createHomeStackComponent}
-        options={{ title: i18n.t('screens.home.title') }}
+        component={HomeScreen}
+        options={{
+          title: i18n.t('screens.home.title'),
+          headerStyle: {
+            backgroundColor: colors.surface,
+          },
+          headerTitle: (headerProps) => (
+            <View style={styles.header}>
+              <Mascot
+                style={styles.mascot}
+                emotion={MASCOT_STYLE.RANDOM}
+                animated
+                entryAnimation={{
+                  animation: 'bounceIn',
+                  duration: 1000,
+                }}
+                loopAnimation={{
+                  animation: 'pulse',
+                  duration: 2000,
+                  iterationCount: 'infinite',
+                }}
+              />
+              <Title style={styles.title}>{headerProps.children}</Title>
+            </View>
+          ),
+        }}
+        initialParams={params}
       />
       <Tab.Screen
         name={'events'}
-        component={PlanningStackComponent}
+        component={PlanningScreen}
         options={{ title: i18n.t('screens.planning.title') }}
       />
       <Tab.Screen
         name={'planex'}
-        component={PlanexStackComponent}
-        options={{ title: i18n.t('screens.planex.title') }}
+        component={PlanexScreen}
+        options={{
+          title: i18n.t('screens.planex.title'),
+        }}
       />
     </Tab.Navigator>
   );

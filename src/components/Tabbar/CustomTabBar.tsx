@@ -27,7 +27,7 @@ import { useCollapsible } from '../../context/CollapsibleContext';
 export const TAB_BAR_HEIGHT = 50;
 
 function CustomTabBar(
-  props: BottomTabBarProps<any> & {
+  props: BottomTabBarProps & {
     icons: {
       [key: string]: {
         normal: string;
@@ -94,10 +94,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function areEqual(
-  prevProps: BottomTabBarProps<any>,
-  nextProps: BottomTabBarProps<any>
-) {
+function areEqual(prevProps: BottomTabBarProps, nextProps: BottomTabBarProps) {
   return prevProps.state.index === nextProps.state.index;
 }
 

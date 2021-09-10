@@ -177,8 +177,8 @@ export function setupMachineNotification(
   if (isEnabled && endDate) {
     createNotifications(machineID, endDate, reminder);
   } else {
-    PushNotification.cancelLocalNotifications({ id: machineID });
+    PushNotification.cancelLocalNotification(machineID);
     const reminderId = reminderIdFactor * parseInt(machineID, 10);
-    PushNotification.cancelLocalNotifications({ id: reminderId.toString() });
+    PushNotification.cancelLocalNotification(reminderId.toString());
   }
 }
