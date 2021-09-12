@@ -39,6 +39,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { TabRoutes } from '../../navigation/TabNavigator';
 import { useShouldShowMascot } from '../../context/preferencesContext';
 import { useLogin } from '../../context/loginContext';
+import { saveLoginToken } from '../../utils/loginToken';
 
 type Props = StackScreenProps<MainStackParamsList, MainRoutes.Login>;
 
@@ -100,6 +101,7 @@ function LoginScreen(props: Props) {
     if (homeMascot.shouldShow) {
       homeMascot.setShouldShow(false);
     }
+    saveLoginToken(token);
     setLogin(token);
     if (!nextScreen) {
       navigation.goBack();

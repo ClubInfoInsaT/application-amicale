@@ -21,16 +21,12 @@ export async function retrieveLoginToken(): Promise<string | undefined> {
 /**
  * Saves the login token in the secure keychain
  *
- * @param email
  * @param token
  * @returns Promise<void>
  */
-export async function saveLoginToken(
-  email: string,
-  token: string
-): Promise<void> {
+export async function saveLoginToken(token: string): Promise<void> {
   return new Promise((resolve: () => void, reject: () => void) => {
-    Keychain.setGenericPassword(email, token).then(resolve).catch(reject);
+    Keychain.setGenericPassword('amicale', token).then(resolve).catch(reject);
   });
 }
 
