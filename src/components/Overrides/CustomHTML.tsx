@@ -18,9 +18,13 @@
  */
 
 import * as React from 'react';
-import { Text } from 'react-native-paper';
-import HTML from 'react-native-render-html';
-import { GestureResponderEvent, Linking } from 'react-native';
+import { Text, useTheme } from 'react-native-paper';
+import HTML, {
+  CustomRendererProps,
+  TBlock,
+  TText,
+} from 'react-native-render-html';
+import { Dimensions, GestureResponderEvent, Linking } from 'react-native';
 
 type PropsType = {
   html: string;
@@ -30,37 +34,54 @@ type PropsType = {
  * Abstraction layer for Agenda component, using custom configuration
  */
 function CustomHTML(props: PropsType) {
+  const theme = useTheme();
   const openWebLink = (_event: GestureResponderEvent, link: string) => {
     Linking.openURL(link);
   };
 
-  const getBasicText = (
-    _htmlAttribs: any,
-    children: any,
-    _convertedCSSStyles: any,
-    passProps: any
-  ) => {
-    return <Text {...passProps}>{children}</Text>;
+  // Why is this so complex?? I just want to replace the default Text element with the one
+  // from react-native-paper
+  // Might need to read the doc a bit more: https://meliorence.github.io/react-native-render-html/
+  // For now this seems to work
+  const getBasicText = (rendererProps: CustomRendererProps<TBlock>) => {
+    let text: TText | undefined;
+    if (rendererProps.tnode.children.length > 0) {
+      const phrasing = rendererProps.tnode.children[0];
+      if (phrasing.children.length > 0) {
+        text = phrasing.children[0] as TText;
+      }
+    }
+    if (text) {
+      return <Text>{text.data}</Text>;
+    } else {
+      return null;
+    }
   };
 
-  const getListBullet = () => {
-    return <Text>- </Text>;
-  };
-
-  // Surround description with p to allow text styling if the description is not html
   return (
     <HTML
-      html={`<p>${props.html}</p>`}
+      // Surround description with p to allow text styling if the description is not html
+      source={{ html: `<p>${props.html}</p>` }}
+      // Use Paper Text instead of React
       renderers={{
         p: getBasicText,
         li: getBasicText,
       }}
-      listsPrefixesRenderers={{
-        ul: getListBullet,
+      // Sometimes we have images inside the text, just ignore them
+      ignoredDomTags={['img']}
+      // Ignore text color
+      ignoredStyles={['color', 'backgroundColor']}
+      contentWidth={Dimensions.get('window').width - 50}
+      renderersProps={{
+        a: {
+          onPress: openWebLink,
+        },
+        ul: {
+          markerTextStyle: {
+            color: theme.colors.text,
+          },
+        },
       }}
-      ignoredTags={['img']}
-      ignoredStyles={['color', 'background-color']}
-      onLinkPress={openWebLink}
     />
   );
 }
