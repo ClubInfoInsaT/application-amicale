@@ -81,6 +81,15 @@ function GroupSelectionScreen() {
   const favoriteGroups = getFavoriteGroups();
 
   useLayoutEffect(() => {
+    const getSearchBar = () => {
+      return (
+        // @ts-ignore
+        <Searchbar
+          placeholder={i18n.t('screens.proximo.search')}
+          onChangeText={setCurrentSearchString}
+        />
+      );
+    };
     navigation.setOptions({
       headerTitle: getSearchBar,
       headerBackTitleVisible: false,
@@ -90,16 +99,6 @@ function GroupSelectionScreen() {
           : { width: '100%' },
     });
   }, [navigation]);
-
-  const getSearchBar = () => {
-    return (
-      // @ts-ignore
-      <Searchbar
-        placeholder={i18n.t('screens.proximo.search')}
-        onChangeText={setCurrentSearchString}
-      />
-    );
-  };
 
   /**
    * Gets a render item for the given article

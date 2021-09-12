@@ -120,6 +120,7 @@ function ProximoListScreen(props: Props) {
   const theme = useTheme();
   const { articles, setArticles } = useCachedProximoArticles();
   const modalRef = useRef<Modalize>(null);
+  const navParams = props.route.params;
 
   const [currentSearchString, setCurrentSearchString] = useState('');
   const [currentSortMode, setCurrentSortMode] = useState(2);
@@ -130,6 +131,70 @@ function ProximoListScreen(props: Props) {
   const sortModes = [sortPrice, sortPriceReverse, sortName, sortNameReverse];
 
   useLayoutEffect(() => {
+    const getSearchBar = () => {
+      return (
+        // @ts-ignore
+        <Searchbar
+          placeholder={i18n.t('screens.proximo.search')}
+          onChangeText={setCurrentSearchString}
+          autoFocus={navParams.shouldFocusSearchBar}
+        />
+      );
+    };
+    const getModalSortMenu = () => {
+      return (
+        <View style={styles.modalContainer}>
+          <Title style={styles.sortTitle}>
+            {i18n.t('screens.proximo.sortOrder')}
+          </Title>
+          <RadioButton.Group
+            onValueChange={setSortMode}
+            value={currentSortMode.toString()}
+          >
+            <RadioButton.Item
+              label={i18n.t('screens.proximo.sortPrice')}
+              value={'0'}
+            />
+            <RadioButton.Item
+              label={i18n.t('screens.proximo.sortPriceReverse')}
+              value={'1'}
+            />
+            <RadioButton.Item
+              label={i18n.t('screens.proximo.sortName')}
+              value={'2'}
+            />
+            <RadioButton.Item
+              label={i18n.t('screens.proximo.sortNameReverse')}
+              value={'3'}
+            />
+          </RadioButton.Group>
+        </View>
+      );
+    };
+    const setSortMode = (mode: string) => {
+      const currentMode = parseInt(mode, 10);
+      setCurrentSortMode(currentMode);
+      if (modalRef.current && currentMode !== currentSortMode) {
+        modalRef.current.close();
+      }
+    };
+    const getSortMenuButton = () => {
+      return (
+        <MaterialHeaderButtons>
+          <Item
+            title="main"
+            iconName="sort"
+            onPress={() => {
+              setModalCurrentDisplayItem(getModalSortMenu());
+              if (modalRef.current) {
+                modalRef.current.open();
+              }
+            }}
+          />
+        </MaterialHeaderButtons>
+      );
+    };
+
     navigation.setOptions({
       headerRight: getSortMenuButton,
       headerTitle: getSearchBar,
@@ -137,21 +202,9 @@ function ProximoListScreen(props: Props) {
       headerTitleContainerStyle:
         Platform.OS === 'ios'
           ? { marginHorizontal: 0, width: '70%' }
-          : { marginHorizontal: 0, right: 50, left: 50 },
+          : { width: '100%' },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation, currentSortMode]);
-
-  /**
-   * Callback used when clicking on the sort menu button.
-   * It will open the modal to show a sort selection
-   */
-  const onSortMenuPress = () => {
-    setModalCurrentDisplayItem(getModalSortMenu());
-    if (modalRef.current) {
-      modalRef.current.open();
-    }
-  };
+  }, [navigation, currentSortMode, navParams.shouldFocusSearchBar]);
 
   /**
    * Callback used when clicking an article in the list.
@@ -163,19 +216,6 @@ function ProximoListScreen(props: Props) {
     setModalCurrentDisplayItem(getModalItemContent(item));
     if (modalRef.current) {
       modalRef.current.open();
-    }
-  };
-
-  /**
-   * Sets the current sort mode.
-   *
-   * @param mode The number representing the mode
-   */
-  const setSortMode = (mode: string) => {
-    const currentMode = parseInt(mode, 10);
-    setCurrentSortMode(currentMode);
-    if (modalRef.current && currentMode !== currentSortMode) {
-      modalRef.current.close();
     }
   };
 
@@ -195,35 +235,6 @@ function ProximoListScreen(props: Props) {
       color = theme.colors.danger;
     }
     return color;
-  };
-
-  /**
-   * Gets the sort menu header button
-   *
-   * @return {*}
-   */
-  const getSortMenuButton = () => {
-    return (
-      <MaterialHeaderButtons>
-        <Item title="main" iconName="sort" onPress={onSortMenuPress} />
-      </MaterialHeaderButtons>
-    );
-  };
-
-  /**
-   * Gets the header search bar
-   *
-   * @return {*}
-   */
-  const getSearchBar = () => {
-    return (
-      // @ts-ignore
-      <Searchbar
-        placeholder={i18n.t('screens.proximo.search')}
-        onChangeText={setCurrentSearchString}
-        autoFocus={props.route.params.shouldFocusSearchBar}
-      />
-    );
   };
 
   /**
@@ -258,42 +269,6 @@ function ProximoListScreen(props: Props) {
           </View>
           <Text>{item.description}</Text>
         </ScrollView>
-      </View>
-    );
-  };
-
-  /**
-   * Gets the modal content to display a sort menu
-   *
-   * @return {*}
-   */
-  const getModalSortMenu = () => {
-    return (
-      <View style={styles.modalContainer}>
-        <Title style={styles.sortTitle}>
-          {i18n.t('screens.proximo.sortOrder')}
-        </Title>
-        <RadioButton.Group
-          onValueChange={setSortMode}
-          value={currentSortMode.toString()}
-        >
-          <RadioButton.Item
-            label={i18n.t('screens.proximo.sortPrice')}
-            value={'0'}
-          />
-          <RadioButton.Item
-            label={i18n.t('screens.proximo.sortPriceReverse')}
-            value={'1'}
-          />
-          <RadioButton.Item
-            label={i18n.t('screens.proximo.sortName')}
-            value={'2'}
-          />
-          <RadioButton.Item
-            label={i18n.t('screens.proximo.sortNameReverse')}
-            value={'3'}
-          />
-        </RadioButton.Group>
       </View>
     );
   };
@@ -341,8 +316,8 @@ function ProximoListScreen(props: Props) {
           data: data
             .filter(
               (d) =>
-                props.route.params.category === -1 ||
-                props.route.params.category === d.category_id
+                navParams.category === -1 ||
+                navParams.category === d.category_id
             )
             .sort(sortModes[currentSortMode]),
           keyExtractor: keyExtractor,
