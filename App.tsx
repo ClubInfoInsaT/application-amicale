@@ -52,10 +52,6 @@ import { retrieveLoginToken } from './src/utils/loginToken';
 import { setupNotifications } from './src/utils/Notifications';
 import { TabRoutes } from './src/navigation/TabNavigator';
 
-// Native optimizations https://reactnavigation.org/docs/react-native-screens
-// Crashes app when navigating away from webview on android 9+
-// enableScreens(true);
-
 initLocales();
 setupNotifications();
 
