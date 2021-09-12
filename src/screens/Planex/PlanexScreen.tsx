@@ -42,6 +42,7 @@ import {
 } from '../../utils/asyncStorage';
 import { usePlanexPreferences } from '../../context/preferencesContext';
 import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 const styles = StyleSheet.create({
   container: {
@@ -59,15 +60,14 @@ function PlanexScreen() {
   const theme = useTheme();
   const { preferences } = usePlanexPreferences();
 
-  const [dialogContent, setDialogContent] =
-    useState<
-      | undefined
-      | {
-          title: string | React.ReactElement;
-          message: string | React.ReactElement;
-          color: string;
-        }
-    >();
+  const [dialogContent, setDialogContent] = useState<
+    | undefined
+    | {
+        title: string | React.ReactElement;
+        message: string | React.ReactElement;
+        color: string;
+      }
+  >();
   const [injectJS, setInjectJS] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -106,7 +106,7 @@ function PlanexScreen() {
    * Callback used when the user clicks on the navigate to settings button.
    * This will hide the banner and open the SettingsScreen
    */
-  const onGoToSettings = () => navigation.navigate('settings');
+  const onGoToSettings = () => navigation.navigate(MainRoutes.Settings);
 
   /**
    * Sends a FullCalendar action to the web page inside the webview.

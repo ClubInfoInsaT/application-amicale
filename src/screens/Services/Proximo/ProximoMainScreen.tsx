@@ -32,6 +32,7 @@ import { useNavigation } from '@react-navigation/core';
 import { useLayoutEffect } from 'react';
 import { useCachedProximoCategories } from '../../../context/cacheContext';
 import GENERAL_STYLES from '../../../constants/Styles';
+import { MainRoutes } from '../../../navigation/MainNavigator';
 
 const LIST_ITEM_HEIGHT = 84;
 
@@ -122,10 +123,10 @@ function ProximoMainScreen() {
       shouldFocusSearchBar: true,
       category: -1,
     };
-    navigation.navigate('proximo-list', searchScreenData);
+    navigation.navigate(MainRoutes.ProximoList, searchScreenData);
   };
 
-  const onPressAboutBtn = () => navigation.navigate('proximo-about');
+  const onPressAboutBtn = () => navigation.navigate(MainRoutes.ProximoAbout);
 
   const getHeaderButtons = () => {
     return (
@@ -170,7 +171,8 @@ function ProximoMainScreen() {
         ? i18n.t('screens.proximo.articles')
         : i18n.t('screens.proximo.article')
     }`;
-    const onPress = () => navigation.navigate('proximo-list', dataToSend);
+    const onPress = () =>
+      navigation.navigate(MainRoutes.ProximoList, dataToSend);
     if (article_number > 0) {
       return (
         <List.Item

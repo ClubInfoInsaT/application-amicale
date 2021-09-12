@@ -24,7 +24,7 @@ import SettingsScreen from '../screens/Other/Settings/SettingsScreen';
 import AboutScreen from '../screens/About/AboutScreen';
 import AboutDependenciesScreen from '../screens/About/AboutDependenciesScreen';
 import DebugScreen from '../screens/About/DebugScreen';
-import TabNavigator from './TabNavigator';
+import TabNavigator, { TabRoutes } from './TabNavigator';
 import GameMainScreen from '../screens/Game/screens/GameMainScreen';
 import VoteScreen from '../screens/Amicale/VoteScreen';
 import LoginScreen from '../screens/Amicale/LoginScreen';
@@ -33,7 +33,10 @@ import ProximoMainScreen from '../screens/Services/Proximo/ProximoMainScreen';
 import ProximoListScreen from '../screens/Services/Proximo/ProximoListScreen';
 import ProximoAboutScreen from '../screens/Services/Proximo/ProximoAboutScreen';
 import ProfileScreen from '../screens/Amicale/ProfileScreen';
-import ClubListScreen from '../screens/Amicale/Clubs/ClubListScreen';
+import ClubListScreen, {
+  ClubCategoryType,
+  ClubType,
+} from '../screens/Amicale/Clubs/ClubListScreen';
 import ClubAboutScreen from '../screens/Amicale/Clubs/ClubAboutScreen';
 import ClubDisplayScreen from '../screens/Amicale/Clubs/ClubDisplayScreen';
 import BugReportScreen from '../screens/Other/FeedbackScreen';
@@ -60,6 +63,10 @@ import FeedItemScreen from '../screens/Home/FeedItemScreen';
 import GroupSelectionScreen from '../screens/Planex/GroupSelectionScreen';
 import ServicesSectionScreen from '../screens/Services/ServicesSectionScreen';
 import AmicaleContactScreen from '../screens/Amicale/AmicaleContactScreen';
+import { FeedItemType } from '../screens/Home/HomeScreen';
+import { PlanningEventType } from '../utils/Planning';
+import { ServiceCategoryType } from '../utils/Services';
+import { ParsedUrlDataType } from '../utils/URLHandler';
 
 export enum MainRoutes {
   Main = 'main',
@@ -77,6 +84,7 @@ export enum MainRoutes {
   Proximo = 'proximo',
   ProximoList = 'proximo-list',
   ProximoAbout = 'proximo-about',
+  ProxiwashAbout = 'proxiwash-about',
   Profile = 'profile',
   ClubList = 'club-list',
   ClubInformation = 'club-information',
@@ -87,28 +95,72 @@ export enum MainRoutes {
   Vote = 'vote',
   Feedback = 'feedback',
   Website = 'website',
+  PlanningInformation = 'planning-information',
+  Scanner = 'scanner',
+  FeedInformation = 'feed-information',
+  GroupSelect = 'group-select',
+  ServicesSection = 'services-section',
+  AmicaleContact = 'amicale-contact',
 }
 
-type DefaultParams = { [key in MainRoutes]: object | undefined };
+type DefaultParams = { [key in MainRoutes]: object | undefined } & {
+  [key in TabRoutes]: object | undefined;
+};
 
-export type FullParamsList = DefaultParams & {
-  'login': { nextScreen: string };
-  'equipment-confirm': {
+export type MainStackParamsList = DefaultParams & {
+  [MainRoutes.Login]: { nextScreen: string };
+  [MainRoutes.EquipmentConfirm]: {
     item?: DeviceType;
     dates: [string, string];
   };
-  'equipment-rent': { item?: DeviceType };
-  'gallery': { images: Array<{ url: string }> };
+  [MainRoutes.EquipmentRent]: { item?: DeviceType };
+  [MainRoutes.Gallery]: { images: Array<{ url: string }> };
   [MainRoutes.ProximoList]: {
     shouldFocusSearchBar: boolean;
     category: number;
   };
+  [MainRoutes.ClubInformation]: ClubInformationScreenParams;
+  [MainRoutes.Website]: {
+    host: string;
+    path?: string;
+    title: string;
+  };
+  [MainRoutes.FeedInformation]: {
+    data: FeedItemType;
+    date: string;
+  };
+  [MainRoutes.PlanningInformation]: PlanningInformationScreenParams;
+  [MainRoutes.ServicesSection]: {
+    data: ServiceCategoryType;
+  };
 };
 
-// Don't know why but TS is complaining without this
-// See: https://stackoverflow.com/questions/63652687/interface-does-not-satisfy-the-constraint-recordstring-object-undefined
-export type MainStackParamsList = FullParamsList &
-  Record<string, object | undefined>;
+export type ClubInformationScreenParams =
+  | {
+      type: 'full';
+      data: ClubType;
+      categories: Array<ClubCategoryType>;
+    }
+  | {
+      type: 'id';
+      clubId: number;
+    };
+
+export type PlanningInformationScreenParams =
+  | {
+      type: 'full';
+      data: PlanningEventType;
+    }
+  | {
+      type: 'id';
+      eventId: number;
+    };
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends MainStackParamsList {}
+  }
+}
 
 const MainStack = createStackNavigator<MainStackParamsList>();
 
@@ -312,41 +364,41 @@ function getRegularScreens(createTabNavigator: () => React.ReactElement) {
         }}
       />
       <MainStack.Screen
-        name={'proxiwash-about'}
+        name={MainRoutes.ProxiwashAbout}
         component={ProxiwashAboutScreen}
         options={{ title: i18n.t('screens.proxiwash.title') }}
       />
       <MainStack.Screen
-        name={'planning-information'}
+        name={MainRoutes.PlanningInformation}
         component={PlanningDisplayScreen}
         options={{ title: i18n.t('screens.planning.eventDetails') }}
       />
       <MainStack.Screen
-        name={'scanner'}
+        name={MainRoutes.Scanner}
         component={ScannerScreen}
         options={{ title: i18n.t('screens.scanner.title') }}
       />
       <MainStack.Screen
-        name={'feed-information'}
+        name={MainRoutes.FeedInformation}
         component={FeedItemScreen}
         options={{
           title: i18n.t('screens.home.feed'),
         }}
       />
       <MainStack.Screen
-        name={'group-select'}
+        name={MainRoutes.GroupSelect}
         component={GroupSelectionScreen}
         options={{
           title: '',
         }}
       />
       <MainStack.Screen
-        name={'services-section'}
+        name={MainRoutes.ServicesSection}
         component={ServicesSectionScreen}
         options={{ title: 'SECTION' }}
       />
       <MainStack.Screen
-        name={'amicale-contact'}
+        name={MainRoutes.AmicaleContact}
         component={AmicaleContactScreen}
         options={{ title: i18n.t('screens.amicaleAbout.title') }}
       />
@@ -363,7 +415,9 @@ function MainStackComponent(props: {
   return (
     <MainStack.Navigator
       initialRouteName={showIntro ? MainRoutes.Intro : MainRoutes.Main}
-      headerMode={'float'}
+      screenOptions={{
+        headerMode: 'float',
+      }}
     >
       {showIntro ? getIntroScreens() : getRegularScreens(createTabNavigator)}
       {isloggedIn ? getAmicaleScreens() : null}
@@ -372,8 +426,7 @@ function MainStackComponent(props: {
 }
 
 type PropsType = {
-  defaultHomeRoute?: string;
-  defaultHomeData?: { [key: string]: string };
+  defaultData?: ParsedUrlDataType;
 };
 
 function MainNavigator(props: PropsType) {
@@ -395,7 +448,5 @@ function MainNavigator(props: PropsType) {
 
 export default React.memo(
   MainNavigator,
-  (pp: PropsType, np: PropsType) =>
-    pp.defaultHomeRoute === np.defaultHomeRoute &&
-    pp.defaultHomeData === np.defaultHomeData
+  (pp: PropsType, np: PropsType) => pp.defaultData === np.defaultData
 );

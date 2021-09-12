@@ -50,6 +50,7 @@ import MainApp from './src/screens/MainApp';
 import LoginProvider from './src/components/providers/LoginProvider';
 import { retrieveLoginToken } from './src/utils/loginToken';
 import { setupNotifications } from './src/utils/Notifications';
+import { TabRoutes } from './src/navigation/TabNavigator';
 
 // Native optimizations https://reactnavigation.org/docs/react-native-screens
 // Crashes app when navigating away from webview on android 9+
@@ -76,11 +77,9 @@ type StateType = {
 };
 
 export default class App extends React.Component<{}, StateType> {
-  navigatorRef: { current: null | NavigationContainerRef };
+  navigatorRef: { current: null | NavigationContainerRef<any> };
 
-  defaultHomeRoute: string | undefined;
-
-  defaultHomeData: { [key: string]: string } | undefined;
+  defaultData?: ParsedUrlDataType;
 
   urlHandler: URLHandler;
 
@@ -97,8 +96,7 @@ export default class App extends React.Component<{}, StateType> {
       loginToken: undefined,
     };
     this.navigatorRef = React.createRef();
-    this.defaultHomeRoute = undefined;
-    this.defaultHomeData = undefined;
+    this.defaultData = undefined;
     this.urlHandler = new URLHandler(this.onInitialURLParsed, this.onDetectURL);
     this.urlHandler.listen();
     setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 20);
@@ -112,8 +110,7 @@ export default class App extends React.Component<{}, StateType> {
    * @param parsedData The data parsed from the url
    */
   onInitialURLParsed = (parsedData: ParsedUrlDataType) => {
-    this.defaultHomeRoute = parsedData.route;
-    this.defaultHomeData = parsedData.data;
+    this.defaultData = parsedData;
   };
 
   /**
@@ -126,9 +123,9 @@ export default class App extends React.Component<{}, StateType> {
     // Navigate to nested navigator and pass data to the index screen
     const nav = this.navigatorRef.current;
     if (nav != null) {
-      nav.navigate('home', {
-        screen: 'index',
-        params: { nextScreen: parsedData.route, data: parsedData.data },
+      nav.navigate(TabRoutes.Home, {
+        nextScreen: parsedData.route,
+        data: parsedData.data,
       });
     }
   };
@@ -213,8 +210,7 @@ export default class App extends React.Component<{}, StateType> {
               <LoginProvider initialToken={this.state.loginToken}>
                 <MainApp
                   ref={this.navigatorRef}
-                  defaultHomeData={this.defaultHomeData}
-                  defaultHomeRoute={this.defaultHomeRoute}
+                  defaultData={this.defaultData}
                 />
               </LoginProvider>
             </MascotPreferencesProvider>

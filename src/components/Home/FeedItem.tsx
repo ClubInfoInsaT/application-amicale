@@ -30,6 +30,7 @@ import type { NewsSourceType } from '../../constants/NewsSourcesConstants';
 import ImageGalleryButton from '../Media/ImageGalleryButton';
 import { useNavigation } from '@react-navigation/native';
 import GENERAL_STYLES from '../../constants/Styles';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 type PropsType = {
   item: FeedItemType;
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
 function FeedItem(props: PropsType) {
   const navigation = useNavigation();
   const onPress = () => {
-    navigation.navigate('feed-information', {
+    navigation.navigate(MainRoutes.FeedInformation, {
       data: item,
       date: getFormattedDate(props.item.time),
     });

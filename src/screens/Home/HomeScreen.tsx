@@ -154,7 +154,7 @@ function HomeScreen(props: Props) {
   useLayoutEffect(() => {
     const getHeaderButton = () => {
       let onPressLog = () =>
-        navigation.navigate('login', { nextScreen: 'profile' });
+        navigation.navigate(MainRoutes.Login, { nextScreen: 'profile' });
       let logIcon = 'login';
       let logColor = theme.colors.primary;
       if (isLoggedIn) {
@@ -190,8 +190,8 @@ function HomeScreen(props: Props) {
       const handleNavigationParams = () => {
         const { route } = props;
         if (route.params != null) {
-          if (route.params.nextScreen != null) {
-            navigation.navigate(route.params.nextScreen, route.params.data);
+          if (route.params.route != null) {
+            navigation.navigate(route.params.route, route.params.data);
             // reset params to prevent infinite loop
             navigation.dispatch(CommonActions.setParams({ nextScreen: null }));
           }
@@ -328,7 +328,7 @@ function HomeScreen(props: Props) {
 
   const hideDisconnectDialog = () => setDialogVisible(false);
 
-  const openScanner = () => navigation.navigate('scanner');
+  const openScanner = () => navigation.navigate(MainRoutes.Scanner);
 
   /**
    * Creates the dataset to be used in the FlatList

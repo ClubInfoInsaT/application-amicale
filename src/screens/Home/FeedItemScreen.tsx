@@ -21,7 +21,7 @@ import * as React from 'react';
 import { Linking, Image, StyleSheet } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import Autolink from 'react-native-autolink';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
@@ -33,11 +33,15 @@ import NewsSourcesConstants, {
   AvailablePages,
 } from '../../constants/NewsSourcesConstants';
 import type { NewsSourceType } from '../../constants/NewsSourcesConstants';
+import {
+  MainRoutes,
+  MainStackParamsList,
+} from '../../navigation/MainNavigator';
 
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  route: { params: { data: FeedItemType; date: string } };
-};
+type PropsType = StackScreenProps<
+  MainStackParamsList,
+  MainRoutes.FeedInformation
+>;
 
 const styles = StyleSheet.create({
   container: {

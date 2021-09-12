@@ -18,10 +18,15 @@
  */
 
 import { Linking } from 'react-native';
+import {
+  ClubInformationScreenParams,
+  MainRoutes,
+  PlanningInformationScreenParams,
+} from '../navigation/MainNavigator';
 
 export type ParsedUrlDataType = {
-  route: string;
-  data: { [key: string]: string };
+  route: MainRoutes.ClubInformation | MainRoutes.PlanningInformation;
+  data: ClubInformationScreenParams | PlanningInformationScreenParams;
 };
 
 export type ParsedUrlCallbackType = (parsedData: ParsedUrlDataType) => void;
@@ -40,10 +45,6 @@ export default class URLHandler {
   static CLUB_INFO_URL_PATH = 'club';
 
   static EVENT_INFO_URL_PATH = 'event';
-
-  static CLUB_INFO_ROUTE = 'club-information';
-
-  static EVENT_INFO_ROUTE = 'planning-information';
 
   onInitialURLParsed: ParsedUrlCallbackType;
 
@@ -152,8 +153,11 @@ export default class URLHandler {
       const id = parseInt(params.id, 10);
       if (!Number.isNaN(id)) {
         return {
-          route: URLHandler.CLUB_INFO_ROUTE,
-          data: { clubId: id.toString() },
+          route: MainRoutes.ClubInformation,
+          data: {
+            type: 'id',
+            clubId: id,
+          },
         };
       }
     }
@@ -173,8 +177,11 @@ export default class URLHandler {
       const id = parseInt(params.id, 10);
       if (!Number.isNaN(id)) {
         return {
-          route: URLHandler.EVENT_INFO_ROUTE,
-          data: { eventId: id.toString() },
+          route: MainRoutes.PlanningInformation,
+          data: {
+            type: 'id',
+            eventId: id,
+          },
         };
       }
     }

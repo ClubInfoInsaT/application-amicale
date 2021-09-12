@@ -33,6 +33,7 @@ import MaterialHeaderButtons, {
 import WebSectionList from '../../../components/Screens/WebSectionList';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthenticatedRequest } from '../../../context/loginContext';
+import { MainRoutes } from '../../../navigation/MainNavigator';
 
 export type ClubCategoryType = {
   id: number;
@@ -80,7 +81,7 @@ function ClubListScreen() {
           <Item
             title="main"
             iconName="information"
-            onPress={() => navigation.navigate('club-about')}
+            onPress={() => navigation.navigate(MainRoutes.ClubAbout)}
           />
         </MaterialHeaderButtons>
       );
@@ -108,7 +109,8 @@ function ClubListScreen() {
    * @param item The article pressed
    */
   const onListItemPress = (item: ClubType) => {
-    navigation.navigate('club-information', {
+    navigation.navigate(MainRoutes.ClubInformation, {
+      type: 'full',
       data: item,
       categories: categories.current,
     });

@@ -79,13 +79,12 @@ export default function GameMainScreen() {
     gameLevel: 0,
   });
 
-  const [dialogContent, setDialogContent] =
-    useState<{
-      dialogTitle: string;
-      dialogMessage: string;
-      dialogButtons: Array<OptionsDialogButtonType>;
-      onDialogDismiss: () => void;
-    }>();
+  const [dialogContent, setDialogContent] = useState<{
+    dialogTitle: string;
+    dialogMessage: string;
+    dialogButtons: Array<OptionsDialogButtonType>;
+    onDialogDismiss: () => void;
+  }>();
 
   const { preferences, updatePreferences } = usePreferences();
 

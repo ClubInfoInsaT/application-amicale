@@ -42,7 +42,10 @@ import {
   isEquipmentAvailable,
 } from '../../../utils/EquipmentBooking';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
-import { MainStackParamsList } from '../../../navigation/MainNavigator';
+import {
+  MainRoutes,
+  MainStackParamsList,
+} from '../../../navigation/MainNavigator';
 import GENERAL_STYLES from '../../../constants/Styles';
 import { ApiRejectType } from '../../../utils/WebData';
 import { REQUEST_STATUS } from '../../../utils/Requests';
@@ -50,7 +53,7 @@ import { useFocusEffect } from '@react-navigation/core';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthenticatedRequest } from '../../../context/loginContext';
 
-type Props = StackScreenProps<MainStackParamsList, 'equipment-rent'>;
+type Props = StackScreenProps<MainStackParamsList, MainRoutes.EquipmentRent>;
 
 export type MarkedDatesObjectType = {
   [key: string]: PeriodMarking;

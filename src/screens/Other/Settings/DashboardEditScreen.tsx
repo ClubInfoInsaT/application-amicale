@@ -149,6 +149,7 @@ function DashboardEditScreen() {
 
   return (
     <CollapsibleFlatList
+      //@ts-ignore
       data={getCategories(navigation.navigate, isLoggedIn)}
       renderItem={getRenderItem}
       ListHeaderComponent={getListHeader()}

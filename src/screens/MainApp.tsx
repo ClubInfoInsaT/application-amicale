@@ -13,13 +13,13 @@ import { Platform, SafeAreaView, View } from 'react-native';
 import { useDarkTheme } from '../context/preferencesContext';
 import { CustomDarkTheme, CustomWhiteTheme } from '../utils/Themes';
 import { setupStatusBar } from '../utils/Utils';
+import { ParsedUrlDataType } from '../utils/URLHandler';
 
 type Props = {
-  defaultHomeRoute?: string;
-  defaultHomeData?: { [key: string]: string };
+  defaultData?: ParsedUrlDataType;
 };
 
-function MainApp(props: Props, ref?: Ref<NavigationContainerRef>) {
+function MainApp(props: Props, ref?: Ref<NavigationContainerRef<any>>) {
   const darkTheme = useDarkTheme();
   const theme = darkTheme ? CustomDarkTheme : CustomWhiteTheme;
 
@@ -44,10 +44,7 @@ function MainApp(props: Props, ref?: Ref<NavigationContainerRef>) {
             >
               <SafeAreaView style={GENERAL_STYLES.flex}>
                 <NavigationContainer theme={theme} ref={ref}>
-                  <MainNavigator
-                    defaultHomeRoute={props.defaultHomeRoute}
-                    defaultHomeData={props.defaultHomeData}
-                  />
+                  <MainNavigator defaultData={props.defaultData} />
                 </NavigationContainer>
               </SafeAreaView>
             </View>

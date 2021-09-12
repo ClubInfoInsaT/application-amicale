@@ -38,16 +38,13 @@ import { useFocusEffect } from '@react-navigation/core';
 import { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthenticatedRequest } from '../../../context/loginContext';
+import { StackScreenProps } from '@react-navigation/stack';
+import {
+  MainRoutes,
+  MainStackParamsList,
+} from '../../../navigation/MainNavigator';
 
-type Props = {
-  route: {
-    params?: {
-      data?: ClubType;
-      categories?: Array<ClubCategoryType>;
-      clubId?: number;
-    };
-  };
-};
+type Props = StackScreenProps<MainStackParamsList, MainRoutes.ClubInformation>;
 
 type ResponseType = ClubType;
 
@@ -94,18 +91,19 @@ function ClubDisplayScreen(props: Props) {
   const theme = useTheme();
 
   const [displayData, setDisplayData] = useState<ClubType | undefined>();
-  const [categories, setCategories] =
-    useState<Array<ClubCategoryType> | undefined>();
+  const [categories, setCategories] = useState<
+    Array<ClubCategoryType> | undefined
+  >();
   const [clubId, setClubId] = useState<number | undefined>();
 
   useFocusEffect(
     useCallback(() => {
-      if (props.route.params?.data && props.route.params?.categories) {
+      if (props.route.params.type === 'full') {
         setDisplayData(props.route.params.data);
         setCategories(props.route.params.categories);
         setClubId(props.route.params.data.id);
       } else {
-        const id = props.route.params?.clubId;
+        const id = props.route.params.clubId;
         setClubId(id ? id : 0);
       }
     }, [props.route.params])

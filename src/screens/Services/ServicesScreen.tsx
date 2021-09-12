@@ -42,6 +42,7 @@ import {
 } from '../../utils/Services';
 import { useNavigation } from '@react-navigation/native';
 import { useLoginState } from '../../context/loginContext';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 const styles = StyleSheet.create({
   container: {
@@ -62,6 +63,7 @@ function ServicesScreen() {
   const theme = useTheme();
   const isLoggedIn = useLoginState();
 
+  //@ts-ignore
   const finalDataset = getCategories(navigation.navigate, isLoggedIn, [
     SERVICES_CATEGORIES_KEY.SPECIAL,
   ]);
@@ -72,7 +74,7 @@ function ServicesScreen() {
         <Item
           title="information"
           iconName="information"
-          onPress={() => navigation.navigate('amicale-contact')}
+          onPress={() => navigation.navigate(MainRoutes.AmicaleContact)}
         />
       </MaterialHeaderButtons>
     );
@@ -114,7 +116,9 @@ function ServicesScreen() {
     return (
       <TouchableRipple
         style={styles.container}
-        onPress={() => navigation.navigate('services-section', { data: item })}
+        onPress={() =>
+          navigation.navigate(MainRoutes.ServicesSection, { data: item })
+        }
       >
         <View>
           <Card.Title

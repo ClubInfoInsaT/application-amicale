@@ -4,6 +4,7 @@ import i18n from 'i18n-js';
 import { FlatList, StyleSheet } from 'react-native';
 import { ProfileClubType } from '../../../screens/Amicale/ProfileScreen';
 import { useNavigation } from '@react-navigation/core';
+import { MainRoutes } from '../../../navigation/MainNavigator';
 
 type Props = {
   clubs?: Array<ProfileClubType>;
@@ -26,7 +27,10 @@ export default function ProfileClubCard(props: Props) {
 
   const getClubListItem = ({ item }: { item: ProfileClubType }) => {
     const onPress = () =>
-      navigation.navigate('club-information', { clubId: item.id });
+      navigation.navigate(MainRoutes.ClubInformation, {
+        type: 'id',
+        clubId: item.id,
+      });
     let description = i18n.t('screens.profile.isMember');
     let icon = (leftProps: {
       color: string;

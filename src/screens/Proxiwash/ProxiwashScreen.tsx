@@ -61,6 +61,7 @@ import {
 } from '../../utils/asyncStorage';
 import { useProxiwashPreferences } from '../../context/preferencesContext';
 import { useSubsequentEffect } from '../../utils/customHooks';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
@@ -170,7 +171,7 @@ function ProxiwashScreen() {
           <Item
             title={'information'}
             iconName={'information'}
-            onPress={() => navigation.navigate('proxiwash-about')}
+            onPress={() => navigation.navigate(MainRoutes.ProxiwashAbout)}
           />
         </MaterialHeaderButtons>
       ),
@@ -494,7 +495,7 @@ function ProxiwashScreen() {
           action: {
             message: i18n.t('screens.proxiwash.mascotDialog.ok'),
             icon: 'cog',
-            onPress: () => navigation.navigate('settings'),
+            onPress: () => navigation.navigate(MainRoutes.Settings),
           },
           cancel: {
             message: i18n.t('screens.proxiwash.mascotDialog.cancel'),

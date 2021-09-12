@@ -133,8 +133,9 @@ const styles = StyleSheet.create({
  */
 export default function VoteScreen() {
   const [hasVoted, setHasVoted] = useState(false);
-  const [mascotDialogVisible, setMascotDialogVisible] =
-    useState<undefined | boolean>(undefined);
+  const [mascotDialogVisible, setMascotDialogVisible] = useState<
+    undefined | boolean
+  >(undefined);
 
   const datesRequest =
     useAuthenticatedRequest<VoteDatesStringType>('elections/dates');

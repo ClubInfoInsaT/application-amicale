@@ -147,10 +147,10 @@ export function useCurrentDashboard() {
   };
 
   const allDatasets = [
-    ...getAmicaleServices(navigation.navigate, isLoggedIn),
-    ...getStudentServices(navigation.navigate),
-    ...getINSAServices(navigation.navigate),
-    ...getSpecialServices(navigation.navigate),
+    ...getAmicaleServices((route) => navigation.navigate(route), isLoggedIn),
+    ...getStudentServices((route) => navigation.navigate(route)),
+    ...getINSAServices((route) => navigation.navigate(route)),
+    ...getSpecialServices((route) => navigation.navigate(route)),
   ];
   return {
     currentDashboard: allDatasets.filter((item) =>

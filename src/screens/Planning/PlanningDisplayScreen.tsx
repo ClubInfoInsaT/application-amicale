@@ -21,7 +21,7 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import { getDateOnlyString, getTimeOnlyString } from '../../utils/Planning';
 import DateManager from '../../managers/DateManager';
 import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
@@ -33,11 +33,15 @@ import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrol
 import type { PlanningEventType } from '../../utils/Planning';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
 import { API_REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
+import {
+  MainRoutes,
+  MainStackParamsList,
+} from '../../navigation/MainNavigator';
 
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  route: { params: { data: PlanningEventType; id: number; eventId: number } };
-};
+type PropsType = StackScreenProps<
+  MainStackParamsList,
+  MainRoutes.PlanningInformation
+>;
 
 type StateType = {
   loading: boolean;
@@ -78,7 +82,7 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
 
-    if (props.route.params.data != null) {
+    if (props.route.params.type === 'full') {
       this.displayData = props.route.params.data;
       this.eventId = this.displayData.id;
       this.shouldFetchData = false;

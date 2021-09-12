@@ -29,6 +29,7 @@ import {
 import { StyleSheet } from 'react-native';
 import GENERAL_STYLES from '../../../constants/Styles';
 import { useNavigation } from '@react-navigation/native';
+import { MainRoutes } from '../../../navigation/MainNavigator';
 
 type PropsType = {
   userDeviceRentDates: [string, string] | null;
@@ -56,14 +57,14 @@ function EquipmentListItem(props: PropsType) {
   let onPress;
   if (isRented) {
     onPress = () => {
-      navigation.navigate('equipment-confirm', {
+      navigation.navigate(MainRoutes.EquipmentConfirm, {
         item,
         dates: userDeviceRentDates,
       });
     };
   } else {
     onPress = () => {
-      navigation.navigate('equipment-rent', { item });
+      navigation.navigate(MainRoutes.EquipmentRent, { item });
     };
   }
 

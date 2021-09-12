@@ -22,6 +22,7 @@ import { TouchableRipple } from 'react-native-paper';
 import { Image } from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, ViewStyle } from 'react-native';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 type PropsType = {
   images: Array<{ url: string }>;
@@ -39,7 +40,7 @@ function ImageGalleryButton(props: PropsType) {
   const navigation = useNavigation();
 
   const onPress = () => {
-    navigation.navigate('gallery', { images: props.images });
+    navigation.navigate(MainRoutes.Gallery, { images: props.images });
   };
 
   return (

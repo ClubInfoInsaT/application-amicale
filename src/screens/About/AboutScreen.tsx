@@ -35,6 +35,7 @@ import OptionsDialog from '../../components/Dialogs/OptionsDialog';
 import type { OptionsDialogButtonType } from '../../components/Dialogs/OptionsDialog';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 const APP_LOGO = require('../../../assets/android.icon.round.png');
 
@@ -179,7 +180,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
     {
       onPressCallback: () => {
         const { navigation } = this.props;
-        navigation.navigate('feedback');
+        navigation.navigate(MainRoutes.Feedback);
       },
       icon: 'bug',
       text: i18n.t('screens.feedback.homeButtonTitle'),
@@ -236,7 +237,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
     {
       onPressCallback: () => {
         const { navigation } = this.props;
-        navigation.navigate('dependencies');
+        navigation.navigate(MainRoutes.Dependencies);
       },
       icon: 'developer-board',
       text: i18n.t('screens.about.libs'),
@@ -275,7 +276,7 @@ class AboutScreen extends React.Component<PropsType, StateType> {
       {
         onPressCallback: () => {
           const { navigation } = this.props;
-          navigation.navigate('feedback');
+          navigation.navigate(MainRoutes.Feedback);
         },
         icon: 'hand-pointing-right',
         text: i18n.t('screens.about.user.you'),

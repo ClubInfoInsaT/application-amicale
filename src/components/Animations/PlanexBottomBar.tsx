@@ -24,6 +24,7 @@ import * as Animatable from 'react-native-animatable';
 import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 import { useNavigation } from '@react-navigation/core';
 import { useCollapsible } from '../../context/CollapsibleContext';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 type Props = {
   onPress: (action: string, data?: string) => void;
@@ -138,7 +139,7 @@ function PlanexBottomBar(props: Props) {
           >
             <FAB
               icon={'account-clock'}
-              onPress={() => navigation.navigate('group-select')}
+              onPress={() => navigation.navigate(MainRoutes.GroupSelect)}
             />
           </Animatable.View>
         </View>

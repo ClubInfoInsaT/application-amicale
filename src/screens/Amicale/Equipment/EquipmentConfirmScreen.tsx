@@ -31,12 +31,15 @@ import i18n from 'i18n-js';
 import { getRelativeDateString } from '../../../utils/EquipmentBooking';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import { StackScreenProps } from '@react-navigation/stack';
-import { MainStackParamsList } from '../../../navigation/MainNavigator';
+import {
+  MainRoutes,
+  MainStackParamsList,
+} from '../../../navigation/MainNavigator';
 import GENERAL_STYLES from '../../../constants/Styles';
 
 type EquipmentConfirmScreenNavigationProp = StackScreenProps<
   MainStackParamsList,
-  'equipment-confirm'
+  MainRoutes.EquipmentConfirm
 >;
 
 type Props = EquipmentConfirmScreenNavigationProp;

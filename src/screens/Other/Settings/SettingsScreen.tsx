@@ -44,6 +44,7 @@ import {
   GeneralPreferenceKeys,
   ProxiwashPreferenceKeys,
 } from '../../../utils/asyncStorage';
+import { MainRoutes } from '../../../navigation/MainNavigator';
 
 const styles = StyleSheet.create({
   slider: {
@@ -204,7 +205,7 @@ function SettingsScreen() {
   };
 
   const getNavigateItem = (
-    route: string,
+    route: MainRoutes,
     icon: string,
     title: string,
     subtitle: string,
@@ -283,7 +284,7 @@ function SettingsScreen() {
           />
           {getStartScreenPicker()}
           {getNavigateItem(
-            'dashboard-edit',
+            MainRoutes.DashboardEdit,
             'view-dashboard',
             i18n.t('screens.settings.dashboard'),
             i18n.t('screens.settings.dashboardSub')
@@ -328,21 +329,21 @@ function SettingsScreen() {
         <List.Section>
           {isDebugUnlocked
             ? getNavigateItem(
-                'debug',
+                MainRoutes.Debug,
                 'bug-check',
                 i18n.t('screens.debug.title'),
                 ''
               )
             : null}
           {getNavigateItem(
-            'about',
+            MainRoutes.About,
             'information',
             i18n.t('screens.about.title'),
             i18n.t('screens.about.buttonDesc'),
             unlockDebugMode
           )}
           {getNavigateItem(
-            'feedback',
+            MainRoutes.Feedback,
             'comment-quote',
             i18n.t('screens.feedback.homeButtonTitle'),
             i18n.t('screens.feedback.homeButtonSubtitle')

@@ -18,17 +18,19 @@
  */
 
 import * as React from 'react';
-import { Collapsible } from 'react-navigation-collapsible';
 import { CommonActions } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import CardList from '../../components/Lists/CardList/CardList';
 import { ServiceCategoryType } from '../../utils/Services';
+import {
+  MainRoutes,
+  MainStackParamsList,
+} from '../../navigation/MainNavigator';
 
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  route: { params: { data: ServiceCategoryType | null } };
-  collapsibleStack: Collapsible;
-};
+type PropsType = StackScreenProps<
+  MainStackParamsList,
+  MainRoutes.ServicesSection
+>;
 
 class ServicesSectionScreen extends React.Component<PropsType> {
   finalDataset: null | ServiceCategoryType;

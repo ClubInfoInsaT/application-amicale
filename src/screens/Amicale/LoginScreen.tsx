@@ -26,7 +26,10 @@ import ErrorDialog from '../../components/Dialogs/ErrorDialog';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
-import { MainStackParamsList } from '../../navigation/MainNavigator';
+import {
+  MainRoutes,
+  MainStackParamsList,
+} from '../../navigation/MainNavigator';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
 import { ApiRejectType, connectToAmicale } from '../../utils/WebData';
@@ -37,15 +40,16 @@ import { TabRoutes } from '../../navigation/TabNavigator';
 import { useShouldShowMascot } from '../../context/preferencesContext';
 import { useLogin } from '../../context/loginContext';
 
-type Props = StackScreenProps<MainStackParamsList, 'login'>;
+type Props = StackScreenProps<MainStackParamsList, MainRoutes.Login>;
 
 function LoginScreen(props: Props) {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const { setLogin } = useLogin();
   const [loading, setLoading] = useState(false);
   const [nextScreen, setNextScreen] = useState<string | undefined>(undefined);
-  const [mascotDialogVisible, setMascotDialogVisible] =
-    useState<undefined | boolean>(undefined);
+  const [mascotDialogVisible, setMascotDialogVisible] = useState<
+    undefined | boolean
+  >(undefined);
   const [currentError, setCurrentError] = useState<ApiRejectType>({
     status: REQUEST_STATUS.SUCCESS,
   });
@@ -58,7 +62,7 @@ function LoginScreen(props: Props) {
   );
 
   const onResetPasswordClick = () => {
-    navigation.navigate('website', {
+    navigation.navigate(MainRoutes.Website, {
       host: Urls.websites.amicale,
       path: Urls.amicale.resetPassword,
       title: i18n.t('screens.websites.amicale'),

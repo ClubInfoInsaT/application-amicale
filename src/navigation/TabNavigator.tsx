@@ -36,6 +36,7 @@ import {
   getPreferenceString,
   GeneralPreferenceKeys,
 } from '../utils/asyncStorage';
+import { ParsedUrlDataType } from '../utils/URLHandler';
 
 const styles = StyleSheet.create({
   header: {
@@ -51,25 +52,24 @@ const styles = StyleSheet.create({
   },
 });
 
+export enum TabRoutes {
+  Services = 'services',
+  Proxiwash = 'proxiwash',
+  Home = 'home',
+  Planning = 'events',
+  Planex = 'planex',
+}
+
 type DefaultParams = { [key in TabRoutes]: object | undefined };
 
-export type FullParamsList = DefaultParams & {
-  [TabRoutes.Home]: {
-    nextScreen: string;
-    data: Record<string, object | undefined>;
-  };
+export type TabStackParamsList = DefaultParams & {
+  [TabRoutes.Home]: ParsedUrlDataType;
 };
-
-// Don't know why but TS is complaining without this
-// See: https://stackoverflow.com/questions/63652687/interface-does-not-satisfy-the-constraint-recordstring-object-undefined
-export type TabStackParamsList = FullParamsList &
-  Record<string, object | undefined>;
 
 const Tab = createBottomTabNavigator<TabStackParamsList>();
 
 type PropsType = {
-  defaultHomeRoute?: string;
-  defaultHomeData?: { [key: string]: string };
+  defaultData?: ParsedUrlDataType;
 };
 
 const ICONS: {
@@ -111,15 +111,6 @@ function TabNavigator(props: PropsType) {
   } else {
     defaultRoute = defaultRoute.toLowerCase();
   }
-
-  let params;
-  if (props.defaultHomeRoute) {
-    params = {
-      data: props.defaultHomeData,
-      nextScreen: props.defaultHomeRoute,
-      shouldOpen: true,
-    };
-  }
   const { colors } = useTheme();
 
   const LABELS: {
@@ -133,23 +124,23 @@ function TabNavigator(props: PropsType) {
   };
   return (
     <Tab.Navigator
-      initialRouteName={defaultRoute}
+      initialRouteName={defaultRoute as TabRoutes}
       tabBar={(tabProps) => (
         <CustomTabBar {...tabProps} labels={LABELS} icons={ICONS} />
       )}
     >
       <Tab.Screen
-        name={'services'}
+        name={TabRoutes.Services}
         component={WebsitesHomeScreen}
         options={{ title: i18n.t('screens.services.title') }}
       />
       <Tab.Screen
-        name={'proxiwash'}
+        name={TabRoutes.Proxiwash}
         component={ProxiwashScreen}
         options={{ title: i18n.t('screens.proxiwash.title') }}
       />
       <Tab.Screen
-        name={'home'}
+        name={TabRoutes.Home}
         component={HomeScreen}
         options={{
           title: i18n.t('screens.home.title'),
@@ -176,15 +167,15 @@ function TabNavigator(props: PropsType) {
             </View>
           ),
         }}
-        initialParams={params}
+        initialParams={props.defaultData}
       />
       <Tab.Screen
-        name={'events'}
+        name={TabRoutes.Planning}
         component={PlanningScreen}
         options={{ title: i18n.t('screens.planning.title') }}
       />
       <Tab.Screen
-        name={'planex'}
+        name={TabRoutes.Planex}
         component={PlanexScreen}
         options={{
           title: i18n.t('screens.planex.title'),
@@ -196,15 +187,5 @@ function TabNavigator(props: PropsType) {
 
 export default React.memo(
   TabNavigator,
-  (pp: PropsType, np: PropsType) =>
-    pp.defaultHomeRoute === np.defaultHomeRoute &&
-    pp.defaultHomeData === np.defaultHomeData
+  (pp: PropsType, np: PropsType) => pp.defaultData === np.defaultData
 );
-
-export enum TabRoutes {
-  Services = 'services',
-  Proxiwash = 'proxiwash',
-  Home = 'home',
-  Planning = 'events',
-  Planex = 'planex',
-}

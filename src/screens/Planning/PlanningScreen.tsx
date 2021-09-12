@@ -36,6 +36,7 @@ import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 LocaleConfig.locales.fr = {
   monthNames: [
@@ -217,7 +218,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
   getRenderItem = (item: PlanningEventType) => {
     const { navigation } = this.props;
     const onPress = () => {
-      navigation.navigate('planning-information', {
+      navigation.navigate(MainRoutes.PlanningInformation, {
         data: item,
       });
     };

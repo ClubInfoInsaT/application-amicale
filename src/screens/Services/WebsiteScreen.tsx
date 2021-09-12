@@ -18,15 +18,16 @@
  */
 
 import * as React from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import WebViewScreen from '../../components/Screens/WebViewScreen';
 import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
 import Urls from '../../constants/Urls';
+import {
+  MainRoutes,
+  MainStackParamsList,
+} from '../../navigation/MainNavigator';
 
-type Props = {
-  navigation: StackNavigationProp<any>;
-  route: { params: { host: string; path: string | null; title: string } };
-};
+type Props = StackScreenProps<MainStackParamsList, MainRoutes.Website>;
 
 type State = {
   url: string;

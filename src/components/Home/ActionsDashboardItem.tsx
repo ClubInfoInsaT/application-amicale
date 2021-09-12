@@ -22,6 +22,7 @@ import { List } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 const styles = StyleSheet.create({
   item: {
@@ -53,7 +54,7 @@ function ActionsDashBoardItem() {
             icon="chevron-right"
           />
         )}
-        onPress={(): void => navigation.navigate('feedback')}
+        onPress={(): void => navigation.navigate(MainRoutes.Feedback)}
         style={styles.item}
       />
     </View>

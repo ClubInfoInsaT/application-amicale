@@ -87,8 +87,8 @@ export type ServiceCategoryType = {
 };
 
 function getAmicaleOnPress(
-  route: string,
-  onPress: (route: string, params?: { [key: string]: any }) => void,
+  route: MainRoutes,
+  onPress: (route: MainRoutes, params?: { [key: string]: any }) => void,
   isLoggedIn: boolean
 ) {
   if (isLoggedIn) {
@@ -99,7 +99,7 @@ function getAmicaleOnPress(
 }
 
 export function getAmicaleServices(
-  onPress: (route: string, params?: { [key: string]: any }) => void,
+  onPress: (route: MainRoutes, params?: { [key: string]: any }) => void,
   isLoggedIn: boolean,
   excludedItems?: Array<string>
 ): Array<ServiceItemType> {
@@ -148,7 +148,7 @@ export function getAmicaleServices(
 }
 
 export function getStudentServices(
-  onPress: (route: string, params?: { [key: string]: any }) => void,
+  onPress: (route: MainRoutes, params?: { [key: string]: any }) => void,
   excludedItems?: Array<string>
 ): Array<ServiceItemType> {
   const studentsDataset = [
@@ -201,7 +201,7 @@ export function getStudentServices(
 }
 
 export function getINSAServices(
-  onPress: (route: string, params?: { [key: string]: any }) => void,
+  onPress: (route: MainRoutes, params?: { [key: string]: any }) => void,
   excludedItems?: Array<string>
 ): Array<ServiceItemType> {
   const insaDataset = [
@@ -274,7 +274,10 @@ export function getINSAServices(
 }
 
 export function getSpecialServices(
-  onPress: (route: string, params?: { [key: string]: any }) => void,
+  onPress: (
+    route: MainRoutes | TabRoutes,
+    params?: { [key: string]: any }
+  ) => void,
   excludedItems?: Array<string>
 ): Array<ServiceItemType> {
   const specialDataset = [
@@ -301,7 +304,10 @@ export function getSpecialServices(
 }
 
 export function getCategories(
-  onPress: (route: string, params?: { [key: string]: any }) => void,
+  onPress: (
+    route: MainRoutes | TabRoutes,
+    params?: { [key: string]: any }
+  ) => void,
   isLoggedIn: boolean,
   excludedItems?: Array<string>
 ): Array<ServiceCategoryType> {

@@ -12,6 +12,7 @@ import {
 import Urls from '../../../constants/Urls';
 import { ProfileDataType } from '../../../screens/Amicale/ProfileScreen';
 import i18n from 'i18n-js';
+import { MainRoutes } from '../../../navigation/MainNavigator';
 
 type Props = {
   profile?: ProfileDataType;
@@ -93,7 +94,7 @@ export default function ProfilePersonalCard(props: Props) {
             icon="account-edit"
             mode="contained"
             onPress={() => {
-              navigation.navigate('website', {
+              navigation.navigate(MainRoutes.Website, {
                 host: Urls.websites.amicale,
                 path: profile?.link,
                 title: i18n.t('screens.websites.amicale'),

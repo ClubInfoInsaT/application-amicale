@@ -23,11 +23,14 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
 import { StyleSheet, View } from 'react-native';
-import { MainStackParamsList } from '../../navigation/MainNavigator';
+import {
+  MainRoutes,
+  MainStackParamsList,
+} from '../../navigation/MainNavigator';
 
 type ImageGalleryScreenNavigationProp = StackScreenProps<
   MainStackParamsList,
-  'gallery'
+  MainRoutes.Gallery
 >;
 
 type Props = ImageGalleryScreenNavigationProp & {
