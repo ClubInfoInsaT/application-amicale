@@ -71,7 +71,8 @@ export default function RequestScreen<T>(props: Props<T>) {
     if (props.refresh !== lastRefresh.current) {
       lastRefresh.current = props.refresh === true;
     }
-  }, [props, loading, refreshData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props, loading]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -89,7 +90,8 @@ export default function RequestScreen<T>(props: Props<T>) {
           clearInterval(refreshInterval.current);
         }
       };
-    }, [props.cache, props.refreshOnFocus, props.autoRefreshTime, refreshData])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.cache, props.refreshOnFocus, props.autoRefreshTime])
   );
 
   const isErrorCritical = (e: API_REQUEST_CODES | undefined) => {
