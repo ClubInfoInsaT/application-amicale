@@ -128,6 +128,7 @@ function TabNavigator(props: PropsType) {
       tabBar={(tabProps) => (
         <CustomTabBar {...tabProps} labels={LABELS} icons={ICONS} />
       )}
+      backBehavior={'initialRoute'}
     >
       <Tab.Screen
         name={TabRoutes.Services}
