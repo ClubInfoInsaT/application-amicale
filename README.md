@@ -12,7 +12,7 @@ Projet démarré pendant l'été 2019 par Arnaud Vergnet (alors en 3MIC), cette 
 
 ...et bien d'autres services
 
-Pour la source du serveur utilisé pour synchroniser les informations, merci de voir [ce dépôt](https://git.etud.insa-toulouse.fr/vergnet/application-amicale-serveur).
+Pour la source du serveur utilisé pour synchroniser les informations, merci de voir [ce dépôt](https://github.com/ClubInfoInsaT/application-amicale-serveur).
 
 ## 🗨️ [Des questions ? Viens discuter sur Discord !](https://discord.gg/W8MeTec)
 
