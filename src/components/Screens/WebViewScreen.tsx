@@ -58,6 +58,7 @@ type Props = {
   customPaddingFunction?: null | ((padding: number) => string);
   showAdvancedControls?: boolean;
   showControls?: boolean;
+  incognito?: boolean;
 };
 
 const AnimatedWebView = Animated.createAnimatedComponent(WebView);
@@ -272,6 +273,7 @@ function WebViewScreen(props: Props) {
       onLoad={() => injectJavaScript(getJavascriptPadding(containerPaddingTop))}
       // Animations
       onScroll={onScrollWithListener(onScroll)}
+      incognito={props.incognito}
     />
   );
 }

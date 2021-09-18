@@ -127,6 +127,7 @@ function PlanexWebview(props: Props) {
         onMessage={props.onMessage}
         showAdvancedControls={false}
         showControls={props.currentGroup !== undefined}
+        incognito={true}
       />
       {!props.currentGroup ? (
         <ErrorView
