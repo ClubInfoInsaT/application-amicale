@@ -22,27 +22,26 @@ Avant toute chose, tu dois installer React Native et git sur ta machine. Pour ce
 
 # 2. Quoi faire ?
 
-Tu trouveras une liste de choses à faire sur [Trello](https://trello.com/b/RMej49Uq/application-campus-insa).
+Tu trouveras une liste de choses à faire sur la [feuille de route](https://github.com/ClubInfoInsaT/application-amicale/projects/1). Tu peux aussi venir discuter et proposer des modifications sur [Discord](https://discord.gg/W8MeTec).
 
 # 3. Fork du projet
 
 Si tu as bien suivi les instructions plus haut, tu devrais pouvoir lancer une application vide sur un appareil. Si ce n'est pas le cas, recommence l'installation depuis le début. Si malgré tout tu n'y arrives pas, envoie-moi un petit mail : [app@amicale-insat.fr](mailto:app@amicale-insat.fr).
 
-Il est maintenant temps de **Fork** le projet. Le dépôt officiel est protégé pour éviter le vandalisme. Un fork permet de copier le code du dépôt officiel et de le lier à ton compte. Sur cette nouvelle version, tu pourras faire les modifications que tu veux, et ensuite demander de fusionner ces modifications avec le dépôt officiel. Le mainteneur actuel du projet vérifiera alors tes modifications et décidera ou non de les accepter.
+Il est maintenant temps de **Fork** le projet. Le dépôt officiel est protégé pour éviter le vandalisme. Un fork permet de copier le code du dépôt officiel et de le lier à ton compte. Sur cette nouvelle version, tu pourras faire les modifications que tu veux, et ensuite demander de fusionner ces modifications avec le dépôt officiel (faire une Pull Request). Le mainteneur actuel du projet vérifiera alors tes modifications et décidera ou non de les accepter.
 
 Plus d'infos sur git [ici](LINKS.md).
 
 Créer un fork est très simple. Pour cela, suis ces instructions :
  
- * Connecte-toi sur ce site (en haut à droite) avec tes identifiants INSA.
- * Vas sur le [dépôt officiel](https://git.etud.insa-toulouse.fr/vergnet/application-amicale) et clique sur 'Fork' en haut à droite.
- * Le site te demandera des informations sur ce fork, tu n'as rien besoin de changer et tu peux juste cliquer sur 'Fork Repository'.
- * Tu arrives ainsi sur la page du dépôt ! Il est exactement comme le dépôt officiel, à quelques détails près. Si tu regardes en haut à gauche, à la place de vergnet/application-amicale, il y a maintenant ton nom ! Tu as donc fait une copie du dépôt officiel que tu as mis sur ton compte.
+ * Connecte-toi sur GitHub (en haut à droite) avec ton compte.
+ * Vas sur le [dépôt officiel](https://github.com/ClubInfoInsaT/application-amicale) et clique sur 'Fork' en haut à droite.
+ * Tu arrives ainsi sur la page du dépôt ! Il est exactement comme le dépôt officiel, à quelques détails près. Si tu regardes en haut à gauche, à la place de `ClubInfoInsaT/application-amicale`, il y a maintenant ton nom ! Tu as donc fait une copie du dépôt officiel que tu as mis sur ton compte.
  * Tu peux maintenant télécharger ce dépôt sur ta machine en utilisant la commande:
  ````shell script
 git clone [LINK]
 ````
-en remplaçant `[LINK]` par le lien que tu peux copier en haut à droite, au-dessus de la liste des fichiers.
+en remplaçant `[LINK]` par le lien que tu peux copier en haut à droite, au-dessus de la liste des fichiers (Gros bouton vert avec marqué Code).
 * Tu as réussi à faire un Fork, bravo !
 
 # 4. Création d'une nouvelle branche
@@ -61,7 +60,7 @@ Tu es maintenant sur ta nouvelle branche et prêt à faire tes modifications.
 
 Tu peux maintenant modifier ce que tu veux pour corriger un bug ou ajoute une fonctionnalité.
 
-Mais avant de faire quoi que ce sois, merci de te signaler ! Cela évitera que plusieurs personnes corrigent le même bug ou de commencer à développer une fonctionnalité non voulue.
+Mais avant de faire quoi que ce soit, merci de te signaler ! Cela évitera que plusieurs personnes corrigent le même bug ou de commencer à développer une fonctionnalité non voulue.
 
 Pour installer l'appli sur ton téléphone/émulateur, reviens sur le [guide d'installation](INSTALL.md), et reprends à la section 3.2.
 
@@ -69,12 +68,12 @@ Avant de passer à l'étape suivante, merci de bien vérifier et tester tes modi
 
 # 6. Création d'une Pull Request
 
-Cette étape te permet d'envoyer tes modifications sur le dépôt officiel, pour être intégrées à l'application disponible dans les magasins.
+Cette étape te permet d'envoyer tes modifications sur le dépôt officiel, pour être intégrées à l'application disponible dans en téléchargement.
 
 Tout se fait simplement sur le site en suivant ces instructions :
 
-* Connecte-toi sur ce site (en haut à droite) avec tes identifiants INSA.
-* Vas sur le [dépôt officiel](https://git.etud.insa-toulouse.fr/vergnet/application-amicale) et clique sur l'onglet 'Pull Requests'.
+* Connecte-toi sur GitHub.
+* Vas sur le [dépôt officiel](https://github.com/ClubInfoInsaT/application-amicale) et clique sur l'onglet 'Pull Requests'.
 * Cette page t'affiche la liste de toutes les pull requests. Pour en créer une nouvelle, clique sur le bouton 'New Pull  Request' en haut à droite.
 * Tu arrives maintenant sur la page de création. Choisis master comme branche de destination, et ta branche créée précédemment comme source.
 * Tu devrais voir en bas la liste de toutes tes modifications. Écris alors un titre présentant tes modifications (très court), et une description expliquant pourquoi elles sont nécessaires. Cela permettra d'expliquer au mainteneur pourquoi il devrait accepter tes modifications.

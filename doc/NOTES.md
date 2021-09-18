@@ -38,10 +38,3 @@ Pour ces raisons, il a été décidé de l'abandonner pour passer à un dévelop
 Librairie utilisée pour afficher une carte en utilisant OSM. N'a pas été utilisée car augmente la taille de l'apk de quelques Mo et rend la compilation plus difficile (il est nécessaire d'augmenter la taille du java heap dans gradle.properties).
 
 [Dépot](https://github.com/react-native-mapbox-gl/maps)
-
-## _2020-06-23_ | react-native-screens
-
-Cette librairie permet d'améliorer les performances de la navigation en utilisant les optimisations natives.
-En revanche, activer le support pour screens fait crash l'appli sur android 9+ lors de la navigation pour sortir d'un écran avec une webview.
-
-[Dépot](https://github.com/software-mansion/react-native-screens) | [Référence](https://reactnavigation.org/docs/react-native-screens/)

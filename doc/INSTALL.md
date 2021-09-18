@@ -2,7 +2,7 @@
 
 Si tu as un problème ou une question, merci de me contacter par mail : [app@amicale-insat.fr](mailto:app@amicale-insat.fr)
 
-Ce guide a été testé sur Linux (Ubuntu 18.04).
+Ce guide a été testé sur Linux (Ubuntu 20.04).
 Si tu utilises Windows, débrouilles-toi ou installe Linux.
 
 ## ⚠️ Avant de commencer, merci de te familiariser avec [les bases !](LINKS.md)
@@ -47,7 +47,7 @@ Si tu veux contribuer des modifications, rends-toi sur [ce guide](CONTRIBUTE.md)
 
 Clone ce dépôt à l'aide de la commande suivante :
 ````shell script
-git clone https://git.etud.insa-toulouse.fr/vergnet/application-amicale.git
+git clone git@github.com:ClubInfoInsaT/application-amicale.git
 ````
 
 Toute modification doit être réalisée sur une branche dédiée (pas de commit direct sur master). Cette nouvelle branche est ensuite fusionnée avec master une fois qu'elle est testée et vérifiée.
@@ -67,10 +67,7 @@ Si tu es sur macOS, tu devras aussi lancer la commande suivante pour installer l
 cd ios && pod install
 ````
 
-En cas de problème d'installation (notamment lors du changement de branche), lance la commande suivante pour réinstaller seulement les modules node utilisés :
-````shell script
-./clear-node-cache.sh 
-````
+En cas de problème d'installation (notamment lors du changement de branche), supprime le dossier `node_modules` et relance les commandes précédentes.
 
 # 4. Lancement de l'application
 
