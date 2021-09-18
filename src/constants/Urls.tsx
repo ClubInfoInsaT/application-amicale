@@ -19,8 +19,7 @@
 
 const STUDENT_SERVER = 'https://etud.insa-toulouse.fr/';
 const AMICALE_SERVER = 'https://www.amicale-insat.fr/';
-const GIT_SERVER =
-  'https://git.etud.insa-toulouse.fr/vergnet/application-amicale/';
+const GIT_SERVER = 'https://github.com/ClubInfoInsaT/application-amicale/';
 const PLANEX_SERVER = 'http://planex.insa-toulouse.fr/';
 
 const AMICALE_ENDPOINT = AMICALE_SERVER + 'api/';
@@ -100,7 +99,7 @@ export default {
   },
   feedback: {
     git: GIT_SERVER,
-    trello: 'https://trello.com/b/RMej49Uq/application-campus-insa',
+    project: 'https://github.com/ClubInfoInsaT/application-amicale/projects/1',
     facebook: 'https://www.facebook.com/campus.insat',
     mail: `mailto:app@amicale-insat.fr?subject=[FEEDBACK] Application CAMPUS
 &body=Coucou Arnaud j'ai du feedback\n\n\n\nBien cordialement.`,

@@ -94,7 +94,7 @@ function getButtons(isFeedback: boolean) {
               Linking.openURL(Urls.feedback.git);
             }}
           >
-            GITETUD
+            Gihub
           </Button>
           <Button
             icon="calendar"
@@ -102,10 +102,10 @@ function getButtons(isFeedback: boolean) {
             color="#026AA7"
             style={styles.button}
             onPress={() => {
-              Linking.openURL(Urls.feedback.trello);
+              Linking.openURL(Urls.feedback.project);
             }}
           >
-            TRELLO
+            Organisation
           </Button>
         </View>
       )}
