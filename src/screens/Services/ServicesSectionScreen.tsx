@@ -17,8 +17,8 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import { CommonActions } from '@react-navigation/native';
+import React, { useLayoutEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import CardList from '../../components/Lists/CardList/CardList';
 import { ServiceCategoryType } from '../../utils/Services';
@@ -27,43 +27,28 @@ import {
   MainStackParamsList,
 } from '../../navigation/MainNavigator';
 
-type PropsType = StackScreenProps<
-  MainStackParamsList,
-  MainRoutes.ServicesSection
->;
+type Props = StackScreenProps<MainStackParamsList, MainRoutes.ServicesSection>;
 
-class ServicesSectionScreen extends React.Component<PropsType> {
-  finalDataset: null | ServiceCategoryType;
+function ServicesSectionScreen(props: Props) {
+  let finalDataset: null | ServiceCategoryType = null;
+  const nav = useNavigation();
 
-  constructor(props: PropsType) {
-    super(props);
-    this.finalDataset = null;
-    this.handleNavigationParams();
+  if (props.route.params.data) {
+    finalDataset = props.route.params.data;
   }
 
-  /**
-   * Recover the list to display from navigation parameters
-   */
-  handleNavigationParams() {
-    const { props } = this;
-    if (props.route.params.data) {
-      this.finalDataset = props.route.params.data;
-      // reset params to prevent infinite loop
-      props.navigation.dispatch(CommonActions.setParams({ data: null }));
-      props.navigation.setOptions({
-        headerTitle: this.finalDataset.title,
+  useLayoutEffect(() => {
+    if (finalDataset) {
+      nav.setOptions({
+        headerTitle: finalDataset.title,
       });
     }
-  }
+  }, [finalDataset, nav]);
 
-  render() {
-    if (!this.finalDataset) {
-      return null;
-    }
-    return (
-      <CardList dataset={this.finalDataset.content} isHorizontal={false} />
-    );
+  if (!finalDataset) {
+    return null;
   }
+  return <CardList dataset={finalDataset.content} isHorizontal={false} />;
 }
 
 export default ServicesSectionScreen;
