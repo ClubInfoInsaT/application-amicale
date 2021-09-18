@@ -49,8 +49,8 @@
       "paymentMethods": "Payment Methods",
       "washerProcedure": "Put your laundry in the tumble without tamping it and by respecting weight limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the central command, then press the START button on the machine.\n\nWhen the program is finished, the screen indicates 'Programme terminé', press the yellow button to open the lid and retrieve your laundry.",
       "washerTips": "Program 'blanc/couleur': 6kg of dry laundry (cotton linen, linen, underwear, sheets, jeans, towels).\n\nProgram 'non repassable': 3,5 kg of dry laundry (synthetic fibre linen, cotton and polyester mixed).\n\nProgram 'fin 30°C': 2,5 kg of dry laundry (delicate linen in synthetic fibres).\n\nProgram 'laine 30°C': 2,5 kg of dry laundry (wool textiles).",
-      "dryerProcedure": "Put your laundry in the tumble without tamping it and by respecting charge limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the central command , then press the START button on the machine.",
-      "dryerTips": "The recommended dryer length is 35 minutes for 14 kg of laundry. You can choose a shorter length if the dryer is not fully charged.",
+      "dryerProcedure": "Put your laundry in the tumble without tamping it and by respecting weight limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the central command , then press the START button on the machine.",
+      "dryerTips": "The recommended dryer length is 35 minutes for 14 kg of laundry. You can choose a shorter length if the dryer is not full.",
       "procedure": "Procedure",
       "tips": "Tips",
       "numAvailable": "available",
@@ -108,7 +108,7 @@
       },
       "mascotDialog": {
         "title": "Small tips",
-        "message": "No need for queues anymore, you will be notified when machines are ready !\n\nIf you have your head in the clouds, you can turn on notifications for your machine by clicking on it.\n\nIf you live off campus we have another available laundromat, check the settings !!!!",
+        "message": "No need for queues anymore, you will be notified when machines are ready !\n\nIf you're daydreaming, you can turn on notifications for your machine by clicking on it.\n\nIf you live off campus we have another available laundromat, check the settings !!!!",
         "ok": "Settings",
         "cancel": "Later"
       }
@@ -164,7 +164,7 @@
     "amicaleAbout": {
       "title": "A question ?",
       "subtitle": "Ask the Amicale",
-      "message": "Want to revive a club?\nWant to start a new project?\nHere are all the contacts you need! Don't hesitate to write a mail or send a message to the Amicale's Facebook page!",
+      "message": "Want to revive a club?\nWant to start a new project?\nHere are all the contacts you need! Don't hesitate to write an email or send a message to the Amicale's Facebook page!",
       "roles": {
         "interSchools": "Inter Schools",
         "culture": "Culture",
@@ -278,7 +278,7 @@
       "wait": {
         "titleSubmitted": "Vote submitted!",
         "titleEnded": "Votes closed",
-        "subtitle": "Waiting for results...",
+        "subtitle": "Awaiting results...",
         "messageSubmitted": "Vote submitted successfully.",
         "messageVoted": "Thank you for your participation.",
         "messageDate": "Results available:",
@@ -317,7 +317,7 @@
       "bookingConfirmedMessage": "Do not forget to come by the Amicale to give your bail in exchange of the equipment.",
       "mascotDialog": {
         "title": "How does it work ?",
-        "message": "Thanks to the Amicale, students have access to some equipment like BBQs and others. To book one of those items, select the equipment of your choice in the list below, enter your lend dates, then come around the Amicale to claim it and give your bail.",
+        "message": "Thanks to the Amicale, students have access to some equipment like BBQs and others. To book one of those items, select the equipment of your choice in the list below, enter your lease dates, then come around the Amicale to claim it and give your bail.",
         "button": "Ok"
       }
     },
@@ -330,7 +330,7 @@
       },
       "error": {
         "title": "QR code invalid",
-        "message": "The QR code scanned could not be recognised, please make sure it is valid."
+        "message": "The scanned QR code could not be recognised, please make sure it is valid."
       },
       "help": {
         "button": "What can I scan?"
@@ -393,7 +393,7 @@
       "title": "Contribute",
       "feedback": "Contact the dev",
       "feedbackSubtitle": "A student like you!",
-      "feedbackDescription": "Feedback or bugs, you are always welcome.\nChoose your preferred way from the buttons below.",
+      "feedbackDescription": "Feedback or bug reports, you are always welcome.\nChoose your preferred way from the buttons below.",
       "contribute": "Contribute to the project",
       "contributeSubtitle": "With a possible \"implication citoyenne\"!",
       "contributeDescription": "Everyone can help: communication, design or coding! You are free to contribute as you like.\nYou can find below a link to the project organization, and a link to the source code on GitHub.",
@@ -467,7 +467,7 @@
   },
   "errors": {
     "title": "Error!",
-    "badCredentials": "Email or password invalid.\n\nMake sure you are using your AMICALE credentials, and not INSA.",
+    "badCredentials": "Invalid email or password.\n\nMake sure you are using your AMICALE credentials, and not INSA.",
     "badToken": "You are not logged in. Please login and try again.",
     "noConsent": "You did not give your consent for data processing to the Amicale.",
     "tokenSave": "Could not save session token. Please contact support.",
@@ -483,9 +483,9 @@
     "yes": "Yes",
     "cancel": "Cancel",
     "disconnect": {
-      "title": "Disconnect",
-      "titleLoading": "Disconnecting...",
-      "message": "Are you sure you want to disconnect from your Amicale account?"
+      "title": "Log out",
+      "titleLoading": "Logging out...",
+      "message": "Are you sure you want to log out of your Amicale account?"
     }
   },
   "general": {
