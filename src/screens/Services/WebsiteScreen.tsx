@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import WebViewScreen from '../../components/Screens/WebViewScreen';
 import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
@@ -26,12 +26,9 @@ import {
   MainRoutes,
   MainStackParamsList,
 } from '../../navigation/MainNavigator';
+import { useNavigation } from '@react-navigation/core';
 
 type Props = StackScreenProps<MainStackParamsList, MainRoutes.Website>;
-
-type State = {
-  url: string;
-};
 
 const ENABLE_MOBILE_STRING =
   '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
@@ -48,103 +45,78 @@ const BIB_BACK_BUTTON =
   '</a>' +
   '</div>';
 
-class WebsiteScreen extends React.Component<Props, State> {
-  injectedJS: { [key: string]: string };
+const injectedJS = {
+  [Urls.websites.availableRooms]:
+    `document.querySelector('head').innerHTML += '${ENABLE_MOBILE_STRING}';` +
+    `document.querySelector('head').innerHTML += '${AVAILABLE_ROOMS_STYLE}'; true;`,
+  [Urls.websites.bib]:
+    `document.querySelector('head').innerHTML += '${ENABLE_MOBILE_STRING}';` +
+    `document.querySelector('head').innerHTML += '${BIB_STYLE}';` +
+    'if ($(".hero-unit-form").length > 0 && $("#customBackButton").length === 0)' +
+    `$(".hero-unit-form").append("${BIB_BACK_BUTTON}");true;`,
+};
 
-  customPaddingFunctions: { [key: string]: (padding: number) => string };
+const customPaddingFunctions = {
+  [Urls.websites.bluemind]: (padding: number): string => {
+    return (
+      `$('head').append('${ENABLE_MOBILE_STRING}');` +
+      `$('.minwidth').css('top', ${padding}` +
+      "$('#mailview-bottom').css('min-height', 500);"
+    );
+  },
+  [Urls.websites.wiketud]: (padding: number): string => {
+    return (
+      `$('#p-logo-text').css('top', 10 + ${padding});` +
+      `$('#site-navigation h2').css('top', 10 + ${padding});` +
+      `$('#site-tools h2').css('top', 10 + ${padding});` +
+      `$('#user-tools h2').css('top', 10 + ${padding});`
+    );
+  },
+};
 
-  host: string;
+function WebsiteScreen(props: Props) {
+  const nav = useNavigation();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      url: '',
-    };
-    this.host = '';
-    props.navigation.addListener('focus', this.onScreenFocus);
-    this.injectedJS = {};
-    this.customPaddingFunctions = {};
-    this.injectedJS[Urls.websites.availableRooms] =
-      `document.querySelector('head').innerHTML += '${ENABLE_MOBILE_STRING}';` +
-      `document.querySelector('head').innerHTML += '${AVAILABLE_ROOMS_STYLE}'; true;`;
+  const params = props.route.params;
 
-    this.injectedJS[Urls.websites.bib] =
-      `document.querySelector('head').innerHTML += '${ENABLE_MOBILE_STRING}';` +
-      `document.querySelector('head').innerHTML += '${BIB_STYLE}';` +
-      'if ($(".hero-unit-form").length > 0 && $("#customBackButton").length === 0)' +
-      `$(".hero-unit-form").append("${BIB_BACK_BUTTON}");true;`;
-
-    this.customPaddingFunctions[Urls.websites.bluemind] = (
-      padding: number
-    ): string => {
-      return (
-        `$('head').append('${ENABLE_MOBILE_STRING}');` +
-        `$('.minwidth').css('top', ${padding}` +
-        "$('#mailview-bottom').css('min-height', 500);"
-      );
-    };
-    this.customPaddingFunctions[Urls.websites.wiketud] = (
-      padding: number
-    ): string => {
-      return (
-        `$('#p-logo-text').css('top', 10 + ${padding});` +
-        `$('#site-navigation h2').css('top', 10 + ${padding});` +
-        `$('#site-tools h2').css('top', 10 + ${padding});` +
-        `$('#user-tools h2').css('top', 10 + ${padding});`
-      );
-    };
-  }
-
-  onScreenFocus = () => {
-    this.handleNavigationParams();
-  };
-
-  /**
-   *
-   */
-  handleNavigationParams() {
-    const { route, navigation } = this.props;
-
-    if (route.params != null) {
-      this.host = route.params.host;
-      let { path } = route.params;
-      const { title } = route.params;
-      let fullUrl = '';
-      if (this.host != null && path != null) {
-        path = path.replace(this.host, '');
-        fullUrl = this.host + path;
-      } else {
-        fullUrl = this.host;
-      }
-      this.setState({ url: fullUrl });
-
-      if (title != null) {
-        navigation.setOptions({ title });
-      }
+  let host = '';
+  let url = '';
+  let title = '';
+  if (params) {
+    host = params.host;
+    title = params.title;
+    let { path } = params;
+    if (host && path) {
+      // Just in case the path has the host in it
+      path = path.replace(host, '');
+      url = host + path;
+    } else {
+      url = host;
     }
   }
 
-  render() {
-    let injectedJavascript = '';
-    let customPadding = null;
-    if (this.host != null && this.injectedJS[this.host] != null) {
-      injectedJavascript = this.injectedJS[this.host];
-    }
-    if (this.host != null && this.customPaddingFunctions[this.host] != null) {
-      customPadding = this.customPaddingFunctions[this.host];
-    }
+  useLayoutEffect(() => {
+    nav.setOptions({ title });
+  }, [nav, title]);
 
-    if (this.state.url) {
-      return (
-        <WebViewScreen
-          url={this.state.url}
-          initialJS={injectedJavascript}
-          customPaddingFunction={customPadding}
-        />
-      );
-    }
-    return <BasicLoadingScreen />;
+  let injectedJavascript = '';
+  let customPadding = null;
+  if (host && injectedJS[host]) {
+    injectedJavascript = injectedJS[host];
   }
+  if (host && customPaddingFunctions[host]) {
+    customPadding = customPaddingFunctions[host];
+  }
+  if (url) {
+    return (
+      <WebViewScreen
+        url={url}
+        initialJS={injectedJavascript}
+        customPaddingFunction={customPadding}
+      />
+    );
+  }
+  return <BasicLoadingScreen />;
 }
 
 export default WebsiteScreen;

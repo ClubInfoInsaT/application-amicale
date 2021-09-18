@@ -147,10 +147,17 @@ export function useCurrentDashboard() {
   };
 
   const allDatasets = [
-    ...getAmicaleServices((route) => navigation.navigate(route), isLoggedIn),
-    ...getStudentServices((route) => navigation.navigate(route)),
-    ...getINSAServices((route) => navigation.navigate(route)),
-    ...getSpecialServices((route) => navigation.navigate(route)),
+    ...getAmicaleServices(
+      (route, params) => navigation.navigate(route, params),
+      isLoggedIn
+    ),
+    ...getStudentServices((route, params) =>
+      navigation.navigate(route, params)
+    ),
+    ...getINSAServices((route, params) => navigation.navigate(route, params)),
+    ...getSpecialServices((route, params) =>
+      navigation.navigate(route, params)
+    ),
   ];
   return {
     currentDashboard: allDatasets.filter((item) =>
