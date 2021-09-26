@@ -158,7 +158,7 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
         }
         // Disable sticky section headers by default on iOS
         stickySectionHeadersEnabled={
-          props.stickySectionHeadersEnabled !== false
+          props.stickySectionHeadersEnabled !== true
             ? props.stickySectionHeadersEnabled
             : false
         }
