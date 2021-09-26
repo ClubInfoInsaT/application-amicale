@@ -398,7 +398,11 @@
       "contributeSubtitle": "With a possible \"implication citoyenne\"!",
       "contributeDescription": "Everyone can help: communication, design or coding! You are free to contribute as you like.\nYou can find below a link to the project organization, and a link to the source code on GitHub.",
       "homeButtonTitle": "Contribute to the project",
-      "homeButtonSubtitle": "Your help is important"
+      "homeButtonSubtitle": "Your help is important",
+      "buttons": {
+        "mail": "Mail",
+        "organization": "Organization"
+      }
     },
     "game": {
       "title": "So Awesome Game",

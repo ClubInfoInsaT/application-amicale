@@ -58,7 +58,7 @@ function getButtons(isFeedback: boolean) {
               Linking.openURL(Urls.feedback.mail);
             }}
           >
-            MAIL
+            {i18n.t('screens.feedback.buttons.mail')}
           </Button>
           <Button
             icon="facebook"
@@ -94,7 +94,7 @@ function getButtons(isFeedback: boolean) {
               Linking.openURL(Urls.feedback.git);
             }}
           >
-            Gihub
+            GitHub
           </Button>
           <Button
             icon="calendar"
@@ -105,7 +105,7 @@ function getButtons(isFeedback: boolean) {
               Linking.openURL(Urls.feedback.project);
             }}
           >
-            Organisation
+            {i18n.t('screens.feedback.buttons.organization')}
           </Button>
         </View>
       )}

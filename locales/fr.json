@@ -398,7 +398,11 @@
       "contributeSubtitle": "Avec une possible implication citoyenne !",
       "contributeDescription": "Il y en a pour tous les goûts : de la com', du design ou de la technique. Tu es libre de participer comme tu veux.\nTu trouveras ci-dessous l'organisation du projet, ainsi que le code source sur GitHub.",
       "homeButtonTitle": "Participer au projet",
-      "homeButtonSubtitle": "Ton aide compte"
+      "homeButtonSubtitle": "Ton aide compte",
+      "buttons": {
+        "mail": "Mail",
+        "organization": "Organisation"
+      }
     },
     "game": {
       "title": "Jeu trop ouf",
