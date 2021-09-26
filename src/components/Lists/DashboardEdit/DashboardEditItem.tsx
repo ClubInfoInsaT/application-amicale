@@ -79,8 +79,4 @@ function DashboardEditItem(props: PropsType) {
   );
 }
 
-const areEqual = (prevProps: PropsType, nextProps: PropsType): boolean => {
-  return nextProps.isActive === prevProps.isActive;
-};
-
-export default React.memo(DashboardEditItem, areEqual);
+export default DashboardEditItem;

@@ -28,7 +28,8 @@ import { ServiceCategoryType, ServiceItemType } from '../../../utils/Services';
 type PropsType = {
   item: ServiceCategoryType;
   activeDashboard: Array<string>;
-  onPress: (service: ServiceItemType) => void;
+  onPress: (newDashboard: Array<string>) => void;
+  activeItem: number;
 };
 
 const styles = StyleSheet.create({
@@ -53,7 +54,10 @@ function DashboardEditAccordion(props: PropsType) {
         item={item}
         isActive={props.activeDashboard.includes(item.key)}
         onPress={() => {
-          props.onPress(item);
+          const newList = props.activeDashboard.map((id, index) =>
+            index === props.activeItem ? item.key : id
+          );
+          props.onPress(newList);
         }}
         style={styles.item}
       />
@@ -88,7 +92,7 @@ function DashboardEditAccordion(props: PropsType) {
         renderItem={() => (
           <FlatList
             data={item.content}
-            extraData={props.activeDashboard.toString()}
+            extraData={props.activeItem + props.activeDashboard.toString()}
             renderItem={getRenderItem}
             listKey={item.key}
             // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration

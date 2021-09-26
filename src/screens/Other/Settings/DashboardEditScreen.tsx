@@ -70,12 +70,11 @@ function DashboardEditScreen() {
     useCurrentDashboard();
   const initialDashboard = useRef(currentDashboardIdList);
   const [activeItem, setActiveItem] = useState(0);
-
   const getDashboardRowRenderItem = ({
     item,
     index,
   }: {
-    item: ServiceItemType | null;
+    item: ServiceItemType | undefined;
     index: number;
   }) => {
     return (
@@ -89,7 +88,7 @@ function DashboardEditScreen() {
     );
   };
 
-  const getDashboard = (content: Array<ServiceItemType | null>) => {
+  const getDashboard = (content: Array<ServiceItemType | undefined>) => {
     return (
       <FlatList
         data={content}
@@ -105,8 +104,9 @@ function DashboardEditScreen() {
     return (
       <DashboardEditAccordion
         item={item}
-        onPress={updateDashboard}
+        onPress={updateCurrentDashboard}
         activeDashboard={currentDashboardIdList}
+        activeItem={activeItem}
       />
     );
   };
@@ -135,14 +135,6 @@ function DashboardEditScreen() {
     );
   };
 
-  const updateDashboard = (service: ServiceItemType) => {
-    updateCurrentDashboard(
-      currentDashboardIdList.map((id, index) =>
-        index === activeItem ? service.key : id
-      )
-    );
-  };
-
   const undoDashboard = () => {
     updateCurrentDashboard(initialDashboard.current);
   };
@@ -153,7 +145,7 @@ function DashboardEditScreen() {
       data={getCategories(navigation.navigate, isLoggedIn)}
       renderItem={getRenderItem}
       ListHeaderComponent={getListHeader()}
-      style={{}}
+      extraData={activeItem}
     />
   );
 }

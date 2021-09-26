@@ -24,6 +24,7 @@ import {
   getINSAServices,
   getSpecialServices,
   getStudentServices,
+  ServiceItemType,
 } from '../utils/Services';
 import { useLoginState } from './loginContext';
 
@@ -159,10 +160,15 @@ export function useCurrentDashboard() {
       navigation.navigate(route, params)
     ),
   ];
+
+  const currentDashboard: Array<ServiceItemType | undefined> = [];
+  // Do not use the allDatasets.filter method as it will lose the dashboard order.
+  dashboardIdList.forEach((id) => {
+    currentDashboard.push(allDatasets.find((v) => v.key === id));
+  });
+
   return {
-    currentDashboard: allDatasets.filter((item) =>
-      dashboardIdList.includes(item.key)
-    ),
+    currentDashboard: currentDashboard,
     currentDashboardIdList: dashboardIdList,
     updateCurrentDashboard: updateCurrentDashboard,
   };
