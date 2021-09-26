@@ -237,7 +237,7 @@ function HomeScreen(props: Props) {
    * @param content
    * @return {*}
    */
-  const getDashboardRow = (content: Array<ServiceItemType | null>) => {
+  const getDashboardRow = (content: Array<ServiceItemType | undefined>) => {
     return (
       <FlatList
         data={content}
@@ -257,7 +257,7 @@ function HomeScreen(props: Props) {
   const getDashboardRowRenderItem = ({
     item,
   }: {
-    item: ServiceItemType | null;
+    item: ServiceItemType | undefined;
   }) => {
     if (item != null) {
       return (

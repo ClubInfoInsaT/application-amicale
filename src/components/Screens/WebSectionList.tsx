@@ -156,6 +156,12 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
         getItemLayout={
           itemHeight ? (d, i) => getItemLayout(itemHeight, d, i) : undefined
         }
+        // Disable sticky section headers by default on iOS
+        stickySectionHeadersEnabled={
+          props.stickySectionHeadersEnabled !== false
+            ? props.stickySectionHeadersEnabled
+            : false
+        }
       />
     );
   };
