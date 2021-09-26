@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
+  item: {
+    width: '100%',
+  },
 });
 
 const LIST_ITEM_HEIGHT = 64;
@@ -52,6 +55,7 @@ function DashboardEditAccordion(props: PropsType) {
         onPress={() => {
           props.onPress(item);
         }}
+        style={styles.item}
       />
     );
   };

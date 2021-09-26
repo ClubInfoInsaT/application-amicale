@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, ViewStyle } from 'react-native';
 import { List, useTheme } from 'react-native-paper';
 import { ServiceItemType } from '../../../utils/Services';
 
@@ -27,6 +27,7 @@ type PropsType = {
   isActive: boolean;
   height: number;
   onPress: () => void;
+  style: ViewStyle;
 };
 
 const styles = StyleSheet.create({
@@ -72,6 +73,7 @@ function DashboardEditItem(props: PropsType) {
         ...styles.image,
         height: height,
         backgroundColor: backgroundColor,
+        ...props.style,
       }}
     />
   );
