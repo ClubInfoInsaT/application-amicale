@@ -93,9 +93,9 @@ export default {
     playstore:
       'https://play.google.com/store/apps/details?id=fr.amicaleinsat.application',
     react: 'https://facebook.github.io/react-native/',
-    git: GIT_SERVER + 'src/branch/master/README.md',
-    changelog: GIT_SERVER + 'src/branch/master/Changelog.md',
-    license: GIT_SERVER + 'src/branch/master/LICENSE',
+    git: GIT_SERVER,
+    changelog: GIT_SERVER + 'blob/master/Changelog.md',
+    license: GIT_SERVER + 'blob/master/LICENSE',
   },
   feedback: {
     git: GIT_SERVER,
