@@ -194,7 +194,9 @@
       "paymentMethods": "Payment Methods",
       "paymentMethodsDescription": "Cash or Lydia",
       "search": "Search",
-      "all": "All"
+      "all": "All",
+      "vegan": "vegan",
+      "vegetarian": "vegetarian"
     },
     "insaAccount": {
       "title": "INSA Account"
