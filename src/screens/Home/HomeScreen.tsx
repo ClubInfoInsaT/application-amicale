@@ -187,20 +187,17 @@ function HomeScreen(props: Props) {
 
   useFocusEffect(
     React.useCallback(() => {
-      const handleNavigationParams = () => {
-        const { route } = props;
-        if (route.params != null) {
-          if (route.params.route != null) {
-            navigation.navigate(route.params.route, route.params.data);
-            // reset params to prevent infinite loop
-            navigation.dispatch(CommonActions.setParams({ nextScreen: null }));
-          }
+      const { route } = props;
+      if (route.params != null) {
+        if (route.params.route != null) {
+          navigation.navigate(route.params.route, route.params.data);
+          // reset params to prevent infinite loop
+          navigation.dispatch(
+            CommonActions.setParams({ route: null, data: null })
+          );
         }
-      };
-      // handle link open when home is not focused or created
-      handleNavigationParams();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoggedIn])
+      }
+    }, [navigation, props])
   );
 
   /**
