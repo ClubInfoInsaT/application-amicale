@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   FlatList,
   NativeScrollEvent,
@@ -27,11 +27,7 @@ import {
 } from 'react-native';
 import i18n from 'i18n-js';
 import { Headline, useTheme } from 'react-native-paper';
-import {
-  CommonActions,
-  useFocusEffect,
-  useNavigation,
-} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
 import { View } from 'react-native-animatable';
@@ -145,6 +141,7 @@ function HomeScreen(props: Props) {
 
   const [dialogVisible, setDialogVisible] = useState(false);
   const fabRef = useRef<AnimatedFAB>(null);
+  const pageLoaded = useRef(false);
 
   const isLoggedIn = useLoginState();
   const { currentDashboard } = useCurrentDashboard();
@@ -185,20 +182,19 @@ function HomeScreen(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation, isLoggedIn]);
 
-  useFocusEffect(
-    React.useCallback(() => {
+  useEffect(() => {
+    if (!pageLoaded.current) {
       const { route } = props;
       if (route.params != null) {
         if (route.params.route != null) {
+          pageLoaded.current = true;
           navigation.navigate(route.params.route, route.params.data);
           // reset params to prevent infinite loop
-          navigation.dispatch(
-            CommonActions.setParams({ route: null, data: null })
-          );
+          navigation.setParams({ route: null, data: null });
         }
       }
-    }, [navigation, props])
-  );
+    }
+  }, [navigation, props, pageLoaded]);
 
   /**
    * Gets the event dashboard render item.
