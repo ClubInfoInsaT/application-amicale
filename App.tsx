@@ -50,7 +50,6 @@ import MainApp from './src/screens/MainApp';
 import LoginProvider from './src/components/providers/LoginProvider';
 import { retrieveLoginToken } from './src/utils/loginToken';
 import { setupNotifications } from './src/utils/Notifications';
-import { TabRoutes } from './src/navigation/TabNavigator';
 
 initLocales();
 setupNotifications();
@@ -118,10 +117,7 @@ export default class App extends React.Component<{}, StateType> {
     // Navigate to nested navigator and pass data to the index screen
     const nav = this.navigatorRef.current;
     if (nav != null) {
-      nav.navigate(TabRoutes.Home, {
-        nextScreen: parsedData.route,
-        data: parsedData.data,
-      });
+      nav.navigate(parsedData.route, parsedData.data);
     }
   };
 

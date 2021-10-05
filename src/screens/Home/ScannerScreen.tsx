@@ -211,7 +211,6 @@ class ScannerScreen extends React.Component<{}, StateType> {
     if (!URLHandler.isUrlValid(event.data)) {
       this.showErrorDialog();
     } else {
-      this.showOpeningDialog();
       Linking.openURL(event.data);
     }
   };
