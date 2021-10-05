@@ -44,8 +44,6 @@ import {
 
 type Props = StackScreenProps<MainStackParamsList, MainRoutes.ClubInformation>;
 
-type ResponseType = ClubType;
-
 const AMICALE_MAIL = 'clubs@amicale-insat.fr';
 
 const styles = StyleSheet.create({
@@ -216,7 +214,7 @@ function ClubDisplayScreen(props: Props) {
     );
   };
 
-  const getScreen = (data: ResponseType | undefined) => {
+  const getScreen = (data: ClubType | undefined) => {
     if (data) {
       return (
         <CollapsibleScrollView style={styles.scroll} hasTab>

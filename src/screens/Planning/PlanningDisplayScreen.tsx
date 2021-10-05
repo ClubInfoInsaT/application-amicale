@@ -17,35 +17,28 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
-import i18n from 'i18n-js';
 import { StackScreenProps } from '@react-navigation/stack';
 import { getDateOnlyString, getTimeOnlyString } from '../../utils/Planning';
 import DateManager from '../../managers/DateManager';
-import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
-import { ApiRejectType, apiRequest } from '../../utils/WebData';
-import ErrorView from '../../components/Screens/ErrorView';
+import { apiRequest } from '../../utils/WebData';
 import CustomHTML from '../../components/Overrides/CustomHTML';
 import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import type { PlanningEventType } from '../../utils/Planning';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
-import { API_REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
 import {
   MainRoutes,
   MainStackParamsList,
 } from '../../navigation/MainNavigator';
+import RequestScreen from '../../components/Screens/RequestScreen';
 
-type PropsType = StackScreenProps<
+type Props = StackScreenProps<
   MainStackParamsList,
   MainRoutes.PlanningInformation
 >;
-
-type StateType = {
-  loading: boolean;
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -61,79 +54,22 @@ const styles = StyleSheet.create({
 });
 
 const EVENT_INFO_URL = 'event/info';
+4;
+function PlanningDisplayScreen(props: Props) {
+  const [displayData, setDisplayData] = useState<PlanningEventType | undefined>(
+    props.route.params.type === 'full' ? props.route.params.data : undefined
+  );
+  const eventId =
+    props.route.params.type === 'full'
+      ? props.route.params.data.id
+      : props.route.params.eventId;
 
-/**
- * Class defining a planning event information page.
- */
-class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
-  displayData: null | PlanningEventType;
-
-  shouldFetchData: boolean;
-
-  eventId: number;
-
-  error: ApiRejectType;
-
-  /**
-   * Generates data depending on whether the screen was opened from the planning or from a link
-   *
-   * @param props
-   */
-  constructor(props: PropsType) {
-    super(props);
-
-    if (props.route.params.type === 'full') {
-      this.displayData = props.route.params.data;
-      this.eventId = this.displayData.id;
-      this.shouldFetchData = false;
-      this.error = { status: REQUEST_STATUS.SUCCESS };
-      this.state = {
-        loading: false,
-      };
-    } else {
-      this.displayData = null;
-      this.eventId = props.route.params.eventId;
-      this.shouldFetchData = true;
-      this.error = { status: REQUEST_STATUS.SUCCESS };
-      this.state = {
-        loading: true,
-      };
-      this.fetchData();
+  const getScreen = (data: PlanningEventType | undefined) => {
+    if (data == null) {
+      return <View />;
     }
-  }
-
-  /**
-   * Hides loading and saves fetched data
-   *
-   * @param data Received data
-   */
-  onFetchSuccess = (data: PlanningEventType) => {
-    this.displayData = data;
-    this.setState({ loading: false });
-  };
-
-  /**
-   * Hides loading and saves the error code
-   *
-   * @param error
-   */
-  onFetchError = (error: ApiRejectType) => {
-    this.error = error;
-    this.setState({ loading: false });
-  };
-
-  /**
-   * Gets content to display
-   *
-   * @returns {*}
-   */
-  getContent() {
-    const { displayData } = this;
-    if (displayData == null) {
-      return null;
-    }
-    let subtitle = getTimeOnlyString(displayData.date_begin);
-    const dateString = getDateOnlyString(displayData.date_begin);
+    let subtitle = getTimeOnlyString(data.date_begin);
+    const dateString = getDateOnlyString(data.date_begin);
     if (dateString !== null && subtitle != null) {
       subtitle += ` | ${DateManager.getInstance().getTranslatedDate(
         dateString
@@ -141,75 +77,37 @@ class PlanningDisplayScreen extends React.Component<PropsType, StateType> {
     }
     return (
       <CollapsibleScrollView style={styles.container} hasTab>
-        <Card.Title title={displayData.title} subtitle={subtitle} />
-        {displayData.logo !== null ? (
+        <Card.Title title={data.title} subtitle={subtitle} />
+        {data.logo !== null ? (
           <ImageGalleryButton
-            images={[{ url: displayData.logo }]}
+            images={[{ url: data.logo }]}
             style={styles.button}
           />
         ) : null}
 
-        {displayData.description !== null ? (
+        {data.description !== null ? (
           <Card.Content style={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}>
-            <CustomHTML html={displayData.description} />
+            <CustomHTML html={data.description} />
           </Card.Content>
         ) : (
           <View />
         )}
       </CollapsibleScrollView>
     );
-  }
-
-  /**
-   * Shows an error view and use a custom message if the event does not exist
-   *
-   * @returns {*}
-   */
-  getErrorView() {
-    if (this.error.code === API_REQUEST_CODES.BAD_INPUT) {
-      return (
-        <ErrorView
-          message={i18n.t('screens.planning.invalidEvent')}
-          icon="calendar-remove"
-        />
-      );
-    }
-    return (
-      <ErrorView
-        status={this.error.status}
-        code={this.error.code}
-        button={{
-          icon: 'refresh',
-          text: i18n.t('general.retry'),
-          onPress: this.fetchData,
-        }}
-      />
-    );
-  }
-
-  /**
-   * Fetches data for the current event id from the API
-   */
-  fetchData = () => {
-    this.setState({ loading: true });
-    apiRequest<PlanningEventType>(EVENT_INFO_URL, 'POST', { id: this.eventId })
-      .then(this.onFetchSuccess)
-      .catch(this.onFetchError);
   };
 
-  render() {
-    const { loading } = this.state;
-    if (loading) {
-      return <BasicLoadingScreen />;
-    }
-    if (
-      this.error.status === REQUEST_STATUS.SUCCESS &&
-      this.error.code === undefined
-    ) {
-      return this.getContent();
-    }
-    return this.getErrorView();
-  }
+  return (
+    <RequestScreen
+      request={() =>
+        apiRequest<PlanningEventType>(EVENT_INFO_URL, 'POST', {
+          id: eventId,
+        })
+      }
+      render={getScreen}
+      cache={displayData}
+      onCacheUpdate={setDisplayData}
+    />
+  );
 }
 
 export default PlanningDisplayScreen;

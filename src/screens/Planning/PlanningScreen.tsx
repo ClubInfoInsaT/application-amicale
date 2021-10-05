@@ -219,6 +219,7 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
     const { navigation } = this.props;
     const onPress = () => {
       navigation.navigate(MainRoutes.PlanningInformation, {
+        type: 'full',
         data: item,
       });
     };
