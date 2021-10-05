@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import {
   Avatar,
@@ -34,8 +34,6 @@ import type { ClubCategoryType, ClubType } from './ClubListScreen';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../../components/Media/ImageGalleryButton';
 import RequestScreen from '../../../components/Screens/RequestScreen';
-import { useFocusEffect } from '@react-navigation/core';
-import { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthenticatedRequest } from '../../../context/loginContext';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -90,24 +88,17 @@ function ClubDisplayScreen(props: Props) {
   const navigation = useNavigation();
   const theme = useTheme();
 
-  const [displayData, setDisplayData] = useState<ClubType | undefined>();
-  const [categories, setCategories] = useState<
-    Array<ClubCategoryType> | undefined
-  >();
-  const [clubId, setClubId] = useState<number | undefined>();
-
-  useFocusEffect(
-    useCallback(() => {
-      if (props.route.params.type === 'full') {
-        setDisplayData(props.route.params.data);
-        setCategories(props.route.params.categories);
-        setClubId(props.route.params.data.id);
-      } else {
-        const id = props.route.params.clubId;
-        setClubId(id ? id : 0);
-      }
-    }, [props.route.params])
+  const [displayData, setDisplayData] = useState<ClubType | undefined>(
+    props.route.params.type === 'full' ? props.route.params.data : undefined
   );
+  const categories =
+    props.route.params.type === 'full'
+      ? props.route.params.categories
+      : undefined;
+  const clubId =
+    props.route.params.type === 'full'
+      ? props.route.params.data.id
+      : props.route.params.clubId;
 
   /**
    * Gets the name of the category with the given ID
@@ -227,7 +218,6 @@ function ClubDisplayScreen(props: Props) {
 
   const getScreen = (data: ResponseType | undefined) => {
     if (data) {
-      updateHeaderTitle(data);
       return (
         <CollapsibleScrollView style={styles.scroll} hasTab>
           {getCategoriesRender(data.category)}
@@ -255,14 +245,11 @@ function ClubDisplayScreen(props: Props) {
     return <View />;
   };
 
-  /**
-   * Updates the header title to match the given club
-   *
-   * @param data The club data
-   */
-  const updateHeaderTitle = (data: ClubType) => {
-    navigation.setOptions({ title: data.name });
-  };
+  useLayoutEffect(() => {
+    if (displayData) {
+      navigation.setOptions({ title: displayData.name });
+    }
+  }, [displayData, navigation]);
 
   const request = useAuthenticatedRequest<ClubType>('clubs/info', {
     id: clubId,
