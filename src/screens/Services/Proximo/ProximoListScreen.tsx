@@ -150,7 +150,7 @@ function ProximoListScreen(props: Props) {
             {i18n.t('screens.proximo.sortOrder')}
           </Title>
           <Checkbox.Item
-            label="Hide out of stock"
+            label={i18n.t('screens.proximo.hideOutOfStock')}
             status={hideOutOfStock ? 'checked' : 'unchecked'}
             onPress={toggleShowOutOfStock}
           />
