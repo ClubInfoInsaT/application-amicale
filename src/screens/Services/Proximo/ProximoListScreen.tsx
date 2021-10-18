@@ -22,6 +22,7 @@ import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import {
   RadioButton,
+  Checkbox,
   Searchbar,
   Subheading,
   Text,
@@ -124,9 +125,10 @@ function ProximoListScreen(props: Props) {
 
   const [currentSearchString, setCurrentSearchString] = useState('');
   const [currentSortMode, setCurrentSortMode] = useState(2);
+  const [hideOutOfStock, setHideOutOfStock] = useState(false);
   const [modalCurrentDisplayItem, setModalCurrentDisplayItem] = useState<
     React.ReactChild | undefined
-  >();
+    >();
 
   const sortModes = [sortPrice, sortPriceReverse, sortName, sortNameReverse];
 
@@ -147,6 +149,11 @@ function ProximoListScreen(props: Props) {
           <Title style={styles.sortTitle}>
             {i18n.t('screens.proximo.sortOrder')}
           </Title>
+          <Checkbox.Item
+            label={i18n.t('screens.proximo.hideOutOfStock')}
+            status={hideOutOfStock ? 'checked' : 'unchecked'}
+            onPress={toggleShowOutOfStock}
+          />
           <RadioButton.Group
             onValueChange={setSortMode}
             value={currentSortMode.toString()}
@@ -178,6 +185,12 @@ function ProximoListScreen(props: Props) {
         modalRef.current.close();
       }
     };
+    const toggleShowOutOfStock = () => {
+      setHideOutOfStock(!hideOutOfStock);
+      if (modalRef.current) {
+        modalRef.current.close();
+      }
+    }
     const getSortMenuButton = () => {
       return (
         <MaterialHeaderButtons>
@@ -204,7 +217,7 @@ function ProximoListScreen(props: Props) {
           ? { marginHorizontal: 0, width: '70%' }
           : { width: '100%' },
     });
-  }, [navigation, currentSortMode, navParams.shouldFocusSearchBar]);
+  }, [navigation, currentSortMode, hideOutOfStock, navParams.shouldFocusSearchBar]);
 
   /**
    * Callback used when clicking an article in the list.
@@ -317,7 +330,8 @@ function ProximoListScreen(props: Props) {
             .filter(
               (d) =>
                 navParams.category === -1 ||
-                navParams.category === d.category_id
+                navParams.category === d.category_id &&
+                (!hideOutOfStock || d.quantity > 0)
             )
             .sort(sortModes[currentSortMode]),
           keyExtractor: keyExtractor,

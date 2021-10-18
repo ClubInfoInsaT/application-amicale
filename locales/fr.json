@@ -183,6 +183,7 @@
       "emptyList": "Liste Vide",
       "article": "Article",
       "articles": "Articles",
+      "hideOutOfStock": "Cacher articles en rupture de stock",
       "sortOrder": "Trier par :",
       "sortName": "Nom",
       "sortNameReverse": "Nom (inversé)",
