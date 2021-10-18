@@ -18,7 +18,7 @@ import * as Animatable from 'react-native-animatable';
 
 let moment = require('moment'); //load moment module to set local language
 require('moment/locale/fr'); // import moment local language file during the application build
-moment.locale('fr');
+//moment.locale(i18n.defaultLocale);
 
 type Props = {
   date?: Date;
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
 });
 
 function ProxiwashListHeader(props: Props) {
+  moment.locale(i18n.currentLocale());  // Locales are scope-specific
   const navigation = useNavigation();
   const theme = useTheme();
   const { date, selectedWash } = props;
