@@ -59,7 +59,12 @@ Plus d'informations sur l'organisation avec git [ici](WORKFLOW.md).
 
 Une fois le dépôt sur ta machine et git sur la branche de ton choix, ouvre un terminal dans le dossier racine et installe les dépendances avec la commande suivante : 
 ````shell script
-npm install
+npm i
+````
+
+Si cette command donne une erreur indiquant que la version d'une dépendance n'est pas valide, utilise cette commande à la place:
+````shell script
+npm i --legacy-peer-deps
 ````
 
 Si tu es sur macOS, tu devras aussi lancer la commande suivante pour installer les dépendances propres à iOS :

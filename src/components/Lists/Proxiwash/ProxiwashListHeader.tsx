@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 });
 
 function ProxiwashListHeader(props: Props) {
-  moment.locale(i18n.currentLocale());  // Locales are scope-specific
+  moment.locale(i18n.currentLocale()); // Locales are scope-specific
   const navigation = useNavigation();
   const theme = useTheme();
   const { date, selectedWash } = props;
