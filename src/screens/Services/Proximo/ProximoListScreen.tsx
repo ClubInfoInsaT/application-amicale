@@ -146,14 +146,14 @@ function ProximoListScreen(props: Props) {
     const getModalSortMenu = () => {
       return (
         <View style={styles.modalContainer}>
-          <Title style={styles.sortTitle}>
-            {i18n.t('screens.proximo.sortOrder')}
-          </Title>
           <Checkbox.Item
             label={i18n.t('screens.proximo.hideOutOfStock')}
             status={hideOutOfStock ? 'checked' : 'unchecked'}
             onPress={toggleShowOutOfStock}
           />
+          <Title style={styles.sortTitle}>
+            {i18n.t('screens.proximo.sortOrder')}
+          </Title>
           <RadioButton.Group
             onValueChange={setSortMode}
             value={currentSortMode.toString()}
