@@ -2,7 +2,7 @@
   "screens": {
     "services": {
       "title": "Services",
-      "more": "Click to see more",
+      "more": "Tap to see more",
       "categories": {
         "amicale": "The Amicale",
         "students": "Student services",
@@ -45,12 +45,12 @@
       "min": "min",
       "informationTab": "Information",
       "paymentTab": "Payment",
-      "tariffs": "Tariffs",
+      "tariffs": "Pricing",
       "paymentMethods": "Payment Methods",
-      "washerProcedure": "Put your laundry in the tumble without tamping it and by respecting weight limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the central command, then press the START button on the machine.\n\nWhen the program is finished, the screen indicates 'Programme terminé', press the yellow button to open the lid and retrieve your laundry.",
+      "washerProcedure": "Put your laundry in the tumble without tamping it and by respecting weight limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay at the central command, then press the START button on the machine.\n\nWhen the program is finished, the screen indicates 'Programme terminé', press the yellow button to open the lid and retrieve your laundry.",
       "washerTips": "Program 'blanc/couleur': 6kg of dry laundry (cotton linen, linen, underwear, sheets, jeans, towels).\n\nProgram 'non repassable': 3,5 kg of dry laundry (synthetic fibre linen, cotton and polyester mixed).\n\nProgram 'fin 30°C': 2,5 kg of dry laundry (delicate linen in synthetic fibres).\n\nProgram 'laine 30°C': 2,5 kg of dry laundry (wool textiles).",
-      "dryerProcedure": "Put your laundry in the tumble without tamping it and by respecting weight limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay to the central command , then press the START button on the machine.",
-      "dryerTips": "The recommended dryer length is 35 minutes for 14 kg of laundry. You can choose a shorter length if the dryer is not full.",
+      "dryerProcedure": "Put your laundry in the tumble without tamping it and by respecting weight limits.\n\nClose the machine's door.\n\nChoose a program using one of the four favorite program buttons.\n\nPay at the central command, then press the START button on the machine.",
+      "dryerTips": "The recommended dryer run time is 35 minutes for 14 kg of laundry. You can choose a shorter run time if the dryer is not full.",
       "procedure": "Procedure",
       "tips": "Tips",
       "numAvailable": "available",
@@ -108,7 +108,7 @@
       },
       "mascotDialog": {
         "title": "Small tips",
-        "message": "No need for queues anymore, you will be notified when machines are ready !\n\nIf you're daydreaming, you can turn on notifications for your machine by clicking on it.\n\nIf you live off campus we have another available laundromat, check the settings !!!!",
+        "message": "No need for queues anymore, you will be notified when machines are ready !\n\nIf you're daydreaming, you can turn on notifications for your machine by tapping it.\n\nIf you live off campus we have another available laundromat, check the settings !!!!",
         "ok": "Settings",
         "cancel": "Later"
       }
@@ -120,7 +120,7 @@
       "feedLoading": "Loading News",
       "feedError": "Failed to load news",
       "dashboard": {
-        "seeMore": "Click to see more",
+        "seeMore": "Tap to see more",
         "todayEventsTitle": "Today's events",
         "todayEventsSubtitleNA": "No events today",
         "todayEventsSubtitle": " event coming today",
@@ -150,7 +150,7 @@
         "title": "Favorites",
         "empty": {
           "title": "No favorites",
-          "subtitle": "Click on the star next to a group to add it to the favorites"
+          "subtitle": "Tap the star next to a group to add it to the favorites"
         }
       },
       "mascotDialog": {
@@ -230,7 +230,7 @@
       "noData": "No data",
       "editInformation": "Edit Information",
       "clubs": "Your clubs",
-      "clubsSubtitle": "Click on a club to show its information",
+      "clubsSubtitle": "Tap a club to show its information",
       "isMember": "Member",
       "isManager": "Manager",
       "membership": "Membership Fee",
@@ -238,17 +238,17 @@
       "membershipPayed": "Payed",
       "membershipNotPayed": "Not payed",
       "welcomeTitle": "Welcome %{name}!",
-      "welcomeDescription": "This is your Amicale INSA Toulouse personal space. Below are the services you can currently access thanks to your account. Feels empty? You're right and we plan on fixing that, so stay tuned!",
-      "welcomeFeedback": "We plan on doing more! If you have any suggestions or found bugs, please tell us by clicking the button below."
+      "welcomeDescription": "This is your Amicale INSA Toulouse personal space. Below are the services you can currently access with your account. Feels empty? You're right and we plan on fixing that, so stay tuned!",
+      "welcomeFeedback": "We plan on doing more! If you have any suggestions or found bugs, please tell us by tapping the button below."
     },
     "clubs": {
       "title": "Clubs",
       "details": "Club details",
       "managers": "Managers",
-      "managersSubtitle": "These people make the club live",
+      "managersSubtitle": "These people keep the club alive",
       "managersUnavailable": "This club has no one :(",
       "categories": "Categories",
-      "categoriesFilterMessage": "Click on a category to filter the list",
+      "categoriesFilterMessage": "Tap a category to filter the list",
       "clubContact": "Contact the club",
       "amicaleContact": "Contact the Amicale",
       "invalidClub": "Could not find the club. Please make sure the club you are trying to access is valid.",
@@ -309,7 +309,7 @@
       "otherYear": "the %{date} of %{month} %{year}",
       "bookingDay": "Booked for %{date}",
       "bookingPeriod": "Booked from %{begin} to %{end}",
-      "booking": "Click on the calendar to set the start and end dates",
+      "booking": "Tap the calendar to set the start and end dates",
       "bookButton": "Book selected dates",
       "dialogTitle": "Confirm booking?",
       "dialogTitleLoading": "Sending your booking...",
@@ -360,7 +360,7 @@
       "information": "Information",
       "dashboardEdit": {
         "title": "Edit dashboard",
-        "message": "The five items above represent your dashboard.\nYou can replace one of its services by selecting it, and then by clicking on the desired new service in the list below.",
+        "message": "The five items above represent your dashboard.\nYou can replace one of its services by selecting it, and then by tapping the desired new service in the list below.",
         "undo": "Undo changes"
       }
     },
