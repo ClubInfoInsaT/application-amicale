@@ -128,7 +128,7 @@ function ProximoListScreen(props: Props) {
   const [hideOutOfStock, setHideOutOfStock] = useState(false);
   const [modalCurrentDisplayItem, setModalCurrentDisplayItem] = useState<
     React.ReactChild | undefined
-    >();
+  >();
 
   const sortModes = [sortPrice, sortPriceReverse, sortName, sortNameReverse];
 
@@ -190,7 +190,7 @@ function ProximoListScreen(props: Props) {
       if (modalRef.current) {
         modalRef.current.close();
       }
-    }
+    };
     const getSortMenuButton = () => {
       return (
         <MaterialHeaderButtons>
@@ -217,7 +217,12 @@ function ProximoListScreen(props: Props) {
           ? { marginHorizontal: 0, width: '70%' }
           : { width: '100%' },
     });
-  }, [navigation, currentSortMode, hideOutOfStock, navParams.shouldFocusSearchBar]);
+  }, [
+    navigation,
+    currentSortMode,
+    hideOutOfStock,
+    navParams.shouldFocusSearchBar,
+  ]);
 
   /**
    * Callback used when clicking an article in the list.
@@ -329,8 +334,8 @@ function ProximoListScreen(props: Props) {
           data: data
             .filter(
               (d) =>
-                navParams.category === -1 ||
-                navParams.category === d.category_id &&
+                (navParams.category === -1 ||
+                  navParams.category === d.category_id) &&
                 (!hideOutOfStock || d.quantity > 0)
             )
             .sort(sortModes[currentSortMode]),
