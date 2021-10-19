@@ -334,9 +334,9 @@ function ProximoListScreen(props: Props) {
           data: data
             .filter(
               (d) =>
-                navParams.category === -1 ||
-                (navParams.category === d.category_id &&
-                  (!hideOutOfStock || d.quantity > 0))
+                (navParams.category === -1 ||
+                  navParams.category === d.category_id) &&
+                (!hideOutOfStock || d.quantity > 0)
             )
             .sort(sortModes[currentSortMode]),
           keyExtractor: keyExtractor,
