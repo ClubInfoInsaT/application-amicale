@@ -1,4 +1,22 @@
-# Version actuelle - v4.1.0 - 11/10/2020
+# Version actuelle - v5.0.0 - 16/10/2021
+
+## 🎉 Nouveautés
+- Ajout d'un cache pour les groupes Planex et Proximo
+
+## 🐛 Corrections de bugs
+- Amélioration des performances
+- Amélioration de la précision des notifications Proxiwash
+- Amélioration du chargement de Planex
+
+## 🖥️ Notes de développement
+- Passage à React Native 0.65.1
+- Nécessite Android 6 minimum à la place de 5
+- Réécriture d'une grosse partie de l'application en fonctionnel avec les [Hook](https://reactjs.org/docs/hooks-intro.html)
+
+
+# Versions précédentes
+
+<details><summary>v4.1.0 - 11/10/2020</summary>
 
 ## 🎉 Nouveautés
 - Possibilité de sélectionner la laverie des Tripodes à la place de celle de l'INSA
@@ -15,10 +33,9 @@
 - Migration de Flow vers TypeScript
 - Blocage de react-native-keychain à la version 4.0.5 en raison d'un bug dans la librairie
 
+</details>
 
-# Versions précédentes
-
-<details><summary>**v4.0.1** - 30/09/2020</summary>
+<details><summary>v4.0.1 - 30/09/2020</summary>
 
 ## 🎉 Nouveautés
 - Ajout d'une mascotte !
@@ -44,7 +61,7 @@
 
 </details>
 
-<details><summary>**v3.0.7** - 13/06/2020</summary>
+<details><summary>v3.0.7 - 13/06/2020</summary>
 
 ## 🎉 Nouveautés
 - Mise à jour des écrans d'intro pour mieux refléter l'appli actuelle
@@ -60,7 +77,7 @@
 
 </details>
 
-<details><summary>**v3.0.5** - 28/05/2020</summary>
+<details><summary>v3.0.5 - 28/05/2020</summary>
 
 ## 🎉 Nouveautés
 - Importante amélioration de la vitesse de démarrage et des performances
@@ -73,7 +90,7 @@
 </details>
 
 
-<details><summary>**v3.0.0** - 26/05/2020</summary>
+<details><summary>v3.0.0 - 26/05/2020</summary>
 
 ## 🎉 Nouveautés
 - Nouvelle barre de navigation !
@@ -92,7 +109,7 @@
 </details>
 
 
-<details><summary>**v2.0.0** - _12/03/2020_</summary>
+<details><summary>v2.0.0 - _12/03/2020_</summary>
 
 ## 🎉 Nouveautés
 - Nouvelle interface !
@@ -105,7 +122,7 @@
 </details>
 
 
-<details><summary>**v1.5.2** - _25/02/2020_</summary>
+<details><summary>v1.5.2 - _25/02/2020_</summary>
 
 ## 🐛 Corrections de bugs
 - Correction d'un problème d'affichage des détail du Proximo
@@ -113,7 +130,7 @@
 </details>
 
 
-<details><summary>**v1.5.1** - _24/02/2020_</summary>
+<details><summary>v1.5.1 - _24/02/2020_</summary>
 
 ## 🎉 Nouveautés
 - Amélioration des performances
@@ -122,7 +139,7 @@
 </details>
 
 
-<details><summary>**v1.5.0** - _05/02/2020_</summary>
+<details><summary>v1.5.0 - _05/02/2020_</summary>
 
 ## 🎉 Nouveautés
 - Amélioration des performances de l'application
@@ -137,7 +154,7 @@
 </details>
 
 
-<details><summary>**v1.4.0** - _01/02/2020_</summary>
+<details><summary>v1.4.0 - _01/02/2020_</summary>
 
 ## 🎉 Nouveautés
 - Ajout d'un accès rapide à BlueMind et l'ENT
@@ -151,7 +168,7 @@
 </details>
 
 
-<details><summary>**v1.3.3** - _29/01/2020_</summary>
+<details><summary>v1.3.3 - _29/01/2020_</summary>
 
 ## 🎉 Nouveautés
 - Ajout d'une barre de recherche dans Proximo
@@ -171,7 +188,7 @@
 </details>
 
 
-<details><summary>**v1.3.0** - _08/11/2019_</summary>
+<details><summary>v1.3.0 - _08/11/2019_</summary>
 
 ## 🎉 Nouveautés
 - Ajout du support du mode paysage dans l'écran Planex pour une vue de la semaine entière
@@ -185,7 +202,7 @@
 </details>
 
 
-<details><summary>**v1.2.0** - _01/11/2019_</summary>
+<details><summary>v1.2.0 - _01/11/2019_</summary>
 
 ## 🎉 Nouveautés
 - Ajout d'une dashboard sur la page d'accueil pour un accès rapide aux informations les plus importantes.
@@ -196,7 +213,7 @@
 </details>
 
 
-<details><summary>**v1.1.1** - _28/09/2019_</summary>
+<details><summary>v1.1.1 - _28/09/2019_</summary>
 
 ## 🎉 Nouveautés
 - Amélioration de la page Menu du RU
@@ -206,7 +223,7 @@
 </details>
 
 
-<details><summary>**v1.1.0** - _17/09/2019_</summary> 
+<details><summary>v1.1.0 - _17/09/2019_</summary> 
 
 ## 🎉 Nouveautés
 - Améliorations diverses de l'interface
@@ -215,7 +232,7 @@
 </details>
 
 
-<details><summary>**v1.0.3** - _13/09/2019_</summary>
+<details><summary>v1.0.3 - _13/09/2019_</summary>
 
 ## 🎉 Nouveautés
 - Ajout de la possibilité de choisir un écran de démarrage
@@ -226,7 +243,7 @@
 </details>
 
 
-<details><summary>**v1.0.2** - _12/09/2019_</summary>
+<details><summary>v1.0.2 - _12/09/2019_</summary>
 
 ## 🎉 Nouveautés
 - Amélioration de l'interface du Proximo
@@ -234,7 +251,7 @@
 
 </details>
 
-<details><summary>**v1.0.0** - _27/08/2019_</summary>
+<details><summary>v1.0.0 - _27/08/2019_</summary>
 
 - Première version officielle créée par Arnaud VERGNET
 
