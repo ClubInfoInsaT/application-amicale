@@ -19,8 +19,7 @@
 
 import * as React from 'react';
 import { SectionListData, StyleSheet, View } from 'react-native';
-import { Card, Text, withTheme } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { Card, Text, useTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
 import DateManager from '../../managers/DateManager';
 import WebSectionList from '../../components/Screens/WebSectionList';
@@ -28,11 +27,6 @@ import type { SectionListDataType } from '../../components/Screens/WebSectionLis
 import Urls from '../../constants/Urls';
 import { readData } from '../../utils/WebData';
 import { REQUEST_STATUS } from '../../utils/Requests';
-
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-  theme: ReactNativePaper.Theme;
-};
 
 export type RuFoodCategoryType = {
   name: string;
@@ -90,18 +84,20 @@ const styles = StyleSheet.create({
 });
 
 /**
- * Class defining the app's menu screen.
+ * Formats the given string to make sure it starts with a capital letter
+ *
+ * @param name The string to format
+ * @return {string} The formatted string
  */
-class SelfMenuScreen extends React.Component<PropsType> {
-  /**
-   * Formats the given string to make sure it starts with a capital letter
-   *
-   * @param name The string to format
-   * @return {string} The formatted string
-   */
-  static formatName(name: string): string {
-    return name.charAt(0) + name.substr(1).toLowerCase();
-  }
+function formatName(name: string): string {
+  return name.charAt(0) + name.substr(1).toLowerCase();
+}
+
+/**
+ * Function defining the app's menu screen.
+ */
+function SelfMenuScreen() {
+  const theme = useTheme();
 
   /**
    * Creates the dataset to be used in the FlatList
@@ -109,7 +105,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @param fetchedData
    * @return {[]}
    */
-  createDataset = (
+  const createDataset = (
     fetchedData: Array<RawRuMenuType> | undefined,
     _loading: boolean,
     _lastRefreshDate: Date | undefined,
@@ -123,7 +119,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
           {
             title: i18n.t('general.notAvailable'),
             data: [],
-            keyExtractor: this.getKeyExtractor,
+            keyExtractor: getKeyExtractor,
           },
         ];
       } else {
@@ -131,7 +127,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
           result.push({
             title: DateManager.getInstance().getTranslatedDate(item.date),
             data: item.meal[0].foodcategory,
-            keyExtractor: this.getKeyExtractor,
+            keyExtractor: getKeyExtractor,
           });
         });
       }
@@ -145,7 +141,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @param section The section to render the header from
    * @return {*}
    */
-  getRenderSectionHeader = ({
+  const getRenderSectionHeader = ({
     section,
   }: {
     section: SectionListData<RuFoodCategoryType>;
@@ -168,8 +164,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @param item The item to render
    * @return {*}
    */
-  getRenderItem = ({ item }: { item: RuFoodCategoryType }) => {
-    const { theme } = this.props;
+  const getRenderItem = ({ item }: { item: RuFoodCategoryType }) => {
     return (
       <Card style={styles.itemCard}>
         <Card.Title style={styles.itemTitle} title={item.name} />
@@ -182,9 +177,7 @@ class SelfMenuScreen extends React.Component<PropsType> {
         <Card.Content>
           {item.dishes.map((object: { name: string }) =>
             object.name !== '' ? (
-              <Text style={styles.itemText}>
-                {SelfMenuScreen.formatName(object.name)}
-              </Text>
+              <Text style={styles.itemText}>{formatName(object.name)}</Text>
             ) : null
           )}
         </Card.Content>
@@ -198,20 +191,18 @@ class SelfMenuScreen extends React.Component<PropsType> {
    * @param item The item to extract the key from
    * @return {*} The extracted key
    */
-  getKeyExtractor = (item: RuFoodCategoryType): string => item.name;
+  const getKeyExtractor = (item: RuFoodCategoryType): string => item.name;
 
-  render() {
-    return (
-      <WebSectionList
-        request={() => readData<Array<RawRuMenuType>>(Urls.app.menu)}
-        createDataset={this.createDataset}
-        refreshOnFocus={true}
-        renderItem={this.getRenderItem}
-        renderSectionHeader={this.getRenderSectionHeader}
-        stickySectionHeadersEnabled={true}
-      />
-    );
-  }
+  return (
+    <WebSectionList
+      request={() => readData<Array<RawRuMenuType>>(Urls.app.menu)}
+      createDataset={createDataset}
+      refreshOnFocus={true}
+      renderItem={getRenderItem}
+      renderSectionHeader={getRenderSectionHeader}
+      stickySectionHeadersEnabled={true}
+    />
+  );
 }
 
-export default withTheme(SelfMenuScreen);
+export default SelfMenuScreen;

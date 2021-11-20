@@ -50,66 +50,61 @@ const styles = StyleSheet.create({
 });
 
 /**
- * Class defining a planning event information page.
+ * Function defining a planning event information page.
  */
-class AmicaleContactScreen extends React.Component<{}> {
+function AmicaleContactScreen() {
   // Dataset containing information about contacts
-  CONTACT_DATASET: Array<DatasetItemType>;
+  const CONTACT_DATASET: Array<DatasetItemType> = [
+    {
+      name: i18n.t('screens.amicaleAbout.roles.interSchools'),
+      email: 'inter.ecoles@amicale-insat.fr',
+      icon: 'share-variant',
+    },
+    {
+      name: i18n.t('screens.amicaleAbout.roles.culture'),
+      email: 'culture@amicale-insat.fr',
+      icon: 'book',
+    },
+    {
+      name: i18n.t('screens.amicaleAbout.roles.animation'),
+      email: 'animation@amicale-insat.fr',
+      icon: 'emoticon',
+    },
+    {
+      name: i18n.t('screens.amicaleAbout.roles.clubs'),
+      email: 'clubs@amicale-insat.fr',
+      icon: 'account-group',
+    },
+    {
+      name: i18n.t('screens.amicaleAbout.roles.event'),
+      email: 'evenements@amicale-insat.fr',
+      icon: 'calendar-range',
+    },
+    {
+      name: i18n.t('screens.amicaleAbout.roles.tech'),
+      email: 'technique@amicale-insat.fr',
+      icon: 'cog',
+    },
+    {
+      name: i18n.t('screens.amicaleAbout.roles.communication'),
+      email: 'amicale@amicale-insat.fr',
+      icon: 'comment-account',
+    },
+    {
+      name: i18n.t('screens.amicaleAbout.roles.intraSchools'),
+      email: 'intra.ecoles@amicale-insat.fr',
+      icon: 'school',
+    },
+    {
+      name: i18n.t('screens.amicaleAbout.roles.publicRelations'),
+      email: 'rp@amicale-insat.fr',
+      icon: 'account-tie',
+    },
+  ];
 
-  constructor(props: {}) {
-    super(props);
-    this.CONTACT_DATASET = [
-      {
-        name: i18n.t('screens.amicaleAbout.roles.interSchools'),
-        email: 'inter.ecoles@amicale-insat.fr',
-        icon: 'share-variant',
-      },
-      {
-        name: i18n.t('screens.amicaleAbout.roles.culture'),
-        email: 'culture@amicale-insat.fr',
-        icon: 'book',
-      },
-      {
-        name: i18n.t('screens.amicaleAbout.roles.animation'),
-        email: 'animation@amicale-insat.fr',
-        icon: 'emoticon',
-      },
-      {
-        name: i18n.t('screens.amicaleAbout.roles.clubs'),
-        email: 'clubs@amicale-insat.fr',
-        icon: 'account-group',
-      },
-      {
-        name: i18n.t('screens.amicaleAbout.roles.event'),
-        email: 'evenements@amicale-insat.fr',
-        icon: 'calendar-range',
-      },
-      {
-        name: i18n.t('screens.amicaleAbout.roles.tech'),
-        email: 'technique@amicale-insat.fr',
-        icon: 'cog',
-      },
-      {
-        name: i18n.t('screens.amicaleAbout.roles.communication'),
-        email: 'amicale@amicale-insat.fr',
-        icon: 'comment-account',
-      },
-      {
-        name: i18n.t('screens.amicaleAbout.roles.intraSchools'),
-        email: 'intra.ecoles@amicale-insat.fr',
-        icon: 'school',
-      },
-      {
-        name: i18n.t('screens.amicaleAbout.roles.publicRelations'),
-        email: 'rp@amicale-insat.fr',
-        icon: 'account-tie',
-      },
-    ];
-  }
+  const keyExtractor = (item: DatasetItemType): string => item.email;
 
-  keyExtractor = (item: DatasetItemType): string => item.email;
-
-  getChevronIcon = (iconProps: {
+  const getChevronIcon = (iconProps: {
     color: string;
     style?: {
       marginRight: number;
@@ -123,7 +118,7 @@ class AmicaleContactScreen extends React.Component<{}> {
     />
   );
 
-  getRenderItem = ({ item }: { item: DatasetItemType }) => {
+  const getRenderItem = ({ item }: { item: DatasetItemType }) => {
     const onPress = () => {
       Linking.openURL(`mailto:${item.email}`);
     };
@@ -138,13 +133,13 @@ class AmicaleContactScreen extends React.Component<{}> {
             icon={item.icon}
           />
         )}
-        right={this.getChevronIcon}
+        right={getChevronIcon}
         onPress={onPress}
       />
     );
   };
 
-  getScreen = () => {
+  const renderItem = () => {
     return (
       <View>
         <View style={styles.imageContainer}>
@@ -165,9 +160,9 @@ class AmicaleContactScreen extends React.Component<{}> {
           <Card.Content>
             <Text>{i18n.t('screens.amicaleAbout.message')}</Text>
             <FlatList
-              data={this.CONTACT_DATASET}
-              keyExtractor={this.keyExtractor}
-              renderItem={this.getRenderItem}
+              data={CONTACT_DATASET}
+              keyExtractor={keyExtractor}
+              renderItem={getRenderItem}
             />
           </Card.Content>
         </Card>
@@ -175,15 +170,8 @@ class AmicaleContactScreen extends React.Component<{}> {
     );
   };
 
-  render() {
-    return (
-      <CollapsibleFlatList
-        data={[{ key: '1' }]}
-        renderItem={this.getScreen}
-        hasTab
-      />
-    );
-  }
+  // We cannot wrap flatlists inside scrollviews
+  return <CollapsibleFlatList data={[{ key: '1' }]} renderItem={renderItem} />;
 }
 
 export default AmicaleContactScreen;

@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Linking, Image, StyleSheet } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import Autolink from 'react-native-autolink';
@@ -26,7 +26,6 @@ import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
 import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
-import type { FeedItemType } from './HomeScreen';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
 import NewsSourcesConstants, {
@@ -37,11 +36,9 @@ import {
   MainRoutes,
   MainStackParamsList,
 } from '../../navigation/MainNavigator';
+import { useNavigation } from '@react-navigation/core';
 
-type PropsType = StackScreenProps<
-  MainStackParamsList,
-  MainRoutes.FeedInformation
->;
+type Props = StackScreenProps<MainStackParamsList, MainRoutes.FeedInformation>;
 
 const styles = StyleSheet.create({
   container: {
@@ -60,83 +57,68 @@ const styles = StyleSheet.create({
 });
 
 /**
- * Class defining a feed item page.
+ * Function defining a feed item page.
  */
-class FeedItemScreen extends React.Component<PropsType> {
-  displayData: FeedItemType;
+function FeedItemScreen(props: Props) {
+  const navigation = useNavigation();
+  const { data, date } = props.route.params;
 
-  date: string;
-
-  constructor(props: PropsType) {
-    super(props);
-    this.displayData = props.route.params.data;
-    this.date = props.route.params.date;
-  }
-
-  componentDidMount() {
-    const { props } = this;
-    props.navigation.setOptions({
-      headerRight: this.getHeaderButton,
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: getHeaderButton,
     });
-  }
+  });
 
   /**
    * Opens the feed item out link in browser or compatible app
    */
-  onOutLinkPress = () => {
-    Linking.openURL(this.displayData.url);
+  const onOutLinkPress = () => {
+    Linking.openURL(data.url);
   };
 
-  /**
-   * Gets the out link header button
-   *
-   * @returns {*}
-   */
-  getHeaderButton = () => {
+  const getHeaderButton = () => {
     return (
       <MaterialHeaderButtons>
         <Item
           title="main"
           iconName="facebook"
           color="#2e88fe"
-          onPress={this.onOutLinkPress}
+          onPress={onOutLinkPress}
         />
       </MaterialHeaderButtons>
     );
   };
 
-  render() {
-    const pageSource: NewsSourceType =
-      NewsSourcesConstants[this.displayData.page_id as AvailablePages];
-    return (
-      <CollapsibleScrollView style={styles.container} hasTab>
-        <Card.Title
-          title={pageSource.name}
-          subtitle={this.date}
-          left={() => <Image source={pageSource.icon} style={styles.image} />}
+  const pageSource: NewsSourceType =
+    NewsSourcesConstants[data.page_id as AvailablePages];
+  return (
+    <CollapsibleScrollView style={styles.container} hasTab>
+      <Card.Title
+        title={pageSource.name}
+        subtitle={date}
+        left={() => <Image source={pageSource.icon} style={styles.image} />}
+      />
+      {data.image ? (
+        <ImageGalleryButton
+          images={[{ url: data.image }]}
+          style={styles.button}
         />
-        {this.displayData.image ? (
-          <ImageGalleryButton
-            images={[{ url: this.displayData.image }]}
-            style={styles.button}
+      ) : null}
+      <Card.Content style={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}>
+        {data.message !== undefined ? (
+          <Autolink
+            text={data.message}
+            hashtag={'facebook'}
+            component={Text}
+            truncate={32}
+            email={true}
+            url={true}
+            phone={true}
           />
         ) : null}
-        <Card.Content style={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}>
-          {this.displayData.message !== undefined ? (
-            <Autolink
-              text={this.displayData.message}
-              hashtag={'facebook'}
-              component={Text}
-              truncate={32}
-              email={true}
-              url={true}
-              phone={true}
-            />
-          ) : null}
-        </Card.Content>
-      </CollapsibleScrollView>
-    );
-  }
+      </Card.Content>
+    </CollapsibleScrollView>
+  );
 }
 
 export default FeedItemScreen;
