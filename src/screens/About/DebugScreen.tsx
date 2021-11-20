@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
 });
 
 /**
- * Class defining the Debug screen.
+ * Function defining the Debug screen.
  * This screen allows the user to get and modify information on the app/device.
  */
 function DebugScreen() {

@@ -17,289 +17,62 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import {
-  FlatList,
-  Linking,
-  Platform,
-  Image,
-  View,
-  StyleSheet,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
-import { Avatar, Card, List } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import packageJson from '../../../package.json';
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import OptionsDialog from '../../components/Dialogs/OptionsDialog';
 import type { OptionsDialogButtonType } from '../../components/Dialogs/OptionsDialog';
 import GENERAL_STYLES from '../../constants/Styles';
-import Urls from '../../constants/Urls';
-import { MainRoutes } from '../../navigation/MainNavigator';
+import AboutCard from '../../components/About/AboutCard';
+import {
+  getAppData,
+  getTeamData,
+  getTechnoData,
+  getThanksData,
+  MemberItemType,
+  openWebLink,
+} from '../../constants/AboutData';
+import { useNavigation } from '@react-navigation/core';
 
 const APP_LOGO = require('../../../assets/android.icon.round.png');
 
-type ListItemType = {
-  onPressCallback: () => void;
-  icon: string;
-  text: string;
-  showChevron: boolean;
-};
-
-type MemberItemType = {
-  name: string;
-  message: string;
-  icon: string;
-  trollLink?: string;
-  linkedin?: string;
-  mail?: string;
-};
-
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-};
-
-type StateType = {
-  dialogVisible: boolean;
-  dialogTitle: string;
-  dialogMessage: string;
-  dialogButtons: Array<OptionsDialogButtonType>;
-};
-
 const styles = StyleSheet.create({
-  card: {
-    marginBottom: 10,
-  },
   list: {
     padding: 5,
   },
 });
 
 /**
- * Opens a link in the device's browser
- * @param link The link to open
+ * Order of information cards
  */
-function openWebLink(link: string) {
-  Linking.openURL(link);
-}
+const DATA_ORDER = [
+  {
+    id: 'app',
+  },
+  {
+    id: 'team',
+  },
+  {
+    id: 'thanks',
+  },
+  {
+    id: 'techno',
+  },
+];
 
 /**
- * Class defining an about screen. This screen shows the user information about the app and it's author.
+ * Function defining an about screen. This screen shows the user information about the app and it's author.
  */
-class AboutScreen extends React.Component<PropsType, StateType> {
-  /**
-   * Object containing data relative to major contributors
-   */
-  majorContributors: Array<MemberItemType> = [
-    {
-      name: 'Arnaud Vergnet',
-      message: i18n.t('screens.about.user.arnaud'),
-      icon: 'crown',
-      trollLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      linkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
-      mail:
-        'mailto:vergnet@etud.insa-toulouse.fr?' +
-        'subject=' +
-        'Application Amicale INSA Toulouse' +
-        '&body=' +
-        'Coucou !\n\n',
-    },
-    {
-      name: 'Jean-Yves Saint-Loubert',
-      message: i18n.t('screens.about.user.docjyj'),
-      icon: 'xml',
-      mail:
-        'mailto:saint-lo@etud.insa-toulouse.fr?' +
-        'subject=' +
-        'Application Amicale INSA Toulouse' +
-        '&body=' +
-        'Coucou !\n\n',
-    },
-    {
-      name: 'Yohan Simard',
-      message: i18n.t('screens.about.user.yohan'),
-      icon: 'xml',
-      linkedin: 'https://www.linkedin.com/in/yohan-simard',
-      mail:
-        'mailto:ysimard@etud.insa-toulouse.fr?' +
-        'subject=' +
-        'Application Amicale INSA Toulouse' +
-        '&body=' +
-        'Coucou !\n\n',
-    },
-  ];
-
-  /**
-   * Object containing data relative to users who helped during development
-   */
-  helpfulUsers: Array<MemberItemType> = [
-    {
-      name: 'Béranger Quintana Y Arciosana',
-      message: i18n.t('screens.about.user.beranger'),
-      icon: 'account-heart',
-    },
-    {
-      name: 'Céline Tassin',
-      message: i18n.t('screens.about.user.celine'),
-      icon: 'brush',
-    },
-    {
-      name: 'Damien Molina',
-      message: i18n.t('screens.about.user.damien'),
-      icon: 'web',
-    },
-    {
-      name: 'Titouan Labourdette',
-      message: i18n.t('screens.about.user.titouan'),
-      icon: 'shield-bug',
-    },
-    {
-      name: 'Théo Tami',
-      message: i18n.t('screens.about.user.theo'),
-      icon: 'food-apple',
-    },
-  ];
-
-  /**
-   * Data to be displayed in the app card
-   */
-  appData: Array<ListItemType> = [
-    {
-      onPressCallback: () => {
-        openWebLink(
-          Platform.OS === 'ios' ? Urls.about.appstore : Urls.about.playstore
-        );
-      },
-      icon: Platform.OS === 'ios' ? 'apple' : 'google-play',
-      text:
-        Platform.OS === 'ios'
-          ? i18n.t('screens.about.appstore')
-          : i18n.t('screens.about.playstore'),
-      showChevron: true,
-    },
-    {
-      onPressCallback: () => {
-        const { navigation } = this.props;
-        navigation.navigate(MainRoutes.Feedback);
-      },
-      icon: 'bug',
-      text: i18n.t('screens.feedback.homeButtonTitle'),
-      showChevron: true,
-    },
-    {
-      onPressCallback: () => {
-        openWebLink(Urls.about.git);
-      },
-      icon: 'git',
-      text: 'Git',
-      showChevron: true,
-    },
-    {
-      onPressCallback: () => {
-        openWebLink(Urls.about.changelog);
-      },
-      icon: 'refresh',
-      text: i18n.t('screens.about.changelog'),
-      showChevron: true,
-    },
-    {
-      onPressCallback: () => {
-        openWebLink(Urls.about.license);
-      },
-      icon: 'file-document',
-      text: i18n.t('screens.about.license'),
-      showChevron: true,
-    },
-  ];
-
-  /**
-   * Data to be displayed in the team card
-   */
-  teamData: Array<ListItemType>;
-
-  /**
-   * Data to be displayed in the thanks card
-   */
-  thanksData: Array<ListItemType>;
-
-  /**
-   * Data to be displayed in the technologies card
-   */
-  technoData = [
-    {
-      onPressCallback: () => {
-        openWebLink(Urls.about.react);
-      },
-      icon: 'react',
-      text: i18n.t('screens.about.reactNative'),
-      showChevron: true,
-    },
-    {
-      onPressCallback: () => {
-        const { navigation } = this.props;
-        navigation.navigate(MainRoutes.Dependencies);
-      },
-      icon: 'developer-board',
-      text: i18n.t('screens.about.libs'),
-      showChevron: true,
-    },
-  ];
-
-  /**
-   * Order of information cards
-   */
-  dataOrder = [
-    {
-      id: 'app',
-    },
-    {
-      id: 'team',
-    },
-    {
-      id: 'thanks',
-    },
-    {
-      id: 'techno',
-    },
-  ];
-
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      dialogVisible: false,
-      dialogTitle: '',
-      dialogMessage: '',
-      dialogButtons: [],
-    };
-    this.teamData = [
-      ...this.getMemberData(this.majorContributors),
-      {
-        onPressCallback: () => {
-          const { navigation } = this.props;
-          navigation.navigate(MainRoutes.Feedback);
-        },
-        icon: 'hand-pointing-right',
-        text: i18n.t('screens.about.user.you'),
-        showChevron: true,
-      },
-    ];
-    this.thanksData = this.getMemberData(this.helpfulUsers);
-  }
-
-  getMemberData(data: Array<MemberItemType>): Array<ListItemType> {
-    const final: Array<ListItemType> = [];
-    data.forEach((item) => {
-      final.push({
-        onPressCallback: () => {
-          this.onContributorListItemPress(item);
-        },
-        icon: item.icon,
-        text: item.name,
-        showChevron: false,
-      });
-    });
-    return final;
-  }
+function AboutScreen() {
+  const [dialog, setDialog] = useState<{
+    title: string;
+    message: string;
+    buttons: Array<OptionsDialogButtonType>;
+  }>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   /**
    * Callback used when clicking a member in the list
@@ -307,11 +80,11 @@ class AboutScreen extends React.Component<PropsType, StateType> {
    *
    * @param user The member to show information for
    */
-  onContributorListItemPress(user: MemberItemType) {
+  const onContributorListItemPress = (user: MemberItemType) => {
     const dialogBtn: Array<OptionsDialogButtonType> = [
       {
         title: 'OK',
-        onPress: this.onDialogDismiss,
+        onPress: onDialogDismiss,
       },
     ];
     const { linkedin, trollLink, mail } = user;
@@ -341,242 +114,89 @@ class AboutScreen extends React.Component<PropsType, StateType> {
         },
       });
     }
-    this.setState({
-      dialogVisible: true,
-      dialogTitle: user.name,
-      dialogMessage: user.message,
-      dialogButtons: dialogBtn,
+    setDialog({
+      title: user.name,
+      message: user.message,
+      buttons: dialogBtn,
     });
-  }
-
-  /**
-   * Gets the app card showing information and links about the app.
-   *
-   * @return {*}
-   */
-  getAppCard() {
-    return (
-      <Card style={styles.card}>
-        <Card.Title
-          title="Campus"
-          subtitle={packageJson.version}
-          left={(iconProps) => (
-            <Image
-              source={APP_LOGO}
-              style={{ width: iconProps.size, height: iconProps.size }}
-            />
-          )}
-        />
-        <Card.Content>
-          <FlatList
-            data={this.appData}
-            keyExtractor={this.keyExtractor}
-            renderItem={this.getCardItem}
-          />
-        </Card.Content>
-      </Card>
-    );
-  }
-
-  /**
-   * Gets the team card showing information and links about the team
-   *
-   * @return {*}
-   */
-  getTeamCard() {
-    return (
-      <Card style={styles.card}>
-        <Card.Title
-          title={i18n.t('screens.about.team')}
-          left={(iconProps) => (
-            <Avatar.Icon size={iconProps.size} icon="account-multiple" />
-          )}
-        />
-        <Card.Content>
-          <FlatList
-            data={this.teamData}
-            keyExtractor={this.keyExtractor}
-            renderItem={this.getCardItem}
-          />
-        </Card.Content>
-      </Card>
-    );
-  }
-
-  /**
-   * Get the thank you card showing support information and links
-   *
-   * @return {*}
-   */
-  getThanksCard() {
-    return (
-      <Card style={styles.card}>
-        <Card.Title
-          title={i18n.t('screens.about.thanks')}
-          left={(iconProps) => (
-            <Avatar.Icon size={iconProps.size} icon="hand-heart" />
-          )}
-        />
-        <Card.Content>
-          <FlatList
-            data={this.thanksData}
-            keyExtractor={this.keyExtractor}
-            renderItem={this.getCardItem}
-          />
-        </Card.Content>
-      </Card>
-    );
-  }
-
-  /**
-   * Gets the techno card showing information and links about the technologies used in the app
-   *
-   * @return {*}
-   */
-  getTechnoCard() {
-    return (
-      <Card style={styles.card}>
-        <Card.Title
-          title={i18n.t('screens.about.technologies')}
-          left={(iconProps) => (
-            <Avatar.Icon size={iconProps.size} icon="wrench" />
-          )}
-        />
-        <Card.Content>
-          <FlatList
-            data={this.technoData}
-            keyExtractor={this.keyExtractor}
-            renderItem={this.getCardItem}
-          />
-        </Card.Content>
-      </Card>
-    );
-  }
-
-  /**
-   * Gets a chevron icon
-   *
-   * @param props
-   * @return {*}
-   */
-  static getChevronIcon(props: {
-    color: string;
-    style?: {
-      marginRight: number;
-      marginVertical?: number;
-    };
-  }) {
-    return (
-      <List.Icon color={props.color} style={props.style} icon="chevron-right" />
-    );
-  }
-
-  /**
-   * Gets a custom list item icon
-   *
-   * @param item The item to show the icon for
-   * @param props
-   * @return {*}
-   */
-  static getItemIcon(
-    item: ListItemType,
-    props: {
-      color: string;
-      style?: {
-        marginRight: number;
-        marginVertical?: number;
-      };
-    }
-  ) {
-    return (
-      <List.Icon color={props.color} style={props.style} icon={item.icon} />
-    );
-  }
-
-  /**
-   * Gets a clickable card item to be rendered inside a card.
-   *
-   * @returns {*}
-   */
-  getCardItem = ({ item }: { item: ListItemType }) => {
-    const getItemIcon = (props: {
-      color: string;
-      style?: {
-        marginRight: number;
-        marginVertical?: number;
-      };
-    }) => AboutScreen.getItemIcon(item, props);
-    if (item.showChevron) {
-      return (
-        <List.Item
-          title={item.text}
-          left={getItemIcon}
-          right={AboutScreen.getChevronIcon}
-          onPress={item.onPressCallback}
-        />
-      );
-    }
-    return (
-      <List.Item
-        title={item.text}
-        left={getItemIcon}
-        onPress={item.onPressCallback}
-      />
-    );
   };
 
-  /**
-   * Gets a card, depending on the given item's id
-   *
-   * @param item The item to show
-   * @return {*}
-   */
-  getMainCard = ({ item }: { item: { id: string } }) => {
+  function getAppCard() {
+    return (
+      <AboutCard
+        title={'Campus'}
+        subtitle={packageJson.version}
+        image={APP_LOGO}
+        data={getAppData(navigation)}
+      />
+    );
+  }
+
+  function getTeamCard() {
+    return (
+      <AboutCard
+        title={i18n.t('screens.about.team')}
+        icon={'account-multiple'}
+        data={getTeamData(navigation, onContributorListItemPress)}
+      />
+    );
+  }
+
+  function getThanksCard() {
+    return (
+      <AboutCard
+        title={i18n.t('screens.about.thanks')}
+        icon={'hand-heart'}
+        data={getThanksData(onContributorListItemPress)}
+      />
+    );
+  }
+
+  function getTechnoCard() {
+    return (
+      <AboutCard
+        title={i18n.t('screens.about.technologies')}
+        icon={'wrench'}
+        data={getTechnoData(navigation)}
+      />
+    );
+  }
+
+  const renderItem = ({ item }: { item: { id: string } }) => {
     switch (item.id) {
       case 'app':
-        return this.getAppCard();
+        return getAppCard();
       case 'team':
-        return this.getTeamCard();
+        return getTeamCard();
       case 'thanks':
-        return this.getThanksCard();
+        return getThanksCard();
       case 'techno':
-        return this.getTechnoCard();
+        return getTechnoCard();
       default:
         return null;
     }
   };
 
-  onDialogDismiss = () => {
-    this.setState({ dialogVisible: false });
-  };
+  const onDialogDismiss = () => setDialog(undefined);
 
-  /**
-   * Extracts a key from the given item
-   *
-   * @param item The item to extract the key from
-   * @return {string} The extracted key
-   */
-  keyExtractor = (item: ListItemType): string => item.icon;
-
-  render() {
-    const { state } = this;
-    return (
-      <View style={GENERAL_STYLES.flex}>
-        <CollapsibleFlatList
-          style={styles.list}
-          data={this.dataOrder}
-          renderItem={this.getMainCard}
-        />
+  return (
+    <View style={GENERAL_STYLES.flex}>
+      <CollapsibleFlatList
+        style={styles.list}
+        data={DATA_ORDER}
+        renderItem={renderItem}
+      />
+      {dialog != null ? (
         <OptionsDialog
-          visible={state.dialogVisible}
-          title={state.dialogTitle}
-          message={state.dialogMessage}
-          buttons={state.dialogButtons}
-          onDismiss={this.onDialogDismiss}
+          visible={dialog != null}
+          title={dialog.title}
+          message={dialog.message}
+          buttons={dialog.buttons}
+          onDismiss={onDialogDismiss}
         />
-      </View>
-    );
-  }
+      ) : null}
+    </View>
+  );
 }
 
 export default AboutScreen;

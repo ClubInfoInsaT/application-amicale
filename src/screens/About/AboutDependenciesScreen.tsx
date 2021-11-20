@@ -48,19 +48,12 @@ function generateListFromObject(object: {
 const LIST_ITEM_HEIGHT = 64;
 
 /**
- * Class defining a screen showing the list of libraries used by the app, taken from package.json
+ * Function defining a screen showing the list of libraries used by the app, taken from package.json
  */
-export default class AboutDependenciesScreen extends React.Component<{}> {
-  data: Array<ListItemType>;
+export default function AboutDependenciesScreen() {
+  const keyExtractor = (item: ListItemType) => item.name;
 
-  constructor(props: {}) {
-    super(props);
-    this.data = generateListFromObject(packageJson.dependencies);
-  }
-
-  keyExtractor = (item: ListItemType): string => item.name;
-
-  getRenderItem = ({ item }: { item: ListItemType }) => (
+  const getRenderItem = ({ item }: { item: ListItemType }) => (
     <List.Item
       title={item.name}
       description={item.version.replace('^', '').replace('~', '')}
@@ -68,7 +61,7 @@ export default class AboutDependenciesScreen extends React.Component<{}> {
     />
   );
 
-  getItemLayout = (
+  const getItemLayout = (
     _data: Array<ListItemType> | null | undefined,
     index: number
   ): { length: number; offset: number; index: number } => ({
@@ -77,18 +70,16 @@ export default class AboutDependenciesScreen extends React.Component<{}> {
     index,
   });
 
-  render() {
-    return (
-      <View>
-        <CollapsibleFlatList
-          data={this.data}
-          keyExtractor={this.keyExtractor}
-          renderItem={this.getRenderItem}
-          // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
-          removeClippedSubviews
-          getItemLayout={this.getItemLayout}
-        />
-      </View>
-    );
-  }
+  return (
+    <View>
+      <CollapsibleFlatList
+        data={generateListFromObject(packageJson.dependencies)}
+        keyExtractor={keyExtractor}
+        renderItem={getRenderItem}
+        // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
+        removeClippedSubviews
+        getItemLayout={getItemLayout}
+      />
+    </View>
+  );
 }
