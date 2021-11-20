@@ -164,7 +164,7 @@ export default function LoginForm(props: Props) {
             error={shouldShowEmailError()}
             textContentType={'emailAddress'}
             autoCapitalize={'none'}
-            autoCompleteType={'email'}
+            autoComplete={'email'}
             autoCorrect={false}
             keyboardType={'email-address'}
             returnKeyType={'next'}
@@ -184,7 +184,7 @@ export default function LoginForm(props: Props) {
             error={shouldShowPasswordError()}
             textContentType={'password'}
             autoCapitalize={'none'}
-            autoCompleteType={'password'}
+            autoComplete={'password'}
             autoCorrect={false}
             keyboardType={'default'}
             returnKeyType={'done'}
