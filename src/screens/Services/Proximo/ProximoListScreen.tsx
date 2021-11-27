@@ -116,6 +116,16 @@ export type ArticlesType = Array<ProximoArticleType>;
 
 type Props = StackScreenProps<MainStackParamsList, MainRoutes.ProximoList>;
 
+type NutritionData = {
+  code: string;
+  product?: {
+    ingredients_analysis_tags: Array<string>;
+    nutriscore_grade: string;
+  };
+  status: number;
+  status_verbose: string;
+};
+
 function ProximoListScreen(props: Props) {
   const navigation = useNavigation();
   const theme = useTheme();
@@ -231,10 +241,14 @@ function ProximoListScreen(props: Props) {
    * @param item The article pressed
    */
   const onListItemPress = (item: ProximoArticleType) => {
-    setModalCurrentDisplayItem(getModalItemContent(item));
-    if (modalRef.current) {
-      modalRef.current.open();
-    }
+    const url = Urls.nutrition.endpoint + item.code + '.jons';
+
+    readData<NutritionData>(url).then((data) => {
+      setModalCurrentDisplayItem(getModalItemContent(item, data));
+      if (modalRef.current) {
+        modalRef.current.open();
+      }
+    });
   };
 
   /**
@@ -256,12 +270,45 @@ function ProximoListScreen(props: Props) {
   };
 
   /**
+   * Returns true if the article is vegan friendly returns false otherwise
+   * If the nutrition data is invalid return false
+   *
+   * @param nutritionData
+   */
+  const isVeganFriendly = (nutritionData: NutritionData): boolean => {
+    if (nutritionData.product) {
+      return nutritionData.product.ingredients_analysis_tags.some(
+        (ingredient: string) => ingredient === 'en:vegan'
+      );
+    }
+    return false;
+  };
+
+  /**
+   * Returns true if the article is vegetarian friendly returns false otherwise
+   * If the nutrition data is invalid return false
+   *
+   * @param nutritionData
+   */
+  const isVegetarianFriendly = (nutritionData: NutritionData): boolean => {
+    if (nutritionData.product) {
+      return nutritionData.product.ingredients_analysis_tags.some(
+        (ingredient: string) => ingredient === 'en:vegetarian'
+      );
+    }
+    return false;
+  };
+
+  /**
    * Gets the modal content depending on the given article
    *
    * @param item The article to display
    * @return {*}
    */
-  const getModalItemContent = (item: ProximoArticleType) => {
+  const getModalItemContent = (
+    item: ProximoArticleType,
+    nutritionData: NutritionData
+  ) => {
     return (
       <View style={styles.modalContainer}>
         <Title>{item.name}</Title>
@@ -286,6 +333,37 @@ function ProximoListScreen(props: Props) {
             />
           </View>
           <Text>{item.description}</Text>
+
+          {nutritionData.status === 1 && (
+            <View>
+              <View style={styles.modalTitleContainer}>
+                <Subheading>Données nutritionnelles</Subheading>
+              </View>
+
+              <View>
+                <Text>
+                  {i18n.t('screens.proximo.vegan')}:{' '}
+                  {isVeganFriendly(nutritionData)
+                    ? i18n.t('screens.game.restart.confirmYes')
+                    : i18n.t('screens.game.restart.confirmNo')}
+                </Text>
+                <Text>
+                  {i18n.t('screens.proximo.vegetarian')}:{' '}
+                  {isVegetarianFriendly(nutritionData)
+                    ? i18n.t('screens.game.restart.confirmYes')
+                    : i18n.t('screens.game.restart.confirmNo')}
+                </Text>
+                <Text>
+                  Nutriscore:{' '}
+                  {
+                    // @ts-ignore nutritionData won't be undefined thanks to the render condition
+                    nutritionData.product.nutriscore_grade.toUpperCase()
+                  }
+                </Text>
+                {/* Data fetched from openfoodfacts.org */}
+              </View>
+            </View>
+          )}
         </ScrollView>
       </View>
     );

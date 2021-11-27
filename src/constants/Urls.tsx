@@ -105,4 +105,7 @@ export default {
 &body=Coucou Arnaud j'ai du feedback\n\n\n\nBien cordialement.`,
     discord: 'https://discord.gg/W8MeTec',
   },
+  nutrition: {
+    endpoint: 'https://world.openfoodfacts.org/api/v0/product/',
+  },
 };

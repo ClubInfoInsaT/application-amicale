@@ -195,7 +195,9 @@
       "paymentMethods": "Moyens de Paiement",
       "paymentMethodsDescription": "Espèce ou Lydia",
       "search": "Rechercher",
-      "all": "Tout"
+      "all": "Tout",
+      "vegan": "vegan",
+      "vegetarian": "vegetarian"
     },
     "insaAccount": {
       "title": "Compte INSA"
