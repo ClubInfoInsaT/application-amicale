@@ -70,6 +70,7 @@ Tu trouveras [une liste de liens utiles](doc/LINKS.md) pour retrouver toutes les
 * **Damien Molina** : Étudiant en IR (2020) et créateur de la dernière version du [site de l'Amicale](https://amicale-insat.fr/). Grâce à son aide, intégrer les services de l'Amicale à l'application a été très simple. 
 * **Titouan Labourdette** : Étudiant en IR (2020). Il a beaucoup aidé pour trouver des bugs et proposer des nouvelles fonctionnalités.
 * **Théo Tami** : Étudiant en AE (2020). Si l'application marche sur iOS, c'est grâce à son aide lors de ses nombreux tests. 
+* **Nestor Carmona Moreno** : Étudiant en MA ModIA (2022). Il a traduit l'application en espagnol et italien.
 
 # 📄 Licence
 
