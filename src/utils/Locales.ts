@@ -22,11 +22,18 @@ import * as RNLocalize from 'react-native-localize';
 
 import en from '../../locales/en.json';
 import fr from '../../locales/fr.json';
+import it from '../../locales/it.json';
+import es from '../../locales/es.json';
 
 const initLocales = () => {
   i18n.fallbacks = true;
-  i18n.translations = { fr, en };
-  const bestLanguage = RNLocalize.findBestAvailableLanguage(['en', 'fr']);
+  i18n.translations = { fr, en, it, es };
+  const bestLanguage = RNLocalize.findBestAvailableLanguage([
+    'en',
+    'fr',
+    'it',
+    'es',
+  ]);
   i18n.locale = bestLanguage ? bestLanguage.languageTag : 'en';
 };
 export default initLocales;

@@ -1,0 +1,531 @@
+{
+  "screens": {
+    "services": {
+      "title": "Servicios",
+      "more": "Pincha aquí para ver más",
+      "categories": {
+        "amicale": "L' Amicale",
+        "students": "Servicios estudiantes",
+        "insa": "Servicios del INSA",
+        "special": "Proxiwash"
+      },
+      "descriptions": {
+        "clubs": "Todos los clubes y sus informaciones",
+        "profile": "Tu perfil Amicaliste y tus informaciones proporcionadas",
+        "amicaleWebsite": "Ver sito para tener más informaciones",
+        "vote": "Vota para las próximas elecciones",
+        "proximo": "Mira el stock de Próximo",
+        "wiketud": "Encuentra informaciones útiles sobre los cursos y la vida en el campus",
+        "elusEtudiants": "El sitio de los estudiantes en contacto con la administración",
+        "tutorInsa": "Da y beneficia de tutorado por otros estudiantes",
+        "self": "Mira el menú del RU",
+        "availableRooms": "Verifica las salas libres",
+        "bib": "Reserva una Bib'Box para los trabajos en grupo",
+        "mails": "Verifica tus mails INSA",
+        "ent": "Mira tus notas",
+        "insaAccount": "Accede a tus informaciones INSA y modifica tu password",
+        "equipment": "Reserva un BBQ u otro material",
+        "washers": "Número de lavadoras disponibles",
+        "dryers": "Número de secadoras disponibles"
+      },
+      "mascotDialog": {
+        "title": "Un poco perdido?",
+        "message": "Aquí es la mezcla de servicios muy útiles! Entre los servicios para los estudiantes, y los del INSA, encontrarás algo para tí.\n\nSi además tienes una cuenta Amicale, tendrás mucha más elección!",
+        "button": "Entendido"
+      }
+    },
+    "proxiwash": {
+      "title": "Proxiwash",
+      "dryer": "Secadora",
+      "dryers": "Secadoras",
+      "washer": "Lavadora",
+      "washers": "Lavadoras",
+      "updated": "Actualización ",
+      "switch": "Cambiar de lavandería",
+      "min": "min",
+      "informationTab": "Informaciones",
+      "paymentTab": "Pago",
+      "tariffs": "Tarifas",
+      "paymentMethods": "Métodos de Pago",
+      "washerProcedure": "Colocar la ropa en el tambor sin comprimirla y respetando las cargas.\n\nCerrar la puerta del aparato.\n\nSeleccionar un programa con una de las cuatro teclas de programa favorito estándar.\n\nUna vez pagado, pulsar el botón START de la lavadora.\n\nUna vez el programa finalizado, la pantalla mostrará 'Programme terminé', pulsar el botón amarillo para abrir la puerta y recoger la ropa.",
+      "washerTips": "Programa blanco/color: 6 kg de ropa seca (algodón, ropa de cama, sábanas, vaqueros, toallas).\n\nPrograma sin planchado: 3,5 kg de ropa seca (textiles de fibras sintéticas, algodón y mezclas de poliéster).\n\nPrograma fino 30°C: 2,5 kg de ropa seca (tejidos delicados de fibras sintéticas).\n\nPrograma de lana a 30°C: 2,5 kg de ropa seca (lana lavable).",
+      "dryerProcedure": "Colocar la ropa en el tambor sin comprimirla y respetando las cargas.\n\nCerrar la puerta del aparato.\n\nSeleccionar un programa con una de las cuatro teclas de programa favorito estándar.\n\nUna vez pagado, pulsar el botón START de la secadora.",
+      "dryerTips": "El tiempo recomendado es de 35 minutos para 14 kg de ropa. Puedes elegir un tiempo más corto si la secadora no está muy cargada.",
+      "procedure": "Procedimiento",
+      "tips": "Consejos",
+      "numAvailable": "disponible",
+      "numAvailablePlural": "disponibles",
+      "errors": {
+        "title": "Mensaje lavandería",
+        "button": "Leer más"
+      },
+      "washinsa": {
+        "title": "Lavandería INSA",
+        "subtitle": "¡¡Tu lavandería preferida!!",
+        "description": "Este es el servicio de lavandería para las residencias del INSA (no te reprocharemos si no vives en el campus y haces la colada aquí). La sala está situada en el R2, con sus 3 secadoras y 9 máquinas, está abierta los 7 días de la semana, ¡las 24 horas del día! Puedes traer tu detergente, cogerlo aquí o incluso mejor comprarlo en Próximo (más barato que cogerlo en la lavandería).",
+        "tariff": "Lavadora 6kg: 3€ la máquina + 0,80€ con el detergente.\nSecadora 14kg: 0,35€ por 5min de secado.",
+        "paymentMethods": "Cualquier moneda hasta 10€.\nSe aceptan tarjetas de crédito."
+      },
+      "tripodeB": {
+        "title": "Lavandería Tripode B",
+        "subtitle": "Para los que viven cerca del metro.",
+        "description": "Este es el servicio de lavandería para las residencias Trípode B y C, así como para Thalès y Pythagore. La sala está situada en el Trípode B, frente a la residencia Pythagore, con sus 2 secadoras y 6 máquinas está abierta los 7 días de la semana desde las 7 hasta las 23. Además de las máquinas de 6 kg, hay una máquina de 10 kg.",
+        "tariff": "Lavadora 6kg: 2,60€ la máquina + 0,90€ con el detergente.\nLavadora 10kg: 4,90€ la máquina + 1,50€ con el detergente.\nSecadora 14kg: 0,40€ por 5min de secado.",
+        "paymentMethods": "Se acepta la tarjeta de crédito."
+      },
+      "modal": {
+        "enableNotifications": "Notificarme",
+        "disableNotifications": "Desactivar las notificaciones",
+        "cancel": "Anular",
+        "finished": "Esta máquina acabó. Si las empezaste tú, puedes recuperar tu ropa limpia.",
+        "ready": "Esta máquina está vacía y lista para su uso.",
+        "running": "Esta máquina empezó a las %{start} y terminará a las %{end}.\n\nTiempo restante: %{remaining} min.\nPrograma: %{program}",
+        "runningNotStarted": "Esta máquina está lista pero no empezó, asegúrate de haber apoyado el botón Start.",
+        "broken": "Esta máquina está fuera de servicio. Gracias por tu comprehensión.",
+        "error": "Ha habido un error y es imposible recuperar las informaciones de esta máquina. Nos disculpamos por las molestias causadas.",
+        "unknown": "Esta máquina está en un estado deconocido. Nos disculpamos por la molestias causadas.",
+        "notificationErrorTitle": "Error",
+        "notificationErrorDescription": "Imposible crear las notificaciones. Asegúrate de haber activado las notificaciones, luego reinicia la aplicación."
+      },
+      "states": {
+        "finished": "ACABADO",
+        "ready": "DISPONIBLE",
+        "running": "EN PROCESO",
+        "runningNotStarted": "NO EMPEZÓ",
+        "broken": "FUERA DE SERVICIO",
+        "error": "ERROR",
+        "unknown": "DESCONOCIDO"
+      },
+      "notifications": {
+        "channel": {
+          "title": "Noticias lavendería",
+          "description": "Recibir recordatorios para las máquinas solicitadas"
+        },
+        "machineFinishedTitle": "Ropa lista",
+        "machineFinishedBody": "La máquina n° {{number}} terminó, ya puedes recuperar tu ropa",
+        "machineRunningTitle": "Máquina en marcha : {{time}} minutos restantes",
+        "machineRunningBody": "La máquina n° {{number}} todavía no ha acabado"
+      },
+      "mascotDialog": {
+        "title": "Información",
+        "message": "¡Ya no hace falta hacer la cola, estarás informado de las máquinas disponibles!\n\nSi estás distraído, puedes activar las notificaciones para tu máquina haciendo clic.\n\nSi vives fuera del campus, tenemos otras lavanderías disponibles. ¡¡¡¡Echa un vistazo en las configuraciones!!!!",
+        "ok": "Configuraciones",
+        "cancel": "Luego"
+      }
+    },
+    "home": {
+      "title": "Campus",
+      "feedTitle": "Actualidad del Campus",
+      "feed": "Detalles",
+      "feedLoading": "Cargando noticias",
+      "feedError": "Error al cargar las noticias",
+      "dashboard": {
+        "seeMore": "Haz clic para tener más informaciones",
+        "todayEventsTitle": "Eventos hoy",
+        "todayEventsSubtitleNA": "No hay evento",
+        "todayEventsSubtitle": "Evento hoy",
+        "todayEventsSubtitlePlural": " Eventos hoy"
+      },
+      "mascotDialog": {
+        "title": "¡Hola chiquillo!",
+        "message": "¡Conéctate a tu cuenta Amicale para tener más servicios!\n\nSi no tienes tiempo, podrás siempre conectarte más tarde.",
+        "login": "Conectarse",
+        "later": "Más Tarde"
+      }
+    },
+    "planning": {
+      "title": "Eventos",
+      "eventDetails": "Detalles",
+      "invalidEvent": "Imposible encontrar el evento. Por favor, verifica que el evento que quieres ver es válido.",
+      "mascotDialog": {
+        "title": "Sii, fiestas!",
+        "message": "Y no sólo! Aquí podrás ver todos los eventos del campus\n\nDesde la venta de crêpes a la fiesta del Gala ¡No te perderás nada!",
+        "button": "¡Venga vamosss!"
+      }
+    },
+    "planex": {
+      "title": "Planex",
+      "noGroupSelected": "Ningún grupo seleccionado. Elige un grupo con ese botón rojo tan bonito ahí abajo.",
+      "favorites": {
+        "title": "Favoritos",
+        "empty": {
+          "title": "Ningún favorito",
+          "subtitle": "Haz clic en la estrella que aparece junto a un grupo para añadirlo a tus favoritos"
+        }
+      },
+      "mascotDialog": {
+        "title": "Saltar clases está mal",
+        "message": "¡Esto es Planex! Puedes marcar tu clase y la de tu enamorado para espiona... ¡encontrarlo fácilmente!\n\nSi utilizas la app Campus exclusivamente para Planex, ve a los ajustes para iniciarla directamente en esta página.",
+        "ok": "Parámetros",
+        "cancel": "Más tarde"
+      }
+    },
+
+    "amicaleAbout": {
+      "title": "¿Una Pregunta?",
+      "subtitle": "Haz tu preguntas a Amicale",
+      "message": "¿Quieres hacerte cargo de un club?\n¿Quieres iniciar un proyecto?\n\n¡Aquí están todos los contactos de la Amicale ! ¡No dudes en escribirnos por correo o en la página de facebook de la Amicale!",
+      "roles": {
+        "interSchools": "Inter Escuelas",
+        "culture": "Cultura",
+        "animation": "Animación",
+        "clubs": "Clubes",
+        "event": "Eventos",
+        "tech": "Técnica",
+        "communication": "Comunicación",
+        "intraSchools": "Alumni / IAT",
+        "publicRelations": "Relaciones públicas"
+      }
+    },
+    "proximo": {
+      "title": "Proximo",
+      "articleList": "Artículos",
+      "emptyList": "Lista Vacía",
+      "article": "Artículo",
+      "articles": "Artículos",
+      "hideOutOfStock": "Ocultar los artículos agotados",
+      "sortOrder": "Filtrar por:",
+      "sortName": "Nombre",
+      "sortNameReverse": "Nombre (invertido)",
+      "sortPrice": "Precio",
+      "sortPriceReverse": "Precio (invertido)",
+      "inStock": "en stock",
+      "description": "Próximo es tu pequeña tienda de comestibles para estudiantes gestionada por estudiantes directamente en el campus. Abierto todos los días desde las 18h30 hasta las 19h30, te damos la bienvenida y te salvamos cuando te quedas sin pasta o sin diluyente. Diferentes productos para diferentes problemas, todo a precio reducido. Puedes pagar con Lydia o en efectivo.",
+      "openingHours": "Horarios de apertura",
+      "paymentMethods": "Métodos de pago",
+      "paymentMethodsDescription": "Efectivo o Lydia",
+      "search": "Buscar",
+      "all": "Todo"
+    },
+    "insaAccount": {
+      "title": "Cuenta INSA"
+    },
+    "menu": {
+      "title": "Menú del RU"
+    },
+    "websites": {
+      "amicale": "Sito de Amicale",
+      "rooms": "Salas disponibles",
+      "bib": "Bib'Box",
+      "mails": "Mails INSA",
+      "ent": "ENT INSA"
+    },
+
+    "login": {
+      "title": "Conexión",
+      "subtitle": "Introduce tus datos de acceso a AMICALE",
+      "email": "Mail",
+      "emailError": "Por favor, introduce una mail válida",
+      "password": "Contraseña",
+      "passwordError": "Por favor, introduce una contraseña",
+      "resetPassword": "Contraseña olvidada",
+      "mascotDialog": {
+        "title": "¿Una cuenta?",
+        "message": "Una cuenta de Amicale te da la oportunidad de participar en varias actividades en el campus. Puedes unirte a clubes o incluso crear el tuyo propio.\n\nAccediendo a tu cuenta de Amicale en la app podrás ver todos los clubes activos, reservar materiales, votar en las próximas elecciones y mucho más.\n\n¿No tienes cuenta? Pásate por la Amicale durante una permanencia para crear una.",
+        "button": "Vale"
+      }
+    },
+    "profile": {
+      "title": "Perfil",
+      "personalInformation": "Informacionse Personales",
+      "noData": "Ningún dato",
+      "editInformation": "Modificar las informaciones",
+      "clubs": "Tus clubes",
+      "clubsSubtitle": "Pincha sobre un club para mostrar sus informaciones",
+      "isMember": "Miembro",
+      "isManager": "Responsable",
+      "membership": "Contribución",
+      "membershipSubtitle": "Permite la participación en diversas actividades",
+      "membershipPayed": "Pagada",
+      "membershipNotPayed": "No pagada :(",
+      "welcomeTitle": "Hola %{name} !",
+      "welcomeDescription": "Este es tu espacio personal Amicale INSA Toulouse. A continuación encontrarás los servicios disponibles en tu cuenta. ¿Un poco vacío? Tienes razón y trataremos de solucionarlo, ¡así que mantente al día!",
+      "welcomeFeedback": "Intentaremos ofrecer más servicios. Si tienes alguna sugerencia, o has encontrado algún error, ponte en contacto con nosotros con el botón de abajo."
+    },
+    "clubs": {
+      "title": "Listea de los Clubes",
+      "details": "Detalles",
+      "managers": "Responsables",
+      "managersSubtitle": "Esta gente mantiene el club en marcha",
+      "managersUnavailable": "Este club está solito :(",
+      "categories": "Categorías",
+      "categoriesFilterMessage": "Pincha sobre una categoría para filtrar la lista",
+      "clubContact": "Contactar el club",
+      "amicaleContact": "Contactar l'Amicale",
+      "invalidClub": "No se puede encontrar el club. Por favor, compruebe que el club que quiere ver es válido.",
+      "about": {
+        "text": "Los clubes son los que mantienen vivo el campus a diario, con más de sesenta clubes que ofrecen una gran variedad de actividades. Desde el club de filosofía hasta el PABI (Production Artisanale de Bière Insaienne), pasando por los numerosos clubes de música y baile, seguro que encuentras una actividad que te permita florecer en el campus.",
+        "title": "¿Una pregunta?",
+        "subtitle": "Haz tus preguntas a la Amicale",
+        "message": "¿Tiene preguntas sobre los clubes? ¿Quiere hacerse cargo o fundar un club?\n\nContacta los responsables en la mail siguiente:"
+      }
+    },
+    "vote": {
+      "title": "Elecciones",
+      "noVote": "Ningún voto en curso",
+      "select": {
+        "title": "Elecciones abiertas",
+        "subtitle": "¡Vota ahora!",
+        "sendButton": "Enviar el voto",
+        "dialogTitle": "¿Enviar el voto?",
+        "dialogTitleLoading": "Enviando el voto...",
+        "dialogMessage": "¿Estás seguro de que quieres enviar tu voto? No podrás cambiarlo."
+      },
+      "tease": {
+        "title": "Se acercan las elecciones",
+        "subtitle": "¡Prepárate para votar!",
+        "message": "Inicio de votos:"
+      },
+      "wait": {
+        "titleSubmitted": "¡Votos enviados!",
+        "titleEnded": "Votos cerrados",
+        "subtitle": "Esperando los resultados...",
+        "messageSubmitted": "Tu voto ha sido enviado.",
+        "messageVoted": "Gracias por tu participación.",
+        "messageDate": "Disponibilitad de los resultados:",
+        "messageDateUndefined": "Los resultados estarán disponibles en breve."
+      },
+      "results": {
+        "title": "Resultados",
+        "subtitle": "Disponibles hasta el:",
+        "totalVotes": "Número total de votos:",
+        "votes": "votos"
+      },
+      "mascotDialog": {
+        "title": "¿Por qué votar?",
+        "message": "¡Las elecciones de la Amicale son el momento para que elijas el próximo equipo que llevará a cabo los diferentes proyectos del campus, que apoyará la organización de tus eventos favoritos, que propondrá animaciones a lo largo del año, y que llevará tus ideas a la administración para que la vida del campus sea más rica!\n¡Así que depende de ti! \uD83D\uDE09\n\nNB : Si sólo se presenta una lista, es importante que todo el mundo vote, para que la lista pueda demostrar a la administración que los INSAianos la apoyan. ¡Esto siempre cuenta para las decisiones difíciles! \uD83D\uDE09",
+        "button": "Okay"
+      }
+    },
+    "equipment": {
+      "title": "Reservación del Material",
+      "book": "Reservar",
+      "confirm": "Confirmación",
+      "bail": "Fianza: %{cost}€",
+      "available": "Disponible %{date}",
+      "today": "hoy",
+      "tomorrow": "mañana",
+      "thisMonth": "el %{date}",
+      "otherMonth": "el %{date} %{month}",
+      "otherYear": "el %{date} %{month} %{year}",
+      "bookingDay": "Reserva para %{date}",
+      "bookingPeriod": "Inicio: %{begin}\nFin: %{end}",
+      "booking": "Pincha en el calendario para elegir las fechas de inicio y fin del préstamo",
+      "bookButton": "Reserva estas fechas",
+      "dialogTitle": "¿Confirmar la reservación?",
+      "dialogTitleLoading": "Envío de la reservación...",
+      "dialogMessage": "¿Estás seguro de que quiere confirmar su reserva?\n\n A continuación, puedes acudir a la Amicale para recoger el material durante la duración de la reserva a cambio de una fianza.",
+      "bookingConfirmedMessage": "No olvides pasarte por L'Amicale para entregar la fianza a cambio del material.",
+      "mascotDialog": {
+        "title": "¿Cómo funciona?",
+        "message": "L'Amicale pone a disposición de los estudiantes aparatos como BBQ, aparatos para la raclette y mucho más. Para reservar uno de ellos, pincha en el que te interese en la lista, indica las fechas, y luego acude a la Amicale para recogerlo y dar la fianza.",
+        "button": "¡Gracias!"
+      }
+    },
+
+    "scanner": {
+      "title": "Scanotron 3000",
+      "permissions": {
+        "error": "Scanotron 3000 necesita acceder a la cámara para escanear códigos QR.\n\nLa cámara no se utilizará nunca a otro fin.",
+        "button": "Autorizar el acceso a la cámara"
+      },
+      "error": {
+        "title": "Código QR inválido",
+        "message": "El código QR escaneado no ha sido reconocido. Verifica su validez."
+      },
+      "help": {
+        "button": "¿Qué escanear?"
+      },
+      "mascotDialog": {
+        "title": "¿Scano...qué?",
+        "message": "¡Scanotron 3000 te permite escanear los códigos QR del Campus, mostrados por los clubes o responsables, para obtener más información.!\n\nLa cámara no se utilizará nunca para ningún otro fin.",
+        "button": "Okay"
+      }
+    },
+    "settings": {
+      "title": "Parámetros",
+      "generalCard": "General",
+      "nightMode": "Modo Noche",
+      "nightModeSubOn": "Tus ojos te lo agradecen",
+      "nightModeSubOff": "Tus ojos se queman",
+      "nightModeAuto": "Modo noche sistema",
+      "nightModeAutoSub": "Sigue el modo seleccionado por el sistema",
+      "startScreen": "Pantalla inicial",
+      "startScreenSub": "Elige la pantalla en la que desea iniciar Campus",
+      "dashboard": "Dashboard",
+      "dashboardSub": "Elige los servicios Choisis les services à afficher sur la dashboard",
+      "proxiwashNotifReminder": "Aviso de la máquine en curso",
+      "proxiwashNotifReminderSub": "Cuántos minutos antes",
+      "proxiwashChangeWash": "Selección de la lavandería",
+      "proxiwashChangeWashSub": "Qué lavandería mostrar",
+      "information": "Informaciones",
+      "dashboardEdit": {
+        "title": "Modificar el dashboard",
+        "message": "Los 5 iconos de arriba representan su panel de control.\nPuedes sustituir uno de estos servicios haciendo clic en él y seleccionando el nuevo servicio de su elección en la lista siguiente.",
+        "undo": "Anular los cambios"
+      }
+    },
+    "about": {
+      "title": "Sobre",
+      "buttonDesc": "Informaciones sobre la aplicación y su creador",
+      "appstore": "Ver en la Appstore",
+      "playstore": "Ver en el Playstore",
+      "changelog": "Changelog",
+      "license": "Licencia",
+      "debug": "Debug",
+      "team": "Equipo",
+      "technologies": "Tecnologías",
+      "reactNative": "Creado con React Native",
+      "libs": "Librerías utilizadas",
+      "thanks": "Agradecimientos",
+      "user": {
+        "you": "¿Tú?",
+        "arnaud": "Estudiante en 4IR (2020). Es el creador de la aplicación que utilizas todos los días.",
+        "docjyj":  "Estudiante en 2MIC FAS (2020). Añadió nuevas funcionalidades y corrigió errores.",
+        "yohan":  "Estudiante en 4IR (2020). Ayudó a corregir errores y proponer ideas.",
+        "beranger": "Estudiante en 4AE (2020) y Presidente de Amicale cuando se creó y lanzó el proyecto. La aplicación fue su idea. Ayudó mucho en encontrar los errores, proponer nuevas funcionalidades y hacer comunicación.",
+        "celine": "Estudiante en 4GPE(2020). Sin ella, todo sería menos lindo. Ayudó a escribir el texto, hacer la comunicación y crear la mascota 🦊.",
+        "damien": "Estudiante en 4IR (2020) y creador de la última versión del sitio de Amicale. Gracias a su ayuda, integrar los servicios de Amicale fue muy simple.",
+        "titouan": "Estudiante en 4IR (2020). Ha ayudado mucho en encontrar errores y proponer nuevas funcionalidades.",
+        "theo": "Estudiante en 4AE (2020). Si la aplicación funciona en iOS, es gracias a él con sus numerosos tests."
+      }
+    },
+    "feedback": {
+      "title": "Participar",
+      "feedback": "Contacta al desarrollador",
+      "feedbackSubtitle": "¡Es un estudiante como tú!",
+      "feedbackDescription": "Que sea para dar tu opinión o reporter errores, eres el bienvenido.\nUtiliza el método que quieres entre los botones aquí abajo.",
+      "contribute": "Contribuye al proyecto",
+      "contributeSubtitle": "¡Con una posible implicación civil!",
+      "contributeDescription": "Hay para todos los gustos: comunicación, design o técnico. Eres libre de participar como quieras.\n Encontrarás aquí abajo la organización del proyect, así como el código en GitHub.",
+      "homeButtonTitle": "Participar al proyecto",
+      "homeButtonSubtitle": "Tu ayuda cuenta",
+      "buttons": {
+        "mail": "Mail",
+        "organization": "Organización"
+      }
+    },
+    "game": {
+      "title": "Juego muy chulo",
+      "welcomeTitle": "¡Bienvenido!",
+      "welcomeMessage": "¿En el baño? ¿El profe todavía no ha llegado?\n¡Este juego está hecho para tí!\n\nIntenta hacer la mejor puntuación y ganar a tus amigos.",
+      "play": "¡Jugar!",
+      "score": "Puntuación: %{score}",
+      "highScore": "Mejor puntuación: %{score}",
+      "newHighScore": "¡Mejor puntuación!",
+      "time": "Tiempo:",
+      "level": "Nivel:",
+      "pause": "Pausa",
+      "pauseMessage": "Has hecho una pausa, eres malo",
+      "resume": "Continuar",
+      "gameOver": "Game Over",
+      "restart": {
+        "text": "Empezar de nuevo",
+        "confirm": "¿Seguro que quieres empezar de nuevo?",
+        "confirmMessage": "Todo tu progreso se borrará, ¿continuar?",
+        "confirmYes": "Sí",
+        "confirmNo": "Wops no"
+      },
+      "mascotDialog": {
+        "title": "¡Un segreto!",
+        "message": "Has descubierto un juego segreto, felicidades!\nSi tienes tiempo que perder, este juego es para tí.",
+        "button": "Vamoooos !"
+      }
+    },
+    "debug": {
+      "title": "Debug"
+    }
+  },
+  "intro": {
+    "slideMain": {
+      "title": "¡Bienvenido a CAMPUS!",
+      "text": "¡La aplicación del campus del INSA de Toulouse! Déjate guiar para entender todo lo que se puede hacer."
+    },
+    "slidePlanex": {
+      "title": "Planex todo guapo",
+      "text": "Consulta tu horario y el de tus amigos con un Planex adaptado para móviles!"
+    },
+    "slideEvents": {
+      "title": "Los Eventos",
+      "text": "¡Entérate de todo lo que ocurre en el campus, desde la venta de crêpes hasta los conciertos de Enfoiros!"
+    },
+    "slideServices": {
+      "title": "¡Y todavía más!",
+      "text": "Hay mucho más que puedes hacer con CAMPUS, pero no tengo tiempo para decirlo todo aquí. Echa un vistazo a la aplicación para descubrirlo."
+    },
+    "slideDone": {
+      "title": "¡Participa en el proyecto!",
+      "text": "Esta aplicación fue creada por un solo estudiante. ¡Tu opinión y tu ayuda son las bienvenidas!\nHay para todos los gustos: ¡comunicación, design o técnica!"
+    },
+    "updateSlide0": {
+      "title": "¡Hola chiquillo!",
+      "text": "Soy el nuevo chico del barrio que te acompañará en la aplicación. Mi afición es darte muchos consejos e información."
+    },
+    "updateSlide1": {
+      "title": "¡Participa en el proyecto!",
+      "text": "Esta aplicación fue creada por un solo estudiante. ¡Tu opinión y tu ayuda son las bienvenidas!\nHay para todos los gustos: ¡comunicación, design o técnica!"
+    },
+    "aprilFoolsSlide": {
+      "title": "¡Novedades de esta actualización!",
+      "text": "Os habemos oído, no os gustan el nuevo design y los colores. ¡Así que los habemos cambiado!\nUn beso."
+    }
+  },
+  "errors": {
+    "title": "¡Error!",
+    "badCredentials": "Email o password inválida.\n\nVerifica que utilizas tus datos de acceso AMICALE y no INSA.",
+    "badToken": "No estás conectado. Por favor, conéctacte y prueba de nuevo.",
+    "noConsent": "No has dado tu consentimiento para el uso de tus datos personales.",
+    "tokenSave": "Imposible salvar el token de sesión. Por favor, contacta el support.",
+    "tokenRetrieve": "Imposible recuperar el token de sesión. Por favor, contacta el support.",
+    "badInput": "Entrada inválida. Por favor, intenta de nuevo.",
+    "forbidden": "No tienes acceso a esta información.",
+    "connectionError": "Error de la red. Por favor, verifica estar conectado al Internet.",
+    "serverError": "Error del servidor. Por favor, contacta el support.",
+    "unknown": "Error desconocido. Por favor, contacta el support."
+  },
+  "dialog": {
+    "ok": "OK",
+    "yes": "Sí",
+    "cancel": "Anular",
+    "disconnect": {
+      "title": "Cerrar sesión",
+      "titleLoading": "Cerrando sesión...",
+      "message": "¿De verdad quieres desconectarte de tu cuenta Amicale?"
+    }
+  },
+  "general": {
+    "loading": "Cargando...",
+    "retry": "Volver a intentar",
+    "networkError": "Imposible contactar los servidores. Verificar estar conectado al Internet.",
+    "goBack": "Anterior",
+    "goForward": "Siguiente",
+    "openInBrowser": "Abrir en el navegador",
+    "notAvailable": "No disponible",
+    "listUpdateFail": "Error en la actualización de la lista"
+  },
+  "date": {
+    "daysOfWeek": {
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    },
+    "monthsOfYear": {
+      "january": "Enero",
+      "february": "Febrero",
+      "march": "Marzo",
+      "april": "Abril",
+      "may": "Mayo",
+      "june": "Junio",
+      "july": "Julio",
+      "august": "Agosto",
+      "september": "Septiembre",
+      "october": "Octubre",
+      "november": "Noviembre",
+      "december": "Diciembre"
+    }
+  }
+}
