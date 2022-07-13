@@ -61,6 +61,7 @@ export function isApiResponseValid<T>(response: ApiResponseType<T>): boolean {
   return (
     response != null &&
     response.error != null &&
+    Object.values(API_REQUEST_CODES).includes(response.error) &&
     response.data != null &&
     typeof response.data === 'object'
   );

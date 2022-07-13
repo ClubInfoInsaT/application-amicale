@@ -15,12 +15,12 @@ test('isRequestResponseValid', () => {
   };
   expect(isApiResponseValid(json)).toBeTrue();
   json = {
-    error: 50,
+    error: 999,
     data: {},
   };
   expect(isApiResponseValid(json)).toBeTrue();
   json = {
-    error: 50,
+    error: 0,
     data: { truc: 'machin' },
   };
   expect(isApiResponseValid(json)).toBeTrue();
