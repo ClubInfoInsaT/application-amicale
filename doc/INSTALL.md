@@ -3,7 +3,7 @@
 Si tu as un problème ou une question, merci de me contacter par mail : [app@amicale-insat.fr](mailto:app@amicale-insat.fr)
 
 Ce guide a été testé sur Linux (Ubuntu 20.04).
-Si tu utilises Windows, débrouilles-toi ou installe Linux.
+Si tu utilises Windows, débrouille-toi ou installe Linux.
 
 ## ⚠️ Avant de commencer, merci de te familiariser avec [les bases !](LINKS.md)
 
@@ -59,12 +59,15 @@ Plus d'informations sur l'organisation avec git [ici](WORKFLOW.md).
 
 Une fois le dépôt sur ta machine et git sur la branche de ton choix, ouvre un terminal dans le dossier racine et installe les dépendances avec la commande suivante : 
 ````shell script
-npm i
+npm ci
 ````
+Le paramètre `ci` indique à `npm` d'installer précisément comme dans le `package-lock.json` (que
+l'on ne modifie pas manuellement). Pour plus d'info se référer à [cette
+réponse](https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore#48524475).
 
 Si cette command donne une erreur indiquant que la version d'une dépendance n'est pas valide, utilise cette commande à la place:
 ````shell script
-npm i --legacy-peer-deps
+npm ci --legacy-peer-deps
 ````
 
 Si tu es sur macOS, tu devras aussi lancer la commande suivante pour installer les dépendances propres à iOS :
@@ -83,3 +86,4 @@ Si tu utilises Webstorm, le projet contient des configurations de lancement pour
 # 5. Compiler une version release
 
 Merci de me contacter par mail pour toute information sur les release : [app@amicale-insat.fr](mailto:app@amicale-insat.fr)
+
