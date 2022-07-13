@@ -1,0 +1,26 @@
+name: lint-test
+
+# Controls when the workflow will run
+on:
+  push:
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  lint-test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      - name: Run linter
+        run: npm run lint
+      - name: Run tests
+        run: npm test
