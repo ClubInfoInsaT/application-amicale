@@ -57,25 +57,6 @@ test('stringToDate', () => {
   expect(Planning.stringToDate('2020-51-50 65:65')).toEqual(testDate);
 });
 
-test('getFormattedEventTime', () => {
-  expect(Planning.getFormattedEventTime(null, null)).toBe('/ - /');
-  expect(Planning.getFormattedEventTime(undefined, undefined)).toBe('/ - /');
-  expect(Planning.getFormattedEventTime('20:30', '23:00')).toBe('/ - /');
-  expect(Planning.getFormattedEventTime('2020-03-30', '2020-03-31')).toBe(
-    '/ - /'
-  );
-
-  expect(
-    Planning.getFormattedEventTime('2020-03-21 09:00', '2020-03-21 09:00')
-  ).toBe('09:00');
-  expect(
-    Planning.getFormattedEventTime('2020-03-21 09:00', '2020-03-22 17:00')
-  ).toBe('09:00 - 23:59');
-  expect(
-    Planning.getFormattedEventTime('2020-03-30 20:30', '2020-03-30 23:00')
-  ).toBe('20:30 - 23:00');
-});
-
 test('getDateOnlyString', () => {
   expect(Planning.getDateOnlyString('2020-03-21 09:00')).toBe('2020-03-21');
   expect(Planning.getDateOnlyString('2021-12-15 09:00')).toBe('2021-12-15');
