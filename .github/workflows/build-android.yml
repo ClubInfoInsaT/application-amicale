@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - 'master'
-    tags:
-      - 'v*'
+    #tags:
+     # - 'v*'
 
 
 jobs:
@@ -45,4 +45,5 @@ jobs:
           releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
           track: internal
           releaseName: ${{steps.tag.outputs.tag}}
+          status: completed
 
