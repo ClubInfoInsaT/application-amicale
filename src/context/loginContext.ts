@@ -24,7 +24,7 @@ export function useLogin() {
  * @returns True if the user is connected
  */
 export function useLoginState() {
-  const { token } = useLogin();
+  const { token } = exports.useLogin();
   return token !== undefined;
 }
 
@@ -33,7 +33,7 @@ export function useLoginState() {
  * @returns The token, or empty string if the user is not logged in
  */
 export function useLoginToken() {
-  const { token } = useLogin();
+  const { token } = exports.useLogin();
   return token ? token : '';
 }
 
