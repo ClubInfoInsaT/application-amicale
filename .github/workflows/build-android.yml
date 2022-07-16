@@ -36,7 +36,7 @@ jobs:
               echo "${{ secrets.KEYSTORE_PROPERTIES_64 }}" | base64 -d > android/keystores/release.keystore.properties
               echo "${{ secrets.JKS_64 }}" | base64 -d > android/app/application-amicale.jks
       - name: build
-        run: make bundle
+        run: npm run bundle
       - uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE }}
