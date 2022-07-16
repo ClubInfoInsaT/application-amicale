@@ -64,9 +64,8 @@ function EquipmentListScreen() {
     undefined | boolean
   >(undefined);
 
-  const requestAll = useAuthenticatedRequest<{ devices: Array<DeviceType> }>(
-    'location/all'
-  );
+  const requestAll =
+    useAuthenticatedRequest<{ devices: Array<DeviceType> }>('location/all');
   const requestOwn = useAuthenticatedRequest<{
     locations: Array<RentedDeviceType>;
   }>('location/my');
