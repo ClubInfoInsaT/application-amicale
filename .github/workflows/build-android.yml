@@ -19,7 +19,7 @@ jobs:
           node-version: 16
       - name: Get tag
         id: tag
-        uses: dawidd6/action-get-tag@v1
+        run: echo '::set-output name=tag::`git describe --tags`'
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Run linter
