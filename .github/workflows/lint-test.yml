@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: show node version
+        run: node -v
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Run linter
