@@ -84,12 +84,6 @@ type PropsType = {
   navigation: StackNavigationProp<any>;
 };
 
-type StateType = {
-  refreshing: boolean;
-  agendaItems: { [key: string]: Array<PlanningEventType> };
-  calendarShowing: boolean;
-};
-
 const AGENDA_MONTH_SPAN = 3;
 
 const styles = StyleSheet.create({
@@ -101,60 +95,45 @@ const styles = StyleSheet.create({
 /**
  * Class defining the app's planning screen
  */
-class PlanningScreen extends React.Component<PropsType, StateType> {
-  agendaRef: null | Agenda<any>;
+function PlanningScreen(props: PropsType) {
+  let agendaRef: null | Agenda<any>;
+  let minTimeBetweenRefresh = 60;
+  let currentDate: string | null = getDateOnlyString(getCurrentDateString());
 
-  lastRefresh: Date | null;
+  const [lastRefresh, setLastRefresh] = React.useState<Date | null>(null);
+  const [refreshing, setRefreshing] = React.useState<boolean>(false);
+  // const [agendaRef, setAgendaRef] = React.useState<Agenda<any> | null>(null);
+  const [agendaItems, setAgendaItems] = React.useState<{
+    [key: string]: Array<PlanningEventType>;
+  }>({});
+  const [calendarShowing, setCalendarShowing] = React.useState<boolean>(false);
 
-  minTimeBetweenRefresh = 60;
-
-  currentDate: string | null;
-
-  constructor(props: PropsType) {
-    super(props);
-    if (i18n.currentLocale().startsWith('fr')) {
-      LocaleConfig.defaultLocale = 'fr';
-    }
-    this.agendaRef = null;
-    this.currentDate = getDateOnlyString(getCurrentDateString());
-    this.lastRefresh = null;
-    this.state = {
-      refreshing: false,
-      agendaItems: {},
-      calendarShowing: false,
-    };
-  }
-
-  /**
-   * Captures focus and blur events to hook on android back button
-   */
-  componentDidMount() {
-    const { navigation } = this.props;
-    this.onRefresh();
+  React.useEffect(() => {
+    const { navigation } = props;
+    onRefresh();
     navigation.addListener('focus', () => {
       BackHandler.addEventListener(
         'hardwareBackPress',
-        this.onBackButtonPressAndroid
+        onBackButtonPressAndroid
       );
     });
     navigation.addListener('blur', () => {
       BackHandler.removeEventListener(
         'hardwareBackPress',
-        this.onBackButtonPressAndroid
+        onBackButtonPressAndroid
       );
     });
-  }
+  });
 
   /**
    * Overrides default android back button behaviour to close the calendar if it was open.
    *
    * @return {boolean}
    */
-  onBackButtonPressAndroid = (): boolean => {
-    const { calendarShowing } = this.state;
-    if (calendarShowing && this.agendaRef != null) {
+  const onBackButtonPressAndroid = (): boolean => {
+    if (calendarShowing && agendaRef != null) {
       // @ts-ignore
-      this.agendaRef.chooseDay(this.agendaRef.state.selectedDay);
+      agendaRef.chooseDay(agendaRef.state.selectedDay);
       return true;
     }
     return false;
@@ -163,30 +142,26 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
   /**
    * Refreshes data and shows an animation while doing it
    */
-  onRefresh = () => {
+  const onRefresh = () => {
     let canRefresh;
-    if (this.lastRefresh) {
+    if (lastRefresh) {
       canRefresh =
-        (new Date().getTime() - this.lastRefresh.getTime()) / 1000 >
-        this.minTimeBetweenRefresh;
+        (new Date().getTime() - lastRefresh.getTime()) / 1000 >
+        minTimeBetweenRefresh;
     } else {
       canRefresh = true;
     }
 
     if (canRefresh) {
-      this.setState({ refreshing: true });
+      setRefreshing(true);
       readData<Array<PlanningEventType>>(Urls.amicale.events)
         .then((fetchedData) => {
-          this.setState({
-            refreshing: false,
-            agendaItems: generateEventAgenda(fetchedData, AGENDA_MONTH_SPAN),
-          });
-          this.lastRefresh = new Date();
+          setRefreshing(false);
+          setAgendaItems(generateEventAgenda(fetchedData, AGENDA_MONTH_SPAN));
+          setLastRefresh(new Date());
         })
         .catch(() => {
-          this.setState({
-            refreshing: false,
-          });
+          setRefreshing(false);
         });
     }
   };
@@ -196,8 +171,9 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    *
    * @param ref
    */
-  onAgendaRef = (ref: Agenda<any>) => {
-    this.agendaRef = ref;
+  const onAgendaRef = (ref: Agenda<any>) => {
+    // setAgendaRef(ref);
+    agendaRef = ref;
   };
 
   /**
@@ -205,8 +181,8 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    *
    * @param isCalendarOpened True is the calendar is already open, false otherwise
    */
-  onCalendarToggled = (isCalendarOpened: boolean) => {
-    this.setState({ calendarShowing: isCalendarOpened });
+  const onCalendarToggled = (isCalendarOpened: boolean) => {
+    setCalendarShowing(isCalendarOpened);
   };
 
   /**
@@ -215,8 +191,8 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    * @param item The current event to render
    * @return {*}
    */
-  getRenderItem = (item: PlanningEventType) => {
-    const { navigation } = this.props;
+  const getRenderItem = (item: PlanningEventType) => {
+    const { navigation } = props;
     const onPress = () => {
       navigation.navigate(MainRoutes.PlanningInformation, {
         type: 'full',
@@ -256,57 +232,54 @@ class PlanningScreen extends React.Component<PropsType, StateType> {
    *
    * @return {*}
    */
-  getRenderEmptyDate = () => <Divider />;
+  const getRenderEmptyDate = () => <Divider />;
 
-  render() {
-    const { state, props } = this;
-    return (
-      <View style={GENERAL_STYLES.flex}>
-        <CustomAgenda
-          {...props}
-          // the list of items that have to be displayed in agenda. If you want to render item as empty date
-          // the value of date key kas to be an empty array []. If there exists no value for date key it is
-          // considered that the date in question is not yet loaded
-          items={state.agendaItems}
-          // initially selected day
-          selected={this.currentDate ? this.currentDate : undefined}
-          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-          minDate={this.currentDate ? this.currentDate : undefined}
-          // Max amount of months allowed to scroll to the past. Default = 50
-          pastScrollRange={1}
-          // Max amount of months allowed to scroll to the future. Default = 50
-          futureScrollRange={AGENDA_MONTH_SPAN}
-          // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
-          onRefresh={this.onRefresh}
-          // callback that fires when the calendar is opened or closed
-          onCalendarToggled={this.onCalendarToggled}
-          // Set this true while waiting for new data from a refresh
-          refreshing={state.refreshing}
-          renderItem={this.getRenderItem}
-          renderEmptyDate={this.getRenderEmptyDate}
-          // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-          firstDay={1}
-          // ref to this agenda in order to handle back button event
-          onRef={this.onAgendaRef}
-          rowHasChanged={(r1: PlanningEventType, r2: PlanningEventType) =>
-            r1.id !== r2.id
-          }
-        />
-        <MascotPopup
-          title={i18n.t('screens.planning.mascotDialog.title')}
-          message={i18n.t('screens.planning.mascotDialog.message')}
-          icon="party-popper"
-          buttons={{
-            cancel: {
-              message: i18n.t('screens.planning.mascotDialog.button'),
-              icon: 'check',
-            },
-          }}
-          emotion={MASCOT_STYLE.HAPPY}
-        />
-      </View>
-    );
-  }
+  return (
+    <View style={GENERAL_STYLES.flex}>
+      <CustomAgenda
+        {...props}
+        // the list of items that have to be displayed in agenda. If you want to render item as empty date
+        // the value of date key kas to be an empty array []. If there exists no value for date key it is
+        // considered that the date in question is not yet loaded
+        items={agendaItems}
+        // initially selected day
+        selected={currentDate ? currentDate : undefined}
+        // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+        minDate={currentDate ? currentDate : undefined}
+        // Max amount of months allowed to scroll to the past. Default = 50
+        pastScrollRange={1}
+        // Max amount of months allowed to scroll to the future. Default = 50
+        futureScrollRange={AGENDA_MONTH_SPAN}
+        // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
+        onRefresh={onRefresh}
+        // callback that fires when the calendar is opened or closed
+        onCalendarToggled={onCalendarToggled}
+        // Set this true while waiting for new data from a refresh
+        refreshing={refreshing}
+        renderItem={getRenderItem}
+        renderEmptyDate={getRenderEmptyDate}
+        // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+        firstDay={1}
+        // ref to this agenda in order to handle back button event
+        onRef={onAgendaRef}
+        rowHasChanged={(r1: PlanningEventType, r2: PlanningEventType) =>
+          r1.id !== r2.id
+        }
+      />
+      <MascotPopup
+        title={i18n.t('screens.planning.mascotDialog.title')}
+        message={i18n.t('screens.planning.mascotDialog.message')}
+        icon="party-popper"
+        buttons={{
+          cancel: {
+            message: i18n.t('screens.planning.mascotDialog.button'),
+            icon: 'check',
+          },
+        }}
+        emotion={MASCOT_STYLE.HAPPY}
+      />
+    </View>
+  );
 }
 
 export default PlanningScreen;
