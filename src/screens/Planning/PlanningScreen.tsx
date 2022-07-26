@@ -100,6 +100,10 @@ function PlanningScreen(props: PropsType) {
   let minTimeBetweenRefresh = 60;
   let currentDate: string | null = getDateOnlyString(getCurrentDateString());
 
+  if (i18n.currentLocale().startsWith('fr')) {
+    LocaleConfig.defaultLocale = 'fr';
+  }
+
   const [lastRefresh, setLastRefresh] = React.useState<Date | null>(null);
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
   // const [agendaRef, setAgendaRef] = React.useState<Agenda<any> | null>(null);
