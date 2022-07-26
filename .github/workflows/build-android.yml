@@ -1,12 +1,9 @@
 name: build-android
 
 on:
-  push:
+  workflow_dispatch:
     branches:
       - 'master'
-    tags:
-      - '*'
-
 
 jobs:
   build-android:
@@ -20,7 +17,7 @@ jobs:
           node-version: 16
       - name: Get tag
         id: tag
-        run: echo '::set-output name=tag::`git describe --tags`'
+        run: echo "::set-output name=tag::`git describe --tags`"
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - uses: szenius/set-timezone@v1.0
