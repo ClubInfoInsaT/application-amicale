@@ -28,6 +28,7 @@ type Props = {
 
 const styles = StyleSheet.create({
   card: {
+    marginTop: 5,
     marginHorizontal: 5,
   },
   messageCard: {
