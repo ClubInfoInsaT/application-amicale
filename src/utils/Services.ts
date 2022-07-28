@@ -52,6 +52,7 @@ export const SERVICES_KEY = {
   WIKETUD: 'wiketud',
   ELUS_ETUDIANTS: 'elus_etudiants',
   TUTOR_INSA: 'tutor_insa',
+  YEARLY_PLANNING: 'yearly_planning',
   RU: 'ru',
   AVAILABLE_ROOMS: 'available_rooms',
   BIB: 'bib',
@@ -195,6 +196,17 @@ export function getStudentServices(
         }),
       badgeFunction: (dashboard: FullDashboardType): number =>
         dashboard.available_tutorials,
+    },
+    {
+      key: SERVICES_KEY.YEARLY_PLANNING,
+      title: "Planning de l'année",
+      subtitle: i18n.t('screens.services.descriptions.yearlyPlanning'),
+      image: Urls.images.availableRooms,
+      onPress: () =>
+        onPress(MainRoutes.Website, {
+          host: Urls.websites.yearlyPlanning,
+          title: "Planning de l'année",
+        }),
     },
   ];
   return getStrippedServicesList(studentsDataset, excludedItems);

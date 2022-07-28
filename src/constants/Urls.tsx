@@ -87,6 +87,8 @@ export default {
     insaAccount: 'https://moncompte.insa-toulouse.fr/',
     tutorInsa: STUDENT_SERVER + '~tutorinsa/',
     wiketud: 'https://wiki.etud.insa-toulouse.fr/',
+    yearlyPlanning:
+      'https://wiki.etud.insa-toulouse.fr/books/quotidien/page/planning-de-lannee-en-cours',
   },
   about: {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
