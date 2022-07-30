@@ -102,7 +102,7 @@ export default {
     project: 'https://github.com/ClubInfoInsaT/application-amicale/projects/1',
     facebook: 'https://www.facebook.com/campus.insat',
     mail: `mailto:app@amicale-insat.fr?subject=[FEEDBACK] Application CAMPUS
-&body=Coucou Arnaud j'ai du feedback\n\n\n\nBien cordialement.`,
+&body=Hello l'équipe j'ai du feedback\n\n\nBien cordialement.`,
     discord: 'https://discord.gg/W8MeTec',
   },
 };
