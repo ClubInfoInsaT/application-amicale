@@ -199,7 +199,7 @@ export function getStudentServices(
     },
     {
       key: SERVICES_KEY.YEARLY_PLANNING,
-      title: "Planning de l'année",
+      title: i18n.t('screens.services.titles.yearlyPlanning'),
       subtitle: i18n.t('screens.services.descriptions.yearlyPlanning'),
       image: Urls.images.availableRooms,
       onPress: () =>
