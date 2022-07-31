@@ -29,6 +29,9 @@
         "washers": "Nombre de lave-Linges disponibles",
         "dryers": "Nombre de sèche-Linges disponibles"
       },
+      "titles": {
+        "yearlyPlanning": "Planning de l'année"
+      },
       "mascotDialog": {
         "title": "Un peu perdu ?",
         "message": "Ici c'est le méli-mélo de services trop utiles ! Entre les services des étudiants, et ceux de l'INSA, tu trouveras forcément quelque chose pour toi.\n\nSi en plus tu as un compte Amicale, tu auras encore plus de choix !",

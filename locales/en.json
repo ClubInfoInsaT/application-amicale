@@ -29,6 +29,9 @@
         "washers": "Number of available washers",
         "dryers": "Number of available dryers"
       },
+      "titles": {
+        "yearlyPlanning": "Yearly planning"
+      },
       "mascotDialog": {
         "title": "A bit lost?",
         "message": "Here is a mix of handy services! Between INSA and students services, I am sure you will find something for you.\n\nAnd if you have an Amicale account, you will have even more choices!",
