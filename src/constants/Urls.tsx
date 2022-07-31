@@ -70,6 +70,7 @@ export default {
     wiketud: APP_IMAGES_ENDPOINT + 'Wiketud.png',
     elusEtudiants: APP_IMAGES_ENDPOINT + 'EEC.png',
     tutorInsa: APP_IMAGES_ENDPOINT + 'TutorINSA.png',
+    yearlyPlanning: APP_IMAGES_ENDPOINT + 'YearlyPlanning.png',
     bib: APP_IMAGES_ENDPOINT + 'Bib.png',
     menu: APP_IMAGES_ENDPOINT + 'RU.png',
     availableRooms: APP_IMAGES_ENDPOINT + 'Salles.png',
