@@ -2,8 +2,6 @@ name: build-ios
 
 on:
   workflow_dispatch:
-    #    branches:
-    #  - 'master'
 
 jobs:
   build-ios:
