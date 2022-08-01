@@ -2,8 +2,8 @@ name: build-ios
 
 on:
   workflow_dispatch:
-    branches:
-      - 'master'
+    #    branches:
+    #  - 'master'
 
 jobs:
   build-ios:
@@ -35,14 +35,14 @@ jobs:
       - name: Build IOS App
         uses: yukiarrr/ios-build-action@v1.4.0
         with:
-          project-path: ios/${{ secrets.APP_PROJECT_NAME }}.xcodeproj
+          project-path: ios/Campus.xcodeproj
           p12-base64: ${{ secrets.IOS_P12_BASE64 }}
           mobileprovision-base64: ${{ secrets.IOS_MOBILE_PROVISION_BASE64 }}
           code-signing-identity: 'iPhone Distribution'
           team-id: ${{ secrets.IOS_TEAM_ID }}
           certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
-          workspace-path: ios/${{ secrets.APP_PROJECT_NAME }}.xcworkspace
-          scheme: ${{ secrets.APP_PROJECT_NAME }}
+          workspace-path: ios/Campus.xcworkspace
+          scheme: Campus
 
       - name: 'Upload app to TestFlight'
         uses: apple-actions/upload-testflight-build@v1
