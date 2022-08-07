@@ -158,7 +158,8 @@
         "message": "Ici c'est Planex ! Tu peux mettre en favoris ta classe et celle de ton crush pour l'espio... les retrouver facilement !\n\nSi tu utilises Campus surtout pour Planex, vas dans les paramètres pour faire démarrer l'appli direct dessus !",
         "ok": "Paramètres",
         "cancel": "Plus tard"
-      }
+      },
+      "serviceDown": "ADE/Planex n'est actuellement pas disponible. Veuillez réessayer plus tard."
     },
 
     "amicaleAbout": {
@@ -381,8 +382,8 @@
       "user": {
         "you": "Toi ?",
         "arnaud": "Étudiant en 4IR (2020). C'est le créateur de cette application que t' utilises tous les jours.",
-        "docjyj":  "Étudiant en 2MIC FAS (2020). Il a ajouté quelques nouvelles fonctionnalités et corrigé des bugs.",
-        "yohan":  "Étudiant en 4IR (2020). Il a aidé à corriger des bug et a proposé quelques idées.",
+        "docjyj": "Étudiant en 2MIC FAS (2020). Il a ajouté quelques nouvelles fonctionnalités et corrigé des bugs.",
+        "yohan": "Étudiant en 4IR (2020). Il a aidé à corriger des bug et a proposé quelques idées.",
         "beranger": "Étudiant en 4AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.",
         "celine": "Étudiante en 4GPE (2020). Sans elle, tout serait moins mignon. Elle a aidé pour écrire le texte, faire de la com, et aussi à créer la mascotte 🦊.",
         "damien": "Étudiant en 4IR (2020) et créateur de la dernière version du site de l’Amicale. Grâce à son aide, intégrer les services de l’Amicale à l’application a été très simple.",

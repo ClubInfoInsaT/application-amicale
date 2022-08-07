@@ -13,6 +13,7 @@ type Props = {
   currentGroup?: PlanexGroupType;
   injectJS: string;
   onMessage: (event: { nativeEvent: { data: string } }) => void;
+  isPlanexDown: boolean;
 };
 
 const styles = StyleSheet.create({
@@ -129,7 +130,13 @@ function PlanexWebview(props: Props) {
         showControls={props.currentGroup !== undefined}
         incognito={true}
       />
-      {!props.currentGroup ? (
+      {props.isPlanexDown ? (
+        <ErrorView
+          icon={'account-clock'}
+          message={i18n.t('screens.planex.serviceDown')}
+          style={styles.error}
+        />
+      ) : !props.currentGroup ? (
         <ErrorView
           icon={'account-clock'}
           message={i18n.t('screens.planex.noGroupSelected')}

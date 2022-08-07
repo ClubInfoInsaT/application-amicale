@@ -43,6 +43,9 @@ import {
 import { usePlanexPreferences } from '../../context/preferencesContext';
 import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
 import { MainRoutes } from '../../navigation/MainNavigator';
+import RequestScreen from '../../components/Screens/RequestScreen';
+import { readData } from '../../utils/WebData';
+import { PlanexDownResponseType } from '../../utils/Planex';
 
 const styles = StyleSheet.create({
   container: {
@@ -54,6 +57,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
 });
+
+// TODO: Replace URL
+const PLANEX_INFO_URL = 'https://etud.insa-toulouse.fr/~leban/planex.json';
 
 function PlanexScreen() {
   const navigation = useNavigation();
@@ -90,15 +96,31 @@ function PlanexScreen() {
   const currentGroup = getCurrentGroup();
 
   /**
-   * Gets the Webview, with an error view on top if no group is selected.
+   * Gets the Webview, with an error view on top if no group is selected or if Planex is down.
    *
    * @returns {*}
    */
-  const getWebView = () => (
-    <PlanexWebview
-      currentGroup={currentGroup}
-      injectJS={injectJS}
-      onMessage={onMessage}
+  const getWebView = (
+    planexDownResponse: PlanexDownResponseType | undefined
+  ) => {
+    return (
+      <PlanexWebview
+        isPlanexDown={
+          planexDownResponse !== undefined
+            ? planexDownResponse.isPlanexDown
+            : true
+        }
+        currentGroup={currentGroup}
+        injectJS={injectJS}
+        onMessage={onMessage}
+      />
+    );
+  };
+
+  const fetchPlanexInfo = () => (
+    <RequestScreen
+      request={() => readData<PlanexDownResponseType>(PLANEX_INFO_URL)}
+      render={getWebView}
     />
   );
 
@@ -206,9 +228,9 @@ function PlanexScreen() {
       {/* Allow to draw webview bellow banner */}
       <View style={styles.container}>
         {theme.dark ? ( // Force component theme update by recreating it on theme change
-          getWebView()
+          fetchPlanexInfo()
         ) : (
-          <View style={GENERAL_STYLES.flex}>{getWebView()}</View>
+          <View style={GENERAL_STYLES.flex}>{fetchPlanexInfo()}</View>
         )}
       </View>
       {loading ? (
