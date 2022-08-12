@@ -18,6 +18,7 @@
         "wiketud": "Trouve des infos utiles sur les cours et la vie du campus",
         "elusEtudiants": "Le site des étudiants en contact avec l'administration",
         "tutorInsa": "Donne et bénéficie de tutorats par d'autres étudiants",
+        "yearlyPlanning": "Vous y trouverez les dates de début et de fin de semestre en fonction des années, les dates de vacances.",
         "self": "Regarde le menu du RU",
         "availableRooms": "Vérifie les salles disponibles",
         "bib": "Réserve une Bib'Box pour les travaux de groupe",
@@ -27,6 +28,9 @@
         "equipment": "Réserve un BBQ ou autre matériel",
         "washers": "Nombre de lave-Linges disponibles",
         "dryers": "Nombre de sèche-Linges disponibles"
+      },
+      "titles": {
+        "yearlyPlanning": "Planning de l'année"
       },
       "mascotDialog": {
         "title": "Un peu perdu ?",
