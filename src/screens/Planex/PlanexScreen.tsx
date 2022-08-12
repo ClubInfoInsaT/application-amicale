@@ -45,7 +45,10 @@ import BasicLoadingScreen from '../../components/Screens/BasicLoadingScreen';
 import { MainRoutes } from '../../navigation/MainNavigator';
 import RequestScreen from '../../components/Screens/RequestScreen';
 import { readData } from '../../utils/WebData';
-import { PlanexDownResponseType } from '../../utils/Planex';
+
+type PlanexDownResponseType = {
+  isPlanexDown: boolean;
+};
 
 const styles = StyleSheet.create({
   container: {
