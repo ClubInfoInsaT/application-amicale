@@ -59,6 +59,7 @@ type Props = {
   showAdvancedControls?: boolean;
   showControls?: boolean;
   incognito?: boolean;
+  onRefreshClicked?: () => void;
 };
 
 const AnimatedWebView = Animated.createAnimatedComponent(WebView);
@@ -214,6 +215,7 @@ function WebViewScreen(props: Props) {
     if (webviewRef.current) {
       //@ts-ignore
       webviewRef.current.reload();
+      props.onRefreshClicked && props.onRefreshClicked();
     }
   };
 

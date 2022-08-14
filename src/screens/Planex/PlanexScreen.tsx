@@ -116,6 +116,7 @@ function PlanexScreen() {
         currentGroup={currentGroup}
         injectJS={injectJS}
         onMessage={onMessage}
+        onRefreshClicked={fetchPlanexInfo}
       />
     );
   };

@@ -14,6 +14,7 @@ type Props = {
   injectJS: string;
   onMessage: (event: { nativeEvent: { data: string } }) => void;
   isPlanexDown: boolean;
+  onRefreshClicked?: () => void;
 };
 
 const styles = StyleSheet.create({
@@ -129,6 +130,7 @@ function PlanexWebview(props: Props) {
         showAdvancedControls={false}
         showControls={props.currentGroup !== undefined}
         incognito={true}
+        onRefreshClicked={props.onRefreshClicked}
       />
       {props.isPlanexDown ? (
         <ErrorView
