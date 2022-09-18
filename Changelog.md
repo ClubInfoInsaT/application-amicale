@@ -11,7 +11,7 @@
 
 ## 🖥️ Notes de développement
 - Ajout de l'intrégation continue de test/lint et build Android & IOS
-- Passage à React Native 0.65.1
+- Passage à React Native 0.67.3
 
 
 # Versions précédentes
