@@ -8,6 +8,7 @@ Si tu utilises Windows, débrouille-toi ou installe Linux.
 ## ⚠️ Avant de commencer, merci de te familiariser avec [les bases !](LINKS.md)
 
 # Table des matières
+* [Tests locaux sous IOS](#tests-locaux-sous-ios)
 * [1. Installation de Git](#1-installation-de-git)
 * [2. Installation de  React Native](#2-installation-de-react-native)
 * [3. Installation de l'application](#3-installation-de-lapplication)
@@ -15,6 +16,22 @@ Si tu utilises Windows, débrouille-toi ou installe Linux.
     * [3.2 Installation des dépendances](#32-installation-des-dépendances)
 * [4. Lancement de l'application](#4-lancement-de-lapplication)
 * [5. Compiler une version release](#5-compiler-une-version-release)
+
+# Tests locaux sous IOS
+
+Cette étape n'est pas obligatoire pour développer dans un environnement Android.
+
+La compilation et le test en simulateur de la version IOS nécessitent un environnement sous MacOS
+(qui doit être à jour avec la dernière version de XCode pour les versions releases). Historiquement
+on utilisait un service en ligne de machines MacOS avec accès à distance. Il s'avère que l'on peut
+utiliser une machine virtuelle directement sur sa propre machine sur Linux (je recommande 16 GO de RAM ou
+plus).
+
+- [Machine virtuelle MacOS](https://github.com/notAperson535/OneClick-macOS-Simple-KVM)
+- Dédier à la VM 8 GO de RAM à la place de 4 en changeant le flag `-m 4G` en `-m 8G` dans le fichier `basic.sh`
+- [XCode](https://developer.apple.com/xcode/resources/) dans `Additional downloads` (ou depuis l'app store)
+- [Homebrew](https://brew.sh/) : permet d'installer des logiciels facilement sous MacOS (et Linux)
+- Aller directement à l'étape 2
 
 # 1. Installation de Git
 
@@ -85,5 +102,12 @@ Si tu utilises Webstorm, le projet contient des configurations de lancement pour
 
 # 5. Compiler une version release
 
-Merci de me contacter par mail pour toute information sur les release : [app@amicale-insat.fr](mailto:app@amicale-insat.fr)
+Merci de me contacter par mail ou sur le [Discord](https://discord.gg/9G8cWyK) pour toute information sur les releases : [app@amicale-insat.fr](mailto:app@amicale-insat.fr)
+
+Les releases de production se font en utilisant l'intégration continue (CI) avec Github Actions.
+Les workflows `build-android` et `build-ios` compilent et mettent en ligne une version signée de
+l'application sur la Console Google Play et Testflight respectivement. À partir de là, le build
+peut être mis en beta puis publié. Ne pas oublier d'utiliser `npm version major/minor/patch` pour
+changer la version (et les numéros de build). À noter que les demandes d'exécution des workflows
+de build doivent être validée par les mainteneurs.
 
