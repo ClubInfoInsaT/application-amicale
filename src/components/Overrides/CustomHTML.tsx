@@ -18,12 +18,8 @@
  */
 
 import * as React from 'react';
-import { Text, useTheme } from 'react-native-paper';
-import HTML, {
-  CustomRendererProps,
-  TBlock,
-  TText,
-} from 'react-native-render-html';
+import { useTheme } from 'react-native-paper';
+import HTML from 'react-native-render-html';
 import { Dimensions, GestureResponderEvent, Linking } from 'react-native';
 
 type PropsType = {
@@ -39,36 +35,18 @@ function CustomHTML(props: PropsType) {
     Linking.openURL(link);
   };
 
-  // Why is this so complex?? I just want to replace the default Text element with the one
-  // from react-native-paper
-  // Might need to read the doc a bit more: https://meliorence.github.io/react-native-render-html/
-  // For now this seems to work
-  const getBasicText = (rendererProps: CustomRendererProps<TBlock>) => {
-    let text: TText | undefined;
-    if (rendererProps.tnode.children.length > 0) {
-      const phrasing = rendererProps.tnode.children[0];
-      if (phrasing.children.length > 0) {
-        text = phrasing.children[0] as TText;
-      }
-    }
-    if (text) {
-      return <Text>{text.data}</Text>;
-    } else {
-      return null;
-    }
-  };
-
   return (
     <HTML
       // Surround description with p to allow text styling if the description is not html
       source={{ html: `<p>${props.html}</p>` }}
-      // Use Paper Text instead of React
-      renderers={{
-        p: getBasicText,
-        li: getBasicText,
+      tagsStyles={{
+        p: {
+          fontWeight: '400',
+        },
       }}
       // Sometimes we have images inside the text, just ignore them
-      ignoredDomTags={['img']}
+      // Default linebreaks are sufficient.
+      ignoredDomTags={['img', 'br']}
       // Ignore text color
       ignoredStyles={['color', 'backgroundColor']}
       contentWidth={Dimensions.get('window').width - 50}
