@@ -51,22 +51,21 @@ function CustomHTML(props: PropsType) {
   // Might need to read the doc a bit more: https://meliorence.github.io/react-native-render-html/
   // For now this seems to work
   const getBasicText = (rendererProps: CustomRendererProps<TBlock>) => {
-    console.log('props', rendererProps);
-    let textNodes = rendererProps.tnode.children.map((phrasing, i) => {
-      console.log('phraseing', i, phrasing);
-      let text = (phrasing.children[0] as TText).data;
-      console.log('text', i, text);
-      return <Text key={i}>{text}</Text>;
+    if (!rendererProps.tnode.children[0]) return <Text />;
+    let textNodes = rendererProps.tnode.children[0].children.map((child, i) => {
+      const text = child as TText;
+      const tag = text.tagName;
+      let style: StyleProp<TextStyle> = {
+        fontWeight: tag === 'strong' || tag === 'b' ? 'bold' : 'normal',
+        fontStyle: tag === 'em' || tag === 'i' ? 'italic' : 'normal',
+      };
+      return (
+        <Text style={style} key={i}>
+          {text.data}
+        </Text>
+      );
     });
-    let style: StyleProp<TextStyle> = {
-      fontWeight: 'bold',
-    };
-    return (
-      <Text>
-        <Text style={style}>ok</Text>ha
-        {textNodes}
-      </Text>
-    );
+    return <Text>{textNodes}</Text>;
   };
 
   return (
