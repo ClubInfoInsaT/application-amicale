@@ -18,9 +18,19 @@
  */
 
 import * as React from 'react';
-import { useTheme } from 'react-native-paper';
-import HTML from 'react-native-render-html';
-import { Dimensions, GestureResponderEvent, Linking } from 'react-native';
+import { useTheme, Text } from 'react-native-paper';
+import HTML, {
+  TBlock,
+  TText,
+  CustomRendererProps,
+} from 'react-native-render-html';
+import {
+  Dimensions,
+  GestureResponderEvent,
+  Linking,
+  StyleProp,
+  TextStyle,
+} from 'react-native';
 
 type PropsType = {
   html: string;
@@ -34,15 +44,40 @@ function CustomHTML(props: PropsType) {
   const openWebLink = (_event: GestureResponderEvent, link: string) => {
     Linking.openURL(link);
   };
+  console.log(props);
+
+  // Why is this so complex?? I just want to replace the default Text element with the one
+  // from react-native-paper
+  // Might need to read the doc a bit more: https://meliorence.github.io/react-native-render-html/
+  // For now this seems to work
+  const getBasicText = (rendererProps: CustomRendererProps<TBlock>) => {
+    console.log('props', rendererProps);
+    let textNodes = rendererProps.tnode.children.map((phrasing, i) => {
+      console.log('phraseing', i, phrasing);
+      let text = (phrasing.children[0] as TText).data;
+      console.log('text', i, text);
+      return <Text key={i}>{text}</Text>;
+    });
+    let style: StyleProp<TextStyle> = {
+      fontWeight: 'bold',
+    };
+    return (
+      <Text>
+        <Text style={style}>ok</Text>ha
+        {textNodes}
+      </Text>
+    );
+  };
 
   return (
     <HTML
       // Surround description with p to allow text styling if the description is not html
       source={{ html: `<p>${props.html}</p>` }}
-      tagsStyles={{
-        p: {
-          fontWeight: '400',
-        },
+      // Use Paper Text instead of React
+      renderers={{
+        p: getBasicText,
+        li: getBasicText,
+        // em: getBasicText,
       }}
       // Sometimes we have images inside the text, just ignore them
       // Default linebreaks are sufficient.
