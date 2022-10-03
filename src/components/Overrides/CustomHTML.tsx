@@ -55,12 +55,18 @@ function CustomHTML(props: PropsType) {
     let textNodes = rendererProps.tnode.children[0].children.map((child, i) => {
       const text = child as TText;
       const tag = text.tagName;
-      let style: StyleProp<TextStyle> = {
+      const style: StyleProp<TextStyle> = {
         fontWeight: tag === 'strong' || tag === 'b' ? 'bold' : 'normal',
         fontStyle: tag === 'em' || tag === 'i' ? 'italic' : 'normal',
+        color: tag === 'a' ? 'blue' : undefined,
       };
+      const onPress =
+        tag === 'a' && text.domNode && text.domNode.attribs.href
+          ? (_event: GestureResponderEvent) =>
+              openWebLink(_event, text.domNode.attribs.href)
+          : () => {};
       return (
-        <Text style={style} key={i}>
+        <Text style={style} key={i} onPress={onPress}>
           {text.data}
         </Text>
       );
