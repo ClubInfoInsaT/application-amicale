@@ -24,7 +24,6 @@
         "bib": "Réserve une Bib'Box pour les travaux de groupe",
         "mails": "Vérifie tes mails INSA",
         "ent": "Retrouve tes notes",
-        "insaAccount": "Accède à tes infos INSA et modifie ton mot de passe",
         "equipment": "Réserve un BBQ ou autre matériel",
         "washers": "Nombre de lave-Linges disponibles",
         "dryers": "Nombre de sèche-Linges disponibles"
@@ -200,9 +199,6 @@
       "paymentMethodsDescription": "Espèce ou Lydia",
       "search": "Rechercher",
       "all": "Tout"
-    },
-    "insaAccount": {
-      "title": "Compte INSA"
     },
     "menu": {
       "title": "Menu du RU"
