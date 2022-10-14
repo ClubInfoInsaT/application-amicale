@@ -60,6 +60,7 @@ export const SERVICES_KEY = {
   ENT: 'ent',
   WASHERS: 'washers',
   DRYERS: 'dryers',
+  SCHOOLING: 'schooling',
 };
 
 export const SERVICES_CATEGORIES_KEY = {
@@ -270,10 +271,10 @@ export function getINSAServices(
         }),
     },
     {
-      key: SERVICES_KEY.ENT,
+      key: SERVICES_KEY.SCHOOLING,
       title: i18n.t('screens.websites.schooling'),
       subtitle: i18n.t('screens.services.descriptions.schooling'),
-      image: Urls.images.tutorInsa,
+      image: Urls.images.schooling,
       onPress: () =>
         onPress(MainRoutes.Website, {
           host: Urls.websites.schooling,
