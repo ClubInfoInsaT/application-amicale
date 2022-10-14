@@ -269,6 +269,17 @@ export function getINSAServices(
           title: i18n.t('screens.websites.ent'),
         }),
     },
+    {
+      key: SERVICES_KEY.ENT,
+      title: i18n.t('screens.websites.schooling'),
+      subtitle: i18n.t('screens.services.descriptions.schooling'),
+      image: Urls.images.tutorInsa,
+      onPress: () =>
+        onPress(MainRoutes.Website, {
+          host: Urls.websites.schooling,
+          title: i18n.t('screens.websites.schooling'),
+        }),
+    },
   ];
   return getStrippedServicesList(insaDataset, excludedItems);
 }
