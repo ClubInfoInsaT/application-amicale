@@ -76,6 +76,7 @@ export default {
     availableRooms: APP_IMAGES_ENDPOINT + 'Salles.png',
     bluemind: APP_IMAGES_ENDPOINT + 'Bluemind.png',
     ent: APP_IMAGES_ENDPOINT + 'ENT.png',
+    schooling: APP_IMAGES_ENDPOINT + 'Schooling.png',
   },
   websites: {
     amicale: AMICALE_SERVER,
