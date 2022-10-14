@@ -24,7 +24,6 @@
         "bib": "Book a Bib'Box for project work",
         "mails": "Check your INSA mails",
         "ent": "See your grades",
-        "insaAccount": "See your information and change your password",
         "equipment": "Book a BBQ or other equipment",
         "washers": "Number of available washers",
         "dryers": "Number of available dryers"
@@ -200,9 +199,6 @@
       "paymentMethodsDescription": "Cash or Lydia",
       "search": "Search",
       "all": "All"
-    },
-    "insaAccount": {
-      "title": "INSA Account"
     },
     "menu": {
       "title": "RU Menu"

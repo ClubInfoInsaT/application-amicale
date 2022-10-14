@@ -76,7 +76,6 @@ export default {
     availableRooms: APP_IMAGES_ENDPOINT + 'Salles.png',
     bluemind: APP_IMAGES_ENDPOINT + 'Bluemind.png',
     ent: APP_IMAGES_ENDPOINT + 'ENT.png',
-    insaAccount: APP_IMAGES_ENDPOINT + 'Account.png',
   },
   websites: {
     amicale: AMICALE_SERVER,
@@ -85,7 +84,6 @@ export default {
     bluemind: 'https://etud-mel.insa-toulouse.fr/webmail/',
     elusEtudiants: STUDENT_SERVER + '~eeinsat/',
     ent: 'https://ent.insa-toulouse.fr/',
-    insaAccount: 'https://moncompte.insa-toulouse.fr/',
     tutorInsa: STUDENT_SERVER + '~tutorinsa/',
     wiketud: 'https://wiki.etud.insa-toulouse.fr/',
     yearlyPlanning:

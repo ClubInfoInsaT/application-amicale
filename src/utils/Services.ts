@@ -58,7 +58,6 @@ export const SERVICES_KEY = {
   BIB: 'bib',
   EMAIL: 'email',
   ENT: 'ent',
-  INSA_ACCOUNT: 'insa_account',
   WASHERS: 'washers',
   DRYERS: 'dryers',
 };
@@ -268,17 +267,6 @@ export function getINSAServices(
         onPress(MainRoutes.Website, {
           host: Urls.websites.ent,
           title: i18n.t('screens.websites.ent'),
-        }),
-    },
-    {
-      key: SERVICES_KEY.INSA_ACCOUNT,
-      title: i18n.t('screens.insaAccount.title'),
-      subtitle: i18n.t('screens.services.descriptions.insaAccount'),
-      image: Urls.images.insaAccount,
-      onPress: () =>
-        onPress(MainRoutes.Website, {
-          host: Urls.websites.insaAccount,
-          title: i18n.t('screens.insaAccount.title'),
         }),
     },
   ];
