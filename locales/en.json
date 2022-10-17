@@ -130,7 +130,7 @@
         "todayEventsSubtitlePlural": " events coming today"
       },
       "mascotDialog": {
-        "title": "Welcome, you!",
+        "title": "Welcome !",
         "message": "Login to your Amicale account to get access to more services!\n\nYou will still be able to login later.",
         "login": "Login",
         "later": "Later"
