@@ -26,7 +26,8 @@
         "ent": "Retrouve tes notes",
         "equipment": "Réserve un BBQ ou autre matériel",
         "washers": "Nombre de lave-Linges disponibles",
-        "dryers": "Nombre de sèche-Linges disponibles"
+        "dryers": "Nombre de sèche-Linges disponibles",
+        "schooling": "Accéde facilement à tous tes documents et résultats."
       },
       "titles": {
         "yearlyPlanning": "Planning de l'année"
@@ -208,7 +209,8 @@
       "rooms": "Salles disponibles",
       "bib": "Bib'Box",
       "mails": "Mails INSA",
-      "ent": "ENT INSA"
+      "ent": "ENT INSA",
+      "schooling": "Ma scolarité"
     },
 
     "login": {

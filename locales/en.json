@@ -26,7 +26,8 @@
         "ent": "See your grades",
         "equipment": "Book a BBQ or other equipment",
         "washers": "Number of available washers",
-        "dryers": "Number of available dryers"
+        "dryers": "Number of available dryers",
+        "schooling": "Easy access to all your documents and results."
       },
       "titles": {
         "yearlyPlanning": "Yearly planning"
@@ -208,7 +209,8 @@
       "rooms": "Available rooms",
       "bib": "Bib'Box",
       "mails": "INSA Mails",
-      "ent": "INSA ENT"
+      "ent": "INSA ENT",
+      "schooling": "My schooling"
     },
 
     "login": {

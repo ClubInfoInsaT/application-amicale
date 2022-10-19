@@ -76,6 +76,7 @@ export default {
     availableRooms: APP_IMAGES_ENDPOINT + 'Salles.png',
     bluemind: APP_IMAGES_ENDPOINT + 'Bluemind.png',
     ent: APP_IMAGES_ENDPOINT + 'ENT.png',
+    schooling: APP_IMAGES_ENDPOINT + 'Schooling.png',
   },
   websites: {
     amicale: AMICALE_SERVER,
@@ -88,6 +89,7 @@ export default {
     wiketud: 'https://wiki.etud.insa-toulouse.fr/',
     yearlyPlanning:
       'https://wiki.etud.insa-toulouse.fr/books/quotidien/page/planning-de-lannee-en-cours',
+    schooling: 'https://mascolarite.insa-toulouse.fr/',
   },
   about: {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
