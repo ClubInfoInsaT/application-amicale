@@ -16,7 +16,8 @@
     "pod": "cd ios && pod install && cd ..",
     "bundle": "cd android && ./gradlew bundleRelease",
     "clean": "react-native-clean-project",
-    "postversion": "react-native-version"
+    "postversion": "react-native-version",
+    "test-locales": "node ./scripts/test-locales.js"
   },
   "dependencies": {
     "@nartc/react-native-barcode-mask": "1.2.0",
@@ -79,6 +80,7 @@
     "jest-extended": "0.11.5",
     "jest-fetch-mock": "3.0.3",
     "metro-react-native-babel-preset": "0.66.2",
+    "node-i18n-checker": "^0.0.88322785",
     "prettier": "2.4.1",
     "react-native-clean-project": "3.6.7",
     "react-native-version": "4.0.0",
