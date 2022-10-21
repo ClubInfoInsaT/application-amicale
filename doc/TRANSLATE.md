@@ -10,3 +10,6 @@ Pour cela, suis cette procédure :
 Envoie-moi un mail avant de commencer pour me prévenir que tu veux travailler sur une traduction. Cela me permettra de te mettre en relation avec d'autres personnes travaillant également sur cette traduction.
 
 Tu peux traduire dans la langue que tu veux, sachant que le français et l'anglais sont déjà fait.
+
+Pour savoir si il manque certaines traductions, envoie un message sur le
+[Discord](https://discord.gg/W8MeTec) ou éxecute `npm run test-locales`.
