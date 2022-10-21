@@ -18,6 +18,8 @@ import * as Animatable from 'react-native-animatable';
 
 let moment = require('moment'); //load moment module to set local language
 require('moment/locale/fr'); // import moment local language file during the application build
+require('moment/locale/es');
+require('moment/locale/it');
 //moment.locale(i18n.defaultLocale);
 
 type Props = {
