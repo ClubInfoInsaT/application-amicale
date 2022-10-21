@@ -201,7 +201,7 @@ export function getStudentServices(
       key: SERVICES_KEY.USEFUL_LINKS,
       title: 'Liens utiles',
       subtitle: i18n.t('screens.services.descriptions.usefulLinks'),
-      image: Urls.images.wiketud,
+      image: Urls.images.usefulLinks,
       onPress: () =>
         onPress(MainRoutes.Website, {
           host: Urls.websites.usefulLinks,
