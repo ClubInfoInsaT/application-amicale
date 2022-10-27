@@ -27,10 +27,12 @@
         "equipment": "Réserve un BBQ ou autre matériel",
         "washers": "Nombre de lave-Linges disponibles",
         "dryers": "Nombre de sèche-Linges disponibles",
-        "schooling": "Accéde facilement à tous tes documents et résultats."
+        "schooling": "Accéde facilement à tous tes documents et résultats.",
+        "map": "Trouve ton chemin dans le campus"
       },
       "titles": {
-        "yearlyPlanning": "Planning de l'année"
+        "yearlyPlanning": "Planning de l'année",
+        "map": "Carte du campus"
       },
       "mascotDialog": {
         "title": "Un peu perdu ?",

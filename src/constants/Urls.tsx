@@ -77,6 +77,7 @@ export default {
     bluemind: APP_IMAGES_ENDPOINT + 'Bluemind.png',
     ent: APP_IMAGES_ENDPOINT + 'ENT.png',
     schooling: APP_IMAGES_ENDPOINT + 'Schooling.png',
+    map: APP_IMAGES_ENDPOINT + 'Map.png',
   },
   websites: {
     amicale: AMICALE_SERVER,
