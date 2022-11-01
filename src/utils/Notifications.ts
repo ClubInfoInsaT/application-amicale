@@ -47,8 +47,10 @@ function cleanChannels() {
   });
 }
 
-export function setupNotifications() {
-  cleanChannels();
+/**
+ * Create Laundry notifications channel if it doesn't exist
+ */
+function ensureLaundryChannel() {
   PushNotification.channelExists(channelIds.laundry, (exists) => {
     if (!exists) {
       PushNotification.createChannel(
@@ -70,6 +72,41 @@ export function setupNotifications() {
       );
     }
   });
+}
+
+/**
+ * Create Amicale Push notifications channel if it doesn't exist
+ */
+function ensureAmicaleChannel() {
+  PushNotification.channelExists(channelIds.laundry, (exists) => {
+    if (!exists) {
+      PushNotification.createChannel(
+        {
+          channelId: channelIds.amicale,
+          channelName: i18n.t(
+            'screens.amicaleAbout.notifications.channel.title'
+          ),
+          channelDescription: i18n.t(
+            'screens.amicaleAbout.notifications.channel.description'
+          ),
+          playSound: true,
+          soundName: 'default',
+          importance: Importance.HIGH,
+          vibrate: true,
+        },
+        (created) =>
+          console.log(
+            `createChannel returned '${created}' for channel '${channelIds.laundry}'`
+          )
+      );
+    }
+  });
+}
+
+export function setupNotifications() {
+  cleanChannels();
+  ensureLaundryChannel();
+  ensureAmicaleChannel();
 
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
