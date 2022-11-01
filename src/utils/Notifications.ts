@@ -29,7 +29,10 @@ import Update from '../constants/Update';
 // Used to multiply the normal notification id to create the reminder one. It allows to find it back easily
 const reminderIdFactor = 100;
 // Allows the channel to be updated when the app updates
-const channelId = 'reminders' + Update.number;
+const channelIds = {
+  laundry: 'reminders' + Update.number,
+  amicale: 'amicale' + Update.number,
+};
 
 /**
  * Clean channels before creating a new one
@@ -37,7 +40,7 @@ const channelId = 'reminders' + Update.number;
 function cleanChannels() {
   PushNotification.getChannels((idList) => {
     idList.forEach((i) => {
-      if (i !== channelId) {
+      if (!Object.values(channelIds).includes(i)) {
         PushNotification.deleteChannel(i);
       }
     });
@@ -46,11 +49,11 @@ function cleanChannels() {
 
 export function setupNotifications() {
   cleanChannels();
-  PushNotification.channelExists(channelId, (exists) => {
+  PushNotification.channelExists(channelIds.laundry, (exists) => {
     if (!exists) {
       PushNotification.createChannel(
         {
-          channelId: channelId, // (required)
+          channelId: channelIds.laundry, // (required)
           channelName: i18n.t('screens.proxiwash.notifications.channel.title'), // (required)
           channelDescription: i18n.t(
             'screens.proxiwash.notifications.channel.description'
@@ -60,7 +63,10 @@ export function setupNotifications() {
           importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
           vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
         },
-        (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+        (created) =>
+          console.log(
+            `createChannel returned '${created}' for channel '${channelIds.laundry}'`
+          ) // (optional) callback returns whether the channel was created, false means it already existed.
       );
     }
   });
@@ -100,7 +106,7 @@ export function setupNotifications() {
 
 const DEFAULT_NOTIFICATIONS_OPTIONS: Partial<PushNotificationObject> = {
   /* Android Only Properties */
-  channelId: channelId, // (required) channelId, if the channel doesn't exist, notification will not trigger.
+  channelId: channelIds.laundry, // (required) channelId, if the channel doesn't exist, notification will not trigger.
   showWhen: true, // (optional) default: true
   autoCancel: true, // (optional) default: true
   vibrate: true, // (optional) default: true
