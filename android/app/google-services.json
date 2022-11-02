@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "542051186977",
+    "firebase_url": "https://amicaleinsatoulouse.firebaseio.com",
+    "project_id": "amicaleinsatoulouse",
+    "storage_bucket": "amicaleinsatoulouse.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542051186977:android:56dde4450eaaeae2836660",
+        "android_client_info": {
+          "package_name": "fr.amicaleinsat.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542051186977-847pf02notr5mriafi1815310973kn5a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwk1SkbsZHpB-hVo0nzxrYHgAAjKMzSPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542051186977-847pf02notr5mriafi1815310973kn5a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542051186977:android:c5f7d0902d30c69f",
+        "android_client_info": {
+          "package_name": "fr.insa.clubinfo.amicale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542051186977-847pf02notr5mriafi1815310973kn5a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwk1SkbsZHpB-hVo0nzxrYHgAAjKMzSPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542051186977-847pf02notr5mriafi1815310973kn5a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

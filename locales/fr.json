@@ -179,6 +179,12 @@
         "communication": "Communication",
         "intraSchools": "Alumni / IAT",
         "publicRelations": "Relations Publiques"
+      },
+      "notifications": {
+        "channel": {
+          "title": "News importantes de l'Amicale",
+          "description": "Notifications Push ponctuelles avec des infos importantes"
+        }
       }
     },
     "proximo": {
