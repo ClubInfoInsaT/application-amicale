@@ -24,9 +24,7 @@ import PushNotification, {
   PushNotificationObject,
 } from 'react-native-push-notification';
 import { Platform } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import Update from '../constants/Update';
-import { MainRoutes } from '../navigation/MainNavigator';
 
 // Used to multiply the normal notification id to create the reminder one. It allows to find it back easily
 const reminderIdFactor = 100;
