@@ -450,3 +450,18 @@ export default React.memo(
   MainNavigator,
   (pp: PropsType, np: PropsType) => pp.defaultData === np.defaultData
 );
+
+export const linking = {
+  prefixes: ['campus-insat://'],
+  config: {
+    screens: {
+      'settings': 'settings',
+      'planning-information': {
+        path: 'event/:eventId',
+        parse: {
+          eventId: (id: string) => parseInt(id, 10),
+        },
+      },
+    },
+  },
+};
