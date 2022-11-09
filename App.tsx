@@ -49,10 +49,8 @@ import {
 import MainApp from './src/screens/MainApp';
 import LoginProvider from './src/components/providers/LoginProvider';
 import { retrieveLoginToken } from './src/utils/loginToken';
-import { setupNotifications } from './src/utils/Notifications';
 
 initLocales();
-setupNotifications();
 
 LogBox.ignoreLogs([
   'Cannot update a component from inside the function body of a different component',
