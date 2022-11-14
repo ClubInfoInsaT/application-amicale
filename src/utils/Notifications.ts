@@ -108,8 +108,6 @@ export function setupNotifications() {
   ensureLaundryChannel();
   ensureAmicaleChannel();
 
-  PushNotification.subscribeToTopic('amicale');
-
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification: function (notification) {
@@ -124,6 +122,7 @@ export function setupNotifications() {
     // (optional) Called when Token is generated (iOS and Android)
     onRegister: function (token) {
       console.log('TOKEN:', token);
+      PushNotification.subscribeToTopic('amicale');
     },
 
     // IOS ONLY (optional): default: all - Permissions to register.
