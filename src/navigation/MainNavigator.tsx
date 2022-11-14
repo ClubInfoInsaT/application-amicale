@@ -68,6 +68,7 @@ import { PlanningEventType } from '../utils/Planning';
 import { ServiceCategoryType } from '../utils/Services';
 import { ParsedUrlDataType } from '../utils/URLHandler';
 import PushNotification from 'react-native-push-notification';
+import { Linking } from 'react-native';
 
 export enum MainRoutes {
   Main = 'main',
@@ -484,10 +485,16 @@ export const linking = {
     // @ts-ignore */
     PushNotification.onNotification = onReceiveURL;
 
+    // Listen to incoming links from deep linking
+    const linkingSubscription = Linking.addEventListener('url', ({ url }) => {
+      listener(url);
+    });
+
     return () => {
       /* Clean up the event listeners
       // @ts-ignore */
       PushNotification.onNotification = null;
+      linkingSubscription.remove();
     };
   },
 };
