@@ -63,6 +63,7 @@ import FeedItemScreen from '../screens/Home/FeedItemScreen';
 import GroupSelectionScreen from '../screens/Planex/GroupSelectionScreen';
 import ServicesSectionScreen from '../screens/Services/ServicesSectionScreen';
 import AmicaleContactScreen from '../screens/Amicale/AmicaleContactScreen';
+import NotificationsScreen from '../screens/Other/NotificationsScreen';
 import { FeedItemType } from '../screens/Home/HomeScreen';
 import { PlanningEventType } from '../utils/Planning';
 import { ServiceCategoryType } from '../utils/Services';
@@ -103,6 +104,7 @@ export enum MainRoutes {
   GroupSelect = 'group-select',
   ServicesSection = 'services-section',
   AmicaleContact = 'amicale-contact',
+  Notifications = 'notifications',
 }
 
 type DefaultParams = { [key in MainRoutes]: object | undefined } & {
@@ -404,6 +406,11 @@ function getRegularScreens(createTabNavigator: () => React.ReactElement) {
         component={AmicaleContactScreen}
         options={{ title: i18n.t('screens.amicaleAbout.title') }}
       />
+      <MainStack.Screen
+        name={MainRoutes.Notifications}
+        component={NotificationsScreen}
+        options={{ title: i18n.t('screens.notifications.title') }}
+      />
     </>
   );
 }
@@ -464,6 +471,7 @@ export const linking = {
           eventId: (id: string) => parseInt(id, 10),
         },
       },
+      'notifications': 'notifications',
     },
   },
   subscribe(listener: Function) {

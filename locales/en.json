@@ -443,6 +443,9 @@
     },
     "debug": {
       "title": "Debug"
+    },
+    "notifications": {
+      "title": "Notifications"
     }
   },
   "intro": {
