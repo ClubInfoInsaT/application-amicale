@@ -30,6 +30,7 @@ import {
   defaultPlanexPreferences,
   defaultPreferences,
   defaultProxiwashPreferences,
+  defaultNotificationPreferences,
   GeneralPreferenceKeys,
   GeneralPreferencesType,
   MascotPreferenceKeys,
@@ -38,6 +39,8 @@ import {
   PlanexPreferencesType,
   ProxiwashPreferenceKeys,
   ProxiwashPreferencesType,
+  NotificationPreferenceType,
+  NotificationPreferenceKeys,
   retrievePreferences,
 } from './src/utils/asyncStorage';
 import {
@@ -45,6 +48,7 @@ import {
   MascotPreferencesProvider,
   PlanexPreferencesProvider,
   ProxiwashPreferencesProvider,
+  NotificationPreferencesProvider,
 } from './src/components/providers/PreferencesProvider';
 import MainApp from './src/screens/MainApp';
 import LoginProvider from './src/components/providers/LoginProvider';
@@ -64,6 +68,7 @@ type StateType = {
     planex: PlanexPreferencesType;
     proxiwash: ProxiwashPreferencesType;
     mascot: MascotPreferencesType;
+    notification: NotificationPreferenceType;
   };
   loginToken?: string;
 };
@@ -84,6 +89,7 @@ export default class App extends React.Component<{}, StateType> {
         planex: defaultPlanexPreferences,
         proxiwash: defaultProxiwashPreferences,
         mascot: defaultMascotPreferences,
+        notification: defaultNotificationPreferences,
       },
       loginToken: undefined,
     };
@@ -128,11 +134,12 @@ export default class App extends React.Component<{}, StateType> {
       | PlanexPreferencesType
       | ProxiwashPreferencesType
       | MascotPreferencesType
+      | NotificationPreferenceType
       | string
       | undefined
     >
   ) => {
-    const [general, planex, proxiwash, mascot, token] = values;
+    const [general, planex, proxiwash, mascot, notification, token] = values;
     this.setState({
       isLoading: false,
       initialPreferences: {
@@ -140,6 +147,7 @@ export default class App extends React.Component<{}, StateType> {
         planex: planex as PlanexPreferencesType,
         proxiwash: proxiwash as ProxiwashPreferencesType,
         mascot: mascot as MascotPreferencesType,
+        notification: notification as NotificationPreferenceType,
       },
       loginToken: token as string | undefined,
     });
@@ -169,6 +177,10 @@ export default class App extends React.Component<{}, StateType> {
         Object.values(MascotPreferenceKeys),
         defaultMascotPreferences
       ),
+      retrievePreferences(
+        Object.values(NotificationPreferenceKeys),
+        defaultNotificationPreferences
+      ),
       retrieveLoginToken(),
     ])
       .then(this.onLoadFinished)
@@ -196,12 +208,16 @@ export default class App extends React.Component<{}, StateType> {
             <MascotPreferencesProvider
               initialPreferences={this.state.initialPreferences.mascot}
             >
-              <LoginProvider initialToken={this.state.loginToken}>
-                <MainApp
-                  ref={this.navigatorRef}
-                  defaultData={this.defaultData}
-                />
-              </LoginProvider>
+              <NotificationPreferencesProvider
+                initialPreferences={this.state.initialPreferences.notification}
+              >
+                <LoginProvider initialToken={this.state.loginToken}>
+                  <MainApp
+                    ref={this.navigatorRef}
+                    defaultData={this.defaultData}
+                  />
+                </LoginProvider>
+              </NotificationPreferencesProvider>
             </MascotPreferencesProvider>
           </ProxiwashPreferencesProvider>
         </PlanexPreferencesProvider>

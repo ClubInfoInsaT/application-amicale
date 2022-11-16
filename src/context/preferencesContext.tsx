@@ -6,6 +6,7 @@ import {
   defaultPlanexPreferences,
   defaultPreferences,
   defaultProxiwashPreferences,
+  defaultNotificationPreferences,
   getPreferenceBool,
   getPreferenceObject,
   MascotPreferenceKeys,
@@ -16,6 +17,8 @@ import {
   GeneralPreferencesType,
   ProxiwashPreferenceKeys,
   ProxiwashPreferencesType,
+  NotificationPreferenceType,
+  NotificationPreferenceKeys,
   isValidMascotPreferenceKey,
   PreferencesType,
 } from '../utils/asyncStorage';
@@ -77,6 +80,14 @@ export const MascotPreferencesContext = React.createContext<
   resetPreferences: () => undefined,
 });
 
+export const NotificationPreferencesContext = React.createContext<
+  PreferencesContextType<NotificationPreferenceType, NotificationPreferenceKeys>
+>({
+  preferences: defaultNotificationPreferences,
+  updatePreferences: () => undefined,
+  resetPreferences: () => undefined,
+});
+
 // Context Hooks
 
 export function usePreferences() {
@@ -93,6 +104,10 @@ export function useProxiwashPreferences() {
 
 export function useMascotPreferences() {
   return useContext(MascotPreferencesContext);
+}
+
+export function useNotificationPreferences() {
+  return useContext(NotificationPreferencesContext);
 }
 
 // Custom Hooks
