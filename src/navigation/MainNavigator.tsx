@@ -485,7 +485,7 @@ export const linking = {
       userInteraction: boolean;
       data: { link: string };
     }) => {
-      if (userInteraction || true) listener(link); // Todo be changed
+      if (userInteraction) listener(link); // Todo be changed
     };
 
     /* Listen to incoming links from deep linking

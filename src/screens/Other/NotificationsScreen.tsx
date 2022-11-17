@@ -22,7 +22,7 @@ import { StyleSheet, View, RefreshControl } from 'react-native';
 import i18n from 'i18n-js';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { readData } from '../../utils/WebData';
-import { PlanningEventType } from '../../utils/Planning';
+import { NotificationType } from '../../utils/Notifications';
 import Urls from '../../constants/Urls';
 import { Card } from 'react-native-paper';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
@@ -47,13 +47,13 @@ type PropsType = {
  * Class defining the app's notification display screen
  */
 function NotificationsScreen(props: PropsType) {
-  let minTimeBetweenRefresh = 6;
+  let minTimeBetweenRefresh = 6; // seconds
 
   const [lastRefresh, setLastRefresh] = React.useState<Date | null>(null);
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
   // const [agendaRef, setAgendaRef] = React.useState<Agenda<any> | null>(null);
   const [notificationItems, setNotificationItems] = React.useState<
-    Array<PlanningEventType>
+    Array<NotificationType>
   >([]);
   const { preferences, updatePreferences } = useNotificationPreferences();
 
@@ -72,7 +72,7 @@ function NotificationsScreen(props: PropsType) {
 
     if (canRefresh && !refreshing) {
       setRefreshing(true);
-      readData<Array<PlanningEventType>>(Urls.amicale.events)
+      readData<Array<NotificationType>>(Urls.amicale.notification)
         .then((fetchedData) => {
           setRefreshing(false);
           setNotificationItems(fetchedData);
@@ -84,16 +84,20 @@ function NotificationsScreen(props: PropsType) {
         })
         .catch(() => {
           setRefreshing(false);
+          setLastRefresh(new Date());
         });
     }
   };
 
   React.useEffect(onRefresh);
 
-  const renderNotificationCard = (item: PlanningEventType) => {
+  const renderNotificationCard = (item: NotificationType) => {
     return (
       <Card style={styles.card} key={item.id}>
-        <Card.Title title={item.title} subtitle={item.place} />
+        <Card.Title
+          title={item.title}
+          subtitle={item.date + ' - ' + item.from}
+        />
         <Card.Content>
           {item.description !== null && item.description !== '<p><br></p>' ? (
             <CustomHTML html={item.description} />
@@ -105,7 +109,7 @@ function NotificationsScreen(props: PropsType) {
     );
   };
 
-  const renderNotifications = (notifications: Array<PlanningEventType>) => {
+  const renderNotifications = (notifications: Array<NotificationType>) => {
     return notifications.map(renderNotificationCard);
   };
 
@@ -121,8 +125,6 @@ function NotificationsScreen(props: PropsType) {
         />
       }
     >
-      <CustomHTML html={getPreferenceNumber(PreferenceKeys.latestNotification, preferences)+ ''}/>
-      <CustomHTML html={'token: ' + getPreferenceString(PreferenceKeys.firebaseToken, preferences)+ ''}/>
       {renderNotifications(notificationItems)}
     </CollapsibleScrollView>
   );

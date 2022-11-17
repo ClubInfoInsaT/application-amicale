@@ -44,7 +44,6 @@ function CustomHTML(props: PropsType) {
   const openWebLink = (_event: GestureResponderEvent, link: string) => {
     Linking.openURL(link);
   };
-  console.log(props);
 
   // Why is this so complex?? I just want to replace the default Text element with the one
   // from react-native-paper

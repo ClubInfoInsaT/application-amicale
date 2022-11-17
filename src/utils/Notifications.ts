@@ -34,6 +34,14 @@ const channelIds = {
   amicale: 'amicale' + Update.number,
 };
 
+export type NotificationType = {
+  id: number;
+  title: string;
+  date: string;
+  from: string;
+  description: string;
+};
+
 /**
  * Clean channels before creating a new one
  */
