@@ -56,10 +56,7 @@ import { useCurrentDashboard } from '../../context/preferencesContext';
 import { MainRoutes } from '../../navigation/MainNavigator';
 import { useLoginState } from '../../context/loginContext';
 import { getPreferenceNumber, PreferenceKeys } from '../../utils/asyncStorage';
-import {
-  usePreferences,
-  useNotificationPreferences,
-} from '../../context/preferencesContext';
+import { useNotificationPreferences } from '../../context/preferencesContext';
 import PushNotification from 'react-native-push-notification';
 
 const FEED_ITEM_HEIGHT = 500;

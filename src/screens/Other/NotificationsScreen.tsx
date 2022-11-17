@@ -19,15 +19,13 @@
 
 import * as React from 'react';
 import { StyleSheet, View, RefreshControl } from 'react-native';
-import i18n from 'i18n-js';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { readData } from '../../utils/WebData';
 import { NotificationType } from '../../utils/Notifications';
 import Urls from '../../constants/Urls';
 import { Card } from 'react-native-paper';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import CustomHTML from '../../components/Overrides/CustomHTML';
-import { getPreferenceNumber, PreferenceKeys, getPreferenceString } from '../../utils/asyncStorage';
+import { PreferenceKeys } from '../../utils/asyncStorage';
 import { useNotificationPreferences } from '../../context/preferencesContext';
 
 const styles = StyleSheet.create({
@@ -39,14 +37,10 @@ const styles = StyleSheet.create({
   },
 });
 
-type PropsType = {
-  navigation: StackNavigationProp<any>;
-};
-
 /**
  * Class defining the app's notification display screen
  */
-function NotificationsScreen(props: PropsType) {
+function NotificationsScreen() {
   let minTimeBetweenRefresh = 6; // seconds
 
   const [lastRefresh, setLastRefresh] = React.useState<Date | null>(null);
@@ -55,7 +49,7 @@ function NotificationsScreen(props: PropsType) {
   const [notificationItems, setNotificationItems] = React.useState<
     Array<NotificationType>
   >([]);
-  const { preferences, updatePreferences } = useNotificationPreferences();
+  const { updatePreferences } = useNotificationPreferences();
 
   /**
    * Refreshes data and shows an animation while doing it
