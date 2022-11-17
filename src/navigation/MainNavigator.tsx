@@ -485,7 +485,6 @@ export const linking = {
       userInteraction: boolean;
       data: { link: string };
     }) => {
-      console.log(link);
       if (userInteraction || true) listener(link); // Todo be changed
     };
 

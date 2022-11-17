@@ -119,6 +119,8 @@ export function setupNotifications() {
       notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
 
+    // NOTE : some events are overridden in MainNavigator and HomeScreen in order to use certain contexts.
+
     // (optional) Called when Token is generated (iOS and Android)
     onRegister: function (token) {
       console.log('TOKEN:', token);

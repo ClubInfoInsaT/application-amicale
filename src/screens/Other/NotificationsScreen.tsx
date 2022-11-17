@@ -27,7 +27,7 @@ import Urls from '../../constants/Urls';
 import { Card } from 'react-native-paper';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import CustomHTML from '../../components/Overrides/CustomHTML';
-import { getPreferenceNumber, PreferenceKeys } from '../../utils/asyncStorage';
+import { getPreferenceNumber, PreferenceKeys, getPreferenceString } from '../../utils/asyncStorage';
 import { useNotificationPreferences } from '../../context/preferencesContext';
 
 const styles = StyleSheet.create({
@@ -122,6 +122,7 @@ function NotificationsScreen(props: PropsType) {
       }
     >
       <CustomHTML html={getPreferenceNumber(PreferenceKeys.latestNotification, preferences)+ ''}/>
+      <CustomHTML html={'token: ' + getPreferenceString(PreferenceKeys.firebaseToken, preferences)+ ''}/>
       {renderNotifications(notificationItems)}
     </CollapsibleScrollView>
   );

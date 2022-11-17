@@ -60,6 +60,7 @@ import {
   usePreferences,
   useNotificationPreferences,
 } from '../../context/preferencesContext';
+import PushNotification from 'react-native-push-notification';
 
 const FEED_ITEM_HEIGHT = 500;
 
@@ -151,9 +152,20 @@ function HomeScreen(props: Props) {
 
   const isLoggedIn = useLoginState();
   const { currentDashboard } = useCurrentDashboard();
-  const { preferences } = useNotificationPreferences();
+  const { preferences, updatePreferences } = useNotificationPreferences();
 
   let homeDashboard: FullDashboardType | null = null;
+
+  function onRegister({ token }: { token: string }) {
+    console.log('TOKEN:', token);
+    PushNotification.subscribeToTopic('amicale');
+    // Store token
+    updatePreferences(PreferenceKeys.firebaseToken, token);
+  }
+
+  /* Listen for new token and save it
+  // @ts-ignore */
+  PushNotification.onRegister = onRegister;
 
   useLayoutEffect(() => {
     const getHeaderButton = () => {
