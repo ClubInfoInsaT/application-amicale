@@ -55,6 +55,11 @@ import { ServiceItemType } from '../../utils/Services';
 import { useCurrentDashboard } from '../../context/preferencesContext';
 import { MainRoutes } from '../../navigation/MainNavigator';
 import { useLoginState } from '../../context/loginContext';
+import { getPreferenceNumber, PreferenceKeys } from '../../utils/asyncStorage';
+import {
+  usePreferences,
+  useNotificationPreferences,
+} from '../../context/preferencesContext';
 
 const FEED_ITEM_HEIGHT = 500;
 
@@ -80,6 +85,7 @@ export type FullDashboardType = {
   available_washers: number;
   today_events: Array<PlanningEventType>;
   available_tutorials: number;
+  latest_notification: number;
 };
 
 type RawNewsFeedType = { [key: string]: Array<FeedItemType> };
@@ -145,6 +151,7 @@ function HomeScreen(props: Props) {
 
   const isLoggedIn = useLoginState();
   const { currentDashboard } = useCurrentDashboard();
+  const { preferences } = useNotificationPreferences();
 
   let homeDashboard: FullDashboardType | null = null;
 
@@ -152,6 +159,7 @@ function HomeScreen(props: Props) {
     const getHeaderButton = () => {
       let onPressLog = () =>
         navigation.navigate(MainRoutes.Login, { nextScreen: 'profile' });
+      let onPressBell = () => navigation.navigate(MainRoutes.Notifications);
       let logIcon = 'login';
       let logColor = theme.colors.primary;
       if (isLoggedIn) {
@@ -159,6 +167,15 @@ function HomeScreen(props: Props) {
         logIcon = 'logout';
         logColor = theme.colors.text;
       }
+      let lastSeenNotification = getPreferenceNumber(
+        PreferenceKeys.latestNotification,
+        preferences
+      ); // Id of the most recent notification seen in the Notification Screen
+      let newNotification = // Whether the latest notification is more recent
+        homeDashboard !== null &&
+        homeDashboard.latest_notification !== undefined &&
+        (homeDashboard.latest_notification > Number(lastSeenNotification) ||
+          lastSeenNotification === undefined);
 
       return (
         <MaterialHeaderButtons>
@@ -167,6 +184,12 @@ function HomeScreen(props: Props) {
             iconName={logIcon}
             color={logColor}
             onPress={onPressLog}
+          />
+          <Item
+            title={'notifications'}
+            iconName={newNotification ? 'bell-ring' : 'bell-outline'}
+            color={newNotification ? theme.colors.primary : theme.colors.text}
+            onPress={onPressBell}
           />
           <Item
             title={i18n.t('screens.settings.title')}

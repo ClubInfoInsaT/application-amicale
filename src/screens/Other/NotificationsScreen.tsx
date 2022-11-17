@@ -27,6 +27,8 @@ import Urls from '../../constants/Urls';
 import { Card } from 'react-native-paper';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import CustomHTML from '../../components/Overrides/CustomHTML';
+import { getPreferenceNumber, PreferenceKeys } from '../../utils/asyncStorage';
+import { useNotificationPreferences } from '../../context/preferencesContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -53,6 +55,7 @@ function NotificationsScreen(props: PropsType) {
   const [notificationItems, setNotificationItems] = React.useState<
     Array<PlanningEventType>
   >([]);
+  const { preferences, updatePreferences } = useNotificationPreferences();
 
   /**
    * Refreshes data and shows an animation while doing it
@@ -74,6 +77,10 @@ function NotificationsScreen(props: PropsType) {
           setRefreshing(false);
           setNotificationItems(fetchedData);
           setLastRefresh(new Date());
+          updatePreferences(
+            PreferenceKeys.latestNotification,
+            fetchedData[0].id
+          );
         })
         .catch(() => {
           setRefreshing(false);
@@ -114,6 +121,7 @@ function NotificationsScreen(props: PropsType) {
         />
       }
     >
+      <CustomHTML html={getPreferenceNumber(PreferenceKeys.latestNotification, preferences)+ ''}/>
       {renderNotifications(notificationItems)}
     </CollapsibleScrollView>
   );
