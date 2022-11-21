@@ -18,6 +18,7 @@
         "wiketud": "Trouve des infos utiles sur les cours et la vie du campus",
         "elusEtudiants": "Le site des étudiants en contact avec l'administration",
         "tutorInsa": "Donne et bénéficie de tutorats par d'autres étudiants",
+        "usefulLinks": "Trouve de nombreux liens utiles à ton année",
         "self": "Regarde le menu du RU",
         "availableRooms": "Vérifie les salles disponibles",
         "bib": "Réserve une Bib'Box pour les travaux de groupe",
@@ -322,7 +323,9 @@
         "button": "Merci !"
       }
     },
-
+    "usefulLinks": {
+      "title": "Liens utiles"
+    },
     "scanner": {
       "title": "Scanotron 3000",
       "permissions": {

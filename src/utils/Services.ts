@@ -199,7 +199,7 @@ export function getStudentServices(
     },
     {
       key: SERVICES_KEY.USEFUL_LINKS,
-      title: 'Liens utiles',
+      title: i18n.t('screens.usefulLinks.title'),
       subtitle: i18n.t('screens.services.descriptions.usefulLinks'),
       image: Urls.images.usefulLinks,
       onPress: () =>

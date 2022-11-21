@@ -323,7 +323,9 @@
         "button": "Ok"
       }
     },
-
+    "usefulLinks": {
+      "title": "Useful links"
+    },
     "scanner": {
       "title": "Scanotron 3000",
       "permissions": {
