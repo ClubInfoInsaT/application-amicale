@@ -77,6 +77,8 @@ export default {
     availableRooms: APP_IMAGES_ENDPOINT + 'Salles.png',
     bluemind: APP_IMAGES_ENDPOINT + 'Bluemind.png',
     ent: APP_IMAGES_ENDPOINT + 'ENT.png',
+    insaAccount: APP_IMAGES_ENDPOINT + 'Account.png',
+    usefulLinks: APP_IMAGES_ENDPOINT + 'UsefulLinks.png',
     schooling: APP_IMAGES_ENDPOINT + 'Schooling.png',
   },
   websites: {
@@ -88,6 +90,7 @@ export default {
     ent: 'https://ent.insa-toulouse.fr/',
     tutorInsa: STUDENT_SERVER + '~tutorinsa/',
     wiketud: 'https://wiki.etud.insa-toulouse.fr/',
+    usefulLinks: 'https://wiki.etud.insa-toulouse.fr/books/liens-utiles',
     yearlyPlanning:
       'https://wiki.etud.insa-toulouse.fr/books/quotidien/page/planning-de-lannee-en-cours',
     schooling: 'https://mascolarite.insa-toulouse.fr/',

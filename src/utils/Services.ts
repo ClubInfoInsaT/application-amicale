@@ -52,6 +52,7 @@ export const SERVICES_KEY = {
   WIKETUD: 'wiketud',
   ELUS_ETUDIANTS: 'elus_etudiants',
   TUTOR_INSA: 'tutor_insa',
+  USEFUL_LINKS: 'useful_links',
   YEARLY_PLANNING: 'yearly_planning',
   RU: 'ru',
   AVAILABLE_ROOMS: 'available_rooms',
@@ -196,6 +197,17 @@ export function getStudentServices(
         }),
       badgeFunction: (dashboard: FullDashboardType): number =>
         dashboard.available_tutorials,
+    },
+    {
+      key: SERVICES_KEY.USEFUL_LINKS,
+      title: i18n.t('screens.usefulLinks.title'),
+      subtitle: i18n.t('screens.services.descriptions.usefulLinks'),
+      image: Urls.images.usefulLinks,
+      onPress: () =>
+        onPress(MainRoutes.Website, {
+          host: Urls.websites.usefulLinks,
+          title: 'Liens utiles',
+        }),
     },
     {
       key: SERVICES_KEY.YEARLY_PLANNING,
