@@ -23,7 +23,6 @@
         "bib": "Prenota una Bib'Box per lavori di gruppo",
         "mails": "Controlla i tuoi mails INSA",
         "ent": "Trova i tuoi voti",
-        "insaAccount": "Accedi ai tuoi dati INSA e cambia la tua password",
         "equipment": "Prenota un BBQ o altro materiale",
         "washers": "Numero di lavatrici disponibili",
         "dryers": "Numero di asciugatrici disponibili"
@@ -195,9 +194,6 @@
       "paymentMethodsDescription": "Contanti o Lydia",
       "search": "Ricerca",
       "all": "Tutto"
-    },
-    "insaAccount": {
-      "title": "Conto INSA"
     },
     "menu": {
       "title": "Menù del RU"

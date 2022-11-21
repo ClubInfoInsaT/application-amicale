@@ -18,13 +18,19 @@
  */
 
 import * as React from 'react';
-import { Text, useTheme } from 'react-native-paper';
+import { useTheme, Text } from 'react-native-paper';
 import HTML, {
-  CustomRendererProps,
   TBlock,
   TText,
+  CustomRendererProps,
 } from 'react-native-render-html';
-import { Dimensions, GestureResponderEvent, Linking } from 'react-native';
+import {
+  Dimensions,
+  GestureResponderEvent,
+  Linking,
+  StyleProp,
+  TextStyle,
+} from 'react-native';
 
 type PropsType = {
   html: string;
@@ -44,18 +50,27 @@ function CustomHTML(props: PropsType) {
   // Might need to read the doc a bit more: https://meliorence.github.io/react-native-render-html/
   // For now this seems to work
   const getBasicText = (rendererProps: CustomRendererProps<TBlock>) => {
-    let text: TText | undefined;
-    if (rendererProps.tnode.children.length > 0) {
-      const phrasing = rendererProps.tnode.children[0];
-      if (phrasing.children.length > 0) {
-        text = phrasing.children[0] as TText;
-      }
-    }
-    if (text) {
-      return <Text>{text.data}</Text>;
-    } else {
-      return null;
-    }
+    if (!rendererProps.tnode.children[0]) return <Text />;
+    let textNodes = rendererProps.tnode.children[0].children.map((child, i) => {
+      const text = child as TText;
+      const tag = text.tagName;
+      const style: StyleProp<TextStyle> = {
+        fontWeight: tag === 'strong' || tag === 'b' ? 'bold' : 'normal',
+        fontStyle: tag === 'em' || tag === 'i' ? 'italic' : 'normal',
+        color: tag === 'a' ? 'blue' : undefined,
+      };
+      const onPress =
+        tag === 'a' && text.domNode && text.domNode.attribs.href
+          ? (_event: GestureResponderEvent) =>
+              openWebLink(_event, text.domNode.attribs.href)
+          : () => {};
+      return (
+        <Text style={style} key={i} onPress={onPress}>
+          {text.data}
+        </Text>
+      );
+    });
+    return <Text>{textNodes}</Text>;
   };
 
   return (
@@ -66,9 +81,11 @@ function CustomHTML(props: PropsType) {
       renderers={{
         p: getBasicText,
         li: getBasicText,
+        // em: getBasicText,
       }}
       // Sometimes we have images inside the text, just ignore them
-      ignoredDomTags={['img']}
+      // Default linebreaks are sufficient.
+      ignoredDomTags={['img', 'br']}
       // Ignore text color
       ignoredStyles={['color', 'backgroundColor']}
       contentWidth={Dimensions.get('window').width - 50}

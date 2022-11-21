@@ -37,6 +37,7 @@ export default {
     api: AMICALE_ENDPOINT,
     resetPassword: AMICALE_SERVER + 'password/reset',
     events: AMICALE_ENDPOINT + 'event/list',
+    notification: APP_ENDPOINT + 'notification/list.json', // TODO Update
   },
   app: {
     api: APP_ENDPOINT,
@@ -70,6 +71,7 @@ export default {
     wiketud: APP_IMAGES_ENDPOINT + 'Wiketud.png',
     elusEtudiants: APP_IMAGES_ENDPOINT + 'EEC.png',
     tutorInsa: APP_IMAGES_ENDPOINT + 'TutorINSA.png',
+    yearlyPlanning: APP_IMAGES_ENDPOINT + 'YearlyPlanning.png',
     bib: APP_IMAGES_ENDPOINT + 'Bib.png',
     menu: APP_IMAGES_ENDPOINT + 'RU.png',
     availableRooms: APP_IMAGES_ENDPOINT + 'Salles.png',
@@ -77,6 +79,7 @@ export default {
     ent: APP_IMAGES_ENDPOINT + 'ENT.png',
     insaAccount: APP_IMAGES_ENDPOINT + 'Account.png',
     usefulLinks: APP_IMAGES_ENDPOINT + 'UsefulLinks.png',
+    schooling: APP_IMAGES_ENDPOINT + 'Schooling.png',
   },
   websites: {
     amicale: AMICALE_SERVER,
@@ -85,10 +88,12 @@ export default {
     bluemind: 'https://etud-mel.insa-toulouse.fr/webmail/',
     elusEtudiants: STUDENT_SERVER + '~eeinsat/',
     ent: 'https://ent.insa-toulouse.fr/',
-    insaAccount: 'https://moncompte.insa-toulouse.fr/',
     tutorInsa: STUDENT_SERVER + '~tutorinsa/',
     wiketud: 'https://wiki.etud.insa-toulouse.fr/',
     usefulLinks: 'https://wiki.etud.insa-toulouse.fr/books/liens-utiles',
+    yearlyPlanning:
+      'https://wiki.etud.insa-toulouse.fr/books/quotidien/page/planning-de-lannee-en-cours',
+    schooling: 'https://mascolarite.insa-toulouse.fr/',
   },
   about: {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
@@ -104,7 +109,7 @@ export default {
     project: 'https://github.com/ClubInfoInsaT/application-amicale/projects/1',
     facebook: 'https://www.facebook.com/campus.insat',
     mail: `mailto:app@amicale-insat.fr?subject=[FEEDBACK] Application CAMPUS
-&body=Coucou Arnaud j'ai du feedback\n\n\n\nBien cordialement.`,
+&body=Hello l'équipe j'ai du feedback\n\n\nBien cordialement.`,
     discord: 'https://discord.gg/W8MeTec',
   },
 };

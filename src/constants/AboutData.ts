@@ -24,9 +24,21 @@ export function openWebLink(link: string) {
 
 export const majorContributors: Array<MemberItemType> = [
   {
+    name: 'Paul Alnet',
+    message: i18n.t('screens.about.user.paul'),
+    icon: 'crown',
+    linkedin: 'https://www.linkedin.com/in/paul-alnet/',
+    mail:
+      'mailto:alnet@insa-toulouse.fr?' +
+      'subject=' +
+      'Application Amicale INSA Toulouse' +
+      '&body=' +
+      'Coucou !\n\n',
+  },
+  {
     name: 'Arnaud Vergnet',
     message: i18n.t('screens.about.user.arnaud'),
-    icon: 'crown',
+    icon: 'bed',
     trollLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     linkedin: 'https://www.linkedin.com/in/arnaud-vergnet-434ba5179/',
     mail:
@@ -37,23 +49,24 @@ export const majorContributors: Array<MemberItemType> = [
       'Coucou !\n\n',
   },
   {
-    name: 'Jean-Yves Saint-Loubert',
-    message: i18n.t('screens.about.user.docjyj'),
+    name: 'Gérald Leban',
+    message: i18n.t('screens.about.user.gerald'),
     icon: 'xml',
+    linkedin: 'https://www.linkedin.com/in/g%C3%A9rald-leban-6806081a2/',
     mail:
-      'mailto:saint-lo@etud.insa-toulouse.fr?' +
+      'mailto:leban@insa-toulouse.fr?' +
       'subject=' +
       'Application Amicale INSA Toulouse' +
       '&body=' +
       'Coucou !\n\n',
   },
   {
-    name: 'Yohan Simard',
-    message: i18n.t('screens.about.user.yohan'),
+    name: 'Raphaël Lacroix',
+    message: i18n.t('screens.about.user.raphael'),
     icon: 'xml',
-    linkedin: 'https://www.linkedin.com/in/yohan-simard',
+    linkedin: 'https://www.linkedin.com/in/rapha%C3%ABl-lacroix-783010197/',
     mail:
-      'mailto:ysimard@etud.insa-toulouse.fr?' +
+      'mailto:rlacroix@insa-toulouse.fr?' +
       'subject=' +
       'Application Amicale INSA Toulouse' +
       '&body=' +

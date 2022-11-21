@@ -36,17 +36,24 @@ export enum MascotPreferenceKeys {
   gameShowMascot = 'gameShowMascot',
 }
 
+export enum NotificationPreferenceKeys {
+  latestNotification = 'latestNotification',
+  firebaseToken = 'firebaseToken',
+}
+
 export const PreferenceKeys = {
   ...GeneralPreferenceKeys,
   ...PlanexPreferenceKeys,
   ...ProxiwashPreferenceKeys,
   ...MascotPreferenceKeys,
+  ...NotificationPreferenceKeys,
 };
 export type PreferenceKeys =
   | GeneralPreferenceKeys
   | PlanexPreferenceKeys
   | ProxiwashPreferenceKeys
-  | MascotPreferenceKeys;
+  | MascotPreferenceKeys
+  | NotificationPreferenceKeys;
 
 export type PreferencesType = { [key in PreferenceKeys]: string };
 export type GeneralPreferencesType = { [key in GeneralPreferenceKeys]: string };
@@ -57,6 +64,9 @@ export type ProxiwashPreferencesType = {
   [key in ProxiwashPreferenceKeys]: string;
 };
 export type MascotPreferencesType = { [key in MascotPreferenceKeys]: string };
+export type NotificationPreferenceType = {
+  [key in NotificationPreferenceKeys]: string;
+};
 
 export const defaultPlanexPreferences: {
   [key in PlanexPreferenceKeys]: string;
@@ -85,6 +95,13 @@ export const defaultMascotPreferences: {
   [MascotPreferenceKeys.voteShowMascot]: '1',
   [MascotPreferenceKeys.equipmentShowMascot]: '1',
   [MascotPreferenceKeys.gameShowMascot]: '1',
+};
+
+export const defaultNotificationPreferences: {
+  [key in NotificationPreferenceKeys]: string;
+} = {
+  [NotificationPreferenceKeys.latestNotification]: '0',
+  [NotificationPreferenceKeys.firebaseToken]: '',
 };
 
 export const defaultPreferences: { [key in GeneralPreferenceKeys]: string } = {

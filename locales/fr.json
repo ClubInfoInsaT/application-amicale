@@ -19,15 +19,19 @@
         "elusEtudiants": "Le site des étudiants en contact avec l'administration",
         "tutorInsa": "Donne et bénéficie de tutorats par d'autres étudiants",
         "usefulLinks": "Trouve de nombreux liens utiles à ton année",
+        "yearlyPlanning": "Vous y trouverez les dates de début et de fin de semestre en fonction des années, les dates de vacances.",
         "self": "Regarde le menu du RU",
         "availableRooms": "Vérifie les salles disponibles",
         "bib": "Réserve une Bib'Box pour les travaux de groupe",
         "mails": "Vérifie tes mails INSA",
         "ent": "Retrouve tes notes",
-        "insaAccount": "Accède à tes infos INSA et modifie ton mot de passe",
         "equipment": "Réserve un BBQ ou autre matériel",
         "washers": "Nombre de lave-Linges disponibles",
-        "dryers": "Nombre de sèche-Linges disponibles"
+        "dryers": "Nombre de sèche-Linges disponibles",
+        "schooling": "Accéde facilement à tous tes documents et résultats."
+      },
+      "titles": {
+        "yearlyPlanning": "Planning de l'année"
       },
       "mascotDialog": {
         "title": "Un peu perdu ?",
@@ -176,6 +180,12 @@
         "communication": "Communication",
         "intraSchools": "Alumni / IAT",
         "publicRelations": "Relations Publiques"
+      },
+      "notifications": {
+        "channel": {
+          "title": "News importantes de l'Amicale",
+          "description": "Notifications Push ponctuelles avec des infos importantes"
+        }
       }
     },
     "proximo": {
@@ -198,9 +208,6 @@
       "search": "Rechercher",
       "all": "Tout"
     },
-    "insaAccount": {
-      "title": "Compte INSA"
-    },
     "menu": {
       "title": "Menu du RU"
     },
@@ -209,7 +216,8 @@
       "rooms": "Salles disponibles",
       "bib": "Bib'Box",
       "mails": "Mails INSA",
-      "ent": "ENT INSA"
+      "ent": "ENT INSA",
+      "schooling": "Ma scolarité"
     },
 
     "login": {
@@ -383,9 +391,10 @@
       "thanks": "Remerciements",
       "user": {
         "you": "Toi ?",
-        "arnaud": "Étudiant en 4IR (2020). C'est le créateur de cette application que t' utilises tous les jours.",
-        "docjyj":  "Étudiant en 2MIC FAS (2020). Il a ajouté quelques nouvelles fonctionnalités et corrigé des bugs.",
-        "yohan":  "Étudiant en 4IR (2020). Il a aidé à corriger des bug et a proposé quelques idées.",
+        "arnaud": "Étudiant en 5IR (2022). Désormais diplômé, c'est le créateur de cette application que t' utilises tous les jours.",
+        "paul": "Étudiant en 2MIC (2022). Responsable Application Campus, il permet à l'application de perdurer dans le temps !",
+        "gerald": "Étudiant en 3MIC-IR (2022). Il a contribué à la résolution de bugs et à l'implémentation de nouvelles fonctionnalités.",
+        "raphael": "Étudiant en 4IR (2022). Il a contribué à la résolution de bugs et à l'implémentation de nouvelles fonctionnalités.",
         "beranger": "Étudiant en 4AE (2020) et Président de l’Amicale au moment de la création et du lancement du projet. L’application, c’était son idée. Il a beaucoup aidé pour trouver des bugs, de nouvelles fonctionnalités et faire de la com.",
         "celine": "Étudiante en 4GPE (2020). Sans elle, tout serait moins mignon. Elle a aidé pour écrire le texte, faire de la com, et aussi à créer la mascotte 🦊.",
         "damien": "Étudiant en 4IR (2020) et créateur de la dernière version du site de l’Amicale. Grâce à son aide, intégrer les services de l’Amicale à l’application a été très simple.",
@@ -437,6 +446,9 @@
     },
     "debug": {
       "title": "Debug"
+    },
+    "notifications": {
+      "title": "Notifications"
     }
   },
   "intro": {

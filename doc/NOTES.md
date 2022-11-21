@@ -4,6 +4,10 @@ Ce fichier permet de regrouper les différentes informations sur des décisions 
 
 Ces notes pouvant évoluer dans le temps, leur date d'écriture est aussi indiquée.
 
+## _2022-09-18_ | react-navigation-collapsible
+
+Bloquée en 6.0.0 à cause d'un problème fatal sous IOS. Le packet n'étant plus maintenu, il faudra migrer vers une autre librairie.
+
 ## _2020-10-07_ | react-native-keychain
 
 Bloquée en 4.0.5 à cause d'un problème de performances. Au dessus de cette version, la récupération du token prend plusieurs secondes, ce qui n'est pas acceptable.

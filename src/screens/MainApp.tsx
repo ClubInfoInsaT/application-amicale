@@ -8,7 +8,7 @@ import GENERAL_STYLES from '../constants/Styles';
 import CollapsibleProvider from '../components/providers/CollapsibleProvider';
 import CacheProvider from '../components/providers/CacheProvider';
 import { OverflowMenuProvider } from 'react-navigation-header-buttons';
-import MainNavigator from '../navigation/MainNavigator';
+import MainNavigator, { linking } from '../navigation/MainNavigator';
 import { Platform, SafeAreaView, View } from 'react-native';
 import { useDarkTheme } from '../context/preferencesContext';
 import { CustomDarkTheme, CustomWhiteTheme } from '../utils/Themes';
@@ -43,7 +43,7 @@ function MainApp(props: Props, ref?: Ref<NavigationContainerRef<any>>) {
               }}
             >
               <SafeAreaView style={GENERAL_STYLES.flex}>
-                <NavigationContainer theme={theme} ref={ref}>
+                <NavigationContainer theme={theme} ref={ref} linking={linking}>
                   <MainNavigator defaultData={props.defaultData} />
                 </NavigationContainer>
               </SafeAreaView>

@@ -53,14 +53,15 @@ export const SERVICES_KEY = {
   ELUS_ETUDIANTS: 'elus_etudiants',
   TUTOR_INSA: 'tutor_insa',
   USEFUL_LINKS: 'useful_links',
+  YEARLY_PLANNING: 'yearly_planning',
   RU: 'ru',
   AVAILABLE_ROOMS: 'available_rooms',
   BIB: 'bib',
   EMAIL: 'email',
   ENT: 'ent',
-  INSA_ACCOUNT: 'insa_account',
   WASHERS: 'washers',
   DRYERS: 'dryers',
+  SCHOOLING: 'schooling',
 };
 
 export const SERVICES_CATEGORIES_KEY = {
@@ -208,6 +209,17 @@ export function getStudentServices(
           title: 'Liens utiles',
         }),
     },
+    {
+      key: SERVICES_KEY.YEARLY_PLANNING,
+      title: i18n.t('screens.services.titles.yearlyPlanning'),
+      subtitle: i18n.t('screens.services.descriptions.yearlyPlanning'),
+      image: Urls.images.availableRooms,
+      onPress: () =>
+        onPress(MainRoutes.Website, {
+          host: Urls.websites.yearlyPlanning,
+          title: "Planning de l'année",
+        }),
+    },
   ];
   return getStrippedServicesList(studentsDataset, excludedItems);
 }
@@ -271,14 +283,14 @@ export function getINSAServices(
         }),
     },
     {
-      key: SERVICES_KEY.INSA_ACCOUNT,
-      title: i18n.t('screens.insaAccount.title'),
-      subtitle: i18n.t('screens.services.descriptions.insaAccount'),
-      image: Urls.images.insaAccount,
+      key: SERVICES_KEY.SCHOOLING,
+      title: i18n.t('screens.websites.schooling'),
+      subtitle: i18n.t('screens.services.descriptions.schooling'),
+      image: Urls.images.schooling,
       onPress: () =>
         onPress(MainRoutes.Website, {
-          host: Urls.websites.insaAccount,
-          title: i18n.t('screens.insaAccount.title'),
+          host: Urls.websites.schooling,
+          title: i18n.t('screens.websites.schooling'),
         }),
     },
   ];

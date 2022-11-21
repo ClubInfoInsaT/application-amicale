@@ -1,4 +1,22 @@
-# Version actuelle - v5.0.0 - 16/10/2021
+# Version actuelle - v5.2.2 - 18/09/2022
+
+## 🎉 Nouveautés
+- Ajout des traductions espagnoles et italiennes 
+- Ajout du Planning de l'année en cours dans les Services Étudiants
+- Ajout d'un filtre permettant de cacher les articles Proximo indisponibles
+
+## 🐛 Corrections de bugs
+- Amélioration de la traduction anglaise
+- Corrections diverses
+
+## 🖥️ Notes de développement
+- Ajout de l'intrégation continue de test/lint et build Android & IOS
+- Passage à React Native 0.67.3
+
+
+# Versions précédentes
+
+<details><summary>v5.0.0 - 16/10/2021</summary>
 
 ## 🎉 Nouveautés
 - Ajout d'un cache pour les groupes Planex et Proximo
@@ -13,8 +31,7 @@
 - Nécessite Android 6 minimum à la place de 5
 - Réécriture d'une grosse partie de l'application en fonctionnel avec les [Hook](https://reactjs.org/docs/hooks-intro.html)
 
-
-# Versions précédentes
+</details>
 
 <details><summary>v4.1.0 - 11/10/2020</summary>
 

@@ -23,7 +23,6 @@
         "bib": "Reserva una Bib'Box para los trabajos en grupo",
         "mails": "Verifica tus mails INSA",
         "ent": "Mira tus notas",
-        "insaAccount": "Accede a tus informaciones INSA y modifica tu password",
         "equipment": "Reserva un BBQ u otro material",
         "washers": "Número de lavadoras disponibles",
         "dryers": "Número de secadoras disponibles"
@@ -196,9 +195,6 @@
       "paymentMethodsDescription": "Efectivo o Lydia",
       "search": "Buscar",
       "all": "Todo"
-    },
-    "insaAccount": {
-      "title": "Cuenta INSA"
     },
     "menu": {
       "title": "Menú del RU"
