@@ -86,7 +86,7 @@ function ensureLaundryChannel() {
  * Create Amicale Push notifications channel if it doesn't exist
  */
 function ensureAmicaleChannel() {
-  PushNotification.channelExists(channelIds.laundry, (exists) => {
+  PushNotification.channelExists(channelIds.amicale, (exists) => {
     if (!exists) {
       PushNotification.createChannel(
         {
