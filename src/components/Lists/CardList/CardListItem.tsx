@@ -18,9 +18,8 @@
  */
 
 import * as React from 'react';
-import { Caption, Card, Paragraph, TouchableRipple } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
-import GENERAL_STYLES from '../../../constants/Styles';
+import { Avatar, List } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 import { ServiceItemType } from '../../../utils/Services';
 
 type PropsType = {
@@ -28,14 +27,15 @@ type PropsType = {
 };
 
 const styles = StyleSheet.create({
-  card: {
-    width: '40%',
-    margin: 5,
-    marginLeft: 'auto',
-    marginRight: 'auto',
+  listItem: {
+    width: '100%',
   },
   cover: {
-    height: 80,
+    height: 60,
+    width: 60,
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
@@ -43,18 +43,36 @@ function CardListItem(props: PropsType) {
   const { item } = props;
   const source =
     typeof item.image === 'number' ? item.image : { uri: item.image };
+
+  const cardIcon = () => (
+    <Avatar.Image size={50} source={source} style={styles.cover} />
+  );
+
+  const getChevronIcon = (iconProps: {
+    color: string;
+    style?: {
+      marginRight: number;
+      marginVertical?: number;
+    };
+  }) => {
+    return (
+      <List.Icon
+        color={iconProps.color}
+        style={iconProps.style}
+        icon="chevron-right"
+      />
+    );
+  };
+
   return (
-    <Card style={styles.card}>
-      <TouchableRipple style={GENERAL_STYLES.flex} onPress={item.onPress}>
-        <View>
-          <Card.Cover style={styles.cover} source={source} />
-          <Card.Content>
-            <Paragraph>{item.title}</Paragraph>
-            <Caption>{item.subtitle}</Caption>
-          </Card.Content>
-        </View>
-      </TouchableRipple>
-    </Card>
+    <List.Item
+      title={item.title}
+      description={item.subtitle}
+      left={cardIcon}
+      right={getChevronIcon}
+      onPress={item.onPress}
+      style={styles.listItem}
+    />
   );
 }
 
