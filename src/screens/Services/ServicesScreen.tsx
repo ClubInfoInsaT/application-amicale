@@ -28,7 +28,6 @@ import {
   useTheme,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import CardList from '../../components/Lists/CardList/CardList';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
@@ -132,7 +131,6 @@ function ServicesScreen() {
             left={() => getListTitleImage(item.image)}
             right={() => <List.Icon icon="chevron-right" />}
           />
-          {/* <CardList dataset={item.content} isHorizontal /> */}
         </View>
       </TouchableRipple>
     );
