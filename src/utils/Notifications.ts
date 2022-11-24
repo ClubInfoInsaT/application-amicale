@@ -29,7 +29,18 @@ import Update from '../constants/Update';
 // Used to multiply the normal notification id to create the reminder one. It allows to find it back easily
 const reminderIdFactor = 100;
 // Allows the channel to be updated when the app updates
-const channelId = 'reminders' + Update.number;
+const channelIds = {
+  laundry: 'reminders' + Update.number,
+  amicale: 'amicale' + Update.number,
+};
+
+export type NotificationType = {
+  id: number;
+  title: string;
+  date: string;
+  from: string;
+  description: string;
+};
 
 /**
  * Clean channels before creating a new one
@@ -37,20 +48,22 @@ const channelId = 'reminders' + Update.number;
 function cleanChannels() {
   PushNotification.getChannels((idList) => {
     idList.forEach((i) => {
-      if (i !== channelId) {
+      if (!Object.values(channelIds).includes(i)) {
         PushNotification.deleteChannel(i);
       }
     });
   });
 }
 
-export function setupNotifications() {
-  cleanChannels();
-  PushNotification.channelExists(channelId, (exists) => {
+/**
+ * Create Laundry notifications channel if it doesn't exist
+ */
+function ensureLaundryChannel() {
+  PushNotification.channelExists(channelIds.laundry, (exists) => {
     if (!exists) {
       PushNotification.createChannel(
         {
-          channelId: channelId, // (required)
+          channelId: channelIds.laundry, // (required)
           channelName: i18n.t('screens.proxiwash.notifications.channel.title'), // (required)
           channelDescription: i18n.t(
             'screens.proxiwash.notifications.channel.description'
@@ -60,10 +73,48 @@ export function setupNotifications() {
           importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
           vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
         },
-        (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+        (created) =>
+          console.log(
+            `createChannel returned '${created}' for channel '${channelIds.laundry}'`
+          ) // (optional) callback returns whether the channel was created, false means it already existed.
       );
     }
   });
+}
+
+/**
+ * Create Amicale Push notifications channel if it doesn't exist
+ */
+function ensureAmicaleChannel() {
+  PushNotification.channelExists(channelIds.amicale, (exists) => {
+    if (!exists) {
+      PushNotification.createChannel(
+        {
+          channelId: channelIds.amicale,
+          channelName: i18n.t(
+            'screens.amicaleAbout.notifications.channel.title'
+          ),
+          channelDescription: i18n.t(
+            'screens.amicaleAbout.notifications.channel.description'
+          ),
+          playSound: true,
+          soundName: 'default',
+          importance: Importance.HIGH,
+          vibrate: true,
+        },
+        (created) =>
+          console.log(
+            `createChannel returned '${created}' for channel '${channelIds.amicale}'`
+          )
+      );
+    }
+  });
+}
+
+export function setupNotifications() {
+  cleanChannels();
+  ensureLaundryChannel();
+  ensureAmicaleChannel();
 
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
@@ -74,6 +125,14 @@ export function setupNotifications() {
 
       // (required) Called when a remote is received or opened, or local notification is opened
       notification.finish(PushNotificationIOS.FetchResult.NoData);
+    },
+
+    // NOTE : some events are overridden in MainNavigator and HomeScreen in order to use certain contexts.
+
+    // (optional) Called when Token is generated (iOS and Android)
+    onRegister: function (token) {
+      console.log('TOKEN:', token);
+      PushNotification.subscribeToTopic('amicale');
     },
 
     // IOS ONLY (optional): default: all - Permissions to register.
@@ -100,7 +159,7 @@ export function setupNotifications() {
 
 const DEFAULT_NOTIFICATIONS_OPTIONS: Partial<PushNotificationObject> = {
   /* Android Only Properties */
-  channelId: channelId, // (required) channelId, if the channel doesn't exist, notification will not trigger.
+  channelId: channelIds.laundry, // (required) channelId, if the channel doesn't exist, notification will not trigger.
   showWhen: true, // (optional) default: true
   autoCancel: true, // (optional) default: true
   vibrate: true, // (optional) default: true

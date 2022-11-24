@@ -4,6 +4,7 @@ import {
   defaultPlanexPreferences,
   defaultPreferences,
   defaultProxiwashPreferences,
+  defaultNotificationPreferences,
   GeneralPreferenceKeys,
   GeneralPreferencesType,
   MascotPreferenceKeys,
@@ -14,6 +15,8 @@ import {
   PreferencesType,
   ProxiwashPreferenceKeys,
   ProxiwashPreferencesType,
+  NotificationPreferenceKeys,
+  NotificationPreferenceType,
   setPreference,
 } from '../../utils/asyncStorage';
 import {
@@ -22,6 +25,7 @@ import {
   PreferencesContext,
   PreferencesContextType,
   ProxiwashPreferencesContext,
+  NotificationPreferencesContext,
 } from '../../context/preferencesContext';
 
 function updateState<T extends Partial<PreferencesType>, K extends string>(
@@ -166,6 +170,21 @@ export function MascotPreferencesProvider(props: Props<MascotPreferencesType>) {
       initialPreferences={props.initialPreferences}
       defaults={defaultMascotPreferences}
       keys={Object.values(MascotPreferenceKeys)}
+    >
+      {props.children}
+    </PreferencesProvider>
+  );
+}
+
+export function NotificationPreferencesProvider(
+  props: Props<NotificationPreferenceType>
+) {
+  return (
+    <PreferencesProvider
+      Context={NotificationPreferencesContext}
+      initialPreferences={props.initialPreferences}
+      defaults={defaultNotificationPreferences}
+      keys={Object.values(NotificationPreferenceKeys)}
     >
       {props.children}
     </PreferencesProvider>

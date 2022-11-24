@@ -18,6 +18,7 @@
         "wiketud": "Trouve des infos utiles sur les cours et la vie du campus",
         "elusEtudiants": "Le site des étudiants en contact avec l'administration",
         "tutorInsa": "Donne et bénéficie de tutorats par d'autres étudiants",
+        "usefulLinks": "Trouve de nombreux liens utiles à ton année",
         "yearlyPlanning": "Vous y trouverez les dates de début et de fin de semestre en fonction des années, les dates de vacances.",
         "self": "Regarde le menu du RU",
         "availableRooms": "Vérifie les salles disponibles",
@@ -179,6 +180,12 @@
         "communication": "Communication",
         "intraSchools": "Alumni / IAT",
         "publicRelations": "Relations Publiques"
+      },
+      "notifications": {
+        "channel": {
+          "title": "News importantes de l'Amicale",
+          "description": "Notifications Push ponctuelles avec des infos importantes"
+        }
       }
     },
     "proximo": {
@@ -324,7 +331,9 @@
         "button": "Merci !"
       }
     },
-
+    "usefulLinks": {
+      "title": "Liens utiles"
+    },
     "scanner": {
       "title": "Scanotron 3000",
       "permissions": {
@@ -437,6 +446,9 @@
     },
     "debug": {
       "title": "Debug"
+    },
+    "notifications": {
+      "title": "Notifications"
     }
   },
   "intro": {
