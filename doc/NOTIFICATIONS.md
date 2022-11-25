@@ -68,6 +68,7 @@ curl -X POST \
 `message.android.data.link` is the link for deep linking.
 
 `message.android.notification.channel_id` is the Android Notification Channel ID setup in `src/utils/Notifications.ts`.
+The `channel_id`s are usually versioned (see Notification setup), so changes in the app must be reflected here.
 
 `message.topic` is the channel subscribed to in `src/screens/Home/Home
 Screen.tsx`
