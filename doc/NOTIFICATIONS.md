@@ -17,6 +17,10 @@ One can test deep linking on Android with
 adb shell am start -W -n fr.amicaleinsat.application/.MainActivity -a android.intent.action.VIEW -d "campus-insat://notifications"
 ```
 
+### The notifications screen
+
+Fetches notification info from the Amicale API (not at time of writing).
+
 ## Debugging notifications on Android
 
 Access the shell of a connected device (physical or virtual) with `adb shell`
