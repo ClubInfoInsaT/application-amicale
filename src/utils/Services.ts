@@ -62,6 +62,7 @@ export const SERVICES_KEY = {
   WASHERS: 'washers',
   DRYERS: 'dryers',
   SCHOOLING: 'schooling',
+  MAP: 'map',
 };
 
 export const SERVICES_CATEGORIES_KEY = {
@@ -218,6 +219,18 @@ export function getStudentServices(
         onPress(MainRoutes.Website, {
           host: Urls.websites.yearlyPlanning,
           title: "Planning de l'année",
+        }),
+    },
+    {
+      key: SERVICES_KEY.MAP,
+      title: i18n.t('screens.services.titles.map'),
+      subtitle: i18n.t('screens.services.descriptions.map'),
+      image: Urls.images.map,
+      onPress: () =>
+        onPress(MainRoutes.Website, {
+          // TODO: Change URL &
+          host: 'https://etud.insa-toulouse.fr/~leban/map/',
+          title: i18n.t('screens.services.titles.map'),
         }),
     },
   ];

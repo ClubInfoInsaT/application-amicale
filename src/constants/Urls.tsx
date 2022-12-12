@@ -80,6 +80,7 @@ export default {
     insaAccount: APP_IMAGES_ENDPOINT + 'Account.png',
     usefulLinks: APP_IMAGES_ENDPOINT + 'UsefulLinks.png',
     schooling: APP_IMAGES_ENDPOINT + 'Schooling.png',
+    map: APP_IMAGES_ENDPOINT + 'Map.png',
   },
   websites: {
     amicale: AMICALE_SERVER,
