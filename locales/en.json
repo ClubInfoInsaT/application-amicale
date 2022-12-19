@@ -374,7 +374,9 @@
         "title": "Edit dashboard",
         "message": "The five items above represent your dashboard.\nYou can replace one of its services by selecting it, and then by tapping the desired new service in the list below.",
         "undo": "Undo changes"
-      }
+      },
+      "notificationsSettings": "Notification Settings",
+      "notificationsSettingsSub": "Manage notifications settings"
     },
     "about": {
       "title": "About",
