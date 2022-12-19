@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Linking, Platform, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import {
   RadioButton,
@@ -233,6 +233,31 @@ function SettingsScreen() {
     );
   };
 
+  const getButtonItem = (
+    icon: string,
+    title: string,
+    subtitle: string,
+    onPress: () => void
+  ) => {
+    return (
+      <List.Item
+        title={title}
+        description={subtitle}
+        onPress={onPress}
+        left={(props) => (
+          <List.Icon color={props.color} style={props.style} icon={icon} />
+        )}
+        right={(props) => (
+          <List.Icon
+            color={props.color}
+            style={props.style}
+            icon="chevron-right"
+          />
+        )}
+      />
+    );
+  };
+
   const onSelectWashValueChange = (value: string) => {
     if (value != null) {
       proxiwashPreferences.updatePreferences(
@@ -288,6 +313,26 @@ function SettingsScreen() {
             'view-dashboard',
             i18n.t('screens.settings.dashboard'),
             i18n.t('screens.settings.dashboardSub')
+          )}
+          {getButtonItem(
+            'cog',
+            i18n.t('screens.settings.notificationsSettings'),
+            i18n.t('screens.settings.notificationsSettingsSub'),
+            () => {
+              if (Platform.OS === 'ios') {
+                Linking.openURL('app-settings:');
+              } else {
+                Linking.sendIntent(
+                  'android.settings.APP_NOTIFICATION_SETTINGS',
+                  [
+                    {
+                      'android.provider.extra.APP_PACKAGE':
+                        'fr.amicaleinsat.application',
+                    },
+                  ]
+                );
+              }
+            }
           )}
         </List.Section>
       </Card>
