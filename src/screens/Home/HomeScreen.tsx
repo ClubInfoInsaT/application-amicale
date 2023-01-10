@@ -168,7 +168,7 @@ function HomeScreen(props: Props) {
     const getHeaderButton = () => {
       let onPressLog = () =>
         navigation.navigate(MainRoutes.Login, { nextScreen: 'profile' });
-      let onPressBell = () => navigation.navigate(MainRoutes.Notifications);
+      // let onPressBell = () => navigation.navigate(MainRoutes.Notifications);
       let logIcon = 'login';
       let logColor = theme.colors.primary;
       if (isLoggedIn) {
@@ -176,15 +176,15 @@ function HomeScreen(props: Props) {
         logIcon = 'logout';
         logColor = theme.colors.text;
       }
-      let lastSeenNotification = getPreferenceNumber(
-        PreferenceKeys.latestNotification,
-        preferences
-      ); // Id of the most recent notification seen in the Notification Screen
-      let newNotification = // Whether the latest notification is more recent
-        homeDashboard !== null &&
-        homeDashboard.latest_notification !== undefined &&
-        (homeDashboard.latest_notification > Number(lastSeenNotification) ||
-          lastSeenNotification === undefined);
+      // let lastSeenNotification = getPreferenceNumber(
+      //   PreferenceKeys.latestNotification,
+      //   preferences
+      // ); // Id of the most recent notification seen in the Notification Screen
+      // let newNotification = // Whether the latest notification is more recent
+      //   homeDashboard !== null &&
+      //   homeDashboard.latest_notification !== undefined &&
+      //   (homeDashboard.latest_notification > Number(lastSeenNotification) ||
+      //     lastSeenNotification === undefined);
 
       return (
         <MaterialHeaderButtons>
@@ -196,9 +196,11 @@ function HomeScreen(props: Props) {
           />
           <Item
             title={'notifications'}
-            iconName={newNotification ? 'bell-ring' : 'bell-outline'}
-            color={newNotification ? theme.colors.primary : theme.colors.text}
-            onPress={onPressBell}
+            // iconName={newNotification ? 'bell-ring' : 'bell-outline'}
+            // color={newNotification ? theme.colors.primary : theme.colors.text}
+            // onPress={onPressBell}
+            iconName={'bell-outline'}
+            color={theme.colors.disabled}
           />
           <Item
             title={i18n.t('screens.settings.title')}
