@@ -55,7 +55,7 @@ import { ServiceItemType } from '../../utils/Services';
 import { useCurrentDashboard } from '../../context/preferencesContext';
 import { MainRoutes } from '../../navigation/MainNavigator';
 import { useLoginState } from '../../context/loginContext';
-import { getPreferenceNumber, PreferenceKeys } from '../../utils/asyncStorage';
+import { PreferenceKeys } from '../../utils/asyncStorage';
 import { useNotificationPreferences } from '../../context/preferencesContext';
 import PushNotification from 'react-native-push-notification';
 
@@ -149,7 +149,8 @@ function HomeScreen(props: Props) {
 
   const isLoggedIn = useLoginState();
   const { currentDashboard } = useCurrentDashboard();
-  const { preferences, updatePreferences } = useNotificationPreferences();
+  // const { preferences, updatePreferences } = useNotificationPreferences();
+  const { updatePreferences } = useNotificationPreferences();
 
   let homeDashboard: FullDashboardType | null = null;
 
