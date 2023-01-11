@@ -62,6 +62,7 @@ export const SERVICES_KEY = {
   WASHERS: 'washers',
   DRYERS: 'dryers',
   SCHOOLING: 'schooling',
+  SOS_INFRA: 'sosinfra',
 };
 
 export const SERVICES_CATEGORIES_KEY = {
@@ -291,6 +292,17 @@ export function getINSAServices(
         onPress(MainRoutes.Website, {
           host: Urls.websites.schooling,
           title: i18n.t('screens.websites.schooling'),
+        }),
+    },
+    {
+      key: SERVICES_KEY.SOS_INFRA,
+      title: i18n.t('screens.websites.sosinfra'),
+      subtitle: i18n.t('screens.services.descriptions.sosinfra'),
+      image: Urls.images.sosinfra,
+      onPress: () =>
+        onPress(MainRoutes.Website, {
+          host: Urls.websites.wikiSosInfra,
+          title: i18n.t('screens.websites.sosinfra'),
         }),
     },
   ];

@@ -28,7 +28,8 @@
         "equipment": "Réserve un BBQ ou autre matériel",
         "washers": "Nombre de lave-Linges disponibles",
         "dryers": "Nombre de sèche-Linges disponibles",
-        "schooling": "Accéde facilement à tous tes documents et résultats."
+        "schooling": "Accéde facilement à tous tes documents et résultats.",
+        "sosinfra": "Signale un problème dans un bâtiment"
       },
       "titles": {
         "yearlyPlanning": "Planning de l'année"
@@ -217,7 +218,8 @@
       "bib": "Bib'Box",
       "mails": "Mails INSA",
       "ent": "ENT INSA",
-      "schooling": "Ma scolarité"
+      "schooling": "Ma scolarité",
+      "sosinfra": "SOS Infra"
     },
 
     "login": {
