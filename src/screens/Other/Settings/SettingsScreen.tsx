@@ -28,7 +28,7 @@ import {
   ToggleButton,
   useTheme,
 } from 'react-native-paper';
-import { Appearance } from 'react-native-appearance';
+import { Appearance } from 'react-native';
 import CustomSlider from '../../../components/Overrides/CustomSlider';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import GENERAL_STYLES from '../../../constants/Styles';

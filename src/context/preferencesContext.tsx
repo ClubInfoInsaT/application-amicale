@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useContext } from 'react';
-import { Appearance } from 'react-native-appearance';
+import { Appearance } from 'react-native';
 import {
   defaultMascotPreferences,
   defaultPlanexPreferences,
