@@ -126,8 +126,8 @@ export const CustomDarkTheme: ReactNativePaper.Theme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    primary: '#be1522',
-    accent: '#be1522',
+    primary: semaineClimatEnergie ? '#1ca81c' : '#be1522',
+    accent: semaineClimatEnergie ? '#1ca81c' : '#be1522',
     border: '#222222',
     tabIcon: '#6d6d6d',
     card: 'rgb(18,18,18)',
