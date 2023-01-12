@@ -337,8 +337,6 @@ function HomeScreen(props: Props) {
     );
   };
 
-  const showDisconnectDialog = () => setDialogVisible(true);
-
   const hideDisconnectDialog = () => setDialogVisible(false);
 
   const openScanner = () => navigation.navigate(MainRoutes.Scanner);
