@@ -167,16 +167,7 @@ function HomeScreen(props: Props) {
 
   useLayoutEffect(() => {
     const getHeaderButton = () => {
-      let onPressLog = () =>
-        navigation.navigate(MainRoutes.Login, { nextScreen: 'profile' });
       // let onPressBell = () => navigation.navigate(MainRoutes.Notifications);
-      let logIcon = 'login';
-      let logColor = theme.colors.primary;
-      if (isLoggedIn) {
-        onPressLog = () => showDisconnectDialog();
-        logIcon = 'logout';
-        logColor = theme.colors.text;
-      }
       // let lastSeenNotification = getPreferenceNumber(
       //   PreferenceKeys.latestNotification,
       //   preferences
@@ -189,12 +180,6 @@ function HomeScreen(props: Props) {
 
       return (
         <MaterialHeaderButtons>
-          <Item
-            title={'log'}
-            iconName={logIcon}
-            color={logColor}
-            onPress={onPressLog}
-          />
           <Item
             title={'notifications'}
             // iconName={newNotification ? 'bell-ring' : 'bell-outline'}
@@ -215,7 +200,7 @@ function HomeScreen(props: Props) {
       headerRight: getHeaderButton,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation, isLoggedIn]);
+  }, [navigation]);
 
   useEffect(() => {
     if (!pageLoaded.current) {
