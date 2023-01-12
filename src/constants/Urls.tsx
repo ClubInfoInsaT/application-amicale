@@ -80,6 +80,7 @@ export default {
     insaAccount: APP_IMAGES_ENDPOINT + 'Account.png',
     usefulLinks: APP_IMAGES_ENDPOINT + 'UsefulLinks.png',
     schooling: APP_IMAGES_ENDPOINT + 'Schooling.png',
+    sosinfra: APP_IMAGES_ENDPOINT + 'SOSInfra.png',
   },
   websites: {
     amicale: AMICALE_SERVER,
@@ -94,6 +95,8 @@ export default {
     yearlyPlanning:
       'https://wiki.etud.insa-toulouse.fr/books/quotidien/page/planning-de-lannee-en-cours',
     schooling: 'https://mascolarite.insa-toulouse.fr/',
+    wikiSosInfra:
+      'https://wiki.etud.insa-toulouse.fr/books/ressources-insa/page/signaler-un-probleme-dans-un-batiment-chauffage-lumiere',
   },
   about: {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
