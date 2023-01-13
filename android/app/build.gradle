@@ -80,7 +80,7 @@ project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
 ]
 
-//apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native/react.gradle"
 
 project.ext.vectoricons = [
     iconFontNames: [ 'MaterialCommunityIcons.ttf'] // Name of the font files you want to copy
