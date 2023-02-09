@@ -40,13 +40,15 @@ export type ApiDataLoginType = {
 
 type ApiResponseType<T> = {
   status: REQUEST_STATUS;
-  error?: API_REQUEST_CODES;
+  code?: API_REQUEST_CODES;
+  message?: string;
   data?: T;
 };
 
 export type ApiRejectType = {
   status: REQUEST_STATUS;
   code?: API_REQUEST_CODES;
+  message?: string;
 };
 
 /**
@@ -60,8 +62,9 @@ export type ApiRejectType = {
 export function isApiResponseValid<T>(response: ApiResponseType<T>): boolean {
   return (
     response != null &&
-    response.error != null &&
-    Object.values(API_REQUEST_CODES).includes(response.error) &&
+    response.code != null &&
+    response.code !== undefined &&
+    Object.values(API_REQUEST_CODES).includes(response.code) &&
     response.data != null &&
     typeof response.data === 'object'
   );
@@ -90,47 +93,63 @@ export async function apiRequest<T>(
       if (params != null) {
         requestParams = { ...params };
       }
+      let headers = new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      });
       if (token) {
-        requestParams = { ...requestParams, token: token };
+        headers.set('Authorization', 'Bearer ' + token);
       }
 
       fetch(Urls.amicale.api + path, {
         method,
-        headers: new Headers({
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }),
+        headers: headers,
         body: JSON.stringify(requestParams),
       })
         .then((response: Response) => {
           const status = response.status;
-          if (status === REQUEST_STATUS.SUCCESS) {
-            return response.json().then((data): ApiResponseType<T> => {
-              return { status: status, error: data.error, data: data.data };
+          return response
+            .json()
+            .then((data): ApiResponseType<T> => {
+              return {
+                status: status,
+                code: data.code,
+                data: data.data,
+                message: data.message,
+              };
+            })
+            .catch(() => {
+              return {
+                status: status,
+                code: API_REQUEST_CODES.SERVER_ERROR,
+                message: 'Failed to parse server JSON',
+              };
             });
-          } else {
-            return { status: status };
-          }
         })
         .then((response: ApiResponseType<T>) => {
           if (isApiResponseValid(response) && response.data) {
-            if (response.error === API_REQUEST_CODES.SUCCESS) {
+            if (response.code === API_REQUEST_CODES.SUCCESS) {
               resolve(response.data);
             } else {
               reject({
                 status: REQUEST_STATUS.SUCCESS,
-                code: response.error,
+                code: response.code,
+                message: response.message,
               });
             }
           } else {
             reject({
               status: response.status,
+              code: API_REQUEST_CODES.SERVER_ERROR,
+              message: 'Invalid server server response',
             });
           }
         })
         .catch(() => {
           reject({
             status: REQUEST_STATUS.CONNECTION_ERROR,
+            code: API_REQUEST_CODES.CONNECTION_ERROR,
+            message: 'Connection error, please check your network',
           });
         });
     }
@@ -147,19 +166,19 @@ export async function connectToAmicale(email: string, password: string) {
         email,
         password,
       };
-      apiRequest<ApiDataLoginType>('password', 'POST', data)
+      apiRequest<ApiDataLoginType>('auth/login', 'POST', data)
         .then((response: ApiDataLoginType) => {
           if (response.token != null) {
             resolve(response.token);
           } else {
             reject({
               status: REQUEST_STATUS.SERVER_ERROR,
+              code: API_REQUEST_CODES.SERVER_ERROR,
+              message: 'Unknown server error on login',
             });
           }
         })
-        .catch((err) => {
-          reject(err);
-        });
+        .catch(reject);
     }
   );
 }

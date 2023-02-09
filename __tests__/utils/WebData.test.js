@@ -5,22 +5,22 @@ const fetch = require('isomorphic-fetch'); // fetch is not implemented in nodeJS
 
 test('isRequestResponseValid', () => {
   let json = {
-    error: 0,
+    code: 0,
     data: {},
   };
   expect(isApiResponseValid(json)).toBeTrue();
   json = {
-    error: 1,
+    code: 1,
     data: {},
   };
   expect(isApiResponseValid(json)).toBeTrue();
   json = {
-    error: 999,
+    code: 999,
     data: {},
   };
   expect(isApiResponseValid(json)).toBeTrue();
   json = {
-    error: 0,
+    code: 0,
     data: { truc: 'machin' },
   };
   expect(isApiResponseValid(json)).toBeTrue();
@@ -29,17 +29,17 @@ test('isRequestResponseValid', () => {
   };
   expect(isApiResponseValid(json)).toBeFalse();
   json = {
-    error: 'coucou',
+    code: 'coucou',
     data: { truc: 'machin' },
   };
   expect(isApiResponseValid(json)).toBeFalse();
   json = {
-    error: 0,
+    code: 0,
     data: 'coucou',
   };
   expect(isApiResponseValid(json)).toBeFalse();
   json = {
-    error: 0,
+    code: 0,
   };
   expect(isApiResponseValid(json)).toBeFalse();
 });

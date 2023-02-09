@@ -30,10 +30,11 @@ test('connectToAmicale bad credentials', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          error: API_REQUEST_CODES.BAD_CREDENTIALS,
+          code: API_REQUEST_CODES.BAD_CREDENTIALS,
+          message: 'Bad credentials.',
           data: {},
         }),
-      status: 200,
+      status: 403,
     });
   });
   return expect(connectToAmicale('email', 'password')).rejects.toHaveProperty(
@@ -47,7 +48,7 @@ test('connectToAmicale good credentials', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          error: API_REQUEST_CODES.SUCCESS,
+          code: API_REQUEST_CODES.SUCCESS,
           data: { token: 'token' },
         }),
       status: 200,
@@ -61,10 +62,10 @@ test('connectToAmicale good credentials no consent', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          error: API_REQUEST_CODES.NO_CONSENT,
+          code: API_REQUEST_CODES.NO_CONSENT,
           data: {},
         }),
-      status: 200,
+      status: 403,
     });
   });
   return expect(connectToAmicale('email', 'password')).rejects.toHaveProperty(
@@ -108,7 +109,7 @@ test('useAuthenticatedRequest success', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          error: API_REQUEST_CODES.SUCCESS,
+          code: API_REQUEST_CODES.SUCCESS,
           data: { coucou: 'toi' },
         }),
       status: 200,
@@ -127,7 +128,7 @@ test('authenticatedRequest error wrong token', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          error: API_REQUEST_CODES.BAD_TOKEN,
+          code: API_REQUEST_CODES.BAD_TOKEN,
           data: {},
         }),
       status: 200,
@@ -146,7 +147,7 @@ test('authenticatedRequest error bogus response', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          error: API_REQUEST_CODES.SUCCESS,
+          code: API_REQUEST_CODES.SUCCESS,
         }),
       status: 200,
     });
@@ -176,7 +177,7 @@ test('authenticatedRequest error no token', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          error: API_REQUEST_CODES.BAD_TOKEN,
+          code: API_REQUEST_CODES.BAD_TOKEN,
           data: {},
         }),
       status: 200,
