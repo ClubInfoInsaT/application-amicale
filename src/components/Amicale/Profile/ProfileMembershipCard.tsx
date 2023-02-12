@@ -1,9 +1,11 @@
 import React from 'react';
-import { Avatar, Card, List, useTheme } from 'react-native-paper';
+import { Avatar, Card, List, useTheme, Text } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { StyleSheet } from 'react-native';
+import { COTISATION } from '../../../screens/Amicale/ProfileScreen';
 
 type Props = {
+  cotisation?: COTISATION;
   valid?: boolean;
 };
 
@@ -18,7 +20,26 @@ const styles = StyleSheet.create({
 
 export default function ProfileMembershipCard(props: Props) {
   const theme = useTheme();
-  const state = props.valid === true;
+  let state;
+  switch (props?.cotisation) {
+    case COTISATION.NONE:
+      state = i18n.t('screens.profile.membershipNotPaid');
+      break;
+    case COTISATION.SEMESTER_1:
+      state = i18n.t('screens.profile.membershipPaidSemester1');
+      break;
+    case COTISATION.SEMESTER_2:
+      state = i18n.t('screens.profile.membershipPaidSemester2');
+      break;
+    case COTISATION.YEARLY:
+      state = i18n.t('screens.profile.membershipPaidYearly');
+      break;
+    case COTISATION.PERMANENT:
+      state = i18n.t('screens.profile.membershipPermanent');
+      break;
+    default:
+      state = i18n.t('screens.profile.membershipNotPaid');
+  }
   return (
     <Card style={styles.card}>
       <Card.Title
@@ -36,16 +57,17 @@ export default function ProfileMembershipCard(props: Props) {
       <Card.Content>
         <List.Section>
           <List.Item
-            title={
-              state
-                ? i18n.t('screens.profile.membershipPayed')
-                : i18n.t('screens.profile.membershipNotPayed')
+            title={state}
+            description={
+              props?.valid
+                ? undefined
+                : i18n.t('screens.profile.membershipNotPaidInstruction')
             }
             left={(leftProps) => (
               <List.Icon
                 style={leftProps.style}
-                color={state ? theme.colors.success : theme.colors.danger}
-                icon={state ? 'check' : 'close'}
+                color={props.valid ? theme.colors.success : theme.colors.danger}
+                icon={props.valid ? 'check' : 'close'}
               />
             )}
           />

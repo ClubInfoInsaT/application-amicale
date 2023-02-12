@@ -63,10 +63,19 @@ export default function ProfilePersonalCard(props: Props) {
     );
   }
 
+  function getBirthdayDisplayString() {
+    let display = i18n.t(
+      profile?.minor ? 'screens.profile.minor' : 'screens.profile.nonMinor'
+    );
+
+    if (profile?.birthday) display += `(${profile.birthday})`;
+    return display;
+  }
+
   return (
     <Card style={styles.card}>
       <Card.Title
-        title={`${profile?.first_name} ${profile?.last_name}`}
+        title={`${profile?.firstName} ${profile?.lastName}`}
         subtitle={profile?.email}
         left={(iconProps) => (
           <Avatar.Icon
@@ -83,10 +92,10 @@ export default function ProfilePersonalCard(props: Props) {
           <List.Subheader>
             {i18n.t('screens.profile.personalInformation')}
           </List.Subheader>
-          {getPersonalListItem(profile?.birthday, 'cake-variant')}
+          {getPersonalListItem(getBirthdayDisplayString(), 'cake-variant')}
           {getPersonalListItem(profile?.phone, 'phone')}
           {getPersonalListItem(profile?.email, 'email')}
-          {getPersonalListItem(profile?.branch, 'school')}
+          {getPersonalListItem(profile?.groupInsa, 'school')}
         </List.Section>
         <Divider />
         <Card.Actions>

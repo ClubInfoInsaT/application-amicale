@@ -39,22 +39,39 @@ export type ProfileClubType = {
   is_manager: boolean;
 };
 
+export enum COTISATION {
+  NONE = 0,
+  SEMESTER_1 = 1,
+  SEMESTER_2 = 2,
+  YEARLY = 3,
+  PERMANENT = 4,
+}
+
+export enum VERIFIED {
+  NONE = 0,
+  EMAIL = 1,
+  ACCOUNT = 2,
+  ACCOUNT_AND_EMAIL = 3,
+}
+
 export type ProfileDataType = {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  cotisation: COTISATION;
+  cotisationValid: boolean;
+  verified: VERIFIED;
+  minor: boolean;
   birthday: string;
   phone: string;
-  branch: string;
-  link: string;
-  validity: boolean;
+  groupInsa: string;
   clubs: Array<ProfileClubType>;
 };
 
 function ProfileScreen() {
   const navigation = useNavigation();
   const [dialogVisible, setDialogVisible] = useState(false);
-  const request = useAuthenticatedRequest<ProfileDataType>('user/profile');
+  const request = useAuthenticatedRequest<ProfileDataType>('user/self');
 
   useLayoutEffect(() => {
     const getHeaderButton = () => (
@@ -82,7 +99,7 @@ function ProfileScreen() {
           case 0:
             flatListData.push({
               id: i.toString(),
-              render: () => <ProfileWelcomeCard firstname={data?.first_name} />,
+              render: () => <ProfileWelcomeCard firstname={data?.firstName} />,
             });
             break;
           case 1:
@@ -100,7 +117,12 @@ function ProfileScreen() {
           default:
             flatListData.push({
               id: i.toString(),
-              render: () => <ProfileMembershipCard valid={data?.validity} />,
+              render: () => (
+                <ProfileMembershipCard
+                  cotisation={data?.cotisation}
+                  valid={data?.cotisationValid}
+                />
+              ),
             });
         }
       }

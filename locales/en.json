@@ -247,11 +247,18 @@
       "isManager": "Manager",
       "membership": "Membership Fee",
       "membershipSubtitle": "Allows you to take part in various activities",
-      "membershipPayed": "Payed",
-      "membershipNotPayed": "Not payed",
+      "membershipPayed": "Paid",
+      "membershipPaidSemester1": "Paid, first semester only",
+      "membershipPaidSemester2": "Paid, second semester only",
+      "membershipPaidYearly": "Paid, yearly",
+      "membershipPermanent": "Permanent",
+      "membershipNotPaid": "Not paid or expired :(",
+      "membershipNotPaidInstruction": "Drop by the Amicale during opening hours ;)",
       "welcomeTitle": "Welcome %{name}!",
       "welcomeDescription": "This is your Amicale INSA Toulouse personal space. Below are the services you can currently access with your account. Feels empty? You're right and we plan on fixing that, so stay tuned!",
-      "welcomeFeedback": "We plan on doing more! If you have any suggestions or found bugs, please tell us by tapping the button below."
+      "welcomeFeedback": "We plan on doing more! If you have any suggestions or found bugs, please tell us by tapping the button below.",
+      "minor": "Minor",
+      "nonMinor": "Non minor"
     },
     "clubs": {
       "title": "Clubs",
