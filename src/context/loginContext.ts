@@ -39,8 +39,9 @@ export function useLoginToken() {
 
 export function useAuthenticatedRequest<T>(
   path: string,
-  params?: { [key: string]: any }
+  method: string = 'GET',
+  body?: { [key: string]: any }
 ) {
   const token = useLoginToken();
-  return () => apiRequest<T>(path, 'POST', params, token);
+  return () => apiRequest<T>(path, method, body, token);
 }

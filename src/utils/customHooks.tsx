@@ -18,7 +18,7 @@
  */
 
 import { DependencyList, useEffect, useRef, useState } from 'react';
-import { REQUEST_STATUS } from './Requests';
+import { API_REQUEST_CODES, REQUEST_STATUS } from './Requests';
 import { ApiRejectType } from './WebData';
 
 export function useMountEffect(func: () => void) {
@@ -58,7 +58,8 @@ export function useRequestLogic<T>(
     loading: boolean;
     lastRefreshDate?: Date;
     status: REQUEST_STATUS;
-    code?: number;
+    code?: API_REQUEST_CODES;
+    message?: string | undefined;
     data: T | undefined;
   }>({
     loading: startLoading !== false && cache === undefined,
@@ -66,6 +67,7 @@ export function useRequestLogic<T>(
     status: REQUEST_STATUS.SUCCESS,
     code: undefined,
     data: undefined,
+    message: undefined,
   });
 
   const refreshData = (newRequest?: () => Promise<T>) => {
@@ -87,11 +89,13 @@ export function useRequestLogic<T>(
       const r = newRequest ? newRequest : request;
       r()
         .then((requestResponse: T) => {
+          console.log('customhooks', requestResponse);
           setResponse({
             loading: false,
             lastRefreshDate: new Date(),
             status: REQUEST_STATUS.SUCCESS,
             code: undefined,
+            message: undefined,
             data: requestResponse,
           });
           if (onCacheUpdate) {
@@ -99,6 +103,7 @@ export function useRequestLogic<T>(
           }
         })
         .catch((error: ApiRejectType | undefined) => {
+          console.log('customhooks', error);
           if (!error) {
             setResponse((prevState) => ({
               loading: false,
@@ -114,6 +119,7 @@ export function useRequestLogic<T>(
               status: error.status,
               code: error.code,
               data: prevState.data,
+              message: error.message,
             }));
           }
         });
@@ -125,15 +131,17 @@ export function useRequestLogic<T>(
     Date | undefined,
     REQUEST_STATUS,
     number | undefined,
+    string | undefined,
     T | undefined,
     (newRequest?: () => Promise<T>) => void
   ] = [
-    response.loading,
-    response.lastRefreshDate,
-    response.status,
-    response.code,
-    cache ? cache : response.data,
-    refreshData,
-  ];
+      response.loading,
+      response.lastRefreshDate,
+      response.status,
+      response.code,
+      response.message,
+      cache ? cache : response.data,
+      refreshData,
+    ];
   return value;
 }

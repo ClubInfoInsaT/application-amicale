@@ -87,6 +87,10 @@ export function getErrorMessage(
         fullMessage.message = i18n.t('errors.forbidden');
         fullMessage.icon = 'lock';
         break;
+      case API_REQUEST_CODES.SERVER_ERROR:
+        fullMessage.message = i18n.t('errors.serverError');
+        fullMessage.icon = 'server-network-off';
+        break;
       default:
         fullMessage.message = i18n.t('errors.unknown');
         fullMessage.icon = 'alert-circle-outline';
@@ -98,6 +102,9 @@ export function getErrorMessage(
     fullMessage.message += `\n\nCode {${props.status}:${props.code}}`;
   } else {
     fullMessage.message += `\n\nCode {${props.status}}`;
+  }
+  if (props.message) {
+    fullMessage.message += `\n\n"${props.message}"`;
   }
   if (message) {
     fullMessage.message = message;

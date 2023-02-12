@@ -21,7 +21,8 @@ export type RequestScreenProps<T> = {
     lastRefreshDate: Date | undefined,
     refreshData: (newRequest?: () => Promise<T>) => void,
     status: REQUEST_STATUS,
-    code?: API_REQUEST_CODES
+    code?: API_REQUEST_CODES,
+    message?: string
   ) => React.ReactElement;
   cache?: T;
   onCacheUpdate?: (newCache: T) => void;
@@ -48,7 +49,7 @@ export default function RequestScreen<T>(props: Props<T>) {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const route = useRoute();
   const refreshInterval = useRef<number>();
-  const [loading, lastRefreshDate, status, code, data, refreshData] =
+  const [loading, lastRefreshDate, status, code, message, data, refreshData] =
     useRequestLogic<T>(
       props.request,
       props.cache,
@@ -117,15 +118,16 @@ export default function RequestScreen<T>(props: Props<T>) {
       <ErrorView
         status={status}
         code={code}
+        message={message}
         loading={loading}
         button={
           isErrorCritical(code)
             ? undefined
             : {
-                icon: 'refresh',
-                text: i18n.t('general.retry'),
-                onPress: () => refreshData(),
-              }
+              icon: 'refresh',
+              text: i18n.t('general.retry'),
+              onPress: () => refreshData(),
+            }
         }
       />
     );

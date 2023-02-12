@@ -155,6 +155,7 @@ function LoginScreen(props: Props) {
             onDismiss={hideErrorDialog}
             status={currentError.status}
             code={currentError.code}
+            message={currentError.message}
           />
         </CollapsibleScrollView>
       </KeyboardAvoidingView>

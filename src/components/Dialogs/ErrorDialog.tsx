@@ -31,6 +31,7 @@ type PropsType = {
   onDismiss: () => void;
   status?: REQUEST_STATUS;
   code?: API_REQUEST_CODES;
+  message?: string;
 };
 
 function ErrorDialog(props: PropsType) {

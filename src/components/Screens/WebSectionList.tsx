@@ -98,7 +98,8 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
     lastRefreshDate: Date | undefined,
     refreshData: (newRequest?: () => Promise<RawData>) => void,
     status: REQUEST_STATUS,
-    code?: API_REQUEST_CODES
+    code?: API_REQUEST_CODES,
+    message?: string
   ) => {
     const { itemHeight } = props;
     const dataset = props.createDataset(
@@ -127,13 +128,13 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
         ListHeaderComponent={
           props.renderListHeaderComponent != null
             ? props.renderListHeaderComponent(
-                data,
-                loading,
-                lastRefreshDate,
-                refreshData,
-                status,
-                code
-              )
+              data,
+              loading,
+              lastRefreshDate,
+              refreshData,
+              status,
+              code
+            )
             : null
         }
         ListEmptyComponent={
@@ -141,13 +142,14 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
             <ErrorView
               status={status}
               code={code}
+              message={message}
               button={
                 code !== API_REQUEST_CODES.BAD_TOKEN
                   ? {
-                      icon: 'refresh',
-                      text: i18n.t('general.retry'),
-                      onPress: () => refreshData(),
-                    }
+                    icon: 'refresh',
+                    text: i18n.t('general.retry'),
+                    onPress: () => refreshData(),
+                  }
                   : undefined
               }
             />

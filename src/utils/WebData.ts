@@ -65,8 +65,8 @@ export function isApiResponseValid<T>(response: ApiResponseType<T>): boolean {
     response.code != null &&
     response.code !== undefined &&
     Object.values(API_REQUEST_CODES).includes(response.code) &&
-    response.data != null &&
-    typeof response.data === 'object'
+    (response.status !== REQUEST_STATUS.SUCCESS ||
+      (response.data != null && typeof response.data === 'object')) // Errors don't return data
   );
 }
 
@@ -84,27 +84,22 @@ export function isApiResponseValid<T>(response: ApiResponseType<T>): boolean {
 export async function apiRequest<T>(
   path: string,
   method: string,
-  params?: object,
+  body?: object,
   token?: string
 ): Promise<T> {
   return new Promise(
     (resolve: (data: T) => void, reject: (error: ApiRejectType) => void) => {
-      let requestParams = {};
-      if (params != null) {
-        requestParams = { ...params };
-      }
-      let headers = new Headers({
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      });
+      let headers = new Headers();
+      headers.append('Accept', 'application/json');
+      headers.append('Content-Type', 'application/json');
       if (token) {
-        headers.set('Authorization', 'Bearer ' + token);
+        headers.append('Authorization', 'Bearer ' + token);
       }
 
       fetch(Urls.amicale.api + path, {
         method,
         headers: headers,
-        body: JSON.stringify(requestParams),
+        body: body ? JSON.stringify(body) : undefined,
       })
         .then((response: Response) => {
           const status = response.status;
@@ -113,7 +108,7 @@ export async function apiRequest<T>(
             .then((data): ApiResponseType<T> => {
               return {
                 status: status,
-                code: data.code,
+                code: data.status,
                 data: data.data,
                 message: data.message,
               };
@@ -127,8 +122,9 @@ export async function apiRequest<T>(
             });
         })
         .then((response: ApiResponseType<T>) => {
-          if (isApiResponseValid(response) && response.data) {
-            if (response.code === API_REQUEST_CODES.SUCCESS) {
+          console.log(response, path, token);
+          if (isApiResponseValid(response)) {
+            if (response.code === API_REQUEST_CODES.SUCCESS && response.data) {
               resolve(response.data);
             } else {
               reject({
@@ -138,14 +134,16 @@ export async function apiRequest<T>(
               });
             }
           } else {
+            console.log(response);
             reject({
               status: response.status,
               code: API_REQUEST_CODES.SERVER_ERROR,
-              message: 'Invalid server server response',
+              message: 'Invalid server response',
             });
           }
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log('webdata', e);
           reject({
             status: REQUEST_STATUS.CONNECTION_ERROR,
             code: API_REQUEST_CODES.CONNECTION_ERROR,
