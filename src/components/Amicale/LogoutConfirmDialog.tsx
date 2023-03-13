@@ -20,35 +20,47 @@
 import * as React from 'react';
 import i18n from 'i18n-js';
 import LoadingConfirmDialog from '../Dialogs/LoadingConfirmDialog';
-import LogoutConfirmDialog from './LogoutConfirmDialog';
+import { useLogout } from '../../utils/logout';
+import RequestScreen from '../../components/Screens/RequestScreen';
+import { useAuthenticatedRequest } from '../../context/loginContext';
 
 type PropsType = {
   visible: boolean;
   onDismiss: () => void;
 };
 
-function LogoutDialog(props: PropsType) {
-  const [confirmed, setConfirmed] = React.useState(false);
+type ResultType = {
+  success: boolean;
+};
+
+function LogoutConfirmDialog(props: PropsType) {
+  const onLogout = useLogout();
+  const request = useAuthenticatedRequest<ResultType>('auth/logout', 'GET');
   // Use a loading dialog as it can take some time to update the context
+  // let message = i18n.t('dialog.disconnect.message');
   const onClickAccept = async (): Promise<void> => {
     return new Promise((resolve: () => void) => {
-      setConfirmed(true);
+      onLogout();
+      props.onDismiss();
       resolve();
     });
   };
 
-  return confirmed ? (
-    <LogoutConfirmDialog visible={props.visible} onDismiss={props.onDismiss} />
-  ) : (
-    <LoadingConfirmDialog
-      visible={props.visible}
-      onDismiss={props.onDismiss}
-      onAccept={onClickAccept}
-      title={i18n.t('dialog.disconnect.title')}
-      titleLoading={i18n.t('dialog.disconnect.titleLoading')}
-      message={i18n.t('dialog.disconnect.message')}
-    />
-  );
+  const renderDialog = (data: ResultType | undefined, loading: boolean) => {
+    let message = loading ? 'Loading...' : 'sucess : ' + data?.success;
+    return (
+      <LoadingConfirmDialog
+        visible={props.visible}
+        onDismiss={props.onDismiss}
+        onAccept={onClickAccept}
+        title={i18n.t('dialog.disconnect.title')}
+        titleLoading={i18n.t('dialog.disconnect.titleLoading')}
+        message={message}
+      />
+    );
+  };
+
+  return <RequestScreen request={request} render={renderDialog} />;
 }
 
-export default LogoutDialog;
+export default LogoutConfirmDialog;
