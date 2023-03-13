@@ -112,7 +112,7 @@ export function getAmicaleServices(
       title: i18n.t('screens.clubs.title'),
       subtitle: i18n.t('screens.services.descriptions.clubs'),
       image: Urls.images.clubs,
-      onPress: getAmicaleOnPress(MainRoutes.ClubList, onPress, isLoggedIn),
+      onPress: getAmicaleOnPress(MainRoutes.ClubList, onPress, true), // Doesn't require log in
     },
     {
       key: SERVICES_KEY.PROFILE,
@@ -126,7 +126,7 @@ export function getAmicaleServices(
       title: i18n.t('screens.equipment.title'),
       subtitle: i18n.t('screens.services.descriptions.equipment'),
       image: Urls.images.equipment,
-      onPress: getAmicaleOnPress(MainRoutes.EquipmentList, onPress, isLoggedIn),
+      onPress: getAmicaleOnPress(MainRoutes.EquipmentList, onPress, true), // Doesn't require log in
     },
     {
       key: SERVICES_KEY.AMICALE_WEBSITE,

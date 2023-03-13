@@ -182,16 +182,18 @@ function getIntroScreens() {
   );
 }
 
-function getAmicaleScreens() {
+function getAmicaleScreens(isloggedIn: boolean) {
   return (
     <>
-      <MainStack.Screen
-        name={MainRoutes.Profile}
-        component={ProfileScreen}
-        options={{
-          title: i18n.t('screens.profile.title'),
-        }}
-      />
+      {isloggedIn ? (
+        <MainStack.Screen
+          name={MainRoutes.Profile}
+          component={ProfileScreen}
+          options={{
+            title: i18n.t('screens.profile.title'),
+          }}
+        />
+      ) : null}
       <MainStack.Screen
         name={MainRoutes.ClubList}
         component={ClubListScreen}
@@ -220,20 +222,24 @@ function getAmicaleScreens() {
           title: i18n.t('screens.equipment.title'),
         }}
       />
-      <MainStack.Screen
-        name={MainRoutes.EquipmentRent}
-        component={EquipmentLendScreen}
-        options={{
-          title: i18n.t('screens.equipment.book'),
-        }}
-      />
-      <MainStack.Screen
-        name={MainRoutes.EquipmentConfirm}
-        component={EquipmentConfirmScreen}
-        options={{
-          title: i18n.t('screens.equipment.confirm'),
-        }}
-      />
+      {isloggedIn ? (
+        <MainStack.Screen
+          name={MainRoutes.EquipmentRent}
+          component={EquipmentLendScreen}
+          options={{
+            title: i18n.t('screens.equipment.book'),
+          }}
+        />
+      ) : null}
+      {isloggedIn ? (
+        <MainStack.Screen
+          name={MainRoutes.EquipmentConfirm}
+          component={EquipmentConfirmScreen}
+          options={{
+            title: i18n.t('screens.equipment.confirm'),
+          }}
+        />
+      ) : null}
     </>
   );
 }
@@ -429,7 +435,7 @@ function MainStackComponent(props: {
       }}
     >
       {showIntro ? getIntroScreens() : getRegularScreens(createTabNavigator)}
-      {isloggedIn ? getAmicaleScreens() : null}
+      {getAmicaleScreens(isloggedIn)}
     </MainStack.Navigator>
   );
 }
