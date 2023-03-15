@@ -19,6 +19,7 @@
 
 import Urls from '../constants/Urls';
 import { API_REQUEST_CODES, REQUEST_STATUS } from './Requests';
+import packageJson from '../../package.json';
 
 // export const ERROR_TYPE = {
 //   SUCCESS: 0,
@@ -89,9 +90,11 @@ export async function apiRequest<T>(
 ): Promise<T> {
   return new Promise(
     (resolve: (data: T) => void, reject: (error: ApiRejectType) => void) => {
+      const userAgent = 'campus/' + packageJson.version;
       let headers = new Headers();
       headers.append('Accept', 'application/json');
       headers.append('Content-Type', 'application/json');
+      headers.append('User-Agent', userAgent);
       if (token) {
         headers.append('Authorization', 'Bearer ' + token);
       }

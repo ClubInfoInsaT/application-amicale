@@ -30,8 +30,10 @@ import ProfileWelcomeCard from '../../components/Amicale/Profile/ProfileWelcomeC
 import ProfilePersonalCard from '../../components/Amicale/Profile/ProfilePersonalCard';
 import ProfileClubCard from '../../components/Amicale/Profile/ProfileClubCard';
 import ProfileMembershipCard from '../../components/Amicale/Profile/ProfileMembershipCard';
+import ProfileSessionsCard from '../../components/Amicale/Profile/ProfileSessionsCard';
 import { useNavigation } from '@react-navigation/core';
 import { useAuthenticatedRequest } from '../../context/loginContext';
+import { MainRoutes } from '../../navigation/MainNavigator';
 
 export type ProfileClubType = {
   id: number;
@@ -71,6 +73,9 @@ export type ProfileDataType = {
 function ProfileScreen() {
   const navigation = useNavigation();
   const [dialogVisible, setDialogVisible] = useState(false);
+  const [sessionsToLogout, setSessionsToLogout] = useState<string | undefined>(
+    'current'
+  );
   const request = useAuthenticatedRequest<ProfileDataType>('user/self');
 
   useLayoutEffect(() => {
@@ -94,44 +99,39 @@ function ProfileScreen() {
         id: string;
         render: () => React.ReactElement;
       }> = [];
-      for (let i = 0; i < 4; i++) {
-        switch (i) {
-          case 0:
-            flatListData.push({
-              id: i.toString(),
-              render: () => <ProfileWelcomeCard firstname={data?.firstName} />,
-            });
-            break;
-          case 1:
-            flatListData.push({
-              id: i.toString(),
-              render: () => <ProfilePersonalCard profile={data} />,
-            });
-            break;
-          case 2:
-            flatListData.push({
-              id: i.toString(),
-              render: () => <ProfileClubCard clubs={data?.clubs} />,
-            });
-            break;
-          default:
-            flatListData.push({
-              id: i.toString(),
-              render: () => (
-                <ProfileMembershipCard
-                  cotisation={data?.cotisation}
-                  valid={data?.cotisationValid}
-                />
-              ),
-            });
-        }
-      }
+      flatListData.push({
+        id: 'welcome',
+        render: () => <ProfileWelcomeCard firstname={data?.firstName} />,
+      });
+      flatListData.push({
+        id: 'personal',
+        render: () => <ProfilePersonalCard profile={data} />,
+      });
+      if (data?.clubs)
+        flatListData.push({
+          id: 'clubs',
+          render: () => <ProfileClubCard clubs={data?.clubs} />,
+        });
+      flatListData.push({
+        id: 'cotisation',
+        render: () => (
+          <ProfileMembershipCard
+            cotisation={data?.cotisation}
+            valid={data?.cotisationValid}
+          />
+        ),
+      });
+      flatListData.push({
+        id: 'sessions',
+        render: () => <ProfileSessionsCard logout={showDisconnectDialog} />,
+      });
       return (
         <View style={GENERAL_STYLES.flex}>
           <CollapsibleFlatList renderItem={getRenderItem} data={flatListData} />
           <LogoutDialog
             visible={dialogVisible}
             onDismiss={hideDisconnectDialog}
+            sessions={sessionsToLogout}
           />
         </View>
       );
@@ -146,9 +146,16 @@ function ProfileScreen() {
     item: { id: string; render: () => React.ReactElement };
   }) => item.render();
 
-  const showDisconnectDialog = () => setDialogVisible(true);
+  const showDisconnectDialog = (session?: string) => {
+    setDialogVisible(true);
+    if (session !== 'all' && session !== 'others') session = 'current';
+    setSessionsToLogout(session);
+  };
 
-  const hideDisconnectDialog = () => setDialogVisible(false);
+  const hideDisconnectDialog = (logout: boolean) => {
+    setDialogVisible(false);
+    if (logout) navigation.navigate(MainRoutes.Main);
+  };
 
   return <RequestScreen request={request} render={getScreen} />;
 }

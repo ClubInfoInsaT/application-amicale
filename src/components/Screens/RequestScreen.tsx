@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import ErrorView from './ErrorView';
+import ErrorView, { ErrorProps } from './ErrorView';
 import { useRequestLogic } from '../../utils/customHooks';
 import {
   useFocusEffect,
@@ -24,6 +24,8 @@ export type RequestScreenProps<T> = {
     code?: API_REQUEST_CODES,
     message?: string
   ) => React.ReactElement;
+  renderError?: (props: ErrorProps) => React.ReactElement;
+  renderLoading?: () => React.ReactElement;
   cache?: T;
   onCacheUpdate?: (newCache: T) => void;
   onMajorError?: (status: number, code?: number) => void;
@@ -107,28 +109,36 @@ export default function RequestScreen<T>(props: Props<T>) {
   }, [code, navigation, route, onLogout]);
 
   if (data === undefined && loading && props.showLoading !== false) {
-    return <BasicLoadingScreen />;
+    return props.renderLoading ? props.renderLoading() : <BasicLoadingScreen />;
   } else if (
     data === undefined &&
     (status !== REQUEST_STATUS.SUCCESS ||
       (status === REQUEST_STATUS.SUCCESS && code !== undefined)) &&
     props.showError !== false
   ) {
-    return (
+    const button = isErrorCritical(code)
+      ? undefined
+      : {
+          icon: 'refresh',
+          text: i18n.t('general.retry'),
+          onPress: () => refreshData(),
+        };
+    return props.renderError ? (
+      props.renderError({
+        status,
+        code,
+        message,
+        icon: undefined,
+        loading,
+        button,
+      })
+    ) : (
       <ErrorView
         status={status}
         code={code}
         message={message}
         loading={loading}
-        button={
-          isErrorCritical(code)
-            ? undefined
-            : {
-              icon: 'refresh',
-              text: i18n.t('general.retry'),
-              onPress: () => refreshData(),
-            }
-        }
+        button={button}
       />
     );
   } else {

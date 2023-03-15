@@ -19,14 +19,15 @@
 
 import * as React from 'react';
 import i18n from 'i18n-js';
-import LoadingConfirmDialog from '../Dialogs/LoadingConfirmDialog';
+import AlertDialog from '../Dialogs/AlertDialog';
 import { useLogout } from '../../utils/logout';
 import RequestScreen from '../../components/Screens/RequestScreen';
 import { useAuthenticatedRequest } from '../../context/loginContext';
 
 type PropsType = {
   visible: boolean;
-  onDismiss: () => void;
+  onDismiss: (logout: boolean) => void;
+  sessions?: string;
 };
 
 type ResultType = {
@@ -35,26 +36,31 @@ type ResultType = {
 
 function LogoutConfirmDialog(props: PropsType) {
   const onLogout = useLogout();
-  const request = useAuthenticatedRequest<ResultType>('auth/logout', 'GET');
+  const session = props.sessions ? props.sessions : 'current';
+  const request = useAuthenticatedRequest<ResultType>(
+    'auth/logout?session=' + session,
+    'GET'
+  );
   // Use a loading dialog as it can take some time to update the context
   // let message = i18n.t('dialog.disconnect.message');
-  const onClickAccept = async (): Promise<void> => {
+  const onDismiss = async (): Promise<void> => {
     return new Promise((resolve: () => void) => {
-      onLogout();
-      props.onDismiss();
+      if (session !== 'others') onLogout();
+      props.onDismiss(true);
       resolve();
     });
   };
 
   const renderDialog = (data: ResultType | undefined, loading: boolean) => {
-    let message = loading ? 'Loading...' : 'sucess : ' + data?.success;
+    let message = loading ? 'Loading...' : 'sucess : ' + data?.success; // TODO i18n
+    const title = loading // TODO i18n
+      ? i18n.t('dialog.disconnect.titleLoading')
+      : i18n.t('dialog.disconnect.title');
     return (
-      <LoadingConfirmDialog
+      <AlertDialog
         visible={props.visible}
-        onDismiss={props.onDismiss}
-        onAccept={onClickAccept}
-        title={i18n.t('dialog.disconnect.title')}
-        titleLoading={i18n.t('dialog.disconnect.titleLoading')}
+        onDismiss={onDismiss}
+        title={title}
         message={message}
       />
     );

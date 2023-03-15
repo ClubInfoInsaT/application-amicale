@@ -24,7 +24,8 @@ import LogoutConfirmDialog from './LogoutConfirmDialog';
 
 type PropsType = {
   visible: boolean;
-  onDismiss: () => void;
+  onDismiss: (logout: boolean) => void;
+  sessions?: string;
 };
 
 function LogoutDialog(props: PropsType) {
@@ -38,15 +39,19 @@ function LogoutDialog(props: PropsType) {
   };
 
   return confirmed ? (
-    <LogoutConfirmDialog visible={props.visible} onDismiss={props.onDismiss} />
+    <LogoutConfirmDialog
+      visible={props.visible}
+      onDismiss={props.onDismiss}
+      sessions={props.sessions}
+    />
   ) : (
     <LoadingConfirmDialog
       visible={props.visible}
-      onDismiss={props.onDismiss}
+      onDismiss={() => props.onDismiss(false)}
       onAccept={onClickAccept}
-      title={i18n.t('dialog.disconnect.title')}
-      titleLoading={i18n.t('dialog.disconnect.titleLoading')}
-      message={i18n.t('dialog.disconnect.message')}
+      title={i18n.t('dialog.disconnect.title')} // TODO i18n , text might not be accurate (This asks for confirmation)
+      titleLoading={i18n.t('dialog.disconnect.titleLoading')} // TODO i18n likely displayed while loading
+      message={i18n.t('dialog.disconnect.message')} // TODO i18n again
     />
   );
 }

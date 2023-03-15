@@ -128,13 +128,13 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
         ListHeaderComponent={
           props.renderListHeaderComponent != null
             ? props.renderListHeaderComponent(
-              data,
-              loading,
-              lastRefreshDate,
-              refreshData,
-              status,
-              code
-            )
+                data,
+                loading,
+                lastRefreshDate,
+                refreshData,
+                status,
+                code
+              )
             : null
         }
         ListEmptyComponent={
@@ -146,10 +146,10 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
               button={
                 code !== API_REQUEST_CODES.BAD_TOKEN
                   ? {
-                    icon: 'refresh',
-                    text: i18n.t('general.retry'),
-                    onPress: () => refreshData(),
-                  }
+                      icon: 'refresh',
+                      text: i18n.t('general.retry'),
+                      onPress: () => refreshData(),
+                    }
                   : undefined
               }
             />

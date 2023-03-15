@@ -28,7 +28,7 @@ import {
   REQUEST_STATUS,
 } from '../../utils/Requests';
 
-type Props = {
+export type ErrorProps = {
   status?: REQUEST_STATUS;
   code?: API_REQUEST_CODES;
   icon?: string;
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function ErrorView(props: Props) {
+function ErrorView(props: ErrorProps) {
   const theme = useTheme();
   const fullMessage = getErrorMessage(props, props.message, props.icon);
   const { button } = props;

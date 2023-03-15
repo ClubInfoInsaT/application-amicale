@@ -135,13 +135,13 @@ export function useRequestLogic<T>(
     T | undefined,
     (newRequest?: () => Promise<T>) => void
   ] = [
-      response.loading,
-      response.lastRefreshDate,
-      response.status,
-      response.code,
-      response.message,
-      cache ? cache : response.data,
-      refreshData,
-    ];
+    response.loading,
+    response.lastRefreshDate,
+    response.status,
+    response.code,
+    response.message,
+    cache ? cache : response.data,
+    refreshData,
+  ];
   return value;
 }
