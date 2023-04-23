@@ -173,13 +173,17 @@ export async function connectToAmicale(email: string, password: string) {
  * If no data was found, returns an empty object
  *
  * @param url The urls to fetch data from
+ * @param httpOptions Fetch options, see fetch docs on MDN
  * @return Promise<any>
  */
-export async function readData<T>(url: string): Promise<T> {
+export async function readData<T>(
+  url: string,
+  httpOptions?: object
+): Promise<T> {
   return new Promise((resolve: (response: T) => void, reject: () => void) => {
-    fetch(url)
+    fetch(url, httpOptions)
       .then(async (response: Response): Promise<any> => response.json())
-      .then((data: T) => resolve(data))
-      .catch(() => reject());
+      .then(resolve)
+      .catch(reject);
   });
 }
