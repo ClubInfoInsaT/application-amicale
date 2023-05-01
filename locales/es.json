@@ -318,26 +318,6 @@
         "button": "¡Gracias!"
       }
     },
-
-    "scanner": {
-      "title": "Scanotron 3000",
-      "permissions": {
-        "error": "Scanotron 3000 necesita acceder a la cámara para escanear códigos QR.\n\nLa cámara no se utilizará nunca a otro fin.",
-        "button": "Autorizar el acceso a la cámara"
-      },
-      "error": {
-        "title": "Código QR inválido",
-        "message": "El código QR escaneado no ha sido reconocido. Verifica su validez."
-      },
-      "help": {
-        "button": "¿Qué escanear?"
-      },
-      "mascotDialog": {
-        "title": "¿Scano...qué?",
-        "message": "¡Scanotron 3000 te permite escanear los códigos QR del Campus, mostrados por los clubes o responsables, para obtener más información.!\n\nLa cámara no se utilizará nunca para ningún otro fin.",
-        "button": "Okay"
-      }
-    },
     "settings": {
       "title": "Parámetros",
       "generalCard": "General",
