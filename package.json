@@ -20,7 +20,6 @@
     "test-locales": "node ./scripts/test-locales.js"
   },
   "dependencies": {
-    "@nartc/react-native-barcode-mask": "1.2.0",
     "@react-native-async-storage/async-storage": "1.16.1",
     "@react-native-community/masked-view": "0.1.11",
     "@react-native-community/push-notification-ios": "1.10.1",
@@ -36,7 +35,6 @@
     "react-native-app-intro-slider": "4.0.4",
     "react-native-autolink": "4.0.0",
     "react-native-calendars": "1.1269.0",
-    "react-native-camera": "4.2.1",
     "react-native-collapsible": "1.6.0",
     "react-native-gesture-handler": "1.10.3",
     "react-native-image-zoom-viewer": "3.0.1",
