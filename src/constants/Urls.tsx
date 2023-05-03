@@ -95,8 +95,7 @@ export default {
     yearlyPlanning:
       'https://wiki.etud.insa-toulouse.fr/books/quotidien/page/planning-de-lannee-en-cours',
     schooling: 'https://mascolarite.insa-toulouse.fr/',
-    wikiSosInfra:
-      'https://wiki.etud.insa-toulouse.fr/books/ressources-insa/page/signaler-un-probleme-dans-un-batiment-chauffage-lumiere',
+    sosInfra: 'http://sosinfra.insa-toulouse.fr/',
   },
   about: {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
