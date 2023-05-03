@@ -301,7 +301,7 @@ export function getINSAServices(
       image: Urls.images.sosinfra,
       onPress: () =>
         onPress(MainRoutes.Website, {
-          host: Urls.websites.sosInra,
+          host: Urls.websites.sosInfra,
           title: i18n.t('screens.websites.sosinfra'),
         }),
     },

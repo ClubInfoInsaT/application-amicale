@@ -95,7 +95,7 @@ export default {
     yearlyPlanning:
       'https://wiki.etud.insa-toulouse.fr/books/quotidien/page/planning-de-lannee-en-cours',
     schooling: 'https://mascolarite.insa-toulouse.fr/',
-    sosInra: 'http://sosinfra.insa-toulouse.fr/',
+    sosInfra: 'http://sosinfra.insa-toulouse.fr/',
   },
   about: {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
