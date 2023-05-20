@@ -54,6 +54,9 @@ const injectedJS = {
     `document.querySelector('head').innerHTML += '${BIB_STYLE}';` +
     'if ($(".hero-unit-form").length > 0 && $("#customBackButton").length === 0)' +
     `$(".hero-unit-form").append("${BIB_BACK_BUTTON}");true;`,
+  [Urls.websites.sosInfra]:
+    `document.querySelector("#ResponsiveNavigationHandle").style.top = "unset";` +
+    `document.querySelector("#Navigation").style.paddingTop = "100px";`,
 };
 
 const customPaddingFunctions = {
