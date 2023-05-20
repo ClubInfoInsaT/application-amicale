@@ -231,6 +231,17 @@ export function getINSAServices(
 ): Array<ServiceItemType> {
   const insaDataset = [
     {
+      key: SERVICES_KEY.SOS_INFRA,
+      title: i18n.t('screens.websites.sosinfra'),
+      subtitle: i18n.t('screens.services.descriptions.sosinfra'),
+      image: Urls.images.sosinfra,
+      onPress: () =>
+        onPress(MainRoutes.Website, {
+          host: Urls.websites.sosInfra,
+          title: i18n.t('screens.websites.sosinfra'),
+        }),
+    },
+    {
       key: SERVICES_KEY.RU,
       title: i18n.t('screens.menu.title'),
       subtitle: i18n.t('screens.services.descriptions.self'),
@@ -292,17 +303,6 @@ export function getINSAServices(
         onPress(MainRoutes.Website, {
           host: Urls.websites.schooling,
           title: i18n.t('screens.websites.schooling'),
-        }),
-    },
-    {
-      key: SERVICES_KEY.SOS_INFRA,
-      title: i18n.t('screens.websites.sosinfra'),
-      subtitle: i18n.t('screens.services.descriptions.sosinfra'),
-      image: Urls.images.sosinfra,
-      onPress: () =>
-        onPress(MainRoutes.Website, {
-          host: Urls.websites.sosInfra,
-          title: i18n.t('screens.websites.sosinfra'),
         }),
     },
   ];
