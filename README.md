@@ -4,7 +4,10 @@
 [<img src="https://etud.insa-toulouse.fr/~amicale_app/images/promo/google-play-badge.png" alt="google-play" width="150"/>](https://play.google.com/store/apps/details?id=fr.amicaleinsat.application)
 
 
-Projet démarré pendant l'été 2019 par Arnaud Vergnet (alors en 3MIC), cette application compatible Android et iOS permet aux étudiants d'avoir un accès facile aux informations du campus :
+Projet démarré pendant l'été 2019 par Arnaud Vergnet (alors en 3MIC) puis
+repris en 2022 par Paul ALNET (actuel 3MIC), cette application compatible
+Android et iOS permet aux étudiants d'avoir un accès facile aux informations du
+campus :
  - Connexion à son compte Amicale
  - Liste des événements sur le campus
  - État des machines à laver
@@ -71,6 +74,9 @@ Tu trouveras [une liste de liens utiles](doc/LINKS.md) pour retrouver toutes les
 * **Titouan Labourdette** : Étudiant en IR (2020). Il a beaucoup aidé pour trouver des bugs et proposer des nouvelles fonctionnalités.
 * **Théo Tami** : Étudiant en AE (2020). Si l'application marche sur iOS, c'est grâce à son aide lors de ses nombreux tests. 
 * **Nestor Carmona Moreno** : Étudiant en MA ModIA (2022). Il a traduit l'application en espagnol et italien.
+* **Gérald Leban** : Étudiant en IR (2023). Il a contribué au développement de nouvelles interfaces.
+* **Baptiste Rébillard** : Étudiant en MIC (2023). Responsable du nouveau site de l'Amicale (2023), il a développé la nouvelle API.
+
 
 # 📄 Licence
 
