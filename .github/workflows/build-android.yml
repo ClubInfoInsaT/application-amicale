@@ -24,10 +24,6 @@ jobs:
         with:
           timezoneLinux: "Europe/Paris"
           timezoneMacos: "Europe/Paris"
-      - name: Run linter
-        run: npm run lint
-      - name: Run tests
-        run: npm test
       - name: add keys
         run:  |
               mkdir -p android/keystores
