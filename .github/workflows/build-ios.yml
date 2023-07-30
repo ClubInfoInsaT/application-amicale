@@ -27,6 +27,8 @@ jobs:
           timezoneMacos: "Europe/Paris"
 
       - name: Install pod dependencies
+        env:
+          NO_FLIPPER: '1'
         run: |
           cd ios && pod install
 
