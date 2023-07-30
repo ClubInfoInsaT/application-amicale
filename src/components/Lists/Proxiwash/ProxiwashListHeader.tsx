@@ -8,7 +8,7 @@ import {
   Text,
   useTheme,
 } from 'react-native-paper';
-import TimeAgo from 'react-native-timeago';
+import TimeAgo from '@manu_omg/react-native-timeago';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/core';
 import { MainRoutes } from '../../../navigation/MainNavigator';
@@ -16,11 +16,11 @@ import ProxiwashConstants from '../../../constants/ProxiwashConstants';
 import { ProxiwashInfoType } from '../../../screens/Proxiwash/ProxiwashScreen';
 import * as Animatable from 'react-native-animatable';
 
-let moment = require('moment'); //load moment module to set local language
-require('moment/locale/fr'); // import moment local language file during the application build
-require('moment/locale/es');
-require('moment/locale/it');
-//moment.locale(i18n.defaultLocale);
+let days = require('dayjs'); //load moment module to set local language
+require('dayjs/locale/fr'); // import daysjs local language file during the application build
+require('dayjs/locale/es');
+require('dayjs/locale/it');
+//days.locale(i18n.defaultLocale);
 
 type Props = {
   date?: Date;
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 });
 
 function ProxiwashListHeader(props: Props) {
-  moment.locale(i18n.currentLocale()); // Locales are scope-specific
+  days.locale(i18n.currentLocale()); // Locales are scope-specific
   const navigation = useNavigation();
   const theme = useTheme();
   const { date, selectedWash } = props;
