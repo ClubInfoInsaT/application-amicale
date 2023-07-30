@@ -89,7 +89,7 @@ npm ci --legacy-peer-deps
 
 Si tu es sur macOS, tu devras aussi lancer la commande suivante pour installer les dépendances propres à iOS :
 ````shell script
-cd ios && pod install
+cd ios && NO_FLIPPER=1 pod install
 ````
 
 En cas de problème d'installation (notamment lors du changement de branche), supprime le dossier `node_modules` et relance les commandes précédentes.
