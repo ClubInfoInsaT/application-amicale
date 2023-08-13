@@ -33,7 +33,7 @@ jobs:
           cd ios && pod install
 
       - name: Build IOS App
-        uses: yukiarrr/ios-build-action@v1.4.0
+        uses: yukiarrr/ios-build-action@v1.11.0
         with:
           project-path: ios/Campus.xcodeproj
           p12-base64: ${{ secrets.IOS_P12_BASE64 }}
