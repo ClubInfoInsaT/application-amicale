@@ -475,7 +475,9 @@ function ProxiwashScreen() {
     <View style={GENERAL_STYLES.flex}>
       <View style={styles.container}>
         <WebSectionList
-          request={() => readData<FetchedDataType>(data.url)}
+          request={() =>
+            readData<FetchedDataType>(data.url, { cache: 'no-cache' })
+          }
           createDataset={createDataset}
           renderItem={getRenderItem}
           renderSectionHeader={getRenderSectionHeader}

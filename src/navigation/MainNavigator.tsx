@@ -58,7 +58,6 @@ import IntroScreen from '../screens/Intro/IntroScreen';
 import { useLoginState } from '../context/loginContext';
 import ProxiwashAboutScreen from '../screens/Proxiwash/ProxiwashAboutScreen';
 import PlanningDisplayScreen from '../screens/Planning/PlanningDisplayScreen';
-import ScannerScreen from '../screens/Home/ScannerScreen';
 import FeedItemScreen from '../screens/Home/FeedItemScreen';
 import GroupSelectionScreen from '../screens/Planex/GroupSelectionScreen';
 import ServicesSectionScreen from '../screens/Services/ServicesSectionScreen';
@@ -99,7 +98,6 @@ export enum MainRoutes {
   Feedback = 'feedback',
   Website = 'website',
   PlanningInformation = 'planning-information',
-  Scanner = 'scanner',
   FeedInformation = 'feed-information',
   GroupSelect = 'group-select',
   ServicesSection = 'services-section',
@@ -382,11 +380,6 @@ function getRegularScreens(createTabNavigator: () => React.ReactElement) {
         name={MainRoutes.PlanningInformation}
         component={PlanningDisplayScreen}
         options={{ title: i18n.t('screens.planning.eventDetails') }}
-      />
-      <MainStack.Screen
-        name={MainRoutes.Scanner}
-        component={ScannerScreen}
-        options={{ title: i18n.t('screens.scanner.title') }}
       />
       <MainStack.Screen
         name={MainRoutes.FeedInformation}

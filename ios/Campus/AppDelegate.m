@@ -8,7 +8,6 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
-#import <React/RCTRootView.h>
 
 #import <React/RCTLinkingManager.h>
 #import "RNSplashScreen.h"
@@ -50,25 +49,15 @@ static void InitializeFlipper(UIApplication *application) {
     InitializeFlipper(application);
   #endif
 
-  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"Campus" initialProperties:nil];
-  if (@available(iOS 13.0, *)) {
-    rootView.backgroundColor = [UIColor systemBackgroundColor];
-  } else {
-    rootView.backgroundColor = [UIColor whiteColor];
-  }
+  self.moduleName = @"Campus";
+  // You can add your custom initial props in the dictionary below.
+  // They will be passed down to the ViewController used by React Native.
+  self.initialProps = @{};
 
-  self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  UIViewController *rootViewController = [UIViewController new];
-  rootViewController.view = rootView;
-  self.window.rootViewController = rootViewController;
-  [self.window makeKeyAndVisible];
 
-// Define UNUserNotificationCenter
+  // Define UNUserNotificationCenter
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-  center.delegate = self;
-  [RNSplashScreen show];
-  return YES;
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 //Called when a notification is delivered to a foreground app.

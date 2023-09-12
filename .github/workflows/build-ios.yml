@@ -19,7 +19,7 @@ jobs:
         run: echo "::set-output name=tag::`git describe --tags`"
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       - uses: szenius/set-timezone@v1.0
         with:
@@ -27,11 +27,13 @@ jobs:
           timezoneMacos: "Europe/Paris"
 
       - name: Install pod dependencies
+        env:
+          NO_FLIPPER: '1'
         run: |
           cd ios && pod install
 
       - name: Build IOS App
-        uses: yukiarrr/ios-build-action@v1.4.0
+        uses: yukiarrr/ios-build-action@v1.11.0
         with:
           project-path: ios/Campus.xcodeproj
           p12-base64: ${{ secrets.IOS_P12_BASE64 }}

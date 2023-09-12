@@ -343,25 +343,6 @@
     "usefulLinks": {
       "title": "Useful links"
     },
-    "scanner": {
-      "title": "Scanotron 3000",
-      "permissions": {
-        "error": "Scanotron 3000 needs access to the camera in order to scan QR codes.\nThe camera will never be used for any other purpose.",
-        "button": "Grant camera access"
-      },
-      "error": {
-        "title": "QR code invalid",
-        "message": "The scanned QR code could not be recognised, please make sure it is valid."
-      },
-      "help": {
-        "button": "What can I scan?"
-      },
-      "mascotDialog": {
-        "title": "Scano...what?",
-        "message": "Scanotron 3000 allows you to scan Campus QR codes, created by clubs or event managers, to get more detailed info!\n\nThe camera will never be used for any other purpose.",
-        "button": "OK"
-      }
-    },
     "settings": {
       "title": "Settings",
       "generalCard": "General",

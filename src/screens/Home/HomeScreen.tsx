@@ -339,8 +339,6 @@ function HomeScreen(props: Props) {
 
   const hideDisconnectDialog = () => setDialogVisible(false);
 
-  const openScanner = () => navigation.navigate(MainRoutes.Scanner);
-
   /**
    * Creates the dataset to be used in the FlatList
    *
@@ -439,7 +437,6 @@ function HomeScreen(props: Props) {
           emotion={MASCOT_STYLE.CUTE}
         />
       ) : null}
-      <AnimatedFAB ref={fabRef} icon="qrcode-scan" onPress={openScanner} />
       <LogoutDialog visible={dialogVisible} onDismiss={hideDisconnectDialog} />
     </View>
   );
