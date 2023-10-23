@@ -209,14 +209,16 @@ function PlanningScreen(props: PropsType) {
       });
     };
     const logoUrl = event.logo;
-    console.log(event.title, logoUrl);
+    const date = new Date(event.start * 1000);
+    let subtitle = dateToTimeString(date, true);
+    if (event.location) subtitle += ' @ ' + event.location.trim();
     if (logoUrl) {
       return (
         <View>
           <Divider />
           <List.Item
             title={event.title}
-            description={dateToTimeString(new Date(event.start), false)}
+            description={subtitle}
             left={() => (
               <Avatar.Image source={{ uri: logoUrl }} style={styles.icon} />
             )}
@@ -230,7 +232,7 @@ function PlanningScreen(props: PropsType) {
         <Divider />
         <List.Item
           title={event.title}
-          description={dateToTimeString(new Date(event.start), false)}
+          description={subtitle}
           onPress={onPress}
         />
       </View>
