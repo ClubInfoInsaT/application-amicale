@@ -244,7 +244,22 @@ function PlanningScreen(props: PropsType) {
    */
   const getRenderEmptyDate = () => <Divider />;
 
-  console.log(refreshing);
+  /**
+   * Renders screen when no events are available. Also displays while loading.
+   * Tapping the text attempts to reload
+   */
+  const getRenderNoEvents = () => {
+    return (
+      <View>
+        <Divider />
+        <List.Item
+          title={'Aucun événement'}
+          description={"Aucun événement n'est prévu pour le moment."}
+          onPress={onRefresh}
+        />
+      </View>
+    );
+  };
 
   return (
     <View style={GENERAL_STYLES.flex}>
@@ -271,18 +286,7 @@ function PlanningScreen(props: PropsType) {
         renderItem={getRenderItem}
         renderEmptyDate={getRenderEmptyDate}
         // Specify what should be rendered instead of ActivityIndicator
-        renderEmptyData={() => {
-          return (
-            <View>
-              <Divider />
-              <List.Item
-                title={'Aucun événement'}
-                description={"Aucun événement n'est prévu pour le moment."}
-                onPress={onRefresh}
-              />
-            </View>
-          );
-        }}
+        renderEmptyData={getRenderNoEvents}
         // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
         firstDay={1}
         // ref to this agenda in order to handle back button event
