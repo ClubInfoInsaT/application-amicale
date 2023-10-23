@@ -17,7 +17,6 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { stringToDate } from './Planning';
 import type { PlanningEventType } from './Planning';
 
 /**
@@ -52,7 +51,7 @@ export function getEventsAfterLimit(
 ): Array<PlanningEventType> {
   const validEvents: Array<PlanningEventType> = [];
   events.forEach((event: PlanningEventType) => {
-    const startDate = stringToDate(event.date_begin);
+    const startDate = new Date(event.start);
     if (startDate != null && startDate >= limit) {
       validEvents.push(event);
     }
@@ -71,7 +70,7 @@ export function getFutureEvents(
   const validEvents: Array<PlanningEventType> = [];
   const now = new Date();
   events.forEach((event: PlanningEventType) => {
-    const startDate = stringToDate(event.date_begin);
+    const startDate = new Date(event.start);
     if (startDate != null && startDate > now) {
       validEvents.push(event);
     }

@@ -26,9 +26,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { readData } from '../../utils/WebData';
 import {
   generateEventAgenda,
-  getCurrentDateString,
-  getDateOnlyString,
-  getTimeOnlyString,
+  dateToDateString,
+  dateToTimeString,
   PlanningEventType,
 } from '../../utils/Planning';
 import CustomAgenda from '../../components/Overrides/CustomAgenda';
@@ -84,6 +83,12 @@ type PropsType = {
   navigation: StackNavigationProp<any>;
 };
 
+type GetEventsResponseType = {
+  data: {
+    events: PlanningEventType[];
+  };
+};
+
 const AGENDA_MONTH_SPAN = 3;
 
 const styles = StyleSheet.create({
@@ -97,8 +102,8 @@ const styles = StyleSheet.create({
  */
 function PlanningScreen(props: PropsType) {
   let agendaRef: null | Agenda<any>;
-  let minTimeBetweenRefresh = 60;
-  let currentDate: string | null = getDateOnlyString(getCurrentDateString());
+  let minTimeBetweenRefresh = 5;
+  let currentDate: string | null = dateToDateString(new Date());
 
   if (i18n.currentLocale().startsWith('fr')) {
     LocaleConfig.defaultLocale = 'fr';
@@ -158,10 +163,10 @@ function PlanningScreen(props: PropsType) {
 
     if (canRefresh) {
       setRefreshing(true);
-      readData<Array<PlanningEventType>>(Urls.amicale.events)
-        .then((fetchedData) => {
+      readData<GetEventsResponseType>(Urls.amicale.events)
+        .then((response) => {
           setRefreshing(false);
-          setAgendaItems(generateEventAgenda(fetchedData, AGENDA_MONTH_SPAN));
+          setAgendaItems(generateEventAgenda(response.data.events));
           setLastRefresh(new Date());
         })
         .catch(() => {
@@ -195,24 +200,25 @@ function PlanningScreen(props: PropsType) {
    * @param item The current event to render
    * @return {*}
    */
-  const getRenderItem = (item: PlanningEventType) => {
+  const getRenderItem = (event: PlanningEventType) => {
     const { navigation } = props;
     const onPress = () => {
       navigation.navigate(MainRoutes.PlanningInformation, {
         type: 'full',
-        data: item,
+        data: event,
       });
     };
-    const logo = item.logo;
-    if (logo) {
+    const logoUrl = event.logo;
+    console.log(event.title, logoUrl);
+    if (logoUrl) {
       return (
         <View>
           <Divider />
           <List.Item
-            title={item.title}
-            description={getTimeOnlyString(item.date_begin)}
+            title={event.title}
+            description={dateToTimeString(new Date(event.start), false)}
             left={() => (
-              <Avatar.Image source={{ uri: logo }} style={styles.icon} />
+              <Avatar.Image source={{ uri: logoUrl }} style={styles.icon} />
             )}
             onPress={onPress}
           />
@@ -223,8 +229,8 @@ function PlanningScreen(props: PropsType) {
       <View>
         <Divider />
         <List.Item
-          title={item.title}
-          description={getTimeOnlyString(item.date_begin)}
+          title={event.title}
+          description={dateToTimeString(new Date(event.start), false)}
           onPress={onPress}
         />
       </View>
@@ -237,6 +243,8 @@ function PlanningScreen(props: PropsType) {
    * @return {*}
    */
   const getRenderEmptyDate = () => <Divider />;
+
+  console.log(refreshing);
 
   return (
     <View style={GENERAL_STYLES.flex}>
@@ -262,6 +270,19 @@ function PlanningScreen(props: PropsType) {
         refreshing={refreshing}
         renderItem={getRenderItem}
         renderEmptyDate={getRenderEmptyDate}
+        // Specify what should be rendered instead of ActivityIndicator
+        renderEmptyData={() => {
+          return (
+            <View>
+              <Divider />
+              <List.Item
+                title={'Aucun événement'}
+                description={"Aucun événement n'est prévu pour le moment."}
+                onPress={onRefresh}
+              />
+            </View>
+          );
+        }}
         // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
         firstDay={1}
         // ref to this agenda in order to handle back button event
