@@ -21,7 +21,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
-import { getDateOnlyString, getTimeOnlyString } from '../../utils/Planning';
+import { dateToDateString, dateToTimeString } from '../../utils/Planning';
 import DateManager from '../../managers/DateManager';
 import { apiRequest } from '../../utils/WebData';
 import CustomHTML from '../../components/Overrides/CustomHTML';
@@ -68,13 +68,10 @@ function PlanningDisplayScreen(props: Props) {
     if (data == null) {
       return <View />;
     }
-    let subtitle = getTimeOnlyString(data.date_begin);
-    const dateString = getDateOnlyString(data.date_begin);
-    if (dateString !== null && subtitle != null) {
-      subtitle += ` | ${DateManager.getInstance().getTranslatedDate(
-        dateString
-      )}`;
-    }
+    const date = new Date(data.start * 1000);
+    let subtitle = dateToDateString(date) + ' ' + dateToTimeString(date, true);
+    if (data.location) subtitle += ' @ ' + data.location.trim();
+
     return (
       <CollapsibleScrollView style={styles.container} hasTab>
         <Card.Title title={data.title} subtitle={subtitle} />
