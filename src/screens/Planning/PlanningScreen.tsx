@@ -251,6 +251,7 @@ function PlanningScreen(props: PropsType) {
    * Tapping the text attempts to reload
    */
   const getRenderNoEvents = () => {
+    // TODO i18n
     return (
       <View>
         <Divider />

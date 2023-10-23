@@ -130,7 +130,6 @@ export function generateEventAgenda(events: PlanningEventType[]): {
       eventsByDate[dateString].push(event);
     }
   });
-  // console.log(eventsByDate);
 
   return eventsByDate;
 }
