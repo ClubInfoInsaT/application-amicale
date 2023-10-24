@@ -53,11 +53,11 @@ export function stringMatchQuery(str: string, query: string): boolean {
  * @returns {boolean} True if at least one entry is in both arrays
  */
 export function isItemInCategoryFilter(
-  filter: Array<number>,
-  categories: Array<number | null>
+  filter: Array<string>,
+  categories: Array<string | null>
 ): boolean {
   let itemFound = false;
-  categories.forEach((cat: number | null) => {
+  categories.forEach((cat: string | null) => {
     if (cat != null && filter.indexOf(cat) !== -1) {
       itemFound = true;
     }

@@ -35,23 +35,28 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuthenticatedRequest } from '../../../context/loginContext';
 import { MainRoutes } from '../../../navigation/MainNavigator';
 
-export type ClubCategoryType = {
-  id: number;
+export type ClubRespoType = {
   name: string;
+  role: string;
 };
 
 export type ClubType = {
   id: number;
   name: string;
-  description: string;
-  logo: string;
-  email: string | null;
-  category: Array<number | null>;
-  responsibles: Array<string>;
+  mail: string | null;
+  website: string | null;
+  instagram: string | null;
+  discord: string | null;
+  description: string | null;
+  type: number;
+  categories: Array<string>;
+  respo: Array<string>;
+  responsibles: Array<ClubRespoType>;
+  logo: string | null;
 };
 
 type ResponseType = {
-  categories: Array<ClubCategoryType>;
+  categories: Array<string>;
   clubs: Array<ClubType>;
 };
 
@@ -61,9 +66,9 @@ function ClubListScreen() {
   const navigation = useNavigation();
   const request = useAuthenticatedRequest<ResponseType>('clubs/list');
   const [currentlySelectedCategories, setCurrentlySelectedCategories] =
-    useState<Array<number>>([]);
+    useState<Array<string>>([]);
   const [currentSearchString, setCurrentSearchString] = useState('');
-  const categories = useRef<Array<ClubCategoryType>>([]);
+  const categories = useRef<Array<string>>([]);
 
   useLayoutEffect(() => {
     const getSearchBar = () => {
@@ -116,7 +121,7 @@ function ClubListScreen() {
     });
   };
 
-  const onChipSelect = (id: number) => {
+  const onChipSelect = (id: string) => {
     updateFilteredData(null, id);
   };
 
@@ -148,28 +153,13 @@ function ClubListScreen() {
     }
   };
 
-  const getCategoryOfId = (id: number): ClubCategoryType | null => {
-    let cat = null;
-    categories.current.forEach((item: ClubCategoryType) => {
-      if (id === item.id) {
-        cat = item;
-      }
-    });
-    return cat;
-  };
-
   const getRenderItem = ({ item }: { item: ClubType }) => {
     const onPress = () => {
       onListItemPress(item);
     };
     if (shouldRenderItem(item)) {
       return (
-        <ClubListItem
-          categoryTranslator={getCategoryOfId}
-          item={item}
-          onPress={onPress}
-          height={LIST_ITEM_HEIGHT}
-        />
+        <ClubListItem item={item} onPress={onPress} height={LIST_ITEM_HEIGHT} />
       );
     }
     return null;
@@ -188,7 +178,7 @@ function ClubListScreen() {
    */
   const updateFilteredData = (
     filterStr: string | null,
-    categoryId: number | null
+    categoryId: string | null
   ) => {
     const newCategoriesState = [...currentlySelectedCategories];
     let newStrState = currentSearchString;
@@ -218,7 +208,7 @@ function ClubListScreen() {
   const shouldRenderItem = (item: ClubType): boolean => {
     let shouldRender =
       currentlySelectedCategories.length === 0 ||
-      isItemInCategoryFilter(currentlySelectedCategories, item.category);
+      isItemInCategoryFilter(currentlySelectedCategories, item.categories);
     if (shouldRender) {
       shouldRender = stringMatchQuery(item.name, currentSearchString);
     }

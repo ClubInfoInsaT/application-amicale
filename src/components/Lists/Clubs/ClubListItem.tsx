@@ -20,15 +20,11 @@
 import * as React from 'react';
 import { Avatar, Chip, List, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-import type {
-  ClubCategoryType,
-  ClubType,
-} from '../../../screens/Amicale/Clubs/ClubListScreen';
+import type { ClubType } from '../../../screens/Amicale/Clubs/ClubListScreen';
 import GENERAL_STYLES from '../../../constants/Styles';
 
 type Props = {
   onPress: () => void;
-  categoryTranslator: (id: number) => ClubCategoryType | null;
   item: ClubType;
   height: number;
 };
@@ -61,33 +57,36 @@ function ClubListItem(props: Props) {
 
   const getCategoriesRender = () => {
     const final: Array<React.ReactNode> = [];
-    props.item.category.forEach((cat) => {
-      if (cat != null) {
-        const category = props.categoryTranslator(cat);
-        if (category) {
-          final.push(
-            <Chip style={styles.chip} key={`${props.item.id}:${category.id}`}>
-              {category.name}
-            </Chip>
-          );
-        }
+    props.item.categories.forEach((category) => {
+      if (category) {
+        final.push(
+          <Chip style={styles.chip} key={`${props.item.id}:${category}`}>
+            {category}
+          </Chip>
+        );
       }
     });
     return <View style={styles.chipContainer}>{final}</View>;
   };
+
+  function getRenderLogo() {
+    if (props.item.logo)
+      return (
+        <Avatar.Image
+          style={styles.avatar}
+          size={64}
+          source={{ uri: props.item.logo }}
+        />
+      );
+    else return <view />;
+  }
 
   return (
     <List.Item
       title={props.item.name}
       description={getCategoriesRender()}
       onPress={props.onPress}
-      left={() => (
-        <Avatar.Image
-          style={styles.avatar}
-          size={64}
-          source={{ uri: props.item.logo }}
-        />
-      )}
+      left={getRenderLogo}
       right={() => (
         <Avatar.Icon
           style={styles.icon}

@@ -23,13 +23,12 @@ import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import AnimatedAccordion from '../../Animations/AnimatedAccordion';
 import { isItemInCategoryFilter } from '../../../utils/Search';
-import type { ClubCategoryType } from '../../../screens/Amicale/Clubs/ClubListScreen';
 import GENERAL_STYLES from '../../../constants/Styles';
 
 type PropsType = {
-  categories: Array<ClubCategoryType>;
-  onChipSelect: (id: number) => void;
-  selectedCategories: Array<number>;
+  categories: Array<string>;
+  onChipSelect: (id: string) => void;
+  selectedCategories: Array<string>;
 };
 
 const styles = StyleSheet.create({
@@ -57,12 +56,12 @@ const styles = StyleSheet.create({
 });
 
 function ClubListHeader(props: PropsType) {
-  const getChipRender = (category: ClubCategoryType, key: string) => {
-    const onPress = (): void => props.onChipSelect(category.id);
+  const getChipRender = (category: string, key: string) => {
+    const onPress = (): void => props.onChipSelect(category);
     return (
       <Chip
         selected={isItemInCategoryFilter(props.selectedCategories, [
-          category.id,
+          category,
           null,
         ])}
         mode="outlined"
@@ -70,15 +69,15 @@ function ClubListHeader(props: PropsType) {
         style={styles.chip}
         key={key}
       >
-        {category.name}
+        {category}
       </Chip>
     );
   };
 
   const getCategoriesRender = () => {
     const final: Array<React.ReactNode> = [];
-    props.categories.forEach((cat: ClubCategoryType) => {
-      final.push(getChipRender(cat, cat.id.toString()));
+    props.categories.forEach((cat: string) => {
+      final.push(getChipRender(cat, cat));
     });
     return final;
   };
