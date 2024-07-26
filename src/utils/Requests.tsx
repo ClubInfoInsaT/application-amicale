@@ -1,19 +1,20 @@
 import i18n from 'i18n-js';
 import { ApiRejectType } from './WebData';
 
-export enum REQUEST_STATUS {
+// HTTP status codes used by API
+export enum RESPONSE_HTTP_STATUS {
   SUCCESS = 200,
-  TOKEN_SAVE = 4,
-  TOKEN_RETRIEVE = 5,
   BAD_INPUT = 400,
+  UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   NOT_FOUND = 404,
-  CONNECTION_ERROR = 600,
   SERVER_ERROR = 500,
-  UNKNOWN = 999,
+  CONNECTION_ERROR = 600, // Custom status code for connection errors
+  UNKNOWN = 999, // Custom status code for unknown errors
 }
 
-export enum API_REQUEST_CODES {
+// Codes contained in `code` field of API response
+export enum API_RESPONSE_CODE {
   SUCCESS = 0,
   BAD_CREDENTIALS = 1,
   BAD_TOKEN = 2,
@@ -36,29 +37,22 @@ export function getErrorMessage(
   };
   if (props.code === undefined) {
     switch (props.status) {
-      case REQUEST_STATUS.BAD_INPUT:
+      case RESPONSE_HTTP_STATUS.BAD_INPUT:
         fullMessage.message = i18n.t('errors.badInput');
         fullMessage.icon = 'alert-circle-outline';
         break;
-      case REQUEST_STATUS.FORBIDDEN:
+      case RESPONSE_HTTP_STATUS.FORBIDDEN:
         fullMessage.message = i18n.t('errors.forbidden');
         fullMessage.icon = 'lock';
         break;
-      case REQUEST_STATUS.CONNECTION_ERROR:
+      case RESPONSE_HTTP_STATUS.CONNECTION_ERROR:
         fullMessage.message = i18n.t('errors.connectionError');
         fullMessage.icon = 'access-point-network-off';
         break;
-      case REQUEST_STATUS.SERVER_ERROR:
+      // TODO 404, 600
+      case RESPONSE_HTTP_STATUS.SERVER_ERROR:
         fullMessage.message = i18n.t('errors.serverError');
         fullMessage.icon = 'server-network-off';
-        break;
-      case REQUEST_STATUS.TOKEN_SAVE:
-        fullMessage.message = i18n.t('errors.tokenSave');
-        fullMessage.icon = 'alert-circle-outline';
-        break;
-      case REQUEST_STATUS.TOKEN_RETRIEVE:
-        fullMessage.message = i18n.t('errors.tokenRetrieve');
-        fullMessage.icon = 'alert-circle-outline';
         break;
       default:
         fullMessage.message = i18n.t('errors.unknown');
@@ -67,27 +61,27 @@ export function getErrorMessage(
     }
   } else {
     switch (props.code) {
-      case API_REQUEST_CODES.BAD_CREDENTIALS:
+      case API_RESPONSE_CODE.BAD_CREDENTIALS:
         fullMessage.message = i18n.t('errors.badCredentials');
         fullMessage.icon = 'account-alert-outline';
         break;
-      case API_REQUEST_CODES.BAD_TOKEN:
+      case API_RESPONSE_CODE.BAD_TOKEN:
         fullMessage.message = i18n.t('errors.badToken');
         fullMessage.icon = 'account-alert-outline';
         break;
-      case API_REQUEST_CODES.NO_CONSENT:
+      case API_RESPONSE_CODE.NO_CONSENT:
         fullMessage.message = i18n.t('errors.noConsent');
         fullMessage.icon = 'account-remove-outline';
         break;
-      case API_REQUEST_CODES.BAD_INPUT:
+      case API_RESPONSE_CODE.BAD_INPUT:
         fullMessage.message = i18n.t('errors.badInput');
         fullMessage.icon = 'alert-circle-outline';
         break;
-      case API_REQUEST_CODES.FORBIDDEN:
+      case API_RESPONSE_CODE.FORBIDDEN:
         fullMessage.message = i18n.t('errors.forbidden');
         fullMessage.icon = 'lock';
         break;
-      case API_REQUEST_CODES.SERVER_ERROR:
+      case API_RESPONSE_CODE.SERVER_ERROR:
         fullMessage.message = i18n.t('errors.serverError');
         fullMessage.icon = 'server-network-off';
         break;
@@ -98,6 +92,7 @@ export function getErrorMessage(
     }
   }
 
+  // Fix this up
   if (props.code !== undefined) {
     fullMessage.message += `\n\nCode {${props.status}:${props.code}}`;
   } else {

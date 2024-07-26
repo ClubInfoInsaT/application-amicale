@@ -48,7 +48,7 @@ import {
 } from '../../../navigation/MainNavigator';
 import GENERAL_STYLES from '../../../constants/Styles';
 import { ApiRejectType } from '../../../utils/WebData';
-import { REQUEST_STATUS } from '../../../utils/Requests';
+import { RESPONSE_HTTP_STATUS } from '../../../utils/Requests';
 import { useFocusEffect } from '@react-navigation/core';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthenticatedRequest } from '../../../context/loginContext';
@@ -107,7 +107,7 @@ function EquipmentRentScreen(props: Props) {
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [currentError, setCurrentError] = useState<ApiRejectType>({
-    status: REQUEST_STATUS.SUCCESS,
+    status: RESPONSE_HTTP_STATUS.SUCCESS,
   });
   const [markedDates, setMarkedDates] = useState<MarkedDatesObjectType>({});
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -172,7 +172,7 @@ function EquipmentRentScreen(props: Props) {
   const onDialogDismiss = () => setDialogVisible(false);
 
   const onErrorDialogDismiss = () =>
-    setCurrentError({ status: REQUEST_STATUS.SUCCESS });
+    setCurrentError({ status: RESPONSE_HTTP_STATUS.SUCCESS });
 
   const getBookStartDate = (): Date | null => {
     return bookedDates.current.length > 0
@@ -411,7 +411,7 @@ function EquipmentRentScreen(props: Props) {
 
         <ErrorDialog
           visible={
-            currentError.status !== REQUEST_STATUS.SUCCESS ||
+            currentError.status !== RESPONSE_HTTP_STATUS.SUCCESS ||
             currentError.code !== undefined
           }
           onDismiss={onErrorDialogDismiss}

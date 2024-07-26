@@ -26,7 +26,7 @@ import WebSectionList from '../../components/Screens/WebSectionList';
 import type { SectionListDataType } from '../../components/Screens/WebSectionList';
 import Urls from '../../constants/Urls';
 import { readData } from '../../utils/WebData';
-import { REQUEST_STATUS } from '../../utils/Requests';
+import { RESPONSE_HTTP_STATUS } from '../../utils/Requests';
 
 export type RuFoodCategoryType = {
   name: string;
@@ -110,10 +110,10 @@ function SelfMenuScreen() {
     _loading: boolean,
     _lastRefreshDate: Date | undefined,
     _refreshData: (newRequest?: () => Promise<Array<RawRuMenuType>>) => void,
-    status: REQUEST_STATUS
+    status: RESPONSE_HTTP_STATUS
   ): SectionListDataType<RuFoodCategoryType> => {
     let result: SectionListDataType<RuFoodCategoryType> = [];
-    if (status === REQUEST_STATUS.SUCCESS) {
+    if (status === RESPONSE_HTTP_STATUS.SUCCESS) {
       if (fetchedData == null || fetchedData.length === 0) {
         result = [
           {

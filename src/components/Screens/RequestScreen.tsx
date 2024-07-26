@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/native';
 import BasicLoadingScreen from './BasicLoadingScreen';
 import i18n from 'i18n-js';
-import { API_REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
+import { API_RESPONSE_CODE, RESPONSE_HTTP_STATUS } from '../../utils/Requests';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainRoutes } from '../../navigation/MainNavigator';
 import { useLogout } from '../../utils/logout';
@@ -20,8 +20,8 @@ export type RequestScreenProps<T> = {
     loading: boolean,
     lastRefreshDate: Date | undefined,
     refreshData: (newRequest?: () => Promise<T>) => void,
-    status: REQUEST_STATUS,
-    code?: API_REQUEST_CODES,
+    status: RESPONSE_HTTP_STATUS,
+    code?: API_RESPONSE_CODE,
     message?: string
   ) => React.ReactElement;
   renderError?: (props: ErrorProps) => React.ReactElement;
@@ -97,8 +97,8 @@ export default function RequestScreen<T>(props: Props<T>) {
     }, [props.cache, props.refreshOnFocus, props.autoRefreshTime])
   );
 
-  const isErrorCritical = (e: API_REQUEST_CODES | undefined) => {
-    return e === API_REQUEST_CODES.BAD_TOKEN;
+  const isErrorCritical = (e: API_RESPONSE_CODE | undefined) => {
+    return e === API_RESPONSE_CODE.BAD_TOKEN;
   };
 
   useEffect(() => {
@@ -112,8 +112,8 @@ export default function RequestScreen<T>(props: Props<T>) {
     return props.renderLoading ? props.renderLoading() : <BasicLoadingScreen />;
   } else if (
     data === undefined &&
-    (status !== REQUEST_STATUS.SUCCESS ||
-      (status === REQUEST_STATUS.SUCCESS && code !== undefined)) &&
+    (status !== RESPONSE_HTTP_STATUS.SUCCESS ||
+      (status === RESPONSE_HTTP_STATUS.SUCCESS && code !== undefined)) &&
     props.showError !== false
   ) {
     const button = isErrorCritical(code)

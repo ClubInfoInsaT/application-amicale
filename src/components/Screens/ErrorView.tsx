@@ -23,14 +23,14 @@ import { StyleSheet, View, ViewStyle } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
 import {
-  API_REQUEST_CODES,
+  API_RESPONSE_CODE,
   getErrorMessage,
-  REQUEST_STATUS,
+  RESPONSE_HTTP_STATUS,
 } from '../../utils/Requests';
 
 export type ErrorProps = {
-  status?: REQUEST_STATUS;
-  code?: API_REQUEST_CODES;
+  status?: RESPONSE_HTTP_STATUS;
+  code?: API_RESPONSE_CODE;
   icon?: string;
   message?: string;
   loading?: boolean;

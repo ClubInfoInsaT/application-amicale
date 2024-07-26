@@ -18,7 +18,7 @@
  */
 
 import { DependencyList, useEffect, useRef, useState } from 'react';
-import { API_REQUEST_CODES, REQUEST_STATUS } from './Requests';
+import { API_RESPONSE_CODE, RESPONSE_HTTP_STATUS } from './Requests';
 import { ApiRejectType } from './WebData';
 
 export function useMountEffect(func: () => void) {
@@ -57,14 +57,14 @@ export function useRequestLogic<T>(
   const [response, setResponse] = useState<{
     loading: boolean;
     lastRefreshDate?: Date;
-    status: REQUEST_STATUS;
-    code?: API_REQUEST_CODES;
+    status: RESPONSE_HTTP_STATUS;
+    code?: API_RESPONSE_CODE;
     message?: string | undefined;
     data: T | undefined;
   }>({
     loading: startLoading !== false && cache === undefined,
     lastRefreshDate: undefined,
-    status: REQUEST_STATUS.SUCCESS,
+    status: RESPONSE_HTTP_STATUS.SUCCESS,
     code: undefined,
     data: undefined,
     message: undefined,
@@ -93,7 +93,7 @@ export function useRequestLogic<T>(
           setResponse({
             loading: false,
             lastRefreshDate: new Date(),
-            status: REQUEST_STATUS.SUCCESS,
+            status: RESPONSE_HTTP_STATUS.SUCCESS,
             code: undefined,
             message: undefined,
             data: requestResponse,
@@ -108,7 +108,7 @@ export function useRequestLogic<T>(
             setResponse((prevState) => ({
               loading: false,
               lastRefreshDate: prevState.lastRefreshDate,
-              status: REQUEST_STATUS.CONNECTION_ERROR,
+              status: RESPONSE_HTTP_STATUS.CONNECTION_ERROR,
               code: undefined,
               data: prevState.data,
             }));
@@ -129,7 +129,7 @@ export function useRequestLogic<T>(
   const value: [
     boolean,
     Date | undefined,
-    REQUEST_STATUS,
+    RESPONSE_HTTP_STATUS,
     number | undefined,
     string | undefined,
     T | undefined,

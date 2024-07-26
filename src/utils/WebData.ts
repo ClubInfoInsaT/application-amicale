@@ -18,37 +18,23 @@
  */
 
 import Urls from '../constants/Urls';
-import { API_REQUEST_CODES, REQUEST_STATUS } from './Requests';
+import { API_RESPONSE_CODE, RESPONSE_HTTP_STATUS } from './Requests';
 import packageJson from '../../package.json';
-
-// export const ERROR_TYPE = {
-//   SUCCESS: 0,
-//   BAD_CREDENTIALS: 1,
-//   BAD_TOKEN: 2,
-//   NO_CONSENT: 3,
-//   TOKEN_SAVE: 4,
-//   TOKEN_RETRIEVE: 5,
-//   BAD_INPUT: 400,
-//   FORBIDDEN: 403,
-//   CONNECTION_ERROR: 404,
-//   SERVER_ERROR: 500,
-//   UNKNOWN: 999,
-// };
 
 export type ApiDataLoginType = {
   token: string;
 };
 
 type ApiResponseType<T> = {
-  status: REQUEST_STATUS;
-  code?: API_REQUEST_CODES;
+  status: RESPONSE_HTTP_STATUS;
+  code?: API_RESPONSE_CODE;
   message?: string;
   data?: T;
 };
 
 export type ApiRejectType = {
-  status: REQUEST_STATUS;
-  code?: API_REQUEST_CODES;
+  status: RESPONSE_HTTP_STATUS;
+  code?: API_RESPONSE_CODE;
   message?: string;
 };
 
@@ -65,8 +51,8 @@ export function isApiResponseValid<T>(response: ApiResponseType<T>): boolean {
     response != null &&
     response.code != null &&
     response.code !== undefined &&
-    Object.values(API_REQUEST_CODES).includes(response.code) &&
-    (response.status !== REQUEST_STATUS.SUCCESS ||
+    Object.values(API_RESPONSE_CODE).includes(response.code) &&
+    (response.status !== RESPONSE_HTTP_STATUS.SUCCESS ||
       (response.data != null && typeof response.data === 'object')) // Errors don't return data
   );
 }
@@ -119,7 +105,7 @@ export async function apiRequest<T>(
             .catch(() => {
               return {
                 status: status,
-                code: API_REQUEST_CODES.SERVER_ERROR,
+                code: API_RESPONSE_CODE.SERVER_ERROR,
                 message: 'Failed to parse server JSON',
               };
             });
@@ -127,11 +113,11 @@ export async function apiRequest<T>(
         .then((response: ApiResponseType<T>) => {
           console.log(response, path, token);
           if (isApiResponseValid(response)) {
-            if (response.code === API_REQUEST_CODES.SUCCESS && response.data) {
+            if (response.code === API_RESPONSE_CODE.SUCCESS && response.data) {
               resolve(response.data);
             } else {
               reject({
-                status: REQUEST_STATUS.SUCCESS,
+                status: RESPONSE_HTTP_STATUS.SUCCESS,
                 code: response.code,
                 message: response.message,
               });
@@ -140,7 +126,7 @@ export async function apiRequest<T>(
             console.log(response);
             reject({
               status: response.status,
-              code: API_REQUEST_CODES.SERVER_ERROR,
+              code: API_RESPONSE_CODE.SERVER_ERROR,
               message: 'Invalid server response',
             });
           }
@@ -148,8 +134,8 @@ export async function apiRequest<T>(
         .catch((e) => {
           console.log('webdata', e);
           reject({
-            status: REQUEST_STATUS.CONNECTION_ERROR,
-            code: API_REQUEST_CODES.CONNECTION_ERROR,
+            status: RESPONSE_HTTP_STATUS.CONNECTION_ERROR,
+            code: API_RESPONSE_CODE.CONNECTION_ERROR,
             message: 'Connection error, please check your network',
           });
         });
@@ -173,8 +159,8 @@ export async function connectToAmicale(email: string, password: string) {
             resolve(response.token);
           } else {
             reject({
-              status: REQUEST_STATUS.SERVER_ERROR,
-              code: API_REQUEST_CODES.SERVER_ERROR,
+              status: RESPONSE_HTTP_STATUS.SERVER_ERROR,
+              code: API_RESPONSE_CODE.SERVER_ERROR,
               message: 'Unknown server error on login',
             });
           }

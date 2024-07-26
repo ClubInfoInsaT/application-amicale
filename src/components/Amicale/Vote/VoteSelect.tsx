@@ -25,7 +25,7 @@ import LoadingConfirmDialog from '../../Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../Dialogs/ErrorDialog';
 import type { VoteTeamType } from '../../../screens/Amicale/VoteScreen';
 import { ApiRejectType } from '../../../utils/WebData';
-import { REQUEST_STATUS } from '../../../utils/Requests';
+import { RESPONSE_HTTP_STATUS } from '../../../utils/Requests';
 import { useAuthenticatedRequest } from '../../../context/loginContext';
 
 type Props = {
@@ -47,7 +47,7 @@ function VoteSelect(props: Props) {
   const [selectedTeam, setSelectedTeam] = useState('none');
   const [voteDialogVisible, setVoteDialogVisible] = useState(false);
   const [currentError, setCurrentError] = useState<ApiRejectType>({
-    status: REQUEST_STATUS.SUCCESS,
+    status: RESPONSE_HTTP_STATUS.SUCCESS,
   });
   const request = useAuthenticatedRequest('elections/vote', {
     team: parseInt(selectedTeam, 10),
@@ -80,7 +80,7 @@ function VoteSelect(props: Props) {
   };
 
   const onErrorDialogDismiss = () => {
-    setCurrentError({ status: REQUEST_STATUS.SUCCESS });
+    setCurrentError({ status: RESPONSE_HTTP_STATUS.SUCCESS });
     props.onVoteError();
   };
 
@@ -129,7 +129,7 @@ function VoteSelect(props: Props) {
       />
       <ErrorDialog
         visible={
-          currentError.status !== REQUEST_STATUS.SUCCESS ||
+          currentError.status !== RESPONSE_HTTP_STATUS.SUCCESS ||
           currentError.code !== undefined
         }
         onDismiss={onErrorDialogDismiss}

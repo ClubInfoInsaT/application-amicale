@@ -64,7 +64,7 @@ const LIST_ITEM_HEIGHT = 96;
 
 function ClubListScreen() {
   const navigation = useNavigation();
-  const request = useAuthenticatedRequest<ResponseType>('clubs/list');
+  const request = useAuthenticatedRequest<ResponseType>('clubs');
   const [currentlySelectedCategories, setCurrentlySelectedCategories] =
     useState<Array<string>>([]);
   const [currentSearchString, setCurrentSearchString] = useState('');

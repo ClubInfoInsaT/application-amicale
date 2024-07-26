@@ -33,7 +33,7 @@ import {
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
 import { ApiRejectType, connectToAmicale } from '../../utils/WebData';
-import { REQUEST_STATUS } from '../../utils/Requests';
+import { RESPONSE_HTTP_STATUS } from '../../utils/Requests';
 import LoginForm from '../../components/Amicale/Login/LoginForm';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { TabRoutes } from '../../navigation/TabNavigator';
@@ -52,7 +52,7 @@ function LoginScreen(props: Props) {
     undefined | boolean
   >(undefined);
   const [currentError, setCurrentError] = useState<ApiRejectType>({
-    status: REQUEST_STATUS.SUCCESS,
+    status: RESPONSE_HTTP_STATUS.SUCCESS,
   });
   const homeMascot = useShouldShowMascot(TabRoutes.Home);
 
@@ -90,7 +90,7 @@ function LoginScreen(props: Props) {
   const showMascotDialog = () => setMascotDialogVisible(true);
 
   const hideErrorDialog = () =>
-    setCurrentError({ status: REQUEST_STATUS.SUCCESS });
+    setCurrentError({ status: RESPONSE_HTTP_STATUS.SUCCESS });
 
   /**
    * Navigates to the screen specified in navigation parameters or simply go back tha stack.
@@ -149,7 +149,7 @@ function LoginScreen(props: Props) {
           />
           <ErrorDialog
             visible={
-              currentError.status !== REQUEST_STATUS.SUCCESS ||
+              currentError.status !== RESPONSE_HTTP_STATUS.SUCCESS ||
               currentError.code !== undefined
             }
             onDismiss={hideErrorDialog}

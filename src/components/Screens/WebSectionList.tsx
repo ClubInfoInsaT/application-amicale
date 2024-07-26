@@ -29,7 +29,7 @@ import ErrorView from './ErrorView';
 import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
 import RequestScreen, { RequestScreenProps } from './RequestScreen';
 import { CollapsibleComponentPropsType } from '../Collapsible/CollapsibleComponent';
-import { API_REQUEST_CODES, REQUEST_STATUS } from '../../utils/Requests';
+import { API_RESPONSE_CODE, RESPONSE_HTTP_STATUS } from '../../utils/Requests';
 
 export type SectionListDataType<ItemT> = Array<{
   title: string;
@@ -55,16 +55,16 @@ type Props<ItemT, RawData> = Omit<
       loading: boolean,
       lastRefreshDate: Date | undefined,
       refreshData: (newRequest?: () => Promise<RawData>) => void,
-      status: REQUEST_STATUS,
-      code?: API_REQUEST_CODES
+      status: RESPONSE_HTTP_STATUS,
+      code?: API_RESPONSE_CODE
     ) => SectionListDataType<ItemT>;
     renderListHeaderComponent?: (
       data: RawData | undefined,
       loading: boolean,
       lastRefreshDate: Date | undefined,
       refreshData: (newRequest?: () => Promise<RawData>) => void,
-      status: REQUEST_STATUS,
-      code?: API_REQUEST_CODES
+      status: RESPONSE_HTTP_STATUS,
+      code?: API_RESPONSE_CODE
     ) => React.ComponentType<any> | React.ReactElement | null;
     itemHeight?: number | null;
   };
@@ -97,8 +97,8 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
     loading: boolean,
     lastRefreshDate: Date | undefined,
     refreshData: (newRequest?: () => Promise<RawData>) => void,
-    status: REQUEST_STATUS,
-    code?: API_REQUEST_CODES,
+    status: RESPONSE_HTTP_STATUS,
+    code?: API_RESPONSE_CODE,
     message?: string
   ) => {
     const { itemHeight } = props;
@@ -144,7 +144,7 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
               code={code}
               message={message}
               button={
-                code !== API_REQUEST_CODES.BAD_TOKEN
+                code !== API_RESPONSE_CODE.BAD_TOKEN
                   ? {
                       icon: 'refresh',
                       text: i18n.t('general.retry'),

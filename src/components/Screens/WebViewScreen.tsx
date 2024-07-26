@@ -47,7 +47,7 @@ import ErrorView from './ErrorView';
 import BasicLoadingScreen from './BasicLoadingScreen';
 import { useFocusEffect, useNavigation } from '@react-navigation/core';
 import { useCollapsible } from '../../context/CollapsibleContext';
-import { REQUEST_STATUS } from '../../utils/Requests';
+import { RESPONSE_HTTP_STATUS } from '../../utils/Requests';
 
 type Props = {
   url: string;
@@ -260,7 +260,7 @@ function WebViewScreen(props: Props) {
       renderLoading={getRenderLoading}
       renderError={() => (
         <ErrorView
-          status={REQUEST_STATUS.CONNECTION_ERROR}
+          status={RESPONSE_HTTP_STATUS.CONNECTION_ERROR}
           button={{
             icon: 'refresh',
             text: i18n.t('general.retry'),

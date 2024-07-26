@@ -21,16 +21,16 @@ import * as React from 'react';
 import i18n from 'i18n-js';
 import AlertDialog from './AlertDialog';
 import {
-  API_REQUEST_CODES,
+  API_RESPONSE_CODE,
   getErrorMessage,
-  REQUEST_STATUS,
+  RESPONSE_HTTP_STATUS,
 } from '../../utils/Requests';
 
 type PropsType = {
   visible: boolean;
   onDismiss: () => void;
-  status?: REQUEST_STATUS;
-  code?: API_REQUEST_CODES;
+  status?: RESPONSE_HTTP_STATUS;
+  code?: API_RESPONSE_CODE;
   message?: string;
 };
 
