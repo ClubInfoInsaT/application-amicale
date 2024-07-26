@@ -25,47 +25,43 @@ export type ApiDataLoginType = {
   token: string;
 };
 
-type ApiResponseType<T> = {
+type ApiResponse<T> = {
   status: RESPONSE_HTTP_STATUS;
-  code?: API_RESPONSE_CODE;
+  code: API_RESPONSE_CODE;
   message?: string;
-  data?: T;
+  data: T;
 };
 
-export type ApiRejectType = {
+// Custom error class for API errors
+// Thrown whenever an API request fails, server-side or client-side (e.g. network error)
+export class ApiError extends Error {
+  code: API_RESPONSE_CODE;
   status: RESPONSE_HTTP_STATUS;
-  code?: API_RESPONSE_CODE;
-  message?: string;
-};
+  message: string;
 
-/**
- * Checks if the given API response is valid.
- *
- * For a request to be valid, it must match the response_format as defined in this file.
- *
- * @param response
- * @returns {boolean}
- */
-export function isApiResponseValid<T>(response: ApiResponseType<T>): boolean {
-  return (
-    response != null &&
-    response.code != null &&
-    response.code !== undefined &&
-    Object.values(API_RESPONSE_CODE).includes(response.code) &&
-    (response.status !== RESPONSE_HTTP_STATUS.SUCCESS ||
-      (response.data != null && typeof response.data === 'object')) // Errors don't return data
-  );
+  constructor(
+    code?: API_RESPONSE_CODE,
+    status?: RESPONSE_HTTP_STATUS,
+    message?: string
+  ) {
+    super(message);
+    this.code = code || API_RESPONSE_CODE.UNKNOWN;
+    this.status = status || RESPONSE_HTTP_STATUS.UNKNOWN;
+    this.message = message || 'An undetermined error occurred';
+  }
 }
 
 /**
  * Sends a request to the Amicale Website backend
  *
- * In case of failure, the promise will be rejected with the error code.
+ * In case of failure, the promise will be rejected with the error code, status and message.
  * In case of success, the promise will return the data object.
  *
  * @param path The API path from the API endpoint
  * @param method The HTTP method to use (GET or POST)
- * @param params The params to use for this request
+ * @param body OPTIONAL: The body to send with the request
+ * @param token OPTIONAL: The token to use for authentication
+ * @throws ApiError
  * @returns {Promise<T>}
  */
 export async function apiRequest<T>(
@@ -75,7 +71,7 @@ export async function apiRequest<T>(
   token?: string
 ): Promise<T> {
   return new Promise(
-    (resolve: (data: T) => void, reject: (error: ApiRejectType) => void) => {
+    (resolve: (data: T) => void, reject: (error: ApiError) => void) => {
       const userAgent = 'campus/' + packageJson.version;
       let headers = new Headers();
       headers.append('Accept', 'application/json');
@@ -90,57 +86,92 @@ export async function apiRequest<T>(
         headers: headers,
         body: body ? JSON.stringify(body) : undefined,
       })
-        .then((response: Response) => {
-          const status = response.status;
-          return response
-            .json()
-            .then((data): ApiResponseType<T> => {
-              return {
-                status: status,
-                code: data.status,
-                data: data.data,
-                message: data.message,
-              };
-            })
-            .catch(() => {
-              return {
-                status: status,
-                code: API_RESPONSE_CODE.SERVER_ERROR,
-                message: 'Failed to parse server JSON',
-              };
-            });
-        })
-        .then((response: ApiResponseType<T>) => {
-          console.log(response, path, token);
-          if (isApiResponseValid(response)) {
-            if (response.code === API_RESPONSE_CODE.SUCCESS && response.data) {
-              resolve(response.data);
-            } else {
-              reject({
-                status: RESPONSE_HTTP_STATUS.SUCCESS,
-                code: response.code,
-                message: response.message,
-              });
-            }
+        .then(async (response: Response) => await parseJson<T>(response))
+        .then((response: ApiResponse<T>) => validateResponse<T>(response))
+        .then((response: ApiResponse<T>) => resolve(response.data))
+        .catch((error: Error) => {
+          console.log('webdata', error);
+          if (error instanceof ApiError) {
+            return reject(error);
+          } else if (error.message && error.message.includes('Network')) {
+            return reject(
+              new ApiError(
+                API_RESPONSE_CODE.CONNECTION_ERROR,
+                RESPONSE_HTTP_STATUS.CONNECTION_ERROR,
+                'Connection error, please check your network. ' + error.message
+              )
+            );
           } else {
-            console.log(response);
-            reject({
-              status: response.status,
-              code: API_RESPONSE_CODE.SERVER_ERROR,
-              message: 'Invalid server response',
-            });
+            console.log('webdata', error);
+            return reject(
+              new ApiError(
+                API_RESPONSE_CODE.UNKNOWN,
+                RESPONSE_HTTP_STATUS.UNKNOWN,
+                'Unknown error, please contact support.' + error.message
+              )
+            );
           }
-        })
-        .catch((e) => {
-          console.log('webdata', e);
-          reject({
-            status: RESPONSE_HTTP_STATUS.CONNECTION_ERROR,
-            code: API_RESPONSE_CODE.CONNECTION_ERROR,
-            message: 'Connection error, please check your network',
-          });
         });
     }
   );
+}
+
+async function parseJson<T>(response: Response): Promise<ApiResponse<T>> {
+  try {
+    const parsedData = await response.json();
+    console.log('Parsed server JSON', parsedData);
+    return {
+      status: response.status,
+      code: parsedData.status,
+      data: parsedData.data,
+      message: parsedData.message,
+    };
+  } catch {
+    console.log('Failed to parse server JSON', response);
+    throw new ApiError(
+      API_RESPONSE_CODE.SERVER_ERROR,
+      RESPONSE_HTTP_STATUS.SERVER_ERROR,
+      'Failed to parse server JSON'
+    );
+  }
+}
+
+/**
+ * Checks if the given API response is valid.
+ *
+ * For a request to be valid, it must match the response_format as defined in this file.
+ *
+ * @param response
+ * @returns {boolean}
+ */
+export function isApiResponseValid<T>(response: ApiResponse<T>): boolean {
+  return (
+    response != null &&
+    response.code != null &&
+    response.code !== undefined &&
+    Object.values(API_RESPONSE_CODE).includes(response.code) &&
+    Object.values(RESPONSE_HTTP_STATUS).includes(response.status) &&
+    (response.status != RESPONSE_HTTP_STATUS.SUCCESS ||
+      (response.data != null && typeof response.data === 'object')) // Errors don't return data
+  );
+}
+
+function validateResponse<T>(response: ApiResponse<T>): ApiResponse<T> {
+  if (!isApiResponseValid(response)) {
+    console.log('Invalid server response', response);
+    throw new ApiError(
+      API_RESPONSE_CODE.SERVER_ERROR,
+      RESPONSE_HTTP_STATUS.SERVER_ERROR,
+      'Invalid server response, please contact support'
+    );
+  } else if (
+    response.status !== RESPONSE_HTTP_STATUS.SUCCESS ||
+    response.code !== API_RESPONSE_CODE.SUCCESS
+  ) {
+    console.log('API error', response.code, response.status, response.message);
+    throw new ApiError(response.code, response.status, response.message);
+  }
+  return response;
 }
 
 export async function connectToAmicale(email: string, password: string) {
