@@ -32,8 +32,7 @@ import {
 } from '../../navigation/MainNavigator';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
-import { ApiRejectType, connectToAmicale } from '../../utils/WebData';
-import { RESPONSE_HTTP_STATUS } from '../../utils/Requests';
+import { ApiError, connectToAmicale } from '../../utils/WebData';
 import LoginForm from '../../components/Amicale/Login/LoginForm';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { TabRoutes } from '../../navigation/TabNavigator';
@@ -51,9 +50,7 @@ function LoginScreen(props: Props) {
   const [mascotDialogVisible, setMascotDialogVisible] = useState<
     undefined | boolean
   >(undefined);
-  const [currentError, setCurrentError] = useState<ApiRejectType>({
-    status: RESPONSE_HTTP_STATUS.SUCCESS,
-  });
+  const [currentError, setCurrentError] = useState<ApiError>();
   const homeMascot = useShouldShowMascot(TabRoutes.Home);
 
   useFocusEffect(
@@ -89,8 +86,7 @@ function LoginScreen(props: Props) {
 
   const showMascotDialog = () => setMascotDialogVisible(true);
 
-  const hideErrorDialog = () =>
-    setCurrentError({ status: RESPONSE_HTTP_STATUS.SUCCESS });
+  const hideErrorDialog = () => setCurrentError(undefined);
 
   /**
    * Navigates to the screen specified in navigation parameters or simply go back tha stack.
@@ -148,14 +144,11 @@ function LoginScreen(props: Props) {
             emotion={MASCOT_STYLE.NORMAL}
           />
           <ErrorDialog
-            visible={
-              currentError.status !== RESPONSE_HTTP_STATUS.SUCCESS ||
-              currentError.code !== undefined
-            }
+            visible={currentError != undefined}
             onDismiss={hideErrorDialog}
-            status={currentError.status}
-            code={currentError.code}
-            message={currentError.message}
+            status={currentError ? currentError.status : undefined}
+            code={currentError ? currentError.code : undefined}
+            message={currentError ? currentError.message : undefined}
           />
         </CollapsibleScrollView>
       </KeyboardAvoidingView>
