@@ -21,10 +21,6 @@ import Urls from '../constants/Urls';
 import { API_RESPONSE_CODE, RESPONSE_HTTP_STATUS } from './Requests';
 import packageJson from '../../package.json';
 
-export type ApiDataLoginType = {
-  token: string;
-};
-
 type ApiResponse<T> = {
   status: RESPONSE_HTTP_STATUS;
   code: API_RESPONSE_CODE;
@@ -174,12 +170,25 @@ function validateResponse<T>(response: ApiResponse<T>): ApiResponse<T> {
   return response;
 }
 
-export async function connectToAmicale(email: string, password: string) {
+export type ApiDataLoginType = {
+  token: string;
+};
+
+/**
+ * Connects to the Amicale API with the given email and password
+ * and returns the token if successful
+ *
+ * @param email The email to use for login
+ * @param password The password to use for login
+ * @returns {Promise<string>}
+ * @throws ApiError
+ */
+export async function connectToAmicale(
+  email: string,
+  password: string
+): Promise<string> {
   return new Promise(
-    (
-      resolve: (token: string) => void,
-      reject: (error: ApiRejectType) => void
-    ) => {
+    (resolve: (token: string) => void, reject: (error: ApiError) => void) => {
       const data = {
         email,
         password,
@@ -189,11 +198,11 @@ export async function connectToAmicale(email: string, password: string) {
           if (response.token != null) {
             resolve(response.token);
           } else {
-            reject({
-              status: RESPONSE_HTTP_STATUS.SERVER_ERROR,
-              code: API_RESPONSE_CODE.SERVER_ERROR,
-              message: 'Unknown server error on login',
-            });
+            throw new ApiError(
+              API_RESPONSE_CODE.SERVER_ERROR,
+              RESPONSE_HTTP_STATUS.SERVER_ERROR,
+              'Unknown server error on login'
+            );
           }
         })
         .catch(reject);
