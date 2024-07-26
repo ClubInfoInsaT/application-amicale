@@ -1,6 +1,9 @@
 import * as loginContext from '../../src/context/loginContext';
 import { connectToAmicale } from '../../src/utils/WebData';
-import { API_REQUEST_CODES } from '../../src/utils/Requests';
+import {
+  API_RESPONSE_CODE,
+  RESPONSE_HTTP_STATUS,
+} from '../../src/utils/Requests';
 
 jest.mock('react-native-keychain');
 
@@ -30,17 +33,17 @@ test('connectToAmicale bad credentials', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          code: API_REQUEST_CODES.BAD_CREDENTIALS,
+          status: API_RESPONSE_CODE.BAD_CREDENTIALS,
           message: 'Bad credentials.',
-          data: {},
         }),
-      status: 403,
+      status: RESPONSE_HTTP_STATUS.FORBIDDEN,
     });
   });
-  return expect(connectToAmicale('email', 'password')).rejects.toHaveProperty(
-    'code',
-    API_REQUEST_CODES.BAD_CREDENTIALS
-  );
+  connectToAmicale('/', 'GET').catch((error) => {
+    expect(error).toHaveProperty('status', RESPONSE_HTTP_STATUS.FORBIDDEN);
+    expect(error).toHaveProperty('code', API_RESPONSE_CODE.BAD_CREDENTIALS);
+    expect(error.message).toMatch(/bad/i);
+  });
 });
 
 test('connectToAmicale good credentials', () => {
@@ -48,13 +51,13 @@ test('connectToAmicale good credentials', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          code: API_REQUEST_CODES.SUCCESS,
+          status: API_RESPONSE_CODE.SUCCESS,
           data: { token: 'token' },
         }),
-      status: 200,
+      status: RESPONSE_HTTP_STATUS.SUCCESS,
     });
   });
-  return expect(connectToAmicale('email', 'password')).resolves.toBe('token');
+  expect(connectToAmicale('email', 'password')).resolves.toBe('token');
 });
 
 test('connectToAmicale good credentials no consent', () => {
@@ -62,25 +65,26 @@ test('connectToAmicale good credentials no consent', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          code: API_REQUEST_CODES.NO_CONSENT,
-          data: {},
+          status: API_RESPONSE_CODE.NO_CONSENT,
+          message: 'No consent.',
         }),
-      status: 403,
+      status: RESPONSE_HTTP_STATUS.FORBIDDEN,
     });
   });
-  return expect(connectToAmicale('email', 'password')).rejects.toHaveProperty(
-    'code',
-    API_REQUEST_CODES.NO_CONSENT
-  );
+  connectToAmicale('email', 'password').catch((error) => {
+    expect(error).toHaveProperty('status', RESPONSE_HTTP_STATUS.FORBIDDEN);
+    expect(error).toHaveProperty('code', API_RESPONSE_CODE.NO_CONSENT);
+    expect(error.message).toMatch(/consent/i);
+  });
 });
 
 test('connect connection error', () => {
   jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-    return Promise.reject();
+    return Promise.reject(new Error('NetworkError that was uncalled for'));
   });
   return expect(connectToAmicale('email', 'password')).rejects.toHaveProperty(
     'code',
-    API_REQUEST_CODES.CONNECTION_ERROR
+    API_RESPONSE_CODE.CONNECTION_ERROR
   );
 });
 
@@ -97,7 +101,7 @@ test('connect bogus response 1', () => {
   });
   return expect(connectToAmicale('email', 'password')).rejects.toHaveProperty(
     'code',
-    API_REQUEST_CODES.SERVER_ERROR
+    API_RESPONSE_CODE.SERVER_ERROR
   );
 });
 
@@ -109,7 +113,7 @@ test('useAuthenticatedRequest success', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          code: API_REQUEST_CODES.SUCCESS,
+          status: API_RESPONSE_CODE.SUCCESS,
           data: { coucou: 'toi' },
         }),
       status: 200,
@@ -128,7 +132,7 @@ test('authenticatedRequest error wrong token', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          code: API_REQUEST_CODES.BAD_TOKEN,
+          status: API_RESPONSE_CODE.BAD_TOKEN,
           data: {},
         }),
       status: 200,
@@ -136,7 +140,7 @@ test('authenticatedRequest error wrong token', () => {
   });
   return expect(
     loginContext.useAuthenticatedRequest('token/check')()
-  ).rejects.toHaveProperty('code', API_REQUEST_CODES.BAD_TOKEN);
+  ).rejects.toHaveProperty('code', API_RESPONSE_CODE.BAD_TOKEN);
 });
 
 test('authenticatedRequest error bogus response', () => {
@@ -147,14 +151,14 @@ test('authenticatedRequest error bogus response', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          code: API_REQUEST_CODES.SUCCESS,
+          status: API_RESPONSE_CODE.SUCCESS,
         }),
-      status: 200,
+      status: RESPONSE_HTTP_STATUS.SUCCESS,
     });
   });
   return expect(
     loginContext.useAuthenticatedRequest('token/check')()
-  ).rejects.toHaveProperty('code', API_REQUEST_CODES.SERVER_ERROR);
+  ).rejects.toHaveProperty('code', API_RESPONSE_CODE.SERVER_ERROR);
 });
 
 test('authenticatedRequest connection error', () => {
@@ -162,11 +166,11 @@ test('authenticatedRequest connection error', () => {
     return { token: 'token' };
   });
   jest.spyOn(global, 'fetch').mockImplementationOnce(() => {
-    return Promise.reject();
+    return Promise.reject(new Error('NetworkError that was uncalled for'));
   });
   return expect(
     loginContext.useAuthenticatedRequest('token/check')()
-  ).rejects.toHaveProperty('code', API_REQUEST_CODES.CONNECTION_ERROR);
+  ).rejects.toHaveProperty('code', API_RESPONSE_CODE.CONNECTION_ERROR);
 });
 
 test('authenticatedRequest error no token', () => {
@@ -177,7 +181,7 @@ test('authenticatedRequest error no token', () => {
     return Promise.resolve({
       json: () =>
         Promise.resolve({
-          code: API_REQUEST_CODES.BAD_TOKEN,
+          status: API_RESPONSE_CODE.BAD_TOKEN,
           data: {},
         }),
       status: 200,
@@ -185,5 +189,5 @@ test('authenticatedRequest error no token', () => {
   });
   return expect(
     loginContext.useAuthenticatedRequest('token/check')()
-  ).rejects.toHaveProperty('code', API_REQUEST_CODES.BAD_TOKEN);
+  ).rejects.toHaveProperty('code', API_RESPONSE_CODE.BAD_TOKEN);
 });
