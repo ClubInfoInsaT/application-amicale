@@ -35,7 +35,7 @@ const PROXIWASH_ENDPOINT =
 export default {
   amicale: {
     api: AMICALE_ENDPOINT,
-    resetPassword: AMICALE_SERVER + 'password/reset',
+    resetPassword: AMICALE_SERVER + 'passwd',
     events: AMICALE_ENDPOINT + 'events',
     notification: APP_ENDPOINT + 'notification/list.json', // TODO Update
   },
