@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 });
 
 const EVENT_INFO_URL = 'event/info';
-4;
+
 function PlanningDisplayScreen(props: Props) {
   const [displayData, setDisplayData] = useState<PlanningEventType | undefined>(
     props.route.params.type === 'full' ? props.route.params.data : undefined
