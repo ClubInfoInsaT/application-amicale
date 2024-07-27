@@ -95,6 +95,20 @@ export function dateToDateString(date: Date): string {
 
 /**
  * Converts a date object to a string in the format
+ * DD/MM/YYYY
+ *
+ * @param date The date object to convert
+ * @return {string} The converted string
+ */
+export function dateToDateStringHuman(date: Date): string {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+/**
+ * Converts a date object to a string in the format
  * HH-MM
  *
  * @param date The date object to convert
@@ -136,4 +150,28 @@ export function generateEventAgenda(events: PlanningEventType[]): {
   });
 
   return eventsByDate;
+}
+
+/**
+ * Generates a subtitle for the event containing date, time and location (if available).
+ *
+ * @param event The event to generate the subtitle for
+ * @param includeStartDay Whether to include the start day in the subtitle. Defaults to true
+ * @return {string} The generated subtitle
+ */
+export function getSubtitle(
+  event: PlanningEventType,
+  includeStartDay: boolean = true
+): string {
+  const start = new Date(event.start * 1000);
+  const end = new Date(event.end * 1000);
+  const over12hLong = end.getTime() - start.getTime() > 12 * 60 * 60 * 1000;
+
+  let subtitle = '';
+  if (includeStartDay) subtitle = dateToDateStringHuman(start) + ' ';
+  subtitle += dateToTimeString(start, true) + '-';
+  if (over12hLong) subtitle += dateToDateStringHuman(end) + ' ';
+  subtitle += dateToTimeString(end, true);
+  if (event.location) subtitle += ' @ ' + event.location.trim();
+  return subtitle;
 }

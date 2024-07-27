@@ -27,8 +27,8 @@ import { readData } from '../../utils/WebData';
 import {
   generateEventAgenda,
   dateToDateString,
-  dateToTimeString,
   PlanningEventType,
+  getSubtitle,
 } from '../../utils/Planning';
 import CustomAgenda from '../../components/Overrides/CustomAgenda';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
@@ -209,9 +209,7 @@ function PlanningScreen(props: PropsType) {
       });
     };
     const logoUrl = event.logo;
-    const date = new Date(event.start * 1000);
-    let subtitle = dateToTimeString(date, true);
-    if (event.location) subtitle += ' @ ' + event.location.trim();
+    const subtitle = getSubtitle(event, false);
     if (logoUrl) {
       return (
         <View>

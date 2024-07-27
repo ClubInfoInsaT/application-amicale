@@ -52,3 +52,71 @@ test('generateEventAgenda', () => {
   expect(calendar['2020-02-01'][1]).toBe(eventList[1]);
   expect(calendar['2020-02-01'][2]).toBe(eventList[3]);
 });
+
+test('getSubtitle same day, with date, no location', () => {
+  const event = {
+    start: new Date('2020-01-14T09:15:00.000Z').valueOf() / 1000,
+    end: new Date('2020-01-14T10:15:00.000Z').valueOf() / 1000,
+    description: 'coucou',
+  };
+  expect(Planning.getSubtitle(event)).toBe('14/01/2020 09:15-10:15');
+});
+
+test('getSubtitle same day, with date, with location', () => {
+  const event = {
+    start: new Date('2020-01-14T09:15:00.000Z').valueOf() / 1000,
+    end: new Date('2020-01-14T10:15:00.000Z').valueOf() / 1000,
+    description: 'coucou',
+    location: 'RU INSA',
+  };
+  expect(Planning.getSubtitle(event)).toBe('14/01/2020 09:15-10:15 @ RU INSA');
+});
+
+test('getSubtitle same day, no date, no location', () => {
+  const event = {
+    start: new Date('2020-01-14T09:15:00.000Z').valueOf() / 1000,
+    end: new Date('2020-01-14T10:15:00.000Z').valueOf() / 1000,
+    description: 'coucou',
+  };
+  expect(Planning.getSubtitle(event, false)).toBe('09:15-10:15');
+});
+
+test('getSubtitle same day, no date, with location', () => {
+  const event = {
+    start: new Date('2020-01-14T09:15:00.000Z').valueOf() / 1000,
+    end: new Date('2020-01-14T10:15:00.000Z').valueOf() / 1000,
+    description: 'coucou',
+    location: 'RU INSA',
+  };
+  expect(Planning.getSubtitle(event, false)).toBe('09:15-10:15 @ RU INSA');
+});
+
+test('getSubtitle next day, less than 12h, no date, no location', () => {
+  const event = {
+    start: new Date('2020-01-14T21:15:00.000Z').valueOf() / 1000,
+    end: new Date('2020-01-15T09:05:00.000Z').valueOf() / 1000,
+    description: 'coucou',
+  };
+  expect(Planning.getSubtitle(event, false)).toBe('21:15-09:05');
+});
+
+test('getSubtitle next day, more than 12h, no date, no location', () => {
+  const event = {
+    start: new Date('2020-01-14T21:15:00.000Z').valueOf() / 1000,
+    end: new Date('2020-01-15T09:25:00.000Z').valueOf() / 1000,
+    description: 'coucou',
+  };
+  expect(Planning.getSubtitle(event, false)).toBe('21:15-15/01/2020 09:25');
+});
+
+test('getSubtitle different day, with date, with location', () => {
+  const event = {
+    start: new Date('2020-01-14T21:15:00.000Z').valueOf() / 1000,
+    end: new Date('2020-01-17T09:05:00.000Z').valueOf() / 1000,
+    description: 'coucou',
+    location: 'RU INSA',
+  };
+  expect(Planning.getSubtitle(event, true)).toBe(
+    '14/01/2020 21:15-17/01/2020 09:05 @ RU INSA'
+  );
+});

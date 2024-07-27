@@ -21,7 +21,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
-import { dateToDateString, dateToTimeString } from '../../utils/Planning';
+import { getSubtitle } from '../../utils/Planning';
 import { apiRequest } from '../../utils/WebData';
 import CustomHTML from '../../components/Overrides/CustomHTML';
 import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
@@ -67,13 +67,15 @@ function PlanningDisplayScreen(props: Props) {
     if (event == null) {
       return <View />;
     }
-    const date = new Date(event.start * 1000);
-    let subtitle = dateToDateString(date) + ' ' + dateToTimeString(date, true);
-    if (event.location) subtitle += ' @ ' + event.location.trim();
+    const subtitle = getSubtitle(event);
 
     return (
       <CollapsibleScrollView style={styles.container} hasTab>
-        <Card.Title title={event.title} subtitle={subtitle} />
+        <Card.Title
+          title={event.title}
+          subtitle={subtitle}
+          subtitleNumberOfLines={2}
+        />
         {event.logo !== null ? (
           <ImageGalleryButton
             images={[{ url: event.logo }]}
