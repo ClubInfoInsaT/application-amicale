@@ -35,29 +35,28 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuthenticatedRequest } from '../../../context/loginContext';
 import { MainRoutes } from '../../../navigation/MainNavigator';
 
-export type ClubRespoType = {
+export type ClubRespo = {
   name: string;
   role: string;
 };
 
-export type ClubType = {
-  id: number;
-  name: string;
-  mail: string | null;
-  website: string | null;
-  instagram: string | null;
-  discord: string | null;
-  description: string | null;
-  type: number;
-  categories: Array<string>;
-  respo: Array<string>;
-  responsibles: Array<ClubRespoType>;
-  logo: string | null;
+export type Club = {
+  id: number; // minimum: 0
+  name: string; // Unstyled string, maxLength: 255
+  mail: string; // email format, maxLength: 255
+  website: string; // url format, maxLength: 255
+  instagram: string; // maxLength: 255
+  discord: string; // url format, maxLength: 255
+  description: string; // HTML description, maxLength: 255
+  type: number; // 0: Club de l'Amicale, 1: Association, 2: Organisateur d'event, minimum: 0
+  categories: string[]; // array of strings, maxLength: 255
+  respo: ClubRespo[];
+  logo: string; // Url to logo image, maxLength: 255
 };
 
 type ResponseType = {
   categories: Array<string>;
-  clubs: Array<ClubType>;
+  clubs: Array<Club>;
 };
 
 const LIST_ITEM_HEIGHT = 96;
@@ -113,7 +112,7 @@ function ClubListScreen() {
    *
    * @param item The article pressed
    */
-  const onListItemPress = (item: ClubType) => {
+  const onListItemPress = (item: Club) => {
     navigation.navigate(MainRoutes.ClubInformation, {
       type: 'full',
       data: item,
@@ -153,7 +152,7 @@ function ClubListScreen() {
     }
   };
 
-  const getRenderItem = ({ item }: { item: ClubType }) => {
+  const getRenderItem = ({ item }: { item: Club }) => {
     const onPress = () => {
       onListItemPress(item);
     };
@@ -165,7 +164,7 @@ function ClubListScreen() {
     return null;
   };
 
-  const keyExtractor = (item: ClubType): string => item.id.toString();
+  const keyExtractor = (item: Club): string => item.id.toString();
 
   /**
    * Updates the search string and category filter, saving them to the State.
@@ -205,7 +204,7 @@ function ClubListScreen() {
    * @param item The club to check
    * @returns {boolean}
    */
-  const shouldRenderItem = (item: ClubType): boolean => {
+  const shouldRenderItem = (item: Club): boolean => {
     let shouldRender =
       currentlySelectedCategories.length === 0 ||
       isItemInCategoryFilter(currentlySelectedCategories, item.categories);

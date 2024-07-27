@@ -20,12 +20,12 @@
 import * as React from 'react';
 import { Avatar, Chip, List, useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-import type { ClubType } from '../../../screens/Amicale/Clubs/ClubListScreen';
+import type { Club } from '../../../screens/Amicale/Clubs/ClubListScreen';
 import GENERAL_STYLES from '../../../constants/Styles';
 
 type Props = {
   onPress: () => void;
-  item: ClubType;
+  item: Club;
   height: number;
 };
 
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 
 function ClubListItem(props: Props) {
   const theme = useTheme();
-  const hasManagers: boolean = props.item.responsibles.length > 0;
+  const hasManagers: boolean = props.item.respo.length > 0;
 
   const getCategoriesRender = () => {
     const final: Array<React.ReactNode> = [];

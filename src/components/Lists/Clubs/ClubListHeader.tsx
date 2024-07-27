@@ -76,9 +76,10 @@ function ClubListHeader(props: PropsType) {
 
   const getCategoriesRender = () => {
     const final: Array<React.ReactNode> = [];
-    props.categories.forEach((cat: string) => {
-      final.push(getChipRender(cat, cat));
-    });
+    if (props.categories)
+      props.categories.forEach((cat: string) => {
+        final.push(getChipRender(cat, cat));
+      });
     return final;
   };
 

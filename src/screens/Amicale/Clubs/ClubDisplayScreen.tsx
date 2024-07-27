@@ -30,7 +30,7 @@ import {
 import i18n from 'i18n-js';
 import CustomHTML from '../../../components/Overrides/CustomHTML';
 import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
-import type { ClubCategoryType, ClubType } from './ClubListScreen';
+import type { Club, ClubRespo } from './ClubListScreen';
 import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../../components/Media/ImageGalleryButton';
 import RequestScreen from '../../../components/Screens/RequestScreen';
@@ -77,6 +77,24 @@ const styles = StyleSheet.create({
   },
 });
 
+type ResponseData = {
+  isMember: boolean; // Whether the user is a member of this club, `false` if user is not logged in
+  pendingIncomingInvitation: boolean; // Whether the user has been invited to join this club, `false` if user is not logged in, `false` if user is already a member
+  pendingOutgoingRequest: boolean; // Whether the user has requested to join this club, `false` if user is not logged in, `false` if user is already a member
+  canJoin: boolean; // Whether the user is able to join this club, `false` if joining is disabled or not yet implemented, `false` if user is not logged in, `false` if user is already a member
+  isManager: boolean; // Whether the user can view member list, invite and remove members, `false` if user is not logged in
+  role:
+    | 'president'
+    | 'vice-president'
+    | 'treasurer'
+    | 'secretary'
+    | 'respo'
+    | 'member'
+    | 'none'; // User's role inside the club
+  responsibility?: string; // If `role` is set to `respo`, this indicates the title taken by the member within the club
+  club: Club; // Reference to Club type
+};
+
 /**
  * Class defining a club event information page.
  * If called with data and categories navigation parameters, will use those to display the data.
@@ -86,35 +104,11 @@ function ClubDisplayScreen(props: Props) {
   const navigation = useNavigation();
   const theme = useTheme();
 
-  const [displayData, setDisplayData] = useState<ClubType | undefined>(
-    props.route.params.type === 'full' ? props.route.params.data : undefined
-  );
-  const categories =
-    props.route.params.type === 'full'
-      ? props.route.params.categories
-      : undefined;
+  const [displayData, setDisplayData] = useState<ResponseData | undefined>();
   const clubId =
     props.route.params.type === 'full'
       ? props.route.params.data.id
       : props.route.params.clubId;
-
-  /**
-   * Gets the name of the category with the given ID
-   *
-   * @param id The category's ID
-   * @returns {string|*}
-   */
-  const getCategoryName = (id: number): string => {
-    let categoryName = '';
-    if (categories) {
-      categories.forEach((item: ClubCategoryType) => {
-        if (id === item.id) {
-          categoryName = item.name;
-        }
-      });
-    }
-    return categoryName;
-  };
 
   /**
    * Gets the view for rendering categories
@@ -122,20 +116,18 @@ function ClubDisplayScreen(props: Props) {
    * @param categories The categories to display (max 2)
    * @returns {null|*}
    */
-  const getCategoriesRender = (c: Array<number | null>) => {
+  const getCategoriesRender = (categories: Array<string>) => {
     if (!categories) {
       return null;
     }
 
     const final: Array<React.ReactNode> = [];
-    c.forEach((cat: number | null) => {
-      if (cat != null) {
-        final.push(
-          <Chip style={styles.category} key={cat}>
-            {getCategoryName(cat)}
-          </Chip>
-        );
-      }
+    categories.forEach((category: string) => {
+      final.push(
+        <Chip style={styles.category} key={category}>
+          {category}
+        </Chip>
+      );
     });
     return <View style={styles.categoryContainer}>{final}</View>;
   };
@@ -147,10 +139,17 @@ function ClubDisplayScreen(props: Props) {
    * @param email The club contact email
    * @returns {*}
    */
-  const getManagersRender = (managers: Array<string>, email: string | null) => {
+  const getManagersRender = (
+    managers: Array<ClubRespo>,
+    email: string | null
+  ) => {
     const managersListView: Array<React.ReactNode> = [];
-    managers.forEach((item: string) => {
-      managersListView.push(<Paragraph key={item}>{item}</Paragraph>);
+    managers.forEach((respo: ClubRespo) => {
+      managersListView.push(
+        <Paragraph
+          key={respo.name}
+        >{`${respo.name} (${respo.role})`}</Paragraph>
+      );
     });
     const hasManagers = managers.length > 0;
     return (
@@ -214,29 +213,32 @@ function ClubDisplayScreen(props: Props) {
     );
   };
 
-  const getScreen = (data: ClubType | undefined) => {
-    if (data) {
+  const getScreen = (response: ResponseData | undefined) => {
+    const club = response?.club;
+
+    if (club) {
+      console.log(club);
       return (
         <CollapsibleScrollView style={styles.scroll} hasTab>
-          {getCategoriesRender(data.category)}
-          {data.logo !== null ? (
+          {getCategoriesRender(club.categories)}
+          {club.logo !== null ? (
             <ImageGalleryButton
-              images={[{ url: data.logo }]}
+              images={[{ url: club.logo }]}
               style={styles.imageButton}
             />
           ) : (
             <View />
           )}
 
-          {data.description !== null ? (
+          {club.description !== null ? (
             // Surround description with div to allow text styling if the description is not html
             <Card.Content>
-              <CustomHTML html={data.description} />
+              <CustomHTML html={club.description} />
             </Card.Content>
           ) : (
             <View />
           )}
-          {getManagersRender(data.responsibles, data.email)}
+          {getManagersRender(club.respo, club.mail)}
         </CollapsibleScrollView>
       );
     }
@@ -249,9 +251,10 @@ function ClubDisplayScreen(props: Props) {
     }
   }, [displayData, navigation]);
 
-  const request = useAuthenticatedRequest<ClubType>('clubs/info', {
-    id: clubId,
-  });
+  const request = useAuthenticatedRequest<ResponseData>(
+    'clubs/club?id=' + clubId,
+    'GET'
+  );
 
   return (
     <RequestScreen
