@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Card, List, useTheme, Text } from 'react-native-paper';
+import { Avatar, Card, List, useTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { StyleSheet } from 'react-native';
 import { COTISATION } from '../../../screens/Amicale/ProfileScreen';
