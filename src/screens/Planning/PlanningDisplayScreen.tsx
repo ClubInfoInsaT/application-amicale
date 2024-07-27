@@ -22,7 +22,6 @@ import { StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
 import { dateToDateString, dateToTimeString } from '../../utils/Planning';
-import DateManager from '../../managers/DateManager';
 import { apiRequest } from '../../utils/WebData';
 import CustomHTML from '../../components/Overrides/CustomHTML';
 import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
@@ -64,27 +63,27 @@ function PlanningDisplayScreen(props: Props) {
       ? props.route.params.data.id
       : props.route.params.eventId;
 
-  const getScreen = (data: PlanningEventType | undefined) => {
-    if (data == null) {
+  const getScreen = (event: PlanningEventType | undefined) => {
+    if (event == null) {
       return <View />;
     }
-    const date = new Date(data.start * 1000);
+    const date = new Date(event.start * 1000);
     let subtitle = dateToDateString(date) + ' ' + dateToTimeString(date, true);
-    if (data.location) subtitle += ' @ ' + data.location.trim();
+    if (event.location) subtitle += ' @ ' + event.location.trim();
 
     return (
       <CollapsibleScrollView style={styles.container} hasTab>
-        <Card.Title title={data.title} subtitle={subtitle} />
-        {data.logo !== null ? (
+        <Card.Title title={event.title} subtitle={subtitle} />
+        {event.logo !== null ? (
           <ImageGalleryButton
-            images={[{ url: data.logo }]}
+            images={[{ url: event.logo }]}
             style={styles.button}
           />
         ) : null}
 
-        {data.description !== null ? (
+        {event.description !== null ? (
           <Card.Content style={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}>
-            <CustomHTML html={data.description} />
+            <CustomHTML html={event.description} />
           </Card.Content>
         ) : (
           <View />

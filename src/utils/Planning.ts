@@ -69,6 +69,7 @@ export function isDescriptionEmpty(description?: string): boolean {
  * @return {string} The converted string
  */
 export function dateToDateTimeString(date: Date, isUTC: boolean): string {
+  // TODO refactor
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
   const year = date.getFullYear();
@@ -123,11 +124,14 @@ export function generateEventAgenda(events: PlanningEventType[]): {
   let eventsByDate: { [key: string]: Array<PlanningEventType> } = {};
   eventsByDate[dateToDateString(new Date())] = [];
   events.forEach((event) => {
+    // TODO events covering multiple days
     const dateString = dateToDateString(new Date(event.start * 1000));
     if (!eventsByDate[dateString]) {
       eventsByDate[dateString] = [event];
     } else {
       eventsByDate[dateString].push(event);
+      // bad time complexity but we're dealing with small arrays
+      eventsByDate[dateString].sort((a, b) => a.start - b.start);
     }
   });
 
