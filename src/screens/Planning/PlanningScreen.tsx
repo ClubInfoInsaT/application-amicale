@@ -161,7 +161,7 @@ function PlanningScreen(props: PropsType) {
       canRefresh = true;
     }
 
-    if (canRefresh) {
+    if (!refreshing && canRefresh) {
       setRefreshing(true);
       readData<GetEventsResponseType>(Urls.amicale.events)
         .then((response) => {
@@ -197,7 +197,7 @@ function PlanningScreen(props: PropsType) {
   /**
    * Gets an event render item
    *
-   * @param item The current event to render
+   * @param event The current event to render
    * @return {*}
    */
   const getRenderItem = (event: PlanningEventType) => {
@@ -256,8 +256,12 @@ function PlanningScreen(props: PropsType) {
       <View>
         <Divider />
         <List.Item
-          title={'Aucun événement'}
-          description={"Aucun événement n'est prévu pour le moment."}
+          title={refreshing ? 'En cours de chargement...' : 'Aucun événement'}
+          description={
+            refreshing
+              ? undefined
+              : "Aucun événement n'est prévu pour le moment."
+          }
           onPress={onRefresh}
         />
       </View>
