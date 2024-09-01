@@ -14,7 +14,10 @@ public class MainActivity extends ReactActivity {
    @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.show(this, R.style.SplashScreenTheme);
-        super.onCreate(savedInstanceState);
+        // Using the saved state caused crashes. This is a workaround.
+        // See https://github.com/software-mansion/react-native-screens/issues/17#issuecomment-424704067
+        // super.onCreate(savedInstanceState);
+        super.onCreate(null);
     }
 
     /**
