@@ -124,9 +124,22 @@ function ClubListScreen() {
     updateFilteredData(null, id);
   };
 
+  const extractCategories = (data: ResponseType) => {
+    let accumulatedCategories: Array<string> = [];
+    data.clubs.forEach((club) => {
+      club.categories.forEach((category) => {
+        if (!accumulatedCategories.includes(category)) {
+          accumulatedCategories.push(category);
+        }
+      });
+    });
+    return accumulatedCategories;
+    // We could do better complexity-wise by using a Set, but it's not worth it here
+  };
+
   const createDataset = (data: ResponseType | undefined) => {
     if (data) {
-      categories.current = data.categories;
+      categories.current = extractCategories(data);
       return [{ title: '', data: data.clubs }];
     } else {
       return [];
