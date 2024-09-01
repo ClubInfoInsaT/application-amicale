@@ -136,16 +136,29 @@ export function generateEventAgenda(events: PlanningEventType[]): {
   [key: string]: Array<PlanningEventType>;
 } {
   let eventsByDate: { [key: string]: Array<PlanningEventType> } = {};
-  eventsByDate[dateToDateString(new Date())] = [];
+
+  // Initialize today's date
+  // new Date(Date.now()) should be equivalent to new Date(), but the latter
+  // behaves unexpectedly in tests
+  eventsByDate[dateToDateString(new Date(Date.now()))] = [];
+
   events.forEach((event) => {
-    // TODO events covering multiple days
-    const dateString = dateToDateString(new Date(event.start * 1000));
-    if (!eventsByDate[dateString]) {
-      eventsByDate[dateString] = [event];
-    } else {
-      eventsByDate[dateString].push(event);
-      // bad time complexity but we're dealing with small arrays
-      eventsByDate[dateString].sort((a, b) => a.start - b.start);
+    const dayLength = 24 * 60 * 60;
+    const lengthInDays = Math.floor((event.end - event.start) / dayLength);
+    console.log(lengthInDays, event.start, event.end, dayLength);
+
+    for (let i = 0; i <= lengthInDays; i++) {
+      const dateString = dateToDateString(
+        new Date((event.start + i * dayLength) * 1000)
+      );
+      if (!eventsByDate[dateString]) {
+        eventsByDate[dateString] = [event];
+      } else {
+        eventsByDate[dateString].push(event);
+        // Sort events, earlier events first
+        // bad time complexity but we're dealing with small arrays
+        eventsByDate[dateString].sort((a, b) => a.start - b.start);
+      }
     }
   });
 
