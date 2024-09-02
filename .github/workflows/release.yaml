@@ -1,0 +1,46 @@
+name: Release Workflow
+
+on:
+  release:
+    types:
+      - created
+
+concurrency:
+  group: release_workflow
+  cancel-in-progress: true
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    environment: build
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Get tag
+        id: tag
+        run: echo "::set-output name=tag::`git describe --tags`"
+      - name: Install dependencies
+        run: npm ci
+      - uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: 'Europe/Paris'
+          timezoneMacos: 'Europe/Paris'
+      - name: add keys
+        run: |
+          mkdir -p android/keystores
+          echo "${{ secrets.KEYSTORE_PROPERTIES_64 }}" | base64 -d > android/keystores/release.keystore.properties
+          echo "${{ secrets.JKS_64 }}" | base64 -d > android/app/application-amicale.jks
+      - name: build
+        run: npm run apk
+      - name: Upload to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: android/app/build/outputs/apk/release/app-release.apk
+          asset_name: campus-${{steps.tag.outputs.tag}}.apk
+          asset_content_type: application/vnd.android.package-archive

@@ -15,6 +15,7 @@
     "full-check": "npm run typescript && npm run lint && npm run test",
     "pod": "cd ios && pod install && cd ..",
     "bundle": "cd android && ./gradlew bundleRelease",
+    "apk": "cd android && ./gradlew assembleRelease",
     "clean": "react-native-clean-project",
     "postversion": "react-native-version",
     "test-locales": "node ./scripts/test-locales.js"
