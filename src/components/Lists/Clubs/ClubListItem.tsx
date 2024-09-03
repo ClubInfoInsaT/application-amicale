@@ -51,56 +51,59 @@ const styles = StyleSheet.create({
   },
 });
 
-function ClubListItem(props: Props) {
-  const theme = useTheme();
-  const hasManagers: boolean = props.item.respo.length > 0;
+const ClubListItem = React.memo(
+  (props: Props) => {
+    const theme = useTheme();
+    const hasManagers: boolean = props.item.respo.length > 0;
 
-  const getCategoriesRender = () => {
-    const final: Array<React.ReactNode> = [];
-    props.item.categories.forEach((category) => {
-      if (category) {
-        final.push(
-          <Chip style={styles.chip} key={`${props.item.id}:${category}`}>
-            {category}
-          </Chip>
+    const getCategoriesRender = () => {
+      const final: Array<React.ReactNode> = [];
+      props.item.categories.forEach((category) => {
+        if (category) {
+          final.push(
+            <Chip style={styles.chip} key={`${props.item.id}:${category}`}>
+              {category}
+            </Chip>
+          );
+        }
+      });
+      return <View style={styles.chipContainer}>{final}</View>;
+    };
+
+    function getRenderLogo() {
+      if (props.item.logo)
+        return (
+          <Avatar.Image
+            style={styles.avatar}
+            size={64}
+            source={{ uri: props.item.logo }}
+          />
         );
-      }
-    });
-    return <View style={styles.chipContainer}>{final}</View>;
-  };
+      else return <view />;
+    }
 
-  function getRenderLogo() {
-    if (props.item.logo)
-      return (
-        <Avatar.Image
-          style={styles.avatar}
-          size={64}
-          source={{ uri: props.item.logo }}
-        />
-      );
-    else return <view />;
-  }
-
-  return (
-    <List.Item
-      title={props.item.name}
-      description={getCategoriesRender()}
-      onPress={props.onPress}
-      left={getRenderLogo}
-      right={() => (
-        <Avatar.Icon
-          style={styles.icon}
-          size={48}
-          icon={hasManagers ? 'check-circle-outline' : 'alert-circle-outline'}
-          color={hasManagers ? theme.colors.success : theme.colors.primary}
-        />
-      )}
-      style={{
-        height: props.height,
-        ...styles.item,
-      }}
-    />
-  );
-}
+    return (
+      <List.Item
+        title={props.item.name}
+        description={getCategoriesRender()}
+        onPress={props.onPress}
+        left={getRenderLogo}
+        right={() => (
+          <Avatar.Icon
+            style={styles.icon}
+            size={48}
+            icon={hasManagers ? 'check-circle-outline' : 'alert-circle-outline'}
+            color={hasManagers ? theme.colors.success : theme.colors.primary}
+          />
+        )}
+        style={{
+          height: props.height,
+          ...styles.item,
+        }}
+      />
+    );
+  },
+  () => true
+); // Component is memoized and constant
 
 export default ClubListItem;
