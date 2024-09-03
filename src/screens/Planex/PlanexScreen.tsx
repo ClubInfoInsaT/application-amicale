@@ -24,7 +24,7 @@ import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Autolink from 'react-native-autolink';
 import AlertDialog from '../../components/Dialogs/AlertDialog';
-import { dateToString, getTimeOnlyString } from '../../utils/Planning';
+import { dateToTimeString } from '../../utils/Planning';
 import DateManager from '../../managers/DateManager';
 import type { PlanexGroupType } from './GroupSelectionScreen';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
@@ -146,15 +146,15 @@ function PlanexScreen() {
         title: string;
         color: string;
       } = JSON.parse(event.nativeEvent.data);
-      const startDate = dateToString(new Date(data.start), true);
-      const endDate = dateToString(new Date(data.end), true);
-      const startString = getTimeOnlyString(startDate);
-      const endString = getTimeOnlyString(endDate);
+      console.log(data);
+      const start = new Date(data.start);
+      const startTime = dateToTimeString(start, true);
+      const endTime = dateToTimeString(new Date(data.end), true);
 
-      let msg = `${DateManager.getInstance().getTranslatedDate(startDate)}\n`;
-      if (startString != null && endString != null) {
-        msg += `${startString} - ${endString}`;
-      }
+      let msg = `${DateManager.getInstance().getTranslatedDateFromDate(
+        start
+      )}\n`;
+      msg += `${startTime} - ${endTime}`;
       showDialog(data.title, msg, data.color);
     }
   };
