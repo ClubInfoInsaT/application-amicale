@@ -29,14 +29,170 @@ test('dateToDateTimeString', () => {
   expect(Planning.dateToDateTimeString(testDate)).toBe('2022-12-31 09:10');
 });
 
+test('generateEventAgenda empty agenda', () => {
+  const eventList = [];
+
+  jest
+    .spyOn(Date, 'now')
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+
+  const calendar = Planning.generateEventAgenda(eventList);
+  expect(Object.keys(calendar).length).toBe(1);
+  expect(calendar['2020-01-14'].length).toBe(0);
+});
+
+test('generateEventAgenda one event today', () => {
+  const eventList = [
+    {
+      start: new Date('2020-01-14T09:15:00.000Z'),
+      end: new Date('2020-01-14T10:15:00.000Z'),
+    },
+  ].map((event) => ({
+    start: event.start.valueOf() / 1000,
+    end: event.end.valueOf() / 1000,
+  })); // convert to timestamp
+
+  jest
+    .spyOn(Date, 'now')
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+
+  const calendar = Planning.generateEventAgenda(eventList, 2);
+  expect(Object.keys(calendar).length).toBe(1);
+  expect(calendar['2020-01-14'].length).toBe(1);
+  expect(calendar['2020-01-14'][0]).toBe(eventList[0]);
+});
+
+test('generateEventAgenda two events today', () => {
+  const eventList = [
+    {
+      start: new Date('2020-01-14T11:15:00.000Z'),
+      end: new Date('2020-01-14T12:15:00.000Z'),
+    },
+    {
+      start: new Date('2020-01-14T09:15:00.000Z'),
+      end: new Date('2020-01-14T10:15:00.000Z'),
+    },
+  ].map((event) => ({
+    start: event.start.valueOf() / 1000,
+    end: event.end.valueOf() / 1000,
+  })); // convert to timestamp
+
+  jest
+    .spyOn(Date, 'now')
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+
+  const calendar = Planning.generateEventAgenda(eventList, 2);
+  expect(Object.keys(calendar).length).toBe(1);
+  expect(calendar['2020-01-14'].length).toBe(2);
+  expect(calendar['2020-01-14'][0]).toBe(eventList[1]);
+  expect(calendar['2020-01-14'][1]).toBe(eventList[0]);
+});
+
+test('generateEventAgenda two events tomorrow', () => {
+  const eventList = [
+    {
+      start: new Date('2020-01-15T00:00:00.000Z'),
+      end: new Date('2020-01-15T12:15:00.000Z'),
+    },
+    {
+      start: new Date('2020-01-15T09:15:00.000Z'),
+      end: new Date('2020-01-15T10:15:00.000Z'),
+    },
+  ].map((event) => ({
+    start: event.start.valueOf() / 1000,
+    end: event.end.valueOf() / 1000,
+  })); // convert to timestamp
+
+  jest
+    .spyOn(Date, 'now')
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+
+  const calendar = Planning.generateEventAgenda(eventList, 2);
+  expect(Object.keys(calendar).length).toBe(2);
+  expect(calendar['2020-01-14'].length).toBe(0);
+  expect(calendar['2020-01-15'][0]).toBe(eventList[0]);
+  expect(calendar['2020-01-15'][1]).toBe(eventList[1]);
+});
+
+test('generateEventAgenda future event spanning 3 days', () => {
+  const eventList = [
+    {
+      // length: 2 days
+      start: new Date('2020-01-16T00:00:00.000Z'),
+      end: new Date('2020-01-18T12:15:00.000Z'),
+    },
+  ].map((event) => ({
+    start: event.start.valueOf() / 1000,
+    end: event.end.valueOf() / 1000,
+  })); // convert to timestamp
+
+  jest
+    .spyOn(Date, 'now')
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+
+  const calendar = Planning.generateEventAgenda(eventList, 2);
+  expect(Object.keys(calendar).length).toBe(4);
+  expect(calendar['2020-01-14'].length).toBe(0);
+  expect(calendar['2020-01-16'].length).toBe(1);
+  expect(calendar['2020-01-16'][0]).toBe(eventList[0]);
+  expect(calendar['2020-01-17'].length).toBe(1);
+  expect(calendar['2020-01-17'][0]).toBe(eventList[0]);
+  expect(calendar['2020-01-18'].length).toBe(1);
+  expect(calendar['2020-01-18'][0]).toBe(eventList[0]);
+});
+
+test('generateEventAgenda current event spanning 3 days', () => {
+  const eventList = [
+    {
+      // length: 2 days
+      start: new Date('2020-01-13T00:00:00.000Z'),
+      end: new Date('2020-01-15T12:15:00.000Z'),
+    },
+  ].map((event) => ({
+    start: event.start.valueOf() / 1000,
+    end: event.end.valueOf() / 1000,
+  })); // convert to timestamp
+
+  jest
+    .spyOn(Date, 'now')
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+
+  const calendar = Planning.generateEventAgenda(eventList, 2);
+  expect(Object.keys(calendar).length).toBe(3);
+  expect(calendar['2020-01-13'].length).toBe(1);
+  expect(calendar['2020-01-13'][0]).toBe(eventList[0]);
+  expect(calendar['2020-01-14'].length).toBe(1);
+  expect(calendar['2020-01-14'][0]).toBe(eventList[0]);
+  expect(calendar['2020-01-15'].length).toBe(1);
+  expect(calendar['2020-01-15'][0]).toBe(eventList[0]);
+});
+
 test('generateEventAgenda', () => {
   const eventList = [
-    { start: new Date('2020-01-14T09:15:00.000Z') },
-    { start: new Date('2020-02-01T09:15:00.000Z') },
-    { start: new Date('2020-01-15T09:15:00.000Z') },
-    { start: new Date('2020-02-01T09:30:00.000Z') },
-    { start: new Date('2020-02-01T08:30:00.000Z') },
-  ].map((event) => ({ start: event.start.valueOf() / 1000 })); // convert to timestamp
+    {
+      start: new Date('2020-01-14T09:15:00.000Z'),
+      end: new Date('2020-01-14T10:15:00.000Z'),
+    },
+    {
+      start: new Date('2020-02-01T09:15:00.000Z'),
+      end: new Date('2020-02-01T10:15:00.000Z'),
+    },
+    {
+      start: new Date('2020-01-15T09:15:00.000Z'),
+      end: new Date('2020-01-15T10:15:00.000Z'),
+    },
+    {
+      start: new Date('2020-02-01T09:30:00.000Z'),
+      end: new Date('2020-02-01T10:30:00.000Z'),
+    },
+    {
+      start: new Date('2020-02-01T08:30:00.000Z'),
+      end: new Date('2020-02-01T09:30:00.000Z'),
+    },
+  ].map((event) => ({
+    start: event.start.valueOf() / 1000,
+    end: event.end.valueOf() / 1000,
+  })); // convert to timestamp
 
   jest
     .spyOn(Date, 'now')
