@@ -53,7 +53,7 @@ export default function ProfileTermsAlertCard(props: Props) {
       {hidden ? undefined : (
         <Card style={styles.card}>
           <Card.Title
-            title="Conditions générales d'utilisation"
+            title={i18n.t('screens.profile.tos')}
             left={(iconProps) => (
               <Avatar.Icon
                 size={iconProps.size}
@@ -66,14 +66,14 @@ export default function ProfileTermsAlertCard(props: Props) {
           <Card.Content>
             <Divider />
             <Paragraph>
-              En appuyant sur "Accepter", tu reconnais avoir lu et accepté les{' '}
+              {i18n.t('screens.profile.tosParagraphOne')}
               <Text
                 style={{ color: 'blue' }}
                 onPress={() => openURLinBrowser(termsUrl)}
               >
-                conditions générales d'utilisation
+                {i18n.t('screens.profile.tos')}
               </Text>{' '}
-              pour profiter pleinement de l'application.
+              {i18n.t('screens.profile.tosParagraphTwo')}
             </Paragraph>
             <Divider />
             <Card.Actions>

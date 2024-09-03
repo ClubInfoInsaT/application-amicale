@@ -259,7 +259,10 @@
       "welcomeFeedback": "We plan on doing more! If you have any suggestions or found bugs, please tell us by tapping the button below.",
       "minor": "Minor",
       "nonMinor": "Non minor",
-      "accept": "Accept"
+      "accept": "Accept",
+      "tos": "Terms of Service",
+      "tosParagraphOne": "By pressing \"Accept\", you acknowledge that you have read and accepted the ",
+      "tosParagraphTwo": " to fully enjoy the application."
     },
     "clubs": {
       "title": "Clubs",

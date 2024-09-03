@@ -49,12 +49,10 @@ function AcceptTermsDialog(props: PropsType) {
   };
 
   const renderDialog = (data: ResultType | undefined, loading: boolean) => {
-    const title = loading // TODO i18n
-      ? i18n.t('dialog.disconnect.titleLoading')
-      : i18n.t('dialog.disconnect.title');
     let message = loading
       ? 'Loading...'
       : 'Terms accepted : ' + (data ? data.success : 'false');
+    const title = i18n.t('screens.profile.tos');
     return (
       <AlertDialog
         visible={props.visible}
