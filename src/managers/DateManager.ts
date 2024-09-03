@@ -90,4 +90,16 @@ export default class DateManager {
       this.monthsOfYear[date.getMonth()]
     } ${date.getFullYear()}`;
   }
+
+  /**
+   * Gets a translated string representing the given date.
+   *
+   * @param date The date objeect
+   * @return {string} The translated string
+   */
+  getTranslatedDateFromDate(date: Date): string {
+    return `${this.daysOfWeek[date.getDay()]} ${date.getDate()} ${
+      this.monthsOfYear[date.getMonth()]
+    } ${date.getFullYear()}`;
+  }
 }
