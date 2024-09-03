@@ -26,6 +26,7 @@ import MaterialHeaderButtons, {
 import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
 import GENERAL_STYLES from '../../constants/Styles';
 import RequestScreen from '../../components/Screens/RequestScreen';
+import ProfileTermsAlertCard from '../../components/Amicale/Profile/ProfileTermsAlertCard';
 import ProfileWelcomeCard from '../../components/Amicale/Profile/ProfileWelcomeCard';
 import ProfilePersonalCard from '../../components/Amicale/Profile/ProfilePersonalCard';
 import ProfileClubCard from '../../components/Amicale/Profile/ProfileClubCard';
@@ -68,6 +69,8 @@ export type ProfileDataType = {
   phone: string;
   groupInsa: string;
   clubs: Array<ProfileClubType>;
+  mustAcceptTerms: boolean;
+  termsUrl: string;
 };
 
 function ProfileScreen() {
@@ -99,6 +102,11 @@ function ProfileScreen() {
         id: string;
         render: () => React.ReactElement;
       }> = [];
+      if (data.mustAcceptTerms)
+        flatListData.push({
+          id: 'terms',
+          render: () => <ProfileTermsAlertCard termsUrl={data.termsUrl} />,
+        });
       flatListData.push({
         id: 'welcome',
         render: () => <ProfileWelcomeCard firstname={data?.firstName} />,

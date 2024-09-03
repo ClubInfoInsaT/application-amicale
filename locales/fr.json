@@ -258,7 +258,11 @@
       "welcomeDescription": "Ceci est ton espace personnel Amicale INSA Toulouse. Tu trouveras ci-dessous les services disponibles avec ton compte. Un peu vide ? Tu as raison et on va essayer de corriger ça, donc reste à jour !",
       "welcomeFeedback": "Nous allons essayer de proposer plus de services ! Si tu as des suggestions, ou as trouvé des bugs, merci de nous contacter avec le bouton ci-dessous.",
       "minor": "Mineur.e",
-      "nonMinor": "Majeur.e"
+      "nonMinor": "Majeur.e",
+      "accept": "Accepter",
+      "tos": "Conditions Générales d'Utilisation",
+      "tosParagraphOne": "En appuyant sur \"Accepter\", tu reconnais avoir lu et accepté les ",
+      "tosParagraphTwo": " pour profiter pleinement de l'application."
     },
     "clubs": {
       "title": "Liste des Clubs",
