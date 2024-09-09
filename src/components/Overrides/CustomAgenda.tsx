@@ -39,6 +39,8 @@ function CustomAgenda(props: PropsType) {
         ref={props.onRef}
         theme={{
           backgroundColor: theme.colors.agendaBackgroundColor,
+          // @ts-ignore types haven't been updated yet
+          reservationsBackgroundColor: theme.colors.agendaBackgroundColor,
           calendarBackground: theme.colors.background,
           textSectionTitleColor: theme.colors.agendaDayTextColor,
           selectedDayBackgroundColor: theme.colors.primary,
