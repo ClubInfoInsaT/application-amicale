@@ -8,7 +8,7 @@
 5. Create a new [provisioning profile][provisioning] (App Store distribution),
    selecting the new certificate. Download.
 6. Update the corresponding [variables][githubactions] for the CI builds. Use
-   `cat file.mobileprovision | base64` (change filename when necessary).
+   `base64 clubinfo2025.mobileprovision --wrap=0` (change filename when necessary).
 7. Try to run `build-ios` workflow to confirm proper configuration.
 
 [certsignreq]: https://developer.apple.com/help/account/create-certificates/create-a-certificate-signing-request
