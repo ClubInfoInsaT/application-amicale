@@ -100,6 +100,19 @@ Suis les instructions sur le [site officiel](https://reactnative.dev/docs/enviro
 
 Si tu utilises Webstorm, le projet contient des configurations de lancement pour lancer le projet d'un seul clic.
 
+Il est possible de lancer un émulateur Android sans lancer Android Studio, ce qui permet de gagner en
+rapidité et en mémoire. Depuis un terminal (sur Linux):
+
+```bash
+# Récupérer la liste des emulateurs installés
+emulator -list-avds
+# En choisir un puis le lancer
+emulator -avd <identifiant de l'émulateur> -no-boot-anim
+```
+
+Note: il faut avoir installé Android Studio et configuré un émulateur depuis l'interface. Dans
+certains cas `npm run android` lancera un émulateur.
+
 # 5. Compiler une version release
 
 Merci de me contacter par mail ou sur le [Discord](https://discord.gg/9G8cWyK) pour toute information sur les releases : [app@amicale-insat.fr](mailto:app@amicale-insat.fr)
