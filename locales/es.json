@@ -234,6 +234,9 @@
       "membershipSubtitle": "Permite la participación en diversas actividades",
       "membershipPayed": "Pagada",
       "membershipNotPayed": "No pagada :(",
+      "sessions":"Sesiones",
+      "sessionsSubtitle": "Borra tus dispositivos antiguos",
+      "logOut": "Cerrar sesión en otros dispositivos",
       "welcomeTitle": "Hola %{name} !",
       "welcomeDescription": "Este es tu espacio personal Amicale INSA Toulouse. A continuación encontrarás los servicios disponibles en tu cuenta. ¿Un poco vacío? Tienes razón y trataremos de solucionarlo, ¡así que mantente al día!",
       "welcomeFeedback": "Intentaremos ofrecer más servicios. Si tienes alguna sugerencia, o has encontrado algún error, ponte en contacto con nosotros con el botón de abajo."

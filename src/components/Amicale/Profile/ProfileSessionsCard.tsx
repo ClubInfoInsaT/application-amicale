@@ -49,10 +49,13 @@ export default function ProfileSessionsCard(props: Props) {
     return (
       <List.Item
         key={index.toString()}
-        title={session.device ? session.device : 'Unknown device'} // TODO i18n
+        title={
+          session.device
+            ? session.device
+            : i18n.t('screens.profile.unknownDevice')
+        }
         description={
-          // : i18n.t('screens.profile.membershipNotPaidInstruction')
-          'last seen ' + session.lastSeen // TODO i18n
+          i18n.t('screens.profile.lastSeen') + new Date(session.lastSeen * 1000)
         }
         left={(leftProps) => (
           <List.Icon
@@ -69,8 +72,8 @@ export default function ProfileSessionsCard(props: Props) {
     return (
       <Card style={styles.card}>
         <Card.Title
-          title="sessions" // TODO i18n
-          subtitle={i18n.t('screens.profile.membershipSubtitle')} // TODO i18n
+          title={i18n.t('screens.profile.sessions')}
+          subtitle={i18n.t('screens.profile.sessionsSubtitle')}
           left={(iconProps) => (
             <Avatar.Icon
               size={iconProps.size}
@@ -89,7 +92,6 @@ export default function ProfileSessionsCard(props: Props) {
     let content = <View />;
     if (data && data.sessions) {
       const items = data.sessions.map(renderSession);
-      // TODO i18n below
       content = (
         <Card.Content>
           <List.Section>{items}</List.Section>
@@ -99,14 +101,14 @@ export default function ProfileSessionsCard(props: Props) {
             onPress={() => props.logout('others')}
             style={styles.logoutOthersButton}
           >
-            {'logout other devices'}
+            {i18n.t('screens.profile.logOut')}
           </Button>
           <Button
             icon="cellphone-remove"
             mode="contained"
             onPress={() => props.logout('all')}
           >
-            {'Deconnexion tous les appareils'}
+            {i18n.t('screens.profile.disconnectAllDevices')}
           </Button>
         </Card.Content>
       );
