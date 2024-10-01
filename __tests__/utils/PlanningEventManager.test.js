@@ -34,7 +34,7 @@ test('generateEventAgenda empty agenda', () => {
 
   jest
     .spyOn(Date, 'now')
-    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000').getTime());
 
   const calendar = Planning.generateEventAgenda(eventList);
   expect(Object.keys(calendar).length).toBe(1);
@@ -44,8 +44,8 @@ test('generateEventAgenda empty agenda', () => {
 test('generateEventAgenda one event today', () => {
   const eventList = [
     {
-      start: new Date('2020-01-14T09:15:00.000Z'),
-      end: new Date('2020-01-14T10:15:00.000Z'),
+      start: new Date('2020-01-14T09:15:00.000'),
+      end: new Date('2020-01-14T10:15:00.000'),
     },
   ].map((event) => ({
     start: event.start.valueOf() / 1000,
@@ -54,7 +54,7 @@ test('generateEventAgenda one event today', () => {
 
   jest
     .spyOn(Date, 'now')
-    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000').getTime());
 
   const calendar = Planning.generateEventAgenda(eventList, 2);
   expect(Object.keys(calendar).length).toBe(1);
@@ -65,12 +65,12 @@ test('generateEventAgenda one event today', () => {
 test('generateEventAgenda two events today', () => {
   const eventList = [
     {
-      start: new Date('2020-01-14T11:15:00.000Z'),
-      end: new Date('2020-01-14T12:15:00.000Z'),
+      start: new Date('2020-01-14T11:15:00.000'),
+      end: new Date('2020-01-14T12:15:00.000'),
     },
     {
-      start: new Date('2020-01-14T09:15:00.000Z'),
-      end: new Date('2020-01-14T10:15:00.000Z'),
+      start: new Date('2020-01-14T09:15:00.000'),
+      end: new Date('2020-01-14T10:15:00.000'),
     },
   ].map((event) => ({
     start: event.start.valueOf() / 1000,
@@ -79,7 +79,7 @@ test('generateEventAgenda two events today', () => {
 
   jest
     .spyOn(Date, 'now')
-    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000').getTime());
 
   const calendar = Planning.generateEventAgenda(eventList, 2);
   expect(Object.keys(calendar).length).toBe(1);
@@ -91,12 +91,12 @@ test('generateEventAgenda two events today', () => {
 test('generateEventAgenda two events tomorrow', () => {
   const eventList = [
     {
-      start: new Date('2020-01-15T00:00:00.000Z'),
-      end: new Date('2020-01-15T12:15:00.000Z'),
+      start: new Date('2020-01-15T00:00:00.000'),
+      end: new Date('2020-01-15T12:15:00.000'),
     },
     {
-      start: new Date('2020-01-15T09:15:00.000Z'),
-      end: new Date('2020-01-15T10:15:00.000Z'),
+      start: new Date('2020-01-15T09:15:00.000'),
+      end: new Date('2020-01-15T10:15:00.000'),
     },
   ].map((event) => ({
     start: event.start.valueOf() / 1000,
@@ -105,7 +105,7 @@ test('generateEventAgenda two events tomorrow', () => {
 
   jest
     .spyOn(Date, 'now')
-    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000').getTime());
 
   const calendar = Planning.generateEventAgenda(eventList, 2);
   expect(Object.keys(calendar).length).toBe(2);
@@ -118,8 +118,8 @@ test('generateEventAgenda future event spanning 3 days', () => {
   const eventList = [
     {
       // length: 2 days
-      start: new Date('2020-01-16T00:00:00.000Z'),
-      end: new Date('2020-01-18T12:15:00.000Z'),
+      start: new Date('2020-01-16T00:00:00.000'),
+      end: new Date('2020-01-18T12:15:00.000'),
     },
   ].map((event) => ({
     start: event.start.valueOf() / 1000,
@@ -128,7 +128,7 @@ test('generateEventAgenda future event spanning 3 days', () => {
 
   jest
     .spyOn(Date, 'now')
-    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000').getTime());
 
   const calendar = Planning.generateEventAgenda(eventList, 2);
   expect(Object.keys(calendar).length).toBe(4);
@@ -145,8 +145,8 @@ test('generateEventAgenda current event spanning 3 days', () => {
   const eventList = [
     {
       // length: 2 days
-      start: new Date('2020-01-13T00:00:00.000Z'),
-      end: new Date('2020-01-15T12:15:00.000Z'),
+      start: new Date('2020-01-13T00:00:00.000'),
+      end: new Date('2020-01-15T12:15:00.000'),
     },
   ].map((event) => ({
     start: event.start.valueOf() / 1000,
@@ -155,7 +155,7 @@ test('generateEventAgenda current event spanning 3 days', () => {
 
   jest
     .spyOn(Date, 'now')
-    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000').getTime());
 
   const calendar = Planning.generateEventAgenda(eventList, 2);
   expect(Object.keys(calendar).length).toBe(3);
@@ -170,24 +170,24 @@ test('generateEventAgenda current event spanning 3 days', () => {
 test('generateEventAgenda', () => {
   const eventList = [
     {
-      start: new Date('2020-01-14T09:15:00.000Z'),
-      end: new Date('2020-01-14T10:15:00.000Z'),
+      start: new Date('2020-01-14T09:15:00.000'),
+      end: new Date('2020-01-14T10:15:00.000'),
     },
     {
-      start: new Date('2020-02-01T09:15:00.000Z'),
-      end: new Date('2020-02-01T10:15:00.000Z'),
+      start: new Date('2020-02-01T09:15:00.000'),
+      end: new Date('2020-02-01T10:15:00.000'),
     },
     {
-      start: new Date('2020-01-15T09:15:00.000Z'),
-      end: new Date('2020-01-15T10:15:00.000Z'),
+      start: new Date('2020-01-15T09:15:00.000'),
+      end: new Date('2020-01-15T10:15:00.000'),
     },
     {
-      start: new Date('2020-02-01T09:30:00.000Z'),
-      end: new Date('2020-02-01T10:30:00.000Z'),
+      start: new Date('2020-02-01T09:30:00.000'),
+      end: new Date('2020-02-01T10:30:00.000'),
     },
     {
-      start: new Date('2020-02-01T08:30:00.000Z'),
-      end: new Date('2020-02-01T09:30:00.000Z'),
+      start: new Date('2020-02-01T08:30:00.000'),
+      end: new Date('2020-02-01T09:30:00.000'),
     },
   ].map((event) => ({
     start: event.start.valueOf() / 1000,
@@ -196,7 +196,7 @@ test('generateEventAgenda', () => {
 
   jest
     .spyOn(Date, 'now')
-    .mockImplementation(() => new Date('2020-01-14T00:00:00.000Z').getTime());
+    .mockImplementation(() => new Date('2020-01-14T00:00:00.000').getTime());
 
   const calendar = Planning.generateEventAgenda(eventList, 2);
   expect(calendar['2020-01-14'].length).toBe(1);
@@ -211,8 +211,8 @@ test('generateEventAgenda', () => {
 
 test('getSubtitle same day, with date, no location', () => {
   const event = {
-    start: new Date('2020-01-14T09:15:00.000Z').valueOf() / 1000,
-    end: new Date('2020-01-14T10:15:00.000Z').valueOf() / 1000,
+    start: new Date('2020-01-14T09:15:00.000').valueOf() / 1000,
+    end: new Date('2020-01-14T10:15:00.000').valueOf() / 1000,
     description: 'coucou',
   };
   expect(Planning.getSubtitle(event)).toBe('14/01/2020 09:15-10:15');
@@ -220,8 +220,8 @@ test('getSubtitle same day, with date, no location', () => {
 
 test('getSubtitle same day, with date, with location', () => {
   const event = {
-    start: new Date('2020-01-14T09:15:00.000Z').valueOf() / 1000,
-    end: new Date('2020-01-14T10:15:00.000Z').valueOf() / 1000,
+    start: new Date('2020-01-14T09:15:00.000').valueOf() / 1000,
+    end: new Date('2020-01-14T10:15:00.000').valueOf() / 1000,
     description: 'coucou',
     location: 'RU INSA',
   };
@@ -230,8 +230,8 @@ test('getSubtitle same day, with date, with location', () => {
 
 test('getSubtitle same day, no date, no location', () => {
   const event = {
-    start: new Date('2020-01-14T09:15:00.000Z').valueOf() / 1000,
-    end: new Date('2020-01-14T10:15:00.000Z').valueOf() / 1000,
+    start: new Date('2020-01-14T09:15:00.000').valueOf() / 1000,
+    end: new Date('2020-01-14T10:15:00.000').valueOf() / 1000,
     description: 'coucou',
   };
   expect(Planning.getSubtitle(event, false)).toBe('09:15-10:15');
@@ -239,8 +239,8 @@ test('getSubtitle same day, no date, no location', () => {
 
 test('getSubtitle same day, no date, with location', () => {
   const event = {
-    start: new Date('2020-01-14T09:15:00.000Z').valueOf() / 1000,
-    end: new Date('2020-01-14T10:15:00.000Z').valueOf() / 1000,
+    start: new Date('2020-01-14T09:15:00.000').valueOf() / 1000,
+    end: new Date('2020-01-14T10:15:00.000').valueOf() / 1000,
     description: 'coucou',
     location: 'RU INSA',
   };
@@ -249,8 +249,8 @@ test('getSubtitle same day, no date, with location', () => {
 
 test('getSubtitle next day, less than 12h, no date, no location', () => {
   const event = {
-    start: new Date('2020-01-14T21:15:00.000Z').valueOf() / 1000,
-    end: new Date('2020-01-15T09:05:00.000Z').valueOf() / 1000,
+    start: new Date('2020-01-14T21:15:00.000').valueOf() / 1000,
+    end: new Date('2020-01-15T09:05:00.000').valueOf() / 1000,
     description: 'coucou',
   };
   expect(Planning.getSubtitle(event, false)).toBe('21:15-09:05');
@@ -258,8 +258,8 @@ test('getSubtitle next day, less than 12h, no date, no location', () => {
 
 test('getSubtitle next day, more than 12h, no date, no location', () => {
   const event = {
-    start: new Date('2020-01-14T21:15:00.000Z').valueOf() / 1000,
-    end: new Date('2020-01-15T09:25:00.000Z').valueOf() / 1000,
+    start: new Date('2020-01-14T21:15:00.000').valueOf() / 1000,
+    end: new Date('2020-01-15T09:25:00.000').valueOf() / 1000,
     description: 'coucou',
   };
   expect(Planning.getSubtitle(event, false)).toBe('21:15-15/01/2020 09:25');
@@ -267,8 +267,8 @@ test('getSubtitle next day, more than 12h, no date, no location', () => {
 
 test('getSubtitle different day, with date, with location', () => {
   const event = {
-    start: new Date('2020-01-14T21:15:00.000Z').valueOf() / 1000,
-    end: new Date('2020-01-17T09:05:00.000Z').valueOf() / 1000,
+    start: new Date('2020-01-14T21:15:00.000').valueOf() / 1000,
+    end: new Date('2020-01-17T09:05:00.000').valueOf() / 1000,
     description: 'coucou',
     location: 'RU INSA',
   };
