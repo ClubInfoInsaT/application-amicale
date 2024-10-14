@@ -24,7 +24,7 @@ import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Autolink from 'react-native-autolink';
 import AlertDialog from '../../components/Dialogs/AlertDialog';
-import { dateToTimeString } from '../../utils/Planning';
+import { dateToTimeStringUTC } from '../../utils/Planning';
 import DateManager from '../../managers/DateManager';
 import type { PlanexGroupType } from './GroupSelectionScreen';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
@@ -148,8 +148,8 @@ function PlanexScreen() {
       } = JSON.parse(event.nativeEvent.data);
       console.log(data);
       const start = new Date(data.start);
-      const startTime = dateToTimeString(start, true);
-      const endTime = dateToTimeString(new Date(data.end), true);
+      const startTime = dateToTimeStringUTC(start);
+      const endTime = dateToTimeStringUTC(new Date(data.end));
 
       let msg = `${DateManager.getInstance().getTranslatedDateFromDate(
         start
