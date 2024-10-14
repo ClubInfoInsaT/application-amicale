@@ -121,6 +121,20 @@ export function dateToTimeString(date: Date): string {
 }
 
 /**
+ * Converts a date object to a string in the format
+ * HH-MM (UTC)
+ *
+ * @param date The date object to convert
+ * @return {string} The converted string
+ */
+export function dateToTimeStringUTC(date: Date): string {
+  const h = date.getUTCHours();
+  const hours = String(h).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
+/**
  * Generates an object with an array of eventObject at each key.
  * Each key is a date string in the format
  * YYYY-MM-DD.
@@ -180,9 +194,9 @@ export function getSubtitle(
 
   let subtitle = '';
   if (includeStartDay) subtitle = dateToDateStringHuman(start) + ' ';
-  subtitle += dateToTimeString(start, true) + '-';
+  subtitle += dateToTimeString(start) + '-';
   if (over12hLong) subtitle += dateToDateStringHuman(end) + ' ';
-  subtitle += dateToTimeString(end, true);
+  subtitle += dateToTimeString(end);
   if (event.location) subtitle += ' @ ' + event.location.trim();
   return subtitle;
 }

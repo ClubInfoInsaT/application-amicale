@@ -29,6 +29,30 @@ test('dateToDateTimeString', () => {
   expect(Planning.dateToDateTimeString(testDate)).toBe('2022-12-31 09:10');
 });
 
+test('dateToTimeString', () => {
+  expect(Planning.dateToTimeString(new Date('2020-01-14T09:15:00.000'))).toBe(
+    '09:15'
+  );
+  expect(Planning.dateToTimeString(new Date('2020-01-14T00:00:00.000'))).toBe(
+    '00:00'
+  );
+  expect(Planning.dateToTimeString(new Date('2020-01-14T23:59:59.999'))).toBe(
+    '23:59'
+  );
+});
+
+test('dateToTimeStringUTC', () => {
+  expect(
+    Planning.dateToTimeStringUTC(new Date('2020-01-14T09:15:00.000Z'))
+  ).toBe('09:15');
+  expect(
+    Planning.dateToTimeStringUTC(new Date('2020-01-14T00:00:00.000Z'))
+  ).toBe('00:00');
+  expect(
+    Planning.dateToTimeStringUTC(new Date('2020-01-14T23:59:59.999Z'))
+  ).toBe('23:59');
+});
+
 test('generateEventAgenda empty agenda', () => {
   const eventList = [];
 
