@@ -29,8 +29,7 @@ const PROXIMO_ENDPOINT = STUDENT_SERVER + '~proximo/v2/api/';
 const PROXIMO_IMAGES_ENDPOINT =
   STUDENT_SERVER + '~proximo/api_proximo/storage/app/public/';
 const APP_IMAGES_ENDPOINT = STUDENT_SERVER + '~amicale_app/images/';
-const PROXIWASH_ENDPOINT =
-  'https://www.proxiwash.com/weblaverie/ma-laverie-2?s=';
+const PROXIWASH_ENDPOINT = 'https://www.proxiwash.com/laverie?code=';
 
 export default {
   amicale: {
