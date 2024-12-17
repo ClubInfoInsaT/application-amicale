@@ -25,7 +25,7 @@ import {
   SectionListProps,
   StyleSheet,
 } from 'react-native';
-import ErrorView from './ErrorView';
+import ErrorView, { ErrorProps } from './ErrorView';
 import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
 import RequestScreen, { RequestScreenProps } from './RequestScreen';
 import { CollapsibleComponentPropsType } from '../Collapsible/CollapsibleComponent';
@@ -92,6 +92,17 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
     };
   };
 
+  const renderEmptyList = props.renderError
+    ? props.renderError
+    : (errorProps: ErrorProps) => (
+        <ErrorView
+          status={errorProps.status}
+          code={errorProps.code}
+          message={errorProps.message}
+          button={errorProps.button}
+        />
+      );
+
   const render = (
     data: RawData | undefined,
     loading: boolean,
@@ -138,22 +149,21 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
             : null
         }
         ListEmptyComponent={
-          loading ? undefined : (
-            <ErrorView
-              status={status}
-              code={code}
-              message={message}
-              button={
-                code !== API_RESPONSE_CODE.BAD_TOKEN
-                  ? {
-                      icon: 'refresh',
-                      text: i18n.t('general.retry'),
-                      onPress: () => refreshData(),
-                    }
-                  : undefined
-              }
-            />
-          )
+          loading
+            ? undefined
+            : renderEmptyList({
+                status,
+                code,
+                message,
+                button:
+                  code !== API_RESPONSE_CODE.BAD_TOKEN
+                    ? {
+                        icon: 'refresh',
+                        text: i18n.t('general.retry'),
+                        onPress: () => refreshData(),
+                      }
+                    : undefined,
+              })
         }
         getItemLayout={
           itemHeight ? (d, i) => getItemLayout(itemHeight, d, i) : undefined
@@ -172,6 +182,7 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
     <RequestScreen<RawData>
       request={props.request}
       render={render}
+      renderError={props.renderError}
       showError={false}
       showLoading={false}
       autoRefreshTime={props.autoRefreshTime}

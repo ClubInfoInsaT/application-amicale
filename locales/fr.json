@@ -63,7 +63,8 @@
       "numAvailablePlural": "disponibles",
       "errors": {
         "title": "Message laverie",
-        "button": "En savoir plus"
+        "button": "En savoir plus",
+        "openSite": "En attendant, ouvre le site avec le bouton en haute à droite"
       },
       "washinsa": {
         "title": "Laverie INSA",
