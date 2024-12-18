@@ -18,22 +18,19 @@
  */
 
 import * as React from 'react';
-import { Button, Card, Text, TouchableRipple } from 'react-native-paper';
-import { Image, StyleSheet, View } from 'react-native';
-import Autolink from 'react-native-autolink';
+import { Button, Card, TouchableRipple } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
-import type { FeedItemType } from '../../screens/Home/HomeScreen';
-import NewsSourcesConstants, {
-  AvailablePages,
-} from '../../constants/NewsSourcesConstants';
-import type { NewsSourceType } from '../../constants/NewsSourcesConstants';
+import type { FeedPostType } from '../../components/Home/Feed';
 import ImageGalleryButton from '../Media/ImageGalleryButton';
 import { useNavigation } from '@react-navigation/native';
 import GENERAL_STYLES from '../../constants/Styles';
 import { MainRoutes } from '../../navigation/MainNavigator';
+import { Avatar } from 'react-native-paper';
+import CustomHTML from '../Overrides/CustomHTML';
 
 type PropsType = {
-  item: FeedItemType;
+  item: FeedPostType;
   height: number;
 };
 
@@ -60,6 +57,11 @@ const styles = StyleSheet.create({
   action: {
     marginLeft: 'auto',
   },
+  avatar: {
+    backgroundColor: 'transparent',
+    marginLeft: 10,
+    marginRight: 10,
+  },
 });
 
 /**
@@ -70,23 +72,17 @@ function FeedItem(props: PropsType) {
   const onPress = () => {
     navigation.navigate(MainRoutes.FeedInformation, {
       data: item,
-      date: getFormattedDate(props.item.time),
+      date: getFormattedDate(props.item.date),
     });
   };
 
   const { item, height } = props;
   const image = item.image !== '' && item.image != null ? item.image : null;
-  const pageSource: NewsSourceType =
-    NewsSourcesConstants[item.page_id as AvailablePages];
   const cardMargin = 10;
   const cardHeight = height - 2 * cardMargin;
   const imageSize = 250;
   const titleHeight = 80;
   const actionsHeight = 60;
-  const textHeight =
-    image != null
-      ? cardHeight - titleHeight - actionsHeight - imageSize
-      : cardHeight - titleHeight - actionsHeight;
   return (
     <Card
       style={{
@@ -97,9 +93,15 @@ function FeedItem(props: PropsType) {
       <TouchableRipple style={GENERAL_STYLES.flex} onPress={onPress}>
         <View>
           <Card.Title
-            title={pageSource.name}
-            subtitle={getFormattedDate(item.time)}
-            left={() => <Image source={pageSource.icon} style={styles.image} />}
+            title={item.title}
+            subtitle={getFormattedDate(item.date)}
+            left={() => (
+              <Avatar.Image
+                style={styles.avatar}
+                size={64}
+                source={{ uri: item.clubLogo }}
+              />
+            )}
             style={{ height: titleHeight }}
           />
           {image != null ? (
@@ -113,18 +115,7 @@ function FeedItem(props: PropsType) {
             />
           ) : null}
           <Card.Content>
-            {item.message !== undefined ? (
-              <Autolink
-                text={item.message}
-                hashtag={'facebook'}
-                component={Text}
-                style={{ height: textHeight }}
-                truncate={32}
-                email={true}
-                url={true}
-                phone={true}
-              />
-            ) : null}
+            <CustomHTML html={item.content} />
           </Card.Content>
           <Card.Actions style={{ height: actionsHeight }}>
             <Button onPress={onPress} icon="plus" style={styles.action}>

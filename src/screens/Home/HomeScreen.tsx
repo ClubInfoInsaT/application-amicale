@@ -20,36 +20,31 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   FlatList,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  SectionListData,
+  //  NativeScrollEvent,
+  //  NativeSyntheticEvent,
   StyleSheet,
 } from 'react-native';
+import Feed from '../../components/Home/Feed';
 import i18n from 'i18n-js';
-import { Headline, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
 import { View } from 'react-native-animatable';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashboardItem from '../../components/Home/EventDashboardItem';
-import WebSectionList from '../../components/Screens/WebSectionList';
-import FeedItem from '../../components/Home/FeedItem';
 import SmallDashboardItem from '../../components/Home/SmallDashboardItem';
 import PreviewEventDashboardItem from '../../components/Home/PreviewEventDashboardItem';
 import ActionsDashBoardItem from '../../components/Home/ActionsDashboardItem';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
-import AnimatedFAB from '../../components/Animations/AnimatedFAB';
+// import AnimatedFAB from '../../components/Animations/AnimatedFAB';
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import { getDisplayEvent, getFutureEvents } from '../../utils/Home';
 import type { PlanningEventType } from '../../utils/Planning';
 import GENERAL_STYLES from '../../constants/Styles';
-import Urls from '../../constants/Urls';
-import { readData } from '../../utils/WebData';
 import { TabRoutes, TabStackParamsList } from '../../navigation/TabNavigator';
 import { ServiceItemType } from '../../utils/Services';
 import { useCurrentDashboard } from '../../context/preferencesContext';
@@ -58,23 +53,6 @@ import { useLoginState } from '../../context/loginContext';
 import { PreferenceKeys } from '../../utils/asyncStorage';
 import { useNotificationPreferences } from '../../context/preferencesContext';
 import PushNotification from 'react-native-push-notification';
-
-const FEED_ITEM_HEIGHT = 500;
-
-const SECTIONS_ID = ['dashboard', 'news_feed'];
-
-const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
-
-export type FeedItemType = {
-  id: string;
-  message: string;
-  url: string;
-  image: string | null;
-  video: string | null;
-  link: string | null;
-  time: number;
-  page_id: string;
-};
 
 export type FullDashboardType = {
   today_menu: Array<{ [key: string]: object }>;
@@ -86,10 +64,7 @@ export type FullDashboardType = {
   latest_notification: number;
 };
 
-type RawNewsFeedType = { [key: string]: Array<FeedItemType> };
-
 type RawDashboardType = {
-  news_feed: RawNewsFeedType;
   dashboard: FullDashboardType;
 };
 
@@ -124,32 +99,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const sortFeedTime = (a: FeedItemType, b: FeedItemType): number =>
-  b.time - a.time;
-
-const generateNewsFeed = (rawFeed: RawNewsFeedType): Array<FeedItemType> => {
-  const finalFeed: Array<FeedItemType> = [];
-  Object.keys(rawFeed).forEach((key: string) => {
-    const category: Array<FeedItemType> | null = rawFeed[key];
-    if (category != null && category.length > 0) {
-      finalFeed.push(...category);
-    }
-  });
-  finalFeed.sort(sortFeedTime);
-  return finalFeed;
-};
-
 function HomeScreen(props: Props) {
   const theme = useTheme();
   const navigation = useNavigation();
 
   const [dialogVisible, setDialogVisible] = useState(false);
-  const fabRef = useRef<AnimatedFAB>(null);
+  //const fabRef = useRef<AnimatedFAB>(null);
   const pageLoaded = useRef(false);
 
   const isLoggedIn = useLoginState();
   const { currentDashboard } = useCurrentDashboard();
-  // const { preferences, updatePreferences } = useNotificationPreferences();
   const { updatePreferences } = useNotificationPreferences();
 
   let homeDashboard: FullDashboardType | null = null;
@@ -244,6 +203,7 @@ function HomeScreen(props: Props) {
     );
   };
 
+  // TODO fix dashboard buttons
   /**
    * Gets a dashboard item with a row of shortcut buttons.
    *
@@ -288,41 +248,6 @@ function HomeScreen(props: Props) {
     return <SmallDashboardItem />;
   };
 
-  const getRenderItem = ({ item }: { item: FeedItemType }) => (
-    <FeedItem item={item} height={FEED_ITEM_HEIGHT} />
-  );
-
-  const getRenderSectionHeader = (data: {
-    section: SectionListData<FeedItemType>;
-  }) => {
-    const icon = data.section.icon;
-    if (data.section.data.length > 0) {
-      return (
-        <Headline style={styles.sectionHeader}>{data.section.title}</Headline>
-      );
-    }
-    return (
-      <View>
-        <Headline
-          style={{
-            ...styles.sectionHeaderEmpty,
-            color: theme.colors.textDisabled,
-          }}
-        >
-          {data.section.title}
-        </Headline>
-        {icon ? (
-          <MaterialCommunityIcons
-            name={icon}
-            size={100}
-            color={theme.colors.textDisabled}
-            style={GENERAL_STYLES.center}
-          />
-        ) : null}
-      </View>
-    );
-  };
-
   const getListHeader = (fetchedData: RawDashboardType | undefined) => {
     let dashboard = null;
     if (fetchedData != null) {
@@ -339,59 +264,15 @@ function HomeScreen(props: Props) {
 
   const hideDisconnectDialog = () => setDialogVisible(false);
 
-  /**
-   * Creates the dataset to be used in the FlatList
-   *
-   * @param fetchedData
-   * @param isLoading
-   * @return {*}
-   */
-  const createDataset = (
-    fetchedData: RawDashboardType | undefined,
-    isLoading: boolean
-  ): Array<{
-    title: string;
-    data: [] | Array<FeedItemType>;
-    icon?: string;
-    id: string;
-  }> => {
-    let currentNewFeed: Array<FeedItemType> = [];
-    if (fetchedData) {
-      if (fetchedData.news_feed) {
-        currentNewFeed = generateNewsFeed(fetchedData.news_feed);
-      }
-      if (fetchedData.dashboard) {
-        homeDashboard = fetchedData.dashboard;
-      }
-    }
-    if (currentNewFeed.length > 0) {
-      return [
-        {
-          title: i18n.t('screens.home.feedTitle'),
-          data: currentNewFeed,
-          id: SECTIONS_ID[1],
-        },
-      ];
-    }
-    return [
-      {
-        title: isLoading
-          ? i18n.t('screens.home.feedLoading')
-          : i18n.t('screens.home.feedError'),
-        data: [],
-        icon: isLoading ? undefined : 'access-point-network-off',
-        id: SECTIONS_ID[1],
-      },
-    ];
-  };
-
   const onEventContainerClick = () => navigation.navigate(TabRoutes.Planning);
 
+  /* TODO Ensure scrolling works then remove or fix
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (fabRef.current) {
       fabRef.current.onScroll(event);
     }
   };
+  /*
 
   /**
    * Callback when pressing the login button on the banner.
@@ -405,17 +286,8 @@ function HomeScreen(props: Props) {
   return (
     <View style={GENERAL_STYLES.flex}>
       <View style={styles.content}>
-        <WebSectionList
-          request={() => readData<RawDashboardType>(Urls.app.dashboard)}
-          createDataset={createDataset}
-          autoRefreshTime={REFRESH_TIME}
-          refreshOnFocus={true}
-          renderItem={getRenderItem}
-          itemHeight={FEED_ITEM_HEIGHT}
-          onScroll={onScroll}
-          renderSectionHeader={getRenderSectionHeader}
-          renderListHeaderComponent={getListHeader}
-        />
+        {getListHeader(undefined)}
+        <Feed />
       </View>
       {!isLoggedIn ? (
         <MascotPopup

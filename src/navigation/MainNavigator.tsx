@@ -63,7 +63,7 @@ import GroupSelectionScreen from '../screens/Planex/GroupSelectionScreen';
 import ServicesSectionScreen from '../screens/Services/ServicesSectionScreen';
 import AmicaleContactScreen from '../screens/Amicale/AmicaleContactScreen';
 import NotificationsScreen from '../screens/Other/NotificationsScreen';
-import { FeedItemType } from '../screens/Home/HomeScreen';
+import { FeedPostType } from '../components/Home/Feed';
 import { PlanningEventType } from '../utils/Planning';
 import { ServiceCategoryType } from '../utils/Services';
 import { ParsedUrlDataType } from '../utils/URLHandler';
@@ -128,7 +128,7 @@ export type MainStackParamsList = DefaultParams & {
     title: string;
   };
   [MainRoutes.FeedInformation]: {
-    data: FeedItemType;
+    data: FeedPostType;
     date: string;
   };
   [MainRoutes.PlanningInformation]: PlanningInformationScreenParams;

@@ -18,9 +18,8 @@
  */
 
 import React, { useLayoutEffect } from 'react';
-import { Linking, Image, StyleSheet } from 'react-native';
-import { Card, Text } from 'react-native-paper';
-import Autolink from 'react-native-autolink';
+import { StyleSheet } from 'react-native';
+import { Card } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
 import MaterialHeaderButtons, {
   Item,
@@ -28,15 +27,13 @@ import MaterialHeaderButtons, {
 import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
-import NewsSourcesConstants, {
-  AvailablePages,
-} from '../../constants/NewsSourcesConstants';
-import type { NewsSourceType } from '../../constants/NewsSourcesConstants';
 import {
   MainRoutes,
   MainStackParamsList,
 } from '../../navigation/MainNavigator';
 import { useNavigation } from '@react-navigation/core';
+import CustomHTML from '../../components/Overrides/CustomHTML';
+import { Avatar } from 'react-native-paper';
 
 type Props = StackScreenProps<MainStackParamsList, MainRoutes.FeedInformation>;
 
@@ -54,6 +51,11 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
+  avatar: {
+    backgroundColor: 'transparent',
+    marginLeft: 10,
+    marginRight: 10,
+  },
 });
 
 /**
@@ -61,20 +63,14 @@ const styles = StyleSheet.create({
  */
 function FeedItemScreen(props: Props) {
   const navigation = useNavigation();
-  const { data, date } = props.route.params;
+  const { data } = props.route.params;
+  const post = data;
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: getHeaderButton,
     });
   });
-
-  /**
-   * Opens the feed item out link in browser or compatible app
-   */
-  const onOutLinkPress = () => {
-    Linking.openURL(data.url);
-  };
 
   const getHeaderButton = () => {
     return (
@@ -83,20 +79,25 @@ function FeedItemScreen(props: Props) {
           title="main"
           iconName="facebook"
           color="#2e88fe"
-          onPress={onOutLinkPress}
+          // onPress={onOutLinkPress}
         />
       </MaterialHeaderButtons>
     );
   };
 
-  const pageSource: NewsSourceType =
-    NewsSourcesConstants[data.page_id as AvailablePages];
   return (
     <CollapsibleScrollView style={styles.container} hasTab>
       <Card.Title
-        title={pageSource.name}
-        subtitle={date}
-        left={() => <Image source={pageSource.icon} style={styles.image} />}
+        title={post.title}
+        subtitle={post.clubName}
+        left={() => (
+          <Avatar.Image
+            style={styles.avatar}
+            size={64}
+            source={{ uri: post.clubLogo }}
+          />
+        )}
+        style={{ height: 80 }}
       />
       {data.image ? (
         <ImageGalleryButton
@@ -105,17 +106,7 @@ function FeedItemScreen(props: Props) {
         />
       ) : null}
       <Card.Content style={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}>
-        {data.message !== undefined ? (
-          <Autolink
-            text={data.message}
-            hashtag={'facebook'}
-            component={Text}
-            truncate={32}
-            email={true}
-            url={true}
-            phone={true}
-          />
-        ) : null}
+        <CustomHTML html={data.content} />
       </Card.Content>
     </CollapsibleScrollView>
   );

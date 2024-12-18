@@ -73,7 +73,7 @@ export async function apiRequest<T>(
       headers.append('Accept', 'application/json');
       headers.append('Content-Type', 'application/json');
       headers.append('User-Agent', userAgent);
-      if (token) {
+      if (token && token.length > 0) {
         headers.append('Authorization', 'Bearer ' + token);
       }
 
