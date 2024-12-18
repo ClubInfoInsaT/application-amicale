@@ -20,7 +20,7 @@
 const STUDENT_SERVER = 'https://etud.insa-toulouse.fr/';
 const AMICALE_SERVER = 'https://www.amicale-insat.fr/';
 const GIT_SERVER = 'https://github.com/ClubInfoInsaT/application-amicale/';
-const PLANEX_SERVER = 'http://planex.insa-toulouse.fr/';
+const PLANEX_SERVER = 'https://planex.insa-toulouse.fr/';
 
 const AMICALE_ENDPOINT = AMICALE_SERVER + 'api/';
 
@@ -85,7 +85,7 @@ export default {
   },
   websites: {
     amicale: AMICALE_SERVER,
-    availableRooms: 'http://planex.insa-toulouse.fr/salles.php',
+    availableRooms: 'https://planex.insa-toulouse.fr/salles.php',
     bib: 'https://bibbox.insa-toulouse.fr/',
     bluemind: 'https://etud-mel.insa-toulouse.fr/webmail/',
     elusEtudiants: STUDENT_SERVER + '~eeinsat/',
@@ -96,7 +96,7 @@ export default {
     yearlyPlanning:
       'https://wiki.etud.insa-toulouse.fr/books/quotidien/page/planning-de-lannee-en-cours',
     schooling: 'https://mascolarite.insa-toulouse.fr/',
-    sosInfra: 'http://sosinfra.insa-toulouse.fr/',
+    sosInfra: 'https://sosinfra.insa-toulouse.fr/',
   },
   about: {
     appstore: 'https://apps.apple.com/us/app/campus-amicale-insat/id1477722148',
