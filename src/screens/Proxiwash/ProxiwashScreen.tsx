@@ -62,6 +62,7 @@ import {
 import { useProxiwashPreferences } from '../../context/preferencesContext';
 import { useSubsequentEffect } from '../../utils/customHooks';
 import { MainRoutes } from '../../navigation/MainNavigator';
+import ErrorView, { ErrorProps } from '../../components/Screens/ErrorView';
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
@@ -462,6 +463,21 @@ function ProxiwashScreen() {
     }
   };
 
+  const renderError = (props: ErrorProps) => {
+    let message = props.message ? props.message : i18n.t('errors.unknown');
+    message += '\n' + i18n.t('screens.proxiwash.errors.openSite');
+
+    return (
+      <ErrorView
+        status={props.status}
+        code={props.code}
+        message={message}
+        loading={props.loading}
+        button={props.button}
+      />
+    );
+  };
+
   let data: LaundromatType;
   switch (selectedWash) {
     case 'tripodeB':
@@ -480,6 +496,7 @@ function ProxiwashScreen() {
           }
           createDataset={createDataset}
           renderItem={getRenderItem}
+          renderError={renderError}
           renderSectionHeader={getRenderSectionHeader}
           autoRefreshTime={REFRESH_TIME}
           refreshOnFocus={true}

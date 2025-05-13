@@ -63,7 +63,8 @@
       "numAvailablePlural": "available",
       "errors": {
         "title": "Proxiwash message",
-        "button": "More info"
+        "button": "More info",
+        "openSite": "In the meantime, open the website by tapping the button in the top-right corner."
       },
       "washinsa": {
         "title": "INSA laundromat",
