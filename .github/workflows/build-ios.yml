@@ -13,6 +13,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Ensure latest XCode is used
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
 
       - name: Get tag
         id: tag
