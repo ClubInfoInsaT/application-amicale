@@ -18,7 +18,7 @@
  */
 
 import React, { useCallback, useLayoutEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import i18n from 'i18n-js';
 import { Searchbar } from 'react-native-paper';
 import { stringMatchQuery } from '../../utils/Search';
@@ -33,6 +33,8 @@ import {
   getPreferenceObject,
   PlanexPreferenceKeys,
 } from '../../utils/asyncStorage';
+import GENERAL_STYLES from '../../constants/Styles';
+import GroupEditPopUp from './GroupEditPopup';
 
 export type PlanexGroupType = {
   name: string;
@@ -169,6 +171,7 @@ function GroupSelectionScreen() {
 
       const addGroupToFavorites = (g: PlanexGroupType) => {
         updateFavorites([...favoriteGroups, g].sort(sortName));
+        popUp(group.name, group)
       };
 
       if (favoriteGroups.some((f) => f.id === group.id)) {
@@ -219,17 +222,70 @@ function GroupSelectionScreen() {
     return data;
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [popupText, setPopupText] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState<PlanexGroupType | null>(null);
+  
+  /**
+   * Function to show the popup with a given message
+   * @param text The text to display in the popup
+   */
+  const popUp = (text: string, group :  PlanexGroupType) => {
+    setPopupText(text);
+    setSelectedGroup(group);
+    setIsModalOpen(true);
+  };
+
+  const hidePopUp = () => {
+    setIsModalOpen(false);
+    if (selectedGroup) {
+      setSelectedGroup(prevGroup => ({
+        name: popupText, 
+        id : selectedGroup.id
+      }));
+
+      updateFavoriteGroupName({
+        id: selectedGroup.id,
+        name: popupText, 
+      });
+
+    }
+  }
+
+  const updateFavoriteGroupName = (updatedGroup: PlanexGroupType) => {
+    const favoriteGroups = getFavoriteGroups();
+    const groupIndex = favoriteGroups.findIndex(group => group.id === updatedGroup.id);
+  
+    if (groupIndex !== -1) {
+      favoriteGroups[groupIndex] = {
+        ...favoriteGroups[groupIndex],
+        name: updatedGroup.name,
+      };
+      updatePreferences(PlanexPreferenceKeys.planexFavoriteGroups, favoriteGroups);
+    }
+  };
+
   return (
-    <WebSectionList
-      request={() => readData<PlanexGroupsType>(Urls.planex.groups)}
-      createDataset={createDataset}
-      refreshOnFocus={true}
-      renderItem={getRenderItem}
-      extraData={currentSearchString + favoriteGroups.length}
-      cache={groups}
-      onCacheUpdate={setGroups}
-    />
+    <View style={GENERAL_STYLES.flex}>
+      <WebSectionList
+        request={() => readData<PlanexGroupsType>(Urls.planex.groups)}
+        createDataset={createDataset}
+        refreshOnFocus={true}
+        renderItem={getRenderItem}
+        extraData={currentSearchString + favoriteGroups.length}
+        cache={groups}
+        onCacheUpdate={setGroups}
+      />
+
+      <GroupEditPopUp
+        isVisible = {isModalOpen}
+        popupText = {popupText}
+        onTextChange={setPopupText}
+        onClose={hidePopUp}
+      />
+    </View>
   );
 }
+
 
 export default GroupSelectionScreen;
