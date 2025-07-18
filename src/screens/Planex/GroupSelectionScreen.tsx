@@ -39,6 +39,7 @@ import GroupEditPopUp from './GroupEditPopup';
 export type PlanexGroupType = {
   name: string;
   id: number;
+  subtitle?: string;
 };
 
 export type PlanexGroupCategoryType = {
@@ -226,10 +227,6 @@ function GroupSelectionScreen() {
   const [popupText, setPopupText] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<PlanexGroupType | null>(null);
   
-  /**
-   * Function to show the popup with a given message
-   * @param text The text to display in the popup
-   */
   const popUp = (text: string, group :  PlanexGroupType) => {
     setPopupText(text);
     setSelectedGroup(group);
@@ -239,15 +236,12 @@ function GroupSelectionScreen() {
   const hidePopUp = () => {
     setIsModalOpen(false);
     if (selectedGroup) {
-      setSelectedGroup(prevGroup => ({
-        name: popupText, 
-        id : selectedGroup.id
-      }));
+      const updatedGroup = {
+        ...selectedGroup,
+        name: popupText != selectedGroup.name ? popupText : selectedGroup.name,
+      };
 
-      updateFavoriteGroupName({
-        id: selectedGroup.id,
-        name: popupText, 
-      });
+      updateFavoriteGroupName(updatedGroup);
 
     }
   }
@@ -260,6 +254,7 @@ function GroupSelectionScreen() {
       favoriteGroups[groupIndex] = {
         ...favoriteGroups[groupIndex],
         name: updatedGroup.name,
+        subtitle: updatedGroup.name !== favoriteGroups[groupIndex].name ? favoriteGroups[groupIndex].name : undefined,
       };
       updatePreferences(PlanexPreferenceKeys.planexFavoriteGroups, favoriteGroups);
     }
