@@ -31,6 +31,7 @@ type Props = {
   item: PlanexGroupType;
   isFav: boolean;
   height: number;
+  subtitle?: string;
 };
 
 const styles = StyleSheet.create({
@@ -56,6 +57,7 @@ function GroupListItem(props: Props) {
   return (
     <List.Item
       title={getPrettierPlanexGroupName(props.item.name)}
+      description={props.subtitle}
       onPress={props.onPress}
       left={(iconProps) => (
         <List.Icon

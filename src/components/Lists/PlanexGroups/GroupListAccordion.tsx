@@ -59,6 +59,7 @@ function GroupListAccordion(props: PropsType) {
         isFav={props.favorites.some((f) => f.id === item.id)}
         onPress={() => props.onGroupPress(item)}
         onStarPress={() => props.onFavoritePress(item)}
+        subtitle={item.subtitle}  
       />
     );
   };
