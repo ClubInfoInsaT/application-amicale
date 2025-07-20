@@ -247,9 +247,32 @@ function GroupSelectionScreen() {
   }
 
   const updateFavoriteGroupName = (updatedGroup: PlanexGroupType) => {
+    
+    const validateInput = (text: string) => {
+      if (text.trim().length === 0) {
+        console.error(i18n.t('screens.planex.editNamePopup.errorEmpty'));
+        return false;
+      }
+      if (text.length > 75) {
+        console.error(i18n.t('screens.planex.editNamePopup.errorTooLong'));
+        return false;
+      }
+      const allowedCharacters = /^[\p{L}0-9_\s]+$/u;
+      if (!allowedCharacters.test(text)) {
+        console.error(i18n.t('screens.planex.editNamePopup.errorInvalidChars'));
+        return false;
+      }
+      return true;
+    }
+
+    if (!validateInput(updatedGroup.name)) {
+      console.error('Invalid group name')
+      return;
+    }
+    
     const favoriteGroups = getFavoriteGroups();
     const groupIndex = favoriteGroups.findIndex(group => group.id === updatedGroup.id);
-  
+    
     if (groupIndex !== -1) {
       favoriteGroups[groupIndex] = {
         ...favoriteGroups[groupIndex],

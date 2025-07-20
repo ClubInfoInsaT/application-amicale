@@ -164,6 +164,12 @@
         "message": "Here is Planex! You can set your class and your crush's to favorites in order to find them back easily!\n\nIf you mainly use Campus for Planex, go to the settings to make the app directly start on it!",
         "ok": "Settings",
         "cancel": "Later"
+      },
+      "editNamePopup": {
+        "saveButton":"Confirm",
+        "errorEmpty":"Error: Too short",
+        "errorTooLong": "Error: Too long",
+        "errorInvalidChars": "Error: Invalid characters"
       }
     },
 
