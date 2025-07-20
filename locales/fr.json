@@ -165,6 +165,12 @@
         "message": "Ici c'est Planex ! Tu peux mettre en favoris ta classe et celle de ton crush pour l'espio... les retrouver facilement !\n\nSi tu utilises Campus surtout pour Planex, vas dans les paramètres pour faire démarrer l'appli direct dessus !",
         "ok": "Paramètres",
         "cancel": "Plus tard"
+      },
+      "editNamePopup": {
+        "saveButton":"Confirmer",
+        "errorEmpty":"Erreur: Trop court",
+        "errorTooLong": "Erreur: Trop long",
+        "errorInvalidChars": "Erreur: Caractères invalides"
       }
     },
 

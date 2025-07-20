@@ -157,6 +157,12 @@
         "message": "Questo è Planex! Puoi mettere nei preferiti la tua classe o quella della tua crush per spiar... trovarla facilmente!\n\nSe usi Campus specialmente per Planex, vai nelle impostazioni per avviare l'app direttamente sulla tabella!",
         "ok": "Impostazioni",
         "cancel": "Più tardi"
+      },
+      "editNamePopup": {
+        "saveButton":"Confermare",
+        "errorEmpty":"Errore: Troppo corta",
+        "errorTooLong": "Errore: Troppo lungo",
+        "errorInvalidChars": "Errore: Caratteri non validi"
       }
     },
 

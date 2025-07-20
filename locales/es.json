@@ -157,6 +157,12 @@
         "message": "¡Esto es Planex! Puedes marcar tu clase y la de tu enamorado para espiona... ¡encontrarlo fácilmente!\n\nSi utilizas la app Campus exclusivamente para Planex, ve a los ajustes para iniciarla directamente en esta página.",
         "ok": "Parámetros",
         "cancel": "Más tarde"
+      },
+      "editNamePopup": {
+        "saveButton":"Confirmar",
+        "errorEmpty":"Error: Demasiado corto",
+        "errorTooLong": "Error: Demasiado largo",
+        "errorInvalidChars": "Error: Caracteres inválidos"
       }
     },
 
