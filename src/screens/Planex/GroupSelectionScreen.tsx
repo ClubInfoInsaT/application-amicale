@@ -115,6 +115,7 @@ function GroupSelectionScreen() {
       favorites={[...favoriteGroups]}
       onGroupPress={onListItemPress}
       onFavoritePress={onListFavoritePress}
+      onEditPress={(group) => popUp(group.name, group)}
       currentSearchString={currentSearchString}
     />
   );
@@ -274,10 +275,11 @@ function GroupSelectionScreen() {
     const groupIndex = favoriteGroups.findIndex(group => group.id === updatedGroup.id);
     
     if (groupIndex !== -1) {
+      const existingGroup = favoriteGroups[groupIndex];
       favoriteGroups[groupIndex] = {
         ...favoriteGroups[groupIndex],
         name: updatedGroup.name,
-        subtitle: updatedGroup.name !== favoriteGroups[groupIndex].name ? favoriteGroups[groupIndex].name : undefined,
+        subtitle: updatedGroup.name === existingGroup.subtitle ? undefined : existingGroup.subtitle || existingGroup.name,
       };
       updatePreferences(PlanexPreferenceKeys.planexFavoriteGroups, favoriteGroups);
     }
