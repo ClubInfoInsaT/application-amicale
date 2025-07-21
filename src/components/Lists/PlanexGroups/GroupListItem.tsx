@@ -28,6 +28,7 @@ import { getPrettierPlanexGroupName } from '../../../utils/Utils';
 type Props = {
   onPress: () => void;
   onStarPress: () => void;
+  onEditPress: () => void;
   item: PlanexGroupType;
   isFav: boolean;
   height: number;
@@ -67,6 +68,21 @@ function GroupListItem(props: Props) {
         />
       )}
       right={(iconProps) => (
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        {props.isFav && (
+        <TouchableRipple
+          onPress = {props.onEditPress}
+          style= {styles.iconContainer}
+          borderless={true}
+        >
+          <MaterialCommunityIcons
+            size={24}
+            style={styles.icon}
+            name="pencil"
+            color={theme.colors.primary}
+          />
+        </TouchableRipple>
+        )}
         <Animatable.View
           ref={starRef}
           useNativeDriver={true}
@@ -84,6 +100,7 @@ function GroupListItem(props: Props) {
             />
           </TouchableRipple>
         </Animatable.View>
+        </View>
       )}
       style={{
         height: props.height,

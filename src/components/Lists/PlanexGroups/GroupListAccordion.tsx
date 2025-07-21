@@ -33,6 +33,7 @@ type PropsType = {
   favorites: Array<PlanexGroupType>;
   onGroupPress: (data: PlanexGroupType) => void;
   onFavoritePress: (data: PlanexGroupType) => void;
+  onEditPress: (data: PlanexGroupType) => void;
   currentSearchString: string;
 };
 
@@ -59,6 +60,7 @@ function GroupListAccordion(props: PropsType) {
         isFav={props.favorites.some((f) => f.id === item.id)}
         onPress={() => props.onGroupPress(item)}
         onStarPress={() => props.onFavoritePress(item)}
+        onEditPress={() => props.onEditPress(item)}
         subtitle={item.subtitle}  
       />
     );
