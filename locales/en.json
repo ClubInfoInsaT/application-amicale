@@ -167,6 +167,7 @@
       },
       "editNamePopup": {
         "saveButton":"Confirm",
+        "cancelButton":"Cancel",
         "errorEmpty":"Error: Too short",
         "errorTooLong": "Error: Too long",
         "errorInvalidChars": "Error: Invalid characters"

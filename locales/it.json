@@ -160,6 +160,7 @@
       },
       "editNamePopup": {
         "saveButton":"Confermare",
+        "cancelButton":"Cancellare",
         "errorEmpty":"Errore: Troppo corta",
         "errorTooLong": "Errore: Troppo lungo",
         "errorInvalidChars": "Errore: Caratteri non validi"
