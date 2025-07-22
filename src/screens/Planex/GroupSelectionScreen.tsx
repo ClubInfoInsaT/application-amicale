@@ -237,6 +237,11 @@ function GroupSelectionScreen() {
   const hidePopUp = () => {
     setIsModalOpen(false);
     if (selectedGroup) {
+
+      if (popupText.trim() === selectedGroup.name.trim()) {
+        return;
+      }
+      
       const updatedGroup = {
         ...selectedGroup,
         name: popupText != selectedGroup.name ? popupText : selectedGroup.name,
@@ -285,6 +290,11 @@ function GroupSelectionScreen() {
     }
   };
 
+  const cancelNameChange = () => {
+    setPopupText("");
+    setIsModalOpen(false);
+  };
+
   return (
     <View style={GENERAL_STYLES.flex}>
       <WebSectionList
@@ -302,6 +312,7 @@ function GroupSelectionScreen() {
         popupText = {popupText}
         onTextChange={setPopupText}
         onClose={hidePopUp}
+        onCancel = {cancelNameChange}
       />
     </View>
   );

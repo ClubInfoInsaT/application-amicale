@@ -9,9 +9,10 @@ type GroupEditPopupProps = {
     popupText : string;
     onTextChange : (text : string) => void;
     onClose : () => void;
+    onCancel: () => void;
 }
 
-const GroupEditPopUp : React.FC<GroupEditPopupProps> = ({ isVisible, popupText, onTextChange, onClose}) => {
+const GroupEditPopUp : React.FC<GroupEditPopupProps> = ({ isVisible, popupText, onTextChange, onClose, onCancel}) => {
     
     const [error, setError] = React.useState<string | null>(null);
 
@@ -55,15 +56,30 @@ const GroupEditPopUp : React.FC<GroupEditPopupProps> = ({ isVisible, popupText, 
                     autoFocus= {true}
                 />
                 {error && <Text style= {styles.errorText}>{error}</Text>}
-                <Button
-                    style = {GENERAL_STYLES.centerHorizontal}
-                    mode = "contained"
-                    icon = "check"
-                    contentStyle={{ flexDirection: "row-reverse"}}
-                    onPress = { handleOnClose }
-                >
-                    {i18n.t("screens.planex.editNamePopup.saveButton")}
-                </Button>
+                <View style={styles.buttonContainer}>
+                    <Button
+                        style = {GENERAL_STYLES.centerHorizontal}
+                        mode = "contained"
+                        icon = "close"
+                        contentStyle={{ flexDirection: "row-reverse"}}
+                        onPress = { onCancel }
+                        labelStyle={{fontSize:12}}
+                    >
+                        {i18n.t("screens.planex.editNamePopup.cancelButton")}
+                    </Button>
+
+                    <Button
+                        style = {GENERAL_STYLES.centerHorizontal}
+                        mode = "contained"
+                        icon = "check"
+                        contentStyle={{ flexDirection: "row-reverse"}}
+                        onPress = { handleOnClose }
+                        labelStyle={{fontSize:12}}
+                    >
+                        {i18n.t("screens.planex.editNamePopup.saveButton")}
+                    </Button>
+                    
+                </View>
             </View>
         </View>
     );
@@ -83,14 +99,14 @@ const styles = StyleSheet.create({
     },
     popup : {
         backgroundColor : 'rgb(39, 39, 39)',
-        padding : 20,
+        padding : 10,
         borderRadius : 10,
-        width : '80%',
+        width : '90%',
         maxWidth: 400,
         alignItems: 'center',
     },
     textInput : {
-        fontSize : 24,
+        fontSize : 20,
         marginBottom : 20,
         borderWidth: 2,
         borderColor: 'rgb(204,204,204)',
@@ -105,6 +121,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginBottom: 10,
         textAlign: 'center',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginTop: 10,
     }
 });
 
