@@ -169,9 +169,9 @@
       "editNamePopup": {
         "saveButton":"Confirmer",
         "cancelButton":"Annuler",
-        "errorEmpty":"Erreur: Trop court",
-        "errorTooLong": "Erreur: Trop long",
-        "errorInvalidChars": "Erreur: Caractères invalides"
+        "errorEmpty":"Erreur: Vide",
+        "errorTooLong": "Erreur: Trop long (> 75)",
+        "errorInvalidChars": "Erreur: Caractères spéciaux"
       }
     },
 
