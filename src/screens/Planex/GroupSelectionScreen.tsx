@@ -173,7 +173,7 @@ function GroupSelectionScreen() {
 
       const addGroupToFavorites = (g: PlanexGroupType) => {
         updateFavorites([...favoriteGroups, g].sort(sortName));
-        popUp(group.name, group)
+        popUp(group.name, group);
       };
 
       if (favoriteGroups.some((f) => f.id === group.id)) {
@@ -224,11 +224,13 @@ function GroupSelectionScreen() {
     return data;
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [popupText, setPopupText] = useState('');
-  const [selectedGroup, setSelectedGroup] = useState<PlanexGroupType | null>(null);
-  
-  const popUp = (text: string, group :  PlanexGroupType) => {
+  const [selectedGroup, setSelectedGroup] = useState<PlanexGroupType | null>(
+    null
+  );
+
+  const popUp = (text: string, group: PlanexGroupType) => {
     setPopupText(text);
     setSelectedGroup(group);
     setIsModalOpen(true);
@@ -237,61 +239,44 @@ function GroupSelectionScreen() {
   const hidePopUp = () => {
     setIsModalOpen(false);
     if (selectedGroup) {
-
       if (popupText.trim() === selectedGroup.name.trim()) {
         return;
       }
-      
+
       const updatedGroup = {
         ...selectedGroup,
         name: popupText != selectedGroup.name ? popupText : selectedGroup.name,
       };
 
       updateFavoriteGroupName(updatedGroup);
-
     }
-  }
+  };
 
   const updateFavoriteGroupName = (updatedGroup: PlanexGroupType) => {
-    
-    const validateInput = (text: string) => {
-      if (text.trim().length === 0) {
-        console.error(i18n.t('screens.planex.editNamePopup.errorEmpty'));
-        return false;
-      }
-      if (text.length > 75) {
-        console.error(i18n.t('screens.planex.editNamePopup.errorTooLong'));
-        return false;
-      }
-      const allowedCharacters = /^[\p{L}0-9_\s]+$/u;
-      if (!allowedCharacters.test(text)) {
-        console.error(i18n.t('screens.planex.editNamePopup.errorInvalidChars'));
-        return false;
-      }
-      return true;
-    }
 
-    if (!validateInput(updatedGroup.name)) {
-      console.error('Invalid group name')
-      return;
-    }
-    
-    const favoriteGroups = getFavoriteGroups();
-    const groupIndex = favoriteGroups.findIndex(group => group.id === updatedGroup.id);
-    
+    const groupIndex = favoriteGroups.findIndex(
+      (group) => group.id === updatedGroup.id
+    );
+
     if (groupIndex !== -1) {
       const existingGroup = favoriteGroups[groupIndex];
       favoriteGroups[groupIndex] = {
         ...favoriteGroups[groupIndex],
         name: updatedGroup.name,
-        subtitle: updatedGroup.name === existingGroup.subtitle ? undefined : existingGroup.subtitle || existingGroup.name,
+        subtitle:
+          updatedGroup.name === existingGroup.subtitle
+            ? undefined
+            : existingGroup.subtitle || existingGroup.name,
       };
-      updatePreferences(PlanexPreferenceKeys.planexFavoriteGroups, favoriteGroups);
-    }
+      updatePreferences(
+        PlanexPreferenceKeys.planexFavoriteGroups,
+        favoriteGroups
+      );
+    } 
   };
 
   const cancelNameChange = () => {
-    setPopupText("");
+    setPopupText('');
     setIsModalOpen(false);
   };
 
@@ -308,15 +293,14 @@ function GroupSelectionScreen() {
       />
 
       <GroupEditPopUp
-        isVisible = {isModalOpen}
-        popupText = {popupText}
+        isVisible={isModalOpen}
+        popupText={popupText}
         onTextChange={setPopupText}
         onClose={hidePopUp}
-        onCancel = {cancelNameChange}
+        onCancel={cancelNameChange}
       />
     </View>
   );
 }
-
 
 export default GroupSelectionScreen;

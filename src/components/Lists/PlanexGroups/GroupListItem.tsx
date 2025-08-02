@@ -35,21 +35,6 @@ type Props = {
   subtitle?: string;
 };
 
-const styles = StyleSheet.create({
-  item: {
-    justifyContent: 'center',
-  },
-  icon: {
-    padding: 10,
-  },
-  iconContainer: {
-    marginRight: 10,
-    marginLeft: 'auto',
-    marginTop: 'auto',
-    marginBottom: 'auto',
-  },
-});
-
 function GroupListItem(props: Props) {
   const theme = useTheme();
 
@@ -68,38 +53,38 @@ function GroupListItem(props: Props) {
         />
       )}
       right={(iconProps) => (
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        {props.isFav && (
-        <TouchableRipple
-          onPress = {props.onEditPress}
-          style= {styles.iconContainer}
-          borderless={true}
-        >
-          <MaterialCommunityIcons
-            size={24}
-            style={styles.icon}
-            name="pencil"
-            color={theme.colors.primary}
-          />
-        </TouchableRipple>
-        )}
-        <Animatable.View
-          ref={starRef}
-          useNativeDriver={true}
-          animation={props.isFav ? 'rubberBand' : undefined}
-        >
-          <TouchableRipple
-            onPress={props.onStarPress}
-            style={styles.iconContainer}
+        <View style={styles.iconsView}>
+          {props.isFav && (
+            <TouchableRipple
+              onPress={props.onEditPress}
+              style={styles.iconContainer}
+              borderless={true}
+            >
+              <MaterialCommunityIcons
+                size={24}
+                style={styles.icon}
+                name="pencil"
+                color={theme.colors.primary}
+              />
+            </TouchableRipple>
+          )}
+          <Animatable.View
+            ref={starRef}
+            useNativeDriver={true}
+            animation={props.isFav ? 'rubberBand' : undefined}
           >
-            <MaterialCommunityIcons
-              size={30}
-              style={styles.icon}
-              name="star"
-              color={props.isFav ? theme.colors.tetrisScore : iconProps.color}
-            />
-          </TouchableRipple>
-        </Animatable.View>
+            <TouchableRipple
+              onPress={props.onStarPress}
+              style={styles.iconContainer}
+            >
+              <MaterialCommunityIcons
+                size={30}
+                style={styles.icon}
+                name="star"
+                color={props.isFav ? theme.colors.tetrisScore : iconProps.color}
+              />
+            </TouchableRipple>
+          </Animatable.View>
         </View>
       )}
       style={{
@@ -109,6 +94,25 @@ function GroupListItem(props: Props) {
     />
   );
 }
+
+const styles = StyleSheet.create({
+  item: {
+    justifyContent: 'center',
+  },
+  icon: {
+    padding: 10,
+  },
+  iconContainer: {
+    marginRight: 10,
+    marginLeft: 'auto',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+  },
+  iconsView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});
 
 export default React.memo(
   GroupListItem,

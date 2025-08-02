@@ -61,7 +61,7 @@ function GroupListAccordion(props: PropsType) {
         onPress={() => props.onGroupPress(item)}
         onStarPress={() => props.onFavoritePress(item)}
         onEditPress={() => props.onEditPress(item)}
-        subtitle={item.subtitle}  
+        subtitle={item.subtitle}
       />
     );
   };
