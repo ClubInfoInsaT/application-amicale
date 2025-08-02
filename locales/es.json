@@ -161,9 +161,9 @@
       "editNamePopup": {
         "saveButton":"Confirmar",
         "cancelButton":"Cancelar",
-        "errorEmpty":"Error: Demasiado corto",
-        "errorTooLong": "Error: Demasiado largo",
-        "errorInvalidChars": "Error: Caracteres inválidos"
+        "errorEmpty":"Error: Vacío",
+        "errorTooLong": "Error: Demasiado largo (> 75)",
+        "errorInvalidChars": "Error: Caracteres especiales"
       }
     },
 
