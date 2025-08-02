@@ -18,6 +18,7 @@
  */
 
 import { Platform, StatusBar } from 'react-native';
+import i18n from 'i18n-js'
 
 /**
  * Updates status bar content color if on iOS only,
@@ -37,7 +38,19 @@ export function setupStatusBar(theme?: ReactNativePaper.Theme) {
 }
 
 const REPLACE_REGEX = /_/g;
-
 export function getPrettierPlanexGroupName(name: string) {
   return name.replace(REPLACE_REGEX, ' ');
 }
+
+const allowedCharacters = /^[\p{L}0-9_\s]+$/u;
+export const isValidFavoriteGroupName = (text: string) => {
+  if (text.trim().length === 0) {
+    throw new Error(i18n.t('screens.planex.editNamePopup.errorEmpty'));
+  }
+  if (text.length >= 75) {
+    throw new Error(i18n.t('screens.planex.editNamePopup.errorTooLong'));
+  }
+  if (!allowedCharacters.test(text)) {
+    throw new Error(i18n.t('screens.planex.editNamePopup.errorInvalidChars'));
+  }
+};
