@@ -253,7 +253,6 @@ function GroupSelectionScreen() {
   };
 
   const updateFavoriteGroupName = (updatedGroup: PlanexGroupType) => {
-
     const groupIndex = favoriteGroups.findIndex(
       (group) => group.id === updatedGroup.id
     );
@@ -272,7 +271,7 @@ function GroupSelectionScreen() {
         PlanexPreferenceKeys.planexFavoriteGroups,
         favoriteGroups
       );
-    } 
+    }
   };
 
   const cancelNameChange = () => {

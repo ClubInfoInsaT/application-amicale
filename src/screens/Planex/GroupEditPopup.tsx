@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import GENERAL_STYLES from '../../constants/Styles';
-import { isValidFavoriteGroupName } from '../../utils/Utils'
+import { isValidFavoriteGroupName } from '../../utils/Utils';
 import i18n from 'i18n-js';
 
 type GroupEditPopupProps = {
@@ -27,23 +27,23 @@ const GroupEditPopUp: React.FC<GroupEditPopupProps> = ({
       onTextChange(text);
       isValidFavoriteGroupName(text);
       setError(null);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
       }
     }
   };
 
   const handleOnClose = () => {
     try {
-      isValidFavoriteGroupName(popupText) 
+      isValidFavoriteGroupName(popupText);
       onClose();
       setError(null);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
       }
-    } 
+    }
   };
 
   if (!isVisible) return null;

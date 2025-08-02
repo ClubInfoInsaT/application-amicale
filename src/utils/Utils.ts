@@ -18,7 +18,7 @@
  */
 
 import { Platform, StatusBar } from 'react-native';
-import i18n from 'i18n-js'
+import i18n from 'i18n-js';
 
 /**
  * Updates status bar content color if on iOS only,
