@@ -63,12 +63,22 @@ const semaineClimatEnergie =
   new Date(2024, 8, 30).getTime() < Date.now() && // Months are 0-indexed
   new Date(2024, 9, 7).getTime() > Date.now();
 
+const octobreRose = new Date().getMonth() === 9;
+
 export const CustomWhiteTheme: ReactNativePaper.Theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: semaineClimatEnergie ? '#1ca81c' : '#be1522',
-    accent: semaineClimatEnergie ? '#1ca81c' : '#be1522',
+    primary: semaineClimatEnergie
+      ? '#1ca81c'
+      : octobreRose
+      ? '#ea6c80'
+      : '#be1522',
+    accent: semaineClimatEnergie
+      ? '#1ca81c'
+      : octobreRose
+      ? '#ea6c80'
+      : '#be1522',
     border: '#e2e2e2',
     tabIcon: '#929292',
     card: '#fff',
@@ -126,8 +136,16 @@ export const CustomDarkTheme: ReactNativePaper.Theme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    primary: semaineClimatEnergie ? '#1ca81c' : '#be1522',
-    accent: semaineClimatEnergie ? '#1ca81c' : '#be1522',
+    primary: semaineClimatEnergie
+      ? '#1ca81c'
+      : octobreRose
+      ? '#ea6c80'
+      : '#be1522',
+    accent: semaineClimatEnergie
+      ? '#1ca81c'
+      : octobreRose
+      ? '#ea6c80'
+      : '#be1522',
     border: '#222222',
     tabIcon: '#6d6d6d',
     card: 'rgb(18,18,18)',
