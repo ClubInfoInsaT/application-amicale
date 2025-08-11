@@ -1,4 +1,4 @@
-import { isValidFavoriteGroupName } from '../../src/utils/Utils';
+import { validateFavoriteGroupName } from '../../src/utils/Utils';
 import i18n from 'i18n-js';
 
 i18n.t = jest.fn((key) => {
@@ -11,18 +11,18 @@ i18n.t = jest.fn((key) => {
   return translations[key];
 });
 
-describe('isValidFavoriteGroupName', () => {
+describe('validateFavoriteGroupName', () => {
   test('name empty', () => {
-    expect(() => isValidFavoriteGroupName('').toThrow('Name cannot be empty'));
+    expect(() => validateFavoriteGroupName('').toThrow('Name cannot be empty'));
     expect(() =>
-      isValidFavoriteGroupName('   ').toThrow('Name cannot be empty')
+      validateFavoriteGroupName('   ').toThrow('Name cannot be empty')
     );
   });
 
   test('name too long', () => {
     const longName = 'a'.repeat(75);
     expect(() =>
-      isValidFavoriteGroupName(longName).toThrow('Name is too long')
+      validateFavoriteGroupName(longName).toThrow('Name is too long')
     );
   });
 
@@ -69,7 +69,7 @@ describe('isValidFavoriteGroupName', () => {
     ];
     invalidNames.forEach((name) => {
       expect(() =>
-        isValidFavoriteGroupName(name).toThrow(
+        validateFavoriteGroupName(name).toThrow(
           'Name contains invalid characters'
         )
       );
@@ -77,14 +77,14 @@ describe('isValidFavoriteGroupName', () => {
   });
 
   test('valid names', () => {
-    expect(() => isValidFavoriteGroupName('Name').not.toThrow());
-    expect(() => isValidFavoriteGroupName('Name_without_space').not.toThrow());
+    expect(() => validateFavoriteGroupName('Name').not.toThrow());
+    expect(() => validateFavoriteGroupName('Name_without_space').not.toThrow());
     expect(() =>
-      isValidFavoriteGroupName('Name_w1th numb333rs ').not.toThrow()
+      validateFavoriteGroupName('Name_w1th numb333rs ').not.toThrow()
     );
-    expect(() => isValidFavoriteGroupName('Nàme with accènts ').not.toThrow());
-    expect(() => isValidFavoriteGroupName('a').not.toThrow());
+    expect(() => validateFavoriteGroupName('Nàme with accènts ').not.toThrow());
+    expect(() => validateFavoriteGroupName('a').not.toThrow());
     const notSoLongName = 'a'.repeat(74);
-    expect(() => isValidFavoriteGroupName(notSoLongName).not.toThrow());
+    expect(() => validateFavoriteGroupName(notSoLongName).not.toThrow());
   });
 });
