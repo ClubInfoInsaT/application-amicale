@@ -43,7 +43,7 @@ export function getPrettierPlanexGroupName(name: string) {
 }
 
 const allowedCharacters = /^[\p{L}0-9_\s]+$/u;
-export const isValidFavoriteGroupName = (text: string) => {
+export const validateFavoriteGroupName = (text: string) => {
   if (text.trim().length === 0) {
     throw new Error(i18n.t('screens.planex.editNamePopup.errorEmpty'));
   }
