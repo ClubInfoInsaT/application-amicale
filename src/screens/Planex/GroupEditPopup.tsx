@@ -28,9 +28,7 @@ const GroupEditPopUp: React.FC<GroupEditPopupProps> = ({
       isValidFavoriteGroupName(text);
       setError(null);
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      }
+      setError((err as Error).message);
     }
   };
 
@@ -40,9 +38,7 @@ const GroupEditPopUp: React.FC<GroupEditPopupProps> = ({
       onClose();
       setError(null);
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      }
+      setError((err as Error).message);
     }
   };
 
