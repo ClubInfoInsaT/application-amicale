@@ -382,7 +382,9 @@
         "title": "Modifier la dashboard",
         "message": "Les 5 icônes ci-dessus représentent ta dashboard.\nTu peux remplacer un de ses services en cliquant dessus, puis en sélectionnant le nouveau service de ton choix dans la liste ci-dessous.",
         "undo": "Annuler les changements"
-      }
+      },
+      "notificationsSettings": "Paramètres des notifications",
+      "notificationsSettingsSub": "Choisis les notifications que tu veux recevoir"
     },
     "about": {
       "title": "À Propos",
