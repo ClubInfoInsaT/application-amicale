@@ -41,7 +41,6 @@ import MaterialHeaderButtons, {
 import ProxiwashSectionHeader from '../../components/Lists/Proxiwash/ProxiwashSectionHeader';
 import {
   getCleanedMachineWatched,
-  getMachineEndDate,
   isMachineWatched,
 } from '../../utils/Proxiwash';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
@@ -51,10 +50,8 @@ import type { LaundromatType } from './ProxiwashAboutScreen';
 import GENERAL_STYLES from '../../constants/Styles';
 import { readData } from '../../utils/WebData';
 import { useNavigation } from '@react-navigation/core';
-import { setupMachineNotification } from '../../utils/Notifications';
 import ProxiwashListHeader from '../../components/Lists/Proxiwash/ProxiwashListHeader';
 import {
-  getPreferenceNumber,
   getPreferenceObject,
   getPreferenceString,
   ProxiwashPreferenceKeys,
@@ -110,10 +107,10 @@ function ProxiwashScreen() {
   const { preferences, updatePreferences } = useProxiwashPreferences();
   const [modalCurrentDisplayItem, setModalCurrentDisplayItem] =
     useState<React.ReactElement | null>(null);
-  const reminder = getPreferenceNumber(
-    ProxiwashPreferenceKeys.proxiwashNotifications,
-    preferences
-  );
+  // const reminder = getPreferenceNumber(
+  //   ProxiwashPreferenceKeys.proxiwashNotifications,
+  //   preferences
+  // );
   const [refresh, setRefresh] = useState(false);
 
   const getMachinesWatched = () => {
@@ -184,12 +181,12 @@ function ProxiwashScreen() {
    *
    * @param machine The machine to set notifications for
    */
-  const onSetupNotificationsPress = (machine: ProxiwashMachineType) => {
-    if (modalRef.current) {
-      modalRef.current.close();
-    }
-    setupNotifications(machine);
-  };
+  // const onSetupNotificationsPress = (machine: ProxiwashMachineType) => {
+  //   if (modalRef.current) {
+  //     modalRef.current.close();
+  //   }
+  //   // setupNotifications(machine);
+  // };
 
   /**
    * Generates the modal content.
@@ -205,9 +202,11 @@ function ProxiwashScreen() {
     item: ProxiwashMachineType,
     isDryer: boolean
   ) => {
-    let button: { text: string; icon: string; onPress: () => void } | undefined;
+    let button:
+      | { text: string; icon: string; onPress?: () => void; disabled: boolean }
+      | undefined;
     let message = modalStateStrings[item.state];
-    const onPress = () => onSetupNotificationsPress(item);
+    // const onPress = () => onSetupNotificationsPress(item);
     if (item.state === MachineStates.RUNNING) {
       let remainingTime = parseInt(item.remainingTime, 10);
       if (remainingTime < 0) {
@@ -219,7 +218,8 @@ function ProxiwashScreen() {
           ? i18n.t('screens.proxiwash.modal.disableNotifications')
           : i18n.t('screens.proxiwash.modal.enableNotifications'),
         icon: '',
-        onPress: onPress,
+        // onPress: onPress,
+        disabled: true,
       };
       message = i18n.t('screens.proxiwash.modal.running', {
         start: item.startTime,
@@ -251,6 +251,7 @@ function ProxiwashScreen() {
               mode="contained"
               onPress={button.onPress}
               style={GENERAL_STYLES.centerHorizontal}
+              disabled={button.disabled}
             >
               {button.text}
             </Button>
@@ -319,20 +320,20 @@ function ProxiwashScreen() {
    *
    * @param machine The machine to watch
    */
-  const setupNotifications = (machine: ProxiwashMachineType) => {
-    if (!isMachineWatched(machine, machinesWatched)) {
-      setupMachineNotification(
-        machine.number,
-        true,
-        reminder,
-        getMachineEndDate(machine)
-      );
-      saveNotificationToState(machine);
-    } else {
-      setupMachineNotification(machine.number, false);
-      removeNotificationFromState(machine);
-    }
-  };
+  // const setupNotifications = (machine: ProxiwashMachineType) => {
+  //   if (!isMachineWatched(machine, machinesWatched)) {
+  //     setupMachineNotification(
+  //       machine.number,
+  //       true,
+  //       reminder,
+  //       getMachineEndDate(machine)
+  //     );
+  //     saveNotificationToState(machine);
+  //   } else {
+  //     setupMachineNotification(machine.number, false);
+  //     removeNotificationFromState(machine);
+  //   }
+  // };
 
   /**
    * Gets the number of machines available
@@ -421,29 +422,29 @@ function ProxiwashScreen() {
    *
    * @param machine
    */
-  const saveNotificationToState = (machine: ProxiwashMachineType) => {
-    let data = [...machinesWatched];
-    data.push(machine);
-    saveNewWatchedList(data);
-  };
+  // const saveNotificationToState = (machine: ProxiwashMachineType) => {
+  //   let data = [...machinesWatched];
+  //   data.push(machine);
+  //   saveNewWatchedList(data);
+  // };
 
   /**
    * Removes the given index from the watchlist array and saves it to preferences
    *
    * @param selectedMachine
    */
-  const removeNotificationFromState = (
-    selectedMachine: ProxiwashMachineType
-  ) => {
-    const newList = machinesWatched.filter(
-      (m) => m.number !== selectedMachine.number
-    );
-    saveNewWatchedList(newList);
-  };
+  // const removeNotificationFromState = (
+  //   selectedMachine: ProxiwashMachineType
+  // ) => {
+  //   const newList = machinesWatched.filter(
+  //     (m) => m.number !== selectedMachine.number
+  //   );
+  //   saveNewWatchedList(newList);
+  // };
 
-  const saveNewWatchedList = (list: Array<ProxiwashMachineType>) => {
-    updatePreferences(ProxiwashPreferenceKeys.proxiwashWatchedMachines, list);
-  };
+  // const saveNewWatchedList = (list: Array<ProxiwashMachineType>) => {
+  //   updatePreferences(ProxiwashPreferenceKeys.proxiwashWatchedMachines, list);
+  // };
 
   const renderListHeaderComponent = (
     data: FetchedDataType | undefined,
