@@ -11,8 +11,8 @@
 
 #import <React/RCTLinkingManager.h>
 #import "RNSplashScreen.h"
-#import <RNCPushNotificationIOS.h>
-#import <UserNotifications/UserNotifications.h>
+//#import <RNCPushNotificationIOS.h>
+//#import <UserNotifications/UserNotifications.h>
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
