@@ -29,9 +29,6 @@ import GameMainScreen from '../screens/Game/screens/GameMainScreen';
 import VoteScreen from '../screens/Amicale/VoteScreen';
 import LoginScreen from '../screens/Amicale/LoginScreen';
 import SelfMenuScreen from '../screens/Services/SelfMenuScreen';
-import ProximoMainScreen from '../screens/Services/Proximo/ProximoMainScreen';
-import ProximoListScreen from '../screens/Services/Proximo/ProximoListScreen';
-import ProximoAboutScreen from '../screens/Services/Proximo/ProximoAboutScreen';
 import ProfileScreen from '../screens/Amicale/ProfileScreen';
 import ClubListScreen, {
   ClubCategoryType,
@@ -83,9 +80,6 @@ export enum MainRoutes {
   GameMain = 'game-main',
   Login = 'login',
   SelfMenu = 'self-menu',
-  Proximo = 'proximo',
-  ProximoList = 'proximo-list',
-  ProximoAbout = 'proximo-about',
   ProxiwashAbout = 'proxiwash-about',
   Profile = 'profile',
   ClubList = 'club-list',
@@ -117,10 +111,6 @@ export type MainStackParamsList = DefaultParams & {
   };
   [MainRoutes.EquipmentRent]: { item?: DeviceType };
   [MainRoutes.Gallery]: { images: Array<{ url: string }> };
-  [MainRoutes.ProximoList]: {
-    shouldFocusSearchBar: boolean;
-    category: number;
-  };
   [MainRoutes.ClubInformation]: ClubInformationScreenParams;
   [MainRoutes.Website]: {
     host: string;
@@ -336,27 +326,7 @@ function getRegularScreens(createTabNavigator: () => React.ReactElement) {
           title: i18n.t('screens.menu.title'),
         }}
       />
-      <MainStack.Screen
-        name={MainRoutes.Proximo}
-        component={ProximoMainScreen}
-        options={{
-          title: i18n.t('screens.proximo.title'),
-        }}
-      />
-      <MainStack.Screen
-        name={MainRoutes.ProximoList}
-        component={ProximoListScreen}
-        options={{
-          title: i18n.t('screens.proximo.articleList'),
-        }}
-      />
-      <MainStack.Screen
-        name={MainRoutes.ProximoAbout}
-        component={ProximoAboutScreen}
-        options={{
-          title: i18n.t('screens.proximo.title'),
-        }}
-      />
+
       <MainStack.Screen
         name={MainRoutes.Vote}
         component={VoteScreen}
