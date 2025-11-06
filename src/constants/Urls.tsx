@@ -31,6 +31,8 @@ const PROXIMO_IMAGES_ENDPOINT =
 const APP_IMAGES_ENDPOINT = STUDENT_SERVER + '~amicale_app/images/';
 const PROXIWASH_ENDPOINT = 'https://www.proxiwash.com/laverie?code=';
 
+const TUTORINSA_INSTAGRAM = 'tutor_insa_t';
+
 export default {
   amicale: {
     api: AMICALE_ENDPOINT,
@@ -89,7 +91,8 @@ export default {
     bluemind: 'https://etud-mel.insa-toulouse.fr/webmail/',
     elusEtudiants: STUDENT_SERVER + '~eeinsat/',
     ent: 'https://ent.insa-toulouse.fr/',
-    tutorInsa: STUDENT_SERVER + '~tutorinsa/',
+    tutorInsa: 'https://www.instagram.com/' + TUTORINSA_INSTAGRAM,
+    tutorInsaDeepLink: 'instagram://user?username=' + TUTORINSA_INSTAGRAM,
     wiketud: 'https://wiki.etud.insa-toulouse.fr/',
     usefulLinks: 'https://wiki.etud.insa-toulouse.fr/books/liens-utiles',
     yearlyPlanning:
