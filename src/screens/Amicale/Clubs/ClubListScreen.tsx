@@ -74,7 +74,7 @@ function ClubListScreen() {
       return (
         // @ts-ignore
         <Searchbar
-          placeholder={i18n.t('screens.proximo.search')}
+          placeholder={i18n.t('screens.clubs.search')}
           onChangeText={onSearchStringChange}
         />
       );
