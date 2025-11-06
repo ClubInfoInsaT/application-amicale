@@ -14,7 +14,6 @@
         "profile": "Ton profil Amicaliste et tes infos renseignées",
         "amicaleWebsite": "Voir ce site pour avoir plus d'infos",
         "vote": "Vote pour les prochaines élections",
-        "proximo": "Regarde le stock du Proximo",
         "wiketud": "Trouve des infos utiles sur les cours et la vie du campus",
         "elusEtudiants": "Le site des étudiants en contact avec l'administration",
         "tutorInsa": "Donne et bénéficie de tutorats par d'autres étudiants",
@@ -69,7 +68,7 @@
       "washinsa": {
         "title": "Laverie INSA",
         "subtitle": "Ta laverie préférée !!",
-        "description": "C'est le service de laverie pour les résidences INSA (On t'en voudra pas si tu loges pas sur le campus et que tu fais ta machine ici). Le local situé au pied du R2 avec ses 3 sèche-linges et 9 machines, est ouvert 7J/7 24h/24 ! Tu peux amener ta lessive, la prendre sur place ou encore mieux l'acheter au Proximo (moins chère qu'à la laverie directement).",
+        "description": "C'est le service de laverie pour les résidences INSA (On t'en voudra pas si tu loges pas sur le campus et que tu fais ta machine ici). Le local situé au pied du R2 avec ses 3 sèche-linges et 9 machines, est ouvert 7J/7 24h/24 ! Tu peux amener ta lessive, ou la prendre sur place.",
         "tariff": "Lave-Linges 6kg: 3€ la machine + 0.80€ avec la lessive.\nSèche-Linges 14kg: 0.35€ pour 5min de sèche linge.",
         "paymentMethods": "Toute monnaie jusqu'à 10€.\nCarte bancaire acceptée."
       },
@@ -197,26 +196,6 @@
         }
       }
     },
-    "proximo": {
-      "title": "Proximo",
-      "articleList": "Articles",
-      "emptyList": "Liste Vide",
-      "article": "Article",
-      "articles": "Articles",
-      "hideOutOfStock": "Cacher articles en rupture de stock",
-      "sortOrder": "Trier par :",
-      "sortName": "Nom",
-      "sortNameReverse": "Nom (inversé)",
-      "sortPrice": "Prix",
-      "sortPriceReverse": "Prix (inversé)",
-      "inStock": "en stock",
-      "description": "Le Proximo c’est ta petite épicerie étudiante tenue par les étudiants directement sur le campus. Ouverte tous les jours de 18h30 à 19h30, nous t’accueillons et te sauvons quand tu n’as plus de pâtes ou de diluant ! Différents produits pour différentes galères, le tout à prix coûtant. Tu peux payer par Lydia ou par espèce.",
-      "openingHours": "Horaires d'ouverture",
-      "paymentMethods": "Moyens de Paiement",
-      "paymentMethodsDescription": "Espèce ou Lydia",
-      "search": "Rechercher",
-      "all": "Tout"
-    },
     "menu": {
       "title": "Menu du RU"
     },
@@ -281,6 +260,7 @@
     "clubs": {
       "title": "Liste des Clubs",
       "details": "Détails",
+      "search": "Rechercher",
       "managers": "Responsables",
       "managersSubtitle": "Ces personnes font vivre le club",
       "managersUnavailable": "Ce club est tout seul :(",

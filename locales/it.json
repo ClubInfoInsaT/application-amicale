@@ -14,7 +14,6 @@
         "profile": "Il tuo profilo Amicaliste e le tue informazioni",
         "amicaleWebsite": "Vedi questo sito per avere più informazioni",
         "vote": "Vota per le prossime elezioni",
-        "proximo": "Guarda lo stock di Proximo",
         "wiketud": "Trova informazioni utile sulle classi e la vita nel campus",
         "elusEtudiants": "Il sito dei studenti in contatto con l'administrazione",
         "tutorInsa": "Da e beneficia del tutoraggio di altri studenti",
@@ -61,7 +60,7 @@
       "washinsa": {
         "title": "Lavanderia INSA",
         "subtitle": "La tua lavanderia preferita!",
-        "description": "Questo è il servizio di lavanderia per le residenze INSA (non ti biasimiamo se non vivi nel campus e fai il bucato qui). La sala situata ai piedi del R2 con le sue 3 asciugatrici e 9 macchine, è aperta 7 giorni su 7, 24 ore su 24! Puoi portare il tuo bucato, portarlo lì o meglio ancora comprarlo al Proximo (più economico che alla lavanderia a gettoni direttamente).",
+        "description": "Questo è il servizio di lavanderia per le residenze INSA (non ti biasimiamo se non vivi nel campus e fai il bucato qui). La sala situata ai piedi del R2 con le sue 3 asciugatrici e 9 macchine, è aperta 7 giorni su 7, 24 ore su 24! Puoi portare il tuo bucato, o portarlo lì.",
         "tariff": "Lavatrice 6kg: 3€ la macchina + 0,80€ con il detersivo.\nAsciugatrice 14kg: 0,35€ per 5min di asciugatura.",
         "paymentMethods": "Monete fino a 10€.\nCarte di credito accettate."
       },
@@ -183,25 +182,6 @@
         "publicRelations": "Relazioni pubbliche"
       }
     },
-    "proximo": {
-      "title": "Proximo",
-      "articleList": "Articoli",
-      "emptyList": "Lista Vuota",
-      "article": "Articoli",
-      "articles": "Articoli",
-      "sortOrder": "Ordina per :",
-      "sortName": "Nome",
-      "sortNameReverse": "Nome (invertito)",
-      "sortPrice": "Prezzo",
-      "sortPriceReverse": "Prezzo (invertito)",
-      "inStock": "in magazzino",
-      "description": "Il Proximo è il tuo piccolo negozio di alimentari per studenti gestito da studenti direttamente nel campus. Aperto tutti i giorni dalle 18.30 alle 19.30, vi diamo il benvenuto e vi salviamo quando finite la pasta o il diluente! Prodotti diversi per problemi diversi, tutti a prezzo di costo. Puoi pagare con Lydia o in contanti.",
-      "openingHours": "Orari di apertura",
-      "paymentMethods": "Metodi di Pagamento",
-      "paymentMethodsDescription": "Contanti o Lydia",
-      "search": "Ricerca",
-      "all": "Tutto"
-    },
     "menu": {
       "title": "Menù del RU"
     },
@@ -250,6 +230,7 @@
     "clubs": {
       "title": "Lista dei Clubs",
       "details": "Dettagli",
+      "search": "Ricerca",
       "managers": "Risponsabili",
       "managersSubtitle": "Queste persone fanno vivere il club",
       "managersUnavailable": "Questo club è da solo :(",
