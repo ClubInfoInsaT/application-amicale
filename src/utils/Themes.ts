@@ -36,7 +36,6 @@ declare global {
 
       // Screens
       planningColor: string;
-      proximoColor: string;
       proxiwashColor: string;
       menuColor: string;
       tutorinsaColor: string;
@@ -110,7 +109,6 @@ export const CustomWhiteTheme: ReactNativePaper.Theme = {
 
     // Screens
     planningColor: '#d9b10a',
-    proximoColor: '#ec5904',
     proxiwashColor: '#1fa5ee',
     menuColor: '#e91314',
     tutorinsaColor: '#f93943',
@@ -177,7 +175,6 @@ export const CustomDarkTheme: ReactNativePaper.Theme = {
 
     // Screens
     planningColor: '#d99e09',
-    proximoColor: '#ec5904',
     proxiwashColor: '#1fa5ee',
     menuColor: '#b81213',
     tutorinsaColor: '#f93943',
