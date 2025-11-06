@@ -25,9 +25,6 @@ const PLANEX_SERVER = 'http://planex.insa-toulouse.fr/';
 const AMICALE_ENDPOINT = AMICALE_SERVER + 'api/';
 
 const APP_ENDPOINT = STUDENT_SERVER + '~amicale_app/v2/';
-const PROXIMO_ENDPOINT = STUDENT_SERVER + '~proximo/v2/api/';
-const PROXIMO_IMAGES_ENDPOINT =
-  STUDENT_SERVER + '~proximo/api_proximo/storage/app/public/';
 const APP_IMAGES_ENDPOINT = STUDENT_SERVER + '~amicale_app/images/';
 const PROXIWASH_ENDPOINT = 'https://www.proxiwash.com/laverie?code=';
 
@@ -44,12 +41,6 @@ export default {
     dashboard: APP_ENDPOINT + 'dashboard/dashboard_data.json',
     menu: APP_ENDPOINT + 'menu/menu_data.json',
   },
-  proximo: {
-    articles: PROXIMO_ENDPOINT + 'articles',
-    categories: PROXIMO_ENDPOINT + 'categories',
-    images: PROXIMO_IMAGES_ENDPOINT + 'img/',
-    icons: PROXIMO_IMAGES_ENDPOINT + 'icon/',
-  },
   proxiwash: {
     washinsa: PROXIWASH_ENDPOINT + 'cf4f39',
     tripodeB: PROXIWASH_ENDPOINT + 'b310b7',
@@ -62,7 +53,6 @@ export default {
     proxiwash: APP_IMAGES_ENDPOINT + 'Proxiwash.png',
     washer: APP_IMAGES_ENDPOINT + 'ProxiwashLaveLinge.png',
     dryer: APP_IMAGES_ENDPOINT + 'ProxiwashSecheLinge.png',
-    proximo: APP_IMAGES_ENDPOINT + 'Proximo.png',
     clubs: APP_IMAGES_ENDPOINT + 'Clubs.png',
     profile: APP_IMAGES_ENDPOINT + 'ProfilAmicaliste.png',
     equipment: APP_IMAGES_ENDPOINT + 'Materiel.png',
