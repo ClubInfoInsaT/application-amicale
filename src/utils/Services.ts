@@ -21,7 +21,7 @@ import type { FullDashboardType } from '../screens/Home/HomeScreen';
 import Urls from '../constants/Urls';
 import { MainRoutes } from '../navigation/MainNavigator';
 import { TabRoutes } from '../navigation/TabNavigator';
-
+import { Linking } from 'react-native';
 /**
  * Gets the given services list without items of the given ids
  *
@@ -191,11 +191,18 @@ export function getStudentServices(
       title: "Tutor'INSA",
       subtitle: i18n.t('screens.services.descriptions.tutorInsa'),
       image: Urls.images.tutorInsa,
-      onPress: () =>
-        onPress(MainRoutes.Website, {
-          host: Urls.websites.tutorInsa,
-          title: "Tutor'INSA",
-        }),
+      onPress: () => {
+        Linking.canOpenURL(Urls.websites.tutorInsaDeepLink)
+        .then((supported) => {
+          console.log(`Instagram deep link supported: ${supported}`);
+          if (supported) {
+            return Linking.openURL(Urls.websites.tutorInsaDeepLink);
+          } else {
+            return Linking.openURL(Urls.websites.tutorInsa);
+          }
+        })
+        .catch(() => Linking.openURL(Urls.websites.tutorInsa));
+      },        
       badgeFunction: (dashboard: FullDashboardType): number =>
         dashboard.available_tutorials,
     },
