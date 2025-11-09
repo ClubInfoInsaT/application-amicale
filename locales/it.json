@@ -25,7 +25,8 @@
         "ent": "Trova i tuoi voti",
         "equipment": "Prenota un BBQ o altro materiale",
         "washers": "Numero di lavatrici disponibili",
-        "dryers": "Numero di asciugatrici disponibili"
+        "dryers": "Numero di asciugatrici disponibili",
+        "map": "Orientati all'INSA"
       },
       "mascotDialog": {
         "title": "Un po' perso?",

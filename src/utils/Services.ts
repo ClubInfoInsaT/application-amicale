@@ -63,6 +63,7 @@ export const SERVICES_KEY = {
   DRYERS: 'dryers',
   SCHOOLING: 'schooling',
   SOS_INFRA: 'sosinfra',
+  MAP: 'map',
 };
 
 export const SERVICES_CATEGORIES_KEY = {
@@ -220,6 +221,17 @@ export function getStudentServices(
           host: Urls.websites.yearlyPlanning,
           title: "Planning de l'année",
         }),
+    },
+    {
+      key: SERVICES_KEY.MAP,
+      title: "Map INSA",
+      subtitle: i18n.t("screens.services.descriptions.map"),
+      image: Urls.images.map,
+      onPress: () =>
+        onPress(MainRoutes.Website, {
+          host: Urls.websites.map,
+          title: "Map INSA",
+        })
     },
   ];
   return getStrippedServicesList(studentsDataset, excludedItems);
