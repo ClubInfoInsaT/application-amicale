@@ -224,14 +224,14 @@ export function getStudentServices(
     },
     {
       key: SERVICES_KEY.MAP,
-      title: "Map INSA",
-      subtitle: i18n.t("screens.services.descriptions.map"),
+      title: 'Map INSA',
+      subtitle: i18n.t('screens.services.descriptions.map'),
       image: Urls.images.map,
       onPress: () =>
         onPress(MainRoutes.Website, {
           host: Urls.websites.map,
-          title: "Map INSA",
-        })
+          title: 'Map INSA',
+        }),
     },
   ];
   return getStrippedServicesList(studentsDataset, excludedItems);

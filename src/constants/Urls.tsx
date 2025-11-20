@@ -81,9 +81,9 @@ export default {
     usefulLinks: APP_IMAGES_ENDPOINT + 'UsefulLinks.png',
     schooling: APP_IMAGES_ENDPOINT + 'Schooling.png',
     sosinfra: APP_IMAGES_ENDPOINT + 'SOSInfra.png',
-    
-    map: "https://sh.veagle.fr/api/shares/map-insat/files/a9181c31-f72e-40f0-a693-26fa5e4067ed?download=false",
-    // !!!!!   WARNING FOR REVIEWER   !!!!!!!! 
+
+    map: 'https://sh.veagle.fr/api/shares/map-insat/files/a9181c31-f72e-40f0-a693-26fa5e4067ed?download=false',
+    // !!!!!   WARNING FOR REVIEWER   !!!!!!!!
     // TODO : upload Map.png to the student server
     // map: APP_IMAGES_ENDPOINT + 'Map.png',
     // Download the png at https://sh.veagle.fr/s/map-insat
