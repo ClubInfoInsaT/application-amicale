@@ -78,7 +78,6 @@ export type FeedItemType = {
 
 export type FullDashboardType = {
   today_menu: Array<{ [key: string]: object }>;
-  proximo_articles: number;
   available_dryers: number;
   available_washers: number;
   today_events: Array<PlanningEventType>;

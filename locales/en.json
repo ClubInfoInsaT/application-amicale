@@ -14,7 +14,6 @@
         "profile": "See your personal information",
         "amicaleWebsite": "See more information on the website",
         "vote": "Vote for the upcoming elections",
-        "proximo": "Check the store's stock",
         "wiketud": "Read useful info about classes and campus life",
         "elusEtudiants": "The students in contact with the administration",
         "tutorInsa": "Give and take part in tutorials by students",
@@ -69,7 +68,7 @@
       "washinsa": {
         "title": "INSA laundromat",
         "subtitle": "Your favorite laundromat!!",
-        "description": "This is the washing service for INSA's residences (We don't mind if you do not live on the campus and do your laundry here). The room is right next to the R2, with 3 dryers and 9 washers. It is open 24/7. You can bring your own detergent, use the one given on site or buy it at the Proximo (cheaper than the one given by the machines).",
+        "description": "This is the washing service for INSA's residences (We don't mind if you do not live on the campus and do your laundry here). The room is right next to the R2, with 3 dryers and 9 washers. It is open 24/7. You can bring your own detergent or use the one given on site.",
         "tariff": "Washers 6kg: 3€ per run + 0.80€ with detergent.\nDryers 14kg: 0.35€ for 5min of dryer usage.",
         "paymentMethods": "Cash up to 10€.\nCredit Cards also accepted."
       },
@@ -197,26 +196,6 @@
         }
       }
     },
-    "proximo": {
-      "title": "Proximo",
-      "articleList": "Articles",
-      "emptyList": "Empty List",
-      "article": "Article",
-      "articles": "Articles",
-      "hideOutOfStock": "Hide out of stock",
-      "sortOrder": "Sort by",
-      "sortName": "Name",
-      "sortNameReverse": "Name (reverse)",
-      "sortPrice": "Price",
-      "sortPriceReverse": "Price (reverse)",
-      "inStock": "in stock",
-      "description": "The Proximo is your small grocery store held by students directly on campus. Open every day from 18h30 to 19h30, we welcome you when you are short on pasta or soda ! Different products for different problems, everything is sold at cost. You can pay with Lydia or cash.",
-      "openingHours": "Opening Hours",
-      "paymentMethods": "Payment Methods",
-      "paymentMethodsDescription": "Cash or Lydia",
-      "search": "Search",
-      "all": "All"
-    },
     "menu": {
       "title": "RU Menu"
     },
@@ -281,6 +260,7 @@
     "clubs": {
       "title": "Clubs",
       "details": "Club details",
+      "search": "Search",
       "managers": "Managers",
       "managersSubtitle": "These people keep the club alive",
       "managersUnavailable": "This club has no one :(",

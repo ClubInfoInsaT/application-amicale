@@ -48,7 +48,6 @@ export const SERVICES_KEY = {
   EQUIPMENT: 'equipment',
   AMICALE_WEBSITE: 'amicale_website',
   VOTE: 'vote',
-  PROXIMO: 'proximo',
   WIKETUD: 'wiketud',
   ELUS_ETUDIANTS: 'elus_etudiants',
   TUTOR_INSA: 'tutor_insa',
@@ -155,15 +154,6 @@ export function getStudentServices(
   excludedItems?: Array<string>
 ): Array<ServiceItemType> {
   const studentsDataset = [
-    {
-      key: SERVICES_KEY.PROXIMO,
-      title: i18n.t('screens.proximo.title'),
-      subtitle: i18n.t('screens.services.descriptions.proximo'),
-      image: Urls.images.proximo,
-      onPress: () => onPress(MainRoutes.Proximo),
-      badgeFunction: (dashboard: FullDashboardType): number =>
-        dashboard.proximo_articles,
-    },
     {
       key: SERVICES_KEY.WIKETUD,
       title: 'Wiketud',

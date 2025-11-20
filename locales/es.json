@@ -14,7 +14,6 @@
         "profile": "Tu perfil Amicaliste y tus informaciones proporcionadas",
         "amicaleWebsite": "Ver sito para tener más informaciones",
         "vote": "Vota para las próximas elecciones",
-        "proximo": "Mira el stock de Próximo",
         "wiketud": "Encuentra informaciones útiles sobre los cursos y la vida en el campus",
         "elusEtudiants": "El sitio de los estudiantes en contacto con la administración",
         "tutorInsa": "Da y beneficia de tutorado por otros estudiantes",
@@ -61,7 +60,7 @@
       "washinsa": {
         "title": "Lavandería INSA",
         "subtitle": "¡¡Tu lavandería preferida!!",
-        "description": "Este es el servicio de lavandería para las residencias del INSA (no te reprocharemos si no vives en el campus y haces la colada aquí). La sala está situada en el R2, con sus 3 secadoras y 9 máquinas, está abierta los 7 días de la semana, ¡las 24 horas del día! Puedes traer tu detergente, cogerlo aquí o incluso mejor comprarlo en Próximo (más barato que cogerlo en la lavandería).",
+        "description": "Este es el servicio de lavandería para las residencias del INSA (no te reprocharemos si no vives en el campus y haces la colada aquí). La sala está situada en el R2, con sus 3 secadoras y 9 máquinas, está abierta los 7 días de la semana, ¡las 24 horas del día! Puedes traer tu detergente o cogerlo aquí.",
         "tariff": "Lavadora 6kg: 3€ la máquina + 0,80€ con el detergente.\nSecadora 14kg: 0,35€ por 5min de secado.",
         "paymentMethods": "Cualquier moneda hasta 10€.\nSe aceptan tarjetas de crédito."
       },
@@ -183,26 +182,6 @@
         "publicRelations": "Relaciones públicas"
       }
     },
-    "proximo": {
-      "title": "Proximo",
-      "articleList": "Artículos",
-      "emptyList": "Lista Vacía",
-      "article": "Artículo",
-      "articles": "Artículos",
-      "hideOutOfStock": "Ocultar los artículos agotados",
-      "sortOrder": "Filtrar por:",
-      "sortName": "Nombre",
-      "sortNameReverse": "Nombre (invertido)",
-      "sortPrice": "Precio",
-      "sortPriceReverse": "Precio (invertido)",
-      "inStock": "en stock",
-      "description": "Próximo es tu pequeña tienda de comestibles para estudiantes gestionada por estudiantes directamente en el campus. Abierto todos los días desde las 18h30 hasta las 19h30, te damos la bienvenida y te salvamos cuando te quedas sin pasta o sin diluyente. Diferentes productos para diferentes problemas, todo a precio reducido. Puedes pagar con Lydia o en efectivo.",
-      "openingHours": "Horarios de apertura",
-      "paymentMethods": "Métodos de pago",
-      "paymentMethodsDescription": "Efectivo o Lydia",
-      "search": "Buscar",
-      "all": "Todo"
-    },
     "menu": {
       "title": "Menú del RU"
     },
@@ -251,6 +230,7 @@
     "clubs": {
       "title": "Listea de los Clubes",
       "details": "Detalles",
+      "search": "Buscar",
       "managers": "Responsables",
       "managersSubtitle": "Esta gente mantiene el club en marcha",
       "managersUnavailable": "Este club está solito :(",
