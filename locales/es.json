@@ -25,7 +25,8 @@
         "ent": "Mira tus notas",
         "equipment": "Reserva un BBQ u otro material",
         "washers": "Número de lavadoras disponibles",
-        "dryers": "Número de secadoras disponibles"
+        "dryers": "Número de secadoras disponibles",
+        "map": "¡Ubícate en el INSA!"
       },
       "mascotDialog": {
         "title": "Un poco perdido?",

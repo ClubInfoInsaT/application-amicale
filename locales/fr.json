@@ -29,7 +29,8 @@
         "washers": "Nombre de lave-Linges disponibles",
         "dryers": "Nombre de sèche-Linges disponibles",
         "schooling": "Accéde facilement à tous tes documents et résultats.",
-        "sosinfra": "Signale un problème dans un bâtiment"
+        "sosinfra": "Signale un problème dans un bâtiment",
+        "map": "Repère toi dans l'INSA"
       },
       "titles": {
         "yearlyPlanning": "Planning de l'année"
