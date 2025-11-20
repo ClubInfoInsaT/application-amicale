@@ -193,16 +193,16 @@ export function getStudentServices(
       image: Urls.images.tutorInsa,
       onPress: () => {
         Linking.canOpenURL(Urls.websites.tutorInsaDeepLink)
-        .then((supported) => {
-          console.log(`Instagram deep link supported: ${supported}`);
-          if (supported) {
-            return Linking.openURL(Urls.websites.tutorInsaDeepLink);
-          } else {
-            return Linking.openURL(Urls.websites.tutorInsa);
-          }
-        })
-        .catch(() => Linking.openURL(Urls.websites.tutorInsa));
-      },        
+          .then((supported: boolean) => {
+            console.log(`Instagram deep link supported: ${supported}`);
+            if (supported) {
+              return Linking.openURL(Urls.websites.tutorInsaDeepLink);
+            } else {
+              return Linking.openURL(Urls.websites.tutorInsa);
+            }
+          })
+          .catch(() => Linking.openURL(Urls.websites.tutorInsa));
+      },
       badgeFunction: (dashboard: FullDashboardType): number =>
         dashboard.available_tutorials,
     },
