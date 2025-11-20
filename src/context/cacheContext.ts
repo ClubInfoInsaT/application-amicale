@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { PlanexGroupsType } from '../screens/Planex/GroupSelectionScreen';
 
-
 export type CacheType = {
   planex?: {
     groups?: PlanexGroupsType;
@@ -23,7 +22,6 @@ export const CacheContext = React.createContext<CacheContextType>({
 export function useCache() {
   return useContext(CacheContext);
 }
-
 
 export function useCachedPlanexGroups() {
   const { cache, setCache } = useCache();

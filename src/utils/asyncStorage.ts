@@ -157,15 +157,15 @@ export function retrievePreferences<
         result.forEach((item) => {
           let [key, value] = item;
           if (value !== null) {
-            if (key === "dashboardItems" && value.includes("proximo")) {
+            if (key === 'dashboardItems' && value.includes('proximo')) {
               // The user has changed the dashboard items
               // We need to replace Proximo because it isn't supported anymore (05/11/2025)
               // In order to do so, we reset the dashboard items to the default value
               value = defaultPreferences.dashboardItems;
               setPreference(PreferenceKeys.dashboardItems, value, defaults);
-              console.log("Proximo successfully removed");
+              console.log('Proximo successfully removed');
             }
-            
+
             preferences[key as Keys] = value;
           }
         });
