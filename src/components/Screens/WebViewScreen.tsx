@@ -97,15 +97,12 @@ function WebViewScreen(props: Props) {
   useFocusEffect(
     useCallback(() => {
       setCollapsible(collapsible);
-      BackHandler.addEventListener(
+      const subscription = BackHandler.addEventListener(
         'hardwareBackPress',
         onBackButtonPressAndroid
       );
       return () => {
-        BackHandler.removeEventListener(
-          'hardwareBackPress',
-          onBackButtonPressAndroid
-        );
+        subscription.remove();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [collapsible, setCollapsible])
