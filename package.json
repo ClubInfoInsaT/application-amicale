@@ -34,7 +34,7 @@
     "react-native-animatable": "1.4.0",
     "react-native-app-intro-slider": "4.0.4",
     "react-native-autolink": "4.2.0",
-    "react-native-calendars": "1.1313.0",
+    "react-native-calendars": "https://codeload.github.com/wix/react-native-calendars/tar.gz/d37e8e02e59c1818832aa0edc3bd1608f20e0912",
     "react-native-collapsible": "1.6.2",
     "react-native-gesture-handler": "^2.28.0",
     "react-native-image-zoom-viewer": "3.0.1",
