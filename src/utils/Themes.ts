@@ -1,4 +1,7 @@
-import { DarkTheme, DefaultTheme } from 'react-native-paper';
+import {
+  MD2DarkTheme as DarkTheme,
+  MD2LightTheme as DefaultTheme,
+} from 'react-native-paper';
 
 declare global {
   namespace ReactNativePaper {
