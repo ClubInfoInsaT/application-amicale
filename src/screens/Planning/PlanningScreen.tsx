@@ -18,7 +18,12 @@
  */
 
 import * as React from 'react';
-import { BackHandler, StyleSheet, View } from 'react-native';
+import {
+  BackHandler,
+  NativeEventSubscription,
+  StyleSheet,
+  View,
+} from 'react-native';
 import i18n from 'i18n-js';
 import { Agenda, LocaleConfig } from 'react-native-calendars';
 import { Avatar, Divider, List } from 'react-native-paper';
@@ -120,17 +125,15 @@ function PlanningScreen(props: PropsType) {
   React.useEffect(() => {
     const { navigation } = props;
     onRefresh();
+    let subscription: NativeEventSubscription;
     navigation.addListener('focus', () => {
-      BackHandler.addEventListener(
+      subscription = BackHandler.addEventListener(
         'hardwareBackPress',
         onBackButtonPressAndroid
       );
     });
     navigation.addListener('blur', () => {
-      BackHandler.removeEventListener(
-        'hardwareBackPress',
-        onBackButtonPressAndroid
-      );
+      if (subscription) subscription.remove();
     });
   });
 
