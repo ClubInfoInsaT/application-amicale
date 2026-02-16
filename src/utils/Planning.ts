@@ -157,7 +157,6 @@ export function generateEventAgenda(events: PlanningEventType[]): {
   events.forEach((event) => {
     const dayLength = 24 * 60 * 60;
     const lengthInDays = Math.floor((event.end - event.start) / dayLength);
-    console.log(lengthInDays, event.start, event.end, dayLength);
 
     for (let i = 0; i <= lengthInDays; i++) {
       const dateString = dateToDateString(
