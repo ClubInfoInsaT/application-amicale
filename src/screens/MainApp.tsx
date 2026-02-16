@@ -35,20 +35,20 @@ function MainApp(props: Props, ref?: Ref<NavigationContainerRef<any>>) {
     <PaperProvider theme={theme}>
       <CollapsibleProvider>
         <CacheProvider>
-          <OverflowMenuProvider>
-            <View
-              style={{
-                backgroundColor: theme.colors.background,
-                ...GENERAL_STYLES.flex,
-              }}
-            >
-              <SafeAreaView style={GENERAL_STYLES.flex}>
-                <NavigationContainer theme={theme} ref={ref} linking={linking}>
+          <View
+            style={{
+              backgroundColor: theme.colors.background,
+              ...GENERAL_STYLES.flex,
+            }}
+          >
+            <SafeAreaView style={GENERAL_STYLES.flex}>
+              <NavigationContainer theme={theme} ref={ref} linking={linking}>
+                <OverflowMenuProvider>
                   <MainNavigator defaultData={props.defaultData} />
-                </NavigationContainer>
-              </SafeAreaView>
-            </View>
-          </OverflowMenuProvider>
+                </OverflowMenuProvider>
+              </NavigationContainer>
+            </SafeAreaView>
+          </View>
         </CacheProvider>
       </CollapsibleProvider>
     </PaperProvider>
