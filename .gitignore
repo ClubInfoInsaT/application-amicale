@@ -30,6 +30,7 @@ build/
 local.properties
 *.iml
 *.hprof
+.cxx/
 
 # node.js
 #
@@ -42,6 +43,7 @@ buck-out/
 \.buckd/
 *.keystore
 !debug.keystore
+.kotlin/
 *.jks
 /android/keystores/release.keystore.properties
 
@@ -60,4 +62,4 @@ buck-out/
 *.jsbundle
 
 # CocoaPods
-/ios/Pods/
+**/Pods/
