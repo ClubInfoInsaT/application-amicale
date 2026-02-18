@@ -21,7 +21,8 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import { Card, Avatar, Paragraph, Title } from 'react-native-paper';
-import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
+import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import ProxiwashConstants from '../../constants/ProxiwashConstants';
 import Urls from '../../constants/Urls';
 
@@ -84,7 +85,10 @@ function getCardItem(item: LaundromatType) {
  */
 export default function ProxiwashAboutScreen() {
   return (
-    <CollapsibleScrollView style={styles.container} hasTab={true}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
+    >
       <View style={styles.imageContainer}>
         <Image source={{ uri: Urls.images.proxiwash }} style={styles.image} />
       </View>
@@ -122,6 +126,6 @@ export default function ProxiwashAboutScreen() {
           <Paragraph>{i18n.t('screens.proxiwash.washerTips')}</Paragraph>
         </Card.Content>
       </Card>
-    </CollapsibleScrollView>
+    </ScrollView>
   );
 }

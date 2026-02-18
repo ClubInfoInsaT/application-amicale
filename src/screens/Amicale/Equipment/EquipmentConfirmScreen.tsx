@@ -29,7 +29,8 @@ import {
 import { StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import { getRelativeDateString } from '../../../utils/EquipmentBooking';
-import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
+import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
   MainRoutes,
@@ -92,7 +93,7 @@ function EquipmentConfirmScreen(props: Props) {
       });
     }
     return (
-      <CollapsibleScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}>
         <Card style={styles.card}>
           <Card.Content>
             <View style={GENERAL_STYLES.flex}>
@@ -111,7 +112,7 @@ function EquipmentConfirmScreen(props: Props) {
             </Paragraph>
           </Card.Content>
         </Card>
-      </CollapsibleScrollView>
+      </ScrollView>
     );
   }
   return null;

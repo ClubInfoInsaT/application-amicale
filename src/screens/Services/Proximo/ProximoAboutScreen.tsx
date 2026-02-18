@@ -22,7 +22,7 @@ import { Image, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import { Card, Avatar, Paragraph, Text } from 'react-native-paper';
 import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
-import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
 import Urls from '../../../constants/Urls';
 
 const styles = StyleSheet.create({
@@ -52,7 +52,10 @@ const styles = StyleSheet.create({
  */
 export default function ProximoAboutScreen() {
   return (
-    <CollapsibleScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
+    >
       <View style={styles.imageContainer}>
         <Image source={{ uri: Urls.images.proximo }} style={styles.image} />
       </View>
@@ -71,7 +74,7 @@ export default function ProximoAboutScreen() {
       <Card
         style={{
           ...styles.card,
-          marginBottom: TAB_BAR_HEIGHT + 20,
+          marginBottom: 20,
         }}
       >
         <Card.Title
@@ -86,6 +89,6 @@ export default function ProximoAboutScreen() {
           </Paragraph>
         </Card.Content>
       </Card>
-    </CollapsibleScrollView>
+    </ScrollView>
   );
 }

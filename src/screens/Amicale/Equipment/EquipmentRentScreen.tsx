@@ -41,7 +41,8 @@ import {
   getValidRange,
   isEquipmentAvailable,
 } from '../../../utils/EquipmentBooking';
-import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
+import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
 import {
   MainRoutes,
   MainStackParamsList,
@@ -319,7 +320,7 @@ function EquipmentRentScreen(props: Props) {
     const firstAvailability = getFirstEquipmentAvailability(item);
     return (
       <View style={GENERAL_STYLES.flex}>
-        <CollapsibleScrollView>
+        <ScrollView contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}>
           <Card style={styles.card}>
             <Card.Content>
               <View style={GENERAL_STYLES.flex}>
@@ -399,7 +400,7 @@ function EquipmentRentScreen(props: Props) {
             }}
             style={styles.calendar}
           />
-        </CollapsibleScrollView>
+        </ScrollView>
         <LoadingConfirmDialog
           visible={dialogVisible}
           onDismiss={onDialogDismiss}

@@ -22,7 +22,6 @@ import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Animated, StyleSheet } from 'react-native';
 import TabIcon from './TabIcon';
 import { useTheme } from 'react-native-paper';
-import { useCollapsible } from '../../context/CollapsibleContext';
 
 export const TAB_BAR_HEIGHT = 50;
 
@@ -42,18 +41,11 @@ function CustomTabBar(
   const state = props.state;
   const theme = useTheme();
 
-  const { collapsible } = useCollapsible();
-  let translateY: number | Animated.AnimatedInterpolation = 0;
-  if (collapsible) {
-    translateY = Animated.multiply(-1.5, collapsible.translateY);
-  }
-
   return (
     <Animated.View
       style={{
         ...styles.bar,
         backgroundColor: theme.colors.surface,
-        transform: [{ translateY: translateY }],
       }}
     >
       {state.routes.map(

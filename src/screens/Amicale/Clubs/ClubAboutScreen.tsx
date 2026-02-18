@@ -22,7 +22,8 @@ import { Image, StyleSheet, View } from 'react-native';
 import { Card, Avatar, Text } from 'react-native-paper';
 import i18n from 'i18n-js';
 import Autolink from 'react-native-autolink';
-import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
+import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
 const AMICALE_ICON = require('../../../../assets/amicale.png');
 
 const CONTACT_LINK = 'clubs@amicale-insat.fr';
@@ -50,7 +51,10 @@ const styles = StyleSheet.create({
 
 function ClubAboutScreen() {
   return (
-    <CollapsibleScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
+    >
       <View style={styles.imageContainer}>
         <Image
           source={AMICALE_ICON}
@@ -80,7 +84,7 @@ function ClubAboutScreen() {
           />
         </Card.Content>
       </Card>
-    </CollapsibleScrollView>
+    </ScrollView>
   );
 }
 

@@ -22,7 +22,8 @@ import { View, StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
 import { StackNavigationProp } from '@react-navigation/stack';
 import packageJson from '../../../package.json';
-import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
+import { FlatList } from 'react-native';
+import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import OptionsDialog from '../../components/Dialogs/OptionsDialog';
 import type { OptionsDialogButtonType } from '../../components/Dialogs/OptionsDialog';
 import GENERAL_STYLES from '../../constants/Styles';
@@ -181,10 +182,11 @@ function AboutScreen() {
 
   return (
     <View style={GENERAL_STYLES.flex}>
-      <CollapsibleFlatList
+      <FlatList
         style={styles.list}
         data={DATA_ORDER}
         renderItem={renderItem}
+        contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
       />
       {dialog != null ? (
         <OptionsDialog

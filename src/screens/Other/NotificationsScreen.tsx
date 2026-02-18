@@ -23,7 +23,8 @@ import { readData } from '../../utils/WebData';
 import { NotificationType } from '../../utils/Notifications';
 import Urls from '../../constants/Urls';
 import { Card } from 'react-native-paper';
-import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
+import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import CustomHTML from '../../components/Overrides/CustomHTML';
 import { PreferenceKeys } from '../../utils/asyncStorage';
 import { useNotificationPreferences } from '../../context/preferencesContext';
@@ -108,9 +109,9 @@ function NotificationsScreen() {
   };
 
   return (
-    <CollapsibleScrollView
+    <ScrollView
       style={styles.container}
-      hasTab={true}
+      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
@@ -120,7 +121,7 @@ function NotificationsScreen() {
       }
     >
       {renderNotifications(notificationItems)}
-    </CollapsibleScrollView>
+    </ScrollView>
   );
 }
 

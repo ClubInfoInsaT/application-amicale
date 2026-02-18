@@ -21,7 +21,7 @@ import * as React from 'react';
 import { FlatList, Image, Linking, StyleSheet, View } from 'react-native';
 import { Avatar, Card, List, Text } from 'react-native-paper';
 import i18n from 'i18n-js';
-import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
+import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 
 const AMICALE_LOGO = require('../../../assets/amicale.png');
 
@@ -171,7 +171,13 @@ function AmicaleContactScreen() {
   };
 
   // We cannot wrap flatlists inside scrollviews
-  return <CollapsibleFlatList data={[{ key: '1' }]} renderItem={renderItem} />;
+  return (
+    <FlatList
+      data={[{ key: '1' }]}
+      renderItem={renderItem}
+      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
+    />
+  );
 }
 
 export default AmicaleContactScreen;
