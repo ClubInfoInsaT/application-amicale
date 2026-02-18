@@ -144,6 +144,7 @@
       "title": "Events",
       "eventDetails": "Event details",
       "invalidEvent": "Could not find the event. Please make sure the event you are trying to access is valid.",
+      "noEvents": "No events",
       "mascotDialog": {
         "title": "Let's party!",
         "message": "And even more! Here you will find every event on the campus.\n\nFrom pancake sales, to the Gala, you will never miss anything!",
