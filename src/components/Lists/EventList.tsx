@@ -34,13 +34,11 @@ import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 
 type EventListProps = {
   eventsByDate: { [key: string]: Array<PlanningEventType> };
-  selectedDate?: string;
   onRefresh?: () => void;
   refreshing?: boolean;
   renderItem: (event: PlanningEventType) => React.ReactElement;
   renderEmptyDate?: () => React.ReactElement;
   renderEmptyData?: () => React.ReactElement;
-  onDateChange?: (date: string) => void;
 };
 
 /**
@@ -51,13 +49,11 @@ function EventList(props: EventListProps) {
   const theme = useTheme();
   const {
     eventsByDate,
-    selectedDate,
     onRefresh,
     refreshing = false,
     renderItem,
     renderEmptyDate,
     renderEmptyData,
-    onDateChange,
   } = props;
 
   // Convert eventsByDate to section data for SectionList
@@ -97,17 +93,16 @@ function EventList(props: EventListProps) {
     const date = new Date(title);
     const today = new Date();
     const isToday = date.toDateString() === today.toDateString();
-    const isSelected = selectedDate === title;
+    const textColor = isToday ? '#FFFFFF' : theme.colors.agendaDayTextColor;
 
     return (
       <TouchableOpacity
-        onPress={() => onDateChange?.(title)}
         style={[
           styles.sectionHeader,
           {
-            backgroundColor: isSelected
+            backgroundColor: isToday
               ? theme.colors.primary
-              : theme.colors.agendaBackgroundColor,
+              : theme.colors.dividerBackground,
           },
         ]}
       >
@@ -116,7 +111,7 @@ function EventList(props: EventListProps) {
             style={[
               styles.sectionHeaderDay,
               {
-                color: isSelected ? '#ffffff' : theme.colors.agendaDayTextColor,
+                color: textColor,
               },
             ]}
           >
@@ -126,25 +121,12 @@ function EventList(props: EventListProps) {
             style={[
               styles.sectionHeaderDate,
               {
-                color: isSelected ? '#ffffff' : theme.colors.agendaDayTextColor,
+                color: textColor,
               },
             ]}
           >
             {dateToDateStringHuman(date)}
           </Text>
-
-          {isToday && (
-            <View
-              style={[
-                styles.todayIndicator,
-                {
-                  backgroundColor: isSelected
-                    ? '#ffffff'
-                    : theme.colors.primary,
-                },
-              ]}
-            />
-          )}
         </View>
       </TouchableOpacity>
     );
@@ -182,7 +164,7 @@ function EventList(props: EventListProps) {
     >
       <SectionList
         sections={sections}
-        keyExtractor={(item, index) => item.id + index}
+        keyExtractor={(item, index) => item.id + '' + index}
         renderItem={renderSectionItem}
         renderSectionHeader={renderSectionHeader}
         ListEmptyComponent={ListEmptyComponent}
@@ -227,12 +209,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     minWidth: 100,
     textAlign: 'center',
-  },
-  todayIndicator: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginLeft: 10,
   },
   emptyContainer: {
     flex: 1,
