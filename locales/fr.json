@@ -144,6 +144,7 @@
       "title": "Événements",
       "eventDetails": "Détails",
       "invalidEvent": "Impossible de trouver l'événement. Merci de vérifier que l'événement que tu veux voir est valide.",
+      "noEvents": "Aucun événement",
       "mascotDialog": {
         "title": "Yay des soirées !",
         "message": "Et pas que ! Ici tu pourras voir tous les évents du campus.\n\nDe la vente de crêpes à la soirée du Gala, tu ne manqueras rien !",
