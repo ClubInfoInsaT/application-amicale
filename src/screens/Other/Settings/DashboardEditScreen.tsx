@@ -24,7 +24,7 @@ import { View } from 'react-native-animatable';
 import i18n from 'i18n-js';
 import DashboardEditAccordion from '../../../components/Lists/DashboardEdit/DashboardEditAccordion';
 import DashboardEditPreviewItem from '../../../components/Lists/DashboardEdit/DashboardEditPreviewItem';
-import CollapsibleFlatList from '../../../components/Collapsible/CollapsibleFlatList';
+import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
 import {
   getCategories,
   ServiceCategoryType,
@@ -140,12 +140,13 @@ function DashboardEditScreen() {
   };
 
   return (
-    <CollapsibleFlatList
+    <FlatList
       //@ts-ignore
       data={getCategories(navigation.navigate, isLoggedIn)}
       renderItem={getRenderItem}
       ListHeaderComponent={getListHeader()}
       extraData={activeItem}
+      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
     />
   );
 }

@@ -30,7 +30,8 @@ import {
 } from 'react-native-paper';
 import { Appearance } from 'react-native';
 import CustomSlider from '../../../components/Overrides/CustomSlider';
-import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
+import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
 import GENERAL_STYLES from '../../../constants/Styles';
 import {
   usePreferences,
@@ -250,7 +251,7 @@ function SettingsScreen() {
   };
 
   return (
-    <CollapsibleScrollView>
+    <ScrollView contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}>
       <Card style={styles.card}>
         <Card.Title title={i18n.t('screens.settings.generalCard')} />
         <List.Section>
@@ -350,7 +351,7 @@ function SettingsScreen() {
           )}
         </List.Section>
       </Card>
-    </CollapsibleScrollView>
+    </ScrollView>
   );
 }
 

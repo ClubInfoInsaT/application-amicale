@@ -23,7 +23,8 @@ import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
-import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
+import { FlatList } from 'react-native';
+import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import GENERAL_STYLES from '../../constants/Styles';
 import RequestScreen from '../../components/Screens/RequestScreen';
 import ProfileTermsAlertCard from '../../components/Amicale/Profile/ProfileTermsAlertCard';
@@ -135,7 +136,11 @@ function ProfileScreen() {
       });
       return (
         <View style={GENERAL_STYLES.flex}>
-          <CollapsibleFlatList renderItem={getRenderItem} data={flatListData} />
+          <FlatList
+            renderItem={getRenderItem}
+            data={flatListData}
+            contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
+          />
           <LogoutDialog
             visible={dialogVisible}
             onDismiss={hideDisconnectDialog}

@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import GENERAL_STYLES from '../constants/Styles';
-import CollapsibleProvider from '../components/providers/CollapsibleProvider';
+
 import CacheProvider from '../components/providers/CacheProvider';
 import { OverflowMenuProvider } from 'react-navigation-header-buttons';
 import MainNavigator, { linking } from '../navigation/MainNavigator';
@@ -33,24 +33,22 @@ function MainApp(props: Props, ref?: Ref<NavigationContainerRef<any>>) {
 
   return (
     <PaperProvider theme={theme}>
-      <CollapsibleProvider>
-        <CacheProvider>
-          <View
-            style={{
-              backgroundColor: theme.colors.background,
-              ...GENERAL_STYLES.flex,
-            }}
-          >
-            <SafeAreaView style={GENERAL_STYLES.flex}>
-              <NavigationContainer theme={theme} ref={ref} linking={linking}>
-                <OverflowMenuProvider>
-                  <MainNavigator defaultData={props.defaultData} />
-                </OverflowMenuProvider>
-              </NavigationContainer>
-            </SafeAreaView>
-          </View>
-        </CacheProvider>
-      </CollapsibleProvider>
+      <CacheProvider>
+        <View
+          style={{
+            backgroundColor: theme.colors.background,
+            ...GENERAL_STYLES.flex,
+          }}
+        >
+          <SafeAreaView style={GENERAL_STYLES.flex}>
+            <NavigationContainer theme={theme} ref={ref} linking={linking}>
+              <OverflowMenuProvider>
+                <MainNavigator defaultData={props.defaultData} />
+              </OverflowMenuProvider>
+            </NavigationContainer>
+          </SafeAreaView>
+        </View>
+      </CacheProvider>
     </PaperProvider>
   );
 }

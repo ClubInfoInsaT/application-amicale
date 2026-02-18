@@ -21,7 +21,8 @@ import * as React from 'react';
 import { Avatar, Button, Card, Paragraph, withTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { Linking, StyleSheet, View } from 'react-native';
-import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
+import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 import Urls from '../../constants/Urls';
 
 const styles = StyleSheet.create({
@@ -115,7 +116,10 @@ function getButtons(isFeedback: boolean) {
 
 function FeedbackScreen() {
   return (
-    <CollapsibleScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
+    >
       <Card>
         <Card.Title
           title={i18n.t('screens.feedback.feedback')}
@@ -144,7 +148,7 @@ function FeedbackScreen() {
         </Card.Content>
         {getButtons(false)}
       </Card>
-    </CollapsibleScrollView>
+    </ScrollView>
   );
 }
 

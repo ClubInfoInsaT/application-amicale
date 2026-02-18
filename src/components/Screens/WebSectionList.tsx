@@ -24,11 +24,10 @@ import {
   SectionListData,
   SectionListProps,
   StyleSheet,
+  SectionList,
 } from 'react-native';
 import ErrorView, { ErrorProps } from './ErrorView';
-import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
 import RequestScreen, { RequestScreenProps } from './RequestScreen';
-import { CollapsibleComponentPropsType } from '../Collapsible/CollapsibleComponent';
 import { API_RESPONSE_CODE, RESPONSE_HTTP_STATUS } from '../../utils/Requests';
 
 export type SectionListDataType<ItemT> = Array<{
@@ -39,8 +38,8 @@ export type SectionListDataType<ItemT> = Array<{
 }>;
 
 type Props<ItemT, RawData> = Omit<
-  CollapsibleComponentPropsType,
-  'children' | 'paddedProps'
+  RequestScreenProps<RawData>,
+  'render' | 'showLoading' | 'showError' | 'onMajorError'
 > &
   Omit<
     RequestScreenProps<RawData>,
@@ -48,7 +47,11 @@ type Props<ItemT, RawData> = Omit<
   > &
   Omit<
     SectionListProps<ItemT>,
-    'sections' | 'getItemLayout' | 'ListHeaderComponent' | 'ListEmptyComponent'
+    | 'sections'
+    | 'getItemLayout'
+    | 'ListHeaderComponent'
+    | 'ListEmptyComponent'
+    | 'refreshControl'
   > & {
     createDataset: (
       data: RawData | undefined,
@@ -122,20 +125,14 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
       code
     );
     return (
-      <CollapsibleSectionList
+      <SectionList
         {...props}
         sections={dataset}
-        paddedProps={(paddingTop) => ({
-          refreshControl: (
-            <RefreshControl
-              progressViewOffset={paddingTop}
-              refreshing={loading}
-              onRefresh={refreshData}
-            />
-          ),
-        })}
         renderItem={props.renderItem}
         style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={refreshData} />
+        }
         ListHeaderComponent={
           props.renderListHeaderComponent != null
             ? props.renderListHeaderComponent(

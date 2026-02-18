@@ -8,11 +8,15 @@ Ces notes pouvant évoluer dans le temps, leur date d'écriture est aussi indiqu
 
 Bloquée en 6.0.0 à cause d'un problème fatal sous IOS. Le packet n'étant plus maintenu, il faudra migrer vers une autre librairie.
 
+Update 02/2026: removed, and removed collapsible header
+
 ## _2020-10-07_ | react-native-keychain
 
 Bloquée en 4.0.5 à cause d'un problème de performances. Au dessus de cette version, la récupération du token prend plusieurs secondes, ce qui n'est pas acceptable.
 
 [Référence](https://github.com/oblador/react-native-keychain/issues/337)
+
+Update 02/2026: recent versions appear to be doing better
 
 ## _2020-09-24_ | Flow
 

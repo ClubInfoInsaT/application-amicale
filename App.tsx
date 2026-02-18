@@ -18,8 +18,7 @@
  */
 
 import React from 'react';
-import { LogBox, Platform } from 'react-native';
-import { setSafeBounceHeight } from 'react-navigation-collapsible';
+import { LogBox } from 'react-native';
 import type { ParsedUrlDataType } from './src/utils/URLHandler';
 import URLHandler from './src/utils/URLHandler';
 import initLocales from './src/utils/Locales';
@@ -96,7 +95,6 @@ export default class App extends React.Component<{}, StateType> {
     this.defaultData = undefined;
     this.urlHandler = new URLHandler(this.onInitialURLParsed, this.onDetectURL);
     this.urlHandler.listen();
-    setSafeBounceHeight(Platform.OS === 'ios' ? 100 : 20);
     this.loadAssetsAsync();
   }
 
