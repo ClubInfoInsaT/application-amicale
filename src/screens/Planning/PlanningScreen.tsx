@@ -30,7 +30,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { readData } from '../../utils/WebData';
 import {
   generateEventAgenda,
-  dateToDateString,
   PlanningEventType,
   getSubtitle,
 } from '../../utils/Planning';
@@ -62,16 +61,12 @@ const styles = StyleSheet.create({
  */
 function PlanningScreen(props: PropsType) {
   let minTimeBetweenRefresh = 5;
-  let currentDate: string | null = dateToDateString(new Date());
 
   const [lastRefresh, setLastRefresh] = React.useState<Date | null>(null);
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
   const [agendaItems, setAgendaItems] = React.useState<{
     [key: string]: Array<PlanningEventType>;
   }>({});
-  const [selectedDate, setSelectedDate] = React.useState<string | undefined>(
-    currentDate ? currentDate : undefined
-  );
 
   React.useEffect(() => {
     const { navigation } = props;
@@ -90,8 +85,6 @@ function PlanningScreen(props: PropsType) {
 
   /**
    * Overrides default android back button behaviour (no special handling needed for event list).
-   *
-   * @return {boolean}
    */
   const onBackButtonPressAndroid = (): boolean => {
     return false;
@@ -124,21 +117,6 @@ function PlanningScreen(props: PropsType) {
     }
   };
 
-  /**
-   * Callback used when a date is selected in the event list
-   *
-   * @param date The selected date string
-   */
-  const onDateChange = (date: string) => {
-    setSelectedDate(date);
-  };
-
-  /**
-   * Gets an event render item
-   *
-   * @param event The current event to render
-   * @return {*}
-   */
   const getRenderItem = (event: PlanningEventType) => {
     const { navigation } = props;
     const onPress = () => {
@@ -209,13 +187,11 @@ function PlanningScreen(props: PropsType) {
     <View style={GENERAL_STYLES.flex}>
       <EventList
         eventsByDate={agendaItems}
-        selectedDate={selectedDate}
         onRefresh={onRefresh}
         refreshing={refreshing}
         renderItem={getRenderItem}
         renderEmptyDate={getRenderEmptyDate}
         renderEmptyData={getRenderNoEvents}
-        onDateChange={onDateChange}
       />
       <MascotPopup
         title={i18n.t('screens.planning.mascotDialog.title')}
