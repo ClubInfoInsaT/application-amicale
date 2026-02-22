@@ -9,7 +9,8 @@ import GENERAL_STYLES from '../constants/Styles';
 import CacheProvider from '../components/providers/CacheProvider';
 import { OverflowMenuProvider } from 'react-navigation-header-buttons';
 import MainNavigator, { linking } from '../navigation/MainNavigator';
-import { Platform, SafeAreaView, View } from 'react-native';
+import { Platform, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useDarkTheme } from '../context/preferencesContext';
 import { CustomDarkTheme, CustomWhiteTheme } from '../utils/Themes';
 import { setupStatusBar } from '../utils/Utils';
@@ -34,20 +35,20 @@ function MainApp(props: Props, ref?: Ref<NavigationContainerRef<any>>) {
   return (
     <PaperProvider theme={theme}>
       <CacheProvider>
-        <View
-          style={{
-            backgroundColor: theme.colors.background,
-            ...GENERAL_STYLES.flex,
-          }}
-        >
-          <SafeAreaView style={GENERAL_STYLES.flex}>
+        <SafeAreaProvider>
+          <View
+            style={{
+              backgroundColor: theme.colors.background,
+              ...GENERAL_STYLES.flex,
+            }}
+          >
             <NavigationContainer theme={theme} ref={ref} linking={linking}>
               <OverflowMenuProvider>
                 <MainNavigator defaultData={props.defaultData} />
               </OverflowMenuProvider>
             </NavigationContainer>
-          </SafeAreaView>
-        </View>
+          </View>
+        </SafeAreaProvider>
       </CacheProvider>
     </PaperProvider>
   );
