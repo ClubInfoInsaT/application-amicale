@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>5.8.0</string>
+	<string>6.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>42</string>
+	<string>43</string>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
 	<false />
 	<key>FacebookAutoInitEnabled</key>
@@ -41,11 +41,10 @@
 	<true />
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
-		<false/>
+		<false />
 		<key>NSAllowsLocalNetworking</key>
-		<true/>
+		<true />
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
