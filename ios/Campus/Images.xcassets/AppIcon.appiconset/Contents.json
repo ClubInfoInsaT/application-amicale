@@ -53,6 +53,12 @@
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
+    },
+    {
+      "filename" : "152.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "152x152"
     }
   ],
   "info" : {
