@@ -300,7 +300,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "amicale.insat.application";
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.amicaleinsat.application";
 				PRODUCT_NAME = Campus;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_VERSION = 5.0;
