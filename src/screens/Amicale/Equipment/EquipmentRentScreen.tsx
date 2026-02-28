@@ -41,7 +41,7 @@ import {
 } from '../../../utils/EquipmentBooking';
 import DateRangeSelector from '../../../components/Lists/DateRangeSelector';
 import { ScrollView } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
+
 import {
   MainRoutes,
   MainStackParamsList,
@@ -308,7 +308,7 @@ function EquipmentRentScreen(props: Props) {
     const firstAvailability = getFirstEquipmentAvailability(item);
     return (
       <View style={GENERAL_STYLES.flex}>
-        <ScrollView contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}>
+        <ScrollView>
           <Card style={styles.card}>
             <Card.Content>
               <View style={GENERAL_STYLES.flex}>

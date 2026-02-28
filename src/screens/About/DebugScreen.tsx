@@ -30,7 +30,7 @@ import {
 import { Modalize } from 'react-native-modalize';
 import CustomModal from '../../components/Overrides/CustomModal';
 import { FlatList } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import { usePreferences } from '../../context/preferencesContext';
 import {
   defaultPreferences,
@@ -155,7 +155,6 @@ function DebugScreen() {
         data={currentPreferences}
         extraData={currentPreferences}
         renderItem={getRenderItem}
-        contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
       />
     </View>
   );

@@ -26,7 +26,7 @@ import ErrorDialog from '../../components/Dialogs/ErrorDialog';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import { ScrollView } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import {
   MainRoutes,
   MainStackParamsList,
@@ -121,7 +121,7 @@ function LoginScreen(props: Props) {
         enabled={true}
         keyboardVerticalOffset={100}
       >
-        <ScrollView contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}>
+        <ScrollView>
           <View style={GENERAL_STYLES.flex}>
             <LoginForm
               loading={loading}

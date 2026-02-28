@@ -22,7 +22,7 @@ import { Avatar, Button, Card, Paragraph, withTheme } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { Linking, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import Urls from '../../constants/Urls';
 
 const styles = StyleSheet.create({
@@ -116,10 +116,7 @@ function getButtons(isFeedback: boolean) {
 
 function FeedbackScreen() {
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
-    >
+    <ScrollView style={styles.container}>
       <Card>
         <Card.Title
           title={i18n.t('screens.feedback.feedback')}

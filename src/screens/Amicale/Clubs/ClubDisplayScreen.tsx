@@ -29,7 +29,7 @@ import {
 } from 'react-native-paper';
 import i18n from 'i18n-js';
 import CustomHTML from '../../../components/Overrides/CustomHTML';
-import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
+
 import type { Club, ClubRespo } from './ClubListScreen';
 import { ScrollView } from 'react-native';
 import ImageGalleryButton from '../../../components/Media/ImageGalleryButton';
@@ -155,7 +155,7 @@ function ClubDisplayScreen(props: Props) {
     return (
       <Card
         style={{
-          marginBottom: TAB_BAR_HEIGHT + 20,
+          marginBottom: 20,
           ...styles.card,
         }}
       >
@@ -219,10 +219,7 @@ function ClubDisplayScreen(props: Props) {
     if (club) {
       console.log(club);
       return (
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
-        >
+        <ScrollView style={styles.scroll}>
           {getCategoriesRender(club.categories)}
           {club.logo !== null ? (
             <ImageGalleryButton

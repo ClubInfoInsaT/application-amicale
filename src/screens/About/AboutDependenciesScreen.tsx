@@ -21,7 +21,7 @@ import * as React from 'react';
 import { List } from 'react-native-paper';
 import { View } from 'react-native-animatable';
 import { FlatList } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import packageJson from '../../../package.json';
 
 type ListItemType = {
@@ -80,7 +80,6 @@ export default function AboutDependenciesScreen() {
         // Performance props, see https://reactnative.dev/docs/optimizing-flatlist-configuration
         removeClippedSubviews
         getItemLayout={getItemLayout}
-        contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
       />
     </View>
   );

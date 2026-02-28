@@ -22,7 +22,7 @@ import { Image, StyleSheet, View } from 'react-native';
 import i18n from 'i18n-js';
 import { Card, Avatar, Paragraph, Title } from 'react-native-paper';
 import { ScrollView } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import ProxiwashConstants from '../../constants/ProxiwashConstants';
 import Urls from '../../constants/Urls';
 
@@ -85,10 +85,7 @@ function getCardItem(item: LaundromatType) {
  */
 export default function ProxiwashAboutScreen() {
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
-    >
+    <ScrollView style={styles.container}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: Urls.images.proxiwash }} style={styles.image} />
       </View>

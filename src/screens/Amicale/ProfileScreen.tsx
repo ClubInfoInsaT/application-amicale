@@ -24,7 +24,7 @@ import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
 import { FlatList } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import GENERAL_STYLES from '../../constants/Styles';
 import RequestScreen from '../../components/Screens/RequestScreen';
 import ProfileTermsAlertCard from '../../components/Amicale/Profile/ProfileTermsAlertCard';
@@ -136,11 +136,7 @@ function ProfileScreen() {
       });
       return (
         <View style={GENERAL_STYLES.flex}>
-          <FlatList
-            renderItem={getRenderItem}
-            data={flatListData}
-            contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
-          />
+          <FlatList renderItem={getRenderItem} data={flatListData} />
           <LogoutDialog
             visible={dialogVisible}
             onDismiss={hideDisconnectDialog}

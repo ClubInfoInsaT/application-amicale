@@ -60,7 +60,6 @@ import { useProxiwashPreferences } from '../../context/preferencesContext';
 import { useSubsequentEffect } from '../../utils/customHooks';
 import { MainRoutes } from '../../navigation/MainNavigator';
 import ErrorView, { ErrorProps } from '../../components/Screens/ErrorView';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
 
 const REFRESH_TIME = 1000 * 10; // Refresh every 10 seconds
 const LIST_ITEM_HEIGHT = 64;
@@ -99,7 +98,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    paddingBottom: TAB_BAR_HEIGHT,
   },
 });
 
