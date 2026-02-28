@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -32,19 +34,21 @@
 	<key>CFBundleVersion</key>
 	<string>44</string>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
-	<false />
+	<false/>
 	<key>FacebookAutoInitEnabled</key>
-	<false />
+	<false/>
 	<key>FacebookAutoLogAppEventsEnabled</key>
-	<false />
+	<false/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
-	<true />
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<false />
+		<false/>
 		<key>NSAllowsLocalNetworking</key>
-		<true />
+		<true/>
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
@@ -57,17 +61,21 @@
 		<string>arm64</string>
 	</array>
 	<key>UIRequiresFullScreen</key>
-	<true />
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Automatic</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false />
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false />
+	<false/>
 </dict>
 </plist>
