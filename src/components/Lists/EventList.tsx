@@ -30,7 +30,6 @@ import { useTheme } from 'react-native-paper';
 import { dateToDateStringHuman, PlanningEventType } from '../../utils/Planning';
 import GENERAL_STYLES from '../../constants/Styles';
 import i18n from 'i18n-js';
-import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 
 type EventListProps = {
   eventsByDate: { [key: string]: Array<PlanningEventType> };
@@ -179,16 +178,12 @@ function EventList(props: EventListProps) {
           ) : undefined
         }
         stickySectionHeadersEnabled={true}
-        contentContainerStyle={styles.contentContainer}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    paddingBottom: TAB_BAR_HEIGHT,
-  },
   sectionHeader: {
     padding: 15,
     borderBottomWidth: 1,

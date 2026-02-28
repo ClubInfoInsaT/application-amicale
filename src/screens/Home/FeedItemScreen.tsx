@@ -25,7 +25,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import { ScrollView } from 'react-native';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
 import NewsSourcesConstants, {
@@ -92,10 +92,7 @@ function FeedItemScreen(props: Props) {
   const pageSource: NewsSourceType =
     NewsSourcesConstants[data.page_id as AvailablePages];
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
-    >
+    <ScrollView style={styles.container}>
       <Card.Title
         title={pageSource.name}
         subtitle={date}

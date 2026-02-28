@@ -24,7 +24,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { getSubtitle } from '../../utils/Planning';
 import { apiRequest } from '../../utils/WebData';
 import CustomHTML from '../../components/Overrides/CustomHTML';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import { ScrollView } from 'react-native';
 import type { PlanningEventType } from '../../utils/Planning';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
@@ -70,10 +70,7 @@ function PlanningDisplayScreen(props: Props) {
     const subtitle = getSubtitle(event);
 
     return (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
-      >
+      <ScrollView style={styles.container}>
         <Card.Title
           title={event.title}
           subtitle={subtitle}

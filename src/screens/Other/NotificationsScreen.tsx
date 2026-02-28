@@ -24,7 +24,7 @@ import { NotificationType } from '../../utils/Notifications';
 import Urls from '../../constants/Urls';
 import { Card } from 'react-native-paper';
 import { ScrollView } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import CustomHTML from '../../components/Overrides/CustomHTML';
 import { PreferenceKeys } from '../../utils/asyncStorage';
 import { useNotificationPreferences } from '../../context/preferencesContext';
@@ -111,7 +111,6 @@ function NotificationsScreen() {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}

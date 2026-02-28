@@ -31,7 +31,7 @@ import {
 import { Appearance } from 'react-native';
 import CustomSlider from '../../../components/Overrides/CustomSlider';
 import { ScrollView } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
+
 import GENERAL_STYLES from '../../../constants/Styles';
 import {
   usePreferences,
@@ -251,7 +251,7 @@ function SettingsScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}>
+    <ScrollView>
       <Card style={styles.card}>
         <Card.Title title={i18n.t('screens.settings.generalCard')} />
         <List.Section>

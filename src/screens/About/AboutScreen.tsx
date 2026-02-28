@@ -23,7 +23,7 @@ import i18n from 'i18n-js';
 import { StackNavigationProp } from '@react-navigation/stack';
 import packageJson from '../../../package.json';
 import { FlatList } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import OptionsDialog from '../../components/Dialogs/OptionsDialog';
 import type { OptionsDialogButtonType } from '../../components/Dialogs/OptionsDialog';
 import GENERAL_STYLES from '../../constants/Styles';
@@ -182,12 +182,7 @@ function AboutScreen() {
 
   return (
     <View style={GENERAL_STYLES.flex}>
-      <FlatList
-        style={styles.list}
-        data={DATA_ORDER}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
-      />
+      <FlatList style={styles.list} data={DATA_ORDER} renderItem={renderItem} />
       {dialog != null ? (
         <OptionsDialog
           visible={dialog != null}

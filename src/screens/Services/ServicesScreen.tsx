@@ -35,7 +35,7 @@ import MaterialHeaderButtons, {
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import { FlatList } from 'react-native';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
+
 import {
   getCategories,
   ServiceCategoryType,
@@ -143,7 +143,6 @@ function ServicesScreen() {
         renderItem={getRenderItem}
         keyExtractor={keyExtractor}
         ItemSeparatorComponent={() => <Divider />}
-        contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
       />
       <MascotPopup
         title={i18n.t('screens.services.mascotDialog.title')}

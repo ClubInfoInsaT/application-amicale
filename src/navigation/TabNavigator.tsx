@@ -28,7 +28,9 @@ import HomeScreen from '../screens/Home/HomeScreen';
 import PlanningScreen from '../screens/Planning/PlanningScreen';
 import ProxiwashScreen from '../screens/Proxiwash/ProxiwashScreen';
 import PlanexScreen from '../screens/Planex/PlanexScreen';
-import CustomTabBar from '../components/Tabbar/CustomTabBar';
+import CustomTabBar, {
+  TAB_BAR_HEIGHT,
+} from '../components/Tabbar/CustomTabBar';
 import WebsitesHomeScreen from '../screens/Services/ServicesScreen';
 import Mascot, { MASCOT_STYLE } from '../components/Mascot/Mascot';
 import { usePreferences } from '../context/preferencesContext';
@@ -129,6 +131,11 @@ function TabNavigator(props: PropsType) {
         <CustomTabBar {...tabProps} labels={LABELS} icons={ICONS} />
       )}
       backBehavior={'initialRoute'}
+      screenOptions={{
+        sceneStyle: {
+          paddingBottom: TAB_BAR_HEIGHT,
+        },
+      }}
     >
       <Tab.Screen
         name={TabRoutes.Services}
