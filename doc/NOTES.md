@@ -4,6 +4,20 @@ Ce fichier permet de regrouper les différentes informations sur des décisions 
 
 Ces notes pouvant évoluer dans le temps, leur date d'écriture est aussi indiquée.
 
+## _2026-02-28_ | React Native 0.84 Upgrade
+
+L'application a été mise à jour de React Native 0.79.6 à 0.84.1 en utilisant le _agent skill_ `/upgrade-react-native`, avec Mistral Vibe.
+
+L'agent gère automatiquement :
+
+- La détection de la version actuelle
+- La validation de la version cible
+- L'application des diffs entre versions
+- La mise à jour des dépendances natives tierces
+- La création d'une checklist post-upgrade
+
+Voir [SKILL.md](.agents/skills/upgrade-react-native/SKILL.md) pour plus de détails.
+
 ## _2022-09-18_ | react-navigation-collapsible
 
 Bloquée en 6.0.0 à cause d'un problème fatal sous IOS. Le packet n'étant plus maintenu, il faudra migrer vers une autre librairie.
@@ -21,23 +35,25 @@ Update 02/2026: recent versions appear to be doing better
 ## _2020-09-24_ | Flow
 
 Flow est un système d'annotation permettant de rendre JavaScript typé statique. Développée par Facebook, cette technologie à initialement été adoptée. En revanche, de nombreux problèmes sont apparus :
-* Système très complexe donnant de nombreuses erreurs inconnues, rendant la contribution complexe pour les non-initiés
-* Manque de compatibilité avec les librairies existantes (la majorité utilisant TypeScript)
-* Utilisation excessive du système lors du développement
-* Plantage régulier du service Flow, nécessitant un redémarrage manuel
+
+- Système très complexe donnant de nombreuses erreurs inconnues, rendant la contribution complexe pour les non-initiés
+- Manque de compatibilité avec les librairies existantes (la majorité utilisant TypeScript)
+- Utilisation excessive du système lors du développement
+- Plantage régulier du service Flow, nécessitant un redémarrage manuel
 
 Ainsi, il a été décidé de migrer le projet vers Typescript.
 
 ## _2020-06-23_ | Expo
 
 Expo est une surcouche à react native permettant de simplifier le processus de build. Le projet à commencé en l'utilisant, mais de nombreux problèmes ont été rencontrés :
-* Augmentation importante de la taille de l'application
-* Augmentation importante du temps de démarrage
-* Impossibilité d'utiliser certaines librairies
-* Obligation d'utiliser une version de react-native spécifique
-* Impossibilité d'utiliser le moteur Hermes sur Android
 
-Pour ces raisons, il a été décidé de l'abandonner pour passer à un développement en react-native pur. 
+- Augmentation importante de la taille de l'application
+- Augmentation importante du temps de démarrage
+- Impossibilité d'utiliser certaines librairies
+- Obligation d'utiliser une version de react-native spécifique
+- Impossibilité d'utiliser le moteur Hermes sur Android
+
+Pour ces raisons, il a été décidé de l'abandonner pour passer à un développement en react-native pur.
 
 [Site officiel](https://docs.expo.io/)
 
