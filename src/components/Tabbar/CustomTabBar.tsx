@@ -23,7 +23,7 @@ import { Animated, StyleSheet } from 'react-native';
 import TabIcon from './TabIcon';
 import { useTheme } from 'react-native-paper';
 
-export const TAB_BAR_HEIGHT = 50;
+export const TAB_BAR_HEIGHT = 60;
 
 function CustomTabBar(
   props: BottomTabBarProps & {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   bar: {
     flexDirection: 'row',
     width: '100%',
-    height: 50,
+    height: TAB_BAR_HEIGHT,
     position: 'absolute',
     bottom: 0,
     left: 0,
