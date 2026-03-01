@@ -1,6 +1,6 @@
 {
   "name": "campus",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
