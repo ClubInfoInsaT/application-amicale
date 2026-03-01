@@ -67,6 +67,8 @@ import { FeedItemType } from '../screens/Home/HomeScreen';
 import { PlanningEventType } from '../utils/Planning';
 import { ServiceCategoryType } from '../utils/Services';
 import { ParsedUrlDataType } from '../utils/URLHandler';
+import { Platform } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export enum MainRoutes {
   Main = 'main',
@@ -412,6 +414,14 @@ function getRegularScreens(createTabNavigator: () => React.ReactElement) {
   );
 }
 
+const backIcon = ({ tintColor }: { tintColor: string }) => (
+  <Icon
+    name={Platform.OS === 'ios' ? 'chevron-left' : 'arrow-left'}
+    size={30}
+    color={tintColor}
+  />
+);
+
 function MainStackComponent(props: {
   showIntro: boolean;
   isloggedIn: boolean;
@@ -423,6 +433,7 @@ function MainStackComponent(props: {
       initialRouteName={showIntro ? MainRoutes.Intro : MainRoutes.Main}
       screenOptions={{
         headerMode: 'float',
+        headerBackImage: backIcon,
       }}
     >
       {showIntro ? getIntroScreens() : getRegularScreens(createTabNavigator)}
