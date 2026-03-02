@@ -44,8 +44,7 @@ type PropsType = {
 function AnimatedAccordion(props: PropsType) {
   const theme = useTheme();
 
-  const [expanded, setExpanded] = React.useState(props.opened);
-  const lastOpenedProp = useRef(props.opened);
+  const [expanded, setExpanded] = React.useState(false);
   const chevronIcon = useRef(props.opened ? 'chevron-up' : 'chevron-down');
   const animStart = useRef(props.opened ? '180deg' : '0deg');
   const animEnd = useRef(props.opened ? '0deg' : '180deg');
@@ -86,10 +85,7 @@ function AnimatedAccordion(props: PropsType) {
     // Force the expanded state to follow the prop when changing
     if (!enabled) {
       setExpanded(false);
-    } else if (
-      props.opened !== undefined &&
-      props.opened !== lastOpenedProp.current
-    ) {
+    } else if (props.opened !== undefined) {
       setExpanded(props.opened);
     }
   }, [enabled, props.opened]);
