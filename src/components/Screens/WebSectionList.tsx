@@ -25,6 +25,7 @@ import {
   SectionListProps,
   StyleSheet,
   SectionList,
+  useWindowDimensions,
 } from 'react-native';
 import ErrorView, { ErrorProps } from './ErrorView';
 import RequestScreen, { RequestScreenProps } from './RequestScreen';
@@ -83,14 +84,15 @@ const styles = StyleSheet.create({
  * To force the component to update, change the value of updateData.
  */
 function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
+  const { width, height: screenHeight } = useWindowDimensions();
   const getItemLayout = (
-    height: number,
+    itemHeight: number,
     _data: Array<SectionListData<ItemT>> | null,
     index: number
   ): { length: number; offset: number; index: number } => {
     return {
-      length: height,
-      offset: height * index,
+      length: itemHeight,
+      offset: itemHeight * index,
       index,
     };
   };
@@ -127,6 +129,7 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
     return (
       <SectionList
         {...props}
+        key={`${width}-${screenHeight}`} // Force re-render on orientation change
         sections={dataset}
         renderItem={props.renderItem}
         style={styles.container}

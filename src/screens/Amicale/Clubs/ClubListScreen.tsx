@@ -18,7 +18,7 @@
  */
 
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import i18n from 'i18n-js';
 import ClubListItem from '../../../components/Lists/Clubs/ClubListItem';
@@ -59,9 +59,9 @@ type ResponseType = {
   clubs: Array<Club>;
 };
 
-const LIST_ITEM_HEIGHT = 96;
-
 function ClubListScreen() {
+  const { height } = useWindowDimensions();
+  const LIST_ITEM_HEIGHT = Math.min(96, height * 0.15); // Responsive height with max cap
   const navigation = useNavigation();
   const request = useAuthenticatedRequest<ResponseType>('clubs');
   const [currentlySelectedCategories, setCurrentlySelectedCategories] =
