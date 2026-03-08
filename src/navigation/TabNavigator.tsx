@@ -58,7 +58,7 @@ export enum TabRoutes {
   Services = 'services',
   Proxiwash = 'proxiwash',
   Home = 'home',
-  Planning = 'events',
+  Planning = 'planning',
   Planex = 'planex',
 }
 
@@ -92,7 +92,7 @@ const ICONS: {
     normal: '',
     focused: '',
   },
-  events: {
+  planning: {
     normal: 'calendar-range-outline',
     focused: 'calendar-range',
   },
@@ -121,7 +121,7 @@ function TabNavigator(props: PropsType) {
     services: i18n.t('screens.services.title'),
     proxiwash: i18n.t('screens.proxiwash.title'),
     home: i18n.t('screens.home.title'),
-    events: i18n.t('screens.planning.title'),
+    planning: i18n.t('screens.planning.title'),
     planex: i18n.t('screens.planex.title'),
   };
   return (
