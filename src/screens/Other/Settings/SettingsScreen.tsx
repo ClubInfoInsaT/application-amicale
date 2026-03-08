@@ -46,6 +46,7 @@ import {
   ProxiwashPreferenceKeys,
 } from '../../../utils/asyncStorage';
 import { MainRoutes } from '../../../navigation/MainNavigator';
+import { TabRoutes } from '../../../navigation/TabNavigator';
 
 const styles = StyleSheet.create({
   slider: {
@@ -153,11 +154,11 @@ function SettingsScreen() {
         value={startScreenPickerSelected}
         style={GENERAL_STYLES.centerHorizontal}
       >
-        <ToggleButton icon="account-circle" value="services" />
-        <ToggleButton icon="tshirt-crew" value="proxiwash" />
-        <ToggleButton icon="triangle" value="home" />
-        <ToggleButton icon="calendar-range" value="planning" />
-        <ToggleButton icon="clock" value="planex" />
+        <ToggleButton icon="account-circle" value={TabRoutes.Services} />
+        <ToggleButton icon="tshirt-crew" value={TabRoutes.Proxiwash} />
+        <ToggleButton icon="triangle" value={TabRoutes.Home} />
+        <ToggleButton icon="calendar-range" value={TabRoutes.Planning} />
+        <ToggleButton icon="clock" value={TabRoutes.Planex} />
       </ToggleButton.Row>
     );
   };
