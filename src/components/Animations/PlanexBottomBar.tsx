@@ -21,7 +21,6 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
 import { FAB, IconButton, Surface, useTheme } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
-import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 import { useNavigation } from '@react-navigation/core';
 
 import { MainRoutes } from '../../navigation/MainNavigator';
@@ -112,7 +111,7 @@ function PlanexBottomBar(props: Props) {
     <Animated.View
       style={{
         ...styles.container,
-        bottom: 10 + TAB_BAR_HEIGHT,
+        bottom: 10,
         transform: [{ translateY: translateY }, { scale: scale }],
         opacity: opacity,
       }}
