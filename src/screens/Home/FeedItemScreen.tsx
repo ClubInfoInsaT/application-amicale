@@ -25,8 +25,8 @@ import { StackScreenProps } from '@react-navigation/stack';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
-import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
-import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
+
+import { ScrollView } from 'react-native';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
 import NewsSourcesConstants, {
   AvailablePages,
@@ -92,7 +92,7 @@ function FeedItemScreen(props: Props) {
   const pageSource: NewsSourceType =
     NewsSourcesConstants[data.page_id as AvailablePages];
   return (
-    <CollapsibleScrollView style={styles.container} hasTab>
+    <ScrollView style={styles.container}>
       <Card.Title
         title={pageSource.name}
         subtitle={date}
@@ -104,7 +104,7 @@ function FeedItemScreen(props: Props) {
           style={styles.button}
         />
       ) : null}
-      <Card.Content style={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}>
+      <Card.Content style={{ paddingBottom: 20 }}>
         {data.message !== undefined ? (
           <Autolink
             text={data.message}
@@ -117,7 +117,7 @@ function FeedItemScreen(props: Props) {
           />
         ) : null}
       </Card.Content>
-    </CollapsibleScrollView>
+    </ScrollView>
   );
 }
 

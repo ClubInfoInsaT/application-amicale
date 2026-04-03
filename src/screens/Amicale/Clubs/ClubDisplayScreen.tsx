@@ -29,9 +29,9 @@ import {
 } from 'react-native-paper';
 import i18n from 'i18n-js';
 import CustomHTML from '../../../components/Overrides/CustomHTML';
-import { TAB_BAR_HEIGHT } from '../../../components/Tabbar/CustomTabBar';
+
 import type { Club, ClubRespo } from './ClubListScreen';
-import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
 import ImageGalleryButton from '../../../components/Media/ImageGalleryButton';
 import RequestScreen from '../../../components/Screens/RequestScreen';
 import { useNavigation } from '@react-navigation/native';
@@ -155,7 +155,7 @@ function ClubDisplayScreen(props: Props) {
     return (
       <Card
         style={{
-          marginBottom: TAB_BAR_HEIGHT + 20,
+          marginBottom: 20,
           ...styles.card,
         }}
       >
@@ -219,7 +219,7 @@ function ClubDisplayScreen(props: Props) {
     if (club) {
       console.log(club);
       return (
-        <CollapsibleScrollView style={styles.scroll} hasTab>
+        <ScrollView style={styles.scroll}>
           {getCategoriesRender(club.categories)}
           {club.logo !== null ? (
             <ImageGalleryButton
@@ -239,7 +239,7 @@ function ClubDisplayScreen(props: Props) {
             <View />
           )}
           {getManagersRender(club.respo, club.mail)}
-        </CollapsibleScrollView>
+        </ScrollView>
       );
     }
     return <View />;

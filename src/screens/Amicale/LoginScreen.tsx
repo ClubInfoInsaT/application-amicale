@@ -25,7 +25,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import ErrorDialog from '../../components/Dialogs/ErrorDialog';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
-import CollapsibleScrollView from '../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
+
 import {
   MainRoutes,
   MainStackParamsList,
@@ -120,7 +121,7 @@ function LoginScreen(props: Props) {
         enabled={true}
         keyboardVerticalOffset={100}
       >
-        <CollapsibleScrollView headerColors={'transparent'}>
+        <ScrollView>
           <View style={GENERAL_STYLES.flex}>
             <LoginForm
               loading={loading}
@@ -150,7 +151,7 @@ function LoginScreen(props: Props) {
             code={currentError ? currentError.code : undefined}
             message={currentError ? currentError.message : undefined}
           />
-        </CollapsibleScrollView>
+        </ScrollView>
       </KeyboardAvoidingView>
     </LinearGradient>
   );

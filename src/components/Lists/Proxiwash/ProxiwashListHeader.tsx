@@ -8,7 +8,6 @@ import {
   Text,
   useTheme,
 } from 'react-native-paper';
-import TimeAgo from '@manu_omg/react-native-timeago';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/core';
 import { MainRoutes } from '../../../navigation/MainNavigator';
@@ -63,7 +62,7 @@ function ProxiwashListHeader(props: Props) {
             date ? (
               <Text>
                 {i18n.t('screens.proxiwash.updated')}
-                <TimeAgo time={date} interval={2000} />
+                TODO
               </Text>
             ) : null
           }

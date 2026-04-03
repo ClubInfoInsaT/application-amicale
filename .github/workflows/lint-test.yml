@@ -14,9 +14,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v6
         with:
-          node-version: 16
+          node-version: 24
       - uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: "Europe/Paris"

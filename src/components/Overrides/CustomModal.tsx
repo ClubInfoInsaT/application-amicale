@@ -21,7 +21,6 @@ import React, { Ref } from 'react';
 import { useTheme } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
 import { View } from 'react-native-animatable';
-import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 
 type Props = {
   children?: React.ReactChild | null;
@@ -44,13 +43,7 @@ function CustomModal(props: Props, ref?: Ref<Modalize>) {
       modalStyle={{ backgroundColor: theme.colors.card }}
       handleStyle={{ backgroundColor: theme.colors.primary }}
     >
-      <View
-        style={{
-          paddingBottom: TAB_BAR_HEIGHT,
-        }}
-      >
-        {children}
-      </View>
+      <View style={{}}>{children}</View>
     </Modalize>
   );
 }

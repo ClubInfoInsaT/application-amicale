@@ -67,8 +67,8 @@ import { FeedItemType } from '../screens/Home/HomeScreen';
 import { PlanningEventType } from '../utils/Planning';
 import { ServiceCategoryType } from '../utils/Services';
 import { ParsedUrlDataType } from '../utils/URLHandler';
-import PushNotification from 'react-native-push-notification';
-import { Linking } from 'react-native';
+import { Platform } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export enum MainRoutes {
   Main = 'main',
@@ -414,6 +414,14 @@ function getRegularScreens(createTabNavigator: () => React.ReactElement) {
   );
 }
 
+const backIcon = ({ tintColor }: { tintColor: string }) => (
+  <Icon
+    name={Platform.OS === 'ios' ? 'chevron-left' : 'arrow-left'}
+    size={30}
+    color={tintColor}
+  />
+);
+
 function MainStackComponent(props: {
   showIntro: boolean;
   isloggedIn: boolean;
@@ -425,6 +433,7 @@ function MainStackComponent(props: {
       initialRouteName={showIntro ? MainRoutes.Intro : MainRoutes.Main}
       screenOptions={{
         headerMode: 'float',
+        headerBackImage: backIcon,
       }}
     >
       {showIntro ? getIntroScreens() : getRegularScreens(createTabNavigator)}
@@ -473,34 +482,34 @@ export const linking = {
       'notifications': 'notifications',
     },
   },
-  subscribe(listener: Function) {
-    // This may get kind of ugly. react-navigation hooks cannot be used outside
-    // of components while we must setup notifications outside of a component.
-    const onReceiveURL = ({
-      userInteraction,
-      data: { link },
-    }: {
-      // Avoids opening the screen if the app is open without the user clicking on the app.
-      userInteraction: boolean;
-      data: { link: string };
-    }) => {
-      if (userInteraction) listener(link); // Todo be changed
-    };
-
-    /* Listen to incoming links from deep linking
-    // @ts-ignore */
-    PushNotification.onNotification = onReceiveURL;
-
-    // Listen to incoming links from deep linking
-    const linkingSubscription = Linking.addEventListener('url', ({ url }) => {
-      listener(url);
-    });
-
-    return () => {
-      /* Clean up the event listeners
-      // @ts-ignore */
-      PushNotification.onNotification = null;
-      linkingSubscription.remove();
-    };
-  },
+  // subscribe(listener: Function) {
+  //   // This may get kind of ugly. react-navigation hooks cannot be used outside
+  //   // of components while we must setup notifications outside of a component.
+  //   const onReceiveURL = ({
+  //     userInteraction,
+  //     data: { link },
+  //   }: {
+  //     // Avoids opening the screen if the app is open without the user clicking on the app.
+  //     userInteraction: boolean;
+  //     data: { link: string };
+  //   }) => {
+  //     if (userInteraction) listener(link); // Todo be changed
+  //   };
+  //
+  //   /* Listen to incoming links from deep linking
+  //   // @ts-ignore */
+  //   PushNotification.onNotification = onReceiveURL;
+  //
+  //   // Listen to incoming links from deep linking
+  //   const linkingSubscription = Linking.addEventListener('url', ({ url }) => {
+  //     listener(url);
+  //   });
+  //
+  //   return () => {
+  //     /* Clean up the event listeners
+  //     // @ts-ignore */
+  //     PushNotification.onNotification = null;
+  //     linkingSubscription.remove();
+  //   };
+  // },
 };

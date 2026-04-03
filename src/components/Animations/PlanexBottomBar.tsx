@@ -21,9 +21,8 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
 import { FAB, IconButton, Surface, useTheme } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
-import { TAB_BAR_HEIGHT } from '../Tabbar/CustomTabBar';
 import { useNavigation } from '@react-navigation/core';
-import { useCollapsible } from '../../context/CollapsibleContext';
+
 import { MainRoutes } from '../../navigation/MainNavigator';
 
 type Props = {
@@ -83,8 +82,6 @@ function PlanexBottomBar(props: Props) {
   const theme = useTheme();
   const [currentMode, setCurrentMode] = useState(DISPLAY_MODES.WEEK);
 
-  const { collapsible } = useCollapsible();
-
   const changeDisplayMode = () => {
     let newMode;
     switch (currentMode) {
@@ -105,24 +102,16 @@ function PlanexBottomBar(props: Props) {
     props.onPress('changeView', newMode);
   };
 
-  let translateY: number | Animated.AnimatedInterpolation = 0;
-  let opacity: number | Animated.AnimatedInterpolation = 1;
-  let scale: number | Animated.AnimatedInterpolation = 1;
-  if (collapsible) {
-    translateY = Animated.multiply(-3, collapsible.translateY);
-    opacity = Animated.subtract(1, collapsible.progress);
-    scale = Animated.add(
-      0.5,
-      Animated.multiply(0.5, Animated.subtract(1, collapsible.progress))
-    );
-  }
+  const translateY = 0;
+  const opacity = 1;
+  const scale = 1;
 
   const buttonColor = theme.colors.primary;
   return (
     <Animated.View
       style={{
         ...styles.container,
-        bottom: 10 + TAB_BAR_HEIGHT,
+        bottom: 10,
         transform: [{ translateY: translateY }, { scale: scale }],
         opacity: opacity,
       }}

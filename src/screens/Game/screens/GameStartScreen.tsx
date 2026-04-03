@@ -24,7 +24,8 @@ import i18n from 'i18n-js';
 import LinearGradient from 'react-native-linear-gradient';
 import { MASCOT_STYLE } from '../../../components/Mascot/Mascot';
 import MascotPopup from '../../../components/Mascot/MascotPopup';
-import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import { ScrollView } from 'react-native';
+
 import GENERAL_STYLES from '../../../constants/Styles';
 import GameBackground from '../components/GameBrackground';
 import PostGameContent from '../components/PostGameContent';
@@ -117,7 +118,7 @@ export default function GameStartScreen(props: Props) {
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       >
-        <CollapsibleScrollView headerColors={'transparent'}>
+        <ScrollView>
           {getMainContent()}
           <MascotPopup
             title={i18n.t('screens.game.mascotDialog.title')}
@@ -131,7 +132,7 @@ export default function GameStartScreen(props: Props) {
             }}
             emotion={MASCOT_STYLE.COOL}
           />
-        </CollapsibleScrollView>
+        </ScrollView>
       </LinearGradient>
     </View>
   );

@@ -5,11 +5,12 @@ import {
 } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import GENERAL_STYLES from '../constants/Styles';
-import CollapsibleProvider from '../components/providers/CollapsibleProvider';
+
 import CacheProvider from '../components/providers/CacheProvider';
 import { OverflowMenuProvider } from 'react-navigation-header-buttons';
 import MainNavigator, { linking } from '../navigation/MainNavigator';
-import { Platform, SafeAreaView, View } from 'react-native';
+import { Platform, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useDarkTheme } from '../context/preferencesContext';
 import { CustomDarkTheme, CustomWhiteTheme } from '../utils/Themes';
 import { setupStatusBar } from '../utils/Utils';
@@ -33,24 +34,22 @@ function MainApp(props: Props, ref?: Ref<NavigationContainerRef<any>>) {
 
   return (
     <PaperProvider theme={theme}>
-      <CollapsibleProvider>
-        <CacheProvider>
-          <OverflowMenuProvider>
-            <View
-              style={{
-                backgroundColor: theme.colors.background,
-                ...GENERAL_STYLES.flex,
-              }}
-            >
-              <SafeAreaView style={GENERAL_STYLES.flex}>
-                <NavigationContainer theme={theme} ref={ref} linking={linking}>
-                  <MainNavigator defaultData={props.defaultData} />
-                </NavigationContainer>
-              </SafeAreaView>
-            </View>
-          </OverflowMenuProvider>
-        </CacheProvider>
-      </CollapsibleProvider>
+      <CacheProvider>
+        <SafeAreaProvider>
+          <View
+            style={{
+              backgroundColor: theme.colors.background,
+              ...GENERAL_STYLES.flex,
+            }}
+          >
+            <NavigationContainer theme={theme} ref={ref} linking={linking}>
+              <OverflowMenuProvider>
+                <MainNavigator defaultData={props.defaultData} />
+              </OverflowMenuProvider>
+            </NavigationContainer>
+          </View>
+        </SafeAreaProvider>
+      </CacheProvider>
     </PaperProvider>
   );
 }

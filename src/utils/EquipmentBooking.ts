@@ -20,8 +20,6 @@
 import i18n from 'i18n-js';
 import type { DeviceType } from '../screens/Amicale/Equipment/EquipmentListScreen';
 import DateManager from '../managers/DateManager';
-import type { MarkedDatesObjectType } from '../screens/Amicale/Equipment/EquipmentRentScreen';
-import { PeriodMarking } from 'react-native-calendars';
 
 /**
  * Gets the current day at midnight
@@ -173,41 +171,4 @@ export function getValidRange(
     date.setDate(date.getDate() + direction);
   }
   return validRange;
-}
-
-/**
- * Generates calendar compatible marked dates from the given array
- *
- *
- * @param isSelection True to use user selection color, false to use disabled color
- * @param theme The current App theme to get colors from
- * @param range The range to mark dates for
- * @returns {{}}
- */
-export function generateMarkedDates(
-  isSelection: boolean,
-  theme: ReactNativePaper.Theme,
-  range: Array<string>
-): MarkedDatesObjectType {
-  const markedDates: {
-    [key: string]: PeriodMarking;
-  } = {};
-  for (let i = 0; i < range.length; i += 1) {
-    const isStart = i === 0;
-    const isEnd = i === range.length - 1;
-    let color;
-    if (isSelection && (isStart || isEnd)) {
-      color = theme.colors.primary;
-    } else if (isSelection) {
-      color = theme.colors.danger;
-    } else {
-      color = theme.colors.textDisabled;
-    }
-    markedDates[range[i]] = {
-      startingDay: isStart,
-      endingDay: isEnd,
-      color,
-    };
-  }
-  return markedDates;
 }

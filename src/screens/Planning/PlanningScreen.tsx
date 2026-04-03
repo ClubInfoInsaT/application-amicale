@@ -18,66 +18,27 @@
  */
 
 import * as React from 'react';
-import { BackHandler, StyleSheet, View } from 'react-native';
+import {
+  BackHandler,
+  NativeEventSubscription,
+  StyleSheet,
+  View,
+} from 'react-native';
 import i18n from 'i18n-js';
-import { Agenda, LocaleConfig } from 'react-native-calendars';
 import { Avatar, Divider, List } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { readData } from '../../utils/WebData';
 import {
   generateEventAgenda,
-  dateToDateString,
   PlanningEventType,
   getSubtitle,
 } from '../../utils/Planning';
-import CustomAgenda from '../../components/Overrides/CustomAgenda';
+import EventList from '../../components/Lists/EventList';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
 import GENERAL_STYLES from '../../constants/Styles';
 import Urls from '../../constants/Urls';
 import { MainRoutes } from '../../navigation/MainNavigator';
-
-LocaleConfig.locales.fr = {
-  monthNames: [
-    'Janvier',
-    'Février',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juillet',
-    'Août',
-    'Septembre',
-    'Octobre',
-    'Novembre',
-    'Décembre',
-  ],
-  monthNamesShort: [
-    'Janv.',
-    'Févr.',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juil.',
-    'Août',
-    'Sept.',
-    'Oct.',
-    'Nov.',
-    'Déc.',
-  ],
-  dayNames: [
-    'Dimanche',
-    'Lundi',
-    'Mardi',
-    'Mercredi',
-    'Jeudi',
-    'Vendredi',
-    'Samedi',
-  ],
-  dayNamesShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-  today: "Aujourd'hui",
-};
 
 type PropsType = {
   navigation: StackNavigationProp<any>;
@@ -89,8 +50,6 @@ type GetEventsResponseType = {
   };
 };
 
-const AGENDA_MONTH_SPAN = 3;
-
 const styles = StyleSheet.create({
   icon: {
     backgroundColor: 'transparent',
@@ -101,50 +60,33 @@ const styles = StyleSheet.create({
  * Class defining the app's planning screen
  */
 function PlanningScreen(props: PropsType) {
-  let agendaRef: null | Agenda<any>;
   let minTimeBetweenRefresh = 5;
-  let currentDate: string | null = dateToDateString(new Date());
-
-  if (i18n.currentLocale().startsWith('fr')) {
-    LocaleConfig.defaultLocale = 'fr';
-  }
 
   const [lastRefresh, setLastRefresh] = React.useState<Date | null>(null);
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
-  // const [agendaRef, setAgendaRef] = React.useState<Agenda<any> | null>(null);
   const [agendaItems, setAgendaItems] = React.useState<{
     [key: string]: Array<PlanningEventType>;
   }>({});
-  const [calendarShowing, setCalendarShowing] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const { navigation } = props;
     onRefresh();
+    let subscription: NativeEventSubscription;
     navigation.addListener('focus', () => {
-      BackHandler.addEventListener(
+      subscription = BackHandler.addEventListener(
         'hardwareBackPress',
         onBackButtonPressAndroid
       );
     });
     navigation.addListener('blur', () => {
-      BackHandler.removeEventListener(
-        'hardwareBackPress',
-        onBackButtonPressAndroid
-      );
+      if (subscription) subscription.remove();
     });
   });
 
   /**
-   * Overrides default android back button behaviour to close the calendar if it was open.
-   *
-   * @return {boolean}
+   * Overrides default android back button behaviour (no special handling needed for event list).
    */
   const onBackButtonPressAndroid = (): boolean => {
-    if (calendarShowing && agendaRef != null) {
-      // @ts-ignore
-      agendaRef.chooseDay(agendaRef.state.selectedDay);
-      return true;
-    }
     return false;
   };
 
@@ -175,31 +117,6 @@ function PlanningScreen(props: PropsType) {
     }
   };
 
-  /**
-   * Callback used when receiving the agenda ref
-   *
-   * @param ref
-   */
-  const onAgendaRef = (ref: Agenda<any>) => {
-    // setAgendaRef(ref);
-    agendaRef = ref;
-  };
-
-  /**
-   * Callback used when a button is pressed to toggle the calendar
-   *
-   * @param isCalendarOpened True is the calendar is already open, false otherwise
-   */
-  const onCalendarToggled = (isCalendarOpened: boolean) => {
-    setCalendarShowing(isCalendarOpened);
-  };
-
-  /**
-   * Gets an event render item
-   *
-   * @param event The current event to render
-   * @return {*}
-   */
   const getRenderItem = (event: PlanningEventType) => {
     const { navigation } = props;
     const onPress = () => {
@@ -268,37 +185,13 @@ function PlanningScreen(props: PropsType) {
 
   return (
     <View style={GENERAL_STYLES.flex}>
-      <CustomAgenda
-        {...props}
-        // the list of items that have to be displayed in agenda. If you want to render item as empty date
-        // the value of date key kas to be an empty array []. If there exists no value for date key it is
-        // considered that the date in question is not yet loaded
-        items={agendaItems}
-        // initially selected day
-        selected={currentDate ? currentDate : undefined}
-        // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-        minDate={currentDate ? currentDate : undefined}
-        // Max amount of months allowed to scroll to the past. Default = 50
-        pastScrollRange={1}
-        // Max amount of months allowed to scroll to the future. Default = 50
-        futureScrollRange={AGENDA_MONTH_SPAN}
-        // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
+      <EventList
+        eventsByDate={agendaItems}
         onRefresh={onRefresh}
-        // callback that fires when the calendar is opened or closed
-        onCalendarToggled={onCalendarToggled}
-        // Set this true while waiting for new data from a refresh
         refreshing={refreshing}
         renderItem={getRenderItem}
         renderEmptyDate={getRenderEmptyDate}
-        // Specify what should be rendered instead of ActivityIndicator
         renderEmptyData={getRenderNoEvents}
-        // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-        firstDay={1}
-        // ref to this agenda in order to handle back button event
-        onRef={onAgendaRef}
-        rowHasChanged={(r1: PlanningEventType, r2: PlanningEventType) =>
-          r1.id !== r2.id
-        }
       />
       <MascotPopup
         title={i18n.t('screens.planning.mascotDialog.title')}

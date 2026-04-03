@@ -31,28 +31,21 @@ import {
   OverflowMenu,
 } from 'react-navigation-header-buttons';
 import i18n from 'i18n-js';
-import {
-  Animated,
-  BackHandler,
-  Linking,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  StyleSheet,
-} from 'react-native';
+import { Animated, BackHandler, Linking, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from 'react-native-paper';
-import { useCollapsibleHeader } from 'react-navigation-collapsible';
+
 import MaterialHeaderButtons, { Item } from '../Overrides/CustomHeaderButton';
 import ErrorView from './ErrorView';
 import BasicLoadingScreen from './BasicLoadingScreen';
 import { useFocusEffect, useNavigation } from '@react-navigation/core';
-import { useCollapsible } from '../../context/CollapsibleContext';
+
 import { RESPONSE_HTTP_STATUS } from '../../utils/Requests';
 
 type Props = {
   url: string;
   onMessage?: (event: { nativeEvent: { data: string } }) => void;
-  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+
   initialJS?: string;
   injectJS?: string;
   customPaddingFunction?: null | ((padding: number) => string);
@@ -86,29 +79,19 @@ function WebViewScreen(props: Props) {
   const theme = useTheme();
   const webviewRef = useRef<WebView>();
 
-  const { setCollapsible } = useCollapsible();
-  const collapsible = useCollapsibleHeader({
-    config: { collapsedColor: theme.colors.surface, useNativeDriver: false },
-  });
-  const { containerPaddingTop, onScrollWithListener } = collapsible;
-
   const [currentInjectedJS, setCurrentInjectedJS] = useState(props.injectJS);
 
   useFocusEffect(
     useCallback(() => {
-      setCollapsible(collapsible);
-      BackHandler.addEventListener(
+      const subscription = BackHandler.addEventListener(
         'hardwareBackPress',
         onBackButtonPressAndroid
       );
       return () => {
-        BackHandler.removeEventListener(
-          'hardwareBackPress',
-          onBackButtonPressAndroid
-        );
+        subscription.remove();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [collapsible, setCollapsible])
+    }, [])
   );
 
   useLayoutEffect(() => {
@@ -236,12 +219,6 @@ function WebViewScreen(props: Props) {
   const onOpenClicked = () =>
     navState ? Linking.openURL(navState.url) : undefined;
 
-  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (props.onScroll) {
-      props.onScroll(event);
-    }
-  };
-
   const injectJavaScript = (script: string) => {
     //@ts-ignore
     if (webviewRef.current) {
@@ -270,9 +247,7 @@ function WebViewScreen(props: Props) {
       )}
       onNavigationStateChange={setNavState}
       onMessage={props.onMessage}
-      onLoad={() => injectJavaScript(getJavascriptPadding(containerPaddingTop))}
-      // Animations
-      onScroll={onScrollWithListener(onScroll)}
+      onLoad={() => injectJavaScript(getJavascriptPadding(0))}
       incognito={props.incognito}
     />
   );

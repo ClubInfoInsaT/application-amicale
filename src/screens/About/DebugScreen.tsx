@@ -29,7 +29,8 @@ import {
 } from 'react-native-paper';
 import { Modalize } from 'react-native-modalize';
 import CustomModal from '../../components/Overrides/CustomModal';
-import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
+import { FlatList } from 'react-native';
+
 import { usePreferences } from '../../context/preferencesContext';
 import {
   defaultPreferences,
@@ -150,7 +151,7 @@ function DebugScreen() {
   return (
     <View>
       <CustomModal ref={modalRef}>{getModalContent()}</CustomModal>
-      <CollapsibleFlatList
+      <FlatList
         data={currentPreferences}
         extraData={currentPreferences}
         renderItem={getRenderItem}

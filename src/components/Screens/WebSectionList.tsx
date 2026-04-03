@@ -24,11 +24,11 @@ import {
   SectionListData,
   SectionListProps,
   StyleSheet,
+  SectionList,
+  useWindowDimensions,
 } from 'react-native';
 import ErrorView, { ErrorProps } from './ErrorView';
-import CollapsibleSectionList from '../Collapsible/CollapsibleSectionList';
 import RequestScreen, { RequestScreenProps } from './RequestScreen';
-import { CollapsibleComponentPropsType } from '../Collapsible/CollapsibleComponent';
 import { API_RESPONSE_CODE, RESPONSE_HTTP_STATUS } from '../../utils/Requests';
 
 export type SectionListDataType<ItemT> = Array<{
@@ -39,8 +39,8 @@ export type SectionListDataType<ItemT> = Array<{
 }>;
 
 type Props<ItemT, RawData> = Omit<
-  CollapsibleComponentPropsType,
-  'children' | 'paddedProps'
+  RequestScreenProps<RawData>,
+  'render' | 'showLoading' | 'showError' | 'onMajorError'
 > &
   Omit<
     RequestScreenProps<RawData>,
@@ -48,7 +48,11 @@ type Props<ItemT, RawData> = Omit<
   > &
   Omit<
     SectionListProps<ItemT>,
-    'sections' | 'getItemLayout' | 'ListHeaderComponent' | 'ListEmptyComponent'
+    | 'sections'
+    | 'getItemLayout'
+    | 'ListHeaderComponent'
+    | 'ListEmptyComponent'
+    | 'refreshControl'
   > & {
     createDataset: (
       data: RawData | undefined,
@@ -80,14 +84,15 @@ const styles = StyleSheet.create({
  * To force the component to update, change the value of updateData.
  */
 function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
+  const { width, height: screenHeight } = useWindowDimensions();
   const getItemLayout = (
-    height: number,
+    itemHeight: number,
     _data: Array<SectionListData<ItemT>> | null,
     index: number
   ): { length: number; offset: number; index: number } => {
     return {
-      length: height,
-      offset: height * index,
+      length: itemHeight,
+      offset: itemHeight * index,
       index,
     };
   };
@@ -122,20 +127,15 @@ function WebSectionList<ItemT, RawData>(props: Props<ItemT, RawData>) {
       code
     );
     return (
-      <CollapsibleSectionList
+      <SectionList
         {...props}
+        key={`${width}-${screenHeight}`} // Force re-render on orientation change
         sections={dataset}
-        paddedProps={(paddingTop) => ({
-          refreshControl: (
-            <RefreshControl
-              progressViewOffset={paddingTop}
-              refreshing={loading}
-              onRefresh={refreshData}
-            />
-          ),
-        })}
         renderItem={props.renderItem}
         style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={refreshData} />
+        }
         ListHeaderComponent={
           props.renderListHeaderComponent != null
             ? props.renderListHeaderComponent(

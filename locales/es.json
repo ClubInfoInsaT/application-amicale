@@ -137,6 +137,7 @@
       "title": "Eventos",
       "eventDetails": "Detalles",
       "invalidEvent": "Imposible encontrar el evento. Por favor, verifica que el evento que quieres ver es válido.",
+      "noEvents": "Sin eventos",
       "mascotDialog": {
         "title": "Sii, fiestas!",
         "message": "Y no sólo! Aquí podrás ver todos los eventos del campus\n\nDesde la venta de crêpes a la fiesta del Gala ¡No te perderás nada!",

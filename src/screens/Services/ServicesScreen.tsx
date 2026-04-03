@@ -34,7 +34,8 @@ import MaterialHeaderButtons, {
 } from '../../components/Overrides/CustomHeaderButton';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
-import CollapsibleFlatList from '../../components/Collapsible/CollapsibleFlatList';
+import { FlatList } from 'react-native';
+
 import {
   getCategories,
   ServiceCategoryType,
@@ -137,12 +138,11 @@ function ServicesScreen() {
 
   return (
     <View>
-      <CollapsibleFlatList
+      <FlatList
         data={finalDataset}
         renderItem={getRenderItem}
         keyExtractor={keyExtractor}
         ItemSeparatorComponent={() => <Divider />}
-        hasTab
       />
       <MascotPopup
         title={i18n.t('screens.services.mascotDialog.title')}

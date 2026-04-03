@@ -30,18 +30,18 @@ import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { BackHandler, StyleSheet, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import i18n from 'i18n-js';
-import { CalendarList, PeriodMarking } from 'react-native-calendars';
 import LoadingConfirmDialog from '../../../components/Dialogs/LoadingConfirmDialog';
 import ErrorDialog from '../../../components/Dialogs/ErrorDialog';
 import {
-  generateMarkedDates,
   getFirstEquipmentAvailability,
   getISODate,
   getRelativeDateString,
   getValidRange,
   isEquipmentAvailable,
 } from '../../../utils/EquipmentBooking';
-import CollapsibleScrollView from '../../../components/Collapsible/CollapsibleScrollView';
+import DateRangeSelector from '../../../components/Lists/DateRangeSelector';
+import { ScrollView } from 'react-native';
+
 import {
   MainRoutes,
   MainStackParamsList,
@@ -54,10 +54,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuthenticatedRequest } from '../../../context/loginContext';
 
 type Props = StackScreenProps<MainStackParamsList, MainRoutes.EquipmentRent>;
-
-export type MarkedDatesObjectType = {
-  [key: string]: PeriodMarking;
-};
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -109,7 +105,6 @@ function EquipmentRentScreen(props: Props) {
   const [currentError, setCurrentError] = useState<ApiRejectType>({
     status: RESPONSE_HTTP_STATUS.SUCCESS,
   });
-  const [markedDates, setMarkedDates] = useState<MarkedDatesObjectType>({});
   const [dialogVisible, setDialogVisible] = useState(false);
 
   const item = props.route.params.item;
@@ -120,7 +115,7 @@ function EquipmentRentScreen(props: Props) {
   const bookRef = useRef<Animatable.View & View>(null);
 
   let lockedDates: {
-    [key: string]: PeriodMarking;
+    [key: string]: any;
   } = {};
 
   if (item) {
@@ -130,10 +125,10 @@ function EquipmentRentScreen(props: Props) {
         new Date(date.end),
         null
       );
-      lockedDates = {
-        ...lockedDates,
-        ...generateMarkedDates(false, theme, range),
-      };
+      // Convert range to locked dates object
+      range.forEach((dateStr) => {
+        lockedDates[dateStr] = { disabled: true };
+      });
     });
   }
 
@@ -230,28 +225,22 @@ function EquipmentRentScreen(props: Props) {
   };
 
   /**
-   * Selects a new date on the calendar.
+   * Selects a new date in the date range selector.
    * If both start and end dates are already selected, unselect all.
    *
-   * @param day The day selected
+   * @param selectedDate The date selected
    */
-  const selectNewDate = (day: {
-    dateString: string;
-    day: number;
-    month: number;
-    timestamp: number;
-    year: number;
-  }) => {
-    const selected = new Date(day.dateString);
+  const selectNewDate = (selectedDate: Date) => {
+    const dateString = getISODate(selectedDate);
 
-    if (!lockedDates[day.dateString] != null) {
+    if (!lockedDates[dateString]) {
       if (start === null) {
-        updateSelectionRange(selected, selected);
+        updateSelectionRange(selectedDate, selectedDate);
         enableBooking();
-      } else if (start.getTime() === selected.getTime()) {
+      } else if (start.getTime() === selectedDate.getTime()) {
         resetSelection();
       } else if (bookedDates.current.length === 1) {
-        updateSelectionRange(start, selected);
+        updateSelectionRange(start, selectedDate);
         enableBooking();
       } else {
         resetSelection();
@@ -296,7 +285,7 @@ function EquipmentRentScreen(props: Props) {
   };
 
   const updateMarkedSelection = () => {
-    setMarkedDates(generateMarkedDates(true, theme, bookedDates.current));
+    // No longer needed - selection is handled by DateRangeSelector
   };
 
   let subHeadingText;
@@ -319,7 +308,7 @@ function EquipmentRentScreen(props: Props) {
     const firstAvailability = getFirstEquipmentAvailability(item);
     return (
       <View style={GENERAL_STYLES.flex}>
-        <CollapsibleScrollView>
+        <ScrollView>
           <Card style={styles.card}>
             <Card.Content>
               <View style={GENERAL_STYLES.flex}>
@@ -345,61 +334,16 @@ function EquipmentRentScreen(props: Props) {
               <Subheading style={styles.subtitle}>{subHeadingText}</Subheading>
             </Card.Content>
           </Card>
-          <CalendarList
-            // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+          <DateRangeSelector
             minDate={new Date()}
-            // Max amount of months allowed to scroll to the past. Default = 50
-            pastScrollRange={0}
-            // Max amount of months allowed to scroll to the future. Default = 50
             futureScrollRange={3}
-            // Enable horizontal scrolling, default = false
-            horizontal
-            // Enable paging on horizontal, default = false
-            pagingEnabled
-            // Handler which gets executed on day press. Default = undefined
-            onDayPress={selectNewDate}
-            // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
             firstDay={1}
-            // Hide month navigation arrows.
-            hideArrows={false}
-            // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-            markingType={'period'}
-            markedDates={{ ...lockedDates, ...markedDates }}
-            theme={{
-              'backgroundColor': theme.colors.agendaBackgroundColor,
-              'calendarBackground': theme.colors.background,
-              'textSectionTitleColor': theme.colors.agendaDayTextColor,
-              'selectedDayBackgroundColor': theme.colors.primary,
-              'selectedDayTextColor': '#ffffff',
-              'todayTextColor': theme.colors.text,
-              'dayTextColor': theme.colors.text,
-              'textDisabledColor': theme.colors.agendaDayTextColor,
-              'dotColor': theme.colors.primary,
-              'selectedDotColor': '#ffffff',
-              'arrowColor': theme.colors.primary,
-              'monthTextColor': theme.colors.text,
-              'indicatorColor': theme.colors.primary,
-              'textDayFontFamily': 'monospace',
-              'textMonthFontFamily': 'monospace',
-              'textDayHeaderFontFamily': 'monospace',
-              'textDayFontWeight': '300',
-              'textMonthFontWeight': 'bold',
-              'textDayHeaderFontWeight': '300',
-              'textDayFontSize': 16,
-              'textMonthFontSize': 16,
-              'textDayHeaderFontSize': 16,
-              'stylesheet.day.period': {
-                base: {
-                  overflow: 'hidden',
-                  height: 34,
-                  width: 34,
-                  alignItems: 'center',
-                },
-              },
-            }}
-            style={styles.calendar}
+            lockedDates={lockedDates}
+            onDateSelect={selectNewDate}
+            selectedDates={bookedDates.current}
+            item={item}
           />
-        </CollapsibleScrollView>
+        </ScrollView>
         <LoadingConfirmDialog
           visible={dialogVisible}
           onDismiss={onDialogDismiss}
