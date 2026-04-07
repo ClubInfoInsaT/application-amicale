@@ -39,6 +39,7 @@ import {
   GeneralPreferenceKeys,
 } from '../utils/asyncStorage';
 import { ParsedUrlDataType } from '../utils/URLHandler';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const styles = StyleSheet.create({
   header: {
@@ -103,6 +104,7 @@ const ICONS: {
 };
 
 function TabNavigator(props: PropsType) {
+  const safeAreaInsets = useSafeAreaInsets();
   const { preferences } = usePreferences();
   let defaultRoute = getPreferenceString(
     GeneralPreferenceKeys.defaultStartScreen,
@@ -133,7 +135,7 @@ function TabNavigator(props: PropsType) {
       backBehavior={'initialRoute'}
       screenOptions={{
         sceneStyle: {
-          paddingBottom: TAB_BAR_HEIGHT,
+          paddingBottom: TAB_BAR_HEIGHT + safeAreaInsets.bottom,
         },
       }}
     >
