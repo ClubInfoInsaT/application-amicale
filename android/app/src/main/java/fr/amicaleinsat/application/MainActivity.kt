@@ -17,7 +17,8 @@ class MainActivity : ReactActivity() {
   // From https://github.com/software-mansion/react-native-screens?tab=readme-ov-file#android
   override fun onCreate(savedInstanceState: Bundle?) {
     supportFragmentManager.fragmentFactory = RNScreensFragmentFactory()
-    super.onCreate(savedInstanceState);
+    // passing savedInstanceState leads to rn-safe-area-context attempting a free that crashes sometimes
+    super.onCreate(null);
   }
 }
 
