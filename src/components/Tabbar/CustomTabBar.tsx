@@ -22,8 +22,9 @@ import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Animated, StyleSheet } from 'react-native';
 import TabIcon from './TabIcon';
 import { useTheme } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export const TAB_BAR_HEIGHT = 60;
+export const TAB_BAR_HEIGHT = 55;
 
 function CustomTabBar(
   props: BottomTabBarProps & {
@@ -40,12 +41,15 @@ function CustomTabBar(
 ) {
   const state = props.state;
   const theme = useTheme();
+  const safeAreaInsets = useSafeAreaInsets();
 
   return (
     <Animated.View
       style={{
         ...styles.bar,
         backgroundColor: theme.colors.surface,
+        paddingBottom: safeAreaInsets.bottom,
+        height: TAB_BAR_HEIGHT + safeAreaInsets.bottom,
       }}
     >
       {state.routes.map(
@@ -79,7 +83,6 @@ const styles = StyleSheet.create({
   bar: {
     flexDirection: 'row',
     width: '100%',
-    height: TAB_BAR_HEIGHT,
     position: 'absolute',
     bottom: 0,
     left: 0,
