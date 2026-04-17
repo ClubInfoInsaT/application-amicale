@@ -28,7 +28,8 @@
         "washers": "Number of available washers",
         "dryers": "Number of available dryers",
         "schooling": "Easy access to all your documents and results.",
-        "sosinfra": "Report issues within a building"
+        "sosinfra": "Report issues within a building",
+        "map": "Find your way around INSA"
       },
       "titles": {
         "yearlyPlanning": "Yearly planning"
