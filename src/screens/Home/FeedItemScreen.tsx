@@ -17,13 +17,10 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Card } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
-import MaterialHeaderButtons, {
-  Item,
-} from '../../components/Overrides/CustomHeaderButton';
 
 import { ScrollView } from 'react-native';
 import ImageGalleryButton from '../../components/Media/ImageGalleryButton';
@@ -31,7 +28,6 @@ import {
   MainRoutes,
   MainStackParamsList,
 } from '../../navigation/MainNavigator';
-import { useNavigation } from '@react-navigation/core';
 import CustomHTML from '../../components/Overrides/CustomHTML';
 import { Avatar } from 'react-native-paper';
 import { TAB_BAR_HEIGHT } from '../../components/Tabbar/CustomTabBar';
@@ -63,28 +59,8 @@ const styles = StyleSheet.create({
  * Function defining a feed item page.
  */
 function FeedItemScreen(props: Props) {
-  const navigation = useNavigation();
   const { data } = props.route.params;
   const post = data;
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: getHeaderButton,
-    });
-  });
-
-  const getHeaderButton = () => {
-    return (
-      <MaterialHeaderButtons>
-        <Item
-          title="main"
-          iconName="facebook"
-          color="#2e88fe"
-          // onPress={onOutLinkPress}
-        />
-      </MaterialHeaderButtons>
-    );
-  };
 
   return (
     <ScrollView style={styles.container}>
