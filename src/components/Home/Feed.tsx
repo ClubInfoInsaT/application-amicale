@@ -151,7 +151,6 @@ function Feed() {
       autoRefreshTime={REFRESH_TIME}
       refreshOnFocus={true}
       renderItem={getRenderItem}
-      itemHeight={FEED_ITEM_HEIGHT}
       //onScroll={onScroll}
       renderSectionHeader={getRenderSectionHeader}
     />

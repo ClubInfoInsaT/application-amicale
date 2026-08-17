@@ -101,16 +101,20 @@ function FeedItem(props: PropsType) {
             )}
             style={{ height: titleHeight }}
           />
-          {image != null ? (
-            <ImageGalleryButton
-              images={[{ url: image }]}
-              style={{
-                ...styles.button,
-                width: imageSize,
-                height: imageSize,
-              }}
-            />
-          ) : null}
+
+          {
+            // TODO: enable images after further testing
+            false && image != null ? (
+              <ImageGalleryButton
+                images={[{ url: image }]}
+                style={{
+                  ...styles.button,
+                  width: imageSize,
+                  height: imageSize,
+                }}
+              />
+            ) : null
+          }
           <Card.Content>
             <CustomHTML html={item.content} />
           </Card.Content>
