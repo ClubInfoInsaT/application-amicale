@@ -17,7 +17,7 @@
  * along with Campus INSAT.  If not, see <https://www.gnu.org/licenses/>.
  */
 import i18n from 'i18n-js';
-import type { FullDashboardType } from '../screens/Home/HomeScreen';
+import type { FullDashboardType } from '../components/Home/DashboardShortcuts';
 import Urls from '../constants/Urls';
 import { MainRoutes } from '../navigation/MainNavigator';
 import { TabRoutes } from '../navigation/TabNavigator';
