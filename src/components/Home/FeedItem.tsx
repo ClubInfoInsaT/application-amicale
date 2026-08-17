@@ -31,7 +31,6 @@ import CustomHTML from '../Overrides/CustomHTML';
 
 type PropsType = {
   item: FeedPostType;
-  height: number;
 };
 
 /**
@@ -76,10 +75,9 @@ function FeedItem(props: PropsType) {
     });
   };
 
-  const { item, height } = props;
+  const { item } = props;
   const image = item.image !== '' && item.image != null ? item.image : null;
   const cardMargin = 10;
-  const cardHeight = height - 2 * cardMargin;
   const imageSize = 250;
   const titleHeight = 80;
   const actionsHeight = 60;
@@ -87,7 +85,6 @@ function FeedItem(props: PropsType) {
     <Card
       style={{
         margin: cardMargin,
-        height: cardHeight,
       }}
     >
       <TouchableRipple style={GENERAL_STYLES.flex} onPress={onPress}>
