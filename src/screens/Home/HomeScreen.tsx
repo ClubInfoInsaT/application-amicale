@@ -19,7 +19,6 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
-  FlatList,
   //  NativeScrollEvent,
   //  NativeSyntheticEvent,
   StyleSheet,
@@ -31,9 +30,6 @@ import { useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
 import { View } from 'react-native-animatable';
-import DashboardItem from '../../components/Home/EventDashboardItem';
-import SmallDashboardItem from '../../components/Home/SmallDashboardItem';
-import PreviewEventDashboardItem from '../../components/Home/PreviewEventDashboardItem';
 import ActionsDashBoardItem from '../../components/Home/ActionsDashboardItem';
 import MaterialHeaderButtons, {
   Item,
@@ -42,38 +38,17 @@ import MaterialHeaderButtons, {
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
-import { getDisplayEvent, getFutureEvents } from '../../utils/Home';
-import type { PlanningEventType } from '../../utils/Planning';
 import GENERAL_STYLES from '../../constants/Styles';
 import { TabRoutes, TabStackParamsList } from '../../navigation/TabNavigator';
-import { ServiceItemType } from '../../utils/Services';
 import { useCurrentDashboard } from '../../context/preferencesContext';
 import { MainRoutes } from '../../navigation/MainNavigator';
 import { useLoginState } from '../../context/loginContext';
+import DashboardShortcuts from '../../components/Home/DashboardShortcuts';
 // import PushNotification from 'react-native-push-notification';
-
-export type FullDashboardType = {
-  today_menu: Array<{ [key: string]: object }>;
-  available_dryers: number;
-  available_washers: number;
-  today_events: Array<PlanningEventType>;
-  available_tutorials: number;
-  latest_notification: number;
-};
-
-type RawDashboardType = {
-  dashboard: FullDashboardType;
-};
 
 type Props = StackScreenProps<TabStackParamsList, TabRoutes.Home>;
 
 const styles = StyleSheet.create({
-  dashboardRow: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: 10,
-    marginBottom: 10,
-  },
   sectionHeader: {
     textAlign: 'center',
     marginTop: 50,
@@ -108,8 +83,6 @@ function HomeScreen(props: Props) {
   const { currentDashboard } = useCurrentDashboard();
   // const { preferences, updatePreferences } = useNotificationPreferences();
   // const { updatePreferences } = useNotificationPreferences();
-
-  let homeDashboard: FullDashboardType | null = null;
 
   // function onRegister({ token }: { token: string }) {
   //   console.log('TOKEN:', token);
@@ -173,96 +146,16 @@ function HomeScreen(props: Props) {
     }
   }, [navigation, props, pageLoaded]);
 
-  /**
-   * Gets the event dashboard render item.
-   * If a preview is available, it will be rendered inside
-   *
-   * @param content
-   * @return {*}
-   */
-  const getDashboardEvent = (content: Array<PlanningEventType>) => {
-    const futureEvents = getFutureEvents(content);
-    const displayEvent = getDisplayEvent(futureEvents);
-    // const clickPreviewAction = () =>
-    //     this.props.navigation.navigate('students', {
-    //         screen: 'planning-information',
-    //         params: {data: displayEvent}
-    //     });
-    return (
-      <DashboardItem
-        eventNumber={futureEvents.length}
-        clickAction={onEventContainerClick}
-      >
-        <PreviewEventDashboardItem
-          event={displayEvent}
-          clickAction={onEventContainerClick}
-        />
-      </DashboardItem>
-    );
-  };
-
-  // TODO fix dashboard buttons
-  /**
-   * Gets a dashboard item with a row of shortcut buttons.
-   *
-   * @param content
-   * @return {*}
-   */
-  const getDashboardRow = (content: Array<ServiceItemType | undefined>) => {
-    return (
-      <FlatList
-        data={content}
-        renderItem={getDashboardRowRenderItem}
-        horizontal
-        contentContainerStyle={styles.dashboardRow}
-      />
-    );
-  };
-
-  /**
-   * Gets a dashboard shortcut item
-   *
-   * @param item
-   * @returns {*}
-   */
-  const getDashboardRowRenderItem = ({
-    item,
-  }: {
-    item: ServiceItemType | undefined;
-  }) => {
-    if (item != null) {
-      return (
-        <SmallDashboardItem
-          image={item.image}
-          onPress={item.onPress}
-          badgeCount={
-            homeDashboard != null && item.badgeFunction != null
-              ? item.badgeFunction(homeDashboard)
-              : undefined
-          }
-        />
-      );
-    }
-    return <SmallDashboardItem />;
-  };
-
-  const getListHeader = (fetchedData: RawDashboardType | undefined) => {
-    let dashboard = null;
-    if (fetchedData != null) {
-      dashboard = fetchedData.dashboard;
-    }
+  const getListHeader = () => {
     return (
       <Animatable.View animation="fadeInDown" duration={500} useNativeDriver>
         <ActionsDashBoardItem />
-        {getDashboardRow(currentDashboard)}
-        {getDashboardEvent(dashboard == null ? [] : dashboard.today_events)}
+        <DashboardShortcuts services={currentDashboard} />
       </Animatable.View>
     );
   };
 
   const hideDisconnectDialog = () => setDialogVisible(false);
-
-  const onEventContainerClick = () => navigation.navigate(TabRoutes.Planning);
 
   /* TODO Ensure scrolling works then remove or fix
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -284,7 +177,7 @@ function HomeScreen(props: Props) {
   return (
     <View style={GENERAL_STYLES.flex}>
       <View style={styles.content}>
-        {getListHeader(undefined)}
+        {getListHeader()}
         <Feed />
       </View>
       {!isLoggedIn ? (
