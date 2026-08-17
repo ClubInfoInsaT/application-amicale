@@ -70,7 +70,7 @@ function FeedItemScreen(props: Props) {
         left={() => (
           <Avatar.Image
             style={styles.avatar}
-            size={64}
+            size={40}
             source={{ uri: post.clubLogo }}
           />
         )}

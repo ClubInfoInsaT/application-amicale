@@ -98,7 +98,7 @@ function FeedItem(props: PropsType) {
             left={() => (
               <Avatar.Image
                 style={styles.avatar}
-                size={64}
+                size={40}
                 source={{ uri: item.clubLogo }}
               />
             )}
