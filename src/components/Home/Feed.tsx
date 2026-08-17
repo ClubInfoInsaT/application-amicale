@@ -63,11 +63,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
   },
-  content: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-  },
 });
 
 function Feed() {
@@ -152,18 +147,16 @@ function Feed() {
   };
 
   return (
-    <View style={styles.content}>
-      <WebSectionList
-        request={request}
-        createDataset={createDataset}
-        autoRefreshTime={REFRESH_TIME}
-        refreshOnFocus={true}
-        renderItem={getRenderItem}
-        itemHeight={FEED_ITEM_HEIGHT}
-        //onScroll={onScroll}
-        renderSectionHeader={getRenderSectionHeader}
-      />
-    </View>
+    <WebSectionList
+      request={request}
+      createDataset={createDataset}
+      autoRefreshTime={REFRESH_TIME}
+      refreshOnFocus={true}
+      renderItem={getRenderItem}
+      itemHeight={FEED_ITEM_HEIGHT}
+      //onScroll={onScroll}
+      renderSectionHeader={getRenderSectionHeader}
+    />
   );
 }
 
