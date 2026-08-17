@@ -29,8 +29,6 @@ import FeedItem from '../../components/Home/FeedItem';
 import GENERAL_STYLES from '../../constants/Styles';
 import { useAuthenticatedRequest } from '../../context/loginContext';
 
-const FEED_ITEM_HEIGHT = 500;
-
 const REFRESH_TIME = 1000 * 20; // Refresh every 20 seconds
 
 export type FeedPostType = {
@@ -71,7 +69,7 @@ function Feed() {
   const request = useAuthenticatedRequest<FeedResponseType>('feed');
 
   const getRenderItem = ({ item }: { item: FeedPostType }) => (
-    <FeedItem item={item} height={FEED_ITEM_HEIGHT} />
+    <FeedItem item={item} />
   );
 
   const getRenderSectionHeader = (data: {
