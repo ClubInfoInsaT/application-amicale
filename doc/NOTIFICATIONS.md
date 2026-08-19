@@ -1,5 +1,10 @@
 # Push notifications
 
+NOTE: this file is outdated. Notifications were removed in 2025 because
+the library used was no longer receiving updates and was causing crashes.
+Furthermore, maintaining notifications has been quite a burden. I will
+leave the choice of restoring notifications to the following team. (Paul)
+
 ## Inside the app
 
 Notification setup is done in `src/utils/Notifications.ts`
@@ -86,15 +91,15 @@ Further reading about [FCM send](https://firebase.google.com/docs/reference/fcm/
 - Set up a [service
   worker](https://console.cloud.google.com/iam-admin/serviceaccounts?project=amicaleinsatoulouse).
   You will likely need to give it a role similar to `Agent de
-  service de gestion du service Firebase`.
+service de gestion du service Firebase`.
 - Create a key for this service worker
 - Securely transfer the key file to the production environment
 - Remove key from your system.
 - `gcloud auth activate-service-account <service worker email>
-  --key-file=amicaleinsatoulouse-XX.json`
+--key-file=amicaleinsatoulouse-XX.json`
 - Ensure you are using the service worker (active) : `gcloud auth
-  list`. If needed you can change the active accout with `cloud
-  config set account <serice worker email>`
+list`. If needed you can change the active accout with `cloud
+config set account <serice worker email>`
 - Remove worker key file.
 
 ### Sending a notification in the production environment
