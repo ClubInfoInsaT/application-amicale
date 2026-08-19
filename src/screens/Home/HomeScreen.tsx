@@ -35,7 +35,6 @@ import ActionsDashBoardItem from '../../components/Home/ActionsDashboardItem';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
-// import AnimatedFAB from '../../components/Animations/AnimatedFAB';
 import LogoutDialog from '../../components/Amicale/LogoutDialog';
 import { MASCOT_STYLE } from '../../components/Mascot/Mascot';
 import MascotPopup from '../../components/Mascot/MascotPopup';
@@ -77,7 +76,6 @@ function HomeScreen(props: Props) {
   const navigation = useNavigation();
 
   const [dialogVisible, setDialogVisible] = useState(false);
-  //const fabRef = useRef<AnimatedFAB>(null);
   const pageLoaded = useRef(false);
 
   const isLoggedIn = useLoginState();
@@ -157,14 +155,6 @@ function HomeScreen(props: Props) {
   };
 
   const hideDisconnectDialog = () => setDialogVisible(false);
-
-  /* TODO Ensure scrolling works then remove or fix
-  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (fabRef.current) {
-      fabRef.current.onScroll(event);
-    }
-  };
-  /*
 
   /**
    * Callback when pressing the login button on the banner.

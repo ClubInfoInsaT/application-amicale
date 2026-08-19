@@ -102,10 +102,6 @@ function Feed() {
 
   /**
    * Creates the dataset to be used in the FlatList
-   *
-   * @param fetchedData
-   * @param isLoading
-   * @return {*}
    */
   const createDataset = (
     fetchedData: FeedResponseType | undefined,
@@ -149,7 +145,6 @@ function Feed() {
       autoRefreshTime={REFRESH_TIME}
       refreshOnFocus={true}
       renderItem={getRenderItem}
-      //onScroll={onScroll}
       renderSectionHeader={getRenderSectionHeader}
     />
   );
