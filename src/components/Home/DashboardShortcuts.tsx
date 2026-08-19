@@ -58,11 +58,7 @@ const styles = StyleSheet.create({
 });
 
 /**
- * Gets a dashboard shortcut item
- *
- * @param item
- * @param dashboardData
- * @returns {*}
+ * Shortcut shown on Home Screen.
  */
 const DashboardShortcutItem = ({
   item,
@@ -88,8 +84,8 @@ const DashboardShortcutItem = ({
 };
 
 /**
- * Component that renders a horizontal row of dashboard shortcuts
- * and the event dashboard, managing its own dashboard data fetching.
+ * Home screen dashboard shortcuts row.
+ * Fetches and updates badge count for the number of available washing machines...
  */
 function DashboardShortcuts({ services, style }: Props) {
   const [dashboardData, setDashboardData] =
