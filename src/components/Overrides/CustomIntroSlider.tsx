@@ -37,8 +37,12 @@ import MascotIntroWelcome from '../Intro/MascotIntroWelcome';
 import IntroIcon from '../Intro/IconIntro';
 import MascotIntroEnd from '../Intro/MascotIntroEnd';
 import GENERAL_STYLES from '../../constants/Styles';
+import {
+  withSafeAreaInsets,
+  WithSafeAreaInsetsProps,
+} from 'react-native-safe-area-context';
 
-type PropsType = {
+type PropsType = WithSafeAreaInsetsProps & {
   onDone: () => void;
   isUpdate: boolean;
   isAprilFools: boolean;
@@ -117,10 +121,7 @@ const styles = StyleSheet.create({
 /**
  * Class used to create intro slides
  */
-export default class CustomIntroSlider extends React.Component<
-  PropsType,
-  StateType
-> {
+class CustomIntroSlider extends React.Component<PropsType, StateType> {
   sliderRef: { current: null | AppIntroSlider };
 
   introSlides: Array<IntroSlideType>;
@@ -325,17 +326,26 @@ export default class CustomIntroSlider extends React.Component<
     }
     CustomIntroSlider.setStatusBarColor(this.currentSlides[0].colors[0]);
     return (
-      <AppIntroSlider
-        ref={this.sliderRef}
-        data={this.currentSlides}
-        extraData={state.currentSlide}
-        renderItem={this.getIntroRenderItem}
-        renderNextButton={this.getRenderNextButton}
-        renderDoneButton={this.getRenderDoneButton}
-        onDone={this.onDone}
-        onSlideChange={this.onSlideChange}
-        onSkip={this.onSkip}
-      />
+      <View
+        style={{
+          ...GENERAL_STYLES.flex,
+          paddingBottom: this.props.insets.bottom,
+        }}
+      >
+        <AppIntroSlider
+          ref={this.sliderRef}
+          data={this.currentSlides}
+          extraData={state.currentSlide}
+          renderItem={this.getIntroRenderItem}
+          renderNextButton={this.getRenderNextButton}
+          renderDoneButton={this.getRenderDoneButton}
+          onDone={this.onDone}
+          onSlideChange={this.onSlideChange}
+          onSkip={this.onSkip}
+        />
+      </View>
     );
   }
 }
+
+export default withSafeAreaInsets(CustomIntroSlider);
