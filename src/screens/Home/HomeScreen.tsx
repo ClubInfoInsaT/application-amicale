@@ -19,6 +19,7 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
+  ScrollView,
   //  NativeScrollEvent,
   //  NativeSyntheticEvent,
   StyleSheet,
@@ -176,10 +177,10 @@ function HomeScreen(props: Props) {
 
   return (
     <View style={GENERAL_STYLES.flex}>
-      <View style={styles.content}>
+      <ScrollView style={styles.content}>
         {getListHeader()}
         <Feed />
-      </View>
+      </ScrollView>
       {!isLoggedIn ? (
         <MascotPopup
           title={i18n.t('screens.home.mascotDialog.title')}
