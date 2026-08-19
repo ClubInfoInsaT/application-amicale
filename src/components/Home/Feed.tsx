@@ -76,11 +76,8 @@ function Feed() {
     section: SectionListData<FeedPostType>;
   }) => {
     const icon = data.section.icon;
-    if (data.section.data.length > 0) {
-      return (
-        <Headline style={styles.sectionHeader}>{data.section.title}</Headline>
-      );
-    }
+    if (data.section.data.length > 0) return;
+
     return (
       <View>
         <Headline
