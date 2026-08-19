@@ -62,8 +62,8 @@ declare global {
 }
 
 const semaineClimatEnergie =
-  new Date(2025, 9, 9).getTime() < Date.now() && // Months are 0-indexed
-  new Date(2025, 9, 11).getTime() > Date.now();
+  new Date(2026, 9, 12).getTime() < Date.now() && // Months are 0-indexed
+  new Date(2026, 9, 17).getTime() > Date.now();
 
 const octobreRose = new Date().getMonth() === 9;
 
