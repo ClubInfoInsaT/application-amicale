@@ -146,6 +146,7 @@ function Feed() {
 
   return (
     <WebSectionList
+      scrollEnabled={false}
       request={request}
       createDataset={createDataset}
       autoRefreshTime={REFRESH_TIME}
