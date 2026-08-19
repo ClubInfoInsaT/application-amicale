@@ -44,7 +44,6 @@ import { useCurrentDashboard } from '../../context/preferencesContext';
 import { MainRoutes } from '../../navigation/MainNavigator';
 import { useLoginState } from '../../context/loginContext';
 import DashboardShortcuts from '../../components/Home/DashboardShortcuts';
-// import PushNotification from 'react-native-push-notification';
 
 type Props = StackScreenProps<TabStackParamsList, TabRoutes.Home>;
 
@@ -80,43 +79,11 @@ function HomeScreen(props: Props) {
 
   const isLoggedIn = useLoginState();
   const { currentDashboard } = useCurrentDashboard();
-  // const { preferences, updatePreferences } = useNotificationPreferences();
-  // const { updatePreferences } = useNotificationPreferences();
-
-  // function onRegister({ token }: { token: string }) {
-  //   console.log('TOKEN:', token);
-  //   PushNotification.subscribeToTopic('amicale');
-  //   // Store token
-  //   updatePreferences(PreferenceKeys.firebaseToken, token);
-  // }
-
-  /* Listen for new token and save it
-  // @ts-ignore */
-  // PushNotification.onRegister = onRegister;
 
   useLayoutEffect(() => {
     const getHeaderButton = () => {
-      // let onPressBell = () => navigation.navigate(MainRoutes.Notifications);
-      // let lastSeenNotification = getPreferenceNumber(
-      //   PreferenceKeys.latestNotification,
-      //   preferences
-      // ); // Id of the most recent notification seen in the Notification Screen
-      // let newNotification = // Whether the latest notification is more recent
-      //   homeDashboard !== null &&
-      //   homeDashboard.latest_notification !== undefined &&
-      //   (homeDashboard.latest_notification > Number(lastSeenNotification) ||
-      //     lastSeenNotification === undefined);
-
       return (
         <MaterialHeaderButtons>
-          <Item
-            title={'notifications'}
-            // iconName={newNotification ? 'bell-ring' : 'bell-outline'}
-            // color={newNotification ? theme.colors.primary : theme.colors.text}
-            // onPress={onPressBell}
-            iconName={'bell-outline'}
-            color={theme.colors.disabled}
-          />
           <Item
             title={i18n.t('screens.settings.title')}
             iconName={'cog'}
@@ -128,7 +95,6 @@ function HomeScreen(props: Props) {
     navigation.setOptions({
       headerRight: getHeaderButton,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 
   useEffect(() => {

@@ -51,29 +51,6 @@ export function getMachineEndDate(machine: ProxiwashMachineType): Date | null {
 }
 
 /**
- * Checks whether the machine of the given ID has scheduled notifications
- *
- * @param machine The machine to check
- * @param machinesWatched The machine list
- * @returns {boolean}
- */
-export function isMachineWatched(
-  machine: ProxiwashMachineType,
-  machinesWatched: Array<ProxiwashMachineType>
-): boolean {
-  let watched = false;
-  machinesWatched.forEach((watchedMachine: ProxiwashMachineType) => {
-    if (
-      watchedMachine.number === machine.number &&
-      watchedMachine.endTime === machine.endTime
-    ) {
-      watched = true;
-    }
-  });
-  return watched;
-}
-
-/**
  * Gets the machine of the given id
  *
  * @param id The machine's ID
@@ -91,31 +68,4 @@ export function getMachineOfId(
     }
   });
   return machineFound;
-}
-
-/**
- * Gets a cleaned machine watched list by removing invalid entries.
- * An entry is considered invalid if the end time in the watched list
- * and in the full list does not match (a new machine cycle started)
- *
- * @param machineWatchedList The current machine watch list
- * @param allMachines The current full machine list
- * @returns {Array<ProxiwashMachineType>}
- */
-export function getCleanedMachineWatched(
-  machineWatchedList: Array<ProxiwashMachineType>,
-  allMachines: Array<ProxiwashMachineType>
-): Array<ProxiwashMachineType> {
-  const newList: Array<ProxiwashMachineType> = [];
-  machineWatchedList.forEach((watchedMachine: ProxiwashMachineType) => {
-    const machine = getMachineOfId(watchedMachine.number, allMachines);
-    if (
-      machine != null &&
-      watchedMachine.number === machine.number &&
-      watchedMachine.endTime === machine.endTime
-    ) {
-      newList.push(machine);
-    }
-  });
-  return newList;
 }

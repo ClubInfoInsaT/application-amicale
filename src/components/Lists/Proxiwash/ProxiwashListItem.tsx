@@ -44,7 +44,7 @@ type PropsType = {
     item: ProxiwashMachineType,
     isDryer: boolean
   ) => void;
-  isWatched: boolean;
+  isWatched: boolean; // remnant of notifications, represents whether the user has set a notification for this machine
   isDryer: boolean;
   height: number;
 };

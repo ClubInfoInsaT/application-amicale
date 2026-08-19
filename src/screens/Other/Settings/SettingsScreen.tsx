@@ -26,10 +26,8 @@ import {
   List,
   Switch,
   ToggleButton,
-  useTheme,
 } from 'react-native-paper';
 import { Appearance } from 'react-native';
-import CustomSlider from '../../../components/Overrides/CustomSlider';
 import { ScrollView } from 'react-native';
 
 import GENERAL_STYLES from '../../../constants/Styles';
@@ -40,7 +38,6 @@ import {
 import { useNavigation } from '@react-navigation/core';
 import {
   getPreferenceBool,
-  getPreferenceNumber,
   getPreferenceString,
   GeneralPreferenceKeys,
   ProxiwashPreferenceKeys,
@@ -67,7 +64,6 @@ const styles = StyleSheet.create({
  */
 function SettingsScreen() {
   const navigation = useNavigation();
-  const theme = useTheme();
   const generalPreferences = usePreferences();
   const proxiwashPreferences = useProxiwashPreferences();
 
@@ -92,18 +88,6 @@ function SettingsScreen() {
     GeneralPreferenceKeys.debugUnlocked,
     generalPreferences.preferences
   ) as boolean;
-  const notif = getPreferenceNumber(
-    ProxiwashPreferenceKeys.proxiwashNotifications,
-    proxiwashPreferences.preferences
-  );
-  const savedNotificationReminder = !notif || Number.isNaN(notif) ? 0 : notif;
-
-  const onProxiwashNotifPickerValueChange = (value: number) => {
-    proxiwashPreferences.updatePreferences(
-      ProxiwashPreferenceKeys.proxiwashNotifications,
-      value
-    );
-  };
 
   const onStartScreenPickerValueChange = (value: string) => {
     if (value != null) {
@@ -112,21 +96,6 @@ function SettingsScreen() {
         value
       );
     }
-  };
-
-  const getProxiwashNotifPicker = () => {
-    return (
-      <CustomSlider
-        style={styles.slider}
-        minimumValue={0}
-        maximumValue={10}
-        step={1}
-        value={savedNotificationReminder}
-        onValueChange={onProxiwashNotifPickerValueChange}
-        thumbTintColor={theme.colors.primary}
-        minimumTrackTintColor={theme.colors.primary}
-      />
-    );
   };
 
   const getProxiwashChangePicker = () => {
@@ -296,20 +265,6 @@ function SettingsScreen() {
       <Card style={styles.card}>
         <Card.Title title="Proxiwash" />
         <List.Section>
-          <List.Item
-            title={i18n.t('screens.settings.proxiwashNotifReminder')}
-            description={i18n.t('screens.settings.proxiwashNotifReminderSub')}
-            left={(props) => (
-              <List.Icon
-                color={props.color}
-                style={props.style}
-                icon="washing-machine"
-              />
-            )}
-          />
-          <View style={styles.pickerContainer}>
-            {getProxiwashNotifPicker()}
-          </View>
           <List.Item
             title={i18n.t('screens.settings.proxiwashChangeWash')}
             description={i18n.t('screens.settings.proxiwashChangeWashSub')}

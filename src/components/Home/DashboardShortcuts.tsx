@@ -36,7 +36,6 @@ export type FullDashboardType = {
   available_washers: number;
   today_events: Array<PlanningEventType>;
   available_tutorials: number;
-  latest_notification: number;
 };
 
 export type RawDashboardType = {
