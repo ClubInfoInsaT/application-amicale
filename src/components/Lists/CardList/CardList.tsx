@@ -75,7 +75,7 @@ export default class CardList extends React.Component<PropsType> {
         data={props.dataset}
         renderItem={this.getRenderItem}
         keyExtractor={this.keyExtractor}
-        numColumns={props.isHorizontal ? undefined : 2}
+        numColumns={props.isHorizontal ? undefined : 1}
         horizontal={props.isHorizontal}
         contentContainerStyle={
           props.isHorizontal ? containerStyle : props.contentContainerStyle

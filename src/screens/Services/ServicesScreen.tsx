@@ -28,7 +28,6 @@ import {
   useTheme,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import CardList from '../../components/Lists/CardList/CardList';
 import MaterialHeaderButtons, {
   Item,
 } from '../../components/Overrides/CustomHeaderButton';
@@ -114,6 +113,9 @@ function ServicesScreen() {
    * @returns {*}
    */
   const getRenderItem = ({ item }: { item: ServiceCategoryType }) => {
+    const subtitle = () =>
+      item.content.map((service) => service.title).join(', ');
+
     return (
       <TouchableRipple
         style={styles.container}
@@ -124,11 +126,12 @@ function ServicesScreen() {
         <View>
           <Card.Title
             title={item.title}
-            subtitle={item.subtitle}
+            // subtitle={item.subtitle}
+            subtitle={subtitle()}
+            subtitleNumberOfLines={2}
             left={() => getListTitleImage(item.image)}
             right={() => <List.Icon icon="chevron-right" />}
           />
-          <CardList dataset={item.content} isHorizontal />
         </View>
       </TouchableRipple>
     );
