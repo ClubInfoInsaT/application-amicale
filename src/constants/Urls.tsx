@@ -73,6 +73,7 @@ export default {
     usefulLinks: APP_IMAGES_ENDPOINT + 'UsefulLinks.png',
     schooling: APP_IMAGES_ENDPOINT + 'Schooling.png',
     sosinfra: APP_IMAGES_ENDPOINT + 'SOSInfra.png',
+    celluleEcoute: APP_IMAGES_ENDPOINT + 'celluleEcoute.png',
   },
   websites: {
     amicale: AMICALE_SERVER,

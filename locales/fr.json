@@ -28,7 +28,8 @@
         "washers": "Nombre de lave-Linges disponibles",
         "dryers": "Nombre de sèche-Linges disponibles",
         "schooling": "Accéde facilement à tous tes documents et résultats.",
-        "sosinfra": "Signale un problème dans un bâtiment"
+        "sosinfra": "Signale un problème dans un bâtiment",
+        "celluleEcoute": "Accédez à la cellule d'écoute pour du soutien et de l'écoute"
       },
       "titles": {
         "yearlyPlanning": "Planning de l'année"
@@ -207,7 +208,8 @@
       "mails": "Mails INSA",
       "ent": "ENT INSA",
       "schooling": "Ma scolarité",
-      "sosinfra": "SOS Infra"
+      "sosinfra": "SOS Infra",
+      "celluleEcoute": "Cellule d'écoute"
     },
 
     "login": {
