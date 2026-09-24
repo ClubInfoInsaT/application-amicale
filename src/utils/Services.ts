@@ -54,6 +54,7 @@ export const SERVICES_KEY = {
   USEFUL_LINKS: 'useful_links',
   YEARLY_PLANNING: 'yearly_planning',
   RU: 'ru',
+  CELLULE_ECOUTE: 'cellule_ecoute',
   AVAILABLE_ROOMS: 'available_rooms',
   BIB: 'bib',
   EMAIL: 'email',
@@ -236,6 +237,17 @@ export function getINSAServices(
         onPress(MainRoutes.Website, {
           host: Urls.websites.sosInfra,
           title: i18n.t('screens.websites.sosinfra'),
+        }),
+    },
+    {
+      key: SERVICES_KEY.CELLULE_ECOUTE,
+      title: i18n.t('screens.websites.celluleEcoute'),
+      subtitle: i18n.t('screens.services.descriptions.celluleEcoute'),
+      image: Urls.images.celluleEcoute,
+      onPress: () =>
+        onPress(MainRoutes.Website, {
+          host: 'https://cgb.insa-toulouse.fr/campus-inclusif/#lutte',
+          title: i18n.t('screens.websites.celluleEcoute'),
         }),
     },
     {

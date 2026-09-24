@@ -24,7 +24,8 @@
         "ent": "Mira tus notas",
         "equipment": "Reserva un BBQ u otro material",
         "washers": "Número de lavadoras disponibles",
-        "dryers": "Número de secadoras disponibles"
+        "dryers": "Número de secadoras disponibles",
+        "celluleEcoute": "Accede a la unidad de escucha para apoyo y orientación"
       },
       "mascotDialog": {
         "title": "Un poco perdido?",
@@ -191,7 +192,8 @@
       "rooms": "Salas disponibles",
       "bib": "Bib'Box",
       "mails": "Mails INSA",
-      "ent": "ENT INSA"
+      "ent": "ENT INSA",
+      "celluleEcoute": "Unidad de escucha"
     },
 
     "login": {

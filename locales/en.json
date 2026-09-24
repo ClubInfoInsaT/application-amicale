@@ -28,7 +28,8 @@
         "washers": "Number of available washers",
         "dryers": "Number of available dryers",
         "schooling": "Easy access to all your documents and results.",
-        "sosinfra": "Report issues within a building"
+        "sosinfra": "Report issues within a building",
+        "celluleEcoute": "Access the counseling unit for support and listening"
       },
       "titles": {
         "yearlyPlanning": "Yearly planning"
@@ -207,7 +208,8 @@
       "mails": "INSA Mails",
       "ent": "INSA ENT",
       "schooling": "My schooling",
-      "sosinfra": "SOS Infra"
+      "sosinfra": "SOS Infra",
+      "celluleEcoute": "Counselling unit"
     },
 
     "login": {
