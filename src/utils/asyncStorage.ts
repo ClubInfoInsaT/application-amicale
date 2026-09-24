@@ -19,8 +19,6 @@ export enum PlanexPreferenceKeys {
 }
 
 export enum ProxiwashPreferenceKeys {
-  proxiwashNotifications = 'proxiwashNotifications',
-  proxiwashWatchedMachines = 'proxiwashWatchedMachines',
   selectedWash = 'selectedWash',
 }
 
@@ -36,24 +34,17 @@ export enum MascotPreferenceKeys {
   gameShowMascot = 'gameShowMascot',
 }
 
-export enum NotificationPreferenceKeys {
-  latestNotification = 'latestNotification',
-  firebaseToken = 'firebaseToken',
-}
-
 export const PreferenceKeys = {
   ...GeneralPreferenceKeys,
   ...PlanexPreferenceKeys,
   ...ProxiwashPreferenceKeys,
   ...MascotPreferenceKeys,
-  ...NotificationPreferenceKeys,
 };
 export type PreferenceKeys =
   | GeneralPreferenceKeys
   | PlanexPreferenceKeys
   | ProxiwashPreferenceKeys
-  | MascotPreferenceKeys
-  | NotificationPreferenceKeys;
+  | MascotPreferenceKeys;
 
 export type PreferencesType = { [key in PreferenceKeys]: string };
 export type GeneralPreferencesType = { [key in GeneralPreferenceKeys]: string };
@@ -64,9 +55,6 @@ export type ProxiwashPreferencesType = {
   [key in ProxiwashPreferenceKeys]: string;
 };
 export type MascotPreferencesType = { [key in MascotPreferenceKeys]: string };
-export type NotificationPreferenceType = {
-  [key in NotificationPreferenceKeys]: string;
-};
 
 export const defaultPlanexPreferences: {
   [key in PlanexPreferenceKeys]: string;
@@ -78,8 +66,6 @@ export const defaultPlanexPreferences: {
 export const defaultProxiwashPreferences: {
   [key in ProxiwashPreferenceKeys]: string;
 } = {
-  [ProxiwashPreferenceKeys.proxiwashNotifications]: '5',
-  [ProxiwashPreferenceKeys.proxiwashWatchedMachines]: '[]',
   [ProxiwashPreferenceKeys.selectedWash]: 'washinsa',
 };
 
@@ -95,13 +81,6 @@ export const defaultMascotPreferences: {
   [MascotPreferenceKeys.voteShowMascot]: '1',
   [MascotPreferenceKeys.equipmentShowMascot]: '1',
   [MascotPreferenceKeys.gameShowMascot]: '1',
-};
-
-export const defaultNotificationPreferences: {
-  [key in NotificationPreferenceKeys]: string;
-} = {
-  [NotificationPreferenceKeys.latestNotification]: '0',
-  [NotificationPreferenceKeys.firebaseToken]: '',
 };
 
 export const defaultPreferences: { [key in GeneralPreferenceKeys]: string } = {

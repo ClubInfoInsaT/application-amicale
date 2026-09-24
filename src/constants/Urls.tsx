@@ -35,7 +35,6 @@ export default {
     api: AMICALE_ENDPOINT,
     resetPassword: AMICALE_SERVER + 'passwd',
     events: AMICALE_ENDPOINT + 'events?utc=true',
-    notification: APP_ENDPOINT + 'notification/list.json', // TODO Update
     tos: AMICALE_SERVER + 'mentions',
   },
   app: {

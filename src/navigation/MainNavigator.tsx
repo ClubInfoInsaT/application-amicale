@@ -59,7 +59,6 @@ import FeedItemScreen from '../screens/Home/FeedItemScreen';
 import GroupSelectionScreen from '../screens/Planex/GroupSelectionScreen';
 import ServicesSectionScreen from '../screens/Services/ServicesSectionScreen';
 import AmicaleContactScreen from '../screens/Amicale/AmicaleContactScreen';
-import NotificationsScreen from '../screens/Other/NotificationsScreen';
 import { FeedPostType } from '../components/Home/Feed';
 import { PlanningEventType } from '../utils/Planning';
 import { ServiceCategoryType } from '../utils/Services';
@@ -96,7 +95,6 @@ export enum MainRoutes {
   GroupSelect = 'group-select',
   ServicesSection = 'services-section',
   AmicaleContact = 'amicale-contact',
-  Notifications = 'notifications',
 }
 
 type DefaultParams = { [key in MainRoutes]: object | undefined } & {
@@ -375,11 +373,6 @@ function getRegularScreens(createTabNavigator: () => React.ReactElement) {
         component={AmicaleContactScreen}
         options={{ title: i18n.t('screens.amicaleAbout.title') }}
       />
-      <MainStack.Screen
-        name={MainRoutes.Notifications}
-        component={NotificationsScreen}
-        options={{ title: i18n.t('screens.notifications.title') }}
-      />
     </>
   );
 }
@@ -449,37 +442,6 @@ export const linking = {
           eventId: (id: string) => parseInt(id, 10),
         },
       },
-      'notifications': 'notifications',
     },
   },
-  // subscribe(listener: Function) {
-  //   // This may get kind of ugly. react-navigation hooks cannot be used outside
-  //   // of components while we must setup notifications outside of a component.
-  //   const onReceiveURL = ({
-  //     userInteraction,
-  //     data: { link },
-  //   }: {
-  //     // Avoids opening the screen if the app is open without the user clicking on the app.
-  //     userInteraction: boolean;
-  //     data: { link: string };
-  //   }) => {
-  //     if (userInteraction) listener(link); // Todo be changed
-  //   };
-  //
-  //   /* Listen to incoming links from deep linking
-  //   // @ts-ignore */
-  //   PushNotification.onNotification = onReceiveURL;
-  //
-  //   // Listen to incoming links from deep linking
-  //   const linkingSubscription = Linking.addEventListener('url', ({ url }) => {
-  //     listener(url);
-  //   });
-  //
-  //   return () => {
-  //     /* Clean up the event listeners
-  //     // @ts-ignore */
-  //     PushNotification.onNotification = null;
-  //     linkingSubscription.remove();
-  //   };
-  // },
 };

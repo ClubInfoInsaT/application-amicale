@@ -1,3 +1,5 @@
+NOTE: ce fichier n'est plus utilisé depuis 2022, les changements sont documentés sur la page des releases.
+
 # Version actuelle - v5.2.2 - 18/09/2022
 
 ## 🎉 Nouveautés
