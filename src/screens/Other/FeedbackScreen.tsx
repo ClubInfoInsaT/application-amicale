@@ -97,17 +97,6 @@ function getButtons(isFeedback: boolean) {
           >
             GitHub
           </Button>
-          <Button
-            icon="calendar"
-            mode="contained"
-            color="#026AA7"
-            style={styles.button}
-            onPress={() => {
-              Linking.openURL(Urls.feedback.project);
-            }}
-          >
-            {i18n.t('screens.feedback.buttons.organization')}
-          </Button>
         </View>
       )}
     </Card.Actions>

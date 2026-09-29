@@ -366,12 +366,11 @@
       "feedbackDescription": "Que sea para dar tu opinión o reporter errores, eres el bienvenido.\nUtiliza el método que quieres entre los botones aquí abajo.",
       "contribute": "Contribuye al proyecto",
       "contributeSubtitle": "¡Con una posible implicación civil!",
-      "contributeDescription": "Hay para todos los gustos: comunicación, design o técnico. Eres libre de participar como quieras.\n Encontrarás aquí abajo la organización del proyect, así como el código en GitHub.",
+      "contributeDescription": "Puedes participar de muchas maneras: comunicación, diseño o directamente programando. Eres libre de participar como quieras.\n¡Aquí abajo encontrarás el github del proyecto!",
       "homeButtonTitle": "Participar al proyecto",
       "homeButtonSubtitle": "Tu ayuda cuenta",
       "buttons": {
-        "mail": "Mail",
-        "organization": "Organización"
+        "mail": "Mail"
       }
     },
     "game": {
