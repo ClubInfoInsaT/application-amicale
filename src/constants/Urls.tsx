@@ -102,7 +102,6 @@ export default {
   },
   feedback: {
     git: GIT_SERVER,
-    project: 'https://github.com/ClubInfoInsaT/application-amicale/projects/1',
     facebook: 'https://www.facebook.com/campus.insat',
     mail: `mailto:app@amicale-insat.fr?subject=[FEEDBACK] Application CAMPUS
 &body=Hello l'équipe j'ai du feedback\n\n\nBien cordialement.`,

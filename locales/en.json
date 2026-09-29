@@ -400,12 +400,11 @@
       "feedbackDescription": "Feedback or bug reports, you are always welcome.\nChoose your preferred way from the buttons below.",
       "contribute": "Contribute to the project",
       "contributeSubtitle": "With a possible \"implication citoyenne\"!",
-      "contributeDescription": "Everyone can help: communication, design or coding! You are free to contribute as you like.\nYou can find below a link to the project organization, and a link to the source code on GitHub.",
+      "contributeDescription": "Everyone can help: communication, design or coding! You are free to contribute as you like.\nYou can find below a link to the source code on GitHub, with a lot of documentation!",
       "homeButtonTitle": "Contribute to the project",
       "homeButtonSubtitle": "Your help is important",
       "buttons": {
-        "mail": "Mail",
-        "organization": "Organization"
+        "mail": "Mail"
       }
     },
     "game": {
